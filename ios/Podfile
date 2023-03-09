@@ -6,7 +6,6 @@ install! 'cocoapods', :deterministic_uuids => false
 
 target 'MastersApp' do
   config = use_native_modules!
-
   # Flags change depending on the env values.
   flags = get_default_flags()
 
@@ -15,6 +14,9 @@ target 'MastersApp' do
     # Hermes is now enabled by default. Disable by setting this flag to false.
     # Upcoming versions of React Native may rely on get_default_flags(), but
     # we make it explicit here to aid in the React Native upgrade process.
+    
+    #debug => false
+    #release => true
     :hermes_enabled => true,
     :fabric_enabled => flags[:fabric_enabled],
     # Enables Flipper.
