@@ -3,7 +3,7 @@ import { Image, Text, TextInput, View } from 'react-native';
 import { useMaskedInputProps, Masks } from 'react-native-mask-input';
 import { styles } from './style';
 
-const Input = ({ isPhoneAuth, tel, setTel, email, setMail }) => {
+export const Input = ({ isPhoneAuth, tel, setTel, email, setMail }) => {
   const [active, setActive] = useState(false);
 
   const phoneMaskedInputProps = useMaskedInputProps({
@@ -49,5 +49,3 @@ const Input = ({ isPhoneAuth, tel, setTel, email, setMail }) => {
     </View>
   );
 };
-
-export default Input;

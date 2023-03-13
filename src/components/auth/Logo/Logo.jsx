@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 
-const Logo = () => (
+export const Logo = () => (
   <View style={styles.container}>
     <Image source={require('../../../assets/icons/logo.png')} />
   </View>
@@ -15,5 +15,3 @@ const styles = StyleSheet.create({
     flex: 1.5,
   },
 });
-
-export default Logo;

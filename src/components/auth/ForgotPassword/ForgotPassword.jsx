@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, View, Text } from 'react-native';
 import { styles } from './style';
 
-const ForgotPassword = () => {
+export const ForgotPassword = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.btn}>
@@ -11,5 +11,3 @@ const ForgotPassword = () => {
     </View>
   );
 };
-
-export default ForgotPassword;

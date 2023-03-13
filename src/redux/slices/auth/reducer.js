@@ -16,13 +16,12 @@ export const getData = createSlice({
     builder.addCase(fetchUserAuth.pending, state => {
       state.loading = true;
     });
-
     builder.addCase(fetchUserAuth.fulfilled, (state, action) => {
       state.user = action.payload;
-      // state.isAuth = true;
+      state.isAuth = true;
+      state.authError = null;
       state.loading = false;
     });
-
     builder.addCase(fetchUserAuth.rejected, (state, action) => {
       state.authError = action.payload?.message;
       state.loading = false;

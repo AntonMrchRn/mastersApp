@@ -3,7 +3,7 @@ import { Image, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './style';
 
-const InputPassword = ({ password, setPassword }) => {
+export const InputPassword = ({ password, setPassword }) => {
   const [active, setActive] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(true);
 
@@ -38,5 +38,3 @@ const InputPassword = ({ password, setPassword }) => {
     </View>
   );
 };
-
-export default InputPassword;

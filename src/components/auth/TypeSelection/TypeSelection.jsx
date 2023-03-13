@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './style';
 
-const TypeSelection = ({ isPhoneAuth, setIsPhoneAuth }) => {
+export const TypeSelection = ({ isPhoneAuth, setIsPhoneAuth }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -26,5 +26,3 @@ const TypeSelection = ({ isPhoneAuth, setIsPhoneAuth }) => {
     </View>
   );
 };
-
-export default TypeSelection;

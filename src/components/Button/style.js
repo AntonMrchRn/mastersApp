@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  disabled: { backgroundColor: configApp.disabled },
   activeBtn: {
     backgroundColor: configApp.brandColor,
   },

@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
-import { KeyboardAvoidingView, Platform, View } from 'react-native';
+import { KeyboardAvoidingView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ForgotPassword from '../../../components/auth/ForgotPassword';
+import { useSelector } from 'react-redux';
 
-import Input from '../../../components/auth/Input';
-import InputPassword from '../../../components/auth/Input/password';
-import Logo from '../../../components/auth/Logo';
-import TypeSelection from '../../../components/auth/TypeSelection';
-import Button from '../../../components/Button';
-import { configApp } from '../../../helpers/platform';
+import {
+  Button,
+  ErrorField,
+  ForgotPassword,
+  Input,
+  InputPassword,
+  Logo,
+  TypeSelection,
+} from '~/components';
+
+import { configApp } from '../../../utils/helpers/platform';
 
 import { styles } from './style';
 
 const SignUpScreen = () => {
+  const { authError } = useSelector(state => state.auth);
+
   const [isPhoneAuth, setIsPhoneAuth] = useState(true);
   const [tel, setTel] = useState('');
   const [email, seteMail] = useState('');
@@ -38,6 +45,7 @@ const SignUpScreen = () => {
             setTel={setTel}
           />
           <InputPassword password={password} setPassword={setPassword} />
+          {authError && <ErrorField error={authError} />}
           <ForgotPassword />
           <Button
             isPhoneAuth={isPhoneAuth}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import platform, { configApp } from '../../../helpers/platform';
+import { configApp } from '../../../utils/helpers/platform';
 import styles from './style';
 import TabTestScreen from '../../../screens/tabs/TabTestScreen';
 

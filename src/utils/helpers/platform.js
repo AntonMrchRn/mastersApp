@@ -36,6 +36,8 @@ export const configApp = {
   tabBarActiveColor: '#59ad40',
   tabBarInactiveColor: '#2e2e2e',
   gray: '#383838',
+  disabled: '#d6d6e1',
+  error: '#ffefe6',
   lightGray: '#757575',
   darkGray: '#292929',
   //errors
