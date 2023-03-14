@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   Button,
@@ -13,17 +13,23 @@ import {
   TypeSelection,
 } from '~/components';
 
+import { fetchUserAuth } from '../../../redux/slices/auth/asyncActions';
 import { configApp } from '../../../utils/helpers/platform';
 
 import { styles } from './style';
 
-const SignUpScreen = () => {
+export const SignUpScreen = () => {
   const { authError } = useSelector(state => state.auth);
+  const dispatch = useDispatch();
 
   const [isPhoneAuth, setIsPhoneAuth] = useState(true);
   const [tel, setTel] = useState('');
   const [email, seteMail] = useState('');
   const [password, setPassword] = useState('');
+
+  const authRequest = () => {
+    dispatch(fetchUserAuth({ tel, email, password, isPhoneAuth }));
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -53,11 +59,10 @@ const SignUpScreen = () => {
             password={password}
             email={email}
             isDisabled
+            onPress={authRequest}
           />
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
-
-export default SignUpScreen;

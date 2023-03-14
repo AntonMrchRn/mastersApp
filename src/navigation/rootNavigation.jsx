@@ -1,18 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
 import TabNavigation from './App/TabNavigation';
 import AuthNavigation from './Auth';
-import { useSelector } from 'react-redux';
+import { useCheckLogin } from '../utils/hooks/useCheckLogin';
 
 const Stack = createStackNavigator();
 
 const RootNavigate = () => {
-  const { isAuth } = useSelector(state => state.auth);
+  const [checkLogin, isAuth] = useCheckLogin();
+
+  useEffect(() => {
+    checkLogin();
+    // SplashScreen.hide(); TODO
+  }, []);
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="AppNavigation"
+    >
       {isAuth ? (
         <Stack.Screen name="AppNavigation" component={TabNavigation} />
       ) : (

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { configApp } from '../../../helpers/platform';
+import { configApp } from '../../../utils/helpers/platform';
 
 export const styles = StyleSheet.create({
   container: {

@@ -8,10 +8,17 @@ const initialState = {
   error: null,
 };
 
-export const getData = createSlice({
-  name: 'auth',
+export const userAuth = createSlice({
+  name: 'userAuth',
   initialState,
-  reducers: {},
+  reducers: {
+    Login: state => {
+      state.isAuth = true;
+    },
+    notLogin: state => {
+      state.isAuth = false;
+    },
+  },
   extraReducers: builder => {
     builder.addCase(fetchUserAuth.pending, state => {
       state.loading = true;
@@ -29,4 +36,6 @@ export const getData = createSlice({
   },
 });
 
-export default getData.reducer;
+export const { Login, notLogin } = userAuth.actions;
+
+export default userAuth.reducer;

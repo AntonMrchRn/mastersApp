@@ -1,9 +1,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { configApp } from '../../../utils/helpers/platform';
 import styles from './style';
 import TabTestScreen from '../../../screens/tabs/TabTestScreen';
+import { configApp } from '../../../utils/helpers/platform';
+import { ProfileScreen } from '../../../screens';
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +47,7 @@ function AppNavigation() {
       />
       <Tab.Screen
         name="Профиль"
-        component={TabTestScreen}
+        component={ProfileScreen}
         // options={{
         //   tabBarIcon: ({ color }) => (
         //     <Icon name="user" size={20} color={color} />
