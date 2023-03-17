@@ -1,5 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { storageMMKV } from '../../mmkv/storage';
 import { host } from '../config';
 
 export const axiosInstance = axios.create({
@@ -10,7 +10,7 @@ export const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(async config => {
-  config.headers.Authorization = `Bearer ${await AsyncStorage.getItem(
+  config.headers.Authorization = `Bearer ${await storageMMKV.getString(
     'token'
   )}`;
   return config;
@@ -23,20 +23,17 @@ axiosInstance.interceptors.response.use(
   async error => {
     const originalRequest = error.config;
     if (error.response.status === 401) {
-      const refreshToken = await AsyncStorage.getItem('refreshToken');
       try {
-        const { data } = await axiosInstance.post('/Account/Refresh', {
-          token: refreshToken,
-        });
+        const { data } = await axiosInstance.post('/relogin');
 
         if (data) {
-          await AsyncStorage.setItem('token', data.token);
-          await AsyncStorage.setItem('refreshToken', data.refresh);
+          console.log('data relogin token', data);
+          await storageMMKV.set('token', data.token);
           return axiosInstance.request(originalRequest);
         }
       } catch (err) {
         console.log('ERROR_INTERCEPTORS', err);
-        await AsyncStorage.removeItem('token');
+        // await AsyncStorage.removeItem('token');
       }
     }
   }

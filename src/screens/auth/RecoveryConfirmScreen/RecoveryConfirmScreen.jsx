@@ -1,21 +1,20 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Button, Input, TypeSelection } from '~/components';
-import ForgotPreview from '../../../components/auth/ForgotPreview/ForgotPreview';
-import { TimerBlock } from '../../../components/auth/Timer/Timer';
+import ConfrimPreview from '../../../components/auth/ConfirmPreview/ConfirmPreview';
+import { HomeScreen, TimerBlock } from '../../../components/auth/Timer/Timer';
 import Header from '../../../components/Header/Header';
 import Spacer from '../../../components/Spacer/Spacer';
-import { storageMMKV } from '../../../mmkv/storage';
 import { recoveryPassword } from '../../../redux/slices/auth/asyncActions';
 import { configApp } from '../../../utils/helpers/platform';
 
 import { styles } from './style';
 
-export const RecoveryScreen = () => {
+export const RecoveryConfirmationScreen = () => {
   const { isRecovery } = useSelector(state => state.auth);
   const [isPhoneAuth, setIsPhoneAuth] = useState(true);
   const [tel, setTel] = useState('');
@@ -24,26 +23,21 @@ export const RecoveryScreen = () => {
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  console.log('isRecovery', isRecovery);
 
-  const recoveryRequest = () => {
-    dispatch(recoveryPassword({ tel, email, isPhoneAuth }));
+  const recoveryRequest = async () => {
+    await dispatch(recoveryPassword({ tel, email, isPhoneAuth }));
   };
-
-  useEffect(() => {
-    if (isRecovery) {
-      navigation.navigate('RecoveryConfirmScreen');
-    }
-  }, [isRecovery]);
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header label={'Восстановление пароля'} />
+      <Header label={'Подтверждение кодом'} />
       <KeyboardAvoidingView
         behavior={configApp.ios ? 'padding' : 'height'}
         style={styles.container}
       >
         <View style={styles.wrapperSignIn}>
-          <ForgotPreview />
+          <ConfrimPreview />
           <TypeSelection
             setIsPhoneAuth={setIsPhoneAuth}
             isPhoneAuth={isPhoneAuth}

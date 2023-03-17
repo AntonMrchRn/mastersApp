@@ -8,7 +8,7 @@ export const fetchUserAuth = createAsyncThunk(
     const phoneNumber = '7' + tel;
 
     try {
-      const { data } = await apiHost.post('login', {
+      const { data } = await apiHost.post('login?isMobile=true', {
         login: isPhoneAuth ? phoneNumber : email,
         password,
       });
@@ -16,6 +16,27 @@ export const fetchUserAuth = createAsyncThunk(
       storageMMKV.set('token', data.token);
 
       return data;
+    } catch (error) {
+      console.log('error', error.error);
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const recoveryPassword = createAsyncThunk(
+  '/recoveryPassword',
+  async ({ tel, email, isPhoneAuth }, thunkApi) => {
+    const phoneNumber = '7' + tel;
+
+    try {
+      // const { data } = isPhoneAuth
+      //   ? await apiHost.patch('me/password', {
+      //       phone: Number(phoneNumber),
+      //     })
+      //   : await apiHost.patch('me/password', {
+      //       email,
+      //     });
+      // return data;
     } catch (error) {
       console.log('error', error.error);
       return thunkApi.rejectWithValue(error.response.data);

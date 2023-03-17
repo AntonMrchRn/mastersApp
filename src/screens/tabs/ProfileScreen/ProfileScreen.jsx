@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Button } from '~/components';
 
 import { storageMMKV } from '../../../mmkv/storage';
-import { notLogin } from '../../../redux/slices/auth/reducer';
+import { logOut } from '../../../redux/slices/auth/reducer';
 
 import styles from './style';
 
@@ -13,7 +13,7 @@ export const ProfileScreen = () => {
 
   const onExit = () => {
     storageMMKV.clearAll();
-    dispatch(notLogin());
+    dispatch(logOut());
   };
 
   return (

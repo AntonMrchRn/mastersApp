@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { storageMMKV } from '../../mmkv/storage';
-import { Login, notLogin } from '../../redux/slices/auth/reducer';
+import { login, logOut } from '../../redux/slices/auth/reducer';
 
 export const useCheckLogin = () => {
   const dispatch = useDispatch();
@@ -10,9 +10,9 @@ export const useCheckLogin = () => {
     try {
       const token = storageMMKV.getString('token');
       if (token) {
-        dispatch(Login());
+        dispatch(login());
       } else {
-        dispatch(notLogin());
+        dispatch(logOut());
       }
     } catch (e) {
       console.error("User didn't login", e);

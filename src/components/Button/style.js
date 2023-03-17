@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
   },
   btn: {
     backgroundColor: configApp.brandColor,
-    height: 40,
+    height: 42,
     width: '47%',
     borderRadius: 5,
     justifyContent: 'center',

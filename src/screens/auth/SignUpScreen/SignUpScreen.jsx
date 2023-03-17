@@ -27,9 +27,8 @@ export const SignUpScreen = () => {
   const [email, seteMail] = useState('');
   const [password, setPassword] = useState('');
 
-  const authRequest = () => {
+  const authRequest = () =>
     dispatch(fetchUserAuth({ tel, email, password, isPhoneAuth }));
-  };
 
   return (
     <SafeAreaView style={styles.container}>
