@@ -9,6 +9,7 @@ export const useCheckLogin = () => {
   const checkLogin = () => {
     try {
       const token = storageMMKV.getString('token');
+
       if (token) {
         dispatch(login());
       } else {

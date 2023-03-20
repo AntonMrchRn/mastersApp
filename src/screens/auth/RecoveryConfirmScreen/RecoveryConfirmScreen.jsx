@@ -24,7 +24,6 @@ export const RecoveryConfirmationScreen = () => {
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  console.log('isRecovery', isRecovery);
 
   const recoveryRequest = async () => {
     await dispatch(recoveryPassword({ tel, email, isPhoneAuth }));

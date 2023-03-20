@@ -29,14 +29,14 @@ export const recoveryPassword = createAsyncThunk(
     const phoneNumber = '7' + tel;
 
     try {
-      // const { data } = isPhoneAuth
-      //   ? await apiHost.patch('me/password', {
-      //       phone: Number(phoneNumber),
-      //     })
-      //   : await apiHost.patch('me/password', {
-      //       email,
-      //     });
-      // return data;
+      const { data } = isPhoneAuth
+        ? await apiHost.patch('me/password', {
+            phone: Number(phoneNumber),
+          })
+        : await apiHost.patch('me/password', {
+            email,
+          });
+      return data;
     } catch (error) {
       console.log('error', error.error);
       return thunkApi.rejectWithValue(error.response.data);

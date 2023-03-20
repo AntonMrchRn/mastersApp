@@ -145,7 +145,7 @@ export function TimerBlock({ expiredTimer, isConfirm }) {
       </View>
     );
   }
-  console.log('isRecovery', isRecovery, 'isConfirm', isConfirm);
+
   if (!isActiveTimer && isConfirm) {
     return (
       <TouchableOpacity style={styles.btnRepeatCode}>
@@ -153,6 +153,7 @@ export function TimerBlock({ expiredTimer, isConfirm }) {
       </TouchableOpacity>
     );
   }
+
   if (isBlock?.block) {
     return (
       <BlockComponent
