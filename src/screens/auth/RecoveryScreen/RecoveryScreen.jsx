@@ -57,7 +57,6 @@ export const RecoveryScreen = () => {
             setTel={setTel}
           />
           <Spacer size="L" />
-          <TimerBlock expiredTimer={25000} />
           <Button
             isPhoneAuth={isPhoneAuth}
             tel={tel}
@@ -68,6 +67,7 @@ export const RecoveryScreen = () => {
             withOutPassword
             onPress={recoveryRequest}
           />
+          <TimerBlock expiredTimer={5000} />
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

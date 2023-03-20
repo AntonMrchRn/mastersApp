@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { Text, View, ActivityIndicator, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -9,6 +9,7 @@ import {
   timerOn,
 } from '../../../redux/slices/auth/reducer';
 import { storageMMKV } from '../../../mmkv/storage';
+import { styles } from './style';
 
 export const pad = (time, length) => {
   while (time?.length < length) {
@@ -52,8 +53,8 @@ const BlockComponent = ({ expiredTimer, timerOffset, closeBlock }) => {
   }, [timeMilliSeconds]);
 
   return (
-    <View style={bs.wrapper}>
-      <Text style={bs.timer}>
+    <View style={styles.wrapper}>
+      <Text style={styles.timer}>
         {`Повторите попытку через ${timeFormat(
           timerOffset + expiredTimer - timeMilliSeconds
         )}`}
@@ -62,26 +63,15 @@ const BlockComponent = ({ expiredTimer, timerOffset, closeBlock }) => {
   );
 };
 
-const bs = StyleSheet.create({
-  wrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  timer: {
-    fontSize: 15,
-    color: '#000',
-    textAlign: 'center',
-  },
-});
-
 const setData = async data => {
-  console.log('data', data);
   await AsyncStorage.setItem('BLOCK', data);
 };
 
-export function TimerBlock({ expiredTimer }) {
+export function TimerBlock({ expiredTimer, isConfirm }) {
   const { isRecovery } = useSelector(state => state.auth);
+  const { isActiveTimer } = useSelector(state => state.auth);
   const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(true);
   const [isBlock, setIsBlock] = useState({
     block: true,
@@ -150,12 +140,19 @@ export function TimerBlock({ expiredTimer }) {
 
   if (loading) {
     return (
-      <View style={style.container}>
+      <View style={styles.container}>
         <ActivityIndicator size={'large'} />
       </View>
     );
   }
-
+  console.log('isRecovery', isRecovery, 'isConfirm', isConfirm);
+  if (!isActiveTimer && isConfirm) {
+    return (
+      <TouchableOpacity style={styles.btnRepeatCode}>
+        <Text style={styles.textBtn}>Запросить новый код</Text>
+      </TouchableOpacity>
+    );
+  }
   if (isBlock?.block) {
     return (
       <BlockComponent
@@ -166,20 +163,3 @@ export function TimerBlock({ expiredTimer }) {
     );
   }
 }
-
-const style = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-  text: {
-    fontSize: 20,
-    color: 'black',
-  },
-  link: {
-    fontSize: 20,
-    color: 'blue',
-    marginTop: 16,
-  },
-});

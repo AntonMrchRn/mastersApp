@@ -5,8 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Button, Input, TypeSelection } from '~/components';
+import CodeFieldInput from '../../../components/auth/CodeField/CodeField';
 import ConfrimPreview from '../../../components/auth/ConfirmPreview/ConfirmPreview';
-import { HomeScreen, TimerBlock } from '../../../components/auth/Timer/Timer';
+import { TimerBlock } from '../../../components/auth/Timer/Timer';
 import Header from '../../../components/Header/Header';
 import Spacer from '../../../components/Spacer/Spacer';
 import { recoveryPassword } from '../../../redux/slices/auth/asyncActions';
@@ -43,6 +44,7 @@ export const RecoveryConfirmationScreen = () => {
             isPhoneAuth={isPhoneAuth}
           />
           <Spacer />
+          <CodeFieldInput />
           <Input
             isPhoneAuth={isPhoneAuth}
             tel={tel}
@@ -51,7 +53,6 @@ export const RecoveryConfirmationScreen = () => {
             setTel={setTel}
           />
           <Spacer size="L" />
-          <TimerBlock expiredTimer={25000} />
           <Button
             isPhoneAuth={isPhoneAuth}
             tel={tel}
@@ -62,6 +63,7 @@ export const RecoveryConfirmationScreen = () => {
             withOutPassword
             onPress={recoveryRequest}
           />
+          <TimerBlock expiredTimer={5000} isConfirm />
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

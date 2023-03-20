@@ -26,7 +26,7 @@ export const Button = ({
   const validWithOutPassword = !isPhone && !isMail && isDisabled;
 
   const { isActiveTimer } = useSelector(state => state.auth);
-  console.log('isActiveTimer', isActiveTimer);
+
   return (
     <TouchableOpacity
       style={[
