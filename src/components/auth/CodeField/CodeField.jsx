@@ -11,8 +11,7 @@ import { styles } from './style';
 
 const CELL_COUNT = 6;
 
-const CodeFieldInput = () => {
-  const [value, setValue] = useState('');
+const CodeFieldInput = ({ value, setValue }) => {
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
