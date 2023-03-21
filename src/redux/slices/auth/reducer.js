@@ -14,6 +14,7 @@ const initialState = {
   isActiveTimer: false,
   timeout: null,
   restore: false,
+  visible: false,
 };
 
 export const userAuth = createSlice({
@@ -37,6 +38,9 @@ export const userAuth = createSlice({
     },
     timerOff: state => {
       state.isActiveTimer = false;
+    },
+    modalVisible: (state, action) => {
+      state.visible = action.payload;
     },
   },
   extraReducers: builder => {
@@ -76,7 +80,6 @@ export const userAuth = createSlice({
     builder.addCase(restorePassword.fulfilled, (state, action) => {
       state.restore = true;
       state.loading = false;
-      state.timeout = action.payload;
     });
     builder.addCase(restorePassword.rejected, (state, action) => {
       state.recoveryError = action.payload;
@@ -92,6 +95,7 @@ export const {
   timerOn,
   timerOff,
   clearRecoveryError,
+  modalVisible,
 } = userAuth.actions;
 
 export default userAuth.reducer;

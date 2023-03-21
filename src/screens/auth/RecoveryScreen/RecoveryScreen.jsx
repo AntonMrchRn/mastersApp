@@ -17,7 +17,7 @@ import ModalScreen from '../../../components/ModalScreen';
 import Spacer from '../../../components/Spacer/Spacer';
 import { storageMMKV } from '../../../mmkv/storage';
 import { recoveryPassword } from '../../../redux/slices/auth/asyncActions';
-import { clearRecoveryError, logOut } from '../../../redux/slices/auth/reducer';
+import { clearRecoveryError } from '../../../redux/slices/auth/reducer';
 import { configApp } from '../../../utils/helpers/platform';
 
 import { styles } from './style';
@@ -39,10 +39,19 @@ export const RecoveryScreen = () => {
     await dispatch(recoveryPassword({ tel, email, isPhoneAuth }));
   };
 
+  useEffect(() => {
+    dispatch(clearRecoveryError());
+  }, []);
+
   const closeModal = () => {
     setVisible(false);
     dispatch(clearRecoveryError());
     navigation.navigate('SignUpScreen');
+  };
+
+  const goBack = () => {
+    dispatch(clearRecoveryError());
+    navigation.goBack();
   };
 
   useEffect(() => {
@@ -57,7 +66,7 @@ export const RecoveryScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header label={'Восстановление пароля'} />
+      <Header label={'Восстановление пароля'} callBack={goBack} />
       <KeyboardAvoidingView
         behavior={configApp.ios ? 'padding' : 'height'}
         style={styles.container}

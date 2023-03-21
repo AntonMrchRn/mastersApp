@@ -39,7 +39,6 @@ export const recoveryPassword = createAsyncThunk(
           });
       return data;
     } catch (error) {
-      console.log('error', error.error);
       return thunkApi.rejectWithValue(error.response.data);
     }
   }
@@ -55,7 +54,6 @@ export const restorePassword = createAsyncThunk(
       });
       return data;
     } catch (error) {
-      console.log('error', error.error);
       return thunkApi.rejectWithValue(error.response.data);
     }
   }

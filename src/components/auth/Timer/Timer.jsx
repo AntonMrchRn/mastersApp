@@ -145,7 +145,6 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
       </View>
     );
   }
-  console.log('---->', isBlock?.block);
 
   if (!isActiveTimer && isConfirm) {
     return (
