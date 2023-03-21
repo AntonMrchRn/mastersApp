@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { TouchableOpacity, Text } from 'react-native';
 import { useSelector } from 'react-redux';
 import { storageMMKV } from '../../mmkv/storage';
@@ -13,6 +13,9 @@ export const Button = ({
   label = 'Войти',
   onPress,
   withOutPassword,
+  value,
+  isRestore,
+  recoveryError,
 }) => {
   const isPhone = tel?.length === 10 && isPhoneAuth;
   const isMail = email?.length > 0 && !isPhoneAuth;
@@ -21,13 +24,26 @@ export const Button = ({
     tel?.length === 10 && password?.length > 0 && isPhoneAuth;
   const isMailWithPass =
     email?.length > 0 && password?.length > 0 && !isPhoneAuth;
+  const isPasswordWidthPass = password?.length > 5 && value?.length > 5;
 
   const validWithPassword = !isPhoneWithPass && !isMailWithPass && isDisabled;
   const validWithOutPassword = !isPhone && !isMail && isDisabled;
 
   const { isActiveTimer } = useSelector(state => state.auth);
 
-  return (
+  return isRestore ? (
+    <TouchableOpacity
+      style={[
+        styles.btn,
+        !isPasswordWidthPass && styles.disabled,
+        recoveryError?.message?.length > 0 && styles.disabled,
+      ]}
+      onPress={onPress}
+      disabled={!isPasswordWidthPass || recoveryError?.message?.length > 0}
+    >
+      <Text style={styles.labelBtn}>{label}</Text>
+    </TouchableOpacity>
+  ) : (
     <TouchableOpacity
       style={[
         styles.btn,

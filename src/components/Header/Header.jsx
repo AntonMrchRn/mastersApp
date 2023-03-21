@@ -1,19 +1,13 @@
 import React from 'react';
-import { useNavigation } from '@react-navigation/native';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './styles';
 
-const Header = ({ label = '' }) => {
-  const navigation = useNavigation();
-
+const Header = ({ label = '', callBack = () => {} }) => {
   return (
     <View style={styles.container}>
       <View style={styles.lateralWrapper}>
-        <TouchableOpacity
-          style={styles.btnBack}
-          onPress={() => navigation.goBack()}
-        >
+        <TouchableOpacity style={styles.btnBack} onPress={callBack}>
           <Image
             source={require('../../assets/icons/arrowBack.png')}
             style={styles.icon}

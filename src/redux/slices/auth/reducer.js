@@ -1,5 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchUserAuth, recoveryPassword } from './asyncActions';
+import {
+  fetchUserAuth,
+  recoveryPassword,
+  restorePassword,
+} from './asyncActions';
 
 const initialState = {
   user: null,
@@ -9,6 +13,9 @@ const initialState = {
   isRecovery: false,
   isActiveTimer: false,
   timeout: null,
+  restore: false,
+  visible: false,
+  visibleEmail: false,
 };
 
 export const userAuth = createSlice({
@@ -24,11 +31,20 @@ export const userAuth = createSlice({
     clearIsRecovery: state => {
       state.isRecovery = false;
     },
+    clearRecoveryError: state => {
+      state.recoveryError = false;
+    },
     timerOn: state => {
       state.isActiveTimer = true;
     },
     timerOff: state => {
       state.isActiveTimer = false;
+    },
+    modalVisible: (state, action) => {
+      state.visible = action.payload;
+    },
+    modalVisibleEmail: (state, action) => {
+      state.visibleEmail = action.payload;
     },
   },
   extraReducers: builder => {
@@ -60,10 +76,31 @@ export const userAuth = createSlice({
       state.recoveryError = action.payload;
       state.loading = false;
     });
+
+    //restore
+    builder.addCase(restorePassword.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(restorePassword.fulfilled, (state, action) => {
+      state.restore = true;
+      state.loading = false;
+    });
+    builder.addCase(restorePassword.rejected, (state, action) => {
+      state.recoveryError = action.payload;
+      state.loading = false;
+    });
   },
 });
 
-export const { login, logOut, clearIsRecovery, timerOn, timerOff } =
-  userAuth.actions;
+export const {
+  login,
+  logOut,
+  clearIsRecovery,
+  timerOn,
+  timerOff,
+  clearRecoveryError,
+  modalVisible,
+  modalVisibleEmail,
+} = userAuth.actions;
 
 export default userAuth.reducer;

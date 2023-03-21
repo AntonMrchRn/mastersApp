@@ -67,7 +67,7 @@ const setData = async data => {
   await AsyncStorage.setItem('BLOCK', data);
 };
 
-export function TimerBlock({ expiredTimer, isConfirm }) {
+export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
   const { isRecovery } = useSelector(state => state.auth);
   const { isActiveTimer } = useSelector(state => state.auth);
   const dispatch = useDispatch();
@@ -148,7 +148,7 @@ export function TimerBlock({ expiredTimer, isConfirm }) {
 
   if (!isActiveTimer && isConfirm) {
     return (
-      <TouchableOpacity style={styles.btnRepeatCode}>
+      <TouchableOpacity style={styles.btnRepeatCode} onPress={() => callBack()}>
         <Text style={styles.textBtn}>Запросить новый код</Text>
       </TouchableOpacity>
     );

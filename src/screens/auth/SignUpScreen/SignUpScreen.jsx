@@ -12,23 +12,30 @@ import {
   Logo,
   TypeSelection,
 } from '~/components';
+import ModalComponentScreen from '../../../components/auth/ModalComponentAuth';
 
 import { fetchUserAuth } from '../../../redux/slices/auth/asyncActions';
+import { modalVisible } from '../../../redux/slices/auth/reducer';
 import { configApp } from '../../../utils/helpers/platform';
 
 import { styles } from './style';
 
 export const SignUpScreen = () => {
-  const { authError } = useSelector(state => state.auth);
+  const { authError, visible } = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
   const [isPhoneAuth, setIsPhoneAuth] = useState(true);
   const [tel, setTel] = useState('');
   const [email, seteMail] = useState('');
   const [password, setPassword] = useState('');
+  const [flag, setFlag] = useState(true);
 
   const authRequest = () =>
     dispatch(fetchUserAuth({ tel, email, password, isPhoneAuth }));
+
+  const closeModal = () => {
+    dispatch(modalVisible(false));
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -48,6 +55,13 @@ export const SignUpScreen = () => {
             email={email}
             setMail={seteMail}
             setTel={setTel}
+          />
+          <ModalComponentScreen
+            flag={flag}
+            visible={visible}
+            label="Вы успешно поменяли пароль!"
+            textBtn="Готово"
+            onPress={closeModal}
           />
           <InputPassword password={password} setPassword={setPassword} />
           {authError && <ErrorField error={authError} />}
