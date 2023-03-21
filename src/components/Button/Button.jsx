@@ -39,9 +39,7 @@ export const Button = ({
         recoveryError?.message?.length > 0 && styles.disabled,
       ]}
       onPress={onPress}
-      disabled={
-        !isPasswordWidthPass || (recoveryError?.message?.length > 0 && true)
-      }
+      disabled={!isPasswordWidthPass || recoveryError?.message?.length > 0}
     >
       <Text style={styles.labelBtn}>{label}</Text>
     </TouchableOpacity>

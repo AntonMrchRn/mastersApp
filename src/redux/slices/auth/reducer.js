@@ -15,6 +15,7 @@ const initialState = {
   timeout: null,
   restore: false,
   visible: false,
+  visibleEmail: false,
 };
 
 export const userAuth = createSlice({
@@ -41,6 +42,9 @@ export const userAuth = createSlice({
     },
     modalVisible: (state, action) => {
       state.visible = action.payload;
+    },
+    modalVisibleEmail: (state, action) => {
+      state.visibleEmail = action.payload;
     },
   },
   extraReducers: builder => {
@@ -96,6 +100,7 @@ export const {
   timerOff,
   clearRecoveryError,
   modalVisible,
+  modalVisibleEmail,
 } = userAuth.actions;
 
 export default userAuth.reducer;

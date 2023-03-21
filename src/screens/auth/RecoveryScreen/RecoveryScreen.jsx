@@ -1,36 +1,33 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import {
-  KeyboardAvoidingView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { KeyboardAvoidingView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Button, Input, TypeSelection } from '~/components';
 import ForgotPreview from '../../../components/auth/ForgotPreview/ForgotPreview';
+import ModalComponentScreen from '../../../components/auth/ModalComponentAuth';
 import { TimerBlock } from '../../../components/auth/Timer/Timer';
 import Header from '../../../components/Header/Header';
-import ModalScreen from '../../../components/ModalScreen';
 import Spacer from '../../../components/Spacer/Spacer';
 import { storageMMKV } from '../../../mmkv/storage';
 import { recoveryPassword } from '../../../redux/slices/auth/asyncActions';
-import { clearRecoveryError } from '../../../redux/slices/auth/reducer';
+import {
+  clearRecoveryError,
+  modalVisibleEmail,
+} from '../../../redux/slices/auth/reducer';
 import { configApp } from '../../../utils/helpers/platform';
 
 import { styles } from './style';
 
 export const RecoveryScreen = () => {
-  const { isRecovery, timeout, recoveryError } = useSelector(
+  const { isRecovery, timeout, recoveryError, visibleEmail } = useSelector(
     state => state.auth
   );
   const [isPhoneAuth, setIsPhoneAuth] = useState(true);
   const [tel, setTel] = useState('');
   const [email, seteMail] = useState('');
   const [password, setPassword] = useState('');
-  const [visible, setVisible] = useState(false);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -44,7 +41,7 @@ export const RecoveryScreen = () => {
   }, []);
 
   const closeModal = () => {
-    setVisible(false);
+    dispatch(modalVisibleEmail(false));
     dispatch(clearRecoveryError());
     navigation.navigate('SignUpScreen');
   };
@@ -60,7 +57,7 @@ export const RecoveryScreen = () => {
       dispatch(clearRecoveryError());
     }
     if (!isPhoneAuth) {
-      setVisible(true);
+      dispatch(modalVisibleEmail(true));
     }
   }, [isRecovery]);
 
@@ -77,20 +74,14 @@ export const RecoveryScreen = () => {
             setIsPhoneAuth={setIsPhoneAuth}
             isPhoneAuth={isPhoneAuth}
           />
-          <ModalScreen visible={visible}>
-            <Text style={styles.titleInfo}>
-              Восстановление пароля На ваш Email отправлено письмо для
-              подтверждения смены пароля. Следуйте инструкциям в письме.
-            </Text>
-            <View style={styles.containerBtn}>
-              <TouchableOpacity
-                style={styles.btnClose}
-                onPress={() => closeModal()}
-              >
-                <Text style={styles.textBtn}>Перейти на главную</Text>
-              </TouchableOpacity>
-            </View>
-          </ModalScreen>
+          <ModalComponentScreen
+            visible={visibleEmail}
+            navigation={navigation}
+            label="Восстановление пароля На ваш Email отправлено письмо для
+              подтверждения смены пароля. Следуйте инструкциям в письме."
+            textBtn="Перейти на главную"
+            onPress={closeModal}
+          />
           <Spacer />
           <Input
             isPhoneAuth={isPhoneAuth}

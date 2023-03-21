@@ -7,7 +7,7 @@ const Header = ({ label = '', callBack = () => {} }) => {
   return (
     <View style={styles.container}>
       <View style={styles.lateralWrapper}>
-        <TouchableOpacity style={styles.btnBack} onPress={() => callBack()}>
+        <TouchableOpacity style={styles.btnBack} onPress={callBack}>
           <Image
             source={require('../../assets/icons/arrowBack.png')}
             style={styles.icon}

@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-import {
-  KeyboardAvoidingView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { KeyboardAvoidingView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -17,7 +12,7 @@ import {
   Logo,
   TypeSelection,
 } from '~/components';
-import ModalScreen from '../../../components/ModalScreen';
+import ModalComponentScreen from '../../../components/auth/ModalComponentAuth';
 
 import { fetchUserAuth } from '../../../redux/slices/auth/asyncActions';
 import { modalVisible } from '../../../redux/slices/auth/reducer';
@@ -33,6 +28,7 @@ export const SignUpScreen = () => {
   const [tel, setTel] = useState('');
   const [email, seteMail] = useState('');
   const [password, setPassword] = useState('');
+  const [flag, setFlag] = useState(true);
 
   const authRequest = () =>
     dispatch(fetchUserAuth({ tel, email, password, isPhoneAuth }));
@@ -60,14 +56,13 @@ export const SignUpScreen = () => {
             setMail={seteMail}
             setTel={setTel}
           />
-          <ModalScreen visible={visible}>
-            <Text style={styles.titleInfo}>Вы успешно поменяли пароль!</Text>
-            <View style={styles.containerBtn}>
-              <TouchableOpacity style={styles.btnClose} onPress={closeModal}>
-                <Text style={styles.textBtn}>Готово</Text>
-              </TouchableOpacity>
-            </View>
-          </ModalScreen>
+          <ModalComponentScreen
+            flag={flag}
+            visible={visible}
+            label="Вы успешно поменяли пароль!"
+            textBtn="Готово"
+            onPress={closeModal}
+          />
           <InputPassword password={password} setPassword={setPassword} />
           {authError && <ErrorField error={authError} />}
           <ForgotPassword />
