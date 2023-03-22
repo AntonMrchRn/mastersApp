@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import TabNavigation from './App/TabNavigation';
 import AuthNavigation from './Auth';
 import { useCheckLogin } from '../utils/hooks/useCheckLogin';
+import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createStackNavigator();
 
@@ -13,7 +14,7 @@ const RootNavigate = () => {
 
   useEffect(() => {
     checkLogin();
-    // SplashScreen.hide(); TODO
+    SplashScreen.hide();
   }, []);
 
   return (
