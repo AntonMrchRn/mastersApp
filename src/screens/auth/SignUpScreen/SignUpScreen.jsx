@@ -30,8 +30,9 @@ export const SignUpScreen = () => {
   const [password, setPassword] = useState('');
   const [flag, setFlag] = useState(true);
 
-  const authRequest = () =>
+  const authRequest = () => {
     dispatch(fetchUserAuth({ tel, email, password, isPhoneAuth }));
+  };
 
   const closeModal = () => {
     dispatch(modalVisible(false));

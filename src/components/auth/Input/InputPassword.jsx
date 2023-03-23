@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Image, TextInput, TouchableOpacity, View } from 'react-native';
+import { TextInput, TouchableOpacity, View } from 'react-native';
+import Eye from '../../svg/auth/Eye';
+import HideEye from '../../svg/auth/HideEye';
 
 import { styles } from './style';
 
@@ -25,14 +27,9 @@ export const InputPassword = ({ password, setPassword }) => {
           style={styles.btn}
           onPress={() => setIsShowPassword(!isShowPassword)}
         >
-          <Image
-            source={
-              isShowPassword
-                ? require('../../../assets/icons/hideEye.png')
-                : require('../../../assets/icons/Eye.png')
-            }
-            style={styles.iconPassword}
-          />
+          <View style={styles.iconPassword}>
+            {isShowPassword ? <HideEye /> : <Eye />}
+          </View>
         </TouchableOpacity>
       </>
     </View>
