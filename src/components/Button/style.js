@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
   },
   labelBtn: {
     color: '#fff',
-    fontFamily: 'Montserrat-Black',
+    fontFamily: 'Montserrat-Regular',
     fontWeight: '400',
   },
   activeTextBtn: {

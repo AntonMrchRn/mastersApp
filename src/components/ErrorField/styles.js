@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
     fontSize: 13,
     paddingRight: 10,
     width: '90%',
-    fontFamily: 'Montserrat-Black',
+    fontFamily: 'Montserrat-Regular',
     fontWeight: '400',
   },
 });

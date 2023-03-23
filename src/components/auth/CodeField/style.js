@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
   cell: {
     fontSize: 20,
     fontWeight: '400',
-    fontFamily: 'Montserrat-Black',
+    fontFamily: 'Montserrat-Regular',
   },
   wrapper: {
     justifyContent: 'center',

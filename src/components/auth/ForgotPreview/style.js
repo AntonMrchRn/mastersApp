@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '400',
     paddingBottom: 7,
-    fontFamily: 'Montserrat-Black',
+    fontFamily: 'Montserrat-Regular',
+    color: 'black',
   },
 });

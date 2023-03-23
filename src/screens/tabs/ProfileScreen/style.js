@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   text: {
-    fontFamily: 'Montserrat-Black',
+    fontFamily: 'Montserrat-Regular',
     color: 'black',
     fontWeight: '400',
   },

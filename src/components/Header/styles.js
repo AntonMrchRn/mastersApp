@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
-    fontFamily: 'Montserrat-Black',
+    fontFamily: 'Montserrat-Regular',
     fontWeight: '400',
   },
 });

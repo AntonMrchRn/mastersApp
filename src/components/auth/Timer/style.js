@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     color: 'black',
-    fontFamily: 'Montserrat-Black',
+    fontFamily: 'Montserrat-Regular',
     fontWeight: '400',
   },
   link: {
@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     color: '#000',
     textAlign: 'center',
-    fontFamily: 'Montserrat-Black',
+    fontFamily: 'Montserrat-Regular',
     fontWeight: '500',
   },
   btnRepeatCode: {
@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
   textBtn: {
     fontSize: 13,
     color: configApp.brandColor,
-    fontFamily: 'Montserrat-Black',
+    fontFamily: 'Montserrat-Regular',
     fontWeight: '400',
   },
 });
