@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 5,
     color: 'black',
     fontFamily: 'Montserrat-Black',
-    fontWeight: '500',
+    fontWeight: '400',
   },
   containerBtn: {
     width: '100%',
@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: 'center',
     fontFamily: 'Montserrat-Black',
-    fontWeight: '500',
+    fontWeight: '400',
   },
   containerBtnPhone: {
     width: '100%',

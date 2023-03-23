@@ -31,6 +31,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
     fontFamily: 'Montserrat-Black',
-    fontWeight: '500',
+    fontWeight: '400',
   },
 });

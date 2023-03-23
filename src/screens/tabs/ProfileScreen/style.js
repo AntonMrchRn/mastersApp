@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Montserrat-Black',
     color: 'black',
-    fontWeight: '500',
+    fontWeight: '400',
   },
 });
 

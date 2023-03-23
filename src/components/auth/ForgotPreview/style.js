@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
   },
   text: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '400',
     paddingBottom: 7,
     fontFamily: 'Montserrat-Black',
   },

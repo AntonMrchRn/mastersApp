@@ -18,6 +18,6 @@ export const styles = StyleSheet.create({
     color: configApp.brandColor,
     fontSize: 13,
     fontFamily: 'Montserrat-Black',
-    fontWeight: '500',
+    fontWeight: '400',
   },
 });
