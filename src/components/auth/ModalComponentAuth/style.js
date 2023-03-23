@@ -13,6 +13,8 @@ export const styles = StyleSheet.create({
     height: 100,
     paddingHorizontal: 5,
     color: 'black',
+    fontFamily: 'Montserrat-Black',
+    fontWeight: '500',
   },
   containerBtn: {
     width: '100%',
@@ -23,12 +25,16 @@ export const styles = StyleSheet.create({
   textBtn: {
     textAlign: 'center',
     color: 'white',
+    fontFamily: 'Montserrat-Black',
+    fontWeight: '400',
   },
   titleInfoPhone: {
     color: 'black',
     fontSize: 17,
     marginTop: 20,
     textAlign: 'center',
+    fontFamily: 'Montserrat-Black',
+    fontWeight: '500',
   },
   containerBtnPhone: {
     width: '100%',
@@ -39,6 +45,8 @@ export const styles = StyleSheet.create({
   textBtnPhone: {
     textAlign: 'center',
     color: 'white',
+    fontFamily: 'Montserrat-Black',
+    fontWeight: '400',
   },
   btnClosePhone: {
     width: '90%',

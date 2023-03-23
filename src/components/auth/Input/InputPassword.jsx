@@ -18,7 +18,6 @@ export const InputPassword = ({ password, setPassword }) => {
           placeholderTextColor={'#5e5e5e'}
           value={password}
           onChangeText={text => setPassword(text)}
-          maxLength={16}
           onPressIn={() => setActive(true)}
           onEndEditing={() => setActive(false)}
           secureTextEntry={isShowPassword}

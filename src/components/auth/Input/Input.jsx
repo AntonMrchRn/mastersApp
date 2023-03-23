@@ -39,7 +39,7 @@ export const Input = ({ isPhoneAuth, tel, setTel, email, setMail }) => {
           placeholder={'Email'}
           keyboardType="email-address"
           placeholderTextColor={'#5e5e5e'}
-          maxLength={36}
+          maxLength={60}
           value={email}
           onChangeText={text => setMail(text)}
           onPressIn={() => setActive(true)}

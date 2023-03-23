@@ -20,6 +20,9 @@ export const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     position: 'relative',
+    paddingRight: 28,
+    fontFamily: 'Montserrat-Black',
+    fontWeight: '500',
   },
   iconPassword: {
     width: 23,
@@ -34,6 +37,8 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     paddingLeft: 4,
     paddingRight: configApp.ios ? 3 : 0,
+    fontFamily: 'Montserrat-Black',
+    fontWeight: '500',
   },
   activeInput: {
     borderColor: configApp.brandColor,

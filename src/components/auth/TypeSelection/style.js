@@ -27,8 +27,10 @@ export const styles = StyleSheet.create({
     color: configApp.brandColor,
     fontWeight: '400',
     fontSize: 14,
+    fontFamily: 'Montserrat-Black',
   },
   activeTextBtn: {
     color: '#fff',
+    fontFamily: 'Montserrat-Black',
   },
 });

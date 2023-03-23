@@ -15,6 +15,7 @@ export const Button = ({
   withOutPassword,
   value,
   isRestore,
+  flag,
   recoveryError,
 }) => {
   const isPhone = tel?.length === 10 && isPhoneAuth;
@@ -50,12 +51,16 @@ export const Button = ({
         withOutPassword
           ? validWithOutPassword && styles.disabled
           : validWithPassword && styles.disabled,
-        isActiveTimer && styles.disabled,
+        !flag && isActiveTimer && styles.disabled,
       ]}
       onPress={onPress}
       disabled={
         withOutPassword
-          ? validWithOutPassword || isActiveTimer
+          ? flag
+            ? validWithOutPassword
+            : validWithOutPassword || isActiveTimer
+          : flag
+          ? validWithPassword
           : validWithPassword || isActiveTimer
       }
     >

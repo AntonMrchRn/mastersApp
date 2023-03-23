@@ -7,6 +7,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     backgroundColor: '#fff',
   },
+  text: {
+    fontFamily: 'Montserrat-Black',
+    color: 'black',
+    fontWeight: '500',
+  },
 });
 
 export default styles;

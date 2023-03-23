@@ -17,7 +17,6 @@ export const fetchUserAuth = createAsyncThunk(
 
       return data;
     } catch (error) {
-      console.log('error', error.error);
       return thunkApi.rejectWithValue(error.response.data);
     }
   }

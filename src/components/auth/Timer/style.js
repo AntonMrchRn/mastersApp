@@ -11,6 +11,8 @@ export const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     color: 'black',
+    fontFamily: 'Montserrat-Black',
+    fontWeight: '400',
   },
   link: {
     fontSize: 20,
@@ -22,15 +24,19 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   timer: {
-    fontSize: 15,
+    fontSize: 14,
     color: '#000',
     textAlign: 'center',
+    fontFamily: 'Montserrat-Black',
+    fontWeight: '500',
   },
   btnRepeatCode: {
     marginTop: 25,
   },
   textBtn: {
-    fontSize: 14,
+    fontSize: 13,
     color: configApp.brandColor,
+    fontFamily: 'Montserrat-Black',
+    fontWeight: '500',
   },
 });

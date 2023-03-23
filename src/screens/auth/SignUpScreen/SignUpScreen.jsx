@@ -28,7 +28,6 @@ export const SignUpScreen = () => {
   const [tel, setTel] = useState('');
   const [email, seteMail] = useState('');
   const [password, setPassword] = useState('');
-  const [flag, setFlag] = useState(true);
 
   const authRequest = () => {
     dispatch(fetchUserAuth({ tel, email, password, isPhoneAuth }));
@@ -58,7 +57,7 @@ export const SignUpScreen = () => {
             setTel={setTel}
           />
           <ModalComponentScreen
-            flag={flag}
+            flag={true}
             visible={visible}
             label="Вы успешно поменяли пароль!"
             textBtn="Готово"
@@ -68,6 +67,7 @@ export const SignUpScreen = () => {
           {authError && <ErrorField error={authError} />}
           <ForgotPassword />
           <Button
+            flag={true}
             isPhoneAuth={isPhoneAuth}
             tel={tel}
             password={password}

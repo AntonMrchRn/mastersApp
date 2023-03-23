@@ -14,7 +14,6 @@ export const styles = StyleSheet.create({
     paddingVertical: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'red',
   },
   icon: { width: 22, height: 25 },
   lateralWrapper: {
@@ -31,5 +30,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
+    fontFamily: 'Montserrat-Black',
+    fontWeight: '500',
   },
 });

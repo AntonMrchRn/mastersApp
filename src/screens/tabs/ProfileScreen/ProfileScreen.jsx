@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { Button } from '~/components';
@@ -18,8 +18,8 @@ export const ProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Профиль</Text>
-      <Button label="Выйти из аккаунта" onPress={onExit} />
+      <Text style={styles.text}>Профиль</Text>
+      <Button label="Выйти из аккаунта" onPress={onExit} flag={true} />
     </View>
   );
 };

@@ -48,7 +48,7 @@ export const RecoveryConfirmationScreen = ({
 
   const restoreRequest = () => {
     dispatch(restorePassword({ password, value })).then(res => {
-      if (res.payload === null) {
+      if (res?.payload === null || res?.payload === undefined) {
         dispatch(clearRecoveryError());
         navigation.navigate('SignUpScreen');
         dispatch(modalVisible(true));
@@ -62,7 +62,7 @@ export const RecoveryConfirmationScreen = ({
 
   useEffect(() => {
     dispatch(clearRecoveryError());
-  }, [password]);
+  }, [password, value]);
 
   return (
     <SafeAreaView style={styles.container}>

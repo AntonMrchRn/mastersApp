@@ -16,6 +16,8 @@ export const styles = StyleSheet.create({
   },
   labelBtn: {
     color: configApp.brandColor,
-    fontSize: 14,
+    fontSize: 13,
+    fontFamily: 'Montserrat-Black',
+    fontWeight: '500',
   },
 });

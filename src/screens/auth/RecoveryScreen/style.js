@@ -15,5 +15,7 @@ export const styles = StyleSheet.create({
   error: {
     color: 'red',
     textAlign: 'center',
+    fontFamily: 'Montserrat-Black',
+    fontWeight: '400',
   },
 });

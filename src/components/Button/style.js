@@ -19,6 +19,8 @@ export const styles = StyleSheet.create({
   },
   labelBtn: {
     color: '#fff',
+    fontFamily: 'Montserrat-Black',
+    fontWeight: '400',
   },
   activeTextBtn: {
     color: configApp.brandColor,

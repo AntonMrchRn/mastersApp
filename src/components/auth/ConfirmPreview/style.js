@@ -13,5 +13,6 @@ export const styles = StyleSheet.create({
     fontWeight: '500',
     paddingBottom: 7,
     textAlign: 'center',
+    fontFamily: 'Montserrat-Black',
   },
 });
