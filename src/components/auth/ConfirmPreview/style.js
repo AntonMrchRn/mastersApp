@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import fonts from '../../fonts';
 
 export const styles = StyleSheet.create({
   container: {
@@ -13,7 +14,7 @@ export const styles = StyleSheet.create({
     fontWeight: '400',
     paddingBottom: 7,
     textAlign: 'center',
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: fonts.main_400,
     color: 'black',
   },
 });

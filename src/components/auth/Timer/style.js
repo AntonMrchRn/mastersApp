@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { configApp } from '../../../utils/helpers/platform';
+import fonts from '../../fonts';
 
 export const styles = StyleSheet.create({
   container: {
@@ -11,7 +12,7 @@ export const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     color: 'black',
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: fonts.main_400,
     fontWeight: '400',
   },
   link: {
@@ -27,7 +28,7 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     color: '#000',
     textAlign: 'center',
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: fonts.main_400,
     fontWeight: '500',
   },
   btnRepeatCode: {
@@ -36,7 +37,7 @@ export const styles = StyleSheet.create({
   textBtn: {
     fontSize: 13,
     color: configApp.brandColor,
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: fonts.main_400,
     fontWeight: '400',
   },
 });

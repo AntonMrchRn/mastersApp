@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { configApp } from '../../../utils/helpers/platform';
+import fonts from '../../fonts';
 
 export const styles = StyleSheet.create({
   container: {
@@ -27,10 +28,10 @@ export const styles = StyleSheet.create({
     color: configApp.brandColor,
     fontWeight: '400',
     fontSize: 14,
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: fonts.main_400,
   },
   activeTextBtn: {
     color: '#fff',
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: fonts.main_400,
   },
 });

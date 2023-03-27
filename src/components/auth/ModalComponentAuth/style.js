@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import fonts from '../../fonts';
 
 export const styles = StyleSheet.create({
   btnClose: {
@@ -13,7 +14,7 @@ export const styles = StyleSheet.create({
     height: 100,
     paddingHorizontal: 5,
     color: 'black',
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: fonts.main_400,
     fontWeight: '400',
   },
   containerBtn: {
@@ -25,7 +26,7 @@ export const styles = StyleSheet.create({
   textBtn: {
     textAlign: 'center',
     color: 'white',
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: fonts.main_400,
     fontWeight: '400',
   },
   titleInfoPhone: {
@@ -33,7 +34,7 @@ export const styles = StyleSheet.create({
     fontSize: 17,
     marginTop: 20,
     textAlign: 'center',
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: fonts.main_400,
     fontWeight: '400',
   },
   containerBtnPhone: {
@@ -45,7 +46,7 @@ export const styles = StyleSheet.create({
   textBtnPhone: {
     textAlign: 'center',
     color: 'white',
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: fonts.main_400,
     fontWeight: '400',
   },
   btnClosePhone: {
