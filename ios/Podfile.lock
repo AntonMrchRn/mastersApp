@@ -73,6 +73,7 @@ PODS:
   - fmt (6.2.1)
   - glog (0.3.5)
   - hermes-engine (0.70.3)
+  - InputMask (6.1.0)
   - libevent (2.1.12)
   - MMKV (1.2.15):
     - MMKVCore (~> 1.2.15)
@@ -317,6 +318,10 @@ PODS:
     - ReactCommon/turbomodule/core
   - react-native-splash-screen (3.3.0):
     - React-Core
+  - react-native-text-input-mask (3.1.4):
+    - InputMask (~> 6.1.0)
+    - React-Core
+    - React-RCTText
   - React-perflogger (0.70.3)
   - React-RCTActionSheet (0.70.3):
     - React-Core/RCTActionSheetHeaders (= 0.70.3)
@@ -448,6 +453,7 @@ DEPENDENCIES:
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
+  - react-native-text-input-mask (from `../node_modules/react-native-text-input-mask`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -479,6 +485,7 @@ SPEC REPOS:
     - Flipper-RSocket
     - FlipperKit
     - fmt
+    - InputMask
     - libevent
     - MMKV
     - MMKVCore
@@ -537,6 +544,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
+  react-native-text-input-mask:
+    :path: "../node_modules/react-native-text-input-mask"
   React-perflogger:
     :path: "../node_modules/react-native/ReactCommon/reactperflogger"
   React-RCTActionSheet:
@@ -590,6 +599,7 @@ SPEC CHECKSUMS:
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   hermes-engine: bb344d89a0d14c2c91ad357480a79698bb80e186
+  InputMask: 71d291dc54d2deaeac6512afb6ec2304228c0bb7
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   MMKV: 7f34558bbb5a33b0eaefae2de4b6a20a2ffdad6f
   MMKVCore: ddf41b9d9262f058419f9ba7598719af56c02cd3
@@ -613,6 +623,7 @@ SPEC CHECKSUMS:
   react-native-mmkv: 69b9c003f10afdd01addf7c6ee784ce42ee2eff3
   react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
+  react-native-text-input-mask: 36a546b378fadd2efe1b7484a859d34bc2c80395
   React-perflogger: 082b4293f0b3914ff41da35a6c06ac4490fcbcc8
   React-RCTActionSheet: 83da3030deb5dea54b398129f56540a44e64d3ae
   React-RCTAnimation: bac3a4f4c0436554d9f7fbb1352a0cdcb1fb0f1c
@@ -633,6 +644,6 @@ SPEC CHECKSUMS:
   Yoga: 2ed968a4f060a92834227c036279f2736de0fce3
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 10dd12f8b1b13f1bd458a5a3b7abd4c146a8d659
+PODFILE CHECKSUM: 637f01c0c62b312005aaf49aac6e4493e2d80a03
 
 COCOAPODS: 1.11.3

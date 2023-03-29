@@ -16,6 +16,8 @@ export const styles = StyleSheet.create({
     color: 'black',
     fontFamily: fonts.main_400,
     fontWeight: '400',
+    top: 7,
+    fontSize: 15,
   },
   containerBtn: {
     width: '100%',

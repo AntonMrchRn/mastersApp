@@ -9,13 +9,16 @@ import {
   ForgotPassword,
   Input,
   InputPassword,
-  Logo,
   TypeSelection,
 } from '~/components';
 import ModalComponentScreen from '../../../components/auth/ModalComponentAuth';
+import Logo from '../../../components/svg/auth/Logo';
 
 import { fetchUserAuth } from '../../../redux/slices/auth/asyncActions';
-import { modalVisible } from '../../../redux/slices/auth/reducer';
+import {
+  clearAuthError,
+  modalVisible,
+} from '../../../redux/slices/auth/reducer';
 import { configApp } from '../../../utils/helpers/platform';
 
 import { styles } from './style';
@@ -31,6 +34,7 @@ export const SignUpScreen = () => {
 
   const authRequest = () => {
     dispatch(fetchUserAuth({ tel, email, password, isPhoneAuth }));
+    dispatch(clearAuthError());
   };
 
   const closeModal = () => {
@@ -48,6 +52,8 @@ export const SignUpScreen = () => {
           <TypeSelection
             setIsPhoneAuth={setIsPhoneAuth}
             isPhoneAuth={isPhoneAuth}
+            setTel={setTel}
+            seteMail={seteMail}
           />
           <Input
             isPhoneAuth={isPhoneAuth}

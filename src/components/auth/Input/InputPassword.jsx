@@ -10,13 +10,14 @@ export const InputPassword = ({ password, setPassword }) => {
   const [isShowPassword, setIsShowPassword] = useState(true);
 
   return (
-    <View style={[styles.container, active && styles.activeInput]}>
+    <View style={[styles.containerPassword, active && styles.activeInput]}>
       <>
         <TextInput
-          style={styles.inputBasic}
+          style={styles.inputBasicPassword}
           placeholder={'Пароль'}
           placeholderTextColor={'#5e5e5e'}
           value={password}
+          maxLength={64}
           onChangeText={text => setPassword(text)}
           onPressIn={() => setActive(true)}
           onEndEditing={() => setActive(false)}

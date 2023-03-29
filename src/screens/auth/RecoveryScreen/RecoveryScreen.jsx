@@ -73,11 +73,13 @@ export const RecoveryScreen = () => {
           <TypeSelection
             setIsPhoneAuth={setIsPhoneAuth}
             isPhoneAuth={isPhoneAuth}
+            setTel={setTel}
+            seteMail={seteMail}
           />
           <ModalComponentScreen
             visible={visibleEmail}
             navigation={navigation}
-            label="Восстановление пароля На ваш Email отправлено письмо для
+            label="На ваш Email отправлено письмо для
               подтверждения смены пароля. Следуйте инструкциям в письме."
             textBtn="Перейти на главную"
             onPress={closeModal}
@@ -91,7 +93,9 @@ export const RecoveryScreen = () => {
             setTel={setTel}
           />
           {recoveryError?.message?.length > 0 && (
-            <Text style={styles.error}>{recoveryError?.message}</Text>
+            <View style={styles.containerError}>
+              <Text style={styles.error}>{recoveryError?.message}</Text>
+            </View>
           )}
           <Spacer size="L" />
           <Button

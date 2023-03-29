@@ -46,6 +46,9 @@ export const userAuth = createSlice({
     modalVisibleEmail: (state, action) => {
       state.visibleEmail = action.payload;
     },
+    clearAuthError: (state, action) => {
+      state.authError = action.payload;
+    },
   },
   extraReducers: builder => {
     // auth
@@ -101,6 +104,7 @@ export const {
   clearRecoveryError,
   modalVisible,
   modalVisibleEmail,
+  clearAuthError,
 } = userAuth.actions;
 
 export default userAuth.reducer;

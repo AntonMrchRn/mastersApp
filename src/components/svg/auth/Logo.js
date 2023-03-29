@@ -6,7 +6,7 @@ const Logo = () => {
   return (
     <View style={styles.container}>
       <Svg
-        width="304"
+        width="245"
         height="114"
         viewBox="0 0 304 114"
         fill="none"
@@ -50,8 +50,8 @@ export default Logo;
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: 15,
-    flex: 1.5,
+    justifyContent: 'flex-end',
+    paddingBottom: 10,
+    flex: 1.2,
   },
 });

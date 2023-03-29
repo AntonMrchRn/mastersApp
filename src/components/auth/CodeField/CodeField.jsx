@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Text, View } from 'react-native';
 
 import {
@@ -24,7 +24,9 @@ const CodeFieldInput = ({ value, setValue }) => {
         ref={ref}
         {...props}
         value={value}
-        onChangeText={setValue}
+        onChangeText={val => {
+          setValue(val.replace(/[\D]+/g, ''));
+        }}
         cellCount={CELL_COUNT}
         keyboardType="number-pad"
         textContentType="oneTimeCode"

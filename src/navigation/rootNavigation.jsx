@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -11,11 +11,18 @@ const Stack = createStackNavigator();
 
 const RootNavigate = () => {
   const [checkLogin, isAuth] = useCheckLogin();
+  const [hideSplash, setHideSplash] = useState(false);
 
   useEffect(() => {
     checkLogin();
-    SplashScreen.hide();
+    setTimeout(() => {
+      setHideSplash(true);
+    }, 1500);
   }, []);
+
+  useEffect(() => {
+    hideSplash && SplashScreen.hide();
+  }, [hideSplash]);
 
   return (
     <Stack.Navigator

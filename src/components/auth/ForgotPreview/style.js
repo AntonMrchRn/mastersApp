@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
     width: '90%',
     flx: 1,
     bottom: 30,
+    height: 90,
   },
   text: {
     fontSize: 14,
@@ -13,5 +14,6 @@ export const styles = StyleSheet.create({
     paddingBottom: 7,
     fontFamily: fonts.main_400,
     color: 'black',
+    textAlign: 'center',
   },
 });

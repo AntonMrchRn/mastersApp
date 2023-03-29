@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '400',
     fontFamily: fonts.main_400,
+    color: 'black',
   },
   wrapper: {
     justifyContent: 'center',
