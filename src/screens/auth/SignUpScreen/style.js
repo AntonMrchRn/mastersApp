@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     padding: 15,
   },
   wrapperSignIn: {
-    flex: 3,
+    flex: Platform.OS === 'ios' ? 3 : 5,
     alignItems: 'center',
   },
 });

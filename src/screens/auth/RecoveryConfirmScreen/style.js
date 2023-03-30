@@ -7,7 +7,8 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   wrapperSignIn: {
-    flex: 1,
+    // flex: 2,
+    height: '100%',
     backgroundColor: '#fff',
     padding: 15,
     alignItems: 'center',

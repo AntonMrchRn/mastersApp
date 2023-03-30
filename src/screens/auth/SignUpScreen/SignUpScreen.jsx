@@ -47,8 +47,8 @@ export const SignUpScreen = () => {
         behavior={configApp.ios ? 'padding' : 'height'}
         style={styles.container}
       >
-        <Logo />
         <View style={styles.wrapperSignIn}>
+          <Logo />
           <TypeSelection
             setIsPhoneAuth={setIsPhoneAuth}
             isPhoneAuth={isPhoneAuth}

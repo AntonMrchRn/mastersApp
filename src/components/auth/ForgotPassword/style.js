@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 30,
     marginTop: 5,
+    height: 28,
   },
   btn: {
     paddingVertical: 5,

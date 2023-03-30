@@ -67,35 +67,40 @@ export const RecoveryConfirmationScreen = ({
   return (
     <SafeAreaView style={styles.container}>
       <Header label={'Подтверждение кодом'} callBack={goBack} />
-      <View style={styles.wrapperSignIn}>
-        <ConfrimPreview />
-        <Spacer />
-        <CodeFieldInput value={value} setValue={setValue} />
-        <InputPassword password={password} setPassword={setPassword} />
-        <Spacer size="L" />
-        {recoveryError?.message?.length > 0 && (
-          <View style={styles.containerError}>
-            <Text style={styles.error}>{recoveryError?.message}</Text>
-          </View>
-        )}
-        <Button
-          isRestore
-          isPhoneAuth={isPhoneAuth}
-          value={value}
-          password={password}
-          email={email}
-          label="Подтвердить"
-          isDisabled
-          withOutPassword
-          recoveryError={recoveryError}
-          onPress={restoreRequest}
-        />
-        <TimerBlock
-          expiredTimer={Number(`${timeout?.timeout}000`)}
-          isConfirm
-          callBack={recoveryRequest}
-        />
-      </View>
+      <KeyboardAvoidingView
+        behavior={configApp.ios ? 'padding' : 'height'}
+        style={styles.container}
+      >
+        <View style={styles.wrapperSignIn}>
+          <ConfrimPreview />
+          <Spacer />
+          <CodeFieldInput value={value} setValue={setValue} />
+          <InputPassword password={password} setPassword={setPassword} />
+          <Spacer size="L" />
+          {recoveryError?.message?.length > 0 && (
+            <View style={styles.containerError}>
+              <Text style={styles.error}>{recoveryError?.message}</Text>
+            </View>
+          )}
+          <Button
+            isRestore
+            isPhoneAuth={isPhoneAuth}
+            value={value}
+            password={password}
+            email={email}
+            label="Подтвердить"
+            isDisabled
+            withOutPassword
+            recoveryError={recoveryError}
+            onPress={restoreRequest}
+          />
+          <TimerBlock
+            expiredTimer={Number(`${timeout?.timeout}000`)}
+            isConfirm
+            callBack={recoveryRequest}
+          />
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

@@ -5,10 +5,10 @@ export const styles = StyleSheet.create({
   container: {
     width: '90%',
     flx: 1,
-    bottom: 30,
+    bottom: 18,
     justifyContent: 'center',
     alignItems: 'center',
-    height: 55,
+    height: 45,
   },
   text: {
     fontSize: 14,

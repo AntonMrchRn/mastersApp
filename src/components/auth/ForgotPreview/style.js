@@ -5,8 +5,8 @@ export const styles = StyleSheet.create({
   container: {
     width: '90%',
     flx: 1,
-    bottom: 30,
-    height: 90,
+    bottom: 33,
+    height: 92,
   },
   text: {
     fontSize: 14,

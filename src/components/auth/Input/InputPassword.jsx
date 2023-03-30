@@ -22,6 +22,7 @@ export const InputPassword = ({ password, setPassword }) => {
           onPressIn={() => setActive(true)}
           onEndEditing={() => setActive(false)}
           secureTextEntry={isShowPassword}
+          autoCapitalize="none"
         />
         <TouchableOpacity
           style={styles.btn}

@@ -1,13 +1,27 @@
 import React, { useState } from 'react';
 import { Image, Text, TextInput, View } from 'react-native';
-import TextInputMask from 'react-native-text-input-mask';
+import { TextInputMask } from 'react-native-masked-text';
 import { styles } from './style';
 
 export const Input = ({ isPhoneAuth, tel, setTel, email, setMail }) => {
   const [active, setActive] = useState(false);
 
+  React.useEffect(() => {
+    if (tel[0] === '7' || tel[0] === '8') {
+      setTel(tel.substring(1));
+    }
+    if (tel[0] !== '9' && tel[0] !== '7' && tel[0] !== '8') {
+      setTel('');
+    }
+  }, [tel]);
+
   return (
-    <View style={[styles.container, active && styles.activeInput]}>
+    <View
+      style={[
+        isPhoneAuth ? styles.container : styles.containerEmail,
+        active && styles.activeInput,
+      ]}
+    >
       {isPhoneAuth ? (
         <>
           <Image
@@ -17,21 +31,25 @@ export const Input = ({ isPhoneAuth, tel, setTel, email, setMail }) => {
           <Text style={styles.prefixPhone}>+7</Text>
           <TextInputMask
             style={styles.inputBasic}
+            type={'cel-phone'}
+            options={{
+              maskType: 'BRL',
+              withDDD: true,
+              dddMask: '(999) 999-99-99',
+            }}
+            value={tel}
+            onChangeText={text => setTel(text.replace(/[\D]+/g, ''))}
             placeholder={'(900) 000-00-00'}
-            keyboardType="numeric"
             placeholderTextColor={'#5e5e5e'}
-            maxLength={14}
+            maxLength={15}
+            keyboardType="numeric"
             onPressIn={() => setActive(true)}
             onEndEditing={() => setActive(false)}
-            mask={'([000]) [000]-[00]-[00]'}
-            onChangeText={value => {
-              setTel(value.replace(/[\D]+/g, ''));
-            }}
           />
         </>
       ) : (
         <TextInput
-          style={styles.inputBasic}
+          style={styles.inputBasicEmail}
           placeholder={'Email'}
           keyboardType="email-address"
           placeholderTextColor={'#5e5e5e'}

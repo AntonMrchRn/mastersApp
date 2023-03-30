@@ -148,7 +148,7 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
 
   if (!isActiveTimer && isConfirm) {
     return (
-      <TouchableOpacity style={styles.btnRepeatCode} onPress={() => callBack()}>
+      <TouchableOpacity style={styles.btnRepeatCode} onPress={callBack}>
         <Text style={styles.textBtn}>Запросить новый код</Text>
       </TouchableOpacity>
     );
