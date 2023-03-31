@@ -54,9 +54,8 @@ export const Button = ({
         withOutPassword
           ? validWithOutPassword && styles.disabled
           : validWithPassword && styles.disabled,
-        !flag && isPhoneAuth
-          ? isActiveTimer
-          : isActiveTimerEmail && styles.disabled,
+        !flag && isPhoneAuth && isActiveTimer && styles.disabled,
+        !flag && !isPhoneAuth && isActiveTimerEmail && styles.disabled,
         !valueCheckBox && styles.disabled,
       ]}
       onPress={onPress}
@@ -64,14 +63,15 @@ export const Button = ({
         withOutPassword
           ? flag
             ? validWithOutPassword || !valueCheckBox
-            : validWithOutPassword || isPhoneAuth
-            ? isActiveTimer
-            : isActiveTimerEmail || !valueCheckBox
+            : validWithOutPassword ||
+              (isPhoneAuth && isActiveTimer) ||
+              (!isPhoneAuth && isActiveTimerEmail) ||
+              !valueCheckBox
           : flag
           ? validWithPassword || !valueCheckBox
-          : validWithPassword || isPhoneAuth
-          ? isActiveTimer
-          : isActiveTimerEmail || !valueCheckBox
+          : validWithPassword ||
+            (isPhoneAuth && isActiveTimer) ||
+            (!isPhoneAuth && isActiveTimerEmail)
       }
     >
       <Text style={styles.labelBtn}>{label}</Text>
