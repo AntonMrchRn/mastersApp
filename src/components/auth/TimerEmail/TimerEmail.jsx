@@ -146,14 +146,6 @@ export function TimerBlockEmail({ expiredTimer, isConfirm, callBack }) {
     );
   }
 
-  if (!isActiveTimerEmail && isConfirm) {
-    return (
-      <TouchableOpacity style={styles.btnRepeatCode} onPress={callBack}>
-        <Text style={styles.textBtn}>Запросить новый код</Text>
-      </TouchableOpacity>
-    );
-  }
-
   if (isBlock?.block) {
     return (
       <BlockComponent
