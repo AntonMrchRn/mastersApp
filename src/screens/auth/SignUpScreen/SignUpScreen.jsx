@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,6 +12,7 @@ import {
   InputPassword,
   TypeSelection,
 } from '~/components';
+import CheckBoxAgreement from '../../../components/auth/CheckBox';
 import ModalComponentScreen from '../../../components/auth/ModalComponentAuth';
 import Logo from '../../../components/svg/auth/Logo';
 
@@ -18,6 +20,8 @@ import { fetchUserAuth } from '../../../redux/slices/auth/asyncActions';
 import {
   clearAuthError,
   modalVisible,
+  timeOutAsync,
+  timeOutAsyncEmail,
 } from '../../../redux/slices/auth/reducer';
 import { configApp } from '../../../utils/helpers/platform';
 
@@ -31,6 +35,7 @@ export const SignUpScreen = () => {
   const [tel, setTel] = useState('');
   const [email, seteMail] = useState('');
   const [password, setPassword] = useState('');
+  const [changeCheckBox, setChangeCheckBox] = useState(false);
 
   const authRequest = () => {
     dispatch(fetchUserAuth({ tel, email, password, isPhoneAuth }));
@@ -41,11 +46,34 @@ export const SignUpScreen = () => {
     dispatch(modalVisible(false));
   };
 
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('time');
+      dispatch(timeOutAsync(JSON.parse(jsonValue)));
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  const getDataEmail = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('timeEmail');
+      dispatch(timeOutAsyncEmail(JSON.parse(jsonValue)));
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  useEffect(() => {
+    getData();
+    getDataEmail();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         behavior={configApp.ios ? 'padding' : 'height'}
-        style={styles.container}
+        style={styles.containerKeyBoard}
       >
         <View style={styles.wrapperSignIn}>
           <Logo />
@@ -71,6 +99,10 @@ export const SignUpScreen = () => {
           />
           <InputPassword password={password} setPassword={setPassword} />
           {authError && <ErrorField error={authError} />}
+          <CheckBoxAgreement
+            valueCheckBox={changeCheckBox}
+            setChangeCheckBox={setChangeCheckBox}
+          />
           <ForgotPassword />
           <Button
             flag={true}
@@ -80,6 +112,7 @@ export const SignUpScreen = () => {
             email={email}
             isDisabled
             onPress={authRequest}
+            valueCheckBox={changeCheckBox}
           />
         </View>
       </KeyboardAvoidingView>

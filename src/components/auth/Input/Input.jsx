@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, Text, TextInput, View } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
 import { styles } from './style';
@@ -6,7 +6,7 @@ import { styles } from './style';
 export const Input = ({ isPhoneAuth, tel, setTel, email, setMail }) => {
   const [active, setActive] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (tel[0] === '7' || tel[0] === '8') {
       setTel(tel.substring(1));
     }
@@ -38,7 +38,9 @@ export const Input = ({ isPhoneAuth, tel, setTel, email, setMail }) => {
               dddMask: '(999) 999-99-99',
             }}
             value={tel}
-            onChangeText={text => setTel(text.replace(/[\D]+/g, ''))}
+            onChangeText={text =>
+              setTel(text.replace(/[\D]+/g, '').replace(/^[0-8]/, ''))
+            }
             placeholder={'(900) 000-00-00'}
             placeholderTextColor={'#5e5e5e'}
             maxLength={15}

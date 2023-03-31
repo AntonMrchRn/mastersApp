@@ -12,7 +12,10 @@ const initialState = {
   recoveryError: null,
   isRecovery: false,
   isActiveTimer: false,
+  isRecoveryEmail: false,
+  isActiveTimerEmail: false,
   timeout: null,
+  timeOutEmail: null,
   restore: false,
   visible: false,
   visibleEmail: false,
@@ -40,6 +43,15 @@ export const userAuth = createSlice({
     timerOff: state => {
       state.isActiveTimer = false;
     },
+    clearIsRecoveryEmail: state => {
+      state.isRecoveryEmail = false;
+    },
+    timerOnEmail: state => {
+      state.isActiveTimerEmail = true;
+    },
+    timerOffEmail: state => {
+      state.isActiveTimerEmail = false;
+    },
     modalVisible: (state, action) => {
       state.visible = action.payload;
     },
@@ -48,6 +60,12 @@ export const userAuth = createSlice({
     },
     clearAuthError: (state, action) => {
       state.authError = action.payload;
+    },
+    timeOutAsync: (state, action) => {
+      state.timeout = action.payload;
+    },
+    timeOutAsyncEmail: (state, action) => {
+      state.timeOutEmail = action.payload;
     },
   },
   extraReducers: builder => {
@@ -71,9 +89,11 @@ export const userAuth = createSlice({
       state.loading = true;
     });
     builder.addCase(recoveryPassword.fulfilled, (state, action) => {
-      state.isRecovery = true;
       state.loading = false;
-      state.timeout = action.payload;
+      action.payload.isPhoneAuth
+        ? ((state.timeout = action.payload.data), (state.isRecovery = true))
+        : ((state.timeOutEmail = action.payload.data),
+          (state.isRecoveryEmail = true));
     });
     builder.addCase(recoveryPassword.rejected, (state, action) => {
       state.recoveryError = action.payload;
@@ -101,10 +121,15 @@ export const {
   clearIsRecovery,
   timerOn,
   timerOff,
+  clearIsRecoveryEmail,
+  timerOnEmail,
+  timerOffEmail,
   clearRecoveryError,
   modalVisible,
   modalVisibleEmail,
   clearAuthError,
+  timeOutAsync,
+  timeOutAsyncEmail,
 } = userAuth.actions;
 
 export default userAuth.reducer;

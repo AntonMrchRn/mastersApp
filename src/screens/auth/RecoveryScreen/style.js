@@ -1,10 +1,16 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import fonts from '../../../components/fonts';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    justifyContent: 'center',
+  },
+  containerKeyBoard: {
+    flex: 1,
+    backgroundColor: '#fff',
+    justifyContent: 'space-around',
   },
   wrapperSignIn: {
     flex: 1,
@@ -23,5 +29,6 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: fonts.main_400,
     fontWeight: '400',
+    fontSize: Platform.OS === 'ios' ? 14 : 12,
   },
 });

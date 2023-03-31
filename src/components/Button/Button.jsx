@@ -17,6 +17,7 @@ export const Button = ({
   isRestore,
   flag,
   recoveryError,
+  valueCheckBox = true,
 }) => {
   const isPhone = tel?.length === 10 && isPhoneAuth;
   const isMail = email?.length > 0 && !isPhoneAuth;
@@ -30,7 +31,9 @@ export const Button = ({
   const validWithPassword = !isPhoneWithPass && !isMailWithPass && isDisabled;
   const validWithOutPassword = !isPhone && !isMail && isDisabled;
 
-  const { isActiveTimer } = useSelector(state => state.auth);
+  const { isActiveTimer, isActiveTimerEmail } = useSelector(
+    state => state.auth
+  );
 
   return isRestore ? (
     <TouchableOpacity
@@ -51,17 +54,24 @@ export const Button = ({
         withOutPassword
           ? validWithOutPassword && styles.disabled
           : validWithPassword && styles.disabled,
-        !flag && isActiveTimer && styles.disabled,
+        !flag && isPhoneAuth
+          ? isActiveTimer
+          : isActiveTimerEmail && styles.disabled,
+        !valueCheckBox && styles.disabled,
       ]}
       onPress={onPress}
       disabled={
         withOutPassword
           ? flag
-            ? validWithOutPassword
-            : validWithOutPassword || isActiveTimer
+            ? validWithOutPassword || !valueCheckBox
+            : validWithOutPassword || isPhoneAuth
+            ? isActiveTimer
+            : isActiveTimerEmail || !valueCheckBox
           : flag
-          ? validWithPassword
-          : validWithPassword || isActiveTimer
+          ? validWithPassword || !valueCheckBox
+          : validWithPassword || isPhoneAuth
+          ? isActiveTimer
+          : isActiveTimerEmail || !valueCheckBox
       }
     >
       <Text style={styles.labelBtn}>{label}</Text>

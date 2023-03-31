@@ -8,6 +8,7 @@ import { Button, Input, TypeSelection } from '~/components';
 import ForgotPreview from '../../../components/auth/ForgotPreview/ForgotPreview';
 import ModalComponentScreen from '../../../components/auth/ModalComponentAuth';
 import { TimerBlock } from '../../../components/auth/Timer/Timer';
+import { TimerBlockEmail } from '../../../components/auth/TimerEmail/TimerEmail';
 import Header from '../../../components/Header/Header';
 import Spacer from '../../../components/Spacer/Spacer';
 import { storageMMKV } from '../../../mmkv/storage';
@@ -21,9 +22,14 @@ import { configApp } from '../../../utils/helpers/platform';
 import { styles } from './style';
 
 export const RecoveryScreen = () => {
-  const { isRecovery, timeout, recoveryError, visibleEmail } = useSelector(
-    state => state.auth
-  );
+  const {
+    isRecovery,
+    timeout,
+    recoveryError,
+    visibleEmail,
+    timeOutEmail,
+    isRecoveryEmail,
+  } = useSelector(state => state.auth);
   const [isPhoneAuth, setIsPhoneAuth] = useState(true);
   const [tel, setTel] = useState('');
   const [email, seteMail] = useState('');
@@ -33,7 +39,7 @@ export const RecoveryScreen = () => {
   const navigation = useNavigation();
 
   const recoveryRequest = async () => {
-    await dispatch(recoveryPassword({ tel, email, isPhoneAuth }));
+    await dispatch(recoveryPassword({ tel, email, isPhoneAuth, navigation }));
   };
 
   useEffect(() => {
@@ -43,7 +49,7 @@ export const RecoveryScreen = () => {
   const closeModal = () => {
     dispatch(modalVisibleEmail(false));
     dispatch(clearRecoveryError());
-    navigation.navigate('SignUpScreen');
+    navigation.goBack();
   };
 
   const goBack = () => {
@@ -52,21 +58,21 @@ export const RecoveryScreen = () => {
   };
 
   useEffect(() => {
-    if (isRecovery && isPhoneAuth) {
+    if (isRecovery && isPhoneAuth && !isRecoveryEmail) {
       navigation.navigate('RecoveryConfirmScreen', { tel: tel });
       dispatch(clearRecoveryError());
     }
     if (!isPhoneAuth) {
       dispatch(modalVisibleEmail(true));
     }
-  }, [isRecovery]);
+  }, [isRecovery, isRecoveryEmail]);
 
   return (
     <SafeAreaView style={styles.container}>
       <Header label={'Восстановление пароля'} callBack={goBack} />
       <KeyboardAvoidingView
         behavior={configApp.ios ? 'padding' : 'height'}
-        style={styles.container}
+        style={styles.containerKeyBoard}
       >
         <View style={styles.wrapperSignIn}>
           <ForgotPreview />
@@ -108,7 +114,13 @@ export const RecoveryScreen = () => {
             withOutPassword
             onPress={recoveryRequest}
           />
-          <TimerBlock expiredTimer={Number(`${timeout?.timeout}000`)} />
+          {isPhoneAuth ? (
+            <TimerBlock expiredTimer={Number(timeout?.timeout * 1000)} />
+          ) : (
+            <TimerBlockEmail
+              expiredTimer={Number(timeOutEmail?.timeout * 1000)}
+            />
+          )}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

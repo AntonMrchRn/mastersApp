@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import fonts from '../../fonts';
 
 export const styles = StyleSheet.create({
@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.main_400,
     fontWeight: '400',
     top: 7,
-    fontSize: 15,
+    fontSize: Platform.OS === 'ios' ? 15 : 13,
   },
   containerBtn: {
     width: '100%',

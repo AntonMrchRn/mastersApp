@@ -69,7 +69,7 @@ export const RecoveryConfirmationScreen = ({
       <Header label={'Подтверждение кодом'} callBack={goBack} />
       <KeyboardAvoidingView
         behavior={configApp.ios ? 'padding' : 'height'}
-        style={styles.container}
+        style={styles.containerKeyBoard}
       >
         <View style={styles.wrapperSignIn}>
           <ConfrimPreview />
@@ -95,7 +95,7 @@ export const RecoveryConfirmationScreen = ({
             onPress={restoreRequest}
           />
           <TimerBlock
-            expiredTimer={Number(`${timeout?.timeout}000`)}
+            expiredTimer={Number(timeout?.timeout * 1000)}
             isConfirm
             callBack={recoveryRequest}
           />

@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { apiHost } from '../../../api/axios';
 import { storageMMKV } from '../../../mmkv/storage';
@@ -36,7 +37,17 @@ export const recoveryPassword = createAsyncThunk(
             email,
             password: password,
           });
-      return data;
+      if (isPhoneAuth) {
+        const jsonValue = JSON.stringify(data);
+        await AsyncStorage.setItem('time', jsonValue);
+        return { data: data, isPhoneAuth: isPhoneAuth };
+      }
+      if (!isPhoneAuth) {
+        const jsonValue = JSON.stringify(data);
+        await AsyncStorage.setItem('timeEmail', jsonValue);
+        console.log('>');
+        return { data: data, isPhoneAuth: isPhoneAuth };
+      }
     } catch (error) {
       return thunkApi.rejectWithValue(error.response.data);
     }
@@ -51,6 +62,8 @@ export const restorePassword = createAsyncThunk(
         code: value,
         password: password,
       });
+      const jsonValue = JSON.stringify(data);
+      await AsyncStorage.setItem('time', jsonValue);
       return data;
     } catch (error) {
       return thunkApi.rejectWithValue(error.response.data);

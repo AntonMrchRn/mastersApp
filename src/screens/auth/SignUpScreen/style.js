@@ -5,6 +5,13 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 15,
+    justifyContent: 'center',
+  },
+  containerKeyBoard: {
+    flex: 1,
+    backgroundColor: '#fff',
+    padding: 15,
+    justifyContent: 'flex-start',
   },
   wrapperSignIn: {
     flex: Platform.OS === 'ios' ? 3 : 5,
