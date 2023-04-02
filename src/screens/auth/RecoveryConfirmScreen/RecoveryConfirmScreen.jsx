@@ -16,6 +16,7 @@ import {
 } from '../../../redux/slices/auth/asyncActions';
 import {
   clearRecoveryError,
+  clearTimeOut,
   modalVisible,
 } from '../../../redux/slices/auth/reducer';
 import { configApp } from '../../../utils/helpers/platform';
@@ -42,7 +43,8 @@ export const RecoveryConfirmationScreen = ({
     navigation.goBack();
   };
 
-  const recoveryRequest = () => {
+  const recoveryRequest = async () => {
+    await dispatch(clearTimeOut());
     dispatch(recoveryPassword({ tel, email, isPhoneAuth }));
   };
 

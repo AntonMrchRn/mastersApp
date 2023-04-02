@@ -45,7 +45,6 @@ export const recoveryPassword = createAsyncThunk(
       if (!isPhoneAuth) {
         const jsonValue = JSON.stringify(data);
         await AsyncStorage.setItem('timeEmail', jsonValue);
-        console.log('>');
         return { data: data, isPhoneAuth: isPhoneAuth };
       }
     } catch (error) {
