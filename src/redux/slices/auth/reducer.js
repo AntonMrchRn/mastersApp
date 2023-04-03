@@ -67,9 +67,6 @@ export const userAuth = createSlice({
     timeOutAsyncEmail: (state, action) => {
       state.timeOutEmail = action.payload;
     },
-    clearTimeOut: (state, action) => {
-      state.timeout = action.payload;
-    },
   },
   extraReducers: builder => {
     // auth
@@ -133,7 +130,6 @@ export const {
   clearAuthError,
   timeOutAsync,
   timeOutAsyncEmail,
-  clearTimeOut,
 } = userAuth.actions;
 
 export default userAuth.reducer;
