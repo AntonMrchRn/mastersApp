@@ -85,7 +85,6 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
   });
 
   useEffect(() => {
-    console.log('isRecovery', isRecovery);
     if (isRecovery) {
       handleBlock();
     }

@@ -1,6 +1,7 @@
 import CheckBox from '@react-native-community/checkbox';
-import React, { useState } from 'react';
+import React from 'react';
 import { Linking, Platform, Text, TouchableOpacity, View } from 'react-native';
+import { configApp } from '../../../utils/helpers/platform';
 import { styles } from './style';
 
 const CheckBoxAgreement = ({ valueCheckBox, setChangeCheckBox }) => {
@@ -18,21 +19,33 @@ const CheckBoxAgreement = ({ valueCheckBox, setChangeCheckBox }) => {
             onValueChange={newValue => setChangeCheckBox(newValue)}
             style={styles.checkBox}
             hideBox
+            onCheckColor={configApp.brandColor}
           />
         </View>
       ) : (
-        <CheckBox
-          disabled={false}
-          value={valueCheckBox}
-          onValueChange={newValue => setChangeCheckBox(newValue)}
-          style={styles.checkBox}
-          hideBox
-        />
+        <View
+          style={[
+            styles.wrapperCheckBoxAndroid,
+            valueCheckBox && styles.activeAndroid,
+          ]}
+        >
+          <CheckBox
+            disabled={false}
+            value={valueCheckBox}
+            onValueChange={newValue => setChangeCheckBox(newValue)}
+            style={styles.checkBoxAndroid}
+            hideBox
+          />
+        </View>
       )}
       <View>
         <TouchableOpacity style={styles.btn} onPress={() => open()}>
-          <Text style={styles.title}>Даю согласие на обработку</Text>
-          <Text style={styles.title}>персональных данных</Text>
+          <View style={styles.wrapperTitleTop}>
+            <Text style={styles.title}>Даю согласие на обработку</Text>
+          </View>
+          <View style={styles.wrapperTitleBottom}>
+            <Text style={styles.title}>персональных данных</Text>
+          </View>
         </TouchableOpacity>
       </View>
     </View>
