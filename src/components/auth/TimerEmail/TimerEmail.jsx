@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Text, View, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { Text, View, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -67,9 +67,8 @@ const setData = async data => {
   await AsyncStorage.setItem('BLOCKEMAIL', data);
 };
 
-export function TimerBlockEmail({ expiredTimer, isConfirm, callBack }) {
+export function TimerBlockEmail({ expiredTimer }) {
   const { isRecoveryEmail } = useSelector(state => state.auth);
-  const { isActiveTimerEmail } = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(true);

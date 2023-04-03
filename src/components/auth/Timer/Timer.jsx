@@ -35,9 +35,13 @@ export const Timer = props => {
   return <Text style={{ textAlign: 'center' }}>{timeFormat(props.time)}</Text>;
 };
 
-const BlockComponent = ({ expiredTimer, timerOffset, closeBlock }) => {
-  const [timeMilliSeconds, setTimeMilliSeconds] = useState(Date.now());
-
+const BlockComponent = ({
+  expiredTimer,
+  timerOffset,
+  closeBlock,
+  setTimeMilliSeconds,
+  timeMilliSeconds,
+}) => {
   useEffect(() => {
     let timeout = setTimeout(() => {
       setTimeMilliSeconds(Date.now());
@@ -70,6 +74,8 @@ const setData = async data => {
 export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
   const { isRecovery } = useSelector(state => state.auth);
   const { isActiveTimer } = useSelector(state => state.auth);
+  const [timeMilliSeconds, setTimeMilliSeconds] = useState(Date.now());
+
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(true);
@@ -79,6 +85,7 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
   });
 
   useEffect(() => {
+    console.log('isRecovery', isRecovery);
     if (isRecovery) {
       handleBlock();
     }
@@ -97,7 +104,6 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
     AsyncStorage.removeItem('BLOCK').then(r => {
       setIsBlock({ block: false, timerOffset: null });
       dispatch(timerOff());
-      storageMMKV.delete('timer');
     });
   }, [isBlock]);
 
@@ -148,7 +154,19 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
 
   if (!isActiveTimer && isConfirm) {
     return (
-      <TouchableOpacity style={styles.btnRepeatCode} onPress={callBack}>
+      <TouchableOpacity
+        style={styles.btnRepeatCode}
+        onPress={() => {
+          setLoading(true);
+          callBack();
+          setIsBlock({
+            block: true,
+            timerOffset: Date.now(),
+          });
+          setTimeMilliSeconds(Date.now());
+          setLoading(false);
+        }}
+      >
         <Text style={styles.textBtn}>Запросить новый код</Text>
       </TouchableOpacity>
     );
@@ -160,6 +178,8 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
         timerOffset={isBlock.timerOffset}
         expiredTimer={expiredTimer}
         closeBlock={closeBlock}
+        setTimeMilliSeconds={setTimeMilliSeconds}
+        timeMilliSeconds={timeMilliSeconds}
       />
     );
   }
