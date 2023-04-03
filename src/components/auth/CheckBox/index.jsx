@@ -1,50 +1,39 @@
-import CheckBox from '@react-native-community/checkbox';
 import React from 'react';
-import { Linking, Platform, Text, TouchableOpacity, View } from 'react-native';
-import { configApp } from '../../../utils/helpers/platform';
+import { Linking, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './style';
+import { Image } from 'react-native';
 
-const CheckBoxAgreement = ({ valueCheckBox, setChangeCheckBox }) => {
+const IconChecked = require('../../../assets/icons/checkMark.png');
+
+export const CheckBoxAgreement = ({ valueCheckBox, setChangeCheckBox }) => {
   const open = () => {
     let url = 'https://mastera-service.ru/docs/personal-data-policy.pdf';
     Linking.openURL(url);
   };
+  const Icon = ({ valueCheckBox }) => {
+    if (valueCheckBox) {
+      return <Image source={IconChecked} style={styles.checkBox} />;
+    }
+    if (!valueCheckBox) {
+      return null;
+    }
+  };
   return (
     <View style={styles.container}>
-      {Platform.OS === 'ios' ? (
+      <TouchableOpacity onPress={() => setChangeCheckBox(!valueCheckBox)}>
         <View style={[styles.wrapperCheckBox, valueCheckBox && styles.active]}>
-          <CheckBox
-            disabled={false}
-            value={valueCheckBox}
-            onValueChange={newValue => setChangeCheckBox(newValue)}
-            style={styles.checkBox}
-            hideBox
-            onCheckColor={configApp.brandColor}
+          <Icon
+            valueCheckBox={valueCheckBox}
+            setChangeCheckBox={setChangeCheckBox}
           />
         </View>
-      ) : (
-        <View
-          style={[
-            styles.wrapperCheckBoxAndroid,
-            valueCheckBox && styles.activeAndroid,
-          ]}
-        >
-          <CheckBox
-            disabled={false}
-            value={valueCheckBox}
-            onValueChange={newValue => setChangeCheckBox(newValue)}
-            style={styles.checkBoxAndroid}
-            hideBox
-          />
-        </View>
-      )}
+      </TouchableOpacity>
       <View>
         <TouchableOpacity style={styles.btn} onPress={() => open()}>
           <View style={styles.wrapperTitleTop}>
-            <Text style={styles.title}>Даю согласие на обработку</Text>
-          </View>
-          <View style={styles.wrapperTitleBottom}>
-            <Text style={styles.title}>персональных данных</Text>
+            <Text style={styles.title}>
+              Даю согласие на обработку персональных данных
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
