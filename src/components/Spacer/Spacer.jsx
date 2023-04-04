@@ -21,7 +21,7 @@ const Spacer = ({ size = 'M', lineWidth, color = '#000', filler, style }) => {
 const styles = StyleSheet.create({
   spacer: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: 'red',
   },
 });
 

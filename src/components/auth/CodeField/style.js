@@ -3,7 +3,11 @@ import { configApp } from '../../../utils/helpers/platform';
 import fonts from '../../fonts';
 
 export const styles = StyleSheet.create({
-  root: { paddingBottom: 20, width: '100%' },
+  root: {
+    width: '100%',
+    height: 70,
+    justifyContent: 'center',
+  },
   cell: {
     fontSize: 20,
     fontWeight: '400',

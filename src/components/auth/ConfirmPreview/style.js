@@ -3,11 +3,10 @@ import fonts from '../../fonts';
 
 export const styles = StyleSheet.create({
   container: {
-    width: '90%',
-    bottom: 18,
-    justifyContent: 'flex-end',
+    width: '100%',
+    justifyContent: 'center',
     alignItems: 'center',
-    height: 110,
+    height: 70,
   },
   text: {
     fontSize: 14,

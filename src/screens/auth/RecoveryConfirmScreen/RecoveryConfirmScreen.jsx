@@ -15,7 +15,6 @@ import {
   restorePassword,
 } from '../../../redux/slices/auth/asyncActions';
 import {
-  clearIsRecovery,
   clearRecoveryError,
   modalVisible,
 } from '../../../redux/slices/auth/reducer';
@@ -70,7 +69,7 @@ export const RecoveryConfirmationScreen = ({
       <Header label={'Подтверждение кодом'} callBack={goBack} />
       <KeyboardAvoidingView
         behavior={configApp.ios ? 'padding' : 'height'}
-        style={styles.containerKeyBoard}
+        style={styles.container}
       >
         <View style={styles.wrapperSignIn}>
           <ConfrimPreview />

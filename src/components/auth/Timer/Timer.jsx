@@ -153,21 +153,23 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
 
   if (!isActiveTimer && isConfirm) {
     return (
-      <TouchableOpacity
-        style={styles.btnRepeatCode}
-        onPress={() => {
-          setLoading(true);
-          callBack();
-          setIsBlock({
-            block: true,
-            timerOffset: Date.now(),
-          });
-          setTimeMilliSeconds(Date.now());
-          setLoading(false);
-        }}
-      >
-        <Text style={styles.textBtn}>Запросить новый код</Text>
-      </TouchableOpacity>
+      <View style={styles.wrapper}>
+        <TouchableOpacity
+          style={styles.btnRepeatCode}
+          onPress={() => {
+            setLoading(true);
+            callBack();
+            setIsBlock({
+              block: true,
+              timerOffset: Date.now(),
+            });
+            setTimeMilliSeconds(Date.now());
+            setLoading(false);
+          }}
+        >
+          <Text style={styles.textBtn}>Запросить новый код</Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 

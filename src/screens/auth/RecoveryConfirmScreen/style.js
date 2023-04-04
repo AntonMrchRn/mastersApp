@@ -5,12 +5,6 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    justifyContent: 'center',
-  },
-  containerKeyBoard: {
-    flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'space-around',
   },
   wrapperSignIn: {
     flex: 1,
@@ -18,11 +12,11 @@ export const styles = StyleSheet.create({
     padding: 15,
     alignItems: 'center',
     justifyContent: 'center',
+    minHeight: 370,
   },
   containerError: {
     width: '100%',
     height: 40,
-    justifyContent: 'flex-start',
   },
   error: {
     color: 'red',
