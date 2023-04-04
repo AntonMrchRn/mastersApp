@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import fonts from '../fonts';
 
 export const styles = StyleSheet.create({
@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
   },
   text: {
     color: '#636363',
-    fontSize: 13,
+    fontSize: Platform.OS === 'ios' ? 13 : 11,
     paddingRight: 10,
     width: '90%',
     fontFamily: fonts.main_400,

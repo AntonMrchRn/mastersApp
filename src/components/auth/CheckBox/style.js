@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { configApp } from '../../../utils/helpers/platform';
 import fonts from '../../fonts';
 
@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 3,
+    justifyContent: 'center',
   },
   wrapperCheckBox: {
     height: 21,
@@ -30,7 +31,7 @@ export const styles = StyleSheet.create({
   title: {
     fontWeight: '400',
     color: configApp.brandColor,
-    fontSize: 11,
+    fontSize: Platform.OS === 'ios' ? 11 : 10,
     fontFamily: fonts.main_400,
   },
   wrapperTitleTop: {
