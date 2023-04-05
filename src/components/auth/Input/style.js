@@ -64,7 +64,7 @@ export const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     position: 'relative',
-    paddingRight: 28,
+    paddingRight: 38,
     fontFamily: fonts.main_400,
     fontWeight: '400',
     paddingHorizontal: 10,

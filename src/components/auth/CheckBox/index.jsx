@@ -6,8 +6,16 @@ import { Image } from 'react-native';
 const IconChecked = require('../../../assets/icons/checkMark.png');
 
 export const CheckBoxAgreement = ({ valueCheckBox, setChangeCheckBox }) => {
-  const open = () => {
+  const openAgreement = () => {
+    let url = 'https://mastera-service.ru/docs/user-agreement.pdf';
+    Linking.openURL(url);
+  };
+  const openPersonalData = () => {
     let url = 'https://mastera-service.ru/docs/personal-data-policy.pdf';
+    Linking.openURL(url);
+  };
+  const openOffer = () => {
+    let url = 'https://mastera-service.ru/docs/public-offer.pdf';
     Linking.openURL(url);
   };
   const Icon = ({ valueCheckBox }) => {
@@ -28,14 +36,21 @@ export const CheckBoxAgreement = ({ valueCheckBox, setChangeCheckBox }) => {
           />
         </View>
       </TouchableOpacity>
-      <View>
-        <TouchableOpacity style={styles.btn} onPress={() => open()}>
-          <View style={styles.wrapperTitleTop}>
-            <Text style={styles.title}>
-              Даю согласие на обработку персональных данных
-            </Text>
-          </View>
-        </TouchableOpacity>
+      <View style={styles.wrapper}>
+        <Text style={styles.title}>
+          Нажимая "Войти", вы выражаетe{' '}
+          <Text style={styles.titlePress} onPress={() => openAgreement()}>
+            согласие
+          </Text>{' '}
+          с условиями обработки{' '}
+          <Text style={styles.titlePress} onPress={() => openPersonalData()}>
+            Персональных данных
+          </Text>{' '}
+          и{' '}
+          <Text style={styles.titlePress} onPress={() => openOffer()}>
+            Офертой
+          </Text>{' '}
+        </Text>
       </View>
     </View>
   );

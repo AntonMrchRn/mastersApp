@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 7,
   },
   text: {
     color: '#636363',

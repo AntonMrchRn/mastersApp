@@ -60,6 +60,7 @@ export const Input = ({ isPhoneAuth, tel, setTel, email, setMail }) => {
           onChangeText={text => setMail(text)}
           onPressIn={() => setActive(true)}
           onEndEditing={() => setActive(false)}
+          autoCapitalize="none"
         />
       )}
     </View>

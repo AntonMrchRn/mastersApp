@@ -17,6 +17,7 @@ export const styles = StyleSheet.create({
     padding: 15,
     alignItems: 'center',
     justifyContent: 'center',
+    minHeight: 385,
   },
   containerError: {
     width: '100%',
