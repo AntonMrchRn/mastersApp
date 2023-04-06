@@ -5,7 +5,7 @@ import fonts from '../../fonts';
 export const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: 50,
+    height: 55,
     flexDirection: 'row',
     alignItems: 'center',
     padding: 3,
@@ -40,9 +40,8 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.main_400,
   },
   wrapper: {
-    width: configApp.ios ? '90%' : '90%',
-    height: configApp.ios ? 45 : 42,
     flexDirection: 'row',
     justifyContent: 'center',
+    paddingHorizontal: configApp.ios ? 7 : 5,
   },
 });

@@ -1,4 +1,4 @@
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import fonts from '../../fonts';
 
 export const styles = StyleSheet.create({
@@ -11,13 +11,13 @@ export const styles = StyleSheet.create({
   },
   titleInfo: {
     textAlign: 'center',
-    height: 100,
     paddingHorizontal: 5,
+    paddingBottom: 20,
     color: 'black',
     fontFamily: fonts.main_400,
     fontWeight: '400',
     top: 7,
-    fontSize: Platform.OS === 'ios' ? 15 : 13,
+    fontSize: 13,
   },
   containerBtn: {
     width: '100%',
@@ -34,10 +34,11 @@ export const styles = StyleSheet.create({
   titleInfoPhone: {
     color: 'black',
     fontSize: 17,
-    marginTop: 20,
+    top: 7,
     textAlign: 'center',
     fontFamily: fonts.main_400,
     fontWeight: '400',
+    paddingBottom: 20,
   },
   containerBtnPhone: {
     width: '100%',
@@ -50,13 +51,5 @@ export const styles = StyleSheet.create({
     color: 'white',
     fontFamily: fonts.main_400,
     fontWeight: '400',
-  },
-  btnClosePhone: {
-    width: '90%',
-    height: '80%',
-    backgroundColor: '#3f51b5',
-    justifyContent: 'center',
-    borderRadius: 12,
-    marginBottom: 45,
   },
 });

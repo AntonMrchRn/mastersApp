@@ -72,7 +72,7 @@ export const RecoveryScreen = () => {
       <Header label={'Восстановление пароля'} callBack={goBack} />
       <KeyboardAvoidingView
         behavior={configApp.ios ? 'padding' : 'height'}
-        style={styles.containerKeyBoard}
+        style={styles.container}
       >
         <View style={styles.wrapperSignIn}>
           <ForgotPreview />

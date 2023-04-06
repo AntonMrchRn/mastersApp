@@ -38,17 +38,17 @@ export const CheckBoxAgreement = ({ valueCheckBox, setChangeCheckBox }) => {
       </TouchableOpacity>
       <View style={styles.wrapper}>
         <Text style={styles.title}>
-          Нажимая "Войти", вы выражаетe{' '}
+          Выражаю{' '}
           <Text style={styles.titlePress} onPress={() => openAgreement()}>
             согласие
           </Text>{' '}
           с условиями обработки{' '}
           <Text style={styles.titlePress} onPress={() => openPersonalData()}>
-            Персональных данных
+            персональных данных
           </Text>{' '}
           и{' '}
           <Text style={styles.titlePress} onPress={() => openOffer()}>
-            Офертой
+            офертой
           </Text>{' '}
         </Text>
       </View>

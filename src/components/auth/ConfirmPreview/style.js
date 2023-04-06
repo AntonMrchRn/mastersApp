@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     height: 70,
   },
   text: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '400',
     paddingBottom: 7,
     textAlign: 'center',

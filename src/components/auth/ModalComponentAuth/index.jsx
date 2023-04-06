@@ -16,10 +16,7 @@ const ModalComponentScreen = ({
         {label}
       </Text>
       <View style={[styles.containerBtn, flag && styles.containerBtnPhone]}>
-        <TouchableOpacity
-          style={[styles.btnClose, flag && styles.btnClosePhone]}
-          onPress={onPress}
-        >
+        <TouchableOpacity style={styles.btnClose} onPress={onPress}>
           <Text style={[styles.textBtn, flag && styles.textBtnPhone]}>
             {textBtn}
           </Text>

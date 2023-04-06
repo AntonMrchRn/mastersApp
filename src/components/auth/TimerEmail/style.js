@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   timer: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#000',
     textAlign: 'center',
     fontFamily: fonts.main_400,

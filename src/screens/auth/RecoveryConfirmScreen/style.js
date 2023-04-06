@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     padding: 15,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 370,
+    minHeight: 440,
   },
   containerError: {
     width: '100%',

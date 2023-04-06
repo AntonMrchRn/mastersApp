@@ -6,18 +6,13 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  containerKeyBoard: {
-    flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'space-around',
-  },
   wrapperSignIn: {
     flex: 1,
     backgroundColor: '#fff',
     padding: 15,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 385,
+    minHeight: 375,
   },
   containerError: {
     width: '100%',

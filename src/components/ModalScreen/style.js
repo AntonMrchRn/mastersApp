@@ -14,7 +14,5 @@ export const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 20,
     elevation: 20,
-    height: 190,
-    paddingTop: 20,
   },
 });

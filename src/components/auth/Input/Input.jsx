@@ -7,10 +7,11 @@ export const Input = ({ isPhoneAuth, tel, setTel, email, setMail }) => {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
-    if (tel[0] === '7' || tel[0] === '8') {
-      setTel(tel.substring(1));
+    const telText = tel.replace(/[\D]+/g, '');
+    if (telText[0] === '7' || telText[0] === '8' || telText[0] === '8') {
+      setTel(telText.replace(/^[0-8]/, ''));
     }
-    if (tel[0] !== '9' && tel[0] !== '7' && tel[0] !== '8') {
+    if (telText[0] !== '9' && telText[0] !== '7' && telText[0] !== '8') {
       setTel('');
     }
   }, [tel]);
@@ -38,9 +39,7 @@ export const Input = ({ isPhoneAuth, tel, setTel, email, setMail }) => {
               dddMask: '(999) 999-99-99',
             }}
             value={tel}
-            onChangeText={text =>
-              setTel(text.replace(/[\D]+/g, '').replace(/^[0-8]/, ''))
-            }
+            onChangeText={text => setTel(text)}
             placeholder={'(900) 000-00-00'}
             placeholderTextColor={'#5e5e5e'}
             maxLength={15}
