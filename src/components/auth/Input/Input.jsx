@@ -8,7 +8,7 @@ export const Input = ({ isPhoneAuth, tel, setTel, email, setMail }) => {
 
   useEffect(() => {
     const telText = tel.replace(/[\D]+/g, '');
-    if (telText[0] === '7' || telText[0] === '8' || telText[0] === '8') {
+    if (telText[0] === '7' || telText[0] === '8' || telText[0] === '9') {
       setTel(telText.replace(/^[0-8]/, ''));
     }
     if (telText[0] !== '9' && telText[0] !== '7' && telText[0] !== '8') {
