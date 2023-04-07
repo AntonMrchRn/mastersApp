@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Text, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -63,6 +63,7 @@ export const RecoveryScreen = () => {
       dispatch(clearRecoveryError());
     }
     if (!isPhoneAuth) {
+      Keyboard.dismiss();
       dispatch(modalVisibleEmail(true));
     }
   }, [isRecovery, isRecoveryEmail]);
@@ -114,13 +115,15 @@ export const RecoveryScreen = () => {
             withOutPassword
             onPress={recoveryRequest}
           />
-          {isPhoneAuth ? (
-            <TimerBlock expiredTimer={Number(timeout?.timeout * 1000)} />
-          ) : (
-            <TimerBlockEmail
-              expiredTimer={Number(timeOutEmail?.timeout * 1000)}
-            />
-          )}
+          <View style={styles.containerTimer}>
+            {isPhoneAuth ? (
+              <TimerBlock expiredTimer={Number(timeout?.timeout * 1000)} />
+            ) : (
+              <TimerBlockEmail
+                expiredTimer={Number(timeOutEmail?.timeout * 1000)}
+              />
+            )}
+          </View>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

@@ -143,14 +143,6 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
     };
   }, []);
 
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size={'large'} />
-      </View>
-    );
-  }
-
   if (!isActiveTimer && isConfirm) {
     return (
       <View style={styles.wrapper}>

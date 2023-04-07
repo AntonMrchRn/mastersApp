@@ -8,13 +8,18 @@ export const Input = ({ isPhoneAuth, tel, setTel, email, setMail }) => {
 
   useEffect(() => {
     const telText = tel.replace(/[\D]+/g, '');
-    if (telText[0] === '7' || telText[0] === '8' || telText[0] === '9') {
+    if (
+      (telText[0] === '7' && telText[1] === '9') ||
+      (telText[0] === '8' && telText[1] === '9')
+    ) {
       setTel(telText.replace(/^[0-8]/, ''));
     }
-    if (telText[0] !== '9' && telText[0] !== '7' && telText[0] !== '8') {
-      setTel('');
+    if (telText?.length < 2) {
+      setTel(telText.replace(/^[0-8]/, `9${tel}`));
     }
   }, [tel]);
+
+  ///2323233
 
   return (
     <View
@@ -39,7 +44,7 @@ export const Input = ({ isPhoneAuth, tel, setTel, email, setMail }) => {
               dddMask: '(999) 999-99-99',
             }}
             value={tel}
-            onChangeText={text => setTel(text)}
+            onChangeText={text => setTel(text.replace(/[\D]+/g, ''))}
             placeholder={'(900) 000-00-00'}
             placeholderTextColor={'#5e5e5e'}
             maxLength={15}

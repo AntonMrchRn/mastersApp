@@ -137,14 +137,6 @@ export function TimerBlockEmail({ expiredTimer }) {
     };
   }, []);
 
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size={'large'} />
-      </View>
-    );
-  }
-
   if (isBlock?.block) {
     return (
       <BlockComponent

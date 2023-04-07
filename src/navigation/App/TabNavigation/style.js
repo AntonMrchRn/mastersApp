@@ -5,6 +5,7 @@ const styles = StyleSheet.create({
   label: {
     fontWeight: '400',
     fontFamily: fonts.main_400,
+    paddingBottom: 4,
   },
 });
 
