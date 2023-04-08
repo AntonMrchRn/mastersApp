@@ -5,7 +5,11 @@ import HideEye from '../../svg/auth/HideEye';
 
 import { styles } from './style';
 
-export const InputPassword = ({ password, setPassword }) => {
+export const InputPassword = ({
+  password,
+  setPassword,
+  setScrollHeight = 215,
+}) => {
   const [active, setActive] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(true);
 
@@ -23,6 +27,9 @@ export const InputPassword = ({ password, setPassword }) => {
           onEndEditing={() => setActive(false)}
           secureTextEntry={isShowPassword}
           autoCapitalize="none"
+          onFocus={() => setScrollHeight(215)}
+          onBlur={() => setScrollHeight(275)}
+          keyboardType="default"
         />
         <TouchableOpacity
           style={styles.btn}

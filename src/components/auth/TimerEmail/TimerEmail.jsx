@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Text, View, ActivityIndicator } from 'react-native';
+import { Text, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -136,6 +136,10 @@ export function TimerBlockEmail({ expiredTimer }) {
       setLoading(true);
     };
   }, []);
+
+  if (loading) {
+    return null;
+  }
 
   if (isBlock?.block) {
     return (

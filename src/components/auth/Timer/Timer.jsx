@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Text, View, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -163,6 +163,10 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
         </TouchableOpacity>
       </View>
     );
+  }
+
+  if (loading) {
+    return null;
   }
 
   if (isBlock?.block) {

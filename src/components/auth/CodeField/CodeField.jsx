@@ -11,7 +11,7 @@ import { styles } from './style';
 
 const CELL_COUNT = 6;
 
-const CodeFieldInput = ({ value, setValue }) => {
+const CodeFieldInput = ({ value, setValue, setKeyboardActive }) => {
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
@@ -30,6 +30,8 @@ const CodeFieldInput = ({ value, setValue }) => {
         cellCount={CELL_COUNT}
         keyboardType="number-pad"
         textContentType="oneTimeCode"
+        onFocus={() => setKeyboardActive(true)}
+        onBlur={() => setKeyboardActive(false)}
         renderCell={({ index, symbol, isFocused }) => (
           <View
             key={index}

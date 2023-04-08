@@ -1,19 +1,23 @@
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 15,
   },
   containerKeyBoard: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  wrapperSignInContainer: {
+    flex: 0.8,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
     padding: 15,
-    justifyContent: 'flex-start',
+    width: '100%',
   },
   wrapperSignIn: {
-    flex: Platform.OS === 'ios' ? 3 : 5,
+    flex: 1,
     alignItems: 'center',
   },
 });

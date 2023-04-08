@@ -1,4 +1,4 @@
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import fonts from '../../../components/fonts';
 import { configApp } from '../../../utils/helpers/platform';
 
@@ -7,13 +7,20 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  wrapperSignIn: {
+  containerKeyBoard: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 15,
+  },
+  wrapperSignInContainer: {
+    flex: 0.8,
     alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: 375,
+    justifyContent: 'flex-end',
+    padding: 15,
+    width: '100%',
+  },
+  wrapperSignIn: {
+    flex: 1,
+    alignItems: 'center',
   },
   containerError: {
     width: '100%',

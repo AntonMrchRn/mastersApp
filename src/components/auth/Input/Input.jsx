@@ -3,7 +3,15 @@ import { Image, Text, TextInput, View } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
 import { styles } from './style';
 
-export const Input = ({ isPhoneAuth, tel, setTel, email, setMail }) => {
+export const Input = ({
+  isPhoneAuth,
+  tel,
+  setTel,
+  email,
+  setMail,
+  setScrollHeight,
+  setKeyActive,
+}) => {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
@@ -18,8 +26,6 @@ export const Input = ({ isPhoneAuth, tel, setTel, email, setMail }) => {
       setTel(telText.replace(/^[0-8]/, `9${tel}`));
     }
   }, [tel]);
-
-  ///2323233
 
   return (
     <View
@@ -51,6 +57,14 @@ export const Input = ({ isPhoneAuth, tel, setTel, email, setMail }) => {
             keyboardType="numeric"
             onPressIn={() => setActive(true)}
             onEndEditing={() => setActive(false)}
+            onFocus={() => {
+              setKeyActive(true);
+              setScrollHeight(275);
+            }}
+            onBlur={() => {
+              setKeyActive(false);
+              setScrollHeight(215);
+            }}
           />
         </>
       ) : (
@@ -65,6 +79,8 @@ export const Input = ({ isPhoneAuth, tel, setTel, email, setMail }) => {
           onPressIn={() => setActive(true)}
           onEndEditing={() => setActive(false)}
           autoCapitalize="none"
+          onFocus={() => setScrollHeight(275)}
+          onBlur={() => setScrollHeight(215)}
         />
       )}
     </View>

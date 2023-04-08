@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 3,
     justifyContent: 'center',
+    paddingHorizontal: 15,
   },
   wrapperCheckBox: {
     height: 21,
