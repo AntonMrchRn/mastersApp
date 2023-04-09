@@ -166,7 +166,7 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
   }
 
   if (loading) {
-    return null;
+    return <View />;
   }
 
   if (isBlock?.block) {

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { InputPassword, Button } from '~/components';
 import CodeFieldInput from '../../../components/auth/CodeField/CodeField';
 import ConfrimPreview from '../../../components/auth/ConfirmPreview/ConfirmPreview';
+import ModalComponentScreen from '../../../components/auth/ModalComponentAuth';
 import { TimerBlock } from '../../../components/auth/Timer/Timer';
 import { BtnCloseKeyboard } from '../../../components/CloseKeyboard';
 import Header from '../../../components/Header/Header';
@@ -20,6 +21,7 @@ import {
   clearRecoveryError,
   modalVisible,
 } from '../../../redux/slices/auth/reducer';
+import { configApp } from '../../../utils/helpers/platform';
 
 import { styles } from './style';
 
@@ -54,11 +56,17 @@ export const RecoveryConfirmationScreen = ({
     dispatch(restorePassword({ password, value })).then(res => {
       if (res?.payload === null || res?.payload === undefined) {
         dispatch(clearRecoveryError());
-        navigation.navigate('SignUpScreen');
         dispatch(modalVisible(true));
       }
     });
   };
+
+  const closeModal = () => {
+    navigation.navigate('SignUpScreen');
+    dispatch(modalVisible(false));
+  };
+
+  const { visible } = useSelector(state => state.auth);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () => {
@@ -100,6 +108,13 @@ export const RecoveryConfirmationScreen = ({
               setValue={setValue}
               setKeyboardActive={setKeyboardActive}
             />
+            <ModalComponentScreen
+              flag={true}
+              visible={visible}
+              label="Вы успешно поменяли пароль!"
+              textBtn="Готово"
+              onPress={closeModal}
+            />
             <InputPassword
               password={password}
               setPassword={setPassword}
@@ -129,7 +144,7 @@ export const RecoveryConfirmationScreen = ({
               callBack={recoveryRequest}
             />
           </View>
-          {onKey && keyboardActive && (
+          {configApp.ios && onKey && keyboardActive && (
             <BtnCloseKeyboard
               scrollHeight={recoveryError?.message?.length > 0 ? 124 : 85}
               onPress={() => Keyboard.dismiss()}

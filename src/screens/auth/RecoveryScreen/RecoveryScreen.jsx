@@ -19,6 +19,7 @@ import {
   clearRecoveryError,
   modalVisibleEmail,
 } from '../../../redux/slices/auth/reducer';
+import { configApp } from '../../../utils/helpers/platform';
 
 import { styles } from './style';
 
@@ -148,7 +149,7 @@ export const RecoveryScreen = () => {
               )}
             </View>
           </View>
-          {onKey && keyActive && (
+          {configApp.ios && onKey && keyActive && (
             <BtnCloseKeyboard
               scrollHeight={recoveryError?.message?.length > 0 ? 122 : 82}
               onPress={() => Keyboard.dismiss()}

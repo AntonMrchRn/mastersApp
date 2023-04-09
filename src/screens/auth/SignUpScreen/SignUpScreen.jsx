@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useEffect, useState } from 'react';
-import { Keyboard, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Dimensions, Keyboard, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,15 +21,15 @@ import Logo from '../../../components/svg/auth/Logo';
 import { fetchUserAuth } from '../../../redux/slices/auth/asyncActions';
 import {
   clearAuthError,
-  modalVisible,
   timeOutAsync,
   timeOutAsyncEmail,
 } from '../../../redux/slices/auth/reducer';
+import { configApp } from '../../../utils/helpers/platform';
 
 import { styles } from './style';
 
 export const SignUpScreen = () => {
-  const { authError, visible } = useSelector(state => state.auth);
+  const { authError } = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
   const [isPhoneAuth, setIsPhoneAuth] = useState(true);
@@ -58,10 +58,6 @@ export const SignUpScreen = () => {
     };
   });
 
-  const closeModal = () => {
-    dispatch(modalVisible(false));
-  };
-
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('time');
@@ -85,15 +81,26 @@ export const SignUpScreen = () => {
     getDataEmail();
   }, []);
 
+  const scrollRef = useRef(null);
+
+  const SCREEN_HEIGHT = Dimensions.get('screen').height;
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView
-        behavior={'position'}
+        ref={scrollRef}
+        behavior="padding"
         contentContainerStyle={styles.containerKeyBoard}
-        extraScrollHeight={scrollHeight}
+        extraScrollHeight={configApp.ios ? scrollHeight : 200}
         scrollEnabled={false}
+        onKeyboardDidShow={() => {
+          configApp.android &&
+            scrollRef.current.scrollForExtraHeightOnAndroid(75);
+        }}
         keyboardVerticalOffset={0}
-        pagingEnabled={true}
+        pagingEnabled={false}
+        style={{ height: SCREEN_HEIGHT }}
+        enableOnAndroid={true}
       >
         <View style={styles.wrapperSignIn}>
           <View style={styles.wrapperSignInContainer}>
@@ -112,13 +119,6 @@ export const SignUpScreen = () => {
               setTel={setTel}
               setScrollHeight={setScrollHeight}
               setKeyActive={setKeyActive}
-            />
-            <ModalComponentScreen
-              flag={true}
-              visible={visible}
-              label="Вы успешно поменяли пароль!"
-              textBtn="Готово"
-              onPress={closeModal}
             />
             <InputPassword
               password={password}
@@ -142,9 +142,9 @@ export const SignUpScreen = () => {
               valueCheckBox={changeCheckBox}
             />
           </View>
-          {onKey && keyActive && (
+          {configApp.ios && onKey && keyActive && (
             <BtnCloseKeyboard
-              scrollHeight={96}
+              scrollHeight={authError ? 172 : 145}
               onPress={() => Keyboard.dismiss()}
             />
           )}

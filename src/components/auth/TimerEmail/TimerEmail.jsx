@@ -138,7 +138,7 @@ export function TimerBlockEmail({ expiredTimer }) {
   }, []);
 
   if (loading) {
-    return null;
+    return <View />;
   }
 
   if (isBlock?.block) {
