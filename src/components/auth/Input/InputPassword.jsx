@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextInput, TouchableOpacity, View } from 'react-native';
+import { Keyboard, TextInput, TouchableOpacity, View } from 'react-native';
 import Eye from '../../svg/auth/Eye';
 import HideEye from '../../svg/auth/HideEye';
 
@@ -27,7 +27,10 @@ export const InputPassword = ({
           onEndEditing={() => setActive(false)}
           secureTextEntry={isShowPassword}
           autoCapitalize="none"
-          onFocus={() => setScrollHeight(215)}
+          onFocus={() => {
+            Keyboard.isVisible();
+            setScrollHeight(215);
+          }}
           onBlur={() => setScrollHeight(275)}
           keyboardType="default"
         />

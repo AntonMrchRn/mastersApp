@@ -12,9 +12,9 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   wrapperSignInContainer: {
-    flex: 0.8,
+    flex: configApp.ios ? 0.8 : 1,
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: configApp.ios ? 'flex-end' : 'center',
     padding: 15,
     width: '100%',
   },

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Text, TextInput, View } from 'react-native';
+import { Image, Keyboard, Text, TextInput, View } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
+import { configApp } from '../../../utils/helpers/platform';
 import { styles } from './style';
 
 export const Input = ({
@@ -13,6 +14,7 @@ export const Input = ({
   setKeyActive,
 }) => {
   const [active, setActive] = useState(false);
+  const [type, setType] = useState('numeric');
 
   useEffect(() => {
     const telText = tel.replace(/[\D]+/g, '');
@@ -25,6 +27,7 @@ export const Input = ({
     if (telText?.length < 2) {
       setTel(telText.replace(/^[0-8]/, `9${tel}`));
     }
+    //89286299031
   }, [tel]);
 
   return (
@@ -42,28 +45,32 @@ export const Input = ({
           />
           <Text style={styles.prefixPhone}>+7</Text>
           <TextInputMask
-            style={styles.inputBasic}
             type={'cel-phone'}
             options={{
               maskType: 'BRL',
               withDDD: true,
               dddMask: '(999) 999-99-99',
             }}
-            value={tel}
-            onChangeText={text => setTel(text.replace(/[\D]+/g, ''))}
+            style={styles.inputBasic}
             placeholder={'(900) 000-00-00'}
             placeholderTextColor={'#5e5e5e'}
+            keyboardType={configApp.ios ? type : 'numeric'}
             maxLength={15}
-            keyboardType="numeric"
+            value={tel}
+            onChangeText={text => setTel(text)}
             onPressIn={() => setActive(true)}
             onEndEditing={() => setActive(false)}
             onFocus={() => {
+              setType('numeric');
               setKeyActive(true);
+              Keyboard.isVisible();
               setScrollHeight(275);
             }}
             onBlur={() => {
+              setType('default');
               setKeyActive(false);
-              setScrollHeight(215);
+              Keyboard.isVisible();
+              setScrollHeight(prev => (prev == 275 ? 275 : 215));
             }}
           />
         </>
@@ -79,8 +86,14 @@ export const Input = ({
           onPressIn={() => setActive(true)}
           onEndEditing={() => setActive(false)}
           autoCapitalize="none"
-          onFocus={() => setScrollHeight(275)}
-          onBlur={() => setScrollHeight(215)}
+          onFocus={() => {
+            Keyboard.isVisible();
+            setScrollHeight(275);
+          }}
+          onBlur={() => {
+            Keyboard.isVisible();
+            setScrollHeight(215);
+          }}
         />
       )}
     </View>

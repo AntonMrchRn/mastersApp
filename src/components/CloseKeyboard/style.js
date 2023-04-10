@@ -10,9 +10,12 @@ export const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     borderTopColor: '#E7E7E7',
     borderTopWidth: 1,
-    paddingHorizontal: 30,
+    paddingHorizontal: 18,
     position: 'absolute',
     height: 40,
+  },
+  btn: {
+    paddingHorizontal: 5,
   },
   readyTitle: {
     color: configApp.brandColor,

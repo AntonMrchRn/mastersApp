@@ -14,7 +14,6 @@ import {
   TypeSelection,
 } from '~/components';
 import CheckBoxAgreement from '../../../components/auth/CheckBox';
-import ModalComponentScreen from '../../../components/auth/ModalComponentAuth';
 import { BtnCloseKeyboard } from '../../../components/CloseKeyboard';
 import Logo from '../../../components/svg/auth/Logo';
 
@@ -50,6 +49,7 @@ export const SignUpScreen = () => {
     Keyboard.addListener('keyboardDidShow', () => {
       setOnKey(true);
     });
+
     Keyboard.addListener('keyboardWillHide', () => {
       setOnKey(false);
     });
@@ -89,7 +89,7 @@ export const SignUpScreen = () => {
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView
         ref={scrollRef}
-        behavior="padding"
+        behavior="position"
         contentContainerStyle={styles.containerKeyBoard}
         extraScrollHeight={configApp.ios ? scrollHeight : 200}
         scrollEnabled={false}
@@ -97,10 +97,16 @@ export const SignUpScreen = () => {
           configApp.android &&
             scrollRef.current.scrollForExtraHeightOnAndroid(75);
         }}
+        onKeyboardDidChangeFrame={() => {
+          setScrollHeight(215);
+        }}
         keyboardVerticalOffset={0}
         pagingEnabled={false}
         style={{ height: SCREEN_HEIGHT }}
         enableOnAndroid={true}
+        keyboardOpeningTime={300}
+        extraHeight={75}
+        viewIsInsideTabBar={false}
       >
         <View style={styles.wrapperSignIn}>
           <View style={styles.wrapperSignInContainer}>

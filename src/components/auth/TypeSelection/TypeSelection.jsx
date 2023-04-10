@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Keyboard, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import {
   clearAuthError,
@@ -20,6 +20,7 @@ export const TypeSelection = ({
       <TouchableOpacity
         style={[styles.btn, isPhoneAuth && styles.activeBtn]}
         onPress={() => {
+          Keyboard.dismiss();
           dispatch(clearAuthError());
           dispatch(clearRecoveryError());
           seteMail('');
@@ -34,6 +35,7 @@ export const TypeSelection = ({
       <TouchableOpacity
         style={[styles.btn, !isPhoneAuth && styles.activeBtn]}
         onPress={() => {
+          Keyboard.dismiss();
           dispatch(clearAuthError());
           dispatch(clearRecoveryError());
           setTel('');

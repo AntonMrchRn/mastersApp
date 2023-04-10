@@ -20,9 +20,10 @@ export const styles = StyleSheet.create({
     color: 'blue',
   },
   wrapper: {
-    marginTop: 25,
     alignItems: 'center',
     justifyContent: 'center',
+    height: 60,
+    width: '100%',
   },
   timer: {
     fontSize: 13,

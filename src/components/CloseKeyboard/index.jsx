@@ -5,7 +5,7 @@ import { styles } from './style';
 export const BtnCloseKeyboard = ({ scrollHeight, onPress }) => {
   return (
     <View style={[styles.container, { bottom: scrollHeight }]}>
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity style={styles.btn} onPress={onPress}>
         <Text style={styles.readyTitle}>Закрыть</Text>
       </TouchableOpacity>
     </View>
