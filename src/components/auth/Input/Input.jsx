@@ -14,7 +14,7 @@ export const Input = ({
   setKeyActive,
 }) => {
   const [active, setActive] = useState(false);
-  const [type, setType] = useState('numeric');
+  const [type, setType] = useState('default');
 
   useEffect(() => {
     const telText = tel.replace(/[\D]+/g, '');
@@ -27,7 +27,6 @@ export const Input = ({
     if (telText?.length < 2) {
       setTel(telText.replace(/^[0-8]/, `9${tel}`));
     }
-    //89286299031
   }, [tel]);
 
   return (
@@ -57,20 +56,22 @@ export const Input = ({
             keyboardType={configApp.ios ? type : 'numeric'}
             maxLength={15}
             value={tel}
-            onChangeText={text => setTel(text)}
+            onChangeText={text => setTel(text.replace(/[\D]+/g, ''))}
             onPressIn={() => setActive(true)}
             onEndEditing={() => setActive(false)}
             onFocus={() => {
-              setType('numeric');
               setKeyActive(true);
               Keyboard.isVisible();
               setScrollHeight(275);
+              setTimeout(() => {
+                setType('numeric');
+              }, 50);
             }}
+            autoCapitalize="none"
             onBlur={() => {
-              setType('default');
               setKeyActive(false);
-              Keyboard.isVisible();
               setScrollHeight(prev => (prev == 275 ? 275 : 215));
+              setType('default');
             }}
           />
         </>
@@ -91,7 +92,6 @@ export const Input = ({
             setScrollHeight(275);
           }}
           onBlur={() => {
-            Keyboard.isVisible();
             setScrollHeight(215);
           }}
         />

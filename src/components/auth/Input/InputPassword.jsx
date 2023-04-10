@@ -5,11 +5,7 @@ import HideEye from '../../svg/auth/HideEye';
 
 import { styles } from './style';
 
-export const InputPassword = ({
-  password,
-  setPassword,
-  setScrollHeight = 215,
-}) => {
+export const InputPassword = ({ password, setPassword, setScrollHeight }) => {
   const [active, setActive] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(true);
 

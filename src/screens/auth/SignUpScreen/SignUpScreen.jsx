@@ -104,7 +104,7 @@ export const SignUpScreen = () => {
         pagingEnabled={false}
         style={{ height: SCREEN_HEIGHT }}
         enableOnAndroid={true}
-        keyboardOpeningTime={300}
+        keyboardOpeningTime={350}
         extraHeight={75}
         viewIsInsideTabBar={false}
       >

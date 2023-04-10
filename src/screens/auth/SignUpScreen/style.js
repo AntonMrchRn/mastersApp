@@ -19,5 +19,7 @@ export const styles = StyleSheet.create({
   wrapperSignIn: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '100%',
   },
 });
