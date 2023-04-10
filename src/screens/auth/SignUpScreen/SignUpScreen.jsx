@@ -43,6 +43,7 @@ export const SignUpScreen = () => {
   const authRequest = () => {
     dispatch(fetchUserAuth({ tel, email, password, isPhoneAuth }));
     dispatch(clearAuthError());
+    setScrollHeight(215);
   };
 
   useEffect(() => {
@@ -75,6 +76,10 @@ export const SignUpScreen = () => {
       // error reading value
     }
   };
+
+  useEffect(() => {
+    return;
+  });
 
   useEffect(() => {
     getData();
@@ -136,7 +141,7 @@ export const SignUpScreen = () => {
               valueCheckBox={changeCheckBox}
               setChangeCheckBox={setChangeCheckBox}
             />
-            <ForgotPassword />
+            <ForgotPassword setScrollHeight={setScrollHeight} />
             <Button
               flag={true}
               isPhoneAuth={isPhoneAuth}

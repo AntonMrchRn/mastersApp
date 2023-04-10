@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { clearAuthError } from '../../../redux/slices/auth/reducer';
 import { styles } from './style';
 
-export const ForgotPassword = () => {
+export const ForgotPassword = ({ setScrollHeight }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -14,6 +14,7 @@ export const ForgotPassword = () => {
       <TouchableOpacity
         style={styles.btn}
         onPress={() => {
+          setScrollHeight(215);
           navigation.navigate('RecoveryScreen');
           dispatch(clearAuthError());
         }}
