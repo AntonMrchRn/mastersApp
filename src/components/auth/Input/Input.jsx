@@ -65,7 +65,7 @@ export const Input = ({
               setScrollHeight(275);
               setTimeout(() => {
                 setType('numeric');
-              }, 50);
+              }, 100);
             }}
             autoCapitalize="none"
             onBlur={() => {

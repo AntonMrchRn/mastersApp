@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { configApp } from '../../../utils/helpers/platform';
 import fonts from '../../fonts';
 
 export const styles = StyleSheet.create({
@@ -9,7 +10,7 @@ export const styles = StyleSheet.create({
     height: 70,
   },
   text: {
-    fontSize: 13,
+    fontSize: configApp.ios ? 13 : 12,
     fontWeight: '400',
     paddingBottom: 7,
     textAlign: 'center',

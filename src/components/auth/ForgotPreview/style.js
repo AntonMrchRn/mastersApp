@@ -1,4 +1,5 @@
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { configApp } from '../../../utils/helpers/platform';
 import fonts from '../../fonts';
 
 export const styles = StyleSheet.create({
@@ -9,7 +10,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   text: {
-    fontSize: Platform.OS === 'ios' ? 13 : 12,
+    fontSize: configApp.ios ? 13 : 12,
     fontWeight: '400',
     paddingBottom: 7,
     fontFamily: fonts.main_400,

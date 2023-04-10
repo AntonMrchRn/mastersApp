@@ -1,5 +1,5 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Keyboard, Text, View } from 'react-native';
 
 import {
   CodeField,
@@ -7,11 +7,17 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
+import { configApp } from '../../../utils/helpers/platform';
 import { styles } from './style';
 
 const CELL_COUNT = 6;
 
-const CodeFieldInput = ({ value, setValue, setKeyboardActive }) => {
+const CodeFieldInput = ({
+  value,
+  setValue,
+  setKeyboardActive,
+  setScrollHeight,
+}) => {
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
@@ -28,10 +34,11 @@ const CodeFieldInput = ({ value, setValue, setKeyboardActive }) => {
           setValue(val.replace(/[\D]+/g, ''));
         }}
         cellCount={CELL_COUNT}
-        keyboardType="number-pad"
+        keyboardType={'number-pad'}
         textContentType="oneTimeCode"
         onFocus={() => setKeyboardActive(true)}
         onBlur={() => setKeyboardActive(false)}
+        autoCapitalize="none"
         renderCell={({ index, symbol, isFocused }) => (
           <View
             key={index}

@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Keyboard, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -36,7 +36,7 @@ export const RecoveryConfirmationScreen = ({
   const [email, seteMail] = useState('');
   const [value, setValue] = useState('');
   const [password, setPassword] = useState('');
-  const [scrollHeight, setScrollHeight] = useState(195);
+  const [scrollHeight, setScrollHeight] = useState(275);
   const [onKey, setOnKey] = useState(false);
   const [keyboardActive, setKeyboardActive] = useState(false);
 
@@ -88,16 +88,22 @@ export const RecoveryConfirmationScreen = ({
     dispatch(clearRecoveryError());
   }, [password, value]);
 
+  const refScroll = useRef(null);
+
   return (
     <SafeAreaView style={styles.container}>
       <Header label={'Подтверждение кодом'} callBack={goBack} />
       <KeyboardAwareScrollView
+        ref={refScroll}
         behavior={'position'}
         contentContainerStyle={styles.containerKeyBoard}
         extraScrollHeight={scrollHeight}
         scrollEnabled={false}
         keyboardVerticalOffset={0}
         pagingEnabled={true}
+        automaticallyAdjustContentInsets={false}
+        keyboardShouldPersistTaps="handled"
+        keyboardOpeningTime={100}
       >
         <View style={styles.wrapperSignIn}>
           <View style={styles.wrapperSignInContainer}>
