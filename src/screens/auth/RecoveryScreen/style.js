@@ -7,20 +7,16 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  containerKeyBoard: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  wrapperSignInContainer: {
-    flex: configApp.ios ? 0.8 : 1,
-    alignItems: 'center',
-    justifyContent: configApp.ios ? 'flex-end' : 'center',
-    padding: 15,
+  containerKeyboard: {
     width: '100%',
+    flex: 1,
   },
   wrapperSignIn: {
     flex: 1,
     alignItems: 'center',
+    padding: 15,
+    width: '100%',
+    justifyContent: 'center',
   },
   containerError: {
     width: '100%',

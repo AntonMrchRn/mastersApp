@@ -1,30 +1,21 @@
 import { Platform, StyleSheet } from 'react-native';
 import fonts from '../../../components/fonts';
-import { configApp } from '../../../utils/helpers/platform';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
   },
-  containerKeyBoard: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  wrapperSignInContainer: {
-    flex: configApp.ios ? 0.8 : 1,
-    alignItems: 'center',
-    justifyContent: configApp.ios ? 'flex-end' : 'center',
-    padding: 15,
+  containerKeyboard: {
     width: '100%',
+    flex: 1,
   },
   wrapperSignIn: {
     flex: 1,
     alignItems: 'center',
-  },
-  containerError: {
+    padding: 15,
     width: '100%',
-    height: 40,
+    justifyContent: 'center',
   },
   error: {
     color: 'red',
@@ -32,5 +23,11 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.main_400,
     fontWeight: '400',
     fontSize: Platform.OS === 'ios' ? 14 : 12,
+  },
+  containerError: {
+    width: '100%',
+    height: 30,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
 });

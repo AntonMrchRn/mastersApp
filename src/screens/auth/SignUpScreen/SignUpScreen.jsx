@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useEffect, useRef, useState } from 'react';
-import { Dimensions, Keyboard, View } from 'react-native';
+import React, { createRef, useEffect, useRef, useState } from 'react';
+import { Dimensions, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,7 +14,6 @@ import {
   TypeSelection,
 } from '~/components';
 import CheckBoxAgreement from '../../../components/auth/CheckBox';
-import { BtnCloseKeyboard } from '../../../components/CloseKeyboard';
 import Logo from '../../../components/svg/auth/Logo';
 
 import { fetchUserAuth } from '../../../redux/slices/auth/asyncActions';
@@ -36,28 +35,11 @@ export const SignUpScreen = () => {
   const [email, seteMail] = useState('');
   const [password, setPassword] = useState('');
   const [changeCheckBox, setChangeCheckBox] = useState(false);
-  const [scrollHeight, setScrollHeight] = useState(215);
-  const [onKey, setOnKey] = useState(false);
-  const [keyActive, setKeyActive] = useState(false);
 
   const authRequest = () => {
     dispatch(fetchUserAuth({ tel, email, password, isPhoneAuth }));
     dispatch(clearAuthError());
-    setScrollHeight(215);
   };
-
-  useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', () => {
-      setOnKey(true);
-    });
-
-    Keyboard.addListener('keyboardWillHide', () => {
-      setOnKey(false);
-    });
-    return () => {
-      Keyboard.removeAllListeners('keyboardDidShow');
-    };
-  });
 
   const getData = async () => {
     try {
@@ -78,87 +60,76 @@ export const SignUpScreen = () => {
   };
 
   useEffect(() => {
-    return;
-  });
-
-  useEffect(() => {
     getData();
     getDataEmail();
   }, []);
 
-  const scrollRef = useRef(null);
+  const OFFSET = 145;
 
-  const SCREEN_HEIGHT = Dimensions.get('screen').height;
+  const focusInput = () => {
+    setTimeout(() => {
+      scrollViewRef?.current?.scrollToPosition(0, OFFSET, true);
+    }, 200);
+  };
+
+  const passwordRef = createRef();
+  const scrollViewRef = createRef();
 
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView
-        ref={scrollRef}
-        behavior="position"
-        contentContainerStyle={styles.containerKeyBoard}
-        extraScrollHeight={configApp.ios ? scrollHeight : 200}
-        scrollEnabled={false}
-        onKeyboardDidShow={() => {
-          configApp.android &&
-            scrollRef.current.scrollForExtraHeightOnAndroid(75);
+        ref={scrollViewRef}
+        keyboardShouldPersistTaps="handled"
+        onKeyboardWillShow={() => {
+          if (configApp.android) {
+            return;
+          }
+          setTimeout(() => {
+            scrollViewRef?.current?.scrollToPosition(0, OFFSET, true);
+          }, 200);
         }}
-        onKeyboardDidChangeFrame={() => {
-          setScrollHeight(215);
-        }}
-        keyboardVerticalOffset={0}
-        pagingEnabled={false}
-        style={{ height: SCREEN_HEIGHT }}
+        keyboardOpeningTime={100}
+        contentContainerStyle={styles.containerKeyboard}
         enableOnAndroid={true}
-        keyboardOpeningTime={350}
-        extraHeight={75}
-        viewIsInsideTabBar={false}
       >
         <View style={styles.wrapperSignIn}>
-          <View style={styles.wrapperSignInContainer}>
-            <Logo />
-            <TypeSelection
-              setIsPhoneAuth={setIsPhoneAuth}
-              isPhoneAuth={isPhoneAuth}
-              setTel={setTel}
-              seteMail={seteMail}
-            />
-            <Input
-              isPhoneAuth={isPhoneAuth}
-              tel={tel}
-              email={email}
-              setMail={seteMail}
-              setTel={setTel}
-              setScrollHeight={setScrollHeight}
-              setKeyActive={setKeyActive}
-            />
-            <InputPassword
-              password={password}
-              setPassword={setPassword}
-              setScrollHeight={setScrollHeight}
-            />
-            {authError && <ErrorField error={authError} />}
-            <CheckBoxAgreement
-              valueCheckBox={changeCheckBox}
-              setChangeCheckBox={setChangeCheckBox}
-            />
-            <ForgotPassword setScrollHeight={setScrollHeight} />
-            <Button
-              flag={true}
-              isPhoneAuth={isPhoneAuth}
-              tel={tel}
-              password={password}
-              email={email}
-              isDisabled
-              onPress={authRequest}
-              valueCheckBox={changeCheckBox}
-            />
-          </View>
-          {configApp.ios && onKey && keyActive && (
-            <BtnCloseKeyboard
-              scrollHeight={authError ? 172 : 145}
-              onPress={() => Keyboard.dismiss()}
-            />
-          )}
+          <Logo />
+          <TypeSelection
+            setIsPhoneAuth={setIsPhoneAuth}
+            isPhoneAuth={isPhoneAuth}
+            setTel={setTel}
+            seteMail={seteMail}
+          />
+          <Input
+            isPhoneAuth={isPhoneAuth}
+            tel={tel}
+            email={email}
+            setMail={seteMail}
+            setTel={setTel}
+            onSubmitEditing={() => passwordRef?.current?.focus()}
+            onFocus={configApp.ios ? focusInput : () => {}}
+          />
+          <InputPassword
+            password={password}
+            setPassword={setPassword}
+            innerRef={passwordRef}
+          />
+          {authError && <ErrorField error={authError} />}
+          <CheckBoxAgreement
+            valueCheckBox={changeCheckBox}
+            setChangeCheckBox={setChangeCheckBox}
+          />
+          <ForgotPassword />
+          <Button
+            flag={true}
+            isPhoneAuth={isPhoneAuth}
+            tel={tel}
+            password={password}
+            email={email}
+            isDisabled
+            onPress={authRequest}
+            valueCheckBox={changeCheckBox}
+          />
         </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>

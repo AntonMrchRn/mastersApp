@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     fontWeight: '500',
   },
   btnRepeatCode: {
-    marginTop: 25,
+    padding: 5,
   },
   textBtn: {
     fontSize: 13,

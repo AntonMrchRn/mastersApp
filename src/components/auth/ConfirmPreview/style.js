@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 70,
+    height: 60,
   },
   text: {
     fontSize: configApp.ios ? 13 : 12,

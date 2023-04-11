@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Keyboard, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View } from 'react-native';
 
 import {
   CodeField,
@@ -12,17 +12,18 @@ import { styles } from './style';
 
 const CELL_COUNT = 6;
 
-const CodeFieldInput = ({
-  value,
-  setValue,
-  setKeyboardActive,
-  setScrollHeight,
-}) => {
+const CodeFieldInput = ({ value, setValue, onSubmitEditing, onFocus }) => {
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
   });
+
+  useEffect(() => {
+    if (value?.length === 6) {
+      onSubmitEditing();
+    }
+  }, [value]);
 
   return (
     <View style={styles.root}>
@@ -33,11 +34,10 @@ const CodeFieldInput = ({
         onChangeText={val => {
           setValue(val.replace(/[\D]+/g, ''));
         }}
+        onFocus={onFocus}
         cellCount={CELL_COUNT}
         keyboardType={'number-pad'}
         textContentType="oneTimeCode"
-        onFocus={() => setKeyboardActive(true)}
-        onBlur={() => setKeyboardActive(false)}
         autoCapitalize="none"
         renderCell={({ index, symbol, isFocused }) => (
           <View

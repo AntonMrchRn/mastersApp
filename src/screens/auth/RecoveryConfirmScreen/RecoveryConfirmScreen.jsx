@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useRef, useState } from 'react';
-import { Keyboard, Text, View } from 'react-native';
+import React, { createRef, useEffect, useRef, useState } from 'react';
+import { Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,7 +10,6 @@ import CodeFieldInput from '../../../components/auth/CodeField/CodeField';
 import ConfrimPreview from '../../../components/auth/ConfirmPreview/ConfirmPreview';
 import ModalComponentScreen from '../../../components/auth/ModalComponentAuth';
 import { TimerBlock } from '../../../components/auth/Timer/Timer';
-import { BtnCloseKeyboard } from '../../../components/CloseKeyboard';
 import Header from '../../../components/Header/Header';
 import Spacer from '../../../components/Spacer/Spacer';
 import {
@@ -36,9 +35,6 @@ export const RecoveryConfirmationScreen = ({
   const [email, seteMail] = useState('');
   const [value, setValue] = useState('');
   const [password, setPassword] = useState('');
-  const [scrollHeight, setScrollHeight] = useState(275);
-  const [onKey, setOnKey] = useState(false);
-  const [keyboardActive, setKeyboardActive] = useState(false);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -69,18 +65,6 @@ export const RecoveryConfirmationScreen = ({
   const { visible } = useSelector(state => state.auth);
 
   useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', () => {
-      setOnKey(true);
-    });
-    Keyboard.addListener('keyboardWillHide', () => {
-      setOnKey(false);
-    });
-    return () => {
-      Keyboard.removeAllListeners('keyboardDidShow');
-    };
-  });
-
-  useEffect(() => {
     dispatch(clearRecoveryError());
   }, []);
 
@@ -88,74 +72,79 @@ export const RecoveryConfirmationScreen = ({
     dispatch(clearRecoveryError());
   }, [password, value]);
 
-  const refScroll = useRef(null);
+  const OFFSET = 120;
+
+  const focusInput = () => {
+    setTimeout(() => {
+      scrollViewRef?.current?.scrollToPosition(0, OFFSET, true);
+    }, 0);
+  };
+
+  const passwordRef = createRef();
+  const scrollViewRef = createRef();
 
   return (
     <SafeAreaView style={styles.container}>
       <Header label={'Подтверждение кодом'} callBack={goBack} />
       <KeyboardAwareScrollView
-        ref={refScroll}
-        behavior={'position'}
-        contentContainerStyle={styles.containerKeyBoard}
-        extraScrollHeight={scrollHeight}
-        scrollEnabled={false}
-        keyboardVerticalOffset={0}
-        pagingEnabled={true}
-        automaticallyAdjustContentInsets={false}
+        ref={scrollViewRef}
         keyboardShouldPersistTaps="handled"
+        onKeyboardWillShow={() => {
+          if (configApp.android) {
+            return;
+          }
+          setTimeout(() => {
+            scrollViewRef?.current?.scrollToPosition(0, OFFSET, true);
+          }, 200);
+        }}
         keyboardOpeningTime={100}
+        contentContainerStyle={styles.containerKeyboard}
+        enableOnAndroid={true}
       >
         <View style={styles.wrapperSignIn}>
-          <View style={styles.wrapperSignInContainer}>
-            <ConfrimPreview />
-            <Spacer />
-            <CodeFieldInput
-              value={value}
-              setValue={setValue}
-              setKeyboardActive={setKeyboardActive}
-            />
-            <ModalComponentScreen
-              flag={true}
-              visible={visible}
-              label="Вы успешно поменяли пароль!"
-              textBtn="Готово"
-              onPress={closeModal}
-            />
-            <InputPassword
-              password={password}
-              setPassword={setPassword}
-              setScrollHeight={setScrollHeight}
-            />
-            <Spacer size="L" />
-            {recoveryError?.message?.length > 0 && (
-              <View style={styles.containerError}>
-                <Text style={styles.error}>{recoveryError?.message}</Text>
-              </View>
-            )}
-            <Button
-              isRestore
-              isPhoneAuth={isPhoneAuth}
-              value={value}
-              password={password}
-              email={email}
-              label="Подтвердить"
-              isDisabled
-              withOutPassword
-              recoveryError={recoveryError}
-              onPress={restoreRequest}
-            />
-            <TimerBlock
-              expiredTimer={Number(timeout?.timeout * 1000)}
-              isConfirm
-              callBack={recoveryRequest}
-            />
-          </View>
-          {configApp.ios && onKey && keyboardActive && (
-            <BtnCloseKeyboard
-              scrollHeight={recoveryError?.message?.length > 0 ? 124 : 85}
-              onPress={() => Keyboard.dismiss()}
-            />
+          <ConfrimPreview />
+          <Spacer />
+          <CodeFieldInput
+            value={value}
+            setValue={setValue}
+            onSubmitEditing={() => passwordRef?.current?.focus()}
+            onFocus={configApp.ios ? focusInput : () => {}}
+          />
+          <ModalComponentScreen
+            flag={true}
+            visible={visible}
+            label="Вы успешно поменяли пароль!"
+            textBtn="Готово"
+            onPress={closeModal}
+          />
+          <InputPassword
+            password={password}
+            setPassword={setPassword}
+            innerRef={passwordRef}
+          />
+          <Spacer size="L" />
+          {recoveryError?.message?.length > 0 && (
+            <View style={styles.containerError}>
+              <Text style={styles.error}>{recoveryError?.message}</Text>
+            </View>
           )}
+          <Button
+            isRestore
+            isPhoneAuth={isPhoneAuth}
+            value={value}
+            password={password}
+            email={email}
+            label="Подтвердить"
+            isDisabled
+            withOutPassword
+            recoveryError={recoveryError}
+            onPress={restoreRequest}
+          />
+          <TimerBlock
+            expiredTimer={Number(timeout?.timeout * 1000)}
+            isConfirm
+            callBack={recoveryRequest}
+          />
         </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>

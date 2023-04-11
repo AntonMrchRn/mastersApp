@@ -5,21 +5,15 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  containerKeyBoard: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  wrapperSignInContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    padding: 15,
-    width: '100%',
-  },
   wrapperSignIn: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     width: '100%',
+    padding: 15,
+  },
+  containerKeyboard: {
+    width: '100%',
+    flex: 0.9,
   },
 });
