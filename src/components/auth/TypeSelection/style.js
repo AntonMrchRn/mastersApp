@@ -31,13 +31,14 @@ export const styles = StyleSheet.create({
   },
   textBtn: {
     color: 'black',
-    fontWeight: '300',
-    fontSize: 14,
+    fontWeight: '400',
+    fontSize: 13,
     fontFamily: fonts.main_400,
   },
   activeTextBtn: {
     color: 'black',
-    fontWeight: '400',
-    fontFamily: fonts.main_400,
+    fontWeight: '700',
+    fontSize: 13,
+    fontFamily: fonts.main_700,
   },
 });

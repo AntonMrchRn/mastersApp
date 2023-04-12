@@ -20,8 +20,9 @@ export const styles = StyleSheet.create({
   },
   labelBtn: {
     color: '#fff',
-    fontFamily: fonts.main_400,
-    fontWeight: '400',
+    fontFamily: fonts.main_700,
+    fontWeight: '700',
+    fontSize: 15,
   },
   activeTextBtn: {
     color: configApp.brandColor,

@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
     width: 22,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    height: '72%',
+    height: '82%',
   },
   active: {
     borderColor: configApp.brandColor,
@@ -28,13 +28,13 @@ export const styles = StyleSheet.create({
   title: {
     fontWeight: '400',
     color: 'black',
-    fontSize: configApp.ios ? 13 : 12,
+    fontSize: 15,
     fontFamily: fonts.main_400,
   },
   titlePress: {
     fontWeight: '400',
     color: configApp.brandColor,
-    fontSize: configApp.ios ? 13 : 12,
+    fontSize: 15,
     fontFamily: fonts.main_400,
   },
   wrapper: {

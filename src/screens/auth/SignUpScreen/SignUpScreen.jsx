@@ -64,7 +64,7 @@ export const SignUpScreen = () => {
     getDataEmail();
   }, []);
 
-  const OFFSET = 0;
+  const OFFSET = 80;
 
   const focusInput = () => {
     setTimeout(() => {
@@ -133,6 +133,7 @@ export const SignUpScreen = () => {
               isDisabled
               onPress={authRequest}
               valueCheckBox={changeCheckBox}
+              label={'Продолжить'}
             />
             <ForgotPassword />
           </View>

@@ -6,7 +6,7 @@ const Logo = () => {
   return (
     <View style={styles.container}>
       <Svg
-        width="245"
+        width="220"
         height="114"
         viewBox="0 0 304 114"
         fill="none"

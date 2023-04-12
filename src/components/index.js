@@ -6,6 +6,4 @@ export * from './auth/ForgotPassword';
 
 export * from './auth/Input';
 
-export * from './auth/Logo';
-
 export * from './auth/TypeSelection';

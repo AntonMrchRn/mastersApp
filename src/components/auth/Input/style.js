@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import normalize from 'react-native-normalize';
 import { configApp } from '../../../utils/helpers/platform';
 import fonts from '../../fonts';
 
@@ -35,18 +36,18 @@ export const styles = StyleSheet.create({
     color: '#000',
     fontSize: 14,
     height: '100%',
-    width: '77.3%',
+    width: configApp.ios ? '77.3%' : '79.8%',
     position: 'relative',
     paddingRight: 28,
     fontFamily: fonts.main_400,
     fontWeight: '400',
-    paddingBottom: 0.2,
+    paddingTop: configApp.ios ? 0 : normalize(12.5),
   },
   inputBasicEmail: {
     color: '#000',
     fontSize: 14,
     height: '100%',
-    width: '90.1%',
+    width: configApp.ios ? '90.1%' : '91%',
     position: 'relative',
     paddingRight: 28,
     fontFamily: fonts.main_400,

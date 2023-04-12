@@ -1,4 +1,6 @@
 import { StyleSheet } from 'react-native';
+import normalize from 'react-native-normalize';
+import { configApp } from '../../../utils/helpers/platform';
 
 export const styles = StyleSheet.create({
   container: {
@@ -6,17 +8,14 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   wrapperSignIn: {
-    // flex: 1,
-    height: 700,
+    height: normalize(configApp.ios ? 560 : 590, 'height'),
     alignItems: 'center',
     width: '100%',
     padding: 15,
   },
   bottomWrapper: {
     width: '100%',
-    // paddingHorizontal: 15,
-    height: '35%',
-    // justifyContent: 'flex-end',
+    height: normalize(configApp.ios ? 190 : 180, 'height'),
     justifyContent: 'center',
   },
   wrapperCenter: {

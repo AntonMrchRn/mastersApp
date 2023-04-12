@@ -1,5 +1,5 @@
 import React from 'react';
-import { Linking, Text, TouchableOpacity, View } from 'react-native';
+import { Keyboard, Linking, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './style';
 import { Image } from 'react-native';
 import CheckBoxDisabled from '../../svg/auth/CheckBoxDisabled';
@@ -20,17 +20,14 @@ export const CheckBoxAgreement = ({ valueCheckBox, setChangeCheckBox }) => {
     let url = 'https://mastera-service.ru/docs/public-offer.pdf';
     Linking.openURL(url);
   };
-  const Icon = ({ valueCheckBox }) => {
-    if (valueCheckBox) {
-      return <Image source={IconChecked} style={styles.checkBox} />;
-    }
-    if (!valueCheckBox) {
-      return null;
-    }
-  };
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => setChangeCheckBox(!valueCheckBox)}>
+      <TouchableOpacity
+        onPress={() => {
+          Keyboard.dismiss();
+          setChangeCheckBox(!valueCheckBox);
+        }}
+      >
         <View style={[styles.wrapperCheckBox, valueCheckBox && styles.active]}>
           {!valueCheckBox ? <CheckBoxDisabled /> : <CheckBoxActive />}
         </View>
