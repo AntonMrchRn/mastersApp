@@ -2,6 +2,8 @@ import React from 'react';
 import { Linking, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './style';
 import { Image } from 'react-native';
+import CheckBoxDisabled from '../../svg/auth/CheckBoxDisabled';
+import CheckBoxActive from '../../svg/auth/CheckBoxActive';
 
 const IconChecked = require('../../../assets/icons/checkMark.png');
 
@@ -30,10 +32,7 @@ export const CheckBoxAgreement = ({ valueCheckBox, setChangeCheckBox }) => {
     <View style={styles.container}>
       <TouchableOpacity onPress={() => setChangeCheckBox(!valueCheckBox)}>
         <View style={[styles.wrapperCheckBox, valueCheckBox && styles.active]}>
-          <Icon
-            valueCheckBox={valueCheckBox}
-            setChangeCheckBox={setChangeCheckBox}
-          />
+          {!valueCheckBox ? <CheckBoxDisabled /> : <CheckBoxActive />}
         </View>
       </TouchableOpacity>
       <View style={styles.wrapper}>

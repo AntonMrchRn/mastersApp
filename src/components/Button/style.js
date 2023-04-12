@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  disabled: { backgroundColor: configApp.disabled },
+  disabled: { backgroundColor: '#ACB8F8' },
   activeBtn: {
     backgroundColor: configApp.brandColor,
   },

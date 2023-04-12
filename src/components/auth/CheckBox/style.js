@@ -13,13 +13,10 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   wrapperCheckBox: {
-    height: 21,
-    width: 21,
-    borderColor: 'lightgray',
-    borderRadius: 5,
-    borderWidth: 1,
+    width: 22,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    height: '72%',
   },
   active: {
     borderColor: configApp.brandColor,
@@ -31,18 +28,18 @@ export const styles = StyleSheet.create({
   title: {
     fontWeight: '400',
     color: 'black',
-    fontSize: configApp.ios ? 11 : 10,
+    fontSize: configApp.ios ? 13 : 12,
     fontFamily: fonts.main_400,
   },
   titlePress: {
     fontWeight: '400',
     color: configApp.brandColor,
-    fontSize: configApp.ios ? 11 : 10,
+    fontSize: configApp.ios ? 13 : 12,
     fontFamily: fonts.main_400,
   },
   wrapper: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    paddingHorizontal: configApp.ios ? 7 : 5,
+    paddingLeft: 10,
+    width: '100%',
   },
 });

@@ -6,14 +6,21 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   wrapperSignIn: {
-    flex: 1,
+    // flex: 1,
+    height: 700,
     alignItems: 'center',
-    justifyContent: 'center',
     width: '100%',
     padding: 15,
   },
-  containerKeyboard: {
+  bottomWrapper: {
     width: '100%',
-    flex: 0.9,
+    // paddingHorizontal: 15,
+    height: '35%',
+    // justifyContent: 'flex-end',
+    justifyContent: 'center',
+  },
+  wrapperCenter: {
+    width: '100%',
+    height: '45%',
   },
 });

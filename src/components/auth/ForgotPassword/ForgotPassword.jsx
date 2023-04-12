@@ -18,7 +18,7 @@ export const ForgotPassword = () => {
           dispatch(clearAuthError());
         }}
       >
-        <Text style={styles.labelBtn}>Не можете войти?</Text>
+        <Text style={styles.labelBtn}>Восстановить пароль</Text>
       </TouchableOpacity>
     </View>
   );

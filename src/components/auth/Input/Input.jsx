@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Text, TextInput, View } from 'react-native';
+import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
+import ClearTel from '../../svg/auth/ClearTel';
+import Flag from '../../svg/auth/Flag';
 import { styles } from './style';
 
 export const Input = ({
@@ -11,15 +13,41 @@ export const Input = ({
   setMail,
   onSubmitEditing,
   onFocus,
+  setActive,
+  active,
 }) => {
-  const [active, setActive] = useState(false);
   const [focus, setFocus] = useState(false);
+  const [activeTel, setActiveTel] = useState(false);
+  const [activeEmail, setActiveEmail] = useState(false);
 
   useEffect(() => {
     if (tel?.length === 10) {
       onSubmitEditing();
     }
+    if (tel?.length > 0) {
+      setActiveTel(true);
+    }
+    if (tel?.length < 1) {
+      setActiveTel(false);
+    }
   }, [tel]);
+
+  useEffect(() => {
+    if (email?.length > 0) {
+      setActiveEmail(true);
+    }
+    if (email?.length < 1) {
+      setActiveEmail(false);
+    }
+  }, [email]);
+
+  const clearValueTel = () => {
+    setTel('');
+  };
+
+  const clearValueEmail = () => {
+    setMail('');
+  };
 
   return (
     <View
@@ -30,10 +58,9 @@ export const Input = ({
     >
       {isPhoneAuth ? (
         <>
-          <Image
-            source={require('../../../assets/icons/flag.png')}
-            style={styles.icon}
-          />
+          <View style={styles.icon}>
+            <Flag />
+          </View>
           <Text style={[styles.prefixPhone, focus && styles.activePrefix]}>
             +7
           </Text>
@@ -71,22 +98,34 @@ export const Input = ({
               setFocus(true);
             }}
           />
+          {activeTel && (
+            <TouchableOpacity onPress={() => clearValueTel()}>
+              <ClearTel />
+            </TouchableOpacity>
+          )}
         </>
       ) : (
-        <TextInput
-          style={styles.inputBasicEmail}
-          placeholder={'Email'}
-          keyboardType="email-address"
-          placeholderTextColor={'#5e5e5e'}
-          maxLength={60}
-          value={email}
-          onChangeText={text => setMail(text)}
-          onPressIn={() => setActive(true)}
-          onEndEditing={() => setActive(false)}
-          autoCapitalize="none"
-          onSubmitEditing={onSubmitEditing}
-          onFocus={onFocus}
-        />
+        <>
+          <TextInput
+            style={styles.inputBasicEmail}
+            placeholder={'Email'}
+            keyboardType="email-address"
+            placeholderTextColor={'#5e5e5e'}
+            maxLength={60}
+            value={email}
+            onChangeText={text => setMail(text)}
+            onPressIn={() => setActive(true)}
+            onEndEditing={() => setActive(false)}
+            autoCapitalize="none"
+            onSubmitEditing={onSubmitEditing}
+            onFocus={onFocus}
+          />
+          {activeEmail && (
+            <TouchableOpacity onPress={() => clearValueEmail()}>
+              <ClearTel />
+            </TouchableOpacity>
+          )}
+        </>
       )}
     </View>
   );

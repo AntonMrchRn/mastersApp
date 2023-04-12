@@ -35,6 +35,7 @@ export const RecoveryScreen = () => {
   const [tel, setTel] = useState('');
   const [email, seteMail] = useState('');
   const [password, setPassword] = useState('');
+  const [active, setActive] = useState(false);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -111,6 +112,7 @@ export const RecoveryScreen = () => {
             isPhoneAuth={isPhoneAuth}
             setTel={setTel}
             seteMail={seteMail}
+            setActive={setActive}
           />
           <ModalComponentScreen
             visible={visibleEmail}
@@ -129,6 +131,8 @@ export const RecoveryScreen = () => {
             setTel={setTel}
             onSubmitEditing={() => passwordRef?.current?.focus()}
             onFocus={configApp.ios ? focusInput : () => {}}
+            setActive={setActive}
+            active={active}
           />
           {recoveryError?.message?.length > 0 && (
             <View style={styles.containerError}>

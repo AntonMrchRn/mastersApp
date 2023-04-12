@@ -13,6 +13,7 @@ export const TypeSelection = ({
   setIsPhoneAuth,
   seteMail,
   setTel,
+  setActive,
 }) => {
   const dispatch = useDispatch();
   return (
@@ -20,11 +21,11 @@ export const TypeSelection = ({
       <TouchableOpacity
         style={[styles.btn, isPhoneAuth && styles.activeBtn]}
         onPress={() => {
-          Keyboard.dismiss();
           dispatch(clearAuthError());
           dispatch(clearRecoveryError());
           seteMail('');
           setIsPhoneAuth(true);
+          setActive(false);
         }}
       >
         <Text style={[styles.textBtn, isPhoneAuth && styles.activeTextBtn]}>
@@ -35,11 +36,11 @@ export const TypeSelection = ({
       <TouchableOpacity
         style={[styles.btn, !isPhoneAuth && styles.activeBtn]}
         onPress={() => {
-          Keyboard.dismiss();
           dispatch(clearAuthError());
           dispatch(clearRecoveryError());
           setTel('');
           setIsPhoneAuth(false);
+          setActive(false);
         }}
       >
         <Text style={[styles.textBtn, !isPhoneAuth && styles.activeTextBtn]}>

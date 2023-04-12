@@ -4,17 +4,16 @@ import fonts from '../../fonts';
 export const styles = StyleSheet.create({
   container: {
     width: '100%',
+    height: '35%',
     alignItems: 'center',
-    marginTop: 25,
-    height: 28,
+    padding: 3,
+    justifyContent: 'flex-end',
+    paddingHorizontal: 15,
+    paddingVertical: 25,
   },
-  btn: {
-    paddingVertical: 5,
-  },
-  labelBtn: {
-    color: 'black',
-    fontSize: 14,
+  title: {
     fontFamily: fonts.main_400,
-    fontWeight: '400',
+    fontWeight: '600',
+    fontSize: 22,
   },
 });

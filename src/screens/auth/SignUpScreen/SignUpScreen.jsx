@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { createRef, useEffect, useRef, useState } from 'react';
-import { Dimensions, View } from 'react-native';
+import React, { createRef, useEffect, useState } from 'react';
+import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,8 +14,7 @@ import {
   TypeSelection,
 } from '~/components';
 import CheckBoxAgreement from '../../../components/auth/CheckBox';
-import Logo from '../../../components/svg/auth/Logo';
-
+import SignUpPreview from '../../../components/auth/SignUpPreview';
 import { fetchUserAuth } from '../../../redux/slices/auth/asyncActions';
 import {
   clearAuthError,
@@ -35,6 +34,7 @@ export const SignUpScreen = () => {
   const [email, seteMail] = useState('');
   const [password, setPassword] = useState('');
   const [changeCheckBox, setChangeCheckBox] = useState(false);
+  const [active, setActive] = useState(false);
 
   const authRequest = () => {
     dispatch(fetchUserAuth({ tel, email, password, isPhoneAuth }));
@@ -64,7 +64,7 @@ export const SignUpScreen = () => {
     getDataEmail();
   }, []);
 
-  const OFFSET = 145;
+  const OFFSET = 0;
 
   const focusInput = () => {
     setTimeout(() => {
@@ -89,47 +89,53 @@ export const SignUpScreen = () => {
           }, 200);
         }}
         keyboardOpeningTime={100}
-        contentContainerStyle={styles.containerKeyboard}
         enableOnAndroid={true}
       >
         <View style={styles.wrapperSignIn}>
-          <Logo />
-          <TypeSelection
-            setIsPhoneAuth={setIsPhoneAuth}
-            isPhoneAuth={isPhoneAuth}
-            setTel={setTel}
-            seteMail={seteMail}
-          />
-          <Input
-            isPhoneAuth={isPhoneAuth}
-            tel={tel}
-            email={email}
-            setMail={seteMail}
-            setTel={setTel}
-            onSubmitEditing={() => passwordRef?.current?.focus()}
-            onFocus={configApp.ios ? focusInput : () => {}}
-          />
-          <InputPassword
-            password={password}
-            setPassword={setPassword}
-            innerRef={passwordRef}
-          />
-          {authError && <ErrorField error={authError} />}
-          <CheckBoxAgreement
-            valueCheckBox={changeCheckBox}
-            setChangeCheckBox={setChangeCheckBox}
-          />
-          <ForgotPassword />
-          <Button
-            flag={true}
-            isPhoneAuth={isPhoneAuth}
-            tel={tel}
-            password={password}
-            email={email}
-            isDisabled
-            onPress={authRequest}
-            valueCheckBox={changeCheckBox}
-          />
+          <SignUpPreview />
+          <View style={styles.wrapperCenter}>
+            <TypeSelection
+              setIsPhoneAuth={setIsPhoneAuth}
+              isPhoneAuth={isPhoneAuth}
+              setTel={setTel}
+              seteMail={seteMail}
+              setActive={setActive}
+            />
+            <Input
+              isPhoneAuth={isPhoneAuth}
+              tel={tel}
+              email={email}
+              setMail={seteMail}
+              setTel={setTel}
+              onSubmitEditing={() => passwordRef?.current?.focus()}
+              onFocus={configApp.ios ? focusInput : () => {}}
+              setActive={setActive}
+              active={active}
+            />
+            <InputPassword
+              password={password}
+              setPassword={setPassword}
+              innerRef={passwordRef}
+            />
+            {authError && <ErrorField error={authError} />}
+            <CheckBoxAgreement
+              valueCheckBox={changeCheckBox}
+              setChangeCheckBox={setChangeCheckBox}
+            />
+          </View>
+          <View style={styles.bottomWrapper}>
+            <Button
+              flag={true}
+              isPhoneAuth={isPhoneAuth}
+              tel={tel}
+              password={password}
+              email={email}
+              isDisabled
+              onPress={authRequest}
+              valueCheckBox={changeCheckBox}
+            />
+            <ForgotPassword />
+          </View>
         </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>
