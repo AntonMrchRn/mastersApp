@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
   container: {
     width: '100%',
     bottom: 30,
-    height: normalize(50, 'height'),
+    height: normalize(150, 'height'),
     justifyContent: 'flex-end',
   },
   text: {

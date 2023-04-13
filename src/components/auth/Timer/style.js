@@ -26,19 +26,20 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   timer: {
-    fontSize: 13,
-    color: '#000',
+    fontSize: 17,
+    color: '#D5D5D6',
     textAlign: 'center',
     fontFamily: fonts.main_400,
-    fontWeight: '500',
+    fontWeight: '700',
   },
   btnRepeatCode: {
     padding: 5,
   },
   textBtn: {
-    fontSize: 13,
-    color: configApp.brandColor,
+    fontSize: 17,
+    color: '#1B1B1B',
+    textAlign: 'center',
     fontFamily: fonts.main_400,
-    fontWeight: '400',
+    fontWeight: '700',
   },
 });

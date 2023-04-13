@@ -6,6 +6,7 @@ import {
   RecoveryScreen,
   SignUpScreen,
 } from '../../screens';
+import { EmailScreen } from '../../screens/auth/EmailScreen/EmailScreen';
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ function AuthNavigation() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
       <Stack.Screen name="RecoveryScreen" component={RecoveryScreen} />
+      <Stack.Screen name="EmailScreen" component={EmailScreen} />
       <Stack.Screen
         name="RecoveryConfirmScreen"
         component={RecoveryConfirmationScreen}

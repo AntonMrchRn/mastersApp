@@ -3,16 +3,15 @@ import React, { createRef, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import {
-  Button,
-  ErrorField,
   ForgotPassword,
   Input,
   InputPassword,
   TypeSelection,
 } from '~/components';
+import { ButtonAuth } from '../../../components/auth/ButtonAuth/ButtonAuth';
 import CheckBoxAgreement from '../../../components/auth/CheckBox';
 import SignUpPreview from '../../../components/auth/SignUpPreview';
 import { fetchUserAuth } from '../../../redux/slices/auth/asyncActions';
@@ -26,7 +25,6 @@ import { configApp } from '../../../utils/helpers/platform';
 import { styles } from './style';
 
 export const SignUpScreen = () => {
-  const { authError } = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
   const [isPhoneAuth, setIsPhoneAuth] = useState(true);
@@ -92,7 +90,7 @@ export const SignUpScreen = () => {
         enableOnAndroid={true}
       >
         <View style={styles.wrapperSignIn}>
-          <SignUpPreview />
+          <SignUpPreview label={'Войдите в систему'} />
           <View style={styles.wrapperCenter}>
             <TypeSelection
               setIsPhoneAuth={setIsPhoneAuth}
@@ -117,14 +115,13 @@ export const SignUpScreen = () => {
               setPassword={setPassword}
               innerRef={passwordRef}
             />
-            {authError && <ErrorField error={authError} />}
             <CheckBoxAgreement
               valueCheckBox={changeCheckBox}
               setChangeCheckBox={setChangeCheckBox}
             />
           </View>
           <View style={styles.bottomWrapper}>
-            <Button
+            <ButtonAuth
               flag={true}
               isPhoneAuth={isPhoneAuth}
               tel={tel}

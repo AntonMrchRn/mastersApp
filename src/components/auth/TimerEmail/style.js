@@ -26,11 +26,11 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   timer: {
-    fontSize: 13,
-    color: '#000',
+    fontSize: 17,
+    color: '#D5D5D6',
     textAlign: 'center',
     fontFamily: fonts.main_400,
-    fontWeight: '500',
+    fontWeight: '700',
   },
   btnRepeatCode: {
     marginTop: 25,

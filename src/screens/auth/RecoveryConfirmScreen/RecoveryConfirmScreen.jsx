@@ -1,11 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { createRef, useEffect, useRef, useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { InputPassword, Button } from '~/components';
+import { InputPassword } from '~/components';
+import { ButtonAuth } from '../../../components/auth/ButtonAuth/ButtonAuth';
 import CodeFieldInput from '../../../components/auth/CodeField/CodeField';
 import ConfrimPreview from '../../../components/auth/ConfirmPreview/ConfirmPreview';
 import ModalComponentScreen from '../../../components/auth/ModalComponentAuth';
@@ -128,7 +129,7 @@ export const RecoveryConfirmationScreen = ({
               <Text style={styles.error}>{recoveryError?.message}</Text>
             </View>
           )}
-          <Button
+          <ButtonAuth
             isRestore
             isPhoneAuth={isPhoneAuth}
             value={value}

@@ -10,7 +10,6 @@ export const styles = StyleSheet.create({
     height: 45,
     borderRadius: 8,
     backgroundColor: configApp.brandLight,
-    marginBottom: 15,
     width: '100%',
     paddingHorizontal: 10,
   },
@@ -20,8 +19,12 @@ export const styles = StyleSheet.create({
     height: 45,
     borderRadius: 8,
     backgroundColor: configApp.brandLight,
-    marginBottom: 15,
     width: '100%',
+  },
+  error: {
+    backgroundColor: '#FEEDEE',
+    borderColor: '#EB142D',
+    borderWidth: 0.8,
   },
   containerPassword: {
     flexDirection: 'row',
@@ -29,7 +32,6 @@ export const styles = StyleSheet.create({
     height: 45,
     borderRadius: 8,
     backgroundColor: configApp.brandLight,
-    marginBottom: 15,
     width: '100%',
   },
   inputBasic: {
@@ -84,6 +86,12 @@ export const styles = StyleSheet.create({
   activePrefix: {
     color: '#000',
   },
+  errorPrefix: {
+    color: '#EB142D',
+  },
+  errorText: {
+    color: '#EB142D',
+  },
   activeInput: {
     borderColor: configApp.brandColor,
     borderWidth: 1,
@@ -92,5 +100,9 @@ export const styles = StyleSheet.create({
     width: 23,
     height: 23,
     marginRight: 5,
+  },
+  wrapper: {
+    width: '100%',
+    marginBottom: 15,
   },
 });

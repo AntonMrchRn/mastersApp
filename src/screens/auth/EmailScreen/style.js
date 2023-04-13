@@ -1,6 +1,5 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import fonts from '../../../components/fonts';
-import { configApp } from '../../../utils/helpers/platform';
 
 export const styles = StyleSheet.create({
   container: {
@@ -12,24 +11,19 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 15,
     width: '100%',
-    justifyContent: 'center',
-  },
-  containerError: {
-    width: '100%',
-    height: 40,
     justifyContent: 'flex-start',
-  },
-  containerTimer: {
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 60,
   },
   error: {
     color: 'red',
     textAlign: 'center',
     fontFamily: fonts.main_400,
     fontWeight: '400',
-    fontSize: configApp.ios ? 14 : 12,
+    fontSize: Platform.OS === 'ios' ? 14 : 12,
+  },
+  containerError: {
+    width: '100%',
+    height: 30,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
 });

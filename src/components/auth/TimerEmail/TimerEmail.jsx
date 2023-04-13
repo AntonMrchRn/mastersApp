@@ -55,9 +55,9 @@ const BlockComponent = ({ expiredTimer, timerOffset, closeBlock }) => {
   return (
     <View style={styles.wrapper}>
       <Text style={styles.timer}>
-        {`Повторите попытку через ${timeFormat(
+        {`Отправить код повторно (${timeFormat(
           timerOffset + expiredTimer - timeMilliSeconds
-        )}`}
+        )})`}
       </Text>
     </View>
   );

@@ -9,6 +9,7 @@ const initialState = {
   user: null,
   isAuth: false,
   authError: null,
+  authErrorCode: null,
   recoveryError: null,
   isRecovery: false,
   isActiveTimer: false,
@@ -17,8 +18,6 @@ const initialState = {
   timeout: null,
   timeOutEmail: null,
   restore: false,
-  visible: false,
-  visibleEmail: false,
 };
 
 export const userAuth = createSlice({
@@ -52,14 +51,9 @@ export const userAuth = createSlice({
     timerOffEmail: state => {
       state.isActiveTimerEmail = false;
     },
-    modalVisible: (state, action) => {
-      state.visible = action.payload;
-    },
-    modalVisibleEmail: (state, action) => {
-      state.visibleEmail = action.payload;
-    },
     clearAuthError: (state, action) => {
       state.authError = action.payload;
+      state.authErrorCode = action.payload;
     },
     timeOutAsync: (state, action) => {
       state.timeout = action.payload;
@@ -81,6 +75,7 @@ export const userAuth = createSlice({
     });
     builder.addCase(fetchUserAuth.rejected, (state, action) => {
       state.authError = action.payload?.message;
+      state.authErrorCode = action.payload?.code;
       state.loading = false;
     });
 
@@ -97,6 +92,8 @@ export const userAuth = createSlice({
     });
     builder.addCase(recoveryPassword.rejected, (state, action) => {
       state.recoveryError = action.payload;
+      state.authError = action.payload?.message;
+      state.authErrorCode = action.payload?.code;
       state.loading = false;
     });
 
@@ -125,8 +122,6 @@ export const {
   timerOnEmail,
   timerOffEmail,
   clearRecoveryError,
-  modalVisible,
-  modalVisibleEmail,
   clearAuthError,
   timeOutAsync,
   timeOutAsyncEmail,

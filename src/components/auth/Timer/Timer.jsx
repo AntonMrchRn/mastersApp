@@ -59,9 +59,9 @@ const BlockComponent = ({
   return (
     <View style={styles.wrapper}>
       <Text style={styles.timer}>
-        {`Повторите попытку через ${timeFormat(
+        {`Отправить код повторно (${timeFormat(
           timerOffset + expiredTimer - timeMilliSeconds
-        )}`}
+        )})`}
       </Text>
     </View>
   );
@@ -159,7 +159,7 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
             setLoading(false);
           }}
         >
-          <Text style={styles.textBtn}>Запросить новый код</Text>
+          <Text style={styles.textBtn}>Отправить новый код</Text>
         </TouchableOpacity>
       </View>
     );

@@ -3,11 +3,11 @@ import { Text, View } from 'react-native';
 import { styles } from './style';
 import Logo from '../../svg/auth/Logo';
 
-export const SignUpPreview = () => {
+export const SignUpPreview = ({ label = '' }) => {
   return (
     <View style={styles.container}>
       <Logo />
-      <Text style={styles.title}>Войдите в систему</Text>
+      <Text style={styles.title}>{label}</Text>
     </View>
   );
 };

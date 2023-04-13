@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { Button } from '~/components';
+import { Button } from '../../../components/Button/Button';
 
 import { storageMMKV } from '../../../mmkv/storage';
 import { logOut } from '../../../redux/slices/auth/reducer';
@@ -19,7 +19,7 @@ export const ProfileScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Профиль</Text>
-      <Button label="Выйти из аккаунта" onPress={onExit} flag={true} />
+      <Button label="Выйти из аккаунта" onPress={onExit} />
     </View>
   );
 };

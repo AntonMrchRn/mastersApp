@@ -1,9 +1,11 @@
 import { StyleSheet } from 'react-native';
-import normalize from 'react-native-normalize';
-import { configApp } from '../../utils/helpers/platform';
-import fonts from '../fonts';
+import { configApp } from '../../../utils/helpers/platform';
+import fonts from '../../fonts';
 
 export const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+  },
   btn: {
     backgroundColor: configApp.brandColor,
     height: 42,
@@ -12,16 +14,17 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  disabled: { backgroundColor: '#ACB8F8' },
+  activeBtn: {
+    backgroundColor: configApp.brandColor,
+  },
   labelBtn: {
     color: '#fff',
     fontFamily: fonts.main_700,
     fontWeight: '700',
     fontSize: 15,
   },
-  container: {
-    width: '100%',
-    height: normalize(65, 'height'),
-    alignItems: 'center',
-    justifyContent: 'center',
+  activeTextBtn: {
+    color: configApp.brandColor,
   },
 });

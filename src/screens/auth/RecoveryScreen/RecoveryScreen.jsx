@@ -1,18 +1,18 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { createRef, useEffect, useState } from 'react';
-import { Keyboard, Text, View } from 'react-native';
+import { Keyboard, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Button, Input, TypeSelection } from '~/components';
+import { Input, TypeSelection } from '~/components';
+import { ButtonAuth } from '../../../components/auth/ButtonAuth/ButtonAuth';
 import ForgotPreview from '../../../components/auth/ForgotPreview/ForgotPreview';
-import ModalComponentScreen from '../../../components/auth/ModalComponentAuth';
+import SignUpPreview from '../../../components/auth/SignUpPreview';
 import { TimerBlock } from '../../../components/auth/Timer/Timer';
 import { TimerBlockEmail } from '../../../components/auth/TimerEmail/TimerEmail';
 import Header from '../../../components/Header/Header';
 import Spacer from '../../../components/Spacer/Spacer';
-import { storageMMKV } from '../../../mmkv/storage';
 import { recoveryPassword } from '../../../redux/slices/auth/asyncActions';
 import {
   clearRecoveryError,
@@ -23,14 +23,9 @@ import { configApp } from '../../../utils/helpers/platform';
 import { styles } from './style';
 
 export const RecoveryScreen = () => {
-  const {
-    isRecovery,
-    timeout,
-    recoveryError,
-    visibleEmail,
-    timeOutEmail,
-    isRecoveryEmail,
-  } = useSelector(state => state.auth);
+  const { isRecovery, timeout, timeOutEmail, isRecoveryEmail } = useSelector(
+    state => state.auth
+  );
   const [isPhoneAuth, setIsPhoneAuth] = useState(true);
   const [tel, setTel] = useState('');
   const [email, seteMail] = useState('');
@@ -48,12 +43,6 @@ export const RecoveryScreen = () => {
     dispatch(clearRecoveryError());
   }, []);
 
-  const closeModal = () => {
-    dispatch(modalVisibleEmail(false));
-    dispatch(clearRecoveryError());
-    navigation.goBack();
-  };
-
   const goBack = () => {
     dispatch(clearRecoveryError());
     navigation.goBack();
@@ -66,7 +55,7 @@ export const RecoveryScreen = () => {
     }
     if (!isPhoneAuth) {
       Keyboard.dismiss();
-      dispatch(modalVisibleEmail(true));
+      navigation.navigate('EmailScreen');
     }
   }, [isRecovery, isRecoveryEmail]);
 
@@ -89,7 +78,7 @@ export const RecoveryScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header label={'Восстановление пароля'} callBack={goBack} />
+      <Header callBack={goBack} />
       <KeyboardAwareScrollView
         ref={scrollViewRef}
         keyboardShouldPersistTaps="handled"
@@ -102,10 +91,10 @@ export const RecoveryScreen = () => {
           }, 200);
         }}
         keyboardOpeningTime={100}
-        contentContainerStyle={styles.containerKeyboard}
         enableOnAndroid={true}
       >
         <View style={styles.wrapperSignIn}>
+          <SignUpPreview label="Восстановление пароля" />
           <ForgotPreview />
           <TypeSelection
             setIsPhoneAuth={setIsPhoneAuth}
@@ -113,14 +102,6 @@ export const RecoveryScreen = () => {
             setTel={setTel}
             seteMail={seteMail}
             setActive={setActive}
-          />
-          <ModalComponentScreen
-            visible={visibleEmail}
-            navigation={navigation}
-            label="На ваш Email отправлено письмо для
-              подтверждения смены пароля. Следуйте инструкциям в письме."
-            textBtn="Перейти на главную"
-            onPress={closeModal}
           />
           <Spacer />
           <Input
@@ -134,18 +115,13 @@ export const RecoveryScreen = () => {
             setActive={setActive}
             active={active}
           />
-          {recoveryError?.message?.length > 0 && (
-            <View style={styles.containerError}>
-              <Text style={styles.error}>{recoveryError?.message}</Text>
-            </View>
-          )}
           <Spacer size="L" />
-          <Button
+          <ButtonAuth
             isPhoneAuth={isPhoneAuth}
             tel={tel}
             password={password}
             email={email}
-            label="Продолжить"
+            label={isPhoneAuth ? 'Получить СМС с кодом' : 'Получить ссылку'}
             isDisabled
             withOutPassword
             onPress={recoveryRequest}
