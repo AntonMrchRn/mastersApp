@@ -13,7 +13,7 @@ import {
 } from '~/components';
 import { ButtonAuth } from '../../../components/auth/ButtonAuth/ButtonAuth';
 import CheckBoxAgreement from '../../../components/auth/CheckBox';
-import SignUpPreview from '../../../components/auth/SignUpPreview';
+import LogoPreview from '../../../components/auth/LogoPreview';
 import { fetchUserAuth } from '../../../redux/slices/auth/asyncActions';
 import {
   clearAuthError,
@@ -90,7 +90,7 @@ export const SignUpScreen = () => {
         enableOnAndroid={true}
       >
         <View style={styles.wrapperSignIn}>
-          <SignUpPreview label={'Войдите в систему'} />
+          <LogoPreview label={'Войдите в систему'} />
           <View style={styles.wrapperCenter}>
             <TypeSelection
               setIsPhoneAuth={setIsPhoneAuth}

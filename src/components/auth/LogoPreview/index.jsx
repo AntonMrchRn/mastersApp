@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { styles } from './style';
 import Logo from '../../svg/auth/Logo';
 
-export const SignUpPreview = ({ label = '' }) => {
+export const LogoPreview = ({ label = '' }) => {
   return (
     <View style={styles.container}>
       <Logo />
@@ -12,4 +12,4 @@ export const SignUpPreview = ({ label = '' }) => {
   );
 };
 
-export default SignUpPreview;
+export default LogoPreview;

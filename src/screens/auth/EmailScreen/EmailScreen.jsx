@@ -4,8 +4,8 @@ import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
 import ConfrimPreviewEmail from '../../../components/auth/ConfirmPreviewEmail/ConfirmPreviewEmail';
+import LogoPreview from '../../../components/auth/LogoPreview';
 
-import SignUpPreview from '../../../components/auth/SignUpPreview';
 import Header from '../../../components/Header/Header';
 import { clearRecoveryError } from '../../../redux/slices/auth/reducer';
 
@@ -24,7 +24,7 @@ export const EmailScreen = () => {
     <SafeAreaView style={styles.container}>
       <Header label={''} callBack={goBack} />
       <View style={styles.wrapperSignIn}>
-        <SignUpPreview label="Восстановление пароля" />
+        <LogoPreview label="Восстановление пароля" />
         <ConfrimPreviewEmail />
       </View>
     </SafeAreaView>

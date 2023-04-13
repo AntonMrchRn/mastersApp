@@ -9,7 +9,7 @@ import { InputPassword } from '~/components';
 import { ButtonAuth } from '../../../components/auth/ButtonAuth/ButtonAuth';
 import CodeFieldInput from '../../../components/auth/CodeField/CodeField';
 import ConfrimPreview from '../../../components/auth/ConfirmPreview/ConfirmPreview';
-import SignUpPreview from '../../../components/auth/SignUpPreview';
+import LogoPreview from '../../../components/auth/LogoPreview';
 import { TimerBlock } from '../../../components/auth/Timer/Timer';
 import Header from '../../../components/Header/Header';
 import Spacer from '../../../components/Spacer/Spacer';
@@ -92,7 +92,7 @@ export const RecoveryConfirmationScreen = ({
         enableOnAndroid={true}
       >
         <View style={styles.wrapperSignIn}>
-          <SignUpPreview label="Восстановление пароля" />
+          <LogoPreview label="Восстановление пароля" />
           <ConfrimPreview />
           <Spacer />
           <CodeFieldInput

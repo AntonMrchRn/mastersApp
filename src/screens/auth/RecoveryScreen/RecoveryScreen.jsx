@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Input, TypeSelection } from '~/components';
 import { ButtonAuth } from '../../../components/auth/ButtonAuth/ButtonAuth';
 import ForgotPreview from '../../../components/auth/ForgotPreview/ForgotPreview';
-import SignUpPreview from '../../../components/auth/SignUpPreview';
+import LogoPreview from '../../../components/auth/LogoPreview';
 import { TimerBlock } from '../../../components/auth/Timer/Timer';
 import { TimerBlockEmail } from '../../../components/auth/TimerEmail/TimerEmail';
 import Header from '../../../components/Header/Header';
@@ -91,7 +91,7 @@ export const RecoveryScreen = () => {
         enableOnAndroid={true}
       >
         <View style={styles.wrapperSignIn}>
-          <SignUpPreview label="Восстановление пароля" />
+          <LogoPreview label="Восстановление пароля" />
           <ForgotPreview />
           <TypeSelection
             setIsPhoneAuth={setIsPhoneAuth}
