@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { createRef, useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +9,7 @@ import { InputPassword } from '~/components';
 import { ButtonAuth } from '../../../components/auth/ButtonAuth/ButtonAuth';
 import CodeFieldInput from '../../../components/auth/CodeField/CodeField';
 import ConfrimPreview from '../../../components/auth/ConfirmPreview/ConfirmPreview';
-import ModalComponentScreen from '../../../components/auth/ModalComponentAuth';
+import SignUpPreview from '../../../components/auth/SignUpPreview';
 import { TimerBlock } from '../../../components/auth/Timer/Timer';
 import Header from '../../../components/Header/Header';
 import Spacer from '../../../components/Spacer/Spacer';
@@ -17,10 +17,7 @@ import {
   recoveryPassword,
   restorePassword,
 } from '../../../redux/slices/auth/asyncActions';
-import {
-  clearRecoveryError,
-  modalVisible,
-} from '../../../redux/slices/auth/reducer';
+import { clearRecoveryError } from '../../../redux/slices/auth/reducer';
 import { configApp } from '../../../utils/helpers/platform';
 
 import { styles } from './style';
@@ -53,17 +50,10 @@ export const RecoveryConfirmationScreen = ({
     dispatch(restorePassword({ password, value })).then(res => {
       if (res?.payload === null || res?.payload === undefined) {
         dispatch(clearRecoveryError());
-        dispatch(modalVisible(true));
+        navigation.navigate('PasswordScreen');
       }
     });
   };
-
-  const closeModal = () => {
-    navigation.navigate('SignUpScreen');
-    dispatch(modalVisible(false));
-  };
-
-  const { visible } = useSelector(state => state.auth);
 
   useEffect(() => {
     dispatch(clearRecoveryError());
@@ -86,7 +76,7 @@ export const RecoveryConfirmationScreen = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header label={'Подтверждение кодом'} callBack={goBack} />
+      <Header callBack={goBack} />
       <KeyboardAwareScrollView
         ref={scrollViewRef}
         keyboardShouldPersistTaps="handled"
@@ -99,10 +89,10 @@ export const RecoveryConfirmationScreen = ({
           }, 200);
         }}
         keyboardOpeningTime={100}
-        contentContainerStyle={styles.containerKeyboard}
         enableOnAndroid={true}
       >
         <View style={styles.wrapperSignIn}>
+          <SignUpPreview label="Восстановление пароля" />
           <ConfrimPreview />
           <Spacer />
           <CodeFieldInput
@@ -111,31 +101,20 @@ export const RecoveryConfirmationScreen = ({
             onSubmitEditing={() => passwordRef?.current?.focus()}
             onFocus={configApp.ios ? focusInput : () => {}}
           />
-          <ModalComponentScreen
-            flag={true}
-            visible={visible}
-            label="Вы успешно поменяли пароль!"
-            textBtn="Готово"
-            onPress={closeModal}
-          />
           <InputPassword
             password={password}
             setPassword={setPassword}
             innerRef={passwordRef}
+            label="Новый пароль"
           />
           <Spacer size="L" />
-          {recoveryError?.message?.length > 0 && (
-            <View style={styles.containerError}>
-              <Text style={styles.error}>{recoveryError?.message}</Text>
-            </View>
-          )}
           <ButtonAuth
             isRestore
             isPhoneAuth={isPhoneAuth}
             value={value}
             password={password}
             email={email}
-            label="Подтвердить"
+            label="Изменить пароль"
             isDisabled
             withOutPassword
             recoveryError={recoveryError}

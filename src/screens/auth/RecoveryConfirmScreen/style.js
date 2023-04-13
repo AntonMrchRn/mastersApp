@@ -6,10 +6,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  containerKeyboard: {
-    width: '100%',
-    flex: 1,
-  },
   wrapperSignIn: {
     flex: 1,
     alignItems: 'center',

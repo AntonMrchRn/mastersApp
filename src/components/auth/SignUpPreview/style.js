@@ -5,7 +5,7 @@ import fonts from '../../fonts';
 export const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: normalize(185, 'height'),
+    height: normalize(165, 'height'),
     alignItems: 'center',
     padding: 3,
     justifyContent: 'flex-end',

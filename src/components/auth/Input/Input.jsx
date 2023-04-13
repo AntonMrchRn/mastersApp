@@ -36,7 +36,7 @@ export const Input = ({
     if (tel?.length < 1) {
       setActiveTel(false);
     }
-    dispatch(clearAuthError());
+    dispatch(clearAuthError(null));
   }, [tel]);
 
   useEffect(() => {
@@ -132,7 +132,7 @@ export const Input = ({
                 styles.inputBasicEmail,
                 authErrorCode === 20003 && styles.errorText,
               ]}
-              placeholder={'Email'}
+              placeholder={'Электронная почта'}
               keyboardType="email-address"
               placeholderTextColor={'#5e5e5e'}
               maxLength={60}

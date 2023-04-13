@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
   },
   bottomWrapper: {
     width: '100%',
-    height: normalize(configApp.ios ? 190 : 180, 'height'),
+    height: normalize(configApp.ios ? 245 : 200, 'height'),
     justifyContent: 'center',
   },
   wrapperCenter: {

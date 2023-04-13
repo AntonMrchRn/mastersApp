@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, Text } from 'react-native';
 import { useSelector } from 'react-redux';
+import { validateEmail } from '../../../utils/hooks/validateEmail';
 import { styles } from './style';
 
 export const ButtonAuth = ({
@@ -18,6 +19,8 @@ export const ButtonAuth = ({
   recoveryError,
   valueCheckBox = true,
 }) => {
+  const [validateEmailBtn, setValidateEmail] = useState(false);
+
   const isPhone = tel?.length === 10 && isPhoneAuth;
   const isMail = email?.length > 0 && !isPhoneAuth;
 
@@ -30,9 +33,13 @@ export const ButtonAuth = ({
   const validWithPassword = !isPhoneWithPass && !isMailWithPass && isDisabled;
   const validWithOutPassword = !isPhone && !isMail && isDisabled;
 
-  const { isActiveTimer, isActiveTimerEmail } = useSelector(
+  const { isActiveTimer, isActiveTimerEmail, authError } = useSelector(
     state => state.auth
   );
+
+  useEffect(() => {
+    setValidateEmail(validateEmail({ email }));
+  }, [email]);
 
   return isRestore ? (
     <TouchableOpacity
@@ -40,9 +47,14 @@ export const ButtonAuth = ({
         styles.btn,
         !isPasswordWidthPass && styles.disabled,
         recoveryError?.message?.length > 0 && styles.disabled,
+        authError?.length > 0 && styles.disabled,
       ]}
       onPress={onPress}
-      disabled={!isPasswordWidthPass || recoveryError?.message?.length > 0}
+      disabled={
+        !isPasswordWidthPass ||
+        recoveryError?.message?.length > 0 ||
+        authError?.length > 0
+      }
     >
       <Text style={styles.labelBtn}>{label}</Text>
     </TouchableOpacity>
@@ -56,21 +68,33 @@ export const ButtonAuth = ({
         !flag && isPhoneAuth && isActiveTimer && styles.disabled,
         !flag && !isPhoneAuth && isActiveTimerEmail && styles.disabled,
         !valueCheckBox && styles.disabled,
+        !isPhoneAuth && !validateEmailBtn && styles.disabled,
+        authError?.length > 0 && styles.disabled,
       ]}
       onPress={onPress}
       disabled={
         withOutPassword
           ? flag
-            ? validWithOutPassword || !valueCheckBox
+            ? validWithOutPassword ||
+              !valueCheckBox ||
+              (!isPhoneAuth && !validateEmailBtn) ||
+              authError?.length > 0
             : validWithOutPassword ||
               (isPhoneAuth && isActiveTimer) ||
               (!isPhoneAuth && isActiveTimerEmail) ||
-              !valueCheckBox
+              !valueCheckBox ||
+              (!isPhoneAuth && !validateEmailBtn) ||
+              authError?.length > 0
           : flag
-          ? validWithPassword || !valueCheckBox
+          ? validWithPassword ||
+            !valueCheckBox ||
+            (!isPhoneAuth && !validateEmailBtn) ||
+            authError?.length > 0
           : validWithPassword ||
             (isPhoneAuth && isActiveTimer) ||
-            (!isPhoneAuth && isActiveTimerEmail)
+            (!isPhoneAuth && isActiveTimerEmail) ||
+            (!isPhoneAuth && !validateEmailBtn) ||
+            authError?.length > 0
       }
     >
       <Text style={styles.labelBtn}>{label}</Text>

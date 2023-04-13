@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import normalize from 'react-native-normalize';
 import fonts from '../../../components/fonts';
 import { configApp } from '../../../utils/helpers/platform';
 
@@ -8,11 +9,19 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   wrapperSignIn: {
-    flex: 1,
+    height: normalize(configApp.ios ? 560 : 590, 'height'),
     alignItems: 'center',
-    padding: 15,
     width: '100%',
-    justifyContent: 'center',
+    padding: 15,
+  },
+  // bottomWrapper: {
+  //   width: '100%',
+  //   height: normalize(configApp.ios ? 220 : 200, 'height'),
+  //   justifyContent: 'center',
+  // },
+  wrapperCenter: {
+    width: '100%',
+    height: '45%',
   },
   containerError: {
     width: '100%',

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Keyboard, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import {
   clearAuthError,

@@ -1,20 +1,19 @@
 import { StyleSheet } from 'react-native';
-import { configApp } from '../../../utils/helpers/platform';
+import normalize from 'react-native-normalize';
 import fonts from '../../fonts';
 
 export const styles = StyleSheet.create({
   container: {
     width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 60,
+    bottom: 30,
+    height: normalize(50, 'height'),
+    justifyContent: 'flex-end',
   },
   text: {
-    fontSize: configApp.ios ? 13 : 12,
+    fontSize: 17,
     fontWeight: '400',
-    paddingBottom: 7,
-    textAlign: 'center',
     fontFamily: fonts.main_400,
-    color: 'black',
+    color: '#707070',
+    textAlign: 'center',
   },
 });

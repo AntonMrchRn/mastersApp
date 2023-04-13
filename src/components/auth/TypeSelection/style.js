@@ -11,9 +11,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     backgroundColor: '#EBF0F9',
-    borderRadius: 12,
-    paddingVertical: 2,
-    paddingHorizontal: 2,
+    borderRadius: 7,
   },
   btn: {
     backgroundColor: '#EBF0F9',
@@ -26,8 +24,10 @@ export const styles = StyleSheet.create({
   },
   activeBtn: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    borderRadius: 7,
     ...configApp.shadow,
+    borderColor: '#3F51B5',
+    borderWidth: 1,
   },
   textBtn: {
     color: 'black',

@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
   wrapper: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 60,
+    height: 75,
     width: '100%',
   },
   timer: {

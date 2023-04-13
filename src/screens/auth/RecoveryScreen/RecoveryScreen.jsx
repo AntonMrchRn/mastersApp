@@ -14,10 +14,7 @@ import { TimerBlockEmail } from '../../../components/auth/TimerEmail/TimerEmail'
 import Header from '../../../components/Header/Header';
 import Spacer from '../../../components/Spacer/Spacer';
 import { recoveryPassword } from '../../../redux/slices/auth/asyncActions';
-import {
-  clearRecoveryError,
-  modalVisibleEmail,
-} from '../../../redux/slices/auth/reducer';
+import { clearRecoveryError } from '../../../redux/slices/auth/reducer';
 import { configApp } from '../../../utils/helpers/platform';
 
 import { styles } from './style';

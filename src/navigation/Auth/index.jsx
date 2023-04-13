@@ -7,6 +7,7 @@ import {
   SignUpScreen,
 } from '../../screens';
 import { EmailScreen } from '../../screens/auth/EmailScreen/EmailScreen';
+import { PasswordScreen } from '../../screens/auth/PasswordScreen/PasswordScreen';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ function AuthNavigation() {
         name="RecoveryConfirmScreen"
         component={RecoveryConfirmationScreen}
       />
+      <Stack.Screen name="PasswordScreen" component={PasswordScreen} />
     </Stack.Navigator>
   );
 }

@@ -8,7 +8,12 @@ import HideEye from '../../svg/auth/HideEye';
 
 import { styles } from './style';
 
-export const InputPassword = ({ password, setPassword, innerRef }) => {
+export const InputPassword = ({
+  password,
+  setPassword,
+  innerRef,
+  label = 'Пароль',
+}) => {
   const [active, setActive] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(true);
 
@@ -36,7 +41,7 @@ export const InputPassword = ({ password, setPassword, innerRef }) => {
               styles.inputBasicPassword,
               authErrorCode === 20002 && styles.errorText,
             ]}
-            placeholder={'Пароль'}
+            placeholder={label}
             placeholderTextColor={'#5e5e5e'}
             value={password}
             maxLength={64}

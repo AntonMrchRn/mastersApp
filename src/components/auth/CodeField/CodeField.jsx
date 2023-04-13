@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Text, View } from 'react-native';
 
 import {
@@ -7,7 +7,6 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
-import { configApp } from '../../../utils/helpers/platform';
 import { styles } from './style';
 
 const CELL_COUNT = 6;
@@ -39,16 +38,24 @@ const CodeFieldInput = ({ value, setValue, onSubmitEditing, onFocus }) => {
         keyboardType={'number-pad'}
         textContentType="oneTimeCode"
         autoCapitalize="none"
-        renderCell={({ index, symbol, isFocused }) => (
-          <View
-            key={index}
-            style={[styles.wrapper, isFocused && styles.focusWrapper]}
-          >
-            <Text style={styles.cell} onLayout={getCellOnLayoutHandler(index)}>
-              {symbol || (isFocused && <Cursor cursorSymbol="|" />)}
-            </Text>
-          </View>
-        )}
+        renderCell={({ index, symbol, isFocused }) => {
+          return (
+            <View style={styles.container} key={index}>
+              {symbol?.length > 0 ? (
+                <View key={index} style={styles.wrapper}>
+                  <Text
+                    style={styles.cell}
+                    onLayout={getCellOnLayoutHandler(index)}
+                  >
+                    {symbol || (isFocused && <Cursor cursorSymbol="|" />)}
+                  </Text>
+                </View>
+              ) : (
+                <View key={index} style={styles.wrapperСircle} />
+              )}
+            </View>
+          );
+        }}
       />
     </View>
   );
