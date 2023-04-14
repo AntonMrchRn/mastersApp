@@ -6,7 +6,7 @@ import fonts from '../fonts';
 export const styles = StyleSheet.create({
   btn: {
     backgroundColor: configApp.brandColor,
-    height: 42,
+    height: 48,
     width: '100%',
     borderRadius: 12,
     justifyContent: 'center',

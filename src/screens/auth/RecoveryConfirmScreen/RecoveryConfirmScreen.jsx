@@ -63,7 +63,7 @@ export const RecoveryConfirmationScreen = ({
     dispatch(clearRecoveryError());
   }, [password, value]);
 
-  const OFFSET = 120;
+  const OFFSET = 0;
 
   const focusInput = () => {
     setTimeout(() => {
@@ -92,7 +92,7 @@ export const RecoveryConfirmationScreen = ({
         enableOnAndroid={true}
       >
         <View style={styles.wrapperSignIn}>
-          <LogoPreview label="Восстановление пароля" />
+          <LogoPreview label="Восстановление пароля" height={135} />
           <ConfrimPreview />
           <Spacer />
           <CodeFieldInput

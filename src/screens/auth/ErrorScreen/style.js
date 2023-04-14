@@ -25,9 +25,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: normalize(325, 'height'),
     alignItems: 'center',
-    padding: 3,
     justifyContent: 'flex-start',
-    paddingVertical: 25,
   },
   title: {
     fontFamily: fonts.main_700_o,
@@ -36,5 +34,6 @@ export const styles = StyleSheet.create({
     color: 'black',
     marginBottom: normalize(12),
     marginTop: normalize(25),
+    textAlign: 'center',
   },
 });

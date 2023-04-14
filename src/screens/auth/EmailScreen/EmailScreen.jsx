@@ -24,7 +24,7 @@ export const EmailScreen = () => {
     <SafeAreaView style={styles.container}>
       <Header label={''} callBack={goBack} />
       <View style={styles.wrapperSignIn}>
-        <LogoPreview label="Восстановление пароля" />
+        <LogoPreview label="Восстановление пароля" height={135} />
         <ConfrimPreviewEmail />
       </View>
     </SafeAreaView>

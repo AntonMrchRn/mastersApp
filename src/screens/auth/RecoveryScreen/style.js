@@ -14,15 +14,6 @@ export const styles = StyleSheet.create({
     width: '100%',
     padding: 15,
   },
-  // bottomWrapper: {
-  //   width: '100%',
-  //   height: normalize(configApp.ios ? 220 : 200, 'height'),
-  //   justifyContent: 'center',
-  // },
-  wrapperCenter: {
-    width: '100%',
-    height: '45%',
-  },
   containerError: {
     width: '100%',
     height: 40,

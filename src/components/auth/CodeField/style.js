@@ -5,8 +5,14 @@ import fonts from '../../fonts';
 export const styles = StyleSheet.create({
   root: {
     width: '70%',
-    height: normalize(70, 'height'),
-    justifyContent: 'flex-start',
+    height: normalize(30, 'height'),
+    justifyContent: 'center',
+  },
+  bottomWrapper: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: normalize(35, 'height'),
   },
   cell: {
     fontSize: 32,
@@ -19,7 +25,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
     width: 40,
-    height: 40,
+    height: 50,
   },
   wrapperСircle: {
     justifyContent: 'center',

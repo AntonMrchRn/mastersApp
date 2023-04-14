@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 45,
+    height: configApp.ios ? 45 : 48,
     borderRadius: 8,
     backgroundColor: configApp.brandLight,
     width: '100%',
@@ -16,11 +16,10 @@ export const styles = StyleSheet.create({
   containerEmail: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 45,
+    height: configApp.ios ? 45 : 48,
     borderRadius: 8,
     backgroundColor: configApp.brandLight,
     width: '100%',
-    paddingHorizontal: 15,
   },
   error: {
     backgroundColor: '#FEEDEE',
@@ -39,23 +38,24 @@ export const styles = StyleSheet.create({
   inputBasic: {
     color: '#000',
     fontSize: 17,
-    height: '100%',
-    width: configApp.ios ? '76%' : '79.8%',
+    height: configApp.ios ? '100%' : '100%',
+    width: configApp.ios ? '76%' : '78.3%',
     position: 'relative',
     paddingRight: 28,
     fontFamily: fonts.main_400,
     fontWeight: '400',
-    paddingTop: configApp.ios ? 0 : normalize(12.5),
   },
   inputBasicEmail: {
     color: '#000',
     fontSize: 17,
     height: '100%',
-    width: configApp.ios ? '93.1%' : '91%',
+    width: '100%',
     position: 'relative',
-    paddingRight: 4,
+    paddingRight: 42,
     fontFamily: fonts.main_400,
     fontWeight: '400',
+    paddingHorizontal: 15,
+    borderRadius: 8,
   },
   inputBasicPassword: {
     color: '#000',
@@ -76,6 +76,10 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     right: 13,
   },
+  btnClose: {
+    position: 'absolute',
+    right: configApp.ios ? 14 : 13,
+  },
   prefixPhone: {
     color: '#5e5e5e',
     fontSize: 17,
@@ -83,6 +87,8 @@ export const styles = StyleSheet.create({
     paddingRight: configApp.ios ? 3 : 0,
     fontFamily: fonts.main_400,
     fontWeight: '400',
+    paddingTop: 0.2,
+    paddingBottom: configApp.ios ? 0 : normalize(3),
   },
   activePrefix: {
     color: '#000',

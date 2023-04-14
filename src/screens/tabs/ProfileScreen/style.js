@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
     backgroundColor: '#fff',
+    padding: 15,
   },
   text: {
     fontFamily: fonts.main_400,

@@ -8,6 +8,7 @@ import {
 } from '../../screens';
 import { EmailScreen } from '../../screens/auth/EmailScreen/EmailScreen';
 import { PasswordScreen } from '../../screens/auth/PasswordScreen/PasswordScreen';
+import { ErrorScreen } from '../../screens/auth/ErrorScreen/ErrorScreen';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ function AuthNavigation() {
         component={RecoveryConfirmationScreen}
       />
       <Stack.Screen name="PasswordScreen" component={PasswordScreen} />
+      <Stack.Screen name="ErrorScreen" component={ErrorScreen} />
     </Stack.Navigator>
   );
 }

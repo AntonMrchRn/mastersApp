@@ -1,9 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 import React, { createRef, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   ForgotPassword,
@@ -26,6 +27,8 @@ import { styles } from './style';
 
 export const SignUpScreen = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const { authErrorCode } = useSelector(state => state.auth);
 
   const [isPhoneAuth, setIsPhoneAuth] = useState(true);
   const [tel, setTel] = useState('');
@@ -62,7 +65,13 @@ export const SignUpScreen = () => {
     getDataEmail();
   }, []);
 
-  const OFFSET = 80;
+  useEffect(() => {
+    if (authErrorCode === 20001) {
+      navigation.navigate('ErrorScreen');
+    }
+  }, [authErrorCode]);
+
+  const OFFSET = 0;
 
   const focusInput = () => {
     setTimeout(() => {
@@ -90,7 +99,7 @@ export const SignUpScreen = () => {
         enableOnAndroid={true}
       >
         <View style={styles.wrapperSignIn}>
-          <LogoPreview label={'Войдите в систему'} />
+          <LogoPreview label={'Войдите в систему'} height={165} />
           <View style={styles.wrapperCenter}>
             <TypeSelection
               setIsPhoneAuth={setIsPhoneAuth}

@@ -107,6 +107,8 @@ export const userAuth = createSlice({
     });
     builder.addCase(restorePassword.rejected, (state, action) => {
       state.recoveryError = action.payload;
+      state.authError = action.payload?.message;
+      state.authErrorCode = action.payload?.code;
       state.loading = false;
     });
   },

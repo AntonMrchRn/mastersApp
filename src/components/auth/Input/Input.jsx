@@ -51,6 +51,9 @@ export const Input = ({
 
   const clearValueTel = () => {
     setTel('');
+    if (!active) {
+      setFocus(false);
+    }
   };
 
   const clearValueEmail = () => {
@@ -120,7 +123,10 @@ export const Input = ({
               }}
             />
             {activeTel && (
-              <TouchableOpacity onPress={() => clearValueTel()}>
+              <TouchableOpacity
+                style={styles.btnClose}
+                onPress={() => clearValueTel()}
+              >
                 <ClearTel />
               </TouchableOpacity>
             )}
@@ -145,7 +151,10 @@ export const Input = ({
               onFocus={onFocus}
             />
             {activeEmail && (
-              <TouchableOpacity onPress={() => clearValueEmail()}>
+              <TouchableOpacity
+                style={styles.btn}
+                onPress={() => clearValueEmail()}
+              >
                 <ClearTel />
               </TouchableOpacity>
             )}

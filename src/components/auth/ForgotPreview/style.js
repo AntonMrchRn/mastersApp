@@ -1,12 +1,10 @@
 import { StyleSheet } from 'react-native';
-import normalize from 'react-native-normalize';
 import fonts from '../../fonts';
 
 export const styles = StyleSheet.create({
   container: {
     width: '100%',
-    bottom: 30,
-    height: normalize(50, 'height'),
+    bottom: 20,
     justifyContent: 'flex-end',
   },
   text: {

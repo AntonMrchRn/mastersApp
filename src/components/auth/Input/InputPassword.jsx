@@ -22,7 +22,9 @@ export const InputPassword = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(clearAuthError(null));
+    if (authErrorCode === 20002) {
+      dispatch(clearAuthError(null));
+    }
   }, [password]);
 
   return (
@@ -57,7 +59,7 @@ export const InputPassword = ({
             onPress={() => setIsShowPassword(!isShowPassword)}
           >
             <View style={styles.iconPassword}>
-              {isShowPassword ? <HideEye /> : <Eye />}
+              {isShowPassword ? <Eye /> : <HideEye />}
             </View>
           </TouchableOpacity>
         </>

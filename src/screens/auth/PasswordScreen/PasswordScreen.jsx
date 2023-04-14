@@ -6,7 +6,10 @@ import { useDispatch } from 'react-redux';
 
 import { Button } from '../../../components/Button/Button';
 import InfoCheckBox from '../../../components/svg/auth/InfoCheckBox';
-import { clearRecoveryError } from '../../../redux/slices/auth/reducer';
+import {
+  clearAuthError,
+  clearRecoveryError,
+} from '../../../redux/slices/auth/reducer';
 
 import { styles } from './style';
 
@@ -26,6 +29,7 @@ export const PasswordScreen = () => {
       <Button
         label="Продолжить"
         onPress={() => {
+          dispatch(clearAuthError());
           dispatch(clearRecoveryError());
           navigation.navigate('SignUpScreen');
         }}

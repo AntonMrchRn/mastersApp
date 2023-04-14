@@ -8,18 +8,18 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   wrapperSignIn: {
-    height: normalize(configApp.ios ? 560 : 590, 'height'),
+    height: normalize(configApp.ios ? 560 : 620, 'height'),
     alignItems: 'center',
     width: '100%',
     padding: 15,
   },
   bottomWrapper: {
     width: '100%',
-    height: normalize(configApp.ios ? 245 : 200, 'height'),
+    height: normalize(configApp.ios ? 245 : 290, 'height'),
     justifyContent: 'center',
   },
   wrapperCenter: {
     width: '100%',
-    height: '45%',
+    height: configApp.ios ? '45%' : normalize(240, 'height'),
   },
 });

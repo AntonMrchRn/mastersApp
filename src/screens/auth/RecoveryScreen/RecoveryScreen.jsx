@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { createRef, useEffect, useState } from 'react';
 import { Keyboard, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import normalize from 'react-native-normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -56,7 +57,7 @@ export const RecoveryScreen = () => {
     }
   }, [isRecovery, isRecoveryEmail]);
 
-  const OFFSET = 100;
+  const OFFSET = 0;
 
   const focusInput = () => {
     setTimeout(() => {
@@ -91,7 +92,10 @@ export const RecoveryScreen = () => {
         enableOnAndroid={true}
       >
         <View style={styles.wrapperSignIn}>
-          <LogoPreview label="Восстановление пароля" />
+          <LogoPreview
+            label="Восстановление пароля"
+            height={configApp.ios ? 135 : normalize(175, 'height')}
+          />
           <ForgotPreview />
           <TypeSelection
             setIsPhoneAuth={setIsPhoneAuth}
