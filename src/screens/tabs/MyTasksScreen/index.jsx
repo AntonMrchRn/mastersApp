@@ -3,12 +3,12 @@ import { Text, View } from 'react-native';
 
 import styles from './style';
 
-const TabTestScreen = () => {
+const MyTasksScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>Контент</Text>
+      <Text>Мои задачи</Text>
     </View>
   );
 };
 
-export default TabTestScreen;
+export default MyTasksScreen;

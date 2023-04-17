@@ -2,11 +2,12 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import styles from './style';
-import TabTestScreen from '../../../screens/tabs/TabTestScreen';
 import { ProfileScreen } from '../../../screens';
 import Employees from '../../../components/svg/tabBar/Employees';
 import Profile from '../../../components/svg/tabBar/Profile';
 import TaskSearch from '../../../components/svg/tabBar/TaskSearch';
+import TaskSearchScreen from '../../../screens/tabs/TaskSearchScreen';
+import MyTasksScreen from '../../../screens/tabs/MyTasksScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -22,7 +23,7 @@ function AppNavigation() {
     >
       <Tab.Screen
         name="Поиск задач"
-        component={TabTestScreen}
+        component={TaskSearchScreen}
         options={{
           tabBarIcon: color => (
             <TaskSearch color={color.focused ? '#3F51B5' : '#707070'} />
@@ -31,7 +32,7 @@ function AppNavigation() {
       />
       <Tab.Screen
         name="Мои задачи"
-        component={TabTestScreen}
+        component={MyTasksScreen}
         options={{
           tabBarIcon: color => (
             <Employees color={color.focused ? '#3F51B5' : '#707070'} />
