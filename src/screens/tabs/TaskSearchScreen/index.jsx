@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { FlatList, SafeAreaView, Text, View } from 'react-native';
 import PreviewNotFound from '../../../components/TabScreens/TaskSearchScreen/PreviewNotFound/PreviewNotFound';
@@ -8,24 +9,24 @@ import styles from './style';
 
 const TaskSearchScreen = () => {
   const [areСommon, setAreСommon] = useState(true);
+  const navigation = useNavigation();
+
+  const taskItem = () => {
+    navigation.navigate('TaskCardScreen');
+  };
 
   const dataFlat = [
-    // { Тест: 'Тест' },
-    // { Тест: 'Тест' },
-    // { Тест: 'Тест' },
-    // { Тест: 'Тест' },
-    // { Тест: 'Тест' },
-    // { Тест: 'Тест' },
-    // { Тест: 'Тест' },
+    { Тест: 'Тест' },
+    { Тест: 'Тест' },
+    { Тест: 'Тест' },
+    { Тест: 'Тест' },
+    { Тест: 'Тест' },
+    { Тест: 'Тест' },
+    { Тест: 'Тест' },
   ];
   return (
     <SafeAreaView style={styles.container}>
-      <View
-        style={[
-          styles.wrapperTop,
-          dataFlat.length > 0 && styles.wrapperTopShadow,
-        ]}
-      >
+      <View style={styles.wrapperTop}>
         <Text style={styles.textHeader}>Поиск задач</Text>
         <TypeSelectionTaskSearch
           areСommon={areСommon}
@@ -37,7 +38,7 @@ const TaskSearchScreen = () => {
           <FlatList
             data={dataFlat}
             renderItem={item => {
-              return <TaskCardItem item={item} />;
+              return <TaskCardItem item={item} onPress={() => taskItem()} />;
             }}
           />
         ) : (

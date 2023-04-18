@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { SafeAreaView, Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { Button } from '../../../components/Button/Button';
 
@@ -17,9 +17,11 @@ export const ProfileScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Профиль</Text>
-      <Button label="Выйти из аккаунта" onPress={onExit} />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.wrapperCenter}>
+        <Text style={styles.text}>Профиль</Text>
+        <Button label="Выйти из аккаунта" onPress={onExit} />
+      </View>
+    </SafeAreaView>
   );
 };

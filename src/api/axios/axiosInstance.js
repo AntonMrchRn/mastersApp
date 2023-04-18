@@ -25,7 +25,6 @@ axiosInstance.interceptors.response.use(
     if (error.response.status === 401) {
       try {
         const { data } = await axiosInstance.post('/relogin');
-
         if (data) {
           console.log('data relogin token', data);
           await storageMMKV.set('token', data.token);

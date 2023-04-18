@@ -1,7 +1,5 @@
 import { StyleSheet } from 'react-native';
-import normalize from 'react-native-normalize';
 import fonts from '../../../components/fonts';
-import { configApp } from '../../../utils/helpers/platform';
 
 const styles = StyleSheet.create({
   container: {
@@ -20,19 +18,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 5,
     backgroundColor: '#fff',
-    borderBottomEndRadius: 32,
-    borderBottomStartRadius: 32,
-  },
-  wrapperTopShadow: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 7,
-    },
-    shadowOpacity: 0.03,
-    shadowRadius: 2.2,
-    marginBottom: 9,
-    elevation: configApp.ios ? 10 : 4,
   },
   textHeader: {
     fontWeight: '700',

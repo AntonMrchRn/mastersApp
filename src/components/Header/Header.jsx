@@ -3,8 +3,21 @@ import { Image, Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './styles';
 
-const Header = ({ label = '', callBack = () => {} }) => {
-  return (
+const Header = ({ label = '', callBack = () => {}, itemFlag }) => {
+  return itemFlag ? (
+    <View style={styles.container}>
+      <View style={styles.lateralWrapper}>
+        <TouchableOpacity style={styles.btnBack} onPress={callBack}>
+          <Image
+            source={require('../../assets/icons/arrowBack.png')}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+      </View>
+      <Text style={styles.label}>{label}</Text>
+      <View style={styles.fix} />
+    </View>
+  ) : (
     <View style={styles.container}>
       <View style={styles.lateralWrapper}>
         <TouchableOpacity style={styles.btnBack} onPress={callBack}>

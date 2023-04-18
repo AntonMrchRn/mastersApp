@@ -1,13 +1,15 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { SafeAreaView, Text, View } from 'react-native';
 
 import styles from './style';
 
 const MyTasksScreen = () => {
   return (
-    <View style={styles.container}>
-      <Text>Мои задачи</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.wrapperCenter}>
+        <Text>Мои задачи</Text>
+      </View>
+    </SafeAreaView>
   );
 };
 
