@@ -34,6 +34,7 @@ export const styles = StyleSheet.create({
     backgroundColor: configApp.brandLight,
     width: '100%',
     paddingHorizontal: 10,
+    paddingVertical: 0,
   },
   inputBasic: {
     color: '#000',
@@ -67,6 +68,7 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.main_400,
     fontWeight: '400',
     paddingHorizontal: 5,
+    paddingVertical: 0,
   },
   iconPassword: {
     width: 24,

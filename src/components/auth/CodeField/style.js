@@ -14,6 +14,11 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     height: normalize(35, 'height'),
   },
+  content: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   cell: {
     fontSize: 32,
     fontWeight: '700',

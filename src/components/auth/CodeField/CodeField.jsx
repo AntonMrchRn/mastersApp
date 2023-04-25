@@ -35,7 +35,7 @@ const CodeFieldInput = ({ value, setValue, onSubmitEditing, onFocus }) => {
   }, [value]);
 
   return (
-    <>
+    <View style={styles.content}>
       <View style={styles.root}>
         <CodeField
           ref={ref}
@@ -72,7 +72,7 @@ const CodeFieldInput = ({ value, setValue, onSubmitEditing, onFocus }) => {
       <View style={styles.bottomWrapper}>
         {authErrorCode === 20005 && <ErrorField error={authError} />}
       </View>
-    </>
+    </View>
   );
 };
 

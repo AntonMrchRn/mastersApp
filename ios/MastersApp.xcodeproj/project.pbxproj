@@ -11,22 +11,22 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		29D53FDD2B6D14382A7F7A64 /* libPods-MastersApp-MastersAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D7E61651C288DDB01153D80 /* libPods-MastersApp-MastersAppTests.a */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		AAF1018CDEB538C07A622E9E /* libPods-MastersApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F3E8DA3A7C346E9E716DD810 /* libPods-MastersApp.a */; };
-		9D67D4FCB0A44EEA8E42850C /* NunitoSans-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 29C61564AB8F4FB5A1A1B068 /* NunitoSans-Black.ttf */; };
-		64A902653D3F46BDB5DDA38F /* NunitoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A658410438B45B8B27FA866 /* NunitoSans-Bold.ttf */; };
-		9D39ED9B714F4B268DE0DC72 /* NunitoSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7710239F97A743AB8B2B486C /* NunitoSans-ExtraBold.ttf */; };
-		7FD3C879A9DD4C62B63EA5B4 /* NunitoSans-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 50A76C94E6D7474BB7A0ED88 /* NunitoSans-ExtraLight.ttf */; };
-		D870A46257C34C19BBFC642F /* NunitoSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09C3D85AD9954D7494459319 /* NunitoSans-Light.ttf */; };
-		FFE809FFC423407BA6132211 /* NunitoSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A343C81D7F4642809D37C348 /* NunitoSans-Regular.ttf */; };
-		9E0EAEA205DF41558A0BD6A4 /* NunitoSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C8A21AC6D38E4F4EB3BCC6B8 /* NunitoSans-SemiBold.ttf */; };
-		428F101859EC4EA59B218C8E /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8BC20480FCF74254B7A09319 /* OpenSans-Bold.ttf */; };
 		1E301521915E47E980804CCC /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A5311D2400C42DE8B875DAA /* OpenSans-ExtraBold.ttf */; };
 		1FA61A76B96F42149CCBB2F5 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 223A1849814445CA9E3014AB /* OpenSans-Light.ttf */; };
-		D3132DEFA7C349DEAB848D6A /* OpenSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B9890FDD4084A3CADC5EC3C /* OpenSans-Medium.ttf */; };
+		29D53FDD2B6D14382A7F7A64 /* libPods-MastersApp-MastersAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D7E61651C288DDB01153D80 /* libPods-MastersApp-MastersAppTests.a */; };
+		428F101859EC4EA59B218C8E /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8BC20480FCF74254B7A09319 /* OpenSans-Bold.ttf */; };
+		64A902653D3F46BDB5DDA38F /* NunitoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A658410438B45B8B27FA866 /* NunitoSans-Bold.ttf */; };
+		7FD3C879A9DD4C62B63EA5B4 /* NunitoSans-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 50A76C94E6D7474BB7A0ED88 /* NunitoSans-ExtraLight.ttf */; };
+		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		9D39ED9B714F4B268DE0DC72 /* NunitoSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7710239F97A743AB8B2B486C /* NunitoSans-ExtraBold.ttf */; };
+		9D67D4FCB0A44EEA8E42850C /* NunitoSans-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 29C61564AB8F4FB5A1A1B068 /* NunitoSans-Black.ttf */; };
+		9E0EAEA205DF41558A0BD6A4 /* NunitoSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C8A21AC6D38E4F4EB3BCC6B8 /* NunitoSans-SemiBold.ttf */; };
 		A335256105B842A3A83EB71F /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8382C2AC148B4022B6B8FF07 /* OpenSans-Regular.ttf */; };
+		AAF1018CDEB538C07A622E9E /* libPods-MastersApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F3E8DA3A7C346E9E716DD810 /* libPods-MastersApp.a */; };
 		CEE3845D3C8C4D16A858B5F0 /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE5DB1F4495042FAA9D3A357 /* OpenSans-SemiBold.ttf */; };
+		D3132DEFA7C349DEAB848D6A /* OpenSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B9890FDD4084A3CADC5EC3C /* OpenSans-Medium.ttf */; };
+		D870A46257C34C19BBFC642F /* NunitoSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09C3D85AD9954D7494459319 /* NunitoSans-Light.ttf */; };
+		FFE809FFC423407BA6132211 /* NunitoSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A343C81D7F4642809D37C348 /* NunitoSans-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,33 +43,33 @@
 		00E356EE1AD99517003FC87E /* MastersAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MastersAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* MastersAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MastersAppTests.m; sourceTree = "<group>"; };
+		09C3D85AD9954D7494459319 /* NunitoSans-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-Light.ttf"; path = "../assets/fonts/NunitoSans-Light.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* MastersApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MastersApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = MastersApp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = MastersApp/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = MastersApp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MastersApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MastersApp/main.m; sourceTree = "<group>"; };
+		1A5311D2400C42DE8B875DAA /* OpenSans-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-ExtraBold.ttf"; path = "../assets/fonts/OpenSans-ExtraBold.ttf"; sourceTree = "<group>"; };
+		223A1849814445CA9E3014AB /* OpenSans-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Light.ttf"; path = "../assets/fonts/OpenSans-Light.ttf"; sourceTree = "<group>"; };
 		26A97455CAD481CA9CEE1DAC /* Pods-MastersApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MastersApp.release.xcconfig"; path = "Target Support Files/Pods-MastersApp/Pods-MastersApp.release.xcconfig"; sourceTree = "<group>"; };
+		29C61564AB8F4FB5A1A1B068 /* NunitoSans-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-Black.ttf"; path = "../assets/fonts/NunitoSans-Black.ttf"; sourceTree = "<group>"; };
+		3B9890FDD4084A3CADC5EC3C /* OpenSans-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Medium.ttf"; path = "../assets/fonts/OpenSans-Medium.ttf"; sourceTree = "<group>"; };
 		4CFE5F2756F2F12C60F3C4B9 /* Pods-MastersApp-MastersAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MastersApp-MastersAppTests.release.xcconfig"; path = "Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		50A76C94E6D7474BB7A0ED88 /* NunitoSans-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-ExtraLight.ttf"; path = "../assets/fonts/NunitoSans-ExtraLight.ttf"; sourceTree = "<group>"; };
+		7710239F97A743AB8B2B486C /* NunitoSans-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-ExtraBold.ttf"; path = "../assets/fonts/NunitoSans-ExtraBold.ttf"; sourceTree = "<group>"; };
+		7A658410438B45B8B27FA866 /* NunitoSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-Bold.ttf"; path = "../assets/fonts/NunitoSans-Bold.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MastersApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8382C2AC148B4022B6B8FF07 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Regular.ttf"; path = "../assets/fonts/OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		8BC20480FCF74254B7A09319 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Bold.ttf"; path = "../assets/fonts/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		9D7E61651C288DDB01153D80 /* libPods-MastersApp-MastersAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MastersApp-MastersAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A343C81D7F4642809D37C348 /* NunitoSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-Regular.ttf"; path = "../assets/fonts/NunitoSans-Regular.ttf"; sourceTree = "<group>"; };
+		C8A21AC6D38E4F4EB3BCC6B8 /* NunitoSans-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-SemiBold.ttf"; path = "../assets/fonts/NunitoSans-SemiBold.ttf"; sourceTree = "<group>"; };
 		CC7B9F83B4113A425BD137D0 /* Pods-MastersApp-MastersAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MastersApp-MastersAppTests.debug.xcconfig"; path = "Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		CE5DB1F4495042FAA9D3A357 /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-SemiBold.ttf"; path = "../assets/fonts/OpenSans-SemiBold.ttf"; sourceTree = "<group>"; };
 		E86BF7A9750EF0ACEE76825E /* Pods-MastersApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MastersApp.debug.xcconfig"; path = "Target Support Files/Pods-MastersApp/Pods-MastersApp.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F3E8DA3A7C346E9E716DD810 /* libPods-MastersApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MastersApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		29C61564AB8F4FB5A1A1B068 /* NunitoSans-Black.ttf */ = {isa = PBXFileReference; name = "NunitoSans-Black.ttf"; path = "../assets/fonts/NunitoSans-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		7A658410438B45B8B27FA866 /* NunitoSans-Bold.ttf */ = {isa = PBXFileReference; name = "NunitoSans-Bold.ttf"; path = "../assets/fonts/NunitoSans-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		7710239F97A743AB8B2B486C /* NunitoSans-ExtraBold.ttf */ = {isa = PBXFileReference; name = "NunitoSans-ExtraBold.ttf"; path = "../assets/fonts/NunitoSans-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		50A76C94E6D7474BB7A0ED88 /* NunitoSans-ExtraLight.ttf */ = {isa = PBXFileReference; name = "NunitoSans-ExtraLight.ttf"; path = "../assets/fonts/NunitoSans-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		09C3D85AD9954D7494459319 /* NunitoSans-Light.ttf */ = {isa = PBXFileReference; name = "NunitoSans-Light.ttf"; path = "../assets/fonts/NunitoSans-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		A343C81D7F4642809D37C348 /* NunitoSans-Regular.ttf */ = {isa = PBXFileReference; name = "NunitoSans-Regular.ttf"; path = "../assets/fonts/NunitoSans-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		C8A21AC6D38E4F4EB3BCC6B8 /* NunitoSans-SemiBold.ttf */ = {isa = PBXFileReference; name = "NunitoSans-SemiBold.ttf"; path = "../assets/fonts/NunitoSans-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		8BC20480FCF74254B7A09319 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; name = "OpenSans-Bold.ttf"; path = "../assets/fonts/OpenSans-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		1A5311D2400C42DE8B875DAA /* OpenSans-ExtraBold.ttf */ = {isa = PBXFileReference; name = "OpenSans-ExtraBold.ttf"; path = "../assets/fonts/OpenSans-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		223A1849814445CA9E3014AB /* OpenSans-Light.ttf */ = {isa = PBXFileReference; name = "OpenSans-Light.ttf"; path = "../assets/fonts/OpenSans-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		3B9890FDD4084A3CADC5EC3C /* OpenSans-Medium.ttf */ = {isa = PBXFileReference; name = "OpenSans-Medium.ttf"; path = "../assets/fonts/OpenSans-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		8382C2AC148B4022B6B8FF07 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; name = "OpenSans-Regular.ttf"; path = "../assets/fonts/OpenSans-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		CE5DB1F4495042FAA9D3A357 /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; name = "OpenSans-SemiBold.ttf"; path = "../assets/fonts/OpenSans-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -545,14 +545,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MastersApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -572,14 +572,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 8S5JMGSU5G;
 				INFOPLIST_FILE = MastersApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
