@@ -1,13 +1,15 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
+import { configApp } from '../../../utils/helpers/platform';
 
 const Logo = () => {
+  const windowHeight = useWindowDimensions().height;
   return (
     <View style={styles.container}>
       <Svg
         width="178"
-        height="114"
+        height={configApp.android && windowHeight < 593 ? '67' : '114'}
         viewBox="0 0 178 32"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

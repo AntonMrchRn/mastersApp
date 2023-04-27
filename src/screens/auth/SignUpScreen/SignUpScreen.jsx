@@ -1,8 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import React, { createRef, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import normalize from 'react-native-normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -79,6 +80,8 @@ export const SignUpScreen = () => {
     }, 200);
   };
 
+  const windowHeight = useWindowDimensions().height;
+
   const passwordRef = createRef();
   const scrollViewRef = createRef();
 
@@ -99,8 +102,17 @@ export const SignUpScreen = () => {
         enableOnAndroid={true}
       >
         <View style={styles.wrapperSignIn}>
-          <LogoPreview label={'Войдите в систему'} height={165} />
-          <View style={styles.wrapperCenter}>
+          <LogoPreview
+            label={'Войдите в систему'}
+            height={configApp.android && windowHeight < 593 ? 145 : 165}
+          />
+          <View
+            style={[
+              styles.wrapperCenter,
+              configApp.android &&
+                windowHeight < 593 && { height: normalize(255, 'height') },
+            ]}
+          >
             <TypeSelection
               setIsPhoneAuth={setIsPhoneAuth}
               isPhoneAuth={isPhoneAuth}
@@ -129,7 +141,12 @@ export const SignUpScreen = () => {
               setChangeCheckBox={setChangeCheckBox}
             />
           </View>
-          <View style={styles.bottomWrapper}>
+          <View
+            style={[
+              styles.bottomWrapper,
+              configApp.android && windowHeight < 593 && { marginTop: 16 },
+            ]}
+          >
             <ButtonAuth
               flag={true}
               isPhoneAuth={isPhoneAuth}

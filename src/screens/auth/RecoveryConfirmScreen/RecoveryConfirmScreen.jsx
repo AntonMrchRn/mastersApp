@@ -95,12 +95,14 @@ export const RecoveryConfirmationScreen = ({
           <LogoPreview label="Восстановление пароля" height={135} />
           <ConfrimPreview />
           <Spacer />
-          <CodeFieldInput
-            value={value}
-            setValue={setValue}
-            onSubmitEditing={() => passwordRef?.current?.focus()}
-            onFocus={configApp.ios ? focusInput : () => {}}
-          />
+          <View style={styles.wrapperCode}>
+            <CodeFieldInput
+              value={value}
+              setValue={setValue}
+              onSubmitEditing={() => passwordRef?.current?.focus()}
+              onFocus={configApp.ios ? focusInput : () => {}}
+            />
+          </View>
           <InputPassword
             password={password}
             setPassword={setPassword}

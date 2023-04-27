@@ -1,5 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  useWindowDimensions,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -10,6 +15,7 @@ import {
 } from '../../../redux/slices/auth/reducer';
 import { storageMMKV } from '../../../mmkv/storage';
 import { styles } from './style';
+import { configApp } from '../../../utils/helpers/platform';
 
 export const pad = (time, length) => {
   while (time?.length < length) {
@@ -42,6 +48,7 @@ const BlockComponent = ({
   setTimeMilliSeconds,
   timeMilliSeconds,
 }) => {
+  const windowHeight = useWindowDimensions().height;
   useEffect(() => {
     let timeout = setTimeout(() => {
       setTimeMilliSeconds(Date.now());
@@ -57,7 +64,12 @@ const BlockComponent = ({
   }, [timeMilliSeconds]);
 
   return (
-    <View style={styles.wrapper}>
+    <View
+      style={[
+        styles.wrapper,
+        windowHeight < 593 && configApp.android && { height: 45 },
+      ]}
+    >
       <Text style={styles.timer}>
         {`Отправить код повторно (${timeFormat(
           timerOffset + expiredTimer - timeMilliSeconds
@@ -75,6 +87,7 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
   const { isRecovery } = useSelector(state => state.auth);
   const { isActiveTimer } = useSelector(state => state.auth);
   const [timeMilliSeconds, setTimeMilliSeconds] = useState(Date.now());
+  const windowHeight = useWindowDimensions().height;
 
   const dispatch = useDispatch();
 
@@ -145,7 +158,12 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
 
   if (!isActiveTimer && isConfirm) {
     return (
-      <View style={styles.wrapper}>
+      <View
+        style={[
+          styles.wrapper,
+          windowHeight < 593 && configApp.android && { height: 45 },
+        ]}
+      >
         <TouchableOpacity
           style={styles.btnRepeatCode}
           onPress={() => {

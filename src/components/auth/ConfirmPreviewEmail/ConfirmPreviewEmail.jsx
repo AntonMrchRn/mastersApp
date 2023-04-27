@@ -12,17 +12,19 @@ const ConfrimPreviewEmail = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Мы отправили вам письмо</Text>
-      <Text style={styles.text}>
-        для подтверждения смены пароля. Следуйте инструкциям, указанным
-      </Text>
-      <Text style={styles.text}>в письме</Text>
+      <View style={styles.wrapper}>
+        <Text style={styles.text}>Мы отправили вам письмо</Text>
+        <Text style={styles.text}>
+          для подтверждения смены пароля. Следуйте инструкциям, указанным
+        </Text>
+        <Text style={styles.text}>в письме</Text>
+      </View>
       <Button
         onPress={() => {
           dispatch(clearRecoveryError());
           navigation.navigate('SignUpScreen');
         }}
-        label="Хорошо,понятно"
+        label="Хорошо, понятно"
       />
     </View>
   );

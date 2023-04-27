@@ -6,9 +6,12 @@ import fonts from '../../fonts';
 export const styles = StyleSheet.create({
   container: {
     width: '100%',
-    bottom: 30,
     height: normalize(configApp.ios ? 150 : 185, 'height'),
     justifyContent: 'flex-end',
+  },
+  wrapper: {
+    width: '100%',
+    paddingVertical: 12,
   },
   text: {
     fontSize: 17,

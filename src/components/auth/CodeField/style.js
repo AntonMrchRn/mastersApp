@@ -4,7 +4,6 @@ import fonts from '../../fonts';
 
 export const styles = StyleSheet.create({
   root: {
-    width: '70%',
     height: normalize(30, 'height'),
     justifyContent: 'center',
   },
