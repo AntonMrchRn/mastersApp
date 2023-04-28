@@ -16,13 +16,13 @@ const TaskSearchScreen = () => {
   };
 
   const dataFlat = [
-    // { Тест: 'Тест' },
-    // { Тест: 'Тест' },
-    // { Тест: 'Тест' },
-    // { Тест: 'Тест' },
-    // { Тест: 'Тест' },
-    // { Тест: 'Тест' },
-    // { Тест: 'Тест' },
+    { Тест: 'Тест' },
+    { Тест: 'Тест' },
+    { Тест: 'Тест' },
+    { Тест: 'Тест' },
+    { Тест: 'Тест' },
+    { Тест: 'Тест' },
+    { Тест: 'Тест' },
   ];
   return (
     <SafeAreaView style={styles.container}>
@@ -39,18 +39,16 @@ const TaskSearchScreen = () => {
           dataFlat.length > 0 && styles.wrapperList,
         ]}
       >
-        {dataFlat.length > 0 ? (
-          <FlatList
-            data={dataFlat}
-            renderItem={item => {
-              return <TaskCardItem item={item} onPress={() => taskItem()} />;
-            }}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-          />
-        ) : (
-          <PreviewNotFound />
-        )}
+        <FlatList
+          data={dataFlat}
+          renderItem={item => {
+            return <TaskCardItem item={item} onPress={() => taskItem()} />;
+          }}
+          contentContainerStyle={dataFlat?.length < 1 && styles.wrapperCenter}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          ListEmptyComponent={<PreviewNotFound />}
+        />
       </View>
     </SafeAreaView>
   );
