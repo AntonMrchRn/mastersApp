@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {
-    fontSize: 17,
+    fontSize: 15,
     fontWeight: '400',
     fontFamily: fonts.main_400,
     color: '#707070',
@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
   title: {
     fontFamily: fonts.main_700_o,
     fontWeight: '700',
-    fontSize: 23,
+    fontSize: 22,
     color: 'black',
     marginBottom: normalize(12),
     marginTop: normalize(25),

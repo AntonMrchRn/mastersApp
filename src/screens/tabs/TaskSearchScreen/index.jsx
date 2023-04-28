@@ -33,13 +33,20 @@ const TaskSearchScreen = () => {
           setAreСommon={setAreСommon}
         />
       </View>
-      <View style={styles.wrapperCenter}>
+      <View
+        style={[
+          styles.wrapperCenter,
+          dataFlat.length > 0 && styles.wrapperList,
+        ]}
+      >
         {dataFlat.length > 0 ? (
           <FlatList
             data={dataFlat}
             renderItem={item => {
               return <TaskCardItem item={item} onPress={() => taskItem()} />;
             }}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
           />
         ) : (
           <PreviewNotFound />

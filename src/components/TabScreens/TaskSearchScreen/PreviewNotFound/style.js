@@ -12,13 +12,13 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fonts.main_700_o,
     fontWeight: '700',
-    fontSize: 23,
+    fontSize: 22,
     color: 'black',
     paddingTop: 30,
     paddingBottom: 10,
   },
   text: {
-    fontSize: 17,
+    fontSize: 15,
     fontWeight: '400',
     fontFamily: fonts.main_400,
     color: '#707070',

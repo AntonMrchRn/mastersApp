@@ -6,12 +6,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  wrapper: {
+    width: '100%',
+    flex: 1,
+  },
   wrapperCenter: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: '#fff',
     width: '100%',
+  },
+  wrapperList: {
+    paddingHorizontal: 12,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    shadowColor: '#3F51B5',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowRadius: 15,
+    shadowOpacity: 0.1,
+    elevation: 0.3,
   },
   wrapperTop: {
     width: '100%',

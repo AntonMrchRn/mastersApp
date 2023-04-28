@@ -4,13 +4,11 @@ import styles from './style';
 
 const TaskCardItem = ({ item, onPress }) => {
   return (
-    <View style={styles.wrapperNotFound}>
-      <TouchableOpacity onPress={onPress}>
-        <View style={styles.wrapperItem}>
-          <Text>Тест</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity style={styles.wrapper} onPress={onPress}>
+      <View style={styles.wrapperItem}>
+        <Text>Тест</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 

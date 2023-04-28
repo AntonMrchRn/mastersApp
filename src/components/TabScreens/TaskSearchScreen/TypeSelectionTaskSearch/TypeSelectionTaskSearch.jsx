@@ -9,7 +9,7 @@ export const TypeSelectionTaskSearch = ({ setAreСommon, areСommon }) => {
       <TouchableOpacity
         style={[styles.btn, areСommon && styles.activeBtn]}
         onPress={() => {
-          setAreСommon(!areСommon);
+          setAreСommon(true);
         }}
       >
         <Text style={[styles.textBtn, areСommon && styles.activeTextBtn]}>
@@ -20,8 +20,9 @@ export const TypeSelectionTaskSearch = ({ setAreСommon, areСommon }) => {
       <TouchableOpacity
         style={[styles.btn, !areСommon && styles.activeBtn]}
         onPress={() => {
-          setAreСommon(!areСommon);
+          setAreСommon(false);
         }}
+        disabled={true}
       >
         <Text style={[styles.textBtn, !areСommon && styles.activeTextBtn]}>
           IT услуги
