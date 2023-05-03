@@ -1,16 +1,18 @@
 import React from 'react';
 import { Keyboard, Linking, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './style';
-import { Image } from 'react-native';
 import CheckBoxDisabled from '../../svg/auth/CheckBoxDisabled';
 import CheckBoxActive from '../../svg/auth/CheckBoxActive';
 
-const IconChecked = require('../../../assets/icons/checkMark.png');
+type CheckBoxProps = {
+  valueCheckBox: boolean;
+  setChangeCheckBox: any;
+};
 
 export const CheckBoxAgreement = ({
   valueCheckBox,
   setChangeCheckBox,
-}: any) => {
+}: CheckBoxProps) => {
   const openAgreement = () => {
     let url = 'https://mastera-service.ru/docs/user-agreement.pdf';
     Linking.openURL(url);

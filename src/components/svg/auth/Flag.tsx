@@ -1,16 +1,9 @@
 import * as React from 'react';
-import Svg, { Defs, G, Path, Rect } from 'react-native-svg';
+import Svg, { G, Path } from 'react-native-svg';
 
 const Flag = () => {
   return (
-    <Svg
-      width="24"
-      height="22"
-      viewBox="0 0 24 24"
-      fill="none"
-      // @ts-expect-error TS(2322): Type '{ children: Element[]; width: string; height... Remove this comment to see the full error message
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <Svg width="24" height="22" viewBox="0 0 24 24" fill="none">
       <G clip-path="url(#clip0_9_6938)">
         <Path
           d="M11.9627 0.75C7.08769 0.75 2.9252 3.9 1.3877 8.25H22.6127C21.0377 3.9 16.8752 0.75 11.9627 0.75Z"
@@ -25,12 +18,6 @@ const Flag = () => {
           fill="#428BC1"
         />
       </G>
-      <Defs>
-        // @ts-expect-error TS(2322): Type '{ children: Element; id: string; }' is not a... Remove this comment to see the full error message
-        <Path id="clip0_9_6938">
-          <Rect width="24" height="24" fill="white" />
-        </Path>
-      </Defs>
     </Svg>
   );
 };

@@ -8,6 +8,18 @@ import ClearTel from '../../svg/auth/ClearTel';
 import Flag from '../../svg/auth/Flag';
 import { styles } from './style';
 
+type InputProps = {
+  isPhoneAuth: boolean;
+  tel: string;
+  setTel: any;
+  email: string;
+  setMail: any;
+  onSubmitEditing: any;
+  onFocus: any;
+  active: any;
+  setActive: any;
+};
+
 export const Input = ({
   isPhoneAuth,
   tel,
@@ -18,7 +30,7 @@ export const Input = ({
   onFocus,
   setActive,
   active,
-}: any) => {
+}: InputProps) => {
   const [focus, setFocus] = useState(false);
   const [activeTel, setActiveTel] = useState(false);
   const [activeEmail, setActiveEmail] = useState(false);

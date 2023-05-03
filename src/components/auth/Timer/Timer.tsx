@@ -13,7 +13,6 @@ import {
   timerOff,
   timerOn,
 } from '../../../redux/slices/auth/reducer';
-import { storageMMKV } from '../../../mmkv/storage';
 import { styles } from './style';
 import { configApp } from '../../../utils/helpers/platform';
 
@@ -116,7 +115,7 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }: any) {
   }, []);
 
   const closeBlock = useCallback(() => {
-    AsyncStorage.removeItem('BLOCK').then(r => {
+    AsyncStorage.removeItem('BLOCK').then(() => {
       // @ts-expect-error TS(2322): Type 'null' is not assignable to type 'number'.
       setIsBlock({ block: false, timerOffset: null });
       dispatch(timerOff());

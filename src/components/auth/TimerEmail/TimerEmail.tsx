@@ -95,7 +95,7 @@ export function TimerBlockEmail({ expiredTimer }: any) {
   }, []);
 
   const closeBlock = useCallback(() => {
-    AsyncStorage.removeItem('BLOCKEMAIL').then(r => {
+    AsyncStorage.removeItem('BLOCKEMAIL').then(() => {
       // @ts-expect-error TS(2322): Type 'null' is not assignable to type 'number'.
       setIsBlock({ block: false, timerOffset: null });
       dispatch(timerOffEmail());

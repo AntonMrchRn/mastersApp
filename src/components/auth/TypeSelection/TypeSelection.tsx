@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import {
@@ -8,13 +8,21 @@ import {
 
 import { styles } from './style';
 
+type TypeSelectionProps = {
+  isPhoneAuth: boolean;
+  setIsPhoneAuth: any;
+  seteMail: any;
+  setTel: any;
+  setActive: any;
+};
+
 export const TypeSelection = ({
   isPhoneAuth,
   setIsPhoneAuth,
   seteMail,
   setTel,
   setActive,
-}: any) => {
+}: TypeSelectionProps) => {
   const dispatch = useDispatch();
   return (
     <View style={styles.container}>

@@ -4,6 +4,22 @@ import { useSelector } from 'react-redux';
 import { validateEmail } from '../../../utils/hooks/validateEmail';
 import { styles } from './style';
 
+type ButtonProps = {
+  isPhoneAuth: boolean;
+  isDisabled: boolean;
+  tel: string;
+  password: string;
+  email: string;
+  withOutPassword: boolean;
+  label: string;
+  isRestore: boolean;
+  value: string;
+  flag: boolean;
+  recoveryError?: any;
+  valueCheckBox: boolean;
+  onPress: any;
+};
+
 export const ButtonAuth = ({
   isPhoneAuth,
   isDisabled,
@@ -18,7 +34,7 @@ export const ButtonAuth = ({
   flag,
   recoveryError,
   valueCheckBox = true,
-}: any) => {
+}: ButtonProps) => {
   const [validateEmailBtn, setValidateEmail] = useState(false);
 
   const isPhone = tel?.length === 10 && isPhoneAuth;
@@ -41,6 +57,8 @@ export const ButtonAuth = ({
   useEffect(() => {
     setValidateEmail(validateEmail({ email }));
   }, [email]);
+
+  console.log('->', recoveryError);
 
   return isRestore ? (
     <TouchableOpacity
