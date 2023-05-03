@@ -18,10 +18,11 @@ export const Input = ({
   onFocus,
   setActive,
   active,
-}) => {
+}: any) => {
   const [focus, setFocus] = useState(false);
   const [activeTel, setActiveTel] = useState(false);
   const [activeEmail, setActiveEmail] = useState(false);
+  // @ts-expect-error TS(2571): Object is of type 'unknown'.
   const { authError, authErrorCode } = useSelector(state => state.auth);
 
   const dispatch = useDispatch();

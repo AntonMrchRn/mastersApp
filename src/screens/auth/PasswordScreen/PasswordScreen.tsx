@@ -29,8 +29,10 @@ export const PasswordScreen = () => {
       <Button
         label="Продолжить"
         onPress={() => {
+          // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
           dispatch(clearAuthError());
           dispatch(clearRecoveryError());
+          // @ts-expect-error TS(2769): No overload matches this call.
           navigation.navigate('SignUpScreen');
         }}
       />

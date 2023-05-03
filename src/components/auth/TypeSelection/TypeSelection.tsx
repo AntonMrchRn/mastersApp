@@ -14,13 +14,14 @@ export const TypeSelection = ({
   seteMail,
   setTel,
   setActive,
-}) => {
+}: any) => {
   const dispatch = useDispatch();
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={[styles.btn, isPhoneAuth && styles.activeBtn]}
         onPress={() => {
+          // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
           dispatch(clearAuthError());
           dispatch(clearRecoveryError());
           seteMail('');
@@ -36,6 +37,7 @@ export const TypeSelection = ({
       <TouchableOpacity
         style={[styles.btn, !isPhoneAuth && styles.activeBtn]}
         onPress={() => {
+          // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
           dispatch(clearAuthError());
           dispatch(clearRecoveryError());
           setTel('');

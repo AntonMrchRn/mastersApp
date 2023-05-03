@@ -34,6 +34,7 @@ export const userAuth = createSlice({
       state.isRecovery = false;
     },
     clearRecoveryError: state => {
+      // @ts-expect-error TS(2322): Type 'false' is not assignable to type 'null'.
       state.recoveryError = false;
     },
     timerOn: state => {
@@ -65,50 +66,70 @@ export const userAuth = createSlice({
   extraReducers: builder => {
     // auth
     builder.addCase(fetchUserAuth.pending, state => {
+      // @ts-expect-error TS(2339): Property 'loading' does not exist on type 'Writabl... Remove this comment to see the full error message
       state.loading = true;
     });
     builder.addCase(fetchUserAuth.fulfilled, (state, action) => {
       state.user = action.payload;
       state.isAuth = true;
       state.authError = null;
+      // @ts-expect-error TS(2339): Property 'loading' does not exist on type 'Writabl... Remove this comment to see the full error message
       state.loading = false;
     });
     builder.addCase(fetchUserAuth.rejected, (state, action) => {
+      // @ts-expect-error TS(2571): Object is of type 'unknown'.
       state.authError = action.payload?.message;
+      // @ts-expect-error TS(2571): Object is of type 'unknown'.
       state.authErrorCode = action.payload?.code;
+      // @ts-expect-error TS(2339): Property 'loading' does not exist on type 'Writabl... Remove this comment to see the full error message
       state.loading = false;
     });
 
     // recovery
     builder.addCase(recoveryPassword.pending, state => {
+      // @ts-expect-error TS(2339): Property 'loading' does not exist on type 'Writabl... Remove this comment to see the full error message
       state.loading = true;
     });
     builder.addCase(recoveryPassword.fulfilled, (state, action) => {
+      // @ts-expect-error TS(2339): Property 'loading' does not exist on type 'Writabl... Remove this comment to see the full error message
       state.loading = false;
+      // @ts-expect-error TS(2532): Object is possibly 'undefined'.
       action.payload.isPhoneAuth
-        ? ((state.timeout = action.payload.data), (state.isRecovery = true))
-        : ((state.timeOutEmail = action.payload.data),
+        ? // @ts-expect-error TS(2532): Object is possibly 'undefined'.
+          ((state.timeout = action.payload.data), (state.isRecovery = true))
+        : // @ts-expect-error TS(2532): Object is possibly 'undefined'.
+          ((state.timeOutEmail = action.payload.data),
           (state.isRecoveryEmail = true));
     });
     builder.addCase(recoveryPassword.rejected, (state, action) => {
+      // @ts-expect-error TS(2322): Type 'unknown' is not assignable to type 'null'.
       state.recoveryError = action.payload;
+      // @ts-expect-error TS(2571): Object is of type 'unknown'.
       state.authError = action.payload?.message;
+      // @ts-expect-error TS(2571): Object is of type 'unknown'.
       state.authErrorCode = action.payload?.code;
+      // @ts-expect-error TS(2339): Property 'loading' does not exist on type 'Writabl... Remove this comment to see the full error message
       state.loading = false;
     });
 
     //restore
     builder.addCase(restorePassword.pending, state => {
+      // @ts-expect-error TS(2339): Property 'loading' does not exist on type 'Writabl... Remove this comment to see the full error message
       state.loading = true;
     });
     builder.addCase(restorePassword.fulfilled, (state, action) => {
       state.restore = true;
+      // @ts-expect-error TS(2339): Property 'loading' does not exist on type 'Writabl... Remove this comment to see the full error message
       state.loading = false;
     });
     builder.addCase(restorePassword.rejected, (state, action) => {
+      // @ts-expect-error TS(2322): Type 'unknown' is not assignable to type 'null'.
       state.recoveryError = action.payload;
+      // @ts-expect-error TS(2571): Object is of type 'unknown'.
       state.authError = action.payload?.message;
+      // @ts-expect-error TS(2571): Object is of type 'unknown'.
       state.authErrorCode = action.payload?.code;
+      // @ts-expect-error TS(2339): Property 'loading' does not exist on type 'Writabl... Remove this comment to see the full error message
       state.loading = false;
     });
   },

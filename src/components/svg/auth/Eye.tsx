@@ -10,6 +10,7 @@ const Eye = () => {
         height="30"
         viewBox="0 0 32 28"
         fill="none"
+        // @ts-expect-error TS(2322): Type '{ children: Element; width: string; height: ... Remove this comment to see the full error message
         xmlns="http://www.w3.org/2000/svg"
       >
         <G filter="url(#filter0_d_36_6208)">

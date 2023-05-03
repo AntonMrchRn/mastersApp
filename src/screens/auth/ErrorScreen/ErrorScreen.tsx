@@ -20,6 +20,7 @@ export const ErrorScreen = () => {
 
   const goBack = () => {
     dispatch(clearRecoveryError());
+    // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
     dispatch(clearAuthError());
     navigation.goBack();
   };

@@ -20,6 +20,7 @@ axiosInstance.interceptors.response.use(
   async config => {
     return config;
   },
+  // @ts-expect-error TS(7030): Not all code paths return a value.
   async error => {
     const originalRequest = error.config;
     if (error.response.status === 401) {

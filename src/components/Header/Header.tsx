@@ -3,7 +3,7 @@ import { Image, Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './styles';
 
-const Header = ({ label = '', callBack = () => {}, itemFlag }) => {
+const Header = ({ label = '', callBack = () => {}, itemFlag }: any) => {
   return itemFlag ? (
     <View style={styles.container}>
       <View style={styles.lateralWrapper}>

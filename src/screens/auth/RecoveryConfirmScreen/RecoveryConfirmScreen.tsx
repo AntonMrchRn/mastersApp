@@ -5,6 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 
+// @ts-expect-error TS(2307): Cannot find module '~/components' or its correspon... Remove this comment to see the full error message
 import { InputPassword } from '~/components';
 import { ButtonAuth } from '../../../components/auth/ButtonAuth/ButtonAuth';
 import CodeFieldInput from '../../../components/auth/CodeField/CodeField';
@@ -26,7 +27,8 @@ export const RecoveryConfirmationScreen = ({
   route: {
     params: { tel },
   },
-}) => {
+}: any) => {
+  // @ts-expect-error TS(2571): Object is of type 'unknown'.
   const { timeout, recoveryError } = useSelector(state => state.auth);
 
   const [isPhoneAuth, setIsPhoneAuth] = useState(true);
@@ -43,13 +45,16 @@ export const RecoveryConfirmationScreen = ({
   };
 
   const recoveryRequest = async () => {
+    // @ts-expect-error TS(2345): Argument of type 'AsyncThunkAction<{ data: any; is... Remove this comment to see the full error message
     await dispatch(recoveryPassword({ tel, email, isPhoneAuth }));
   };
 
   const restoreRequest = () => {
-    dispatch(restorePassword({ password, value })).then(res => {
+    // @ts-expect-error TS(2345): Argument of type 'AsyncThunkAction<any, void, Asyn... Remove this comment to see the full error message
+    dispatch(restorePassword({ password, value })).then((res: any) => {
       if (res?.payload === null || res?.payload === undefined) {
         dispatch(clearRecoveryError());
+        // @ts-expect-error TS(2769): No overload matches this call.
         navigation.navigate('PasswordScreen');
       }
     });
@@ -67,6 +72,7 @@ export const RecoveryConfirmationScreen = ({
 
   const focusInput = () => {
     setTimeout(() => {
+      // @ts-expect-error TS(2571): Object is of type 'unknown'.
       scrollViewRef?.current?.scrollToPosition(0, OFFSET, true);
     }, 0);
   };
@@ -78,6 +84,7 @@ export const RecoveryConfirmationScreen = ({
     <SafeAreaView style={styles.container}>
       <Header callBack={goBack} />
       <KeyboardAwareScrollView
+        // @ts-expect-error TS(2769): No overload matches this call.
         ref={scrollViewRef}
         keyboardShouldPersistTaps="handled"
         onKeyboardWillShow={() => {
@@ -85,6 +92,7 @@ export const RecoveryConfirmationScreen = ({
             return;
           }
           setTimeout(() => {
+            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             scrollViewRef?.current?.scrollToPosition(0, OFFSET, true);
           }, 200);
         }}
@@ -99,6 +107,7 @@ export const RecoveryConfirmationScreen = ({
             <CodeFieldInput
               value={value}
               setValue={setValue}
+              // @ts-expect-error TS(2571): Object is of type 'unknown'.
               onSubmitEditing={() => passwordRef?.current?.focus()}
               onFocus={configApp.ios ? focusInput : () => {}}
             />
@@ -122,6 +131,8 @@ export const RecoveryConfirmationScreen = ({
             recoveryError={recoveryError}
             onPress={restoreRequest}
           />
+          // @ts-expect-error TS(2786): 'TimerBlock' cannot be used as a JSX
+          component.
           <TimerBlock
             expiredTimer={Number(timeout?.timeout * 1000)}
             isConfirm

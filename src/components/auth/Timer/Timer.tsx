@@ -17,14 +17,14 @@ import { storageMMKV } from '../../../mmkv/storage';
 import { styles } from './style';
 import { configApp } from '../../../utils/helpers/platform';
 
-export const pad = (time, length) => {
+export const pad = (time: any, length: any) => {
   while (time?.length < length) {
     time = '0' + time;
   }
   return time;
 };
 
-export const timeFormat = time => {
+export const timeFormat = (time: any) => {
   time = new Date(time);
   let h = pad(time.getUTCHours().toString(), 2);
   let m = pad(time.getUTCMinutes().toString(), 2);
@@ -37,7 +37,7 @@ export const timeFormat = time => {
   }
 };
 
-export const Timer = props => {
+export const Timer = (props: any) => {
   return <Text style={{ textAlign: 'center' }}>{timeFormat(props.time)}</Text>;
 };
 
@@ -47,7 +47,7 @@ const BlockComponent = ({
   closeBlock,
   setTimeMilliSeconds,
   timeMilliSeconds,
-}) => {
+}: any) => {
   const windowHeight = useWindowDimensions().height;
   useEffect(() => {
     let timeout = setTimeout(() => {
@@ -79,12 +79,15 @@ const BlockComponent = ({
   );
 };
 
-const setData = async data => {
+const setData = async (data: any) => {
   await AsyncStorage.setItem('BLOCK', data);
 };
 
-export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
+// @ts-expect-error TS(7030): Not all code paths return a value.
+export function TimerBlock({ expiredTimer, isConfirm, callBack }: any) {
+  // @ts-expect-error TS(2571): Object is of type 'unknown'.
   const { isRecovery } = useSelector(state => state.auth);
+  // @ts-expect-error TS(2571): Object is of type 'unknown'.
   const { isActiveTimer } = useSelector(state => state.auth);
   const [timeMilliSeconds, setTimeMilliSeconds] = useState(Date.now());
   const windowHeight = useWindowDimensions().height;
@@ -114,6 +117,7 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
 
   const closeBlock = useCallback(() => {
     AsyncStorage.removeItem('BLOCK').then(r => {
+      // @ts-expect-error TS(2322): Type 'null' is not assignable to type 'number'.
       setIsBlock({ block: false, timerOffset: null });
       dispatch(timerOff());
     });
@@ -140,10 +144,12 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }) {
           }
         } else {
           setLoading(false);
+          // @ts-expect-error TS(2322): Type 'null' is not assignable to type 'number'.
           setIsBlock({ block: false, timerOffset: null });
         }
       } catch (e) {
         setLoading(false);
+        // @ts-expect-error TS(2345): Argument of type '{ block: false; }' is not assign... Remove this comment to see the full error message
         setIsBlock({ block: false });
         console.log('readStorage error', e);
       }

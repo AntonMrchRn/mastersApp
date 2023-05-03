@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './style';
 
-export const TypeSelectionTaskSearch = ({ setAreСommon, areСommon }) => {
+export const TypeSelectionTaskSearch = ({ setAreСommon, areСommon }: any) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity

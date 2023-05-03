@@ -1,13 +1,14 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
 
-const TaskSearch = prop => {
+const TaskSearch = (prop: any) => {
   return (
     <Svg
       width="25"
       height="24"
       viewBox="0 0 25 24"
       fill={prop.color}
+      // @ts-expect-error TS(2322): Type '{ children: Element[]; width: string; height... Remove this comment to see the full error message
       xmlns="http://www.w3.org/2000/svg"
     >
       <Path

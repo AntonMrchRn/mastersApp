@@ -22,6 +22,7 @@ const ConfrimPreviewEmail = () => {
       <Button
         onPress={() => {
           dispatch(clearRecoveryError());
+          // @ts-expect-error TS(2769): No overload matches this call.
           navigation.navigate('SignUpScreen');
         }}
         label="Хорошо, понятно"

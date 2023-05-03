@@ -7,7 +7,10 @@ import CheckBoxActive from '../../svg/auth/CheckBoxActive';
 
 const IconChecked = require('../../../assets/icons/checkMark.png');
 
-export const CheckBoxAgreement = ({ valueCheckBox, setChangeCheckBox }) => {
+export const CheckBoxAgreement = ({
+  valueCheckBox,
+  setChangeCheckBox,
+}: any) => {
   const openAgreement = () => {
     let url = 'https://mastera-service.ru/docs/user-agreement.pdf';
     Linking.openURL(url);

@@ -8,6 +8,7 @@ const Flag = () => {
       height="22"
       viewBox="0 0 24 24"
       fill="none"
+      // @ts-expect-error TS(2322): Type '{ children: Element[]; width: string; height... Remove this comment to see the full error message
       xmlns="http://www.w3.org/2000/svg"
     >
       <G clip-path="url(#clip0_9_6938)">
@@ -25,6 +26,7 @@ const Flag = () => {
         />
       </G>
       <Defs>
+        // @ts-expect-error TS(2322): Type '{ children: Element; id: string; }' is not a... Remove this comment to see the full error message
         <Path id="clip0_9_6938">
           <Rect width="24" height="24" fill="white" />
         </Path>

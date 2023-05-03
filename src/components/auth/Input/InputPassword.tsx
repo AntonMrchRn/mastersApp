@@ -13,10 +13,11 @@ export const InputPassword = ({
   setPassword,
   innerRef,
   label = 'Пароль',
-}) => {
+}: any) => {
   const [active, setActive] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(true);
 
+  // @ts-expect-error TS(2571): Object is of type 'unknown'.
   const { authError, authErrorCode } = useSelector(state => state.auth);
 
   const dispatch = useDispatch();

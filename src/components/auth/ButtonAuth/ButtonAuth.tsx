@@ -18,7 +18,7 @@ export const ButtonAuth = ({
   flag,
   recoveryError,
   valueCheckBox = true,
-}) => {
+}: any) => {
   const [validateEmailBtn, setValidateEmail] = useState(false);
 
   const isPhone = tel?.length === 10 && isPhoneAuth;
@@ -34,6 +34,7 @@ export const ButtonAuth = ({
   const validWithOutPassword = !isPhone && !isMail && isDisabled;
 
   const { isActiveTimer, isActiveTimerEmail, authError } = useSelector(
+    // @ts-expect-error TS(2571): Object is of type 'unknown'.
     state => state.auth
   );
 

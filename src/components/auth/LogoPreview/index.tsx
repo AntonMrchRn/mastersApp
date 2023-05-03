@@ -4,7 +4,7 @@ import { styles } from './style';
 import Logo from '../../svg/auth/Logo';
 import normalize from 'react-native-normalize';
 
-export const LogoPreview = ({ label = '', height }) => {
+export const LogoPreview = ({ label = '', height }: any) => {
   return (
     <View style={[styles.container, { height: normalize(height, 'height') }]}>
       <Logo />

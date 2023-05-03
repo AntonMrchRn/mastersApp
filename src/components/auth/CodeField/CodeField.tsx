@@ -14,13 +14,14 @@ import { styles } from './style';
 
 const CELL_COUNT = 6;
 
-const CodeFieldInput = ({ value, setValue, onSubmitEditing, onFocus }) => {
+const CodeFieldInput = ({ value, setValue, onSubmitEditing, onFocus }: any) => {
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
   });
 
+  // @ts-expect-error TS(2571): Object is of type 'unknown'.
   const { authError, authErrorCode } = useSelector(state => state.auth);
 
   const dispatch = useDispatch();

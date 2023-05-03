@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import styles from './style';
 
-const TaskCardItem = ({ item, onPress }) => {
+const TaskCardItem = ({ item, onPress }: any) => {
   return (
     <TouchableOpacity style={styles.wrapper} onPress={onPress}>
       <View style={styles.wrapperItem}>

@@ -5,6 +5,7 @@ import { storageMMKV } from '../../../mmkv/storage';
 
 export const fetchUserAuth = createAsyncThunk(
   '/auth',
+  // @ts-expect-error TS(2339): Property 'tel' does not exist on type 'void'.
   async ({ tel, email, password, isPhoneAuth }, thunkApi) => {
     const phoneNumber = '7' + tel;
 
@@ -18,6 +19,7 @@ export const fetchUserAuth = createAsyncThunk(
 
       return data;
     } catch (error) {
+      // @ts-expect-error TS(2571): Object is of type 'unknown'.
       return thunkApi.rejectWithValue(error.response.data);
     }
   }
@@ -25,6 +27,7 @@ export const fetchUserAuth = createAsyncThunk(
 
 export const recoveryPassword = createAsyncThunk(
   '/recoveryPassword',
+  // @ts-expect-error TS(7030): Not all code paths return a value.
   async ({ password, email, isPhoneAuth, tel }, thunkApi) => {
     const phoneNumber = '7' + tel;
     try {
@@ -48,6 +51,7 @@ export const recoveryPassword = createAsyncThunk(
         return { data: data, isPhoneAuth: isPhoneAuth };
       }
     } catch (error) {
+      // @ts-expect-error TS(2571): Object is of type 'unknown'.
       return thunkApi.rejectWithValue(error.response.data);
     }
   }
@@ -55,6 +59,7 @@ export const recoveryPassword = createAsyncThunk(
 
 export const restorePassword = createAsyncThunk(
   'restorePassword',
+  // @ts-expect-error TS(2339): Property 'password' does not exist on type 'void'.
   async ({ password, value }, thunkApi) => {
     try {
       const { data } = await apiHost.patch('me/password', {
@@ -65,6 +70,7 @@ export const restorePassword = createAsyncThunk(
       await AsyncStorage.setItem('time', jsonValue);
       return data;
     } catch (error) {
+      // @ts-expect-error TS(2571): Object is of type 'unknown'.
       return thunkApi.rejectWithValue(error.response.data);
     }
   }
