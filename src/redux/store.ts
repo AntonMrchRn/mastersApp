@@ -8,9 +8,7 @@ export const store = configureStore({
     getDefaultMiddleware().concat(createDebugger()),
 });
 
-// это исключение для следующес троки и проверки ReturnType если еще у тебя будеть такие ошибки тоесть испортировать нечего
-// можешь исползовать
-//eslint-disable-next-line no-undef
+// eslint-disable-next-line no-undef
 export type RootState = ReturnType<typeof rootReducer>;
 
 export type AppDispatch = typeof store.dispatch;
