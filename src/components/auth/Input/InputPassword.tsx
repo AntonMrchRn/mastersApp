@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { TextInput, TouchableOpacity, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { clearAuthError } from '../../../redux/slices/auth/reducer';
+import { useAppSelector } from '../../../utils/hooks/useRedux';
 import { ErrorField } from '../../ErrorField/ErrorFiled';
-import Eye from '../../svg/auth/Eye';
-import HideEye from '../../svg/auth/HideEye';
+import Eye from '../../../assets/icons/svg/auth/Eye';
+import HideEye from '../../../assets/icons/svg/auth/HideEye';
 
 import { styles } from './style';
 
@@ -17,8 +18,7 @@ export const InputPassword = ({
   const [active, setActive] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(true);
 
-  // @ts-expect-error TS(2571): Object is of type 'unknown'.
-  const { authError, authErrorCode } = useSelector(state => state.auth);
+  const { authError, authErrorCode } = useAppSelector(state => state.auth);
 
   const dispatch = useDispatch();
 

@@ -13,6 +13,12 @@ export const styles = StyleSheet.create({
     width: '100%',
     padding: 15,
   },
+  marginTopAndroid: {
+    marginTop: 16,
+  },
+  androidHeight: {
+    height: normalize(255, 'height'),
+  },
   bottomWrapper: {
     width: '100%',
     height: normalize(configApp.ios ? 245 : 290, 'height'),

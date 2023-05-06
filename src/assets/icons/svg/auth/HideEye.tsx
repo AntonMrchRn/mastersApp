@@ -5,14 +5,7 @@ import Svg, { Path } from 'react-native-svg';
 const HideEye = () => {
   return (
     <View style={styles.container}>
-      <Svg
-        width="23"
-        height="26"
-        viewBox="0 0 24 24"
-        fill="none"
-        // @ts-expect-error TS(2322): Type '{ children: Element[]; width: string; height... Remove this comment to see the full error message
-        xmlns="http://www.w3.org/2000/svg"
-      >
+      <Svg width="23" height="26" viewBox="0 0 24 24" fill="none">
         <Path
           d="M4.5 3.75L19.5 20.25"
           stroke="black"

@@ -16,7 +16,6 @@ export const TypeSelectionTaskSearch = ({ setAreСommon, areСommon }: any) => {
           Общие
         </Text>
       </TouchableOpacity>
-
       <TouchableOpacity
         style={[styles.btn, !areСommon && styles.activeBtn]}
         onPress={() => {

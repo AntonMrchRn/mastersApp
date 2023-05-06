@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import {
   clearIsRecoveryEmail,
@@ -10,6 +10,7 @@ import {
 } from '../../../redux/slices/auth/reducer';
 import { storageMMKV } from '../../../mmkv/storage';
 import { styles } from './style';
+import { useAppSelector } from '../../../utils/hooks/useRedux';
 
 export const pad = (time: any, length: any) => {
   while (time?.length < length) {
@@ -32,7 +33,7 @@ export const timeFormat = (time: any) => {
 };
 
 export const Timer = (props: any) => {
-  return <Text style={{ textAlign: 'center' }}>{timeFormat(props.time)}</Text>;
+  return <Text style={styles.timeFormatStyle}>{timeFormat(props.time)}</Text>;
 };
 
 const BlockComponent = ({ expiredTimer, timerOffset, closeBlock }: any) => {
@@ -67,14 +68,15 @@ const setData = async (data: any) => {
   await AsyncStorage.setItem('BLOCKEMAIL', data);
 };
 
-// @ts-expect-error TS(7030): Not all code paths return a value.
 export function TimerBlockEmail({ expiredTimer }: any) {
-  // @ts-expect-error TS(2571): Object is of type 'unknown'.
-  const { isRecoveryEmail } = useSelector(state => state.auth);
+  const { isRecoveryEmail } = useAppSelector(state => state.auth);
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(true);
-  const [isBlock, setIsBlock] = useState({
+  const [isBlock, setIsBlock] = useState<{
+    block: boolean;
+    timerOffset: number | null;
+  }>({
     block: true,
     timerOffset: Date.now(),
   });
@@ -96,7 +98,6 @@ export function TimerBlockEmail({ expiredTimer }: any) {
 
   const closeBlock = useCallback(() => {
     AsyncStorage.removeItem('BLOCKEMAIL').then(() => {
-      // @ts-expect-error TS(2322): Type 'null' is not assignable to type 'number'.
       setIsBlock({ block: false, timerOffset: null });
       dispatch(timerOffEmail());
       storageMMKV.delete('timerEmail');
@@ -124,13 +125,11 @@ export function TimerBlockEmail({ expiredTimer }: any) {
           }
         } else {
           setLoading(false);
-          // @ts-expect-error TS(2322): Type 'null' is not assignable to type 'number'.
           setIsBlock({ block: false, timerOffset: null });
         }
       } catch (e) {
         setLoading(false);
-        // @ts-expect-error TS(2345): Argument of type '{ block: false; }' is not assign... Remove this comment to see the full error message
-        setIsBlock({ block: false });
+        setIsBlock({ block: false, timerOffset: null });
         console.log('readStorage error', e);
       }
     };
@@ -155,4 +154,5 @@ export function TimerBlockEmail({ expiredTimer }: any) {
       />
     );
   }
+  return null;
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Keyboard, Linking, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './style';
-import CheckBoxDisabled from '../../svg/auth/CheckBoxDisabled';
-import CheckBoxActive from '../../svg/auth/CheckBoxActive';
+import CheckBoxDisabled from '../../../assets/icons/svg/auth/CheckBoxDisabled';
+import CheckBoxActive from '../../../assets/icons/svg/auth/CheckBoxActive';
 
 type CheckBoxProps = {
   valueCheckBox: boolean;

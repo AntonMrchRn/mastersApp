@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { configApp } from '../../../utils/helpers/platform';
-import fonts from '../../fonts';
+import fonts from '../../../utils/helpers/getFonts';
 
 export const styles = StyleSheet.create({
   container: {
@@ -17,5 +17,8 @@ export const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: fonts.main_700,
     fontWeight: '700',
+  },
+  marginAndroid: {
+    marginTop: 0,
   },
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { styles } from './style';
-import Logo from '../../svg/auth/Logo';
+import Logo from '../../../assets/icons/svg/auth/Logo';
 import normalize from 'react-native-normalize';
 
 type LogoProps = {

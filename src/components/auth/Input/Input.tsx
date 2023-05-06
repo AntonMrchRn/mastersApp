@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { clearAuthError } from '../../../redux/slices/auth/reducer';
+import { useAppSelector } from '../../../utils/hooks/useRedux';
 import { ErrorField } from '../../ErrorField/ErrorFiled';
-import ClearTel from '../../svg/auth/ClearTel';
-import Flag from '../../svg/auth/Flag';
+import ClearTel from '../../../assets/icons/svg/auth/ClearTel';
+import Flag from '../../../assets/icons/svg/auth/Flag';
 import { styles } from './style';
 
 type InputProps = {
@@ -34,8 +35,7 @@ export const Input = ({
   const [focus, setFocus] = useState(false);
   const [activeTel, setActiveTel] = useState(false);
   const [activeEmail, setActiveEmail] = useState(false);
-  // @ts-expect-error TS(2571): Object is of type 'unknown'.
-  const { authError, authErrorCode } = useSelector(state => state.auth);
+  const { authError, authErrorCode } = useAppSelector(state => state.auth);
 
   const dispatch = useDispatch();
 
@@ -115,7 +115,7 @@ export const Input = ({
               maxLength={tel?.length < 2 ? 100 : 13}
               value={tel}
               onChangeText={text => {
-                if (text.length == 1) {
+                if (text.length === 1) {
                   text = text.replace(/[^\d\s\(\)-]/g, '');
                   text = text.replace(/(^[0-8])/, '(9$1');
                   setTel(text.replace(/[\D]+/g, ''));

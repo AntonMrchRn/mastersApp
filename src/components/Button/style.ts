@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import normalize from 'react-native-normalize';
+import fonts from '../../utils/helpers/getFonts';
 import { configApp } from '../../utils/helpers/platform';
-import fonts from '../fonts';
 
 export const styles = StyleSheet.create({
   btn: {

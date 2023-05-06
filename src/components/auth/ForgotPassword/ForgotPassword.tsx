@@ -6,30 +6,28 @@ import {
   Text,
   useWindowDimensions,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
 import { clearAuthError } from '../../../redux/slices/auth/reducer';
 import { configApp } from '../../../utils/helpers/platform';
+import { useAppDispatch } from '../../../utils/hooks/useRedux';
 import { styles } from './style';
 
 export const ForgotPassword = () => {
-  const navigation = useNavigation();
-  const dispatch = useDispatch();
+  const navigation: any = useNavigation();
+  const dispatch = useAppDispatch();
   const windowHeight = useWindowDimensions().height;
 
   return (
     <View
       style={[
         styles.container,
-        configApp.android && windowHeight < 593 && { marginTop: 0 },
+        configApp.android && windowHeight < 593 && styles.marginAndroid,
       ]}
     >
       <TouchableOpacity
         style={styles.btn}
         onPress={() => {
-          // @ts-expect-error TS(2769): No overload matches this call.
-          navigation.navigate('RecoveryScreen');
-          // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
-          dispatch(clearAuthError());
+          navigation.navigate('Recovery');
+          dispatch(clearAuthError(null));
         }}
       >
         <Text style={styles.labelBtn}>Восстановить пароль</Text>

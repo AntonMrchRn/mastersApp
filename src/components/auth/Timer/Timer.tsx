@@ -6,7 +6,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import {
   clearIsRecovery,
@@ -15,6 +15,7 @@ import {
 } from '../../../redux/slices/auth/reducer';
 import { styles } from './style';
 import { configApp } from '../../../utils/helpers/platform';
+import { useAppSelector } from '../../../utils/hooks/useRedux';
 
 export const pad = (time: any, length: any) => {
   while (time?.length < length) {
@@ -37,7 +38,7 @@ export const timeFormat = (time: any) => {
 };
 
 export const Timer = (props: any) => {
-  return <Text style={{ textAlign: 'center' }}>{timeFormat(props.time)}</Text>;
+  return <Text style={styles.timeFormatStyle}>{timeFormat(props.time)}</Text>;
 };
 
 const BlockComponent = ({
@@ -66,7 +67,7 @@ const BlockComponent = ({
     <View
       style={[
         styles.wrapper,
-        windowHeight < 593 && configApp.android && { height: 45 },
+        windowHeight < 593 && configApp.android && styles.wrapperAndroid,
       ]}
     >
       <Text style={styles.timer}>
@@ -82,19 +83,28 @@ const setData = async (data: any) => {
   await AsyncStorage.setItem('BLOCK', data);
 };
 
-// @ts-expect-error TS(7030): Not all code paths return a value.
-export function TimerBlock({ expiredTimer, isConfirm, callBack }: any) {
-  // @ts-expect-error TS(2571): Object is of type 'unknown'.
-  const { isRecovery } = useSelector(state => state.auth);
-  // @ts-expect-error TS(2571): Object is of type 'unknown'.
-  const { isActiveTimer } = useSelector(state => state.auth);
+type TimerBlockProps = {
+  expiredTimer: number;
+  isConfirm?: boolean;
+  callBack?: () => {};
+};
+
+export function TimerBlock({
+  expiredTimer,
+  isConfirm,
+  callBack,
+}: TimerBlockProps) {
+  const { isRecovery, isActiveTimer } = useAppSelector(state => state.auth);
   const [timeMilliSeconds, setTimeMilliSeconds] = useState(Date.now());
   const windowHeight = useWindowDimensions().height;
 
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(true);
-  const [isBlock, setIsBlock] = useState({
+  const [isBlock, setIsBlock] = useState<{
+    block: boolean;
+    timerOffset: number | null;
+  }>({
     block: true,
     timerOffset: Date.now(),
   });
@@ -116,7 +126,6 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }: any) {
 
   const closeBlock = useCallback(() => {
     AsyncStorage.removeItem('BLOCK').then(() => {
-      // @ts-expect-error TS(2322): Type 'null' is not assignable to type 'number'.
       setIsBlock({ block: false, timerOffset: null });
       dispatch(timerOff());
     });
@@ -143,13 +152,11 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }: any) {
           }
         } else {
           setLoading(false);
-          // @ts-expect-error TS(2322): Type 'null' is not assignable to type 'number'.
           setIsBlock({ block: false, timerOffset: null });
         }
       } catch (e) {
         setLoading(false);
-        // @ts-expect-error TS(2345): Argument of type '{ block: false; }' is not assign... Remove this comment to see the full error message
-        setIsBlock({ block: false });
+        setIsBlock({ block: false, timerOffset: null });
         console.log('readStorage error', e);
       }
     };
@@ -166,14 +173,14 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }: any) {
       <View
         style={[
           styles.wrapper,
-          windowHeight < 593 && configApp.android && { height: 45 },
+          windowHeight < 593 && configApp.android && styles.heightAndroid,
         ]}
       >
         <TouchableOpacity
           style={styles.btnRepeatCode}
           onPress={() => {
             setLoading(true);
-            callBack();
+            callBack && callBack();
             setIsBlock({
               block: true,
               timerOffset: Date.now(),
@@ -203,4 +210,5 @@ export function TimerBlock({ expiredTimer, isConfirm, callBack }: any) {
       />
     );
   }
+  return null;
 }

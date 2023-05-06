@@ -9,11 +9,10 @@ import styles from './style';
 
 const TaskSearchScreen = () => {
   const [areСommon, setAreСommon] = useState(true);
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
 
   const taskItem = () => {
-    // @ts-expect-error TS(2769): No overload matches this call.
-    navigation.navigate('TaskCardScreen');
+    navigation.navigate('TaskCard');
   };
 
   const dataFlat = [
@@ -25,6 +24,7 @@ const TaskSearchScreen = () => {
     { Тест: 'Тест' },
     { Тест: 'Тест' },
   ];
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapperTop}>

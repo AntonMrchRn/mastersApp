@@ -1,14 +1,14 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Text, View } from 'react-native';
-import { useDispatch } from 'react-redux';
 import { clearRecoveryError } from '../../../redux/slices/auth/reducer';
+import { useAppDispatch } from '../../../utils/hooks/useRedux';
 import { Button } from '../../Button/Button';
 import { styles } from './style';
 
 const ConfrimPreviewEmail = () => {
-  const navigation = useNavigation();
-  const dispatch = useDispatch();
+  const navigation: any = useNavigation();
+  const dispatch = useAppDispatch();
 
   return (
     <View style={styles.container}>
@@ -22,8 +22,7 @@ const ConfrimPreviewEmail = () => {
       <Button
         onPress={() => {
           dispatch(clearRecoveryError());
-          // @ts-expect-error TS(2769): No overload matches this call.
-          navigation.navigate('SignUpScreen');
+          navigation.navigate('SignUp');
         }}
         label="Хорошо, понятно"
       />

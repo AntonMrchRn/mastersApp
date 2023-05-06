@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import { configApp } from '../../../utils/helpers/platform';
+import { configApp } from '../../../../utils/helpers/platform';
 
 const Logo = () => {
   const windowHeight = useWindowDimensions().height;
@@ -12,8 +12,6 @@ const Logo = () => {
         height={configApp.android && windowHeight < 593 ? '67' : '114'}
         viewBox="0 0 178 32"
         fill="none"
-        // @ts-expect-error TS(2322): Type '{ children: Element[]; width: string; height... Remove this comment to see the full error message
-        xmlns="http://www.w3.org/2000/svg"
       >
         <Path
           d="M164.224 0H155.84L149.714 15.235L152.978 18.1062L152.856 22.1198L153.582 22.7706C153.602 22.7408 153.631 22.7209 153.656 22.6961L157.799 12.195L159.639 7.58522C159.678 7.4362 159.806 7.32692 160.012 7.32692C160.179 7.32692 160.346 7.4362 160.385 7.58522L163.895 16.298C163.978 16.6309 163.856 16.7799 163.537 16.7799H159.369L157.308 22.5868H166.133C166.3 22.5868 166.423 22.6613 166.467 22.8451L170.237 32H177.143L164.224 0Z"

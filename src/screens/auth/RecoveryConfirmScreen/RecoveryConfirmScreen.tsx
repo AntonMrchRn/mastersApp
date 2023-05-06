@@ -1,12 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { createRef, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { TextInput, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDispatch, useSelector } from 'react-redux';
+import { InputPassword } from '../../../components';
 
-// @ts-expect-error TS(2307): Cannot find module '~/components' or its correspon... Remove this comment to see the full error message
-import { InputPassword } from '~/components';
 import { ButtonAuth } from '../../../components/auth/ButtonAuth/ButtonAuth';
 import CodeFieldInput from '../../../components/auth/CodeField/CodeField';
 import ConfrimPreview from '../../../components/auth/ConfirmPreview/ConfirmPreview';
@@ -20,6 +18,7 @@ import {
 } from '../../../redux/slices/auth/asyncActions';
 import { clearRecoveryError } from '../../../redux/slices/auth/reducer';
 import { configApp } from '../../../utils/helpers/platform';
+import { useAppDispatch, useAppSelector } from '../../../utils/hooks/useRedux';
 
 import { styles } from './style';
 
@@ -28,34 +27,31 @@ export const RecoveryConfirmationScreen = ({
     params: { tel },
   },
 }: any) => {
-  // @ts-expect-error TS(2571): Object is of type 'unknown'.
-  const { timeout, recoveryError } = useSelector(state => state.auth);
-
-  const [isPhoneAuth, setIsPhoneAuth] = useState(true);
-  const [email, seteMail] = useState('');
+  const { timeout, recoveryError } = useAppSelector((state: any) => state.auth);
   const [value, setValue] = useState('');
   const [password, setPassword] = useState('');
 
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
+  const dispatch = useAppDispatch();
+  const navigation: any = useNavigation();
 
   const goBack = () => {
     dispatch(clearRecoveryError());
     navigation.goBack();
   };
 
+  const isPhoneAuth = true;
+
+  const email = '';
+
   const recoveryRequest = async () => {
-    // @ts-expect-error TS(2345): Argument of type 'AsyncThunkAction<{ data: any; is... Remove this comment to see the full error message
     await dispatch(recoveryPassword({ tel, email, isPhoneAuth }));
   };
 
   const restoreRequest = () => {
-    // @ts-expect-error TS(2345): Argument of type 'AsyncThunkAction<any, void, Asyn... Remove this comment to see the full error message
     dispatch(restorePassword({ password, value })).then((res: any) => {
       if (res?.payload === null || res?.payload === undefined) {
         dispatch(clearRecoveryError());
-        // @ts-expect-error TS(2769): No overload matches this call.
-        navigation.navigate('PasswordScreen');
+        navigation.navigate('Password');
       }
     });
   };
@@ -72,19 +68,17 @@ export const RecoveryConfirmationScreen = ({
 
   const focusInput = () => {
     setTimeout(() => {
-      // @ts-expect-error TS(2571): Object is of type 'unknown'.
       scrollViewRef?.current?.scrollToPosition(0, OFFSET, true);
     }, 0);
   };
 
-  const passwordRef = createRef();
-  const scrollViewRef = createRef();
+  const passwordRef = useRef<TextInput>(null);
+  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
   return (
     <SafeAreaView style={styles.container}>
       <Header callBack={goBack} />
       <KeyboardAwareScrollView
-        // @ts-expect-error TS(2769): No overload matches this call.
         ref={scrollViewRef}
         keyboardShouldPersistTaps="handled"
         onKeyboardWillShow={() => {
@@ -92,7 +86,6 @@ export const RecoveryConfirmationScreen = ({
             return;
           }
           setTimeout(() => {
-            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             scrollViewRef?.current?.scrollToPosition(0, OFFSET, true);
           }, 200);
         }}
@@ -107,7 +100,6 @@ export const RecoveryConfirmationScreen = ({
             <CodeFieldInput
               value={value}
               setValue={setValue}
-              // @ts-expect-error TS(2571): Object is of type 'unknown'.
               onSubmitEditing={() => passwordRef?.current?.focus()}
               onFocus={configApp.ios ? focusInput : () => {}}
             />
@@ -131,8 +123,6 @@ export const RecoveryConfirmationScreen = ({
             recoveryError={recoveryError}
             onPress={restoreRequest}
           />
-          // @ts-expect-error TS(2786): 'TimerBlock' cannot be used as a JSX
-          component.
           <TimerBlock
             expiredTimer={Number(timeout?.timeout * 1000)}
             isConfirm

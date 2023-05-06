@@ -1,21 +1,27 @@
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import TaskCardScreen from '../../../../screens/tabs/TaskCardScreen';
 import TaskSearchScreen from '../../../../screens/tabs/TaskSearchScreen';
 
-const Stack = createStackNavigator();
+export type TaskSearchNavigationParamList = {
+  TaskSearch: undefined;
+  TaskCard: undefined;
+};
+
+const Stack = createStackNavigator<TaskSearchNavigationParamList>();
 
 function TaskSearchNavigation() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="TaskSearchScreen"
+        name="TaskSearch"
         component={TaskSearchScreen}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name="TaskCardScreen"
+        name="TaskCard"
         component={TaskCardScreen}
         options={{
           headerShown: false,

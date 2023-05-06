@@ -1,11 +1,11 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { storageMMKV } from '../../mmkv/storage';
 import { login, logOut } from '../../redux/slices/auth/reducer';
+import { useAppSelector } from './useRedux';
 
 export const useCheckLogin = () => {
   const dispatch = useDispatch();
-  // @ts-expect-error TS(2571): Object is of type 'unknown'.
-  const { isAuth } = useSelector(state => state.auth);
+  const { isAuth } = useAppSelector(state => state.auth);
 
   const checkLogin = () => {
     try {
@@ -21,5 +21,5 @@ export const useCheckLogin = () => {
     }
   };
 
-  return [checkLogin, isAuth];
+  return { checkLogin, isAuth };
 };

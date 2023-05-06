@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import fonts from '../../../fonts';
+import fonts from '../../../../utils/helpers/getFonts';
 
 const styles = StyleSheet.create({
   wrapperNotFound: {

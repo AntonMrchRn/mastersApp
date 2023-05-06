@@ -2,20 +2,20 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDispatch } from 'react-redux';
 
 import { Button } from '../../../components/Button/Button';
-import InfoCheckBox from '../../../components/svg/auth/InfoCheckBox';
+import InfoCheckBox from '../../../assets/icons/svg/auth/InfoCheckBox';
 import {
   clearAuthError,
   clearRecoveryError,
 } from '../../../redux/slices/auth/reducer';
+import { useAppDispatch } from '../../../utils/hooks/useRedux';
 
 import { styles } from './style';
 
 export const PasswordScreen = () => {
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
+  const dispatch = useAppDispatch();
+  const navigation: any = useNavigation();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -29,11 +29,9 @@ export const PasswordScreen = () => {
       <Button
         label="Продолжить"
         onPress={() => {
-          // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
-          dispatch(clearAuthError());
+          dispatch(clearAuthError(null));
           dispatch(clearRecoveryError());
-          // @ts-expect-error TS(2769): No overload matches this call.
-          navigation.navigate('SignUpScreen');
+          navigation.navigate('SignUp');
         }}
       />
     </SafeAreaView>

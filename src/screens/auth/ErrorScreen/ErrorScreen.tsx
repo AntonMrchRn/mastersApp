@@ -2,26 +2,25 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDispatch } from 'react-redux';
 
 import Header from '../../../components/Header/Header';
 import { Button } from '../../../components/Button';
-import ErrorCross from '../../../components/svg/auth/ErrorCross';
+import ErrorCross from '../../../assets/icons/svg/auth/ErrorCross';
 import {
   clearAuthError,
   clearRecoveryError,
 } from '../../../redux/slices/auth/reducer';
 
 import { styles } from './style';
+import { useAppDispatch } from '../../../utils/hooks/useRedux';
 
 export const ErrorScreen = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigation = useNavigation();
 
   const goBack = () => {
     dispatch(clearRecoveryError());
-    // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
-    dispatch(clearAuthError());
+    dispatch(clearAuthError(null));
     navigation.goBack();
   };
 

@@ -1,17 +1,21 @@
 import React from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
+import ArrowBack from '../../assets/icons/svg/auth/ArrowBack';
 
 import { styles } from './styles';
 
-const Header = ({ label = '', callBack = () => {}, itemFlag }: any) => {
+type HeaderProps = {
+  label?: string;
+  callBack: any;
+  itemFlag?: boolean;
+};
+
+const Header = ({ label = '', callBack = () => {}, itemFlag }: HeaderProps) => {
   return itemFlag ? (
     <View style={styles.container}>
       <View style={styles.lateralWrapper}>
         <TouchableOpacity style={styles.btnBack} onPress={callBack}>
-          <Image
-            source={require('../../assets/icons/arrowBack.png')}
-            style={styles.icon}
-          />
+          <ArrowBack />
         </TouchableOpacity>
       </View>
       <Text style={styles.label}>{label}</Text>
@@ -21,10 +25,7 @@ const Header = ({ label = '', callBack = () => {}, itemFlag }: any) => {
     <View style={styles.container}>
       <View style={styles.lateralWrapper}>
         <TouchableOpacity style={styles.btnBack} onPress={callBack}>
-          <Image
-            source={require('../../assets/icons/arrowBack.png')}
-            style={styles.icon}
-          />
+          <ArrowBack />
         </TouchableOpacity>
       </View>
       <Text style={styles.label}>{label}</Text>

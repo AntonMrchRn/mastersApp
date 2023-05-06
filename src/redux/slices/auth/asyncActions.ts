@@ -5,8 +5,7 @@ import { storageMMKV } from '../../../mmkv/storage';
 
 export const fetchUserAuth = createAsyncThunk(
   '/auth',
-  // @ts-expect-error TS(2339): Property 'tel' does not exist on type 'void'.
-  async ({ tel, email, password, isPhoneAuth }, thunkApi) => {
+  async ({ tel, email, password, isPhoneAuth }: any, thunkApi: any) => {
     const phoneNumber = '7' + tel;
 
     try {
@@ -14,21 +13,19 @@ export const fetchUserAuth = createAsyncThunk(
         login: isPhoneAuth ? phoneNumber : email,
         password,
       });
-
       storageMMKV.set('token', data.token);
 
       return data;
     } catch (error) {
-      // @ts-expect-error TS(2571): Object is of type 'unknown'.
-      return thunkApi.rejectWithValue(error.response.data);
+      const errorMessage: any = error;
+      return thunkApi.rejectWithValue(errorMessage.response.data);
     }
   }
 );
 
 export const recoveryPassword = createAsyncThunk(
   '/recoveryPassword',
-  // @ts-expect-error TS(7030): Not all code paths return a value.
-  async ({ password, email, isPhoneAuth, tel }, thunkApi) => {
+  async ({ password, email, isPhoneAuth, tel }: any, thunkApi: any) => {
     const phoneNumber = '7' + tel;
     try {
       const { data } = isPhoneAuth
@@ -51,16 +48,15 @@ export const recoveryPassword = createAsyncThunk(
         return { data: data, isPhoneAuth: isPhoneAuth };
       }
     } catch (error) {
-      // @ts-expect-error TS(2571): Object is of type 'unknown'.
-      return thunkApi.rejectWithValue(error.response.data);
+      const errorMessage: any = error;
+      return thunkApi.rejectWithValue(errorMessage.response.data);
     }
   }
 );
 
 export const restorePassword = createAsyncThunk(
   'restorePassword',
-  // @ts-expect-error TS(2339): Property 'password' does not exist on type 'void'.
-  async ({ password, value }, thunkApi) => {
+  async ({ password, value }: any, thunkApi: any) => {
     try {
       const { data } = await apiHost.patch('me/password', {
         code: value,
@@ -70,8 +66,8 @@ export const restorePassword = createAsyncThunk(
       await AsyncStorage.setItem('time', jsonValue);
       return data;
     } catch (error) {
-      // @ts-expect-error TS(2571): Object is of type 'unknown'.
-      return thunkApi.rejectWithValue(error.response.data);
+      const errorMessage: any = error;
+      return thunkApi.rejectWithValue(errorMessage.response.data);
     }
   }
 );

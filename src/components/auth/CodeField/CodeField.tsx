@@ -7,8 +7,8 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
-import { useDispatch, useSelector } from 'react-redux';
 import { clearAuthError } from '../../../redux/slices/auth/reducer';
+import { useAppDispatch, useAppSelector } from '../../../utils/hooks/useRedux';
 import { ErrorField } from '../../ErrorField/ErrorFiled';
 import { styles } from './style';
 
@@ -21,10 +21,9 @@ const CodeFieldInput = ({ value, setValue, onSubmitEditing, onFocus }: any) => {
     setValue,
   });
 
-  // @ts-expect-error TS(2571): Object is of type 'unknown'.
-  const { authError, authErrorCode } = useSelector(state => state.auth);
+  const { authError, authErrorCode } = useAppSelector(state => state.auth);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (value?.length === 6) {

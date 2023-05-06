@@ -1,13 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { createRef, useEffect, useState } from 'react';
-import { Keyboard, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Keyboard, TextInput, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import normalize from 'react-native-normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDispatch, useSelector } from 'react-redux';
-
-// @ts-expect-error TS(2307): Cannot find module '~/components' or its correspon... Remove this comment to see the full error message
-import { Input, TypeSelection } from '~/components';
+import { Input, TypeSelection } from '../../../components';
 import { ButtonAuth } from '../../../components/auth/ButtonAuth/ButtonAuth';
 import ForgotPreview from '../../../components/auth/ForgotPreview/ForgotPreview';
 import LogoPreview from '../../../components/auth/LogoPreview';
@@ -16,57 +13,59 @@ import { TimerBlockEmail } from '../../../components/auth/TimerEmail/TimerEmail'
 import Header from '../../../components/Header/Header';
 import Spacer from '../../../components/Spacer/Spacer';
 import { recoveryPassword } from '../../../redux/slices/auth/asyncActions';
-import { clearRecoveryError } from '../../../redux/slices/auth/reducer';
+import {
+  clearAuthError,
+  clearRecoveryError,
+} from '../../../redux/slices/auth/reducer';
 import { configApp } from '../../../utils/helpers/platform';
+import { useAppDispatch, useAppSelector } from '../../../utils/hooks/useRedux';
 
 import { styles } from './style';
 
 export const RecoveryScreen = () => {
-  const { isRecovery, timeout, timeOutEmail, isRecoveryEmail } = useSelector(
-    // @ts-expect-error TS(2571): Object is of type 'unknown'.
-    state => state.auth
+  const { isRecovery, timeout, timeOutEmail, isRecoveryEmail } = useAppSelector(
+    (state: any) => state.auth
   );
-  const [isPhoneAuth, setIsPhoneAuth] = useState(true);
+  const [isPhoneAuth, setIsPhoneAuth] = useState<boolean>(true);
   const [tel, setTel] = useState('');
   const [email, seteMail] = useState('');
-  const [password, setPassword] = useState('');
   const [active, setActive] = useState(false);
 
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
+  const dispatch = useAppDispatch();
+  const navigation: any = useNavigation();
 
   const recoveryRequest = async () => {
-    // @ts-expect-error TS(2345): Argument of type 'AsyncThunkAction<{ data: any; is... Remove this comment to see the full error message
     await dispatch(recoveryPassword({ tel, email, isPhoneAuth, navigation }));
   };
 
   useEffect(() => {
     dispatch(clearRecoveryError());
+    dispatch(clearAuthError(null));
   }, []);
 
   const goBack = () => {
     dispatch(clearRecoveryError());
+    dispatch(clearAuthError(null));
     navigation.goBack();
   };
 
   useEffect(() => {
     if (isRecovery && isPhoneAuth && !isRecoveryEmail) {
-      // @ts-expect-error TS(2345): Argument of type 'string' is not assignable to par... Remove this comment to see the full error message
-      navigation.navigate('RecoveryConfirmScreen', { tel: tel });
+      navigation.navigate('RecoveryConfirm', { tel: tel });
       dispatch(clearRecoveryError());
     }
     if (!isPhoneAuth) {
       Keyboard.dismiss();
-      // @ts-expect-error TS(2769): No overload matches this call.
-      navigation.navigate('EmailScreen');
+      navigation.navigate('Email');
     }
   }, [isRecovery, isRecoveryEmail]);
 
   const OFFSET = 0;
 
+  const password = '';
+
   const focusInput = () => {
     setTimeout(() => {
-      // @ts-expect-error TS(2571): Object is of type 'unknown'.
       scrollViewRef?.current?.scrollToPosition(0, OFFSET, true);
     }, 200);
   };
@@ -77,14 +76,13 @@ export const RecoveryScreen = () => {
     }
   }, [tel]);
 
-  const passwordRef = createRef();
-  const scrollViewRef = createRef();
+  const passwordRef = useRef<TextInput>(null);
+  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
   return (
     <SafeAreaView style={styles.container}>
       <Header callBack={goBack} />
       <KeyboardAwareScrollView
-        // @ts-expect-error TS(2769): No overload matches this call.
         ref={scrollViewRef}
         keyboardShouldPersistTaps="handled"
         onKeyboardWillShow={() => {
@@ -92,7 +90,6 @@ export const RecoveryScreen = () => {
             return;
           }
           setTimeout(() => {
-            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             scrollViewRef?.current?.scrollToPosition(0, OFFSET, true);
           }, 200);
         }}
@@ -119,7 +116,6 @@ export const RecoveryScreen = () => {
             email={email}
             setMail={seteMail}
             setTel={setTel}
-            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             onSubmitEditing={() => passwordRef?.current?.focus()}
             onFocus={configApp.ios ? focusInput : () => {}}
             setActive={setActive}
@@ -138,10 +134,8 @@ export const RecoveryScreen = () => {
           />
           <View style={styles.containerTimer}>
             {isPhoneAuth ? (
-              // @ts-expect-error TS(2786): 'TimerBlock' cannot be used as a JSX component.
               <TimerBlock expiredTimer={Number(timeout?.timeout * 1000)} />
             ) : (
-              // @ts-expect-error TS(2786): 'TimerBlockEmail' cannot be used as a JSX componen... Remove this comment to see the full error message
               <TimerBlockEmail
                 expiredTimer={Number(timeOutEmail?.timeout * 1000)}
               />

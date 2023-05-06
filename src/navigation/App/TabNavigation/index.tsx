@@ -2,14 +2,20 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import styles from './style';
-import Employees from '../../../components/svg/tabBar/Employees';
-import Profile from '../../../components/svg/tabBar/Profile';
-import TaskSearch from '../../../components/svg/tabBar/TaskSearch';
+import Employees from '../../../assets/icons/svg/tabBar/Employees';
+import Profile from '../../../assets/icons/svg/tabBar/Profile';
+import TaskSearch from '../../../assets/icons/svg/tabBar/TaskSearch';
 import MyTasksNavigation from './MyTasksNavigation';
 import ProfileNavigation from './ProfileNavigation';
 import TaskSearchNavigation from './TaskSearchNavigation';
 
-const Tab = createBottomTabNavigator();
+export type TabNavigationParamList = {
+  TaskSearchNavigation: undefined;
+  MyTasksNavigation: undefined;
+  ProfileNavigation: undefined;
+};
+
+const Tab = createBottomTabNavigator<TabNavigationParamList>();
 
 function AppNavigation() {
   return (
@@ -22,27 +28,30 @@ function AppNavigation() {
       }}
     >
       <Tab.Screen
-        name="Поиск задач"
+        name="TaskSearchNavigation"
         component={TaskSearchNavigation}
         options={{
+          title: 'Поиск задач',
           tabBarIcon: color => (
             <TaskSearch color={color.focused ? '#3F51B5' : '#707070'} />
           ),
         }}
       />
       <Tab.Screen
-        name="Мои задачи"
+        name="MyTasksNavigation"
         component={MyTasksNavigation}
         options={{
+          title: 'Поиск задач',
           tabBarIcon: color => (
             <Employees color={color.focused ? '#3F51B5' : '#707070'} />
           ),
         }}
       />
       <Tab.Screen
-        name="Профиль"
+        name="ProfileNavigation"
         component={ProfileNavigation}
         options={{
+          title: 'Профиль',
           tabBarIcon: color => (
             <Profile color={color.focused ? '#3F51B5' : '#707070'} />
           ),

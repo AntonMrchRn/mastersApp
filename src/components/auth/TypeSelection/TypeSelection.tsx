@@ -1,10 +1,10 @@
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { useDispatch } from 'react-redux';
 import {
   clearAuthError,
   clearRecoveryError,
 } from '../../../redux/slices/auth/reducer';
+import { useAppDispatch } from '../../../utils/hooks/useRedux';
 
 import { styles } from './style';
 
@@ -23,14 +23,13 @@ export const TypeSelection = ({
   setTel,
   setActive,
 }: TypeSelectionProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={[styles.btn, isPhoneAuth && styles.activeBtn]}
         onPress={() => {
-          // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
-          dispatch(clearAuthError());
+          dispatch(clearAuthError(null));
           dispatch(clearRecoveryError());
           seteMail('');
           setIsPhoneAuth(true);
@@ -45,8 +44,7 @@ export const TypeSelection = ({
       <TouchableOpacity
         style={[styles.btn, !isPhoneAuth && styles.activeBtn]}
         onPress={() => {
-          // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
-          dispatch(clearAuthError());
+          dispatch(clearAuthError(null));
           dispatch(clearRecoveryError());
           setTel('');
           setIsPhoneAuth(false);

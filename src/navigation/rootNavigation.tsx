@@ -7,10 +7,15 @@ import AuthNavigation from './Auth';
 import { useCheckLogin } from '../utils/hooks/useCheckLogin';
 import SplashScreen from 'react-native-splash-screen';
 
-const Stack = createStackNavigator();
+export type RootNavigationParamList = {
+  AppNavigation: undefined;
+  AuthNavigation: undefined;
+};
+
+const Stack = createStackNavigator<RootNavigationParamList>();
 
 const RootNavigate = () => {
-  const [checkLogin, isAuth] = useCheckLogin();
+  const { checkLogin, isAuth } = useCheckLogin();
   const [isLoad, setIsLoad] = useState(false);
 
   useEffect(() => {

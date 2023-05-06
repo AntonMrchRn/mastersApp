@@ -6,7 +6,7 @@ import Header from '../../../components/Header/Header';
 import styles from './style';
 
 const TaskCardScreen = () => {
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
       <Header
@@ -14,6 +14,7 @@ const TaskCardScreen = () => {
           navigation.goBack();
         }}
         itemFlag
+        label={''}
       />
       <View style={styles.wrapperCenter}>
         <Text>Карточка</Text>

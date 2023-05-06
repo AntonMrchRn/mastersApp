@@ -1,35 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, Text } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../../utils/hooks/useRedux';
 import { validateEmail } from '../../../utils/hooks/validateEmail';
 import { styles } from './style';
 
 type ButtonProps = {
   isPhoneAuth: boolean;
   isDisabled: boolean;
-  tel: string;
+  tel?: string;
   password: string;
   email: string;
-  withOutPassword: boolean;
+  withOutPassword?: boolean;
   label: string;
-  isRestore: boolean;
-  value: string;
-  flag: boolean;
+  isRestore?: boolean;
+  value?: string;
+  flag?: boolean;
   recoveryError?: any;
-  valueCheckBox: boolean;
-  onPress: any;
+  valueCheckBox?: boolean;
+  onPress?: any;
 };
 
 export const ButtonAuth = ({
   isPhoneAuth,
   isDisabled,
-  tel,
+  tel = '',
   password,
   email,
   label = 'Войти',
   onPress,
   withOutPassword,
-  value,
+  value = '',
   isRestore,
   flag,
   recoveryError,
@@ -49,16 +49,13 @@ export const ButtonAuth = ({
   const validWithPassword = !isPhoneWithPass && !isMailWithPass && isDisabled;
   const validWithOutPassword = !isPhone && !isMail && isDisabled;
 
-  const { isActiveTimer, isActiveTimerEmail, authError } = useSelector(
-    // @ts-expect-error TS(2571): Object is of type 'unknown'.
-    state => state.auth
+  const { isActiveTimer, isActiveTimerEmail, authError } = useAppSelector(
+    (state: any) => state.auth
   );
 
   useEffect(() => {
     setValidateEmail(validateEmail({ email }));
   }, [email]);
-
-  console.log('->', recoveryError);
 
   return isRestore ? (
     <TouchableOpacity

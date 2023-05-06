@@ -4,9 +4,6 @@ import Svg, { G, Path } from 'react-native-svg';
 const ArrowBack = () => {
   return (
     <Svg
-      // @ts-expect-error TS(2322): Type '{ children: Element; version: string; xmlns:... Remove this comment to see the full error message
-      version="1.0"
-      xmlns="http://www.w3.org/2000/svg"
       width="22"
       height="25"
       viewBox="0 0 512.000000 512.000000"

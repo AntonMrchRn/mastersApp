@@ -3,14 +3,7 @@ import Svg, { Rect } from 'react-native-svg';
 
 const CheckBoxDisabled = () => {
   return (
-    <Svg
-      width="20"
-      height="20"
-      viewBox="0 0 20 20"
-      fill="none"
-      // @ts-expect-error TS(2322): Type '{ children: Element; width: string; height: ... Remove this comment to see the full error message
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <Svg width="20" height="20" viewBox="0 0 20 20" fill="none">
       <Rect
         x="0.75"
         y="0.75"

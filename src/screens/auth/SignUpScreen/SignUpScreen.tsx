@@ -1,19 +1,15 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import React, { createRef, useEffect, useState } from 'react';
-import { useWindowDimensions, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { TextInput, useWindowDimensions, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import normalize from 'react-native-normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDispatch, useSelector } from 'react-redux';
-
 import {
   ForgotPassword,
   Input,
   InputPassword,
   TypeSelection,
-  // @ts-expect-error TS(2307): Cannot find module '~/components' or its correspon... Remove this comment to see the full error message
-} from '~/components';
+} from '../../../components';
 import { ButtonAuth } from '../../../components/auth/ButtonAuth/ButtonAuth';
 import CheckBoxAgreement from '../../../components/auth/CheckBox';
 import LogoPreview from '../../../components/auth/LogoPreview';
@@ -24,14 +20,14 @@ import {
   timeOutAsyncEmail,
 } from '../../../redux/slices/auth/reducer';
 import { configApp } from '../../../utils/helpers/platform';
+import { useAppDispatch, useAppSelector } from '../../../utils/hooks/useRedux';
 
 import { styles } from './style';
 
 export const SignUpScreen = () => {
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
-  // @ts-expect-error TS(2571): Object is of type 'unknown'.
-  const { authErrorCode } = useSelector(state => state.auth);
+  const dispatch = useAppDispatch();
+  const navigation: any = useNavigation();
+  const { authErrorCode } = useAppSelector((state: any) => state.auth);
 
   const [isPhoneAuth, setIsPhoneAuth] = useState(true);
   const [tel, setTel] = useState('');
@@ -41,17 +37,14 @@ export const SignUpScreen = () => {
   const [active, setActive] = useState(false);
 
   const authRequest = () => {
-    // @ts-expect-error TS(2345): Argument of type 'AsyncThunkAction<any, void, Asyn... Remove this comment to see the full error message
     dispatch(fetchUserAuth({ tel, email, password, isPhoneAuth }));
-    // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
-    dispatch(clearAuthError());
+    dispatch(clearAuthError(null));
   };
 
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('time');
-      // @ts-expect-error TS(2345): Argument of type 'string | null' is not assignable... Remove this comment to see the full error message
-      dispatch(timeOutAsync(JSON.parse(jsonValue)));
+      jsonValue && dispatch(timeOutAsync(JSON.parse(jsonValue)));
     } catch (e) {
       // error reading value
     }
@@ -60,8 +53,7 @@ export const SignUpScreen = () => {
   const getDataEmail = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('timeEmail');
-      // @ts-expect-error TS(2345): Argument of type 'string | null' is not assignable... Remove this comment to see the full error message
-      dispatch(timeOutAsyncEmail(JSON.parse(jsonValue)));
+      jsonValue && dispatch(timeOutAsyncEmail(JSON.parse(jsonValue)));
     } catch (e) {
       // error reading value
     }
@@ -74,8 +66,7 @@ export const SignUpScreen = () => {
 
   useEffect(() => {
     if (authErrorCode === 20001) {
-      // @ts-expect-error TS(2769): No overload matches this call.
-      navigation.navigate('ErrorScreen');
+      navigation.navigate('Error');
     }
   }, [authErrorCode]);
 
@@ -83,20 +74,18 @@ export const SignUpScreen = () => {
 
   const focusInput = () => {
     setTimeout(() => {
-      // @ts-expect-error TS(2571): Object is of type 'unknown'.
       scrollViewRef?.current?.scrollToPosition(0, OFFSET, true);
     }, 200);
   };
 
   const windowHeight = useWindowDimensions().height;
 
-  const passwordRef = createRef();
-  const scrollViewRef = createRef();
+  const passwordRef = useRef<TextInput>(null);
+  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView
-        // @ts-expect-error TS(2769): No overload matches this call.
         ref={scrollViewRef}
         keyboardShouldPersistTaps="handled"
         onKeyboardWillShow={() => {
@@ -104,7 +93,6 @@ export const SignUpScreen = () => {
             return;
           }
           setTimeout(() => {
-            // @ts-expect-error TS(2571): Object is of type 'unknown'.
             scrollViewRef?.current?.scrollToPosition(0, OFFSET, true);
           }, 200);
         }}
@@ -119,8 +107,7 @@ export const SignUpScreen = () => {
           <View
             style={[
               styles.wrapperCenter,
-              configApp.android &&
-                windowHeight < 593 && { height: normalize(255, 'height') },
+              configApp.android && windowHeight < 593 && styles.androidHeight,
             ]}
           >
             <TypeSelection
@@ -136,7 +123,6 @@ export const SignUpScreen = () => {
               email={email}
               setMail={seteMail}
               setTel={setTel}
-              // @ts-expect-error TS(2571): Object is of type 'unknown'.
               onSubmitEditing={() => passwordRef?.current?.focus()}
               onFocus={configApp.ios ? focusInput : () => {}}
               setActive={setActive}
@@ -155,7 +141,9 @@ export const SignUpScreen = () => {
           <View
             style={[
               styles.bottomWrapper,
-              configApp.android && windowHeight < 593 && { marginTop: 16 },
+              configApp.android &&
+                windowHeight < 593 &&
+                styles.marginTopAndroid,
             ]}
           >
             <ButtonAuth
