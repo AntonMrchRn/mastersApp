@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
-import fonts from '../../../utils/helpers/getFonts';
+import { configApp } from '../../../../utils/helpers/platform';
+import fonts from '../../../../utils/helpers/getFonts';
 
 export const styles = StyleSheet.create({
   container: {
@@ -20,12 +21,12 @@ export const styles = StyleSheet.create({
   timeFormatStyle: {
     textAlign: 'center',
   },
-  wrapperAndroid: {
-    height: 45,
-  },
   link: {
     fontSize: 20,
     color: 'blue',
+  },
+  wrapperAndroid: {
+    height: 45,
   },
   wrapper: {
     alignItems: 'center',
@@ -41,13 +42,12 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
   },
   btnRepeatCode: {
-    padding: 5,
+    marginTop: 25,
   },
   textBtn: {
-    fontSize: 17,
-    color: '#1B1B1B',
-    textAlign: 'center',
+    fontSize: 13,
+    color: configApp.brandColor,
     fontFamily: fonts.main_400,
-    fontWeight: '700',
+    fontWeight: '400',
   },
 });

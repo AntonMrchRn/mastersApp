@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 
@@ -7,62 +7,10 @@ import {
   clearIsRecoveryEmail,
   timerOffEmail,
   timerOnEmail,
-} from '../../../redux/slices/auth/reducer';
-import { storageMMKV } from '../../../mmkv/storage';
-import { styles } from './style';
-import { useAppSelector } from '../../../utils/hooks/useRedux';
-
-export const pad = (time: any, length: any) => {
-  while (time?.length < length) {
-    time = '0' + time;
-  }
-  return time;
-};
-
-export const timeFormat = (time: any) => {
-  time = new Date(time);
-  let h = pad(time.getUTCHours().toString(), 2);
-  let m = pad(time.getUTCMinutes().toString(), 2);
-  let s = pad(time.getUTCSeconds().toString(), 2);
-
-  if (h >= 23 && m >= 59 && s > 0) {
-    return '00:00';
-  } else {
-    return `${h < 1 ? '' : h + ':'}${m}:${h === 1 ? null : s}`;
-  }
-};
-
-export const Timer = (props: any) => {
-  return <Text style={styles.timeFormatStyle}>{timeFormat(props.time)}</Text>;
-};
-
-const BlockComponent = ({ expiredTimer, timerOffset, closeBlock }: any) => {
-  const [timeMilliSeconds, setTimeMilliSeconds] = useState(Date.now());
-
-  useEffect(() => {
-    let timeout = setTimeout(() => {
-      setTimeMilliSeconds(Date.now());
-    }, 1000);
-
-    if (timeMilliSeconds - timerOffset > expiredTimer) {
-      closeBlock();
-    }
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [timeMilliSeconds]);
-
-  return (
-    <View style={styles.wrapper}>
-      <Text style={styles.timer}>
-        {`Отправить код повторно (${timeFormat(
-          timerOffset + expiredTimer - timeMilliSeconds
-        )})`}
-      </Text>
-    </View>
-  );
-};
+} from '../../../../redux/slices/auth/reducer';
+import { storageMMKV } from '../../../../mmkv/storage';
+import { useAppSelector } from '../../../../utils/hooks/useRedux';
+import { TimerComponent } from '../TimerComponent';
 
 const setData = async (data: any) => {
   await AsyncStorage.setItem('BLOCKEMAIL', data);
@@ -71,7 +19,7 @@ const setData = async (data: any) => {
 export function TimerBlockEmail({ expiredTimer }: any) {
   const { isRecoveryEmail } = useAppSelector(state => state.auth);
   const dispatch = useDispatch();
-
+  const [timeMilliSeconds, setTimeMilliSeconds] = useState(Date.now());
   const [loading, setLoading] = useState(true);
   const [isBlock, setIsBlock] = useState<{
     block: boolean;
@@ -147,10 +95,12 @@ export function TimerBlockEmail({ expiredTimer }: any) {
 
   if (isBlock?.block) {
     return (
-      <BlockComponent
+      <TimerComponent
         timerOffset={isBlock.timerOffset}
         expiredTimer={expiredTimer}
         closeBlock={closeBlock}
+        setTimeMilliSeconds={setTimeMilliSeconds}
+        timeMilliSeconds={timeMilliSeconds}
       />
     );
   }

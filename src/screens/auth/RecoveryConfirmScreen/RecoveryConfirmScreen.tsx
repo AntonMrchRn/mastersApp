@@ -9,7 +9,7 @@ import { ButtonAuth } from '../../../components/auth/ButtonAuth/ButtonAuth';
 import CodeFieldInput from '../../../components/auth/CodeField/CodeField';
 import ConfrimPreview from '../../../components/auth/ConfirmPreview/ConfirmPreview';
 import LogoPreview from '../../../components/auth/LogoPreview';
-import { TimerBlock } from '../../../components/auth/Timer/Timer';
+import { TimerBlock } from '../../../components/auth/Timer/TimerPhone/TimerPhone';
 import Header from '../../../components/Header/Header';
 import Spacer from '../../../components/Spacer/Spacer';
 import {
