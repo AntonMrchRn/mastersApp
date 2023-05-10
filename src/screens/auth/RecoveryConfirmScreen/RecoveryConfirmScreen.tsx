@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { TextInput, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -10,13 +10,15 @@ import CodeFieldInput from '../../../components/auth/CodeField/CodeField';
 import ConfrimPreview from '../../../components/auth/ConfirmPreview/ConfirmPreview';
 import LogoPreview from '../../../components/auth/LogoPreview';
 import { TimerBlock } from '../../../components/auth/Timer/TimerPhone/TimerPhone';
-import Header from '../../../components/Header/Header';
 import Spacer from '../../../components/Spacer/Spacer';
 import {
   recoveryPassword,
   restorePassword,
 } from '../../../redux/slices/auth/asyncActions';
-import { clearRecoveryError } from '../../../redux/slices/auth/reducer';
+import {
+  clearAuthError,
+  clearRecoveryError,
+} from '../../../redux/slices/auth/reducer';
 import { configApp } from '../../../utils/helpers/platform';
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks/useRedux';
 
@@ -34,10 +36,7 @@ export const RecoveryConfirmationScreen = ({
   const dispatch = useAppDispatch();
   const navigation: any = useNavigation();
 
-  const goBack = () => {
-    dispatch(clearRecoveryError());
-    navigation.goBack();
-  };
+  const isFocused = useIsFocused();
 
   const isPhoneAuth = true;
 
@@ -55,6 +54,11 @@ export const RecoveryConfirmationScreen = ({
       }
     });
   };
+
+  useEffect(() => {
+    dispatch(clearRecoveryError());
+    dispatch(clearAuthError(null));
+  }, [isFocused]);
 
   useEffect(() => {
     dispatch(clearRecoveryError());
@@ -76,8 +80,7 @@ export const RecoveryConfirmationScreen = ({
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header callBack={goBack} />
+    <SafeAreaView edges={['bottom']} style={styles.container}>
       <KeyboardAwareScrollView
         ref={scrollViewRef}
         keyboardShouldPersistTaps="handled"

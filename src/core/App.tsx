@@ -4,13 +4,16 @@ import { Provider } from 'react-redux';
 import { MyTheme } from '../utils/helpers/platform';
 import RootNavigate from '../navigation/rootNavigation';
 import { store } from '../redux';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const App = () => {
   return (
     <Provider store={store}>
-      <NavigationContainer theme={MyTheme}>
-        <RootNavigate />
-      </NavigationContainer>
+      <SafeAreaProvider>
+        <NavigationContainer theme={MyTheme}>
+          <RootNavigate />
+        </NavigationContainer>
+      </SafeAreaProvider>
     </Provider>
   );
 };

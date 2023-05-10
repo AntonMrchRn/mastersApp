@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { Keyboard, TextInput, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -10,7 +10,6 @@ import ForgotPreview from '../../../components/auth/ForgotPreview/ForgotPreview'
 import LogoPreview from '../../../components/auth/LogoPreview';
 import { TimerBlockEmail } from '../../../components/auth/Timer/TimerEmail/TimerEmail';
 import { TimerBlock } from '../../../components/auth/Timer/TimerPhone/TimerPhone';
-import Header from '../../../components/Header/Header';
 import Spacer from '../../../components/Spacer/Spacer';
 import { recoveryPassword } from '../../../redux/slices/auth/asyncActions';
 import {
@@ -34,6 +33,8 @@ export const RecoveryScreen = () => {
   const dispatch = useAppDispatch();
   const navigation: any = useNavigation();
 
+  const isFocused = useIsFocused();
+
   const recoveryRequest = async () => {
     await dispatch(recoveryPassword({ tel, email, isPhoneAuth, navigation }));
   };
@@ -43,11 +44,10 @@ export const RecoveryScreen = () => {
     dispatch(clearAuthError(null));
   }, []);
 
-  const goBack = () => {
+  useEffect(() => {
     dispatch(clearRecoveryError());
     dispatch(clearAuthError(null));
-    navigation.goBack();
-  };
+  }, [isFocused]);
 
   useEffect(() => {
     if (isRecovery && isPhoneAuth && !isRecoveryEmail) {
@@ -80,8 +80,7 @@ export const RecoveryScreen = () => {
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header callBack={goBack} />
+    <SafeAreaView edges={['bottom']} style={styles.container}>
       <KeyboardAwareScrollView
         ref={scrollViewRef}
         keyboardShouldPersistTaps="handled"

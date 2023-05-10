@@ -3,7 +3,6 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import Header from '../../../components/Header/Header';
 import { Button } from '../../../components/Button';
 import ErrorCross from '../../../assets/icons/svg/auth/ErrorCross';
 import {
@@ -25,8 +24,7 @@ export const ErrorScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header label={''} callBack={goBack} />
+    <SafeAreaView edges={['bottom']} style={styles.container}>
       <View style={styles.wrapperSignIn}>
         <View style={styles.containerInfo}>
           <ErrorCross />

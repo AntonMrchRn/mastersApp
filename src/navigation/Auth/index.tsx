@@ -9,6 +9,7 @@ import {
 import { EmailScreen } from '../../screens/auth/EmailScreen/EmailScreen';
 import { PasswordScreen } from '../../screens/auth/PasswordScreen/PasswordScreen';
 import { ErrorScreen } from '../../screens/auth/ErrorScreen/ErrorScreen';
+import Header from '../../components/Header/Header';
 
 export type AuthNavigationParamList = {
   SignUp: undefined;
@@ -25,17 +26,29 @@ function AuthNavigation() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: false,
+        header: Header,
       }}
     >
-      <Stack.Screen name="SignUp" component={SignUpScreen} />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUpScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen name="Recovery" component={RecoveryScreen} />
       <Stack.Screen name="Email" component={EmailScreen} />
       <Stack.Screen
         name="RecoveryConfirm"
         component={RecoveryConfirmationScreen}
       />
-      <Stack.Screen name="Password" component={PasswordScreen} />
+      <Stack.Screen
+        name="Password"
+        component={PasswordScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen name="Error" component={ErrorScreen} />
     </Stack.Navigator>
   );

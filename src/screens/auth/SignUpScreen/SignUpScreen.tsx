@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { TextInput, useWindowDimensions, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -16,6 +16,7 @@ import LogoPreview from '../../../components/auth/LogoPreview';
 import { fetchUserAuth } from '../../../redux/slices/auth/asyncActions';
 import {
   clearAuthError,
+  clearRecoveryError,
   timeOutAsync,
   timeOutAsyncEmail,
 } from '../../../redux/slices/auth/reducer';
@@ -35,6 +36,8 @@ export const SignUpScreen = () => {
   const [password, setPassword] = useState('');
   const [changeCheckBox, setChangeCheckBox] = useState(false);
   const [active, setActive] = useState(false);
+
+  const isFocused = useIsFocused();
 
   const authRequest = () => {
     dispatch(fetchUserAuth({ tel, email, password, isPhoneAuth }));
@@ -62,7 +65,14 @@ export const SignUpScreen = () => {
   useEffect(() => {
     getData();
     getDataEmail();
+    dispatch(clearRecoveryError());
+    dispatch(clearAuthError(null));
   }, []);
+
+  useEffect(() => {
+    dispatch(clearRecoveryError());
+    dispatch(clearAuthError(null));
+  }, [isFocused]);
 
   useEffect(() => {
     if (authErrorCode === 20001) {

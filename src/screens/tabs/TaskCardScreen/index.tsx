@@ -1,21 +1,12 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
-import Header from '../../../components/Header/Header';
+import { Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import styles from './style';
 
 const TaskCardScreen = () => {
-  const navigation: any = useNavigation();
   return (
-    <SafeAreaView style={styles.container}>
-      <Header
-        callBack={() => {
-          navigation.goBack();
-        }}
-        itemFlag
-        label={''}
-      />
+    <SafeAreaView edges={['bottom']} style={styles.container}>
       <View style={styles.wrapperCenter}>
         <Text>Карточка</Text>
       </View>
