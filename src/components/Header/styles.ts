@@ -10,6 +10,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: '#fff',
   },
+  wrapper: {
+    backgroundColor: '#fff',
+  },
   btnBack: {
     width: 45,
     paddingVertical: 5,

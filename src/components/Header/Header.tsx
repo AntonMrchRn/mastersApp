@@ -7,7 +7,7 @@ import { styles } from './styles';
 
 const Header = (props: any) => {
   return props.itemFlag ? (
-    <SafeAreaView edges={['top']}>
+    <SafeAreaView style={styles.wrapper} edges={['top']}>
       <View style={styles.container}>
         <View style={styles.lateralWrapper}>
           <TouchableOpacity
@@ -22,7 +22,7 @@ const Header = (props: any) => {
       </View>
     </SafeAreaView>
   ) : (
-    <SafeAreaView edges={['top']}>
+    <SafeAreaView style={styles.wrapper} edges={['top']}>
       <View style={styles.container}>
         <View style={styles.lateralWrapper}>
           <TouchableOpacity

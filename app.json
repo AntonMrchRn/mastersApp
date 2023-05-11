@@ -1,4 +1,5 @@
 {
   "name": "MastersApp",
-  "displayName": "MastersApp"
+  "displayName": "MastersApp",
+  "userInterfaceStyle": "light"
 }
