@@ -1,6 +1,8 @@
 import axios from 'axios';
+
 import { storageMMKV } from '../../mmkv/storage';
-import { host } from '../config';
+
+import { host } from './config';
 
 export const axiosInstance = axios.create({
   baseURL: host,

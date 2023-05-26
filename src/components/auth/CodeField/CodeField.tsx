@@ -1,38 +1,56 @@
 import React, { useEffect } from 'react';
 import { Text, View } from 'react-native';
-
 import {
   CodeField,
   Cursor,
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
-import { clearAuthError } from '../../../redux/slices/auth/reducer';
-import { useAppDispatch, useAppSelector } from '../../../utils/hooks/useRedux';
-import { ErrorField } from '../../ErrorField/ErrorFiled';
+
+import { useAppDispatch, useAppSelector } from '../../../store';
+import { clearAuthError } from '../../../store/slices/auth/actions';
+import { selectAuth } from '../../../store/slices/auth/selectors';
+import { ErrorCode } from '../../../types/error';
+import { ErrorField } from '../../ErrorField';
+
 import { styles } from './style';
 
 const CELL_COUNT = 6;
 
-const CodeFieldInput = ({ value, setValue, onSubmitEditing, onFocus }: any) => {
+type CodeFieldInputProps = {
+  value: string;
+  onFocus: () => void;
+  onSubmitEditing: () => void;
+  setValue: (value: string) => void;
+};
+
+const CodeFieldInput = ({
+  value,
+  onFocus,
+  setValue,
+  onSubmitEditing,
+}: CodeFieldInputProps) => {
+  const { authError, authErrorCode } = useAppSelector(selectAuth);
+  const dispatch = useAppDispatch();
+
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
   });
 
-  const { authError, authErrorCode } = useAppSelector(state => state.auth);
-
-  const dispatch = useAppDispatch();
-
   useEffect(() => {
     if (value?.length === 6) {
       onSubmitEditing();
     }
-    if (authErrorCode === 20005) {
+    if (authErrorCode === ErrorCode.IncorrectVerificationCode) {
       dispatch(clearAuthError(null));
     }
   }, [value]);
+
+  const onChangeText = (value: string) => {
+    setValue(value.replace(/[\D]+/g, ''));
+  };
 
   return (
     <View style={styles.content}>
@@ -41,9 +59,7 @@ const CodeFieldInput = ({ value, setValue, onSubmitEditing, onFocus }: any) => {
           ref={ref}
           {...props}
           value={value}
-          onChangeText={val => {
-            setValue(val.replace(/[\D]+/g, ''));
-          }}
+          onChangeText={onChangeText}
           onFocus={onFocus}
           cellCount={CELL_COUNT}
           keyboardType={'number-pad'}
@@ -62,7 +78,7 @@ const CodeFieldInput = ({ value, setValue, onSubmitEditing, onFocus }: any) => {
                     </Text>
                   </View>
                 ) : (
-                  <View key={index} style={styles.wrapperСircle} />
+                  <View key={index} style={styles.wrapperCircle} />
                 )}
               </View>
             );
@@ -70,7 +86,9 @@ const CodeFieldInput = ({ value, setValue, onSubmitEditing, onFocus }: any) => {
         />
       </View>
       <View style={styles.bottomWrapper}>
-        {authErrorCode === 20005 && <ErrorField error={authError} />}
+        {authErrorCode === ErrorCode.IncorrectVerificationCode && (
+          <ErrorField error={authError} />
+        )}
       </View>
     </View>
   );

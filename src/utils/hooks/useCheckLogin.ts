@@ -1,11 +1,13 @@
 import { useDispatch } from 'react-redux';
+
 import { storageMMKV } from '../../mmkv/storage';
-import { login, logOut } from '../../redux/slices/auth/reducer';
-import { useAppSelector } from './useRedux';
+import { useAppSelector } from '../../store';
+import { login, logOut } from '../../store/slices/auth/actions';
+import { selectAuth } from '../../store/slices/auth/selectors';
 
 export const useCheckLogin = () => {
+  const { isAuth } = useAppSelector(selectAuth);
   const dispatch = useDispatch();
-  const { isAuth } = useAppSelector(state => state.auth);
 
   const checkLogin = () => {
     try {

@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, Text } from 'react-native';
-import { useAppSelector } from '../../../utils/hooks/useRedux';
-import { validateEmail } from '../../../utils/hooks/validateEmail';
+import { Text, TouchableOpacity } from 'react-native';
+
+import { useAppSelector } from '../../../store';
+import { selectAuth } from '../../../store/slices/auth/selectors';
+import { Error } from '../../../types/error';
+import { validateEmail } from '../../../utils/helpers/validateEmail';
+
 import { styles } from './style';
 
-type ButtonProps = {
+type ButtonAuthProps = {
+  label: string;
+  email: string;
+  password: string;
   isPhoneAuth: boolean;
   isDisabled: boolean;
   tel?: string;
-  password: string;
-  email: string;
-  withOutPassword?: boolean;
-  label: string;
-  isRestore?: boolean;
   value?: string;
   flag?: boolean;
-  recoveryError?: any;
+  withOutPassword?: boolean;
+  isRestore?: boolean;
   valueCheckBox?: boolean;
-  onPress?: any;
+  onPress?: () => void;
+  recoveryError?: null | boolean | Error;
 };
 
 export const ButtonAuth = ({
@@ -34,8 +38,11 @@ export const ButtonAuth = ({
   flag,
   recoveryError,
   valueCheckBox = true,
-}: ButtonProps) => {
-  const [validateEmailBtn, setValidateEmail] = useState(false);
+}: ButtonAuthProps) => {
+  const { isActiveTimer, isActiveTimerEmail, authError } =
+    useAppSelector(selectAuth);
+
+  const [validateEmailBtn, setValidateEmailBtn] = useState<boolean>(false);
 
   const isPhone = tel?.length === 10 && isPhoneAuth;
   const isMail = email?.length > 0 && !isPhoneAuth;
@@ -49,12 +56,8 @@ export const ButtonAuth = ({
   const validWithPassword = !isPhoneWithPass && !isMailWithPass && isDisabled;
   const validWithOutPassword = !isPhone && !isMail && isDisabled;
 
-  const { isActiveTimer, isActiveTimerEmail, authError } = useAppSelector(
-    (state: any) => state.auth
-  );
-
   useEffect(() => {
-    setValidateEmail(validateEmail({ email }));
+    setValidateEmailBtn(validateEmail(email));
   }, [email]);
 
   return isRestore ? (
@@ -62,14 +65,14 @@ export const ButtonAuth = ({
       style={[
         styles.btn,
         !isPasswordWidthPass && styles.disabled,
-        recoveryError?.message?.length > 0 && styles.disabled,
-        authError?.length > 0 && styles.disabled,
+        (recoveryError as Error)?.message?.length > 0 && styles.disabled,
+        !!authError && authError?.length > 0 && styles.disabled,
       ]}
       onPress={onPress}
       disabled={
         !isPasswordWidthPass ||
-        recoveryError?.message?.length > 0 ||
-        authError?.length > 0
+        (recoveryError as Error)?.message?.length > 0 ||
+        (!!authError && authError?.length > 0)
       }
     >
       <Text style={styles.labelBtn}>{label}</Text>
@@ -85,7 +88,7 @@ export const ButtonAuth = ({
         !flag && !isPhoneAuth && isActiveTimerEmail && styles.disabled,
         !valueCheckBox && styles.disabled,
         !isPhoneAuth && !validateEmailBtn && styles.disabled,
-        authError?.length > 0 && styles.disabled,
+        !!authError && authError?.length > 0 && styles.disabled,
       ]}
       onPress={onPress}
       disabled={
@@ -94,23 +97,23 @@ export const ButtonAuth = ({
             ? validWithOutPassword ||
               !valueCheckBox ||
               (!isPhoneAuth && !validateEmailBtn) ||
-              authError?.length > 0
+              (!!authError && authError?.length > 0)
             : validWithOutPassword ||
               (isPhoneAuth && isActiveTimer) ||
               (!isPhoneAuth && isActiveTimerEmail) ||
               !valueCheckBox ||
               (!isPhoneAuth && !validateEmailBtn) ||
-              authError?.length > 0
+              (!!authError && authError?.length > 0)
           : flag
           ? validWithPassword ||
             !valueCheckBox ||
             (!isPhoneAuth && !validateEmailBtn) ||
-            authError?.length > 0
+            (!!authError && authError?.length > 0)
           : validWithPassword ||
             (isPhoneAuth && isActiveTimer) ||
             (!isPhoneAuth && isActiveTimerEmail) ||
             (!isPhoneAuth && !validateEmailBtn) ||
-            authError?.length > 0
+            (!!authError && authError?.length > 0)
       }
     >
       <Text style={styles.labelBtn}>{label}</Text>

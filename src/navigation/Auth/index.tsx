@@ -1,55 +1,50 @@
 import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
+
+import Header from '../../components/Header/Header';
+
 import {
   RecoveryConfirmationScreen,
   RecoveryScreen,
-  SignUpScreen,
+  SignInScreen,
 } from '../../screens';
 import { EmailScreen } from '../../screens/auth/EmailScreen/EmailScreen';
-import { PasswordScreen } from '../../screens/auth/PasswordScreen/PasswordScreen';
 import { ErrorScreen } from '../../screens/auth/ErrorScreen/ErrorScreen';
-import Header from '../../components/Header/Header';
+import { PasswordScreen } from '../../screens/auth/PasswordScreen/PasswordScreen';
+import {
+  AuthNavigationParamList,
+  AuthScreenName,
+} from '../../types/navigation';
 
-export type AuthNavigationParamList = {
-  SignUp: undefined;
-  Recovery: undefined;
-  Email: undefined;
-  RecoveryConfirm: undefined;
-  Password: undefined;
-  Error: undefined;
+const screenOptions = {
+  header: Header,
 };
-
+const options = {
+  headerShown: false,
+};
 const Stack = createStackNavigator<AuthNavigationParamList>();
 
 function AuthNavigation() {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        header: Header,
-      }}
-    >
+    <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen
-        name="SignUp"
-        component={SignUpScreen}
-        options={{
-          headerShown: false,
-        }}
+        name={AuthScreenName.SignIn}
+        component={SignInScreen}
+        options={options}
       />
-      <Stack.Screen name="Recovery" component={RecoveryScreen} />
-      <Stack.Screen name="Email" component={EmailScreen} />
+      <Stack.Screen name={AuthScreenName.Recovery} component={RecoveryScreen} />
+      <Stack.Screen name={AuthScreenName.Email} component={EmailScreen} />
       <Stack.Screen
-        name="RecoveryConfirm"
+        name={AuthScreenName.RecoveryConfirm}
         component={RecoveryConfirmationScreen}
       />
       <Stack.Screen
-        name="Password"
+        name={AuthScreenName.Password}
         component={PasswordScreen}
-        options={{
-          headerShown: false,
-        }}
+        options={options}
       />
-      <Stack.Screen name="Error" component={ErrorScreen} />
+      <Stack.Screen name={AuthScreenName.Error} component={ErrorScreen} />
     </Stack.Navigator>
   );
 }

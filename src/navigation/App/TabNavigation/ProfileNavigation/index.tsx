@@ -1,22 +1,23 @@
 import React from 'react';
+
 import { createStackNavigator } from '@react-navigation/stack';
+
 import { ProfileScreen } from '../../../../screens';
+import {
+  ProfileNavigationParamList,
+  ProfileNavigatorScreenName,
+} from '../../../../types/navigation';
 
-export type ProfileNavigationParamList = {
-  Profile: undefined;
-};
-
+const options = { headerShown: false };
 const Stack = createStackNavigator<ProfileNavigationParamList>();
 
 function ProfileNavigation() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Profile"
+        name={ProfileNavigatorScreenName.Profile}
         component={ProfileScreen}
-        options={{
-          headerShown: false,
-        }}
+        options={options}
       />
     </Stack.Navigator>
   );

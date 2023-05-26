@@ -1,31 +1,29 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  useWindowDimensions,
-} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { useAppSelector } from '../../../../store';
 import {
   clearIsRecovery,
   timerOff,
   timerOn,
-} from '../../../../redux/slices/auth/reducer';
-import { styles } from './style';
-import { configApp } from '../../../../utils/helpers/platform';
-import { useAppSelector } from '../../../../utils/hooks/useRedux';
+} from '../../../../store/slices/auth/actions';
+import { selectAuth } from '../../../../store/slices/auth/selectors';
+import { configApp, deviceHeight } from '../../../../utils/helpers/platform';
 import { TimerComponent } from '../TimerComponent';
 
-const setData = async (data: any) => {
+import { styles } from './style';
+
+const setData = async (data: string) => {
   await AsyncStorage.setItem('BLOCK', data);
 };
 
 type TimerBlockProps = {
   expiredTimer: number;
   isConfirm?: boolean;
-  callBack?: () => {};
+  callBack?: () => void;
 };
 
 export function TimerBlock({
@@ -33,13 +31,11 @@ export function TimerBlock({
   isConfirm,
   callBack,
 }: TimerBlockProps) {
-  const { isRecovery, isActiveTimer } = useAppSelector(state => state.auth);
-  const [timeMilliSeconds, setTimeMilliSeconds] = useState(Date.now());
-  const windowHeight = useWindowDimensions().height;
-
+  const { isRecovery, isActiveTimer } = useAppSelector(selectAuth);
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(true);
+  const [timeMilliSeconds, setTimeMilliSeconds] = useState<number>(Date.now());
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isBlock, setIsBlock] = useState<{
     block: boolean;
     timerOffset: number | null;
@@ -79,22 +75,22 @@ export function TimerBlock({
         }
         if (value !== null) {
           dispatch(timerOn());
-          let data = JSON.parse(value);
-          let timeNow = Date.now();
+          const data = JSON.parse(value);
+          const timeNow = Date.now();
 
           if (timeNow - data.timerOffset > expiredTimer) {
             closeBlock();
-            setLoading(false);
+            setIsLoading(false);
           } else {
             setIsBlock(data);
-            setLoading(false);
+            setIsLoading(false);
           }
         } else {
-          setLoading(false);
+          setIsLoading(false);
           setIsBlock({ block: false, timerOffset: null });
         }
       } catch (e) {
-        setLoading(false);
+        setIsLoading(false);
         setIsBlock({ block: false, timerOffset: null });
         console.log('readStorage error', e);
       }
@@ -103,38 +99,37 @@ export function TimerBlock({
     readStorage().then();
 
     return () => {
-      setLoading(true);
+      setIsLoading(true);
     };
   }, []);
 
   if (!isActiveTimer && isConfirm) {
+    const onSendCode = () => {
+      setIsLoading(true);
+      callBack && callBack();
+      setIsBlock({
+        block: true,
+        timerOffset: Date.now(),
+      });
+      setTimeMilliSeconds(Date.now());
+      setIsLoading(false);
+    };
+
     return (
       <View
         style={[
           styles.wrapper,
-          windowHeight < 593 && configApp.android && styles.heightAndroid,
+          deviceHeight < 593 && configApp.android && styles.heightAndroid,
         ]}
       >
-        <TouchableOpacity
-          style={styles.btnRepeatCode}
-          onPress={() => {
-            setLoading(true);
-            callBack && callBack();
-            setIsBlock({
-              block: true,
-              timerOffset: Date.now(),
-            });
-            setTimeMilliSeconds(Date.now());
-            setLoading(false);
-          }}
-        >
+        <TouchableOpacity style={styles.btnRepeatCode} onPress={onSendCode}>
           <Text style={styles.textBtn}>Отправить новый код</Text>
         </TouchableOpacity>
       </View>
     );
   }
 
-  if (loading) {
+  if (isLoading) {
     return <View />;
   }
 

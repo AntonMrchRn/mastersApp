@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import normalize from 'react-native-normalize';
+
 import { configApp } from '../../../utils/helpers/platform';
 
 export const styles = StyleSheet.create({

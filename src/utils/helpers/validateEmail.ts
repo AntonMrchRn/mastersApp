@@ -1,8 +1,4 @@
-type EmailProprs = {
-  email: string;
-};
-
-export const validateEmail = ({ email }: EmailProprs) => {
+export const validateEmail = (email: string) => {
   const validate =
     /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
   if (validate.test(String(email).toLowerCase())) {

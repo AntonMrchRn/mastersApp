@@ -1,10 +1,11 @@
 import React from 'react';
-import { TouchableOpacity, Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
+
 import { styles } from './style';
 
 type ButtonProps = {
   label: string;
-  onPress: any;
+  onPress: () => void;
 };
 
 export const Button = ({ label = 'Войти', onPress }: ButtonProps) => {

@@ -1,29 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React, { RefObject, useEffect, useState } from 'react';
 import { TextInput, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { clearAuthError } from '../../../redux/slices/auth/reducer';
-import { useAppSelector } from '../../../utils/hooks/useRedux';
-import { ErrorField } from '../../ErrorField/ErrorFiled';
+
 import Eye from '../../../assets/icons/svg/auth/Eye';
 import HideEye from '../../../assets/icons/svg/auth/HideEye';
+import { useAppSelector } from '../../../store';
+import { clearAuthError } from '../../../store/slices/auth/actions';
+import { selectAuth } from '../../../store/slices/auth/selectors';
+import { ErrorCode } from '../../../types/error';
+import { ErrorField } from '../../ErrorField';
 
 import { styles } from './style';
 
+type InputPasswordProps = {
+  password: string;
+  innerRef: RefObject<TextInput>;
+  setPassword: (password: string) => void;
+  label?: string;
+};
+
 export const InputPassword = ({
+  innerRef,
   password,
   setPassword,
-  innerRef,
   label = 'Пароль',
-}: any) => {
-  const [active, setActive] = useState(false);
-  const [isShowPassword, setIsShowPassword] = useState(true);
-
-  const { authError, authErrorCode } = useAppSelector(state => state.auth);
-
+}: InputPasswordProps) => {
+  const { authError, authErrorCode } = useAppSelector(selectAuth);
   const dispatch = useDispatch();
 
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const [isShowPassword, setIsShowPassword] = useState(true);
+
   useEffect(() => {
-    if (authErrorCode === 20002) {
+    if (authErrorCode === ErrorCode.IncorrectPassword) {
       dispatch(clearAuthError(null));
     }
   }, [password]);
@@ -33,8 +42,8 @@ export const InputPassword = ({
       <View
         style={[
           styles.containerPassword,
-          active && styles.activeInput,
-          authErrorCode === 20002 && styles.error,
+          isActive && styles.activeInput,
+          authErrorCode === ErrorCode.IncorrectPassword && styles.error,
         ]}
       >
         <>
@@ -42,15 +51,15 @@ export const InputPassword = ({
             ref={innerRef}
             style={[
               styles.inputBasicPassword,
-              authErrorCode === 20002 && styles.errorText,
+              authErrorCode === ErrorCode.IncorrectPassword && styles.errorText,
             ]}
             placeholder={label}
             placeholderTextColor={'#5e5e5e'}
             value={password}
             maxLength={64}
             onChangeText={text => setPassword(text)}
-            onPressIn={() => setActive(true)}
-            onEndEditing={() => setActive(false)}
+            onPressIn={() => setIsActive(true)}
+            onEndEditing={() => setIsActive(false)}
             secureTextEntry={isShowPassword}
             autoCapitalize="none"
             keyboardType="default"
@@ -65,7 +74,9 @@ export const InputPassword = ({
           </TouchableOpacity>
         </>
       </View>
-      {authErrorCode === 20002 && <ErrorField error={authError} />}
+      {authErrorCode === ErrorCode.IncorrectPassword && (
+        <ErrorField error={authError} />
+      )}
     </View>
   );
 };

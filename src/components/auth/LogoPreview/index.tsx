@@ -1,15 +1,17 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { styles } from './style';
-import Logo from '../../../assets/icons/svg/auth/Logo';
 import normalize from 'react-native-normalize';
 
-type LogoProps = {
+import Logo from '../../../assets/icons/svg/auth/Logo';
+
+import { styles } from './style';
+
+type LogoPreviewProps = {
   label: string;
   height: number;
 };
 
-export const LogoPreview = ({ label = '', height }: LogoProps) => {
+const LogoPreview = ({ label = '', height }: LogoPreviewProps) => {
   return (
     <View style={[styles.container, { height: normalize(height, 'height') }]}>
       <Logo />

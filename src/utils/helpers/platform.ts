@@ -1,8 +1,9 @@
-import { Platform, Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
+
 import { DefaultTheme } from '@react-navigation/native';
 
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
+export const deviceHeight = Dimensions.get('window').height;
+export const deviceWidth = Dimensions.get('window').width;
 const platform = Platform.OS;
 const platformStyle = undefined;
 const isIphoneX =

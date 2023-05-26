@@ -1,10 +1,11 @@
 import React from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
-import { Button } from '../../../components/Button/Button';
+
+import { Button } from '../../../components';
 
 import { storageMMKV } from '../../../mmkv/storage';
-import { logOut } from '../../../redux/slices/auth/reducer';
-import { useAppDispatch } from '../../../utils/hooks/useRedux';
+import { useAppDispatch } from '../../../store';
+import { logOut } from '../../../store/slices/auth/actions';
 
 import styles from './style';
 

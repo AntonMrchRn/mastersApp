@@ -1,110 +1,58 @@
-import { useIsFocused, useNavigation } from '@react-navigation/native';
-import React, { useEffect, useRef, useState } from 'react';
-import { TextInput, View } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { InputPassword } from '../../../components';
 
+import { InputPassword } from '../../../components';
 import { ButtonAuth } from '../../../components/auth/ButtonAuth/ButtonAuth';
 import CodeFieldInput from '../../../components/auth/CodeField/CodeField';
-import ConfrimPreview from '../../../components/auth/ConfirmPreview/ConfirmPreview';
+import ConfirmPreview from '../../../components/auth/ConfirmPreview/ConfirmPreview';
 import LogoPreview from '../../../components/auth/LogoPreview';
 import { TimerBlock } from '../../../components/auth/Timer/TimerPhone/TimerPhone';
 import Spacer from '../../../components/Spacer/Spacer';
-import {
-  recoveryPassword,
-  restorePassword,
-} from '../../../redux/slices/auth/asyncActions';
-import {
-  clearAuthError,
-  clearRecoveryError,
-} from '../../../redux/slices/auth/reducer';
+
 import { configApp } from '../../../utils/helpers/platform';
-import { useAppDispatch, useAppSelector } from '../../../utils/hooks/useRedux';
 
 import { styles } from './style';
+import useRecoveryConfirmationScreen from './useRecoveryConfirmationScreen';
 
-export const RecoveryConfirmationScreen = ({
-  route: {
-    params: { tel },
-  },
-}: any) => {
-  const { timeout, recoveryError } = useAppSelector((state: any) => state.auth);
-  const [value, setValue] = useState('');
-  const [password, setPassword] = useState('');
-
-  const dispatch = useAppDispatch();
-  const navigation: any = useNavigation();
-
-  const isFocused = useIsFocused();
-
-  const isPhoneAuth = true;
-
-  const email = '';
-
-  const recoveryRequest = async () => {
-    await dispatch(recoveryPassword({ tel, email, isPhoneAuth }));
-  };
-
-  const restoreRequest = () => {
-    dispatch(restorePassword({ password, value })).then((res: any) => {
-      if (res?.payload === null || res?.payload === undefined) {
-        dispatch(clearRecoveryError());
-        navigation.navigate('Password');
-      }
-    });
-  };
-
-  useEffect(() => {
-    dispatch(clearRecoveryError());
-    dispatch(clearAuthError(null));
-  }, [isFocused]);
-
-  useEffect(() => {
-    dispatch(clearRecoveryError());
-  }, []);
-
-  useEffect(() => {
-    dispatch(clearRecoveryError());
-  }, [password, value]);
-
-  const OFFSET = 0;
-
-  const focusInput = () => {
-    setTimeout(() => {
-      scrollViewRef?.current?.scrollToPosition(0, OFFSET, true);
-    }, 0);
-  };
-
-  const passwordRef = useRef<TextInput>(null);
-  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
+export const RecoveryConfirmationScreen = () => {
+  const {
+    value,
+    email,
+    timeout,
+    password,
+    setValue,
+    focusInput,
+    isPhoneAuth,
+    setPassword,
+    passwordRef,
+    scrollViewRef,
+    recoveryError,
+    restoreRequest,
+    recoveryRequest,
+    onKeyboardWillShow,
+  } = useRecoveryConfirmationScreen();
 
   return (
     <SafeAreaView edges={['bottom']} style={styles.container}>
       <KeyboardAwareScrollView
         ref={scrollViewRef}
-        keyboardShouldPersistTaps="handled"
-        onKeyboardWillShow={() => {
-          if (configApp.android) {
-            return;
-          }
-          setTimeout(() => {
-            scrollViewRef?.current?.scrollToPosition(0, OFFSET, true);
-          }, 200);
-        }}
-        keyboardOpeningTime={100}
         enableOnAndroid={true}
+        keyboardOpeningTime={100}
+        keyboardShouldPersistTaps="handled"
+        onKeyboardWillShow={onKeyboardWillShow}
       >
         <View style={styles.wrapperSignIn}>
           <LogoPreview label="Восстановление пароля" height={135} />
-          <ConfrimPreview />
+          <ConfirmPreview />
           <Spacer />
           <View style={styles.wrapperCode}>
             <CodeFieldInput
               value={value}
               setValue={setValue}
               onSubmitEditing={() => passwordRef?.current?.focus()}
-              onFocus={configApp.ios ? focusInput : () => {}}
+              onFocus={configApp.ios ? focusInput : () => null}
             />
           </View>
           <InputPassword
@@ -126,11 +74,13 @@ export const RecoveryConfirmationScreen = ({
             recoveryError={recoveryError}
             onPress={restoreRequest}
           />
-          <TimerBlock
-            expiredTimer={Number(timeout?.timeout * 1000)}
-            isConfirm
-            callBack={recoveryRequest}
-          />
+          {!!timeout && (
+            <TimerBlock
+              expiredTimer={Number(timeout?.timeout * 1000)}
+              isConfirm
+              callBack={recoveryRequest}
+            />
+          )}
         </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>

@@ -1,22 +1,23 @@
 import React from 'react';
+
 import { createStackNavigator } from '@react-navigation/stack';
+
 import MyTasksScreen from '../../../../screens/tabs/MyTasksScreen';
+import {
+  MyTasksNavigationParamList,
+  MyTasksNavigatorScreenName,
+} from '../../../../types/navigation';
 
-export type MyTasksNavigationParamList = {
-  MyTasks: undefined;
-};
-
+const options = { headerShown: false };
 const Stack = createStackNavigator<MyTasksNavigationParamList>();
 
 function MyTasksNavigation() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="MyTasks"
+        name={MyTasksNavigatorScreenName.MyTasks}
         component={MyTasksScreen}
-        options={{
-          headerShown: false,
-        }}
+        options={options}
       />
     </Stack.Navigator>
   );

@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react';
+import SplashScreen from 'react-native-splash-screen';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import TabNavigation from './App/TabNavigation';
-import AuthNavigation from './Auth';
 import { useCheckLogin } from '../utils/hooks/useCheckLogin';
-import SplashScreen from 'react-native-splash-screen';
 
-export type RootNavigationParamList = {
-  AppNavigation: undefined;
-  AuthNavigation: undefined;
-};
+import TabNavigation from './App/TabNavigation';
+import { RootNavigationParamList, RootScreenName } from '../types/navigation';
 
+import AuthNavigation from './Auth';
+
+const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<RootNavigationParamList>();
 
-const RootNavigate = () => {
+const RootNavigation = () => {
   const { checkLogin, isAuth } = useCheckLogin();
-  const [isLoad, setIsLoad] = useState(false);
+  const [isLoad, setIsLoad] = useState<boolean>(false);
 
   useEffect(() => {
     isLoad && SplashScreen.hide();
@@ -31,16 +30,22 @@ const RootNavigate = () => {
 
   return (
     <Stack.Navigator
-      screenOptions={{ headerShown: false }}
-      initialRouteName="AppNavigation"
+      screenOptions={screenOptions}
+      initialRouteName={RootScreenName.AppNavigator}
     >
       {isAuth ? (
-        <Stack.Screen name="AppNavigation" component={TabNavigation} />
+        <Stack.Screen
+          name={RootScreenName.AppNavigator}
+          component={TabNavigation}
+        />
       ) : (
-        <Stack.Screen name="AuthNavigation" component={AuthNavigation} />
+        <Stack.Screen
+          name={RootScreenName.AuthNavigator}
+          component={AuthNavigation}
+        />
       )}
     </Stack.Navigator>
   );
 };
 
-export default RootNavigate;
+export default RootNavigation;

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+
 import { styles } from './style';
 
-const ConfrimPreview = () => {
+const ConfirmPreview = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Мы отправили вам смс с 6-значным кодом.</Text>
@@ -11,4 +12,4 @@ const ConfrimPreview = () => {
   );
 };
 
-export default ConfrimPreview;
+export default ConfirmPreview;

@@ -1,26 +1,33 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { storageMMKV } from '../../../../mmkv/storage';
+import { useAppSelector } from '../../../../store';
 import {
   clearIsRecoveryEmail,
   timerOffEmail,
   timerOnEmail,
-} from '../../../../redux/slices/auth/reducer';
-import { storageMMKV } from '../../../../mmkv/storage';
-import { useAppSelector } from '../../../../utils/hooks/useRedux';
+} from '../../../../store/slices/auth/actions';
+import { selectAuth } from '../../../../store/slices/auth/selectors';
 import { TimerComponent } from '../TimerComponent';
 
-const setData = async (data: any) => {
+const setData = async (data: string) => {
   await AsyncStorage.setItem('BLOCKEMAIL', data);
 };
 
-export function TimerBlockEmail({ expiredTimer }: any) {
-  const { isRecoveryEmail } = useAppSelector(state => state.auth);
+type TimerBlockEmailProps = {
+  expiredTimer: number;
+};
+
+export function TimerBlockEmail({ expiredTimer }: TimerBlockEmailProps) {
+  const { isRecoveryEmail } = useAppSelector(selectAuth);
   const dispatch = useDispatch();
-  const [timeMilliSeconds, setTimeMilliSeconds] = useState(Date.now());
-  const [loading, setLoading] = useState(true);
+
+  const [timeMilliSeconds, setTimeMilliSeconds] = useState<number>(Date.now());
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isBlock, setIsBlock] = useState<{
     block: boolean;
     timerOffset: number | null;
@@ -61,22 +68,22 @@ export function TimerBlockEmail({ expiredTimer }: any) {
         }
         if (value !== null) {
           dispatch(timerOnEmail());
-          let data = JSON.parse(value);
-          let timeNow = Date.now();
+          const data = JSON.parse(value);
+          const timeNow = Date.now();
 
           if (timeNow - data.timerOffset > expiredTimer) {
             closeBlock();
-            setLoading(false);
+            setIsLoading(false);
           } else {
             setIsBlock(data);
-            setLoading(false);
+            setIsLoading(false);
           }
         } else {
-          setLoading(false);
+          setIsLoading(false);
           setIsBlock({ block: false, timerOffset: null });
         }
       } catch (e) {
-        setLoading(false);
+        setIsLoading(false);
         setIsBlock({ block: false, timerOffset: null });
         console.log('readStorage error', e);
       }
@@ -85,11 +92,11 @@ export function TimerBlockEmail({ expiredTimer }: any) {
     readStorage().then();
 
     return () => {
-      setLoading(true);
+      setIsLoading(true);
     };
   }, []);
 
-  if (loading) {
+  if (isLoading) {
     return <View />;
   }
 

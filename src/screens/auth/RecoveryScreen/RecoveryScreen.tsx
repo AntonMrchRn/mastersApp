@@ -1,9 +1,9 @@
-import { useIsFocused, useNavigation } from '@react-navigation/native';
-import React, { useEffect, useRef, useState } from 'react';
-import { Keyboard, TextInput, View } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import normalize from 'react-native-normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { Input, TypeSelection } from '../../../components';
 import { ButtonAuth } from '../../../components/auth/ButtonAuth/ButtonAuth';
 import ForgotPreview from '../../../components/auth/ForgotPreview/ForgotPreview';
@@ -11,89 +11,40 @@ import LogoPreview from '../../../components/auth/LogoPreview';
 import { TimerBlockEmail } from '../../../components/auth/Timer/TimerEmail/TimerEmail';
 import { TimerBlock } from '../../../components/auth/Timer/TimerPhone/TimerPhone';
 import Spacer from '../../../components/Spacer/Spacer';
-import { recoveryPassword } from '../../../redux/slices/auth/asyncActions';
-import {
-  clearAuthError,
-  clearRecoveryError,
-} from '../../../redux/slices/auth/reducer';
+
 import { configApp } from '../../../utils/helpers/platform';
-import { useAppDispatch, useAppSelector } from '../../../utils/hooks/useRedux';
 
 import { styles } from './style';
+import useRecoveryScreen from './useRecoveryScreen';
 
 export const RecoveryScreen = () => {
-  const { isRecovery, timeout, timeOutEmail, isRecoveryEmail } = useAppSelector(
-    (state: any) => state.auth
-  );
-  const [isPhoneAuth, setIsPhoneAuth] = useState<boolean>(true);
-  const [tel, setTel] = useState('');
-  const [email, seteMail] = useState('');
-  const [active, setActive] = useState(false);
-
-  const dispatch = useAppDispatch();
-  const navigation: any = useNavigation();
-
-  const isFocused = useIsFocused();
-
-  const recoveryRequest = async () => {
-    await dispatch(recoveryPassword({ tel, email, isPhoneAuth, navigation }));
-  };
-
-  useEffect(() => {
-    dispatch(clearRecoveryError());
-    dispatch(clearAuthError(null));
-  }, []);
-
-  useEffect(() => {
-    dispatch(clearRecoveryError());
-    dispatch(clearAuthError(null));
-  }, [isFocused]);
-
-  useEffect(() => {
-    if (isRecovery && isPhoneAuth && !isRecoveryEmail) {
-      navigation.navigate('RecoveryConfirm', { tel: tel });
-      dispatch(clearRecoveryError());
-    }
-    if (!isPhoneAuth) {
-      Keyboard.dismiss();
-      navigation.navigate('Email');
-    }
-  }, [isRecovery, isRecoveryEmail]);
-
-  const OFFSET = 0;
-
-  const password = '';
-
-  const focusInput = () => {
-    setTimeout(() => {
-      scrollViewRef?.current?.scrollToPosition(0, OFFSET, true);
-    }, 200);
-  };
-
-  useEffect(() => {
-    if (tel?.length === 10) {
-      Keyboard.dismiss();
-    }
-  }, [tel]);
-
-  const passwordRef = useRef<TextInput>(null);
-  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
+  const {
+    tel,
+    email,
+    setTel,
+    timeout,
+    setEmail,
+    password,
+    isActive,
+    focusInput,
+    setIsActive,
+    isPhoneAuth,
+    passwordRef,
+    timeOutEmail,
+    scrollViewRef,
+    setIsPhoneAuth,
+    recoveryRequest,
+    onKeyboardWillShow,
+  } = useRecoveryScreen();
 
   return (
     <SafeAreaView edges={['bottom']} style={styles.container}>
       <KeyboardAwareScrollView
         ref={scrollViewRef}
-        keyboardShouldPersistTaps="handled"
-        onKeyboardWillShow={() => {
-          if (configApp.android) {
-            return;
-          }
-          setTimeout(() => {
-            scrollViewRef?.current?.scrollToPosition(0, OFFSET, true);
-          }, 200);
-        }}
-        keyboardOpeningTime={100}
         enableOnAndroid={true}
+        keyboardOpeningTime={100}
+        keyboardShouldPersistTaps="handled"
+        onKeyboardWillShow={onKeyboardWillShow}
       >
         <View style={styles.wrapperSignIn}>
           <LogoPreview
@@ -105,20 +56,20 @@ export const RecoveryScreen = () => {
             setIsPhoneAuth={setIsPhoneAuth}
             isPhoneAuth={isPhoneAuth}
             setTel={setTel}
-            seteMail={seteMail}
-            setActive={setActive}
+            setEmail={setEmail}
+            setIsActive={setIsActive}
           />
           <Spacer />
           <Input
             isPhoneAuth={isPhoneAuth}
             tel={tel}
             email={email}
-            setMail={seteMail}
+            setEmail={setEmail}
             setTel={setTel}
             onSubmitEditing={() => passwordRef?.current?.focus()}
-            onFocus={configApp.ios ? focusInput : () => {}}
-            setActive={setActive}
-            active={active}
+            onFocus={configApp.ios ? focusInput : () => null}
+            setIsActive={setIsActive}
+            isActive={isActive}
           />
           <Spacer size="L" />
           <ButtonAuth
@@ -132,13 +83,15 @@ export const RecoveryScreen = () => {
             onPress={recoveryRequest}
           />
           <View style={styles.containerTimer}>
-            {isPhoneAuth ? (
-              <TimerBlock expiredTimer={Number(timeout?.timeout * 1000)} />
-            ) : (
-              <TimerBlockEmail
-                expiredTimer={Number(timeOutEmail?.timeout * 1000)}
-              />
-            )}
+            {isPhoneAuth
+              ? !!timeout && (
+                  <TimerBlock expiredTimer={Number(timeout?.timeout * 1000)} />
+                )
+              : !!timeOutEmail && (
+                  <TimerBlockEmail
+                    expiredTimer={Number(timeOutEmail?.timeout * 1000)}
+                  />
+                )}
           </View>
         </View>
       </KeyboardAwareScrollView>

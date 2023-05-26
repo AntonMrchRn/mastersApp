@@ -1,76 +1,108 @@
 import React, { useEffect, useState } from 'react';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { TextInputMask } from 'react-native-masked-text';
+import {
+  TextInputMask,
+  TextInputMaskOptionProp,
+} from 'react-native-masked-text';
 import { useDispatch } from 'react-redux';
-import { clearAuthError } from '../../../redux/slices/auth/reducer';
-import { useAppSelector } from '../../../utils/hooks/useRedux';
-import { ErrorField } from '../../ErrorField/ErrorFiled';
+
 import ClearTel from '../../../assets/icons/svg/auth/ClearTel';
 import Flag from '../../../assets/icons/svg/auth/Flag';
+import { useAppSelector } from '../../../store';
+import { clearAuthError } from '../../../store/slices/auth/actions';
+import { selectAuth } from '../../../store/slices/auth/selectors';
+import { ErrorCode } from '../../../types/error';
+import { ErrorField } from '../../ErrorField';
+
 import { styles } from './style';
 
+const INPUT_MASK_OPTIONS: TextInputMaskOptionProp = {
+  maskType: 'BRL',
+  withDDD: true,
+  dddMask: '999 999-99-99',
+};
+
 type InputProps = {
-  isPhoneAuth: boolean;
   tel: string;
-  setTel: any;
   email: string;
-  setMail: any;
-  onSubmitEditing: any;
-  onFocus: any;
-  active: any;
-  setActive: any;
+  isActive: boolean;
+  onFocus: () => void;
+  isPhoneAuth: boolean;
+  onSubmitEditing: () => void;
+  setTel: (tel: string) => void;
+  setEmail: (email: string) => void;
+  setIsActive: (isActive: boolean) => void;
 };
 
 export const Input = ({
-  isPhoneAuth,
   tel,
-  setTel,
   email,
-  setMail,
-  onSubmitEditing,
+  setTel,
   onFocus,
-  setActive,
-  active,
+  isActive,
+  setEmail,
+  setIsActive,
+  isPhoneAuth,
+  onSubmitEditing,
 }: InputProps) => {
-  const [focus, setFocus] = useState(false);
-  const [activeTel, setActiveTel] = useState(false);
-  const [activeEmail, setActiveEmail] = useState(false);
-  const { authError, authErrorCode } = useAppSelector(state => state.auth);
-
+  const { authError, authErrorCode } = useAppSelector(selectAuth);
   const dispatch = useDispatch();
+
+  const [isFocus, setIsFocus] = useState<boolean>(false);
+  const [isActiveTel, setIsActiveTel] = useState<boolean>(false);
+  const [isActiveEmail, setIsActiveEmail] = useState<boolean>(false);
 
   useEffect(() => {
     if (tel?.length === 10) {
       onSubmitEditing();
     }
     if (tel?.length > 0) {
-      setActiveTel(true);
+      setIsActiveTel(true);
     }
     if (tel?.length < 1) {
-      setActiveTel(false);
+      setIsActiveTel(false);
     }
     dispatch(clearAuthError(null));
   }, [tel]);
 
   useEffect(() => {
     if (email?.length > 0) {
-      setActiveEmail(true);
+      setIsActiveEmail(true);
     }
     if (email?.length < 1) {
-      setActiveEmail(false);
+      setIsActiveEmail(false);
     }
     dispatch(clearAuthError(null));
   }, [email]);
 
-  const clearValueTel = () => {
+  const clearTelValue = () => {
     setTel('');
-    if (!active) {
-      setFocus(false);
+    if (!isActive) {
+      setIsFocus(false);
     }
   };
 
-  const clearValueEmail = () => {
-    setMail('');
+  const clearEmailValue = () => {
+    setEmail('');
+  };
+
+  const onChangeTel = (text: string) => {
+    if (text.length === 1) {
+      text = text.replace(/[^\d\s\(\)-]/g, '');
+      text = text.replace(/(^[0-8])/, '(9$1');
+      setTel(text.replace(/[\D]+/g, ''));
+    } else {
+      text = text.replace(/[^\d\s\(\)-]/g, '');
+      text = text.replace(/(^[7 | 8])/, '');
+      text = text.replace(/(^[0-8])/, '(9$1');
+      setTel(text.replace(/[\D]+/g, ''));
+    }
+  };
+
+  const onBlurTel = () => tel?.length < 1 && setIsFocus(false);
+  const onFocusTel = () => {
+    onFocus;
+    setIsFocus(true);
   };
 
   return (
@@ -78,10 +110,10 @@ export const Input = ({
       <View
         style={[
           isPhoneAuth ? styles.container : styles.containerEmail,
-          active && styles.activeInput,
+          isActive && styles.activeInput,
           isPhoneAuth
-            ? authErrorCode === 20004 && styles.error
-            : authErrorCode === 20003 && styles.error,
+            ? authErrorCode === ErrorCode.IncorrectPhone && styles.error
+            : authErrorCode === ErrorCode.IncorrectEmail && styles.error,
         ]}
       >
         {isPhoneAuth ? (
@@ -92,54 +124,34 @@ export const Input = ({
             <Text
               style={[
                 styles.prefixPhone,
-                focus && styles.activePrefix,
-                authErrorCode === 20004 && styles.errorPrefix,
+                isFocus && styles.activePrefix,
+                authErrorCode === ErrorCode.IncorrectPhone &&
+                  styles.errorPrefix,
               ]}
             >
               +7
             </Text>
             <TextInputMask
               type={'cel-phone'}
-              options={{
-                maskType: 'BRL',
-                withDDD: true,
-                dddMask: '999 999-99-99',
-              }}
+              options={INPUT_MASK_OPTIONS}
               style={[
                 styles.inputBasic,
-                authErrorCode === 20004 && styles.errorText,
+                authErrorCode === ErrorCode.IncorrectPhone && styles.errorText,
               ]}
               placeholder={'900 000-00-00'}
               placeholderTextColor={'#5e5e5e'}
               keyboardType={'numeric'}
               maxLength={tel?.length < 2 ? 100 : 13}
               value={tel}
-              onChangeText={text => {
-                if (text.length === 1) {
-                  text = text.replace(/[^\d\s\(\)-]/g, '');
-                  text = text.replace(/(^[0-8])/, '(9$1');
-                  setTel(text.replace(/[\D]+/g, ''));
-                } else {
-                  text = text.replace(/[^\d\s\(\)-]/g, '');
-                  text = text.replace(/(^[7 | 8])/, '');
-                  text = text.replace(/(^[0-8])/, '(9$1');
-                  setTel(text.replace(/[\D]+/g, ''));
-                }
-              }}
-              onPressIn={() => setActive(true)}
-              onEndEditing={() => setActive(false)}
+              onChangeText={onChangeTel}
+              onPressIn={() => setIsActive(true)}
+              onEndEditing={() => setIsActive(false)}
               autoCapitalize="none"
-              onBlur={() => tel?.length < 1 && setFocus(false)}
-              onFocus={() => {
-                onFocus;
-                setFocus(true);
-              }}
+              onBlur={onBlurTel}
+              onFocus={onFocusTel}
             />
-            {activeTel && (
-              <TouchableOpacity
-                style={styles.btnClose}
-                onPress={() => clearValueTel()}
-              >
+            {isActiveTel && (
+              <TouchableOpacity style={styles.btnClose} onPress={clearTelValue}>
                 <ClearTel />
               </TouchableOpacity>
             )}
@@ -149,25 +161,22 @@ export const Input = ({
             <TextInput
               style={[
                 styles.inputBasicEmail,
-                authErrorCode === 20003 && styles.errorText,
+                authErrorCode === ErrorCode.IncorrectEmail && styles.errorText,
               ]}
               placeholder={'Электронная почта'}
               keyboardType="email-address"
               placeholderTextColor={'#5e5e5e'}
               maxLength={60}
               value={email}
-              onChangeText={text => setMail(text)}
-              onPressIn={() => setActive(true)}
-              onEndEditing={() => setActive(false)}
+              onChangeText={text => setEmail(text)}
+              onPressIn={() => setIsActive(true)}
+              onEndEditing={() => setIsActive(false)}
               autoCapitalize="none"
               onSubmitEditing={onSubmitEditing}
               onFocus={onFocus}
             />
-            {activeEmail && (
-              <TouchableOpacity
-                style={styles.btn}
-                onPress={() => clearValueEmail()}
-              >
+            {isActiveEmail && (
+              <TouchableOpacity style={styles.btn} onPress={clearEmailValue}>
                 <ClearTel />
               </TouchableOpacity>
             )}
@@ -175,8 +184,12 @@ export const Input = ({
         )}
       </View>
       {isPhoneAuth
-        ? authErrorCode === 20004 && <ErrorField error={authError} />
-        : authErrorCode === 20003 && <ErrorField error={authError} />}
+        ? authErrorCode === ErrorCode.IncorrectPhone && (
+            <ErrorField error={authError} />
+          )
+        : authErrorCode === ErrorCode.IncorrectEmail && (
+            <ErrorField error={authError} />
+          )}
     </View>
   );
 };

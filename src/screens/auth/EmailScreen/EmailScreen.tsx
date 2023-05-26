@@ -1,15 +1,17 @@
-import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ConfrimPreviewEmail from '../../../components/auth/ConfirmPreviewEmail/ConfirmPreviewEmail';
+
+import { useIsFocused } from '@react-navigation/native';
+
+import ConfirmPreviewEmail from '../../../components/auth/ConfirmPreviewEmail/ConfirmPreviewEmail';
 import LogoPreview from '../../../components/auth/LogoPreview';
 
+import { useAppDispatch } from '../../../store';
 import {
   clearAuthError,
   clearRecoveryError,
-} from '../../../redux/slices/auth/reducer';
-import { useAppDispatch } from '../../../utils/hooks/useRedux';
+} from '../../../store/slices/auth/actions';
 
 import { styles } from './style';
 
@@ -27,7 +29,7 @@ export const EmailScreen = () => {
     <SafeAreaView edges={['bottom']} style={styles.container}>
       <View style={styles.wrapperSignIn}>
         <LogoPreview label="Восстановление пароля" height={135} />
-        <ConfrimPreviewEmail />
+        <ConfirmPreviewEmail />
       </View>
     </SafeAreaView>
   );

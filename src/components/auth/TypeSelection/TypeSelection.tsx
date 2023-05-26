@@ -1,55 +1,60 @@
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
+
+import { useAppDispatch } from '../../../store';
 import {
   clearAuthError,
   clearRecoveryError,
-} from '../../../redux/slices/auth/reducer';
-import { useAppDispatch } from '../../../utils/hooks/useRedux';
+} from '../../../store/slices/auth/actions';
 
 import { styles } from './style';
 
 type TypeSelectionProps = {
   isPhoneAuth: boolean;
-  setIsPhoneAuth: any;
-  seteMail: any;
-  setTel: any;
-  setActive: any;
+  setTel: (tel: string) => void;
+  setEmail: (email: string) => void;
+  setIsActive: (isActive: boolean) => void;
+  setIsPhoneAuth: (isPhoneAuth: boolean) => void;
 };
 
 export const TypeSelection = ({
+  setTel,
+  setEmail,
+  setIsActive,
   isPhoneAuth,
   setIsPhoneAuth,
-  seteMail,
-  setTel,
-  setActive,
 }: TypeSelectionProps) => {
   const dispatch = useAppDispatch();
+
+  const selectPhone = () => {
+    dispatch(clearAuthError(null));
+    dispatch(clearRecoveryError());
+    setEmail('');
+    setIsPhoneAuth(true);
+    setIsActive(false);
+  };
+
+  const selectEmail = () => {
+    dispatch(clearAuthError(null));
+    dispatch(clearRecoveryError());
+    setTel('');
+    setIsPhoneAuth(false);
+    setIsActive(false);
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={[styles.btn, isPhoneAuth && styles.activeBtn]}
-        onPress={() => {
-          dispatch(clearAuthError(null));
-          dispatch(clearRecoveryError());
-          seteMail('');
-          setIsPhoneAuth(true);
-          setActive(false);
-        }}
+        onPress={selectPhone}
       >
         <Text style={[styles.textBtn, isPhoneAuth && styles.activeTextBtn]}>
           Телефон
         </Text>
       </TouchableOpacity>
-
       <TouchableOpacity
         style={[styles.btn, !isPhoneAuth && styles.activeBtn]}
-        onPress={() => {
-          dispatch(clearAuthError(null));
-          dispatch(clearRecoveryError());
-          setTel('');
-          setIsPhoneAuth(false);
-          setActive(false);
-        }}
+        onPress={selectEmail}
       >
         <Text style={[styles.textBtn, !isPhoneAuth && styles.activeTextBtn]}>
           Email

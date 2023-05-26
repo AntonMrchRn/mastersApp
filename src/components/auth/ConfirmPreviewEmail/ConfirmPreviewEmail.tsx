@@ -1,14 +1,26 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Text, View } from 'react-native';
-import { clearRecoveryError } from '../../../redux/slices/auth/reducer';
-import { useAppDispatch } from '../../../utils/hooks/useRedux';
-import { Button } from '../../Button/Button';
+
+import { useNavigation } from '@react-navigation/native';
+
+import { useAppDispatch } from '../../../store';
+import { clearRecoveryError } from '../../../store/slices/auth/actions';
+import {
+  AuthScreenName,
+  SignInScreenNavigationProp,
+} from '../../../types/navigation';
+import { Button } from '../../Button';
+
 import { styles } from './style';
 
-const ConfrimPreviewEmail = () => {
-  const navigation: any = useNavigation();
+const ConfirmPreviewEmail = () => {
+  const navigation = useNavigation<SignInScreenNavigationProp>();
   const dispatch = useAppDispatch();
+
+  const onPress = () => {
+    dispatch(clearRecoveryError());
+    navigation.navigate(AuthScreenName.SignIn);
+  };
 
   return (
     <View style={styles.container}>
@@ -19,15 +31,9 @@ const ConfrimPreviewEmail = () => {
         </Text>
         <Text style={styles.text}>в письме</Text>
       </View>
-      <Button
-        onPress={() => {
-          dispatch(clearRecoveryError());
-          navigation.navigate('SignUp');
-        }}
-        label="Хорошо, понятно"
-      />
+      <Button onPress={onPress} label="Хорошо, понятно" />
     </View>
   );
 };
 
-export default ConfrimPreviewEmail;
+export default ConfirmPreviewEmail;

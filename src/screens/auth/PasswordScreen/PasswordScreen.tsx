@@ -1,21 +1,33 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Button } from '../../../components/Button/Button';
+import { useNavigation } from '@react-navigation/native';
+
+import { Button } from '../../../components';
+
 import InfoCheckBox from '../../../assets/icons/svg/auth/InfoCheckBox';
+import { useAppDispatch } from '../../../store';
 import {
   clearAuthError,
   clearRecoveryError,
-} from '../../../redux/slices/auth/reducer';
-import { useAppDispatch } from '../../../utils/hooks/useRedux';
+} from '../../../store/slices/auth/actions';
+import {
+  AuthScreenName,
+  SignInScreenNavigationProp,
+} from '../../../types/navigation';
 
 import { styles } from './style';
 
 export const PasswordScreen = () => {
   const dispatch = useAppDispatch();
-  const navigation: any = useNavigation();
+  const navigation = useNavigation<SignInScreenNavigationProp>();
+
+  const goToSignIn = () => {
+    dispatch(clearAuthError(null));
+    dispatch(clearRecoveryError());
+    navigation.navigate(AuthScreenName.SignIn);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -26,14 +38,7 @@ export const PasswordScreen = () => {
           <Text style={styles.text}>Теперь вы можете войти в систему</Text>
         </View>
       </View>
-      <Button
-        label="Продолжить"
-        onPress={() => {
-          dispatch(clearAuthError(null));
-          dispatch(clearRecoveryError());
-          navigation.navigate('SignUp');
-        }}
-      />
+      <Button label="Продолжить" onPress={goToSignIn} />
     </SafeAreaView>
   );
 };

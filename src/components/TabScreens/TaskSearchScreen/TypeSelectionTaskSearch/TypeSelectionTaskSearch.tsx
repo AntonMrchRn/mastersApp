@@ -3,28 +3,41 @@ import { Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './style';
 
-export const TypeSelectionTaskSearch = ({ setAreСommon, areСommon }: any) => {
+enum Tabs {
+  Common = 'Общие',
+  IT_Services = 'IT услуги',
+}
+
+type TypeSelectionTaskSearchProps = {
+  areCommon: boolean;
+  setAreCommon: (areCommon: boolean) => void;
+};
+
+export const TypeSelectionTaskSearch = ({
+  areCommon,
+  setAreCommon,
+}: TypeSelectionTaskSearchProps) => {
+  const onSelect = (tabType: Tabs) => {
+    setAreCommon(tabType === Tabs.Common);
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        style={[styles.btn, areСommon && styles.activeBtn]}
-        onPress={() => {
-          setAreСommon(true);
-        }}
+        style={[styles.btn, areCommon && styles.activeBtn]}
+        onPress={() => onSelect(Tabs.Common)}
       >
-        <Text style={[styles.textBtn, areСommon && styles.activeTextBtn]}>
-          Общие
+        <Text style={[styles.textBtn, areCommon && styles.activeTextBtn]}>
+          {Tabs.Common}
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[styles.btn, !areСommon && styles.activeBtn]}
-        onPress={() => {
-          setAreСommon(false);
-        }}
+        style={[styles.btn, !areCommon && styles.activeBtn]}
+        onPress={() => onSelect(Tabs.IT_Services)}
         disabled={true}
       >
-        <Text style={[styles.textBtn, !areСommon && styles.activeTextBtn]}>
-          IT услуги
+        <Text style={[styles.textBtn, !areCommon && styles.activeTextBtn]}>
+          {Tabs.IT_Services}
         </Text>
       </TouchableOpacity>
     </View>

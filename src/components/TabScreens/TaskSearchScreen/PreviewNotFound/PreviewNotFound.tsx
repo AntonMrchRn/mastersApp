@@ -1,6 +1,8 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+
 import TaskSearchClear from '../../../../assets/icons/svg/screens/TaskSearchClear';
+
 import styles from './style';
 
 const PreviewNotFound = () => {

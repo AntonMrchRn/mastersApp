@@ -1,17 +1,19 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Button } from '../../../components/Button';
+import { useNavigation } from '@react-navigation/native';
+
+import { Button } from '../../../components';
+
 import ErrorCross from '../../../assets/icons/svg/auth/ErrorCross';
+import { useAppDispatch } from '../../../store';
 import {
   clearAuthError,
   clearRecoveryError,
-} from '../../../redux/slices/auth/reducer';
+} from '../../../store/slices/auth/actions';
 
 import { styles } from './style';
-import { useAppDispatch } from '../../../utils/hooks/useRedux';
 
 export const ErrorScreen = () => {
   const dispatch = useAppDispatch();

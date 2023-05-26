@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import normalize from 'react-native-normalize';
+
 import fonts from '../../../utils/helpers/getFonts';
 
 export const styles = StyleSheet.create({
@@ -31,7 +32,7 @@ export const styles = StyleSheet.create({
     width: 40,
     height: 50,
   },
-  wrapperСircle: {
+  wrapperCircle: {
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
