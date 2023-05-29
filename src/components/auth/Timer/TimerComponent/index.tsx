@@ -1,46 +1,51 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { Text, useWindowDimensions, View } from 'react-native';
-import { configApp } from '../../../../utils/helpers/platform';
-import { styles } from './style';
+import { Text, View } from 'react-native';
 
-export const pad = (time: any, length: any) => {
+import { configApp, deviceHeight } from '@/constants/platform';
+
+import styles from './style';
+
+const pad = (time: string, length: number) => {
   while (time?.length < length) {
     time = '0' + time;
   }
   return time;
 };
 
-export const timeFormat = (time: any) => {
-  time = new Date(time);
-  let h = pad(time.getUTCHours().toString(), 2);
-  let m = pad(time.getUTCMinutes().toString(), 2);
-  let s = pad(time.getUTCSeconds().toString(), 2);
+const timeFormat = (time: number) => {
+  const date = new Date(time);
+  const h = pad(date.getUTCHours().toString(), 2);
+  const m = pad(date.getUTCMinutes().toString(), 2);
+  const s = pad(date.getUTCSeconds().toString(), 2);
 
-  if (h >= 23 && m >= 59 && s > 0) {
+  if (+h >= 23 && +m >= 59 && +s > 0) {
     return '00:00';
   } else {
-    return `${h < 1 ? '' : h + ':'}${m}:${h === 1 ? null : s}`;
+    return `${+h < 1 ? '' : h + ':'}${m}:${+h === 1 ? null : s}`;
   }
 };
 
-export const Timer = (props: any) => {
-  return <Text style={styles.timeFormatStyle}>{timeFormat(props.time)}</Text>;
+type TimerComponentProps = {
+  expiredTimer: number;
+  closeBlock: () => void;
+  timeMilliSeconds: number;
+  timerOffset: number | null;
+  setTimeMilliSeconds: (timeMilliSeconds: number) => void;
 };
-export const TimerComponent = ({
+const TimerComponent = ({
   expiredTimer,
   timerOffset,
   closeBlock,
-  setTimeMilliSeconds,
   timeMilliSeconds,
-}: any) => {
-  const windowHeight = useWindowDimensions().height;
+  setTimeMilliSeconds,
+}: TimerComponentProps) => {
   useEffect(() => {
-    let timeout = setTimeout(() => {
+    const timeout = setTimeout(() => {
       setTimeMilliSeconds(Date.now());
     }, 1000);
 
-    if (timeMilliSeconds - timerOffset > expiredTimer) {
+    if (!!timerOffset && timeMilliSeconds - timerOffset > expiredTimer) {
       closeBlock();
     }
 
@@ -53,14 +58,18 @@ export const TimerComponent = ({
     <View
       style={[
         styles.wrapper,
-        windowHeight < 593 && configApp.android && styles.wrapperAndroid,
+        deviceHeight < 593 && configApp.android && styles.wrapperAndroid,
       ]}
     >
-      <Text style={styles.timer}>
-        {`Отправить код повторно (${timeFormat(
-          timerOffset + expiredTimer - timeMilliSeconds
-        )})`}
-      </Text>
+      {!!timerOffset && (
+        <Text style={styles.timer}>
+          {`Отправить код повторно (${timeFormat(
+            timerOffset + expiredTimer - timeMilliSeconds
+          )})`}
+        </Text>
+      )}
     </View>
   );
 };
+
+export default TimerComponent;

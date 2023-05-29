@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native';
 import normalize from 'react-native-normalize';
-import { configApp } from '../../../utils/helpers/platform';
-import fonts from '../../../utils/helpers/getFonts';
 
-export const styles = StyleSheet.create({
+import { fonts } from '@/constants/fonts';
+import { configApp } from '@/constants/platform';
+
+const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -115,3 +116,5 @@ export const styles = StyleSheet.create({
     marginBottom: 15,
   },
 });
+
+export default styles;

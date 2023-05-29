@@ -18,7 +18,11 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
-    "allowUnreachableCode": false
+    "allowUnreachableCode": false,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+    }
   },
   "exclude": [
     "node_modules",

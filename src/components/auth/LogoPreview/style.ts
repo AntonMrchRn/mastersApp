@@ -1,7 +1,8 @@
 import { StyleSheet } from 'react-native';
-import fonts from '../../../utils/helpers/getFonts';
 
-export const styles = StyleSheet.create({
+import { fonts } from '@/constants/fonts';
+
+const styles = StyleSheet.create({
   container: {
     width: '100%',
     alignItems: 'center',
@@ -16,3 +17,5 @@ export const styles = StyleSheet.create({
     color: 'black',
   },
 });
+
+export default styles;

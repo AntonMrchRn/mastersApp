@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native';
-import fonts from '../../../utils/helpers/getFonts';
-import { configApp } from '../../../utils/helpers/platform';
 
-export const styles = StyleSheet.create({
+import { fonts } from '@/constants/fonts';
+import { configApp } from '@/constants/platform';
+
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -33,3 +34,5 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default styles;

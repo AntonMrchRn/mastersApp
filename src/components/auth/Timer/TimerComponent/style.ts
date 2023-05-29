@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native';
-import { configApp } from '../../../../utils/helpers/platform';
-import fonts from '../../../../utils/helpers/getFonts';
 
-export const styles = StyleSheet.create({
+import { fonts } from '@/constants/fonts';
+import { configApp } from '@/constants/platform';
+
+const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -51,3 +52,5 @@ export const styles = StyleSheet.create({
     fontWeight: '400',
   },
 });
+
+export default styles;

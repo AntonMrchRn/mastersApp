@@ -1,9 +1,42 @@
 module.exports = {
-  parser: 'babel-eslint',
+  parser: '@typescript-eslint/parser',
   root: true,
-  extends: ['@react-native-community/eslint-config'],
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
+  ],
+  plugins: ['@typescript-eslint', 'prettier', 'simple-import-sort'],
   rules: {
     'react-hooks/exhaustive-deps': 'off',
+    '@typescript-eslint/no-explicit-any': 'error',
+    'no-useless-escape': 'off',
+    '@typescript-eslint/no-var-requires': 'off',
+    'simple-import-sort/imports': [
+      'error',
+      {
+        groups: [
+          // React
+          ['^react'],
+          // Hooks
+          ['^(?!@).*hooks.*$'],
+          // Another imports
+          ['^@?\\w'],
+          // Packages.
+          ['^@?'],
+          // Side effect imports.
+          ['^\\u0000'],
+          // Api
+          ['^(?!@).*api.*$'],
+          // Components
+          ['^\\.(?!@).*components.*$'],
+          // Folders imports.
+          ['.*partials.*', '^\\.(?!/?$)', '^\\./?$'],
+          // Anything that starts with a style.
+          ['^\\./style'],
+        ],
+      },
+    ],
     'prettier/prettier': [
       'error',
       {
@@ -18,5 +51,8 @@ module.exports = {
       jsx: true,
       js: true,
     },
+  },
+  env: {
+    node: true,
   },
 };
