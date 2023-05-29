@@ -4,18 +4,18 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 
-import { useAppDispatch, useAppSelector } from '../../../store';
+import { configApp } from '@/constants/platform';
+import { useAppDispatch, useAppSelector } from '@/store';
 import {
   clearAuthError,
   clearRecoveryError,
-} from '../../../store/slices/auth/actions';
-import { recoveryPassword } from '../../../store/slices/auth/asyncActions';
-import { selectAuth } from '../../../store/slices/auth/selectors';
+} from '@/store/slices/auth/actions';
+import { recoveryPassword } from '@/store/slices/auth/asyncActions';
+import { selectAuth } from '@/store/slices/auth/selectors';
 import {
   AuthScreenName,
   CompositeRecoveryConfirmAndEmailNavigationProp,
-} from '../../../types/navigation';
-import { configApp } from '../../../utils/helpers/platform';
+} from '@/types/navigation';
 
 const OFFSET = 0;
 const password = '';

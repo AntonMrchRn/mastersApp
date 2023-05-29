@@ -18,20 +18,22 @@ module.exports = {
         groups: [
           // React
           ['^react'],
-          // Packages.
+          // Hooks
+          ['^(?!@).*hooks.*$'],
+          // Another imports
           ['^@?\\w'],
+          // Packages.
+          ['^@?'],
           // Side effect imports.
           ['^\\u0000'],
           // Api
           ['^(?!@).*api.*$'],
           // Components
           ['^\\.(?!@).*components.*$'],
-          // Hooks
-          ['^(?!@).*hooks.*$'],
-          // Relative imports, put parent imports last
-          ['^\\./(?=.*/)(?!/?$)', '^\\.\\.(?!/?$)', '^\\.\\./?$'],
           // Folders imports.
           ['.*partials.*', '^\\.(?!/?$)', '^\\./?$'],
+          // Anything that starts with a style.
+          ['^\\./style'],
         ],
       },
     ],

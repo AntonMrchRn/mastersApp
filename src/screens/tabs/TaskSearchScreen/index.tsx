@@ -9,12 +9,11 @@ import {
 
 import { useNavigation } from '@react-navigation/native';
 
-import PreviewNotFound from '../../../components/TabScreens/TaskSearchScreen/PreviewNotFound/PreviewNotFound';
-import TaskCardItem from '../../../components/TabScreens/TaskSearchScreen/TaskCardItem/TaskCardItem';
-import { TypeSelectionTaskSearch } from '../../../components/TabScreens/TaskSearchScreen/TypeSelectionTaskSearch/TypeSelectionTaskSearch';
-
-import { TaskCardScreenNavigationProp } from '../../../types/navigation';
-import { Task } from '../../../types/task';
+import PreviewNotFound from '@/components/TabScreens/TaskSearchScreen/PreviewNotFound';
+import TaskCardItem from '@/components/TabScreens/TaskSearchScreen/TaskCardItem';
+import TypeSelectionTaskSearch from '@/components/TabScreens/TaskSearchScreen/TypeSelectionTaskSearch';
+import { TaskCardScreenNavigationProp } from '@/types/navigation';
+import { Task } from '@/types/task';
 
 import styles from './style';
 

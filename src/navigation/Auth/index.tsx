@@ -2,20 +2,14 @@ import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Header from '../../components/Header/Header';
-
-import {
-  RecoveryConfirmationScreen,
-  RecoveryScreen,
-  SignInScreen,
-} from '../../screens';
-import { EmailScreen } from '../../screens/auth/EmailScreen/EmailScreen';
-import { ErrorScreen } from '../../screens/auth/ErrorScreen/ErrorScreen';
-import { PasswordScreen } from '../../screens/auth/PasswordScreen/PasswordScreen';
-import {
-  AuthNavigationParamList,
-  AuthScreenName,
-} from '../../types/navigation';
+import Header from '@/components/Header';
+import EmailScreen from '@/screens/auth/EmailScreen';
+import ErrorScreen from '@/screens/auth/ErrorScreen';
+import PasswordScreen from '@/screens/auth/PasswordScreen';
+import RecoveryConfirmationScreen from '@/screens/auth/RecoveryConfirmScreen';
+import RecoveryScreen from '@/screens/auth/RecoveryScreen';
+import SignInScreen from '@/screens/auth/SignInScreen';
+import { AuthNavigationParamList, AuthScreenName } from '@/types/navigation';
 
 const screenOptions = {
   header: Header,

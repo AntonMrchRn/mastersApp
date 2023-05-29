@@ -2,11 +2,11 @@ import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import MyTasksScreen from '../../../../screens/tabs/MyTasksScreen';
+import MyTasksScreen from '@/screens/tabs/MyTasksScreen';
 import {
   MyTasksNavigationParamList,
   MyTasksNavigatorScreenName,
-} from '../../../../types/navigation';
+} from '@/types/navigation';
 
 const options = { headerShown: false };
 const Stack = createStackNavigator<MyTasksNavigationParamList>();

@@ -4,9 +4,9 @@ import { Provider } from 'react-redux';
 
 import { NavigationContainer } from '@react-navigation/native';
 
-import RootNavigation from '../navigation/rootNavigation';
-import { store } from '../store';
-import { MyTheme } from '../utils/helpers/platform';
+import { MyTheme } from '@/constants/platform';
+import RootNavigation from '@/navigation/rootNavigation';
+import { store } from '@/store';
 
 const App = () => {
   return (

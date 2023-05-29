@@ -8,22 +8,22 @@ import {
   useRoute,
 } from '@react-navigation/native';
 
-import { useAppDispatch, useAppSelector } from '../../../store';
+import { configApp } from '@/constants/platform';
+import { useAppDispatch, useAppSelector } from '@/store';
 import {
   clearAuthError,
   clearRecoveryError,
-} from '../../../store/slices/auth/actions';
+} from '@/store/slices/auth/actions';
 import {
   recoveryPassword,
   restorePassword,
-} from '../../../store/slices/auth/asyncActions';
-import { selectAuth } from '../../../store/slices/auth/selectors';
+} from '@/store/slices/auth/asyncActions';
+import { selectAuth } from '@/store/slices/auth/selectors';
 import {
   AuthScreenName,
   PasswordScreenNavigationProp,
   RecoveryConfirmScreenRoute,
-} from '../../../types/navigation';
-import { configApp } from '../../../utils/helpers/platform';
+} from '@/types/navigation';
 
 const OFFSET = 0;
 const email = '';

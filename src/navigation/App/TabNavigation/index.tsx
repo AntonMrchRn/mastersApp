@@ -2,15 +2,16 @@ import React from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import Employees from '../../../assets/icons/svg/tabBar/Employees';
-import Profile from '../../../assets/icons/svg/tabBar/Profile';
-import TaskSearch from '../../../assets/icons/svg/tabBar/TaskSearch';
-import { BottomTab, TabNavigationParamList } from '../../../types/navigation';
+import Employees from '@/assets/icons/svg/tabBar/Employees';
+import Profile from '@/assets/icons/svg/tabBar/Profile';
+import TaskSearch from '@/assets/icons/svg/tabBar/TaskSearch';
+import { BottomTab, TabNavigationParamList } from '@/types/navigation';
 
 import MyTasksNavigation from './MyTasksNavigation';
 import ProfileNavigation from './ProfileNavigation';
-import styles from './style';
 import TaskSearchNavigation from './TaskSearchNavigation';
+
+import styles from './style';
 
 const screenOptions = {
   headerShown: false,

@@ -5,21 +5,18 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 
-import { useAppDispatch, useAppSelector } from '../../../store';
+import { configApp } from '@/constants/platform';
+import { useAppDispatch, useAppSelector } from '@/store';
 import {
   clearAuthError,
   clearRecoveryError,
   timeOutAsync,
   timeOutAsyncEmail,
-} from '../../../store/slices/auth/actions';
-import { fetchUserAuth } from '../../../store/slices/auth/asyncActions';
-import { selectAuth } from '../../../store/slices/auth/selectors';
-import { ErrorCode } from '../../../types/error';
-import {
-  AuthScreenName,
-  ErrorScreenNavigationProp,
-} from '../../../types/navigation';
-import { configApp } from '../../../utils/helpers/platform';
+} from '@/store/slices/auth/actions';
+import { fetchUserAuth } from '@/store/slices/auth/asyncActions';
+import { selectAuth } from '@/store/slices/auth/selectors';
+import { ErrorCode } from '@/types/error';
+import { AuthScreenName, ErrorScreenNavigationProp } from '@/types/navigation';
 
 const OFFSET = 0;
 

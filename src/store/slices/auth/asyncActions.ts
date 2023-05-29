@@ -2,13 +2,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import { AuthAPI } from '../../../services/api/auth';
-
-import { storageMMKV } from '../../../mmkv/storage';
+import { storageMMKV } from '@/mmkv/storage';
+import { AuthAPI } from '@/services/api/auth';
 
 import { RestorePasswordParams, UserAuthParams } from './types';
 
-export const fetchUserAuth = createAsyncThunk(
+const fetchUserAuth = createAsyncThunk(
   '/auth',
   async (
     { phoneNumber, email, password, isPhoneAuth }: UserAuthParams,
@@ -30,7 +29,7 @@ export const fetchUserAuth = createAsyncThunk(
   }
 );
 
-export const recoveryPassword = createAsyncThunk(
+const recoveryPassword = createAsyncThunk(
   '/recoveryPassword',
   async (
     { phoneNumber, email, password, isPhoneAuth }: UserAuthParams,
@@ -59,7 +58,7 @@ export const recoveryPassword = createAsyncThunk(
   }
 );
 
-export const restorePassword = createAsyncThunk(
+const restorePassword = createAsyncThunk(
   'restorePassword',
   async ({ password, value }: RestorePasswordParams, thunkApi) => {
     try {
@@ -73,3 +72,5 @@ export const restorePassword = createAsyncThunk(
     }
   }
 );
+
+export { fetchUserAuth, recoveryPassword, restorePassword };

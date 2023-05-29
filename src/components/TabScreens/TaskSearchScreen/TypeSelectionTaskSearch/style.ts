@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
 import normalize from 'react-native-normalize';
 
-import fonts from '../../../../utils/helpers/getFonts';
-import { configApp } from '../../../../utils/helpers/platform';
+import { fonts } from '@/constants/fonts';
+import { configApp } from '@/constants/platform';
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     height: configApp.ios ? normalize(28, 'height') : normalize(35, 'height'),
     width: '100%',
@@ -44,3 +44,5 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.main_700,
   },
 });
+
+export default styles;

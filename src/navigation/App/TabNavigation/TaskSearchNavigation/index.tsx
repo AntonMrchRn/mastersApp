@@ -2,14 +2,13 @@ import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Header from '../../../../components/Header/Header';
-
-import TaskCardScreen from '../../../../screens/tabs/TaskCardScreen';
-import TaskSearchScreen from '../../../../screens/tabs/TaskSearchScreen';
+import Header from '@/components/Header';
+import TaskCardScreen from '@/screens/tabs/TaskCardScreen';
+import TaskSearchScreen from '@/screens/tabs/TaskSearchScreen';
 import {
   TaskSearchNavigationParamList,
   TaskSearchNavigatorScreenName,
-} from '../../../../types/navigation';
+} from '@/types/navigation';
 
 const options = { headerShown: false };
 const screenOptions = { header: Header };

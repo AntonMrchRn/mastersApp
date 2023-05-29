@@ -2,11 +2,11 @@ import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { ProfileScreen } from '../../../../screens';
+import ProfileScreen from '@/screens/tabs/ProfileScreen';
 import {
   ProfileNavigationParamList,
   ProfileNavigatorScreenName,
-} from '../../../../types/navigation';
+} from '@/types/navigation';
 
 const options = { headerShown: false };
 const Stack = createStackNavigator<ProfileNavigationParamList>();

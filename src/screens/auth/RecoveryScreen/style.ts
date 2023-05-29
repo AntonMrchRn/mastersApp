@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
 import normalize from 'react-native-normalize';
 
-import fonts from '../../../utils/helpers/getFonts';
-import { configApp } from '../../../utils/helpers/platform';
+import { fonts } from '@/constants/fonts';
+import { configApp } from '@/constants/platform';
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -34,3 +34,5 @@ export const styles = StyleSheet.create({
     fontSize: configApp.ios ? 14 : 12,
   },
 });
+
+export default styles;

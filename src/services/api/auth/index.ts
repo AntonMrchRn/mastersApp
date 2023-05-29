@@ -1,10 +1,10 @@
+import { apiHost } from '@/services/axios';
 import {
   RecoveryPasswordResponse,
   RestorePasswordParams,
   UserAuthParams,
   UserAuthResponse,
-} from '../../../store/slices/auth/types';
-import { apiHost } from '../../axios';
+} from '@/store/slices/auth/types';
 
 export class AuthAPI {
   static async fetchUserAuth({

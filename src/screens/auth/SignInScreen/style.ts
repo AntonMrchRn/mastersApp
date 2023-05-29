@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import normalize from 'react-native-normalize';
 
-import { configApp } from '../../../utils/helpers/platform';
+import { configApp } from '@/constants/platform';
 
 export const styles = StyleSheet.create({
   container: {
@@ -30,3 +30,5 @@ export const styles = StyleSheet.create({
     height: configApp.ios ? '45%' : normalize(240, 'height'),
   },
 });
+
+export default styles;

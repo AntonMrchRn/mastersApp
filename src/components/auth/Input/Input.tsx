@@ -6,15 +6,15 @@ import {
 } from 'react-native-masked-text';
 import { useDispatch } from 'react-redux';
 
-import ClearTel from '../../../assets/icons/svg/auth/ClearTel';
-import Flag from '../../../assets/icons/svg/auth/Flag';
-import { useAppSelector } from '../../../store';
-import { clearAuthError } from '../../../store/slices/auth/actions';
-import { selectAuth } from '../../../store/slices/auth/selectors';
-import { ErrorCode } from '../../../types/error';
-import { ErrorField } from '../../ErrorField';
+import ClearTel from '@/assets/icons/svg/auth/ClearTel';
+import Flag from '@/assets/icons/svg/auth/Flag';
+import ErrorField from '@/components/ErrorField';
+import { useAppSelector } from '@/store';
+import { clearAuthError } from '@/store/slices/auth/actions';
+import { selectAuth } from '@/store/slices/auth/selectors';
+import { ErrorCode } from '@/types/error';
 
-import { styles } from './style';
+import styles from './style';
 
 const INPUT_MASK_OPTIONS: TextInputMaskOptionProp = {
   maskType: 'BRL',
@@ -34,7 +34,7 @@ type InputProps = {
   setIsActive: (isActive: boolean) => void;
 };
 
-export const Input = ({
+const Input = ({
   tel,
   email,
   setTel,
@@ -193,3 +193,5 @@ export const Input = ({
     </View>
   );
 };
+
+export default Input;

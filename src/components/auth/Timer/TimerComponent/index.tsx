@@ -2,9 +2,9 @@ import React from 'react';
 import { useEffect } from 'react';
 import { Text, View } from 'react-native';
 
-import { configApp, deviceHeight } from '../../../../utils/helpers/platform';
+import { configApp, deviceHeight } from '@/constants/platform';
 
-import { styles } from './style';
+import styles from './style';
 
 const pad = (time: string, length: number) => {
   while (time?.length < length) {
@@ -26,10 +26,6 @@ const timeFormat = (time: number) => {
   }
 };
 
-export const Timer = (time: number) => {
-  return <Text style={styles.timeFormatStyle}>{timeFormat(time)}</Text>;
-};
-
 type TimerComponentProps = {
   expiredTimer: number;
   closeBlock: () => void;
@@ -37,7 +33,7 @@ type TimerComponentProps = {
   timerOffset: number | null;
   setTimeMilliSeconds: (timeMilliSeconds: number) => void;
 };
-export const TimerComponent = ({
+const TimerComponent = ({
   expiredTimer,
   timerOffset,
   closeBlock,
@@ -75,3 +71,5 @@ export const TimerComponent = ({
     </View>
   );
 };
+
+export default TimerComponent;

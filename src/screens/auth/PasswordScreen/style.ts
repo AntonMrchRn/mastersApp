@@ -1,9 +1,9 @@
 import { StyleSheet } from 'react-native';
 import normalize from 'react-native-normalize';
 
-import fonts from '../../../utils/helpers/getFonts';
+import { fonts } from '@/constants/fonts';
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -39,3 +39,5 @@ export const styles = StyleSheet.create({
     marginTop: normalize(25),
   },
 });
+
+export default styles;

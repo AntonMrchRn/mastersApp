@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { storageMMKV } from '../../mmkv/storage';
+import { storageMMKV } from '@/mmkv/storage';
 
 import { host } from './config';
 

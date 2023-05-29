@@ -1,9 +1,9 @@
 import { StyleSheet } from 'react-native';
 
-import fonts from '../../../utils/helpers/getFonts';
-import { configApp } from '../../../utils/helpers/platform';
+import { fonts } from '@/constants/fonts';
+import { configApp } from '@/constants/platform';
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     height: 38,
     width: '100%',
@@ -43,3 +43,5 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.main_700,
   },
 });
+
+export default styles;

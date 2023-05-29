@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Error } from '../../../types/error';
+import { Error } from '@/types/error';
 
 import {
   fetchUserAuth,
@@ -25,7 +25,7 @@ const initialState: InitialState = {
   loading: false,
 };
 
-export const userAuth = createSlice({
+const userAuth = createSlice({
   name: 'userAuth',
   initialState,
   reducers: {

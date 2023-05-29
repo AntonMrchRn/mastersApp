@@ -2,10 +2,11 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 import { configureStore } from '@reduxjs/toolkit';
 
-import rootReducer from './rootReducer';
+import rootReducer from '@/store/rootReducer';
+
 const createDebugger = require('redux-flipper').default;
 
-export const store = configureStore({
+const store = configureStore({
   reducer: rootReducer,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat(createDebugger()),
@@ -18,4 +19,4 @@ const useAppDispatch = () => useDispatch<AppDispatch>();
 const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export type { RootState };
-export { useAppDispatch, useAppSelector };
+export { store, useAppDispatch, useAppSelector };

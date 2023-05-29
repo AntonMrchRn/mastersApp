@@ -3,12 +3,10 @@ import SplashScreen from 'react-native-splash-screen';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { useCheckLogin } from '../utils/hooks/useCheckLogin';
-
-import TabNavigation from './App/TabNavigation';
-import { RootNavigationParamList, RootScreenName } from '../types/navigation';
-
-import AuthNavigation from './Auth';
+import { useCheckLogin } from '@/hooks/useCheckLogin';
+import TabNavigation from '@/navigation/App/TabNavigation';
+import AuthNavigation from '@/navigation/Auth';
+import { RootNavigationParamList, RootScreenName } from '@/types/navigation';
 
 const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<RootNavigationParamList>();

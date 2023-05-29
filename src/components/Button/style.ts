@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
 import normalize from 'react-native-normalize';
 
-import fonts from '../../utils/helpers/getFonts';
-import { configApp } from '../../utils/helpers/platform';
+import { fonts } from '@/constants/fonts';
+import { configApp } from '@/constants/platform';
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   btn: {
     backgroundColor: configApp.brandColor,
     height: 48,
@@ -26,3 +26,5 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default styles;

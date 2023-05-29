@@ -2,15 +2,15 @@ import React, { RefObject, useEffect, useState } from 'react';
 import { TextInput, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 
-import Eye from '../../../assets/icons/svg/auth/Eye';
-import HideEye from '../../../assets/icons/svg/auth/HideEye';
-import { useAppSelector } from '../../../store';
-import { clearAuthError } from '../../../store/slices/auth/actions';
-import { selectAuth } from '../../../store/slices/auth/selectors';
-import { ErrorCode } from '../../../types/error';
-import { ErrorField } from '../../ErrorField';
+import Eye from '@/assets/icons/svg/auth/Eye';
+import HideEye from '@/assets/icons/svg/auth/HideEye';
+import ErrorField from '@/components/ErrorField';
+import { useAppSelector } from '@/store';
+import { clearAuthError } from '@/store/slices/auth/actions';
+import { selectAuth } from '@/store/slices/auth/selectors';
+import { ErrorCode } from '@/types/error';
 
-import { styles } from './style';
+import styles from './style';
 
 type InputPasswordProps = {
   password: string;
@@ -19,7 +19,7 @@ type InputPasswordProps = {
   label?: string;
 };
 
-export const InputPassword = ({
+const InputPassword = ({
   innerRef,
   password,
   setPassword,
@@ -80,3 +80,5 @@ export const InputPassword = ({
     </View>
   );
 };
+
+export default InputPassword;
