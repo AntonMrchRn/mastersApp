@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 
@@ -6,11 +7,21 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import { DownloadManager } from '@/components/DownloadManager';
 import { MyTheme } from '@/constants/platform';
-import RootNavigation from '@/navigation/rootNavigation';
 import { store } from '@/store';
-import { View } from 'react-native';
 
 const App = () => {
+  const files = [
+    {
+      url: 'https://246601.selcdn.ru/tasks-test/tasks/180/19945c8cc72150f1f1b08befd230cda5.png',
+      name: 'Screenshot_7',
+      fileID: 282,
+      userID: 45,
+      isCheck: false,
+      isOffer: false,
+      extension: 'png',
+      isApplication: true,
+    },
+  ];
   return (
     <Provider store={store}>
       <SafeAreaProvider>
@@ -18,7 +29,7 @@ const App = () => {
           <View
             style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
           >
-            <DownloadManager title={'123'} metric={'Mb'} size={30} />
+            <DownloadManager files={files} />
           </View>
         </NavigationContainer>
       </SafeAreaProvider>
