@@ -1,5 +1,7 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
+
+import { SegmentedControl } from 'rn-ui-kit';
 
 import { useAppDispatch } from '@/store';
 import {
@@ -10,7 +12,6 @@ import {
 import styles from './style';
 
 type TypeSelectionProps = {
-  isPhoneAuth: boolean;
   setTel: (tel: string) => void;
   setEmail: (email: string) => void;
   setIsActive: (isActive: boolean) => void;
@@ -21,7 +22,6 @@ const TypeSelection = ({
   setTel,
   setEmail,
   setIsActive,
-  isPhoneAuth,
   setIsPhoneAuth,
 }: TypeSelectionProps) => {
   const dispatch = useAppDispatch();
@@ -44,22 +44,17 @@ const TypeSelection = ({
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={[styles.btn, isPhoneAuth && styles.activeBtn]}
-        onPress={selectPhone}
-      >
-        <Text style={[styles.textBtn, isPhoneAuth && styles.activeTextBtn]}>
-          Телефон
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.btn, !isPhoneAuth && styles.activeBtn]}
-        onPress={selectEmail}
-      >
-        <Text style={[styles.textBtn, !isPhoneAuth && styles.activeTextBtn]}>
-          Email
-        </Text>
-      </TouchableOpacity>
+      <SegmentedControl
+        tabs={['Телефон', 'Email']}
+        onChange={index => {
+          if (index === 0) {
+            selectPhone();
+          }
+          if (index === 1) {
+            selectEmail();
+          }
+        }}
+      />
     </View>
   );
 };
