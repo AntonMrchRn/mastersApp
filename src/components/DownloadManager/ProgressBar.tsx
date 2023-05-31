@@ -18,7 +18,14 @@ export const ProgressBar: FC<ProgressBarProps> = ({
   return (
     <View>
       <View style={styles.progressLine}>
-        <View style={{ width: `${progress}%`, backgroundColor: 'red' }}></View>
+        <View
+          style={[
+            styles.progressFill,
+            {
+              width: `${progress}%`,
+            },
+          ]}
+        ></View>
       </View>
       <View style={styles.progressTextContainer}>
         <Text style={styles.regularText}>
