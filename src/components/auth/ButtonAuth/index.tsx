@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+
+import { Button } from 'rn-ui-kit';
 
 import { useAppSelector } from '@/store';
 import { selectAuth } from '@/store/slices/auth/selectors';
@@ -61,24 +62,25 @@ const ButtonAuth = ({
   }, [email]);
 
   return isRestore ? (
-    <TouchableOpacity
+    <Button
+      onPress={onPress}
       style={[
         styles.btn,
         !isPasswordWidthPass && styles.disabled,
         (recoveryError as Error)?.message?.length > 0 && styles.disabled,
         !!authError && authError?.length > 0 && styles.disabled,
       ]}
-      onPress={onPress}
       disabled={
         !isPasswordWidthPass ||
         (recoveryError as Error)?.message?.length > 0 ||
         (!!authError && authError?.length > 0)
       }
-    >
-      <Text style={styles.labelBtn}>{label}</Text>
-    </TouchableOpacity>
+      label={label}
+      labelStyle={styles.labelBtn}
+    />
   ) : (
-    <TouchableOpacity
+    <Button
+      label={label}
       style={[
         styles.btn,
         withOutPassword
@@ -115,9 +117,8 @@ const ButtonAuth = ({
             (!isPhoneAuth && !validateEmailBtn) ||
             (!!authError && authError?.length > 0)
       }
-    >
-      <Text style={styles.labelBtn}>{label}</Text>
-    </TouchableOpacity>
+      labelStyle={styles.labelBtn}
+    />
   );
 };
 
