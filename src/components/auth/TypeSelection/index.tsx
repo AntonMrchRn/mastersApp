@@ -54,6 +54,7 @@ const TypeSelection = ({
             selectEmail();
           }
         }}
+        textStyle={styles.txt}
       />
     </View>
   );

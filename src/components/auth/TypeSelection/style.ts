@@ -13,6 +13,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#EBF0F9',
     borderRadius: 7,
   },
+  txt: {
+    color: '#1B1B1B',
+    fontFamily: fonts.main_400,
+  },
 });
 
 export default styles;
