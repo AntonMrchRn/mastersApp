@@ -1,7 +1,12 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import React, { FC } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { Text, useTheme } from 'rn-ui-kit';
+
+import { CloseFileIcon } from '@/assets/icons/svg/files/CloseFileIcon';
+import { DeleteFileIcon } from '@/assets/icons/svg/files/DeleteFileIcon';
+import { DownloadFileIcon } from '@/assets/icons/svg/files/DownloadFileIcon';
 
 import { FileProps } from './index';
 import { ProgressBar } from './ProgressBar';
@@ -13,6 +18,8 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
   const size = 100;
   const metric = 'Mb';
   const loading = true;
+  const onDevice = false;
+  const canDownload = false;
 
   const theme = useTheme();
 
@@ -42,13 +49,38 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
     },
     size: { marginTop: 4 },
     regularText: {
-      fontFamily: 'Nunito Sans Regular',
-      fontWeight: '400',
-      fontSize: 13,
-      lineHeight: 16,
       color: theme.text.neutral,
     },
   });
+
+  const handleDownload = () => {};
+  const handleDelete = () => {};
+  const handleStop = () => {};
+
+  const getIcon = () => {
+    if (loading) {
+      return (
+        <TouchableOpacity onPress={handleStop}>
+          <CloseFileIcon />
+        </TouchableOpacity>
+      );
+    }
+    if (onDevice) {
+      return (
+        <TouchableOpacity onPress={handleDelete}>
+          <DeleteFileIcon />
+        </TouchableOpacity>
+      );
+    }
+    if (canDownload) {
+      return (
+        <TouchableOpacity onPress={handleDownload}>
+          <DownloadFileIcon />
+        </TouchableOpacity>
+      );
+    }
+    return null;
+  };
 
   return (
     <View>
@@ -60,12 +92,13 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
               {file.name}
             </Text>
             <View style={styles.size}>
-              <Text variant={'captionRegular'}>
+              <Text variant={'captionRegular'} style={styles.regularText}>
                 {size} {metric}
               </Text>
             </View>
           </View>
         </View>
+        {getIcon()}
       </View>
       {loading && (
         <ProgressBar
