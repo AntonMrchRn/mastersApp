@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-import { Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
-import { styles } from './styles';
+import { useTheme } from 'rn-ui-kit';
 
 type ProgressBarProps = {
   progress: number;
@@ -15,17 +15,38 @@ export const ProgressBar: FC<ProgressBarProps> = ({
   size,
   metric,
 }) => {
+  const theme = useTheme();
+
+  const styles = StyleSheet.create({
+    regularText: {
+      fontFamily: 'Nunito Sans Regular',
+      fontWeight: '400',
+      fontSize: 13,
+      lineHeight: 16,
+      color: theme.text.neutral,
+    },
+    progressTextContainer: {
+      marginTop: 4,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    progressLine: {
+      backgroundColor: theme.background.secondaryBadge,
+      borderRadius: 8,
+      width: '100%',
+      height: 4,
+    },
+    progressFill: {
+      backgroundColor: theme.text.secondary,
+      borderRadius: 8,
+      height: 4,
+      width: `${progress}%`,
+    },
+  });
   return (
     <View>
       <View style={styles.progressLine}>
-        <View
-          style={[
-            styles.progressFill,
-            {
-              width: `${progress}%`,
-            },
-          ]}
-        ></View>
+        <View style={styles.progressFill}></View>
       </View>
       <View style={styles.progressTextContainer}>
         <Text style={styles.regularText}>

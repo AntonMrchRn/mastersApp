@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import { Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+
+import { Text, useTheme } from 'rn-ui-kit';
 
 import { FileProps } from './index';
 import { ProgressBar } from './ProgressBar';
-
-import { styles } from './styles';
 
 type DownloadItemProps = {
   file: FileProps;
@@ -14,15 +14,53 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
   const metric = 'Mb';
   const loading = true;
 
+  const theme = useTheme();
+
+  const styles = StyleSheet.create({
+    head: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 8,
+    },
+    iconContainer: {
+      width: 52,
+      height: 52,
+      backgroundColor: theme.background.fieldMain,
+      borderRadius: 8,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    iconTitleSize: {
+      flexDirection: 'row',
+    },
+    titleSize: {
+      marginLeft: 8,
+    },
+    title: {
+      color: theme.text.basic,
+    },
+    size: { marginTop: 4 },
+    regularText: {
+      fontFamily: 'Nunito Sans Regular',
+      fontWeight: '400',
+      fontSize: 13,
+      lineHeight: 16,
+      color: theme.text.neutral,
+    },
+  });
+
   return (
-    <View style={styles.wrapper}>
+    <View>
       <View style={styles.head}>
         <View style={styles.iconTitleSize}>
           <View style={styles.iconContainer}></View>
           <View style={styles.titleSize}>
-            <Text style={styles.title}>{file.name}</Text>
+            <Text variant={'bodySBold'} style={styles.title}>
+              {file.name}
+            </Text>
             <View style={styles.size}>
-              <Text style={styles.regularText}>
+              <Text variant={'captionRegular'}>
                 {size} {metric}
               </Text>
             </View>

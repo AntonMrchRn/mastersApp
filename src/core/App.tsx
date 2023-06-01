@@ -1,15 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Provider } from 'react-redux';
-
-import { NavigationContainer } from '@react-navigation/native';
-import { ThemeProvider, ToastProvider } from 'rn-ui-kit';
+import SplashScreen from 'react-native-splash-screen';
 
 import { DownloadManager } from '@/components/DownloadManager';
-import { MyTheme } from '@/constants/platform';
-import RootNavigation from '@/navigation/rootNavigation';
-import { store } from '@/store';
 
 const App = () => {
   const files = [
@@ -24,18 +17,17 @@ const App = () => {
       isApplication: true,
     },
   ];
+  SplashScreen.hide();
   return (
-    <Provider store={store}>
-      <SafeAreaProvider>
-        <ThemeProvider>
-          <ToastProvider>
-            <NavigationContainer theme={MyTheme}>
-              <DownloadManager files={files} />
-            </NavigationContainer>
-          </ToastProvider>
-        </ThemeProvider>
-      </SafeAreaProvider>
-    </Provider>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <DownloadManager files={files} />
+    </View>
   );
 };
 

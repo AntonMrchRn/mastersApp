@@ -1,9 +1,7 @@
 import React, { FC } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { DownloadItem } from './DownloadItem';
-
-import { styles } from './styles';
 
 export type FileProps = {
   url: string;
@@ -20,6 +18,12 @@ type DownloadManagerProps = {
   files: FileProps[];
 };
 export const DownloadManager: FC<DownloadManagerProps> = ({ files }) => {
+  const styles = StyleSheet.create({
+    container: {
+      width: '100%',
+    },
+  });
+
   return (
     <View style={styles.container}>
       {files.map(file => {
