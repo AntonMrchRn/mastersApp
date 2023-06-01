@@ -6,7 +6,15 @@ import { Text, useTheme } from 'rn-ui-kit';
 
 import { CloseFileIcon } from '@/assets/icons/svg/files/CloseFileIcon';
 import { DeleteFileIcon } from '@/assets/icons/svg/files/DeleteFileIcon';
+import { DOCIcon } from '@/assets/icons/svg/files/DOCIcon';
 import { DownloadFileIcon } from '@/assets/icons/svg/files/DownloadFileIcon';
+import { FileIcon } from '@/assets/icons/svg/files/FileIcon';
+import { JPGIcon } from '@/assets/icons/svg/files/JPGIcon';
+import { PDFIcon } from '@/assets/icons/svg/files/PDFIcon';
+import { PNGIcon } from '@/assets/icons/svg/files/PNGIcon';
+import { PPTIcon } from '@/assets/icons/svg/files/PPTIcon';
+import { XLSIcon } from '@/assets/icons/svg/files/XLSIcon';
+import { ZIPIcon } from '@/assets/icons/svg/files/ZIPIcon';
 
 import { FileProps } from './index';
 import { ProgressBar } from './ProgressBar';
@@ -15,13 +23,14 @@ type DownloadItemProps = {
   file: FileProps;
 };
 export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
+  const theme = useTheme();
+
+  const title = `${file.name}.${file.extension}`;
   const size = 100;
   const metric = 'Mb';
   const loading = true;
   const onDevice = false;
   const canDownload = false;
-
-  const theme = useTheme();
 
   const styles = StyleSheet.create({
     head: {
@@ -53,11 +62,32 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
     },
   });
 
+  const getIcon = () => {
+    switch (file.extension) {
+      case 'pdf':
+        return <PDFIcon color={theme.icons.accent} />;
+      case 'doc':
+        return <DOCIcon color={theme.icons.accent} />;
+      case 'png':
+        return <PNGIcon color={theme.icons.accent} />;
+      case 'xls':
+        return <XLSIcon color={theme.icons.accent} />;
+      case 'ppt':
+        return <PPTIcon color={theme.icons.accent} />;
+      case 'jpg':
+        return <JPGIcon color={theme.icons.accent} />;
+      case 'zip':
+        return <ZIPIcon color={theme.icons.accent} />;
+      default:
+        return <FileIcon color={theme.icons.accent} />;
+    }
+  };
+
   const handleDownload = () => {};
   const handleDelete = () => {};
   const handleStop = () => {};
 
-  const getIcon = () => {
+  const getAction = () => {
     if (loading) {
       return (
         <TouchableOpacity onPress={handleStop}>
@@ -86,10 +116,10 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
     <View>
       <View style={styles.head}>
         <View style={styles.iconTitleSize}>
-          <View style={styles.iconContainer}></View>
+          <View style={styles.iconContainer}>{getIcon()}</View>
           <View style={styles.titleSize}>
             <Text variant={'bodySBold'} style={styles.title}>
-              {file.name}
+              {title}
             </Text>
             <View style={styles.size}>
               <Text variant={'captionRegular'} style={styles.regularText}>
@@ -98,7 +128,7 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
             </View>
           </View>
         </View>
-        {getIcon()}
+        {getAction()}
       </View>
       {loading && (
         <ProgressBar
