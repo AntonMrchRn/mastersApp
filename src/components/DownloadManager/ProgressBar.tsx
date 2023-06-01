@@ -7,13 +7,11 @@ type ProgressBarProps = {
   progress: number;
   currentSize: number;
   size: number;
-  metric: string;
 };
 export const ProgressBar: FC<ProgressBarProps> = ({
   progress,
   currentSize,
   size,
-  metric,
 }) => {
   const theme = useTheme();
 
@@ -46,7 +44,7 @@ export const ProgressBar: FC<ProgressBarProps> = ({
       </View>
       <View style={styles.progressTextContainer}>
         <Text variant={'captionRegular'} style={styles.regularText}>
-          загружено {currentSize} {metric} / {size} {metric}
+          загружено {currentSize} Mb / {size} Mb
         </Text>
         <Text variant={'captionRegular'} style={styles.regularText}>
           {progress}%

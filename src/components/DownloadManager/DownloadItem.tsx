@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 
 import { Text, useTheme } from 'rn-ui-kit';
 
@@ -23,14 +24,26 @@ type DownloadItemProps = {
   file: FileProps;
 };
 export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
+  const [onDevice, setOnDevice] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
 
-  const title = `${file.name}.${file.extension}`;
+  const fileType = file?.extensionOriginal || '';
+  const title = `${file.name}.${fileType}`;
   const size = 100;
-  const metric = 'Mb';
-  const loading = true;
-  const onDevice = false;
-  const canDownload = false;
+  const canDownload = !!file.url;
+  const MASTERS_PATH = '/storage/emulated/0/Download/Masters';
+
+  const hasOnDevice = () => {
+    ReactNativeBlobUtil.fs.ls(MASTERS_PATH).then(files => {
+      const res = files.find(file => file === title);
+      setOnDevice(!!res);
+    });
+  };
+
+  useEffect(() => {
+    hasOnDevice();
+  }, []);
 
   const styles = StyleSheet.create({
     head: {
@@ -49,9 +62,11 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
     },
     iconTitleSize: {
       flexDirection: 'row',
+      flexShrink: 1,
     },
     titleSize: {
       marginLeft: 8,
+      flexShrink: 1,
     },
     title: {
       color: theme.text.basic,
@@ -60,10 +75,14 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
     regularText: {
       color: theme.text.neutral,
     },
+    action: {
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
   });
 
   const getIcon = () => {
-    switch (file.extension) {
+    switch (fileType) {
       case 'pdf':
         return <PDFIcon color={theme.icons.accent} />;
       case 'doc':
@@ -83,12 +102,63 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
     }
   };
 
-  const handleDownload = () => {};
-  const handleDelete = () => {};
-  const handleStop = () => {};
+  const task = ReactNativeBlobUtil.config({
+    fileCache: true,
+  }).fetch('GET', file.url);
+
+  const getProgress = () => {
+    task.progress &&
+      task.progress((received, total) => {
+        console.log(
+          '🚀 ~ file: DownloadItem.tsx:113 ~ .progress ~ total:',
+          total
+        );
+        console.log(
+          '🚀 ~ file: DownloadItem.tsx:113 ~ .progress ~ received:',
+          received
+        );
+        console.log('progress ' + Math.floor((received / total) * 100) + '%');
+      });
+  };
+
+  const handleDownload = () => {
+    setIsLoading(true);
+    getProgress();
+    task
+      .then(res => {
+        ReactNativeBlobUtil.MediaCollection.copyToMediaStore(
+          {
+            name: file.name,
+            parentFolder: 'Masters',
+            mimeType: file.mime,
+          },
+          'Download',
+          res.path()
+        );
+      })
+      .catch(err => {
+        console.log(err, 'downloadError');
+      })
+      .then(() => {
+        hasOnDevice();
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.log(err, 'downloadError2');
+      });
+  };
+  const handleDelete = async () => {
+    await ReactNativeBlobUtil.fs.unlink(MASTERS_PATH + '/' + title);
+    hasOnDevice();
+  };
+  const handleStop = () => {
+    task.cancel(() => {
+      setIsLoading(false);
+    });
+  };
 
   const getAction = () => {
-    if (loading) {
+    if (isLoading) {
       return (
         <TouchableOpacity onPress={handleStop}>
           <CloseFileIcon />
@@ -123,20 +193,17 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
             </Text>
             <View style={styles.size}>
               <Text variant={'captionRegular'} style={styles.regularText}>
-                {size} {metric}
+                {size} Mb
               </Text>
             </View>
           </View>
         </View>
-        {getAction()}
+        <View style={styles.action}>{getAction()}</View>
       </View>
-      {loading && (
-        <ProgressBar
-          progress={10}
-          currentSize={5}
-          size={size}
-          metric={metric}
-        />
+      {isLoading ? (
+        <ProgressBar progress={10} currentSize={5} size={size} />
+      ) : (
+        <View style={{ height: 24 }} />
       )}
     </View>
   );

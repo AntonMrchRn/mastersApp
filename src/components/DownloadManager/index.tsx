@@ -10,7 +10,9 @@ export type FileProps = {
   userID: number;
   isCheck: boolean;
   isOffer: boolean;
+  mime: string;
   extension: string;
+  extensionOriginal: string;
   isApplication: boolean;
 };
 
