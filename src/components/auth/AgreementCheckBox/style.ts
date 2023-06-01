@@ -19,11 +19,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   active: {
-    borderColor: configApp.brandColor,
+    backgroundColor: configApp.brandColor,
   },
   checkBox: {
-    height: 10,
-    width: 10,
+    height: normalize(21, 'width'),
+    width: normalize(21, 'width'),
+    borderWidth: 1,
+    borderRadius: 4,
+    borderColor: configApp.brandColor,
   },
   title: {
     fontWeight: '400',

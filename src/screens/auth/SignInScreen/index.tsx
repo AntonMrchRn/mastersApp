@@ -59,7 +59,6 @@ const SignInScreen = () => {
           >
             <TypeSelection
               setIsPhoneAuth={setIsPhoneAuth}
-              isPhoneAuth={isPhoneAuth}
               setTel={setTel}
               setEmail={setEmail}
               setIsActive={setIsActive}
