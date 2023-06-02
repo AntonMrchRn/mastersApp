@@ -11,9 +11,11 @@ import { DOCIcon } from '@/assets/icons/svg/files/DOCIcon';
 import { DownloadFileIcon } from '@/assets/icons/svg/files/DownloadFileIcon';
 import { FileIcon } from '@/assets/icons/svg/files/FileIcon';
 import { JPGIcon } from '@/assets/icons/svg/files/JPGIcon';
+import { MP4Icon } from '@/assets/icons/svg/files/MP4Icon';
 import { PDFIcon } from '@/assets/icons/svg/files/PDFIcon';
 import { PNGIcon } from '@/assets/icons/svg/files/PNGIcon';
 import { PPTIcon } from '@/assets/icons/svg/files/PPTIcon';
+import { WEBPIcon } from '@/assets/icons/svg/files/WEBPIcon';
 import { XLSIcon } from '@/assets/icons/svg/files/XLSIcon';
 import { ZIPIcon } from '@/assets/icons/svg/files/ZIPIcon';
 
@@ -108,6 +110,10 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
         return <JPGIcon color={theme.icons.accent} />;
       case 'zip':
         return <ZIPIcon color={theme.icons.accent} />;
+      case 'webp':
+        return <WEBPIcon color={theme.icons.accent} />;
+      case 'mp4':
+        return <MP4Icon color={theme.icons.accent} />;
       default:
         return <FileIcon color={theme.icons.accent} />;
     }
