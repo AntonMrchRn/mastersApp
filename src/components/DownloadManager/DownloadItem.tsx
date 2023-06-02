@@ -18,6 +18,8 @@ import { PPTIcon } from '@/assets/icons/svg/files/PPTIcon';
 import { WEBPIcon } from '@/assets/icons/svg/files/WEBPIcon';
 import { XLSIcon } from '@/assets/icons/svg/files/XLSIcon';
 import { ZIPIcon } from '@/assets/icons/svg/files/ZIPIcon';
+import { isAndroid } from '@/utils/isAndroid';
+import { isIOS } from '@/utils/isIOS';
 
 import { FileProps } from './index';
 import { ProgressBar } from './ProgressBar';
@@ -31,24 +33,25 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
   const [recieved, setRecieved] = useState(0);
   const [progress, setProgress] = useState(0);
   const theme = useTheme();
+
   const config = ReactNativeBlobUtil.config({
     fileCache: true,
   }).fetch('GET', file.url);
   const task = useRef(config).current;
-
+  const dirs = ReactNativeBlobUtil.fs.dirs;
   const fileType = file?.extensionOriginal || '';
   const title = `${file.name}.${fileType}`;
   const size = 100;
   const canDownload = !!file.url;
-  const MASTERS_PATH = '/storage/emulated/0/Download/Masters';
+  const DOWNLOAD_PATH = isIOS ? dirs.CacheDir : '/storage/emulated/0/Download';
+  const MASTERS_PATH = `${DOWNLOAD_PATH}/Masters`;
+  const FILE_PATH = `${MASTERS_PATH}/${title}`;
 
   const hasOnDevice = () => {
-    ReactNativeBlobUtil.fs.ls('/storage/emulated/0/Download').then(files => {
-      const res = files.find(file => file === 'Masters');
-      if (res) {
-        ReactNativeBlobUtil.fs.ls(MASTERS_PATH).then(items => {
-          const result = items.find(item => item === title);
-          setOnDevice(!!result);
+    ReactNativeBlobUtil.fs.isDir(MASTERS_PATH).then(isDir => {
+      if (isDir) {
+        ReactNativeBlobUtil.fs.exists(FILE_PATH).then(exists => {
+          setOnDevice(exists);
         });
       }
     });
@@ -132,15 +135,17 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
     getProgress();
     task
       .then(res => {
-        ReactNativeBlobUtil.MediaCollection.copyToMediaStore(
-          {
-            name: file.name,
-            parentFolder: 'Masters',
-            mimeType: file.mime,
-          },
-          'Download',
-          res.path()
-        );
+        if (isAndroid) {
+          ReactNativeBlobUtil.MediaCollection.copyToMediaStore(
+            {
+              name: file.name,
+              parentFolder: 'Masters',
+              mimeType: file.mime,
+            },
+            'Download',
+            res.path()
+          );
+        }
       })
       .catch(err => {
         console.log(err, 'downloadError');
