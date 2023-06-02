@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 
@@ -18,7 +18,6 @@ import { PPTIcon } from '@/assets/icons/svg/files/PPTIcon';
 import { WEBPIcon } from '@/assets/icons/svg/files/WEBPIcon';
 import { XLSIcon } from '@/assets/icons/svg/files/XLSIcon';
 import { ZIPIcon } from '@/assets/icons/svg/files/ZIPIcon';
-import { isAndroid } from '@/utils/isAndroid';
 import { isIOS } from '@/utils/isIOS';
 
 import { FileProps } from './index';
@@ -34,25 +33,20 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
   const [progress, setProgress] = useState(0);
   const theme = useTheme();
 
-  const config = ReactNativeBlobUtil.config({
-    fileCache: true,
-  }).fetch('GET', file.url);
-  const task = useRef(config).current;
   const dirs = ReactNativeBlobUtil.fs.dirs;
   const fileType = file?.extensionOriginal || '';
   const title = `${file.name}.${fileType}`;
+  const FILE_PATH = `${dirs.DocumentDir}/${title}`;
+  const config = ReactNativeBlobUtil.config({
+    fileCache: true,
+    path: FILE_PATH,
+  }).fetch('GET', file.url);
+  const [task, setTask] = useState(config);
   const canDownload = !!file.url;
-  const DOWNLOAD_PATH = isIOS ? dirs.CacheDir : '/storage/emulated/0/Download';
-  const MASTERS_PATH = `${DOWNLOAD_PATH}/Masters`;
-  const FILE_PATH = `${MASTERS_PATH}/${title}`;
 
   const hasOnDevice = () => {
-    ReactNativeBlobUtil.fs.isDir(MASTERS_PATH).then(isDir => {
-      if (isDir) {
-        ReactNativeBlobUtil.fs.exists(FILE_PATH).then(exists => {
-          setOnDevice(exists);
-        });
-      }
+    ReactNativeBlobUtil.fs.exists(FILE_PATH).then(exists => {
+      setOnDevice(exists);
     });
   };
 
@@ -78,6 +72,7 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
     iconTitleSize: {
       flexDirection: 'row',
       flexShrink: 1,
+      flexGrow: 1,
     },
     titleSize: {
       marginLeft: 8,
@@ -131,33 +126,18 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
 
   const handleDownload = () => {
     setIsLoading(true);
-    try {
-      getProgress();
-      task
-        .then(res => {
-          if (isAndroid) {
-            ReactNativeBlobUtil.MediaCollection.copyToMediaStore(
-              {
-                name: file.name,
-                parentFolder: 'Masters',
-                mimeType: file.mime,
-              },
-              'Download',
-              res.path()
-            );
-            // ReactNativeBlobUtil.fs.unlink(`${dirs.CacheDir}/${title}`);
-          }
-        })
-        .catch(err => {
-          console.log(err, 'downloadError');
-        })
-        .then(() => {
-          hasOnDevice();
-          setIsLoading(false);
-        });
-    } catch (err) {
-      console.log(err, 'downloadError2');
-    }
+    getProgress();
+    task
+      .catch(err => {
+        console.log(
+          '🚀 ~ file: DownloadItem.tsx:149 ~ handleDownload ~ err:',
+          err
+        );
+      })
+      .finally(() => {
+        hasOnDevice();
+        setIsLoading(false);
+      });
   };
   const handleDelete = async () => {
     await ReactNativeBlobUtil.fs.unlink(FILE_PATH);
@@ -165,7 +145,10 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
   };
   const handleStop = () => {
     task.cancel(() => {
+      setRecieved(0);
+      setProgress(0);
       setIsLoading(false);
+      setTask(config);
     });
   };
   const handleOpen = () => {
