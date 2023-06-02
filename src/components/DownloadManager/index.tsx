@@ -14,6 +14,7 @@ export type FileProps = {
   extension: string;
   extensionOriginal: string;
   isApplication: boolean;
+  size: number;
 };
 
 type DownloadManagerProps = {

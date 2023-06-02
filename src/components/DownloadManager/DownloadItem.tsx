@@ -41,7 +41,6 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
   const dirs = ReactNativeBlobUtil.fs.dirs;
   const fileType = file?.extensionOriginal || '';
   const title = `${file.name}.${fileType}`;
-  const size = 100;
   const canDownload = !!file.url;
   const DOWNLOAD_PATH = isIOS ? dirs.CacheDir : '/storage/emulated/0/Download';
   const MASTERS_PATH = `${DOWNLOAD_PATH}/Masters`;
@@ -132,40 +131,49 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
 
   const handleDownload = () => {
     setIsLoading(true);
-    getProgress();
-    task
-      .then(res => {
-        if (isAndroid) {
-          ReactNativeBlobUtil.MediaCollection.copyToMediaStore(
-            {
-              name: file.name,
-              parentFolder: 'Masters',
-              mimeType: file.mime,
-            },
-            'Download',
-            res.path()
-          );
-        }
-      })
-      .catch(err => {
-        console.log(err, 'downloadError');
-      })
-      .then(() => {
-        hasOnDevice();
-        setIsLoading(false);
-      })
-      .catch(err => {
-        console.log(err, 'downloadError2');
-      });
+    try {
+      getProgress();
+      task
+        .then(res => {
+          if (isAndroid) {
+            ReactNativeBlobUtil.MediaCollection.copyToMediaStore(
+              {
+                name: file.name,
+                parentFolder: 'Masters',
+                mimeType: file.mime,
+              },
+              'Download',
+              res.path()
+            );
+            // ReactNativeBlobUtil.fs.unlink(`${dirs.CacheDir}/${title}`);
+          }
+        })
+        .catch(err => {
+          console.log(err, 'downloadError');
+        })
+        .then(() => {
+          hasOnDevice();
+          setIsLoading(false);
+        });
+    } catch (err) {
+      console.log(err, 'downloadError2');
+    }
   };
   const handleDelete = async () => {
-    await ReactNativeBlobUtil.fs.unlink(MASTERS_PATH + '/' + title);
+    await ReactNativeBlobUtil.fs.unlink(FILE_PATH);
     hasOnDevice();
   };
   const handleStop = () => {
     task.cancel(() => {
       setIsLoading(false);
     });
+  };
+  const handleOpen = () => {
+    if (onDevice) {
+      isIOS
+        ? ReactNativeBlobUtil.ios.openDocument(FILE_PATH)
+        : ReactNativeBlobUtil.android.actionViewIntent(FILE_PATH, file.mime);
+    }
   };
 
   const getAction = () => {
@@ -196,7 +204,11 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
   return (
     <View>
       <View style={styles.head}>
-        <View style={styles.iconTitleSize}>
+        <TouchableOpacity
+          style={styles.iconTitleSize}
+          onPress={handleOpen}
+          disabled={!onDevice}
+        >
           <View style={styles.iconContainer}>{getIcon()}</View>
           <View style={styles.titleSize}>
             <Text variant={'bodySBold'} style={styles.title}>
@@ -204,15 +216,15 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
             </Text>
             <View style={styles.size}>
               <Text variant={'captionRegular'} style={styles.regularText}>
-                {size} Mb
+                {file.size} Mb
               </Text>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
         <View style={styles.action}>{getAction()}</View>
       </View>
       {isLoading ? (
-        <ProgressBar progress={progress} recieved={recieved} size={size} />
+        <ProgressBar progress={progress} recieved={recieved} size={file.size} />
       ) : (
         <View style={{ height: 24 }} />
       )}

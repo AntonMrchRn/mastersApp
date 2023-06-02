@@ -17,6 +17,7 @@ const App = () => {
       extension: 'png',
       extensionOriginal: 'png',
       isApplication: true,
+      size: 100,
     },
     {
       url: 'https://246601.selcdn.ru/tasks-test/tasks/180/c5509c4413f1bb001e430af9ba78b3dc.jpg',
@@ -29,6 +30,7 @@ const App = () => {
       extension: 'jpg',
       extensionOriginal: 'jpg',
       isApplication: true,
+      size: 100,
     },
     {
       url: 'https://246601.selcdn.ru/tasks-test/tasks/180/5f050b889b25f9ed68f7db4f7072ead4.mp4',
@@ -41,6 +43,7 @@ const App = () => {
       extension: 'video',
       extensionOriginal: 'mp4',
       isApplication: true,
+      size: 100,
     },
     {
       url: 'https://246601.selcdn.ru/tasks-test/tasks/180/af2d14c8f901b6ed9fa7e57f6cb9b5b3.jpg',
@@ -53,6 +56,7 @@ const App = () => {
       extension: 'jpg',
       extensionOriginal: 'jpg',
       isApplication: false,
+      size: 100,
     },
     {
       url: 'https://246601.selcdn.ru/tasks-test/tasks/180/995b4b540924a3b2bb13cdd638f4bda8.webp',
@@ -65,6 +69,7 @@ const App = () => {
       extension: 'webp',
       extensionOriginal: 'webp',
       isApplication: false,
+      size: 100,
     },
     {
       url: 'https://246601.selcdn.ru/tasks-test/tasks/180/c8116803277e5ab2421e3dcf67d35c87.webp',
@@ -77,6 +82,7 @@ const App = () => {
       extension: 'webp',
       extensionOriginal: 'webp',
       isApplication: false,
+      size: 100,
     },
     {
       url: 'https://246601.selcdn.ru/tasks-test/tasks/180/816a2b1781e343aa9c8e09e98dfc6f2f.pdf',
@@ -89,6 +95,7 @@ const App = () => {
       extension: 'pdf',
       extensionOriginal: 'pdf',
       isApplication: false,
+      size: 100,
     },
   ];
   SplashScreen.hide();
