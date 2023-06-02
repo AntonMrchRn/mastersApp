@@ -26,7 +26,7 @@ type DownloadItemProps = {
 export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
   const [onDevice, setOnDevice] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [currentSize, setCurrentSize] = useState(0);
+  const [recieved, setRecieved] = useState(0);
   const [progress, setProgress] = useState(0);
   const theme = useTheme();
   const config = ReactNativeBlobUtil.config({
@@ -115,13 +115,9 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
 
   const getProgress = () => {
     task.progress &&
-      task.progress((received, total) => {
-        console.log(
-          '🚀 ~ file: DownloadItem.tsx:113 ~ .progress ~ received:',
-          received
-        );
-        setCurrentSize(+received);
-        setProgress(+Math.floor((received / total) * 100));
+      task.progress((rec, total) => {
+        setRecieved(+rec);
+        setProgress(+Math.floor((rec / total) * 100));
       });
   };
 
@@ -205,11 +201,7 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
         <View style={styles.action}>{getAction()}</View>
       </View>
       {isLoading ? (
-        <ProgressBar
-          progress={progress}
-          currentSize={currentSize}
-          size={size}
-        />
+        <ProgressBar progress={progress} recieved={recieved} size={size} />
       ) : (
         <View style={{ height: 24 }} />
       )}
