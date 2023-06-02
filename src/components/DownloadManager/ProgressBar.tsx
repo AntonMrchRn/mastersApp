@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 
+import prettyBytes from 'pretty-bytes';
 import { Text, useTheme } from 'rn-ui-kit';
 
 type ProgressBarProps = {
@@ -44,7 +45,7 @@ export const ProgressBar: FC<ProgressBarProps> = ({
       </View>
       <View style={styles.progressTextContainer}>
         <Text variant={'captionRegular'} style={styles.regularText}>
-          загружено {currentSize} Mb / {size} Mb
+          загружено {prettyBytes(currentSize)} / {size} MB
         </Text>
         <Text variant={'captionRegular'} style={styles.regularText}>
           {progress}%

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 
@@ -26,7 +26,13 @@ type DownloadItemProps = {
 export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
   const [onDevice, setOnDevice] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentSize, setCurrentSize] = useState(0);
+  const [progress, setProgress] = useState(0);
   const theme = useTheme();
+  const config = ReactNativeBlobUtil.config({
+    fileCache: true,
+  }).fetch('GET', file.url);
+  const task = useRef(config).current;
 
   const fileType = file?.extensionOriginal || '';
   const title = `${file.name}.${fileType}`;
@@ -35,9 +41,14 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
   const MASTERS_PATH = '/storage/emulated/0/Download/Masters';
 
   const hasOnDevice = () => {
-    ReactNativeBlobUtil.fs.ls(MASTERS_PATH).then(files => {
-      const res = files.find(file => file === title);
-      setOnDevice(!!res);
+    ReactNativeBlobUtil.fs.ls('/storage/emulated/0/Download').then(files => {
+      const res = files.find(file => file === 'Masters');
+      if (res) {
+        ReactNativeBlobUtil.fs.ls(MASTERS_PATH).then(items => {
+          const result = items.find(item => item === title);
+          setOnDevice(!!result);
+        });
+      }
     });
   };
 
@@ -102,22 +113,15 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
     }
   };
 
-  const task = ReactNativeBlobUtil.config({
-    fileCache: true,
-  }).fetch('GET', file.url);
-
   const getProgress = () => {
     task.progress &&
       task.progress((received, total) => {
         console.log(
-          '🚀 ~ file: DownloadItem.tsx:113 ~ .progress ~ total:',
-          total
-        );
-        console.log(
           '🚀 ~ file: DownloadItem.tsx:113 ~ .progress ~ received:',
           received
         );
-        console.log('progress ' + Math.floor((received / total) * 100) + '%');
+        setCurrentSize(+received);
+        setProgress(+Math.floor((received / total) * 100));
       });
   };
 
@@ -201,7 +205,11 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
         <View style={styles.action}>{getAction()}</View>
       </View>
       {isLoading ? (
-        <ProgressBar progress={10} currentSize={5} size={size} />
+        <ProgressBar
+          progress={progress}
+          currentSize={currentSize}
+          size={size}
+        />
       ) : (
         <View style={{ height: 24 }} />
       )}
