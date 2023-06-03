@@ -1,7 +1,9 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import React, { FC, useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import ReactNativeBlobUtil from 'react-native-blob-util';
+import ReactNativeBlobUtil, {
+  FetchBlobResponse,
+  StatefulPromise,
+} from 'react-native-blob-util';
 
 import { Text, useTheme } from 'rn-ui-kit';
 
@@ -31,17 +33,19 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [recieved, setRecieved] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [activeTask, setActiveTask] =
+    useState<StatefulPromise<FetchBlobResponse>>();
+
   const theme = useTheme();
 
   const dirs = ReactNativeBlobUtil.fs.dirs;
   const fileType = file?.extensionOriginal || '';
   const title = `${file.name}.${fileType}`;
   const FILE_PATH = `${dirs.DocumentDir}/${title}`;
-  const config = ReactNativeBlobUtil.config({
+  const task = ReactNativeBlobUtil.config({
     fileCache: true,
     path: FILE_PATH,
-  }).fetch('GET', file.url);
-  const [task, setTask] = useState(config);
+  });
   const canDownload = !!file.url;
 
   const hasOnDevice = () => {
@@ -116,18 +120,15 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
     }
   };
 
-  const getProgress = () => {
-    task.progress &&
-      task.progress((rec, total) => {
-        setRecieved(+rec);
-        setProgress(+Math.floor((rec / total) * 100));
-      });
-  };
-
   const handleDownload = () => {
     setIsLoading(true);
-    getProgress();
-    task
+    const active = task.fetch('GET', file.url);
+    setActiveTask(active);
+    active.progress((rec, total) => {
+      setRecieved(+rec);
+      setProgress(+Math.floor((rec / total) * 100));
+    });
+    active
       .catch(err => {
         console.log(
           '🚀 ~ file: DownloadItem.tsx:149 ~ handleDownload ~ err:',
@@ -143,14 +144,17 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
     await ReactNativeBlobUtil.fs.unlink(FILE_PATH);
     hasOnDevice();
   };
+
   const handleStop = () => {
-    task.cancel(() => {
-      setRecieved(0);
-      setProgress(0);
-      setIsLoading(false);
-      setTask(config);
-    });
+    activeTask &&
+      activeTask.cancel(() => {
+        setRecieved(0);
+        setProgress(0);
+        setIsLoading(false);
+        setActiveTask(undefined);
+      });
   };
+
   const handleOpen = () => {
     if (onDevice) {
       isIOS
