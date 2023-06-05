@@ -5,13 +5,14 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
-  body: {
-    flex: 1,
-  },
+  body: { marginHorizontal: 20 },
   badges: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 22,
   },
   badge: {
     marginRight: 4,
+    marginVertical: 4,
   },
 });

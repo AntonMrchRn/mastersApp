@@ -6,6 +6,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { Badge } from 'rn-ui-kit';
 import { Variant } from 'rn-ui-kit/lib/typescript/components/Badge';
 
+import { NightIcon } from '@/assets/icons/svg/screens/NightIcon';
 import { TaskCardHeader } from '@/components/TaskCardHeader';
 import {
   TaskSearchNavigationParamList,
@@ -19,11 +20,22 @@ type TaskCardScreenProps = StackScreenProps<
   TaskSearchNavigatorScreenName.TaskCard
 >;
 export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
-  type Badge = { label: string; icon: boolean | JSX.Element; variant: Variant };
+  type Badge = {
+    label: string;
+    icon: boolean | JSX.Element;
+    variant: Variant;
+    secondary?: boolean;
+  };
   const badges: Badge[] = [
-    { label: 'Опубликовано', icon: false, variant: 'basic' },
-    { label: 'Срочно', icon: true, variant: 'accent' },
-    { label: 'Ночные работы', icon: true, variant: 'accent' },
+    { label: 'Опубликовано', icon: false, variant: 'basic', secondary: true },
+    { label: 'Срочно', icon: true, variant: 'secondary', secondary: true },
+
+    {
+      label: 'Ночные работы',
+      icon: <NightIcon />,
+      variant: 'special',
+      secondary: true,
+    },
   ];
   return (
     <SafeAreaView style={styles.container}>
@@ -35,13 +47,14 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
       <View style={styles.body}>
         <View style={styles.badges}>
           {badges.map(badge => (
-            <View style={styles.badge} key={badge.label}>
-              <Badge
-                label={badge.label}
-                icon={badge.icon}
-                variant={badge.variant}
-              />
-            </View>
+            <Badge
+              secondary={badge?.secondary}
+              label={badge.label}
+              icon={badge.icon}
+              variant={badge.variant}
+              style={styles.badge}
+              key={badge.label}
+            />
           ))}
         </View>
       </View>

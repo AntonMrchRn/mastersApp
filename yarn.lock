@@ -6719,9 +6719,9 @@ rimraf@~2.6.2:
   dependencies:
     glob "^7.1.3"
 
-"rn-ui-kit@git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#0.1.2":
-  version "0.1.2"
-  resolved "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#f2d29d5482edfe9a66d10b0eb83ad323acfbe70a"
+"rn-ui-kit@git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#0.1.3":
+  version "0.1.3"
+  resolved "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#d5a1123eca25769e352b587ce2a372ce087260e5"
 
 rsvp@^4.8.4:
   version "4.8.5"
