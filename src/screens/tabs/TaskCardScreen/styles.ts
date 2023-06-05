@@ -27,12 +27,6 @@ export const styles = StyleSheet.create({
   tips: {
     marginTop: 8,
   },
-  task: {
-    marginTop: 36,
-  },
-  text: {
-    marginTop: 24,
-  },
   card: {
     flex: 1,
     borderTopLeftRadius: 24,
@@ -40,34 +34,5 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 0,
     marginTop: 30,
-  },
-  address: {
-    marginTop: 16,
-    flexDirection: 'row',
-  },
-  date: {
-    marginTop: 8,
-    flexDirection: 'row',
-  },
-  ml10: {
-    marginLeft: 10,
-  },
-  attachments: {
-    marginTop: 36,
-    marginBottom: 24,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  mr11: {
-    marginRight: 11,
-  },
-  labelStyle: {
-    fontFamily: 'Nunito Sans Bold',
-    fontSize: 17,
-    fontWeight: '700',
-    lineHeight: 24,
-  },
-  button: {
-    marginTop: 16,
   },
 });
