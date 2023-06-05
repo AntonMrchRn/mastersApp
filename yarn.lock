@@ -6324,11 +6324,6 @@ react-native-normalize@^1.0.1:
   resolved "https://registry.yarnpkg.com/react-native-normalize/-/react-native-normalize-1.0.1.tgz#52de71d1b86dd357c6f40fd4ab84b10336f0f072"
   integrity sha512-QYs95xhARhlcWWcDC77r4nVfxa3pDSfIBx2gdYZ+DOcLhSdPzRHFivWbGu3mL01JcvE69pMK7BmbPCda28vXwA==
 
-react-native-normalized@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-normalized/-/react-native-normalized-2.0.1.tgz#05bf88846ddf6b75e74db3effc785d8e397fc9aa"
-  integrity sha512-HeNlIeUwpFj3fsdu41CNthaSBwzidJ6UymS/KRChGsXspuO0cKAuGP1gsLPrA4wwMgVK40q19pqwBVlse4ivtQ==
-
 react-native-reanimated@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.2.0.tgz#9b885fcad6cb0b570e63a05e02b6cf62c26a4875"
