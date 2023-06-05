@@ -54,10 +54,20 @@ export const styles = StyleSheet.create({
   },
   attachments: {
     marginTop: 36,
+    marginBottom: 24,
     flexDirection: 'row',
     alignItems: 'center',
   },
   mr11: {
     marginRight: 11,
+  },
+  labelStyle: {
+    fontFamily: 'Nunito Sans Bold',
+    fontSize: 17,
+    fontWeight: '700',
+    lineHeight: 24,
+  },
+  button: {
+    marginTop: 16,
   },
 });

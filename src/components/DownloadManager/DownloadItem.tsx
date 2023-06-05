@@ -210,10 +210,8 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
         </TouchableOpacity>
         <View style={styles.action}>{getAction()}</View>
       </View>
-      {isLoading ? (
+      {isLoading && (
         <ProgressBar progress={progress} recieved={recieved} size={file.size} />
-      ) : (
-        <View style={{ height: 24 }} />
       )}
     </View>
   );
