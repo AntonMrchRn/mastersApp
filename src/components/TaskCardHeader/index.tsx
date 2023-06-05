@@ -49,12 +49,6 @@ export const TaskCardHeader: FC<TaskCardHeaderProps> = ({
       width: '15%',
       height: '100%',
     },
-    title: {
-      color: theme.text.basic,
-    },
-    description: {
-      color: theme.text.neutral,
-    },
   });
 
   return (
@@ -63,10 +57,10 @@ export const TaskCardHeader: FC<TaskCardHeaderProps> = ({
         <ArrowBack />
       </TouchableOpacity>
       <View style={styles.wrapper}>
-        <Text variant="bodyMBold" style={styles.title}>
+        <Text variant="bodyMBold" color={theme.text.basic}>
           {title}
         </Text>
-        <Text variant="captionRegular" style={styles.description}>
+        <Text variant="captionRegular" color={theme.text.neutral}>
           {description}
         </Text>
       </View>
