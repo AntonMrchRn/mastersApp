@@ -1,10 +1,6 @@
-import React from 'react';
-
-import { Button } from 'rn-ui-kit';
+import { Variant } from 'rn-ui-kit/lib/typescript/components/Button';
 
 import { TaskCardStatus } from '@/screens/tabs/TaskCardScreen/useTaskCard';
-
-import { styles } from './styles';
 
 export type TaskCardContants = {
   title: string;
@@ -117,7 +113,7 @@ export const useTaskCardDescription = (status: TaskCardStatus) => {
       size: 100,
     },
   ];
-  const getButton = (): { label: string; variant: Variant } => {
+  const getButton = (): { label: string; variant: Variant }[] => {
     switch (status) {
       case 'published':
         return [
