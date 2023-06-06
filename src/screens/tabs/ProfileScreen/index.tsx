@@ -1,7 +1,8 @@
 import React from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 
-import Button from '@/components/Button';
+import { Button } from 'rn-ui-kit';
+
 import { storageMMKV } from '@/mmkv/storage';
 import { useAppDispatch } from '@/store';
 import { logOut } from '@/store/slices/auth/actions';

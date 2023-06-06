@@ -29,6 +29,9 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: configApp.ios ? '45%' : normalize(240, 'height'),
   },
+  input: {
+    paddingRight: 8,
+  },
 });
 
 export default styles;

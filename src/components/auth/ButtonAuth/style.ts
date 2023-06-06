@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontFamily: fonts.main_700,
     fontWeight: '700',
-    fontSize: 15,
+    fontSize: 17,
   },
   activeTextBtn: {
     color: configApp.brandColor,
