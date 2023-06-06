@@ -146,9 +146,9 @@ export const useTaskCard = () => {
   const getCurrentTab = () => {
     switch (tab) {
       case 'Описание':
-        return <TaskCardDescription />;
+        return <TaskCardDescription status={status} />;
       default:
-        return <TaskCardDescription />;
+        return <TaskCardDescription status={status} />;
     }
   };
   const onTabChange = (item: TabItem) => {
@@ -159,5 +159,6 @@ export const useTaskCard = () => {
     getBadges,
     tabs,
     getCurrentTab,
+    status,
   };
 };

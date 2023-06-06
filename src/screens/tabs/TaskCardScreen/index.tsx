@@ -20,7 +20,7 @@ type TaskCardScreenProps = StackScreenProps<
   TaskSearchNavigatorScreenName.TaskCard
 >;
 export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
-  const { getBadges, tabs, onTabChange, getCurrentTab } = useTaskCard();
+  const { getBadges, tabs, onTabChange, getCurrentTab, status } = useTaskCard();
   const theme = useTheme();
   const goBack = () => {
     if (navigation.canGoBack()) {
@@ -54,11 +54,13 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
           <Text variant="title3" style={styles.price} color={theme.text.basic}>
             18 000 ₽
           </Text>
-          <Tips
-            type={'warning'}
-            text="Срок подачи сметы до 10 апреля 19:00"
-            containerStyle={styles.tips}
-          />
+          {status === 'published' && (
+            <Tips
+              type={'warning'}
+              text="Срок подачи сметы до 10 апреля 19:00"
+              containerStyle={styles.tips}
+            />
+          )}
           <TabControl data={tabs} initialId={0} onChange={onTabChange} />
         </View>
         <Card isShadow style={styles.card}>
