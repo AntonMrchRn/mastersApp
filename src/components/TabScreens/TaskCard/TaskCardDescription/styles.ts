@@ -36,8 +36,8 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
     lineHeight: 24,
   },
-  button: {
-    marginTop: 16,
+  bottom: {
+    marginTop: 24,
     marginBottom: 12,
   },
   edit: {

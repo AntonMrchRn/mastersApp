@@ -1,3 +1,4 @@
+import { IconTypes, Types } from 'rn-ui-kit/lib/typescript/components/Banner';
 import { Variant } from 'rn-ui-kit/lib/typescript/components/Button';
 
 import { TaskCardStatus } from '@/screens/tabs/TaskCardScreen/useTaskCard';
@@ -113,7 +114,7 @@ export const useTaskCardDescription = (status: TaskCardStatus) => {
       size: 100,
     },
   ];
-  const getButton = (): { label: string; variant: Variant }[] => {
+  const getButtons = (): { label: string; variant: Variant }[] => {
     switch (status) {
       case 'published':
         return [
@@ -137,5 +138,46 @@ export const useTaskCardDescription = (status: TaskCardStatus) => {
         return [];
     }
   };
-  return { contacts, files, getButton };
+  const getBanner = (): {
+    title: string;
+    type: Types;
+    icon: IconTypes;
+    text: string;
+  } | null => {
+    switch (status) {
+      case 'workDelivery':
+        return {
+          title: 'Задача на проверке',
+          type: 'info',
+          icon: 'info',
+          text: 'Координатор проверяет выполненные услуги. После успешной проверки задача будет передана на оплату',
+        };
+      case 'done':
+        return {
+          title: 'Выполненные услуги приняты',
+          type: 'success',
+          icon: 'success',
+          text: 'В ближайшее время оплата поступит на вашу банковскую карту/счет',
+        };
+      case 'paid':
+        return {
+          title: 'Оплата произведена',
+          type: 'success',
+          icon: 'success',
+          text: 'Денежные средства переведены вам на указанные в профиле реквизиты',
+        };
+      case 'cancelled':
+        return {
+          title: 'Задача отменена',
+          type: 'error',
+          icon: 'alert',
+          text: 'По инициативе координатора выполнение задачи прекращено',
+        };
+      default:
+        return null;
+    }
+  };
+  const banner = getBanner();
+  const buttons = getButtons();
+  return { contacts, files, buttons, banner };
 };

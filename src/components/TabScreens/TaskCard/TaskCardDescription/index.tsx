@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
-import { Button, Card, Text, useTheme } from 'rn-ui-kit';
+import { Banner, Button, Card, Text, useTheme } from 'rn-ui-kit';
 
 import { AddressIcon } from '@/assets/icons/svg/screens/AddressIcon';
 import { AvatarIcon } from '@/assets/icons/svg/screens/AvatarIcon';
@@ -22,7 +22,7 @@ type TaskCardDescriptionProps = {
 export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   status,
 }) => {
-  const { contacts, files, getButton } = useTaskCardDescription(status);
+  const { contacts, files, buttons, banner } = useTaskCardDescription(status);
   const theme = useTheme();
 
   return (
@@ -125,8 +125,8 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
         <CaretDownIcon />
       </View>
       <DownloadManager files={files} />
-      <View style={styles.button}>
-        {getButton().map((button, index) => (
+      <View style={styles.bottom}>
+        {buttons.map((button, index) => (
           <Button
             key={index}
             label={button.label}
@@ -135,6 +135,14 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
             labelStyle={styles.labelStyle}
           />
         ))}
+        {banner && (
+          <Banner
+            type={banner.type}
+            icon={banner.icon}
+            text={banner.text}
+            title={banner.title}
+          />
+        )}
       </View>
     </View>
   );
