@@ -33,6 +33,9 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: configApp.ios ? 14 : 12,
   },
+  input: {
+    width: '100%',
+  },
 });
 
 export default styles;

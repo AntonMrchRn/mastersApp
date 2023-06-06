@@ -33,6 +33,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  inputContainer: {
+    width: '100%',
+  },
+  input: {
+    paddingRight: 8,
+  },
 });
 
 export default styles;

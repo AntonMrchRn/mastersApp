@@ -4,7 +4,6 @@ import { Button } from 'rn-ui-kit';
 
 import { useAppSelector } from '@/store';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import { Error } from '@/types/error';
 import { validateEmail } from '@/utils/validateEmail';
 
 import styles from './style';
@@ -15,41 +14,48 @@ type ButtonAuthProps = {
   password: string;
   isPhoneAuth: boolean;
   isDisabled: boolean;
-  tel?: string;
+  phone?: string;
   value?: string;
   flag?: boolean;
-  withOutPassword?: boolean;
+  authError?: string;
+  isLoading?: boolean;
   isRestore?: boolean;
-  valueCheckBox?: boolean;
   onPress?: () => void;
-  recoveryError?: null | boolean | Error;
+  recoveryError?: string;
+  valueCheckBox?: boolean;
+  withOutPassword?: boolean;
 };
 
+// TODO refactor this component
+// 1) we don't need to use the component twice
+// 2) use constants for large conditions
+
 const ButtonAuth = ({
-  isPhoneAuth,
-  isDisabled,
-  tel = '',
-  password,
-  email,
-  label = 'Войти',
-  onPress,
-  withOutPassword,
-  value = '',
-  isRestore,
   flag,
+  email,
+  onPress,
+  password,
+  authError,
+  isRestore,
+  phone = '',
+  value = '',
+  isDisabled,
+  isPhoneAuth,
   recoveryError,
+  label = 'Войти',
+  withOutPassword,
+  isLoading = false,
   valueCheckBox = true,
 }: ButtonAuthProps) => {
-  const { isActiveTimer, isActiveTimerEmail, authError } =
-    useAppSelector(selectAuth);
+  const { isActiveTimer, isActiveTimerEmail } = useAppSelector(selectAuth);
 
   const [validateEmailBtn, setValidateEmailBtn] = useState<boolean>(false);
 
-  const isPhone = tel?.length === 10 && isPhoneAuth;
+  const isPhone = phone?.length === 10 && isPhoneAuth;
   const isMail = email?.length > 0 && !isPhoneAuth;
 
   const isPhoneWithPass =
-    tel?.length === 10 && password?.length > 0 && isPhoneAuth;
+    phone?.length === 10 && password?.length > 0 && isPhoneAuth;
   const isMailWithPass =
     email?.length > 0 && password?.length > 0 && !isPhoneAuth;
   const isPasswordWidthPass = password?.length > 5 && value?.length > 5;
@@ -63,23 +69,21 @@ const ButtonAuth = ({
 
   return isRestore ? (
     <Button
+      isPending={isLoading}
       onPress={onPress}
       style={[
         styles.btn,
         !isPasswordWidthPass && styles.disabled,
-        (recoveryError as Error)?.message?.length > 0 && styles.disabled,
-        !!authError && authError?.length > 0 && styles.disabled,
+        !!recoveryError?.length && styles.disabled,
+        !!authError && styles.disabled,
       ]}
-      disabled={
-        !isPasswordWidthPass ||
-        (recoveryError as Error)?.message?.length > 0 ||
-        (!!authError && authError?.length > 0)
-      }
+      disabled={!isPasswordWidthPass || !!recoveryError?.length || !!authError}
       label={label}
       labelStyle={styles.labelBtn}
     />
   ) : (
     <Button
+      isPending={isLoading}
       label={label}
       style={[
         styles.btn,
@@ -90,7 +94,7 @@ const ButtonAuth = ({
         !flag && !isPhoneAuth && isActiveTimerEmail && styles.disabled,
         !valueCheckBox && styles.disabled,
         !isPhoneAuth && !validateEmailBtn && styles.disabled,
-        !!authError && authError?.length > 0 && styles.disabled,
+        !!authError && styles.disabled,
       ]}
       onPress={onPress}
       disabled={
@@ -99,23 +103,23 @@ const ButtonAuth = ({
             ? validWithOutPassword ||
               !valueCheckBox ||
               (!isPhoneAuth && !validateEmailBtn) ||
-              (!!authError && authError?.length > 0)
+              !!authError
             : validWithOutPassword ||
               (isPhoneAuth && isActiveTimer) ||
               (!isPhoneAuth && isActiveTimerEmail) ||
               !valueCheckBox ||
               (!isPhoneAuth && !validateEmailBtn) ||
-              (!!authError && authError?.length > 0)
+              !!authError
           : flag
           ? validWithPassword ||
             !valueCheckBox ||
             (!isPhoneAuth && !validateEmailBtn) ||
-            (!!authError && authError?.length > 0)
+            !!authError
           : validWithPassword ||
             (isPhoneAuth && isActiveTimer) ||
             (!isPhoneAuth && isActiveTimerEmail) ||
             (!isPhoneAuth && !validateEmailBtn) ||
-            (!!authError && authError?.length > 0)
+            !!authError
       }
       labelStyle={styles.labelBtn}
     />
