@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { IconTypes, Types } from 'rn-ui-kit/lib/typescript/components/Banner';
 import { Variant } from 'rn-ui-kit/lib/typescript/components/Button';
 
@@ -9,6 +11,11 @@ export type TaskCardContants = {
   phone: string;
 };
 export const useTaskCardDescription = (status: TaskCardStatus) => {
+  //подана ли смета
+  const [budgetSubmission, setBudgetSubmission] = useState(false);
+  const onBudgetSubmission = () => {
+    setBudgetSubmission(true);
+  };
   const contacts: TaskCardContants[] = [
     {
       title: 'Роль контактного лица',
@@ -114,13 +121,26 @@ export const useTaskCardDescription = (status: TaskCardStatus) => {
       size: 100,
     },
   ];
-  const getButtons = (): { label: string; variant: Variant }[] => {
+  const getButtons = (): {
+    label: string;
+    variant: Variant;
+    onPress?: () => void;
+  }[] => {
     switch (status) {
       case 'published':
+        if (budgetSubmission) {
+          return [
+            {
+              label: 'Отозвать смету',
+              variant: 'outlineDanger',
+            },
+          ];
+        }
         return [
           {
             label: 'Подать смету',
             variant: 'accent',
+            onPress: onBudgetSubmission,
           },
         ];
       case 'inProgress':

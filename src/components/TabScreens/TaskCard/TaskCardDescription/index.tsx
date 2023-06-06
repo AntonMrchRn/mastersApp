@@ -128,6 +128,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
       <View style={styles.bottom}>
         {buttons.map((button, index) => (
           <Button
+            onPress={button.onPress}
             key={index}
             label={button.label}
             variant={button.variant}
