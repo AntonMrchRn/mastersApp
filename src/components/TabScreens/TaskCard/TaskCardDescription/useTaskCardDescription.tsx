@@ -14,9 +14,14 @@ export const useTaskCardDescription = (status: TaskCardStatus) => {
   //подана ли смета
   const [budgetSubmission, setBudgetSubmission] = useState(false);
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
+
   const onBudgetSubmission = () => {
     setBudgetSubmission(true);
   };
+  const onBudgetModalVisible = () => {
+    setBudgetModalVisible(!budgetModalVisible);
+  };
+
   const contacts: TaskCardContants[] = [
     {
       title: 'Роль контактного лица',
@@ -134,6 +139,7 @@ export const useTaskCardDescription = (status: TaskCardStatus) => {
             {
               label: 'Отозвать смету',
               variant: 'outlineDanger',
+              onPress: onBudgetModalVisible,
             },
           ];
         }
@@ -200,5 +206,12 @@ export const useTaskCardDescription = (status: TaskCardStatus) => {
   };
   const banner = getBanner();
   const buttons = getButtons();
-  return { contacts, files, buttons, banner, budgetModalVisible };
+  return {
+    contacts,
+    files,
+    buttons,
+    banner,
+    budgetModalVisible,
+    onBudgetModalVisible,
+  };
 };
