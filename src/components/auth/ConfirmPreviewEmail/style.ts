@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import normalize from 'react-native-normalize';
 
 import { fonts } from '@/constants/fonts';
 import { configApp } from '@/constants/platform';
@@ -7,12 +6,10 @@ import { configApp } from '@/constants/platform';
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: normalize(configApp.ios ? 150 : 185, 'height'),
     justifyContent: 'flex-end',
   },
   wrapper: {
     width: '100%',
-    paddingVertical: 12,
   },
   text: {
     fontSize: 17,

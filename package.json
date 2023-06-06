@@ -47,7 +47,7 @@
     "react-native-text-input-mask": "^3.1.4",
     "react-redux": "^8.0.5",
     "redux-flipper": "^2.0.2",
-    "rn-ui-kit": "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#0.1.2"
+    "rn-ui-kit": "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#0.1.9"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

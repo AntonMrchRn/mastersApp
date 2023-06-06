@@ -3,25 +3,17 @@ import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useNavigation } from '@react-navigation/native';
+import { Button } from 'rn-ui-kit';
 
 import InfoCheckBox from '@/assets/icons/svg/auth/InfoCheckBox';
-import Button from '@/components/Button';
-import { useAppDispatch } from '@/store';
-import {
-  clearAuthError,
-  clearRecoveryError,
-} from '@/store/slices/auth/actions';
 import { AuthScreenName, SignInScreenNavigationProp } from '@/types/navigation';
 
 import styles from './style';
 
 const PasswordScreen = () => {
-  const dispatch = useAppDispatch();
   const navigation = useNavigation<SignInScreenNavigationProp>();
 
   const goToSignIn = () => {
-    dispatch(clearAuthError(null));
-    dispatch(clearRecoveryError());
     navigation.navigate(AuthScreenName.SignIn);
   };
 

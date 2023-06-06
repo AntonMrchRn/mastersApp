@@ -6,80 +6,114 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 
 import { configApp } from '@/constants/platform';
-import { useAppDispatch, useAppSelector } from '@/store';
+import { storageMMKV } from '@/mmkv/storage';
+import { useAppDispatch } from '@/store';
+import { useGetUserAuthMutation } from '@/store/api/auth';
 import {
-  clearAuthError,
-  clearRecoveryError,
-  timeOutAsync,
-  timeOutAsyncEmail,
+  login,
+  timeoutAsyncEmail,
+  timeoutAsyncPhone,
 } from '@/store/slices/auth/actions';
-import { fetchUserAuth } from '@/store/slices/auth/asyncActions';
-import { selectAuth } from '@/store/slices/auth/selectors';
-import { ErrorCode } from '@/types/error';
+import { AuthTab, authTabByIndex } from '@/types/authTab';
+import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
+import { Error } from '@/types/error';
 import { AuthScreenName, ErrorScreenNavigationProp } from '@/types/navigation';
 
 const OFFSET = 0;
 
 const useSignInScreen = () => {
-  const { authErrorCode } = useAppSelector(selectAuth);
-  const dispatch = useAppDispatch();
+  const [
+    getUserAuth,
+    { data: userAuth, isSuccess, isLoading, isError, error: authError },
+  ] = useGetUserAuthMutation();
 
   const isFocused = useIsFocused();
+  const dispatch = useAppDispatch();
   const navigation = useNavigation<ErrorScreenNavigationProp>();
 
-  const [isPhoneAuth, setIsPhoneAuth] = useState<boolean>(true);
-  const [tel, setTel] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<AuthTab>(AuthTab.Phone);
   const [isAgreeWithTerms, setIsAgreeWithTerms] = useState<boolean>(false);
-  const [isActive, setIsActive] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(
+    (authError as AxiosQueryErrorResponse)?.data
+  );
   const passwordRef = useRef<TextInput>(null);
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
+  const isPhoneAuth = activeTab === AuthTab.Phone;
+  const isPhoneError = error?.code === ErrorCode.IncorrectPhone;
+  const isEmailError = error?.code === ErrorCode.IncorrectEmail;
+  const isPasswordError = error?.code === ErrorCode.IncorrectPassword;
+
+  useEffect(() => {
+    if (isError) {
+      if (error?.code === ErrorCode.Server) {
+        return navigation.navigate(AuthScreenName.Error);
+      }
+
+      setError((authError as AxiosQueryErrorResponse)?.data);
+    }
+  }, [isError]);
+
+  useEffect(() => {
+    setPhone('');
+    setEmail('');
+    setError(null);
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (isPasswordError) {
+      setError(null);
+    }
+  }, [password]);
+
   useEffect(() => {
     getData();
-    getDataEmail();
-    dispatch(clearRecoveryError());
-    dispatch(clearAuthError(null));
+    setError(null);
   }, []);
 
   useEffect(() => {
-    dispatch(clearRecoveryError());
-    dispatch(clearAuthError(null));
+    setError(null);
   }, [isFocused]);
 
   useEffect(() => {
-    if (authErrorCode === ErrorCode.Server) {
-      navigation.navigate(AuthScreenName.Error);
+    if (phone?.length === 10) {
+      passwordRef.current?.focus();
     }
-  }, [authErrorCode]);
 
-  const authRequest = () => {
-    dispatch(
-      fetchUserAuth({ phoneNumber: '7' + tel, email, password, isPhoneAuth })
-    );
-    dispatch(clearAuthError(null));
+    setError(null);
+  }, [phone, email]);
+
+  useEffect(() => {
+    if (isSuccess && userAuth) {
+      storageMMKV.set('token', userAuth.token);
+      dispatch(login());
+      setError(null);
+    }
+  }, [isSuccess]);
+
+  const logIn = async () => {
+    await getUserAuth({
+      login: isPhoneAuth ? '7' + phone : email,
+      password,
+    });
   };
 
   const getData = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('time');
-      jsonValue && dispatch(timeOutAsync(JSON.parse(jsonValue)));
+      const jsonValue = await AsyncStorage.getItem('timePhone');
+      const jsonValueEmail = await AsyncStorage.getItem('timeEmail');
+
+      jsonValue && dispatch(timeoutAsyncPhone(JSON.parse(jsonValue)));
+      jsonValueEmail && dispatch(timeoutAsyncEmail(JSON.parse(jsonValueEmail)));
     } catch (e) {
       console.log(`getData value reading error: ${e}`);
     }
   };
 
-  const getDataEmail = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('timeEmail');
-      jsonValue && dispatch(timeOutAsyncEmail(JSON.parse(jsonValue)));
-    } catch (e) {
-      console.log(`getDataEmail value reading error: ${e}`);
-    }
-  };
-
-  const focusInput = () => {
+  const onFocus = () => {
     setTimeout(() => {
       scrollViewRef?.current?.scrollToPosition(0, OFFSET, true);
     }, 200);
@@ -94,21 +128,29 @@ const useSignInScreen = () => {
     }, 200);
   };
 
+  const switchTab = (index: number) => {
+    setError(null);
+    setActiveTab(authTabByIndex[index] as AuthTab);
+  };
+
   return {
-    tel,
+    phone,
     email,
-    setTel,
+    logIn,
+    error,
+    onFocus,
+    setPhone,
     setEmail,
-    isActive,
     password,
-    focusInput,
-    authRequest,
-    isPhoneAuth,
-    setIsActive,
+    switchTab,
+    isLoading,
     setPassword,
     passwordRef,
+    isPhoneAuth,
+    isPhoneError,
+    isEmailError,
     scrollViewRef,
-    setIsPhoneAuth,
+    isPasswordError,
     isAgreeWithTerms,
     onKeyboardWillShow,
     setIsAgreeWithTerms,

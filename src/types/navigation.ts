@@ -47,7 +47,7 @@ type AuthNavigationParamList = {
   [AuthScreenName.Recovery]: undefined;
   [AuthScreenName.Password]: undefined;
   [AuthScreenName.RecoveryConfirm]: {
-    tel: string;
+    phone: string;
   };
   [AuthScreenName.Error]: undefined;
 };
