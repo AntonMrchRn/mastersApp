@@ -11,14 +11,18 @@ export type TaskCardContants = {
   phone: string;
 };
 export const useTaskCardDescription = (status: TaskCardStatus) => {
-  //подана ли смета
   const [budgetSubmission, setBudgetSubmission] = useState(false);
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
+  const [budgetCanceled, setBudgetCanceled] = useState(true);
 
   const onBudgetSubmission = () => {
-    setBudgetSubmission(true);
+    setBudgetSubmission(!budgetSubmission);
   };
   const onBudgetModalVisible = () => {
+    setBudgetModalVisible(!budgetModalVisible);
+  };
+  const onRevokeBudget = () => {
+    setBudgetSubmission(!budgetSubmission);
     setBudgetModalVisible(!budgetModalVisible);
   };
 
@@ -134,6 +138,9 @@ export const useTaskCardDescription = (status: TaskCardStatus) => {
   }[] => {
     switch (status) {
       case 'published':
+        if (budgetCanceled) {
+          return [];
+        }
         if (budgetSubmission) {
           return [
             {
@@ -172,6 +179,16 @@ export const useTaskCardDescription = (status: TaskCardStatus) => {
     text: string;
   } | null => {
     switch (status) {
+      case 'published':
+        if (budgetCanceled) {
+          return {
+            title: 'Ваша смета отклонена координатором',
+            type: 'error',
+            icon: 'alert',
+            text: 'К сожалению, теперь вы не можете стать исполнителем этой задачи',
+          };
+        }
+        return null;
       case 'workDelivery':
         return {
           title: 'Задача на проверке',
@@ -213,5 +230,6 @@ export const useTaskCardDescription = (status: TaskCardStatus) => {
     banner,
     budgetModalVisible,
     onBudgetModalVisible,
+    onRevokeBudget,
   };
 };

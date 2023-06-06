@@ -29,8 +29,8 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
     banner,
     budgetModalVisible,
     onBudgetModalVisible,
+    onRevokeBudget,
   } = useTaskCardDescription(status);
-
   const theme = useTheme();
   return (
     <View>
@@ -42,8 +42,21 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
         title="Вы точно хотите отозвать смету?"
         description="Без отправленной сметы вас не будут рассматривать на роль исполнителя"
       >
-        <View>
-          <Button size="S" />
+        <View style={styles.buttons}>
+          <Button
+            size="S"
+            variant="outlineAccent"
+            label="Отмена"
+            style={styles.modalButton}
+            onPress={onBudgetModalVisible}
+          />
+          <Button
+            size="S"
+            variant="danger"
+            label="Отозвать"
+            style={styles.modalButton}
+            onPress={onRevokeBudget}
+          />
         </View>
       </Modal>
       <Text variant="title3" style={styles.task} color={theme.text.basic}>
