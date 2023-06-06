@@ -22,7 +22,7 @@ type TaskCardDescriptionProps = {
 export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   status,
 }) => {
-  const { contacts, files } = useTaskCardDescription();
+  const { contacts, files, getButton } = useTaskCardDescription(status);
   const theme = useTheme();
 
   return (
@@ -126,7 +126,15 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
       </View>
       <DownloadManager files={files} />
       <View style={styles.button}>
-        <Button label="Подать смету" labelStyle={styles.labelStyle} />
+        {getButton().map((button, index) => (
+          <Button
+            key={index}
+            label={button.label}
+            variant={button.variant}
+            style={index !== 0 && { marginTop: 16 }}
+            labelStyle={styles.labelStyle}
+          />
+        ))}
       </View>
     </View>
   );

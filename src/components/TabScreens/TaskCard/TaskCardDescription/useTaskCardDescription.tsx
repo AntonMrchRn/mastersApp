@@ -1,9 +1,17 @@
+import React from 'react';
+
+import { Button } from 'rn-ui-kit';
+
+import { TaskCardStatus } from '@/screens/tabs/TaskCardScreen/useTaskCard';
+
+import { styles } from './styles';
+
 export type TaskCardContants = {
   title: string;
   name: string;
   phone: string;
 };
-export const useTaskCardDescription = () => {
+export const useTaskCardDescription = (status: TaskCardStatus) => {
   const contacts: TaskCardContants[] = [
     {
       title: 'Роль контактного лица',
@@ -109,5 +117,29 @@ export const useTaskCardDescription = () => {
       size: 100,
     },
   ];
-  return { contacts, files };
+  const getButton = (): { label: string; variant: Variant } => {
+    switch (status) {
+      case 'published':
+        return [
+          {
+            label: 'Подать смету',
+            variant: 'accent',
+          },
+        ];
+      case 'inProgress':
+        return [
+          {
+            label: 'Сдать работы',
+            variant: 'accent',
+          },
+          {
+            label: 'Отказаться от задачи',
+            variant: 'outlineDanger',
+          },
+        ];
+      default:
+        return [];
+    }
+  };
+  return { contacts, files, getButton };
 };
