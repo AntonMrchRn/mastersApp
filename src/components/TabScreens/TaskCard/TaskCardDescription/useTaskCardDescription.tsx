@@ -13,7 +13,7 @@ export type TaskCardContants = {
 export const useTaskCardDescription = (status: TaskCardStatus) => {
   const [budgetSubmission, setBudgetSubmission] = useState(false);
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
-  const [budgetCanceled, setBudgetCanceled] = useState(true);
+  const [budgetCanceled, setBudgetCanceled] = useState(false);
 
   const onBudgetSubmission = () => {
     setBudgetSubmission(!budgetSubmission);
