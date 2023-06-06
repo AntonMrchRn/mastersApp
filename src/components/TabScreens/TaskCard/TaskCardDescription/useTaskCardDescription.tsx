@@ -13,6 +13,7 @@ export type TaskCardContants = {
 export const useTaskCardDescription = (status: TaskCardStatus) => {
   //подана ли смета
   const [budgetSubmission, setBudgetSubmission] = useState(false);
+  const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const onBudgetSubmission = () => {
     setBudgetSubmission(true);
   };
@@ -199,5 +200,5 @@ export const useTaskCardDescription = (status: TaskCardStatus) => {
   };
   const banner = getBanner();
   const buttons = getButtons();
-  return { contacts, files, buttons, banner };
+  return { contacts, files, buttons, banner, budgetModalVisible };
 };

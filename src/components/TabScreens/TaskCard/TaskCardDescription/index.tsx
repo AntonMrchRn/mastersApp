@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
-import { Banner, Button, Card, Text, useTheme } from 'rn-ui-kit';
+import { Banner, Button, Card, Modal, Text, useTheme } from 'rn-ui-kit';
 
 import { AddressIcon } from '@/assets/icons/svg/screens/AddressIcon';
 import { AvatarIcon } from '@/assets/icons/svg/screens/AvatarIcon';
@@ -22,11 +22,19 @@ type TaskCardDescriptionProps = {
 export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   status,
 }) => {
-  const { contacts, files, buttons, banner } = useTaskCardDescription(status);
+  const { contacts, files, buttons, banner, budgetModalVisible } =
+    useTaskCardDescription(status);
   const theme = useTheme();
 
   return (
     <View>
+      <Modal
+        closeIcon
+        isVisible={budgetModalVisible}
+        headerIcon="error"
+        title="Вы точно хотите отозвать смету?"
+        description="Без отправленной сметы вас не будут рассматривать на роль исполнителя"
+      ></Modal>
       <Text variant="title3" style={styles.task} color={theme.text.basic}>
         О задаче
       </Text>
