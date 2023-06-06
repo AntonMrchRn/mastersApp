@@ -24,23 +24,115 @@ type TaskCardScreenProps = StackScreenProps<
 export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
   const [tab, setTab] = useState('Описание');
   const theme = useTheme();
-
+  const [status, setStatus] = useState<Status>('closed');
+  type Status =
+    | 'published'
+    | 'inProgress'
+    | 'workDelivery'
+    | 'done'
+    | 'paid'
+    | 'cancelled'
+    | 'closed';
   type Badge = {
     label: string;
     icon: boolean | JSX.Element;
     variant: Variant;
     secondary?: boolean;
   };
-  const badges: Badge[] = [
-    { label: 'Опубликовано', icon: false, variant: 'basic', secondary: true },
-    { label: 'Срочно', icon: true, variant: 'secondary', secondary: true },
-    {
-      label: 'Ночные работы',
-      icon: <NightIcon />,
-      variant: 'special',
-      secondary: true,
-    },
-  ];
+  const getBadges = (): Badge[] => {
+    switch (status) {
+      case 'published':
+        return [
+          {
+            label: 'Опубликовано',
+            icon: false,
+            variant: 'basic',
+            secondary: true,
+          },
+          {
+            label: 'Срочно',
+            icon: true,
+            variant: 'secondary',
+            secondary: true,
+          },
+          {
+            label: 'Ночные работы',
+            icon: <NightIcon />,
+            variant: 'special',
+            secondary: true,
+          },
+        ];
+      case 'inProgress':
+        return [
+          {
+            label: 'В работе',
+            icon: false,
+            variant: 'accent',
+            secondary: true,
+          },
+          {
+            label: 'Срочно',
+            icon: true,
+            variant: 'secondary',
+            secondary: true,
+          },
+          {
+            label: 'Ночные работы',
+            icon: <NightIcon />,
+            variant: 'special',
+            secondary: true,
+          },
+        ];
+      case 'workDelivery':
+        return [
+          {
+            label: 'Сдача работ',
+            icon: false,
+            variant: 'warning',
+            secondary: true,
+          },
+        ];
+      case 'done':
+        return [
+          {
+            label: 'Ожидает оплаты',
+            icon: false,
+            variant: 'special',
+            secondary: true,
+          },
+        ];
+      case 'paid':
+        return [
+          {
+            label: 'Оплачено',
+            icon: false,
+            variant: 'success',
+            secondary: true,
+          },
+        ];
+      case 'cancelled':
+        return [
+          {
+            label: 'Отменено',
+            icon: false,
+            variant: 'danger',
+            secondary: true,
+          },
+        ];
+      case 'closed':
+        return [
+          {
+            label: 'Закрыто',
+            icon: false,
+            variant: 'basic',
+            secondary: true,
+          },
+        ];
+      default:
+        return [];
+    }
+  };
+
   const tabs: TabItem[] = [
     {
       id: 0,
@@ -68,7 +160,6 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
       icon: false,
     },
   ];
-
   const handleTabChange = (item: TabItem) => {
     setTab(item.label);
   };
@@ -80,17 +171,22 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
         return <TaskCardDescription />;
     }
   };
+  const goBack = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+  };
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <TaskCardHeader
-        navigation={navigation}
+        goBack={goBack}
         title={'Задача ID 32996'}
         description={'Опубликовано 10 апреля в 23:52'}
       />
       <ScrollView style={styles.scrollView}>
         <View style={styles.body}>
           <View style={styles.badges}>
-            {badges.map(badge => (
+            {getBadges().map(badge => (
               <Badge
                 secondary={badge?.secondary}
                 label={badge.label}

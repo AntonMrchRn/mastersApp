@@ -1,27 +1,18 @@
 import React, { FC } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
-import { StackNavigationProp } from '@react-navigation/stack';
 import { Text, useTheme } from 'rn-ui-kit';
 
 import ArrowBack from '@/assets/icons/svg/auth/ArrowBack';
-import {
-  TaskSearchNavigationParamList,
-  TaskSearchNavigatorScreenName,
-} from '@/types/navigation';
 
 type TaskCardHeaderProps = {
-  navigation: StackNavigationProp<
-    TaskSearchNavigationParamList,
-    TaskSearchNavigatorScreenName.TaskCard,
-    undefined
-  >;
+  goBack: () => void;
   title: string;
   description: string;
 };
 
 export const TaskCardHeader: FC<TaskCardHeaderProps> = ({
-  navigation,
+  goBack,
   title,
   description,
 }) => {
@@ -53,7 +44,7 @@ export const TaskCardHeader: FC<TaskCardHeaderProps> = ({
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.btnBack} onPress={navigation?.goBack}>
+      <TouchableOpacity style={styles.btnBack} onPress={goBack}>
         <ArrowBack />
       </TouchableOpacity>
       <View style={styles.wrapper}>
