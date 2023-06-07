@@ -28,9 +28,11 @@ import { styles } from './styles';
 
 type TaskCardDescriptionProps = {
   status: TaskCardStatus;
+  setStatus: React.Dispatch<React.SetStateAction<TaskCardStatus>>;
 };
 export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   status,
+  setStatus,
 }) => {
   const {
     contacts,
@@ -47,7 +49,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
     inputDateValue,
     onInputDateValue,
     onBottomSheetButton,
-  } = useTaskCardDescription(status);
+  } = useTaskCardDescription(status, setStatus);
   const theme = useTheme();
   return (
     <View>

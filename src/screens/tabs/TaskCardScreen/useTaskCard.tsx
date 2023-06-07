@@ -146,9 +146,9 @@ export const useTaskCard = () => {
   const getCurrentTab = () => {
     switch (tab) {
       case 'Описание':
-        return <TaskCardDescription status={status} />;
+        return <TaskCardDescription status={status} setStatus={setStatus} />;
       default:
-        return <TaskCardDescription status={status} />;
+        return <TaskCardDescription status={status} setStatus={setStatus} />;
     }
   };
   const onTabChange = (item: TabItem) => {

@@ -10,7 +10,10 @@ export type TaskCardContants = {
   name: string;
   phone: string;
 };
-export const useTaskCardDescription = (status: TaskCardStatus) => {
+export const useTaskCardDescription = (
+  status: TaskCardStatus,
+  setStatus: React.Dispatch<React.SetStateAction<TaskCardStatus>>
+) => {
   const [budgetSubmission, setBudgetSubmission] = useState(false);
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [dateModalVisible, setDateModalVisible] = useState(false);
@@ -40,6 +43,9 @@ export const useTaskCardDescription = (status: TaskCardStatus) => {
     setDateTo(currentDate);
     setInputDateValue('');
     onDateModalVisible();
+  };
+  const onWorkDelivery = () => {
+    setStatus('workDelivery');
   };
 
   const dateFrom = '2023-04-12';
@@ -179,6 +185,7 @@ export const useTaskCardDescription = (status: TaskCardStatus) => {
           {
             label: 'Сдать работы',
             variant: 'accent',
+            onPress: onWorkDelivery,
           },
           {
             label: 'Отказаться от задачи',
