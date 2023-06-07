@@ -17,6 +17,8 @@ export const useTaskCardDescription = (
   const [budgetSubmission, setBudgetSubmission] = useState(false);
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [dateModalVisible, setDateModalVisible] = useState(false);
+  const [cancelModalVisible, setCancelModalVisible] = useState(false);
+  const [taskCanceled, setTaskCanceled] = useState(false);
   const [budgetCanceled, setBudgetCanceled] = useState(false);
   const [dateTo, setDateTo] = useState('2023-04-17');
   const [inputDateValue, setInputDateValue] = useState('');
@@ -26,6 +28,9 @@ export const useTaskCardDescription = (
   };
   const onBudgetModalVisible = () => {
     setBudgetModalVisible(!budgetModalVisible);
+  };
+  const onCancelModalVisible = () => {
+    setCancelModalVisible(!cancelModalVisible);
   };
   const onDateModalVisible = () => {
     setDateModalVisible(!dateModalVisible);
@@ -37,7 +42,7 @@ export const useTaskCardDescription = (
     setBudgetSubmission(!budgetSubmission);
     setBudgetModalVisible(!budgetModalVisible);
   };
-  const onBottomSheetButton = () => {
+  const onDateBottomSheetButton = () => {
     const dateArray = inputDateValue.split('/');
     const currentDate = `20${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`;
     setDateTo(currentDate);
@@ -46,6 +51,10 @@ export const useTaskCardDescription = (
   };
   const onWorkDelivery = () => {
     setStatus('workDelivery');
+  };
+  const onCancelTask = () => {
+    setStatus('published');
+    onCancelModalVisible();
   };
 
   const dateFrom = '2023-04-12';
@@ -190,6 +199,7 @@ export const useTaskCardDescription = (
           {
             label: 'Отказаться от задачи',
             variant: 'outlineDanger',
+            onPress: onCancelModalVisible,
           },
         ];
       default:
@@ -261,6 +271,9 @@ export const useTaskCardDescription = (
     dateTo,
     inputDateValue,
     onInputDateValue,
-    onBottomSheetButton,
+    onDateBottomSheetButton,
+    cancelModalVisible,
+    onCancelModalVisible,
+    onCancelTask,
   };
 };

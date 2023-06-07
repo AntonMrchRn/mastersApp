@@ -4,10 +4,19 @@ export const styles = StyleSheet.create({
   mr10: {
     marginRight: 10,
   },
+  mr11: {
+    marginRight: 11,
+  },
+  mr16: {
+    marginRight: 16,
+  },
+  ml10: {
+    marginLeft: 10,
+  },
   mt24: {
     marginTop: 24,
   },
-  task: {
+  mt36: {
     marginTop: 36,
   },
   address: {
@@ -18,17 +27,11 @@ export const styles = StyleSheet.create({
     marginTop: 8,
     flexDirection: 'row',
   },
-  ml10: {
-    marginLeft: 10,
-  },
   attachments: {
     marginTop: 36,
     marginBottom: 24,
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  mr11: {
-    marginRight: 11,
   },
   bottom: {
     marginTop: 24,
@@ -54,9 +57,6 @@ export const styles = StyleSheet.create({
   cardBody: {
     flexDirection: 'row',
   },
-  mr16: {
-    marginRight: 16,
-  },
   name: {
     marginTop: 8,
   },
@@ -64,13 +64,5 @@ export const styles = StyleSheet.create({
     marginTop: 4,
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  buttons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 24,
-  },
-  modalButton: {
-    width: '48%',
   },
 });

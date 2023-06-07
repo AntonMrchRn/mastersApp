@@ -2,16 +2,7 @@ import React, { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
 import dayjs from 'dayjs';
-import {
-  Banner,
-  BottomSheet,
-  Button,
-  Card,
-  InputDate,
-  Modal,
-  Text,
-  useTheme,
-} from 'rn-ui-kit';
+import { Banner, Button, Card, Text, useTheme } from 'rn-ui-kit';
 
 import { AddressIcon } from '@/assets/icons/svg/screens/AddressIcon';
 import { AvatarIcon } from '@/assets/icons/svg/screens/AvatarIcon';
@@ -22,6 +13,9 @@ import { PhoneIcon } from '@/assets/icons/svg/screens/PhoneIcon';
 import { DownloadManager } from '@/components/DownloadManager';
 import { TaskCardStatus } from '@/screens/tabs/TaskCardScreen/useTaskCard';
 
+import { TaskCardBudgetModal } from '../TaskCardBudgetModal';
+import { TaskCardCancelBottomSheet } from '../TaskCardCancelBottomSheet';
+import { TaskCardDateBottomSheet } from '../TaskCardDateBottomSheet';
 import { useTaskCardDescription } from './useTaskCardDescription';
 
 import { styles } from './styles';
@@ -48,58 +42,32 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
     dateTo,
     inputDateValue,
     onInputDateValue,
-    onBottomSheetButton,
+    onDateBottomSheetButton,
+    cancelModalVisible,
+    onCancelModalVisible,
+    onCancelTask,
   } = useTaskCardDescription(status, setStatus);
   const theme = useTheme();
   return (
     <View>
-      <Modal
-        closeIcon
-        closeIconPress={onBudgetModalVisible}
+      <TaskCardBudgetModal
         isVisible={budgetModalVisible}
-        headerIcon="error"
-        title="Вы точно хотите отозвать смету?"
-        description="Без отправленной сметы вас не будут рассматривать на роль исполнителя"
-      >
-        <View style={styles.buttons}>
-          <Button
-            size="S"
-            variant="outlineAccent"
-            label="Отмена"
-            style={styles.modalButton}
-            onPress={onBudgetModalVisible}
-          />
-          <Button
-            size="S"
-            variant="danger"
-            label="Отозвать"
-            style={styles.modalButton}
-            onPress={onRevokeBudget}
-          />
-        </View>
-      </Modal>
-      <BottomSheet
-        closeIcon
-        closeIconPress={onDateModalVisible}
-        onSwipeComplete={onDateModalVisible}
+        onCancel={onBudgetModalVisible}
+        onRevoke={onRevokeBudget}
+      />
+      <TaskCardCancelBottomSheet
+        isVisible={cancelModalVisible}
+        onCancel={onCancelModalVisible}
+        onRefuse={onCancelTask}
+      />
+      <TaskCardDateBottomSheet
         isVisible={dateModalVisible}
-        title="Дата окончания"
-      >
-        <InputDate
-          containerStyle={{ width: '100%', marginTop: 24 }}
-          value={inputDateValue}
-          onChangeText={masked => {
-            onInputDateValue(masked);
-          }}
-        />
-        <Button
-          label="Изменить"
-          style={styles.mt24}
-          disabled={inputDateValue.length < 8}
-          onPress={onBottomSheetButton}
-        />
-      </BottomSheet>
-      <Text variant="title3" style={styles.task} color={theme.text.basic}>
+        onCancel={onDateModalVisible}
+        onChange={onDateBottomSheetButton}
+        value={inputDateValue}
+        onChangeText={onInputDateValue}
+      />
+      <Text variant="title3" style={styles.mt36} color={theme.text.basic}>
         О задаче
       </Text>
       <Text variant="bodySRegular" style={styles.mt24} color={theme.text.basic}>
