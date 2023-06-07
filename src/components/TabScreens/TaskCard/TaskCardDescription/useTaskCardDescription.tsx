@@ -13,7 +13,10 @@ export type TaskCardContants = {
 export const useTaskCardDescription = (status: TaskCardStatus) => {
   const [budgetSubmission, setBudgetSubmission] = useState(false);
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
+  const [dateModalVisible, setDateModalVisible] = useState(false);
   const [budgetCanceled, setBudgetCanceled] = useState(false);
+  const [dateTo, setDateTo] = useState('2023-04-17');
+  const [inputDateValue, setInputDateValue] = useState('');
 
   const onBudgetSubmission = () => {
     setBudgetSubmission(!budgetSubmission);
@@ -21,11 +24,25 @@ export const useTaskCardDescription = (status: TaskCardStatus) => {
   const onBudgetModalVisible = () => {
     setBudgetModalVisible(!budgetModalVisible);
   };
+  const onDateModalVisible = () => {
+    setDateModalVisible(!dateModalVisible);
+  };
+  const onInputDateValue = (text: string) => {
+    setInputDateValue(text);
+  };
   const onRevokeBudget = () => {
     setBudgetSubmission(!budgetSubmission);
     setBudgetModalVisible(!budgetModalVisible);
   };
+  const onBottomSheetButton = () => {
+    const dateArray = inputDateValue.split('/');
+    const currentDate = `20${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`;
+    setDateTo(currentDate);
+    setInputDateValue('');
+    onDateModalVisible();
+  };
 
+  const dateFrom = '2023-04-12';
   const contacts: TaskCardContants[] = [
     {
       title: 'Роль контактного лица',
@@ -231,5 +248,12 @@ export const useTaskCardDescription = (status: TaskCardStatus) => {
     budgetModalVisible,
     onBudgetModalVisible,
     onRevokeBudget,
+    onDateModalVisible,
+    dateModalVisible,
+    dateFrom,
+    dateTo,
+    inputDateValue,
+    onInputDateValue,
+    onBottomSheetButton,
   };
 };

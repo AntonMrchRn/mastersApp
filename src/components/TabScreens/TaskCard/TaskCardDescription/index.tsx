@@ -1,7 +1,17 @@
 import React, { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
-import { Banner, Button, Card, Modal, Text, useTheme } from 'rn-ui-kit';
+import dayjs from 'dayjs';
+import {
+  Banner,
+  BottomSheet,
+  Button,
+  Card,
+  InputDate,
+  Modal,
+  Text,
+  useTheme,
+} from 'rn-ui-kit';
 
 import { AddressIcon } from '@/assets/icons/svg/screens/AddressIcon';
 import { AvatarIcon } from '@/assets/icons/svg/screens/AvatarIcon';
@@ -30,6 +40,13 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
     budgetModalVisible,
     onBudgetModalVisible,
     onRevokeBudget,
+    onDateModalVisible,
+    dateModalVisible,
+    dateFrom,
+    dateTo,
+    inputDateValue,
+    onInputDateValue,
+    onBottomSheetButton,
   } = useTaskCardDescription(status);
   const theme = useTheme();
   return (
@@ -59,10 +76,31 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
           />
         </View>
       </Modal>
+      <BottomSheet
+        closeIcon
+        closeIconPress={onDateModalVisible}
+        onSwipeComplete={onDateModalVisible}
+        isVisible={dateModalVisible}
+        title="Дата окончания"
+      >
+        <InputDate
+          containerStyle={{ width: '100%', marginTop: 24 }}
+          value={inputDateValue}
+          onChangeText={masked => {
+            onInputDateValue(masked);
+          }}
+        />
+        <Button
+          label="Изменить"
+          style={styles.mt24}
+          disabled={inputDateValue.length < 8}
+          onPress={onBottomSheetButton}
+        />
+      </BottomSheet>
       <Text variant="title3" style={styles.task} color={theme.text.basic}>
         О задаче
       </Text>
-      <Text variant="bodySRegular" style={styles.text} color={theme.text.basic}>
+      <Text variant="bodySRegular" style={styles.mt24} color={theme.text.basic}>
         Lorem ipsum dolor sit amet consectetur. Tincidunt ultricies egestas
         tempus feugiat sagittis at gravida. Duis vitae elit habitant tortor
         viverra semper dictum ultricies non. Lectus morbi ut nascetur varius.
@@ -90,11 +128,12 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
           color={theme.text.basic}
           style={styles.ml10}
         >
-          с 12 апреля 09:00 по 17 апреля 18:00
+          с {dayjs(dateFrom).format('DD MMMM YYYY')} по{' '}
+          {dayjs(dateTo).format('DD MMMM YYYY')}
         </Text>
       </View>
       {status === 'inProgress' && (
-        <TouchableOpacity style={styles.edit}>
+        <TouchableOpacity style={styles.edit} onPress={onDateModalVisible}>
           <EditIcon />
           <Text
             variant="bodySBold"
@@ -165,7 +204,6 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
             label={button.label}
             variant={button.variant}
             style={index !== 0 && { marginTop: 16 }}
-            labelStyle={styles.labelStyle}
           />
         ))}
         {banner && (

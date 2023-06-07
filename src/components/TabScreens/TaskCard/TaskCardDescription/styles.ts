@@ -4,11 +4,11 @@ export const styles = StyleSheet.create({
   mr10: {
     marginRight: 10,
   },
+  mt24: {
+    marginTop: 24,
+  },
   task: {
     marginTop: 36,
-  },
-  text: {
-    marginTop: 24,
   },
   address: {
     marginTop: 16,
@@ -30,12 +30,6 @@ export const styles = StyleSheet.create({
   mr11: {
     marginRight: 11,
   },
-  labelStyle: {
-    fontFamily: 'Nunito Sans Bold',
-    fontSize: 17,
-    fontWeight: '700',
-    lineHeight: 24,
-  },
   bottom: {
     marginTop: 24,
     marginBottom: 12,
@@ -44,6 +38,7 @@ export const styles = StyleSheet.create({
     marginTop: 16,
     flexDirection: 'row',
     alignItems: 'center',
+    alignSelf: 'flex-start',
   },
   contacts: {
     marginTop: 44,

@@ -21,7 +21,7 @@ export type TaskCardBadge = {
   secondary?: boolean;
 };
 export const useTaskCard = () => {
-  const [status, setStatus] = useState<TaskCardStatus>('published');
+  const [status, setStatus] = useState<TaskCardStatus>('inProgress');
   const [tab, setTab] = useState('Описание');
   const getBadges = (): TaskCardBadge[] => {
     switch (status) {
