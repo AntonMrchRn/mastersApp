@@ -1,12 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 
 import { SegmentedControl } from 'rn-ui-kit';
 
-import { useAppSelector } from '@/store';
-
-type TypeSelectionTaskSearchProps = {
-  onPress?: () => void;
-};
+import { useAppDispatch, useAppSelector } from '@/store';
+import { getSearchTasks } from '@/store/slices/taskSearch/asyncActions';
 
 type TypeSelectionItem = {
   ID: number;
@@ -15,9 +12,8 @@ type TypeSelectionItem = {
   tableName?: string;
 };
 
-const TypeSelectionTaskSearch: FC<TypeSelectionTaskSearchProps> = ({
-  onPress,
-}: TypeSelectionTaskSearchProps) => {
+const TypeSelectionTaskSearch: FC = ({ setActiveTab }) => {
+  const dispatch = useAppDispatch();
   const { tableNames } = useAppSelector(state => state.taskSearch);
 
   const descriptions = tableNames.map(
@@ -26,7 +22,10 @@ const TypeSelectionTaskSearch: FC<TypeSelectionTaskSearchProps> = ({
 
   return (
     <SegmentedControl
-      onChange={res => console.log('res', tableNames[res].code)}
+      onChange={res => {
+        dispatch(getSearchTasks({ idList: tableNames[res].ID }));
+        setActiveTab(tableNames[res].ID);
+      }}
       tabs={descriptions.length ? descriptions : ['', '']}
     />
   );

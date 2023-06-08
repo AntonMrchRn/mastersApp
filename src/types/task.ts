@@ -1,6 +1,5 @@
 type Task = {
-  id: number;
-  test: string;
+  ID: number;
 };
 
 export type { Task };
