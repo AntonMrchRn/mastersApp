@@ -1,18 +1,17 @@
 import React, { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
-import dayjs from 'dayjs';
 import { Banner, Button, Card, Text, useTheme } from 'rn-ui-kit';
 
-import { AddressIcon } from '@/assets/icons/svg/screens/AddressIcon';
 import { AvatarIcon } from '@/assets/icons/svg/screens/AvatarIcon';
-import { CalendarCheckIcon } from '@/assets/icons/svg/screens/CalendarCheckIcon';
 import { CaretDownIcon } from '@/assets/icons/svg/screens/CaretDownIcon';
 import { EditIcon } from '@/assets/icons/svg/screens/EditIcon';
 import { PhoneIcon } from '@/assets/icons/svg/screens/PhoneIcon';
 import { DownloadManager } from '@/components/DownloadManager';
+import { TaskAddress } from '@/components/task/TaskAddress';
 import { TaskCardStatus } from '@/screens/tabs/TaskCardScreen/useTaskCard';
 
+import { TaskDate } from '../../../task/TaskDate';
 import { TaskCardBudgetModal } from '../TaskCardBudgetModal';
 import { TaskCardCancelBottomSheet } from '../TaskCardCancelBottomSheet';
 import { TaskCardDateBottomSheet } from '../TaskCardDateBottomSheet';
@@ -81,26 +80,14 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
         morbi ut nascetur varius.
       </Text>
       <View style={styles.address}>
-        <AddressIcon />
-        <Text
-          variant="bodySRegular"
-          color={theme.text.basic}
-          style={styles.ml10}
-        >
-          Краснодар, ул. Чекистов 24, кв. 89, нежилые помещения 1,2,3,4,5,6
-          (Аптека Апрель)
-        </Text>
+        <TaskAddress
+          address={
+            'Краснодар, ул. Чекистов 24, кв. 89, нежилые помещения 1,2,3,4,5,6(Аптека Апрель)'
+          }
+        />
       </View>
       <View style={styles.date}>
-        <CalendarCheckIcon />
-        <Text
-          variant="bodySRegular"
-          color={theme.text.basic}
-          style={styles.ml10}
-        >
-          с {dayjs(dateFrom).format('DD MMMM YYYY')} по{' '}
-          {dayjs(dateTo).format('DD MMMM YYYY')}
-        </Text>
+        <TaskDate from={dateFrom} to={dateTo} />
       </View>
       {status === 'inProgress' && (
         <TouchableOpacity style={styles.edit} onPress={onDateModalVisible}>

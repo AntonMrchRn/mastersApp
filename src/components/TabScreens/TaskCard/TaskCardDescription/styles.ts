@@ -21,11 +21,9 @@ export const styles = StyleSheet.create({
   },
   address: {
     marginTop: 16,
-    flexDirection: 'row',
   },
   date: {
     marginTop: 8,
-    flexDirection: 'row',
   },
   attachments: {
     marginTop: 36,

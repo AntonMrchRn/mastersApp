@@ -3,9 +3,10 @@ import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { StackScreenProps } from '@react-navigation/stack';
-import { Badge, Card, TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
+import { Card, TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
 
 import { TaskCardHeader } from '@/components/TabScreens/TaskCard/TaskCardHeader';
+import { TaskBadges } from '@/components/task/TaskBadges';
 import {
   TaskSearchNavigationParamList,
   TaskSearchNavigatorScreenName,
@@ -20,7 +21,7 @@ type TaskCardScreenProps = StackScreenProps<
   TaskSearchNavigatorScreenName.TaskCard
 >;
 export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
-  const { getBadges, tabs, onTabChange, getCurrentTab, status } = useTaskCard();
+  const { badges, tabs, onTabChange, getCurrentTab, status } = useTaskCard();
   const theme = useTheme();
   const goBack = () => {
     if (navigation.canGoBack()) {
@@ -37,16 +38,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
       <ScrollView style={styles.scrollView}>
         <View style={styles.body}>
           <View style={styles.badges}>
-            {getBadges().map(badge => (
-              <Badge
-                secondary={badge?.secondary}
-                label={badge.label}
-                icon={badge.icon}
-                variant={badge.variant}
-                style={styles.badge}
-                key={badge.label}
-              />
-            ))}
+            <TaskBadges badges={badges} />
           </View>
           <Text variant="title2" style={styles.title} color={theme.text.basic}>
             Какое-то длинное название задания на 2-3 строчки

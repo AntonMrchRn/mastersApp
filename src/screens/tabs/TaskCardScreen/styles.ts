@@ -10,13 +10,7 @@ export const styles = StyleSheet.create({
   },
   body: { marginHorizontal: 20 },
   badges: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
     marginTop: 22,
-  },
-  badge: {
-    marginRight: 4,
-    marginVertical: 4,
   },
   title: {
     marginTop: 4,

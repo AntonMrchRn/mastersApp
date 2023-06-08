@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import { Variant } from 'rn-ui-kit/lib/typescript/components/Badge';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
 
 import { NightIcon } from '@/assets/icons/svg/screens/NightIcon';
 import { TaskCardDescription } from '@/components/TabScreens/TaskCard/TaskCardDescription';
+import { TaskBadge } from '@/components/task/TaskBadges';
 
 export type TaskCardStatus =
   | 'published'
@@ -14,16 +14,11 @@ export type TaskCardStatus =
   | 'paid'
   | 'cancelled'
   | 'closed';
-export type TaskCardBadge = {
-  label: string;
-  icon: boolean | JSX.Element;
-  variant: Variant;
-  secondary?: boolean;
-};
+
 export const useTaskCard = () => {
   const [status, setStatus] = useState<TaskCardStatus>('inProgress');
   const [tab, setTab] = useState('Описание');
-  const getBadges = (): TaskCardBadge[] => {
+  const getBadges = (): TaskBadge[] => {
     switch (status) {
       case 'published':
         return [
@@ -154,9 +149,10 @@ export const useTaskCard = () => {
   const onTabChange = (item: TabItem) => {
     setTab(item.label);
   };
+  const badges = getBadges();
   return {
     onTabChange,
-    getBadges,
+    badges,
     tabs,
     getCurrentTab,
     status,
