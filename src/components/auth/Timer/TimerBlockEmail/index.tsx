@@ -8,7 +8,7 @@ import TimerComponent from '@/components/auth/Timer/TimerComponent';
 import { storageMMKV } from '@/mmkv/storage';
 import { useAppSelector } from '@/store';
 import {
-  clearIsRecoveryEmail,
+  clearIsRecoveryByEmail,
   timerOffEmail,
   timerOnEmail,
 } from '@/store/slices/auth/actions';
@@ -22,8 +22,10 @@ type TimerBlockEmailProps = {
   expiredTimer: number;
 };
 
+// TODO get rid of the need to use async storage and MMKV together
+
 function TimerBlockEmail({ expiredTimer }: TimerBlockEmailProps) {
-  const { isRecoveryEmail } = useAppSelector(selectAuth);
+  const { isRecoveryByEmail } = useAppSelector(selectAuth);
   const dispatch = useDispatch();
 
   const [timeMilliSeconds, setTimeMilliSeconds] = useState<number>(Date.now());
@@ -37,17 +39,17 @@ function TimerBlockEmail({ expiredTimer }: TimerBlockEmailProps) {
   });
 
   useEffect(() => {
-    if (isRecoveryEmail) {
+    if (isRecoveryByEmail) {
       handleBlock();
     }
-  }, [isRecoveryEmail]);
+  }, [isRecoveryByEmail]);
 
   const handleBlock = useCallback(() => {
     const data = { block: true, timerOffset: Date.now() };
     setData(JSON.stringify(data)).then(() => {
       setIsBlock(data);
       dispatch(timerOnEmail());
-      dispatch(clearIsRecoveryEmail());
+      dispatch(clearIsRecoveryByEmail());
     });
   }, []);
 

@@ -3,13 +3,13 @@ import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { Input, InputCode, Spacer } from 'rn-ui-kit';
+
 import ButtonAuth from '@/components/auth/ButtonAuth';
-import CodeFieldInput from '@/components/auth/CodeFieldInput';
 import ConfirmPreview from '@/components/auth/ConfirmPreview';
-import InputPassword from '@/components/auth/Input/InputPassword';
 import LogoPreview from '@/components/auth/LogoPreview';
-import TimerBlock from '@/components/auth/Timer/TimerBlock';
-import Spacer from '@/components/Spacer';
+import TimerBlockPhone from '@/components/auth/Timer/TimerBlockPhone';
+import ErrorField from '@/components/ErrorField';
 import { configApp } from '@/constants/platform';
 
 import useRecoveryConfirmationScreen from './useRecoveryConfirmationScreen';
@@ -18,19 +18,21 @@ import styles from './style';
 
 const RecoveryConfirmationScreen = () => {
   const {
-    value,
+    code,
     email,
-    timeout,
+    error,
+    setCode,
+    onFocus,
     password,
-    setValue,
-    focusInput,
-    isPhoneAuth,
+    sendCode,
+    isLoading,
     setPassword,
+    isCodeError,
     passwordRef,
+    timeoutPhone,
     scrollViewRef,
-    recoveryError,
-    restoreRequest,
-    recoveryRequest,
+    isPasswordError,
+    restorePassword,
     onKeyboardWillShow,
   } = useRecoveryConfirmationScreen();
 
@@ -45,40 +47,48 @@ const RecoveryConfirmationScreen = () => {
       >
         <View style={styles.wrapperSignIn}>
           <LogoPreview label="Восстановление пароля" height={135} />
+          <Spacer size="xs" />
           <ConfirmPreview />
-          <Spacer />
-          <View style={styles.wrapperCode}>
-            <CodeFieldInput
-              value={value}
-              setValue={setValue}
-              onSubmitEditing={() => passwordRef?.current?.focus()}
-              onFocus={configApp.ios ? focusInput : () => null}
-            />
-          </View>
-          <InputPassword
-            password={password}
-            setPassword={setPassword}
-            innerRef={passwordRef}
-            label="Новый пароль"
+          <Spacer size="m" />
+          <InputCode
+            value={code}
+            onChangeText={(code: string) => setCode(code)}
+            onSubmitEditing={() => passwordRef?.current?.focus()}
+            onFocus={configApp.ios ? onFocus : () => null}
           />
-          <Spacer size="L" />
+          {isCodeError && error && <ErrorField error={error.message} />}
+          <Spacer size="xxl" />
+          <Input
+            value={password}
+            ref={passwordRef}
+            variant="password"
+            containerStyle={styles.inputContainer}
+            style={styles.input}
+            placeholder="Новый пароль"
+            maxLength={64}
+            onChangeText={setPassword}
+            hint={isPasswordError ? error?.message : undefined}
+            isError={isPasswordError}
+          />
+          <Spacer size="xl" />
           <ButtonAuth
             isRestore
-            isPhoneAuth={isPhoneAuth}
-            value={value}
-            password={password}
-            email={email}
-            label="Изменить пароль"
             isDisabled
+            value={code}
+            email={email}
             withOutPassword
-            recoveryError={recoveryError}
-            onPress={restoreRequest}
+            isPhoneAuth={true}
+            password={password}
+            isLoading={isLoading}
+            label="Изменить пароль"
+            onPress={restorePassword}
+            recoveryError={error?.message}
           />
-          {!!timeout && (
-            <TimerBlock
-              expiredTimer={Number(timeout?.timeout * 1000)}
+          {!!timeoutPhone && (
+            <TimerBlockPhone
               isConfirm
-              callBack={recoveryRequest}
+              callBack={sendCode}
+              expiredTimer={Number(timeoutPhone?.timeout) * 1000}
             />
           )}
         </View>

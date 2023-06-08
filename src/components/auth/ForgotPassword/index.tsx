@@ -4,8 +4,6 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { configApp, deviceHeight } from '@/constants/platform';
-import { useAppDispatch } from '@/store';
-import { clearAuthError } from '@/store/slices/auth/actions';
 import {
   AuthScreenName,
   RecoveryScreenNavigationProp,
@@ -15,11 +13,9 @@ import styles from './style';
 
 const ForgotPassword = () => {
   const navigation = useNavigation<RecoveryScreenNavigationProp>();
-  const dispatch = useAppDispatch();
 
   const navigateToRecovery = () => {
     navigation.navigate(AuthScreenName.Recovery);
-    dispatch(clearAuthError(null));
   };
 
   return (

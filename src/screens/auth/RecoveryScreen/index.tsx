@@ -4,14 +4,13 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import normalize from 'react-native-normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { Input, InputPhone, SegmentedControl, Spacer } from 'rn-ui-kit';
+
 import ButtonAuth from '@/components/auth/ButtonAuth';
 import ForgotPreview from '@/components/auth/ForgotPreview';
-import Input from '@/components/auth/Input/Input';
 import LogoPreview from '@/components/auth/LogoPreview';
-import TimerBlock from '@/components/auth/Timer/TimerBlock';
 import TimerBlockEmail from '@/components/auth/Timer/TimerBlockEmail';
-import TypeSelection from '@/components/auth/TypeSelection';
-import Spacer from '@/components/Spacer';
+import TimerBlockPhone from '@/components/auth/Timer/TimerBlockPhone';
 import { configApp } from '@/constants/platform';
 
 import useRecoveryScreen from './useRecoveryScreen';
@@ -20,21 +19,22 @@ import styles from './style';
 
 const RecoveryScreen = () => {
   const {
-    tel,
+    phone,
     email,
-    setTel,
-    timeout,
+    error,
+    onFocus,
+    sendCode,
+    setPhone,
     setEmail,
     password,
-    isActive,
-    focusInput,
-    setIsActive,
+    switchTab,
+    isLoading,
     isPhoneAuth,
-    passwordRef,
-    timeOutEmail,
+    timeoutPhone,
+    timeoutEmail,
+    isPhoneError,
+    isEmailError,
     scrollViewRef,
-    setIsPhoneAuth,
-    recoveryRequest,
     onKeyboardWillShow,
   } = useRecoveryScreen();
 
@@ -52,45 +52,57 @@ const RecoveryScreen = () => {
             label="Восстановление пароля"
             height={configApp.ios ? 135 : normalize(175, 'height')}
           />
+          <Spacer size="xs" />
           <ForgotPreview />
-          <TypeSelection
-            setIsPhoneAuth={setIsPhoneAuth}
-            isPhoneAuth={isPhoneAuth}
-            setTel={setTel}
-            setEmail={setEmail}
-            setIsActive={setIsActive}
-          />
-          <Spacer />
-          <Input
-            isPhoneAuth={isPhoneAuth}
-            tel={tel}
-            email={email}
-            setEmail={setEmail}
-            setTel={setTel}
-            onSubmitEditing={() => passwordRef?.current?.focus()}
-            onFocus={configApp.ios ? focusInput : () => null}
-            setIsActive={setIsActive}
-            isActive={isActive}
-          />
-          <Spacer size="L" />
+          <SegmentedControl onChange={switchTab} tabs={['Телефон', 'Email']} />
+          <Spacer size="xl" />
+          {isPhoneAuth ? (
+            <InputPhone
+              isError={isPhoneError}
+              value={phone}
+              onClear={() => setPhone('')}
+              containerStyle={styles.input}
+              hint={isPhoneError ? error?.message : undefined}
+              onFocus={configApp.ios ? onFocus : () => null}
+              onChangeText={(_, unmasked) => setPhone(unmasked)}
+            />
+          ) : (
+            <Input
+              value={email}
+              variant="text"
+              autoCapitalize="none"
+              isError={isEmailError}
+              keyboardType="email-address"
+              onClear={() => setEmail('')}
+              containerStyle={styles.input}
+              placeholder="Электронная почта"
+              hint={isEmailError ? error?.message : undefined}
+              onChangeText={(email: string) => setEmail(email)}
+              onFocus={configApp.ios ? onFocus : () => null}
+            />
+          )}
+          <Spacer size="xl" />
           <ButtonAuth
-            isPhoneAuth={isPhoneAuth}
-            tel={tel}
-            password={password}
-            email={email}
-            label={isPhoneAuth ? 'Получить СМС с кодом' : 'Получить ссылку'}
             isDisabled
+            phone={phone}
+            email={email}
             withOutPassword
-            onPress={recoveryRequest}
+            onPress={sendCode}
+            password={password}
+            isLoading={isLoading}
+            isPhoneAuth={isPhoneAuth}
+            label={isPhoneAuth ? 'Получить СМС с кодом' : 'Получить ссылку'}
           />
           <View style={styles.containerTimer}>
             {isPhoneAuth
-              ? !!timeout && (
-                  <TimerBlock expiredTimer={Number(timeout?.timeout * 1000)} />
+              ? !!timeoutPhone && (
+                  <TimerBlockPhone
+                    expiredTimer={Number(timeoutPhone?.timeout * 1000)}
+                  />
                 )
-              : !!timeOutEmail && (
+              : !!timeoutEmail && (
                   <TimerBlockEmail
-                    expiredTimer={Number(timeOutEmail?.timeout * 1000)}
+                    expiredTimer={Number(timeoutEmail?.timeout * 1000)}
                   />
                 )}
           </View>

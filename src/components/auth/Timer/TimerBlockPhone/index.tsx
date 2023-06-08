@@ -8,9 +8,9 @@ import TimerComponent from '@/components/auth/Timer/TimerComponent';
 import { configApp, deviceHeight } from '@/constants/platform';
 import { useAppSelector } from '@/store';
 import {
-  clearIsRecovery,
-  timerOff,
-  timerOn,
+  clearIsRecoveryByPhone,
+  timerOffPhone,
+  timerOnPhone,
 } from '@/store/slices/auth/actions';
 import { selectAuth } from '@/store/slices/auth/selectors';
 
@@ -20,14 +20,20 @@ const setData = async (data: string) => {
   await AsyncStorage.setItem('BLOCK', data);
 };
 
-type TimerBlockProps = {
+type TimerBlockPhoneProps = {
   expiredTimer: number;
   isConfirm?: boolean;
   callBack?: () => void;
 };
 
-function TimerBlock({ expiredTimer, isConfirm, callBack }: TimerBlockProps) {
-  const { isRecovery, isActiveTimer } = useAppSelector(selectAuth);
+// TODO possibly create one component TimerBlock instead TimerBlockPhone and TimerBlockEmail
+
+function TimerBlockPhone({
+  expiredTimer,
+  isConfirm,
+  callBack,
+}: TimerBlockPhoneProps) {
+  const { isRecoveryByPhone, isActiveTimer } = useAppSelector(selectAuth);
   const dispatch = useDispatch();
 
   const [timeMilliSeconds, setTimeMilliSeconds] = useState<number>(Date.now());
@@ -41,24 +47,24 @@ function TimerBlock({ expiredTimer, isConfirm, callBack }: TimerBlockProps) {
   });
 
   useEffect(() => {
-    if (isRecovery) {
+    if (isRecoveryByPhone) {
       handleBlock();
     }
-  }, [isRecovery]);
+  }, [isRecoveryByPhone]);
 
   const handleBlock = useCallback(() => {
     const data = { block: true, timerOffset: Date.now() };
     setData(JSON.stringify(data)).then(() => {
       setIsBlock(data);
-      dispatch(timerOn());
-      dispatch(clearIsRecovery());
+      dispatch(timerOnPhone());
+      dispatch(clearIsRecoveryByPhone());
     });
   }, []);
 
   const closeBlock = useCallback(() => {
     AsyncStorage.removeItem('BLOCK').then(() => {
       setIsBlock({ block: false, timerOffset: null });
-      dispatch(timerOff());
+      dispatch(timerOffPhone());
     });
   }, [isBlock]);
 
@@ -67,10 +73,10 @@ function TimerBlock({ expiredTimer, isConfirm, callBack }: TimerBlockProps) {
       try {
         const value = await AsyncStorage.getItem('BLOCK');
         if (value === null) {
-          dispatch(timerOff());
+          dispatch(timerOffPhone());
         }
         if (value !== null) {
-          dispatch(timerOn());
+          dispatch(timerOnPhone());
           const data = JSON.parse(value);
           const timeNow = Date.now();
 
@@ -143,4 +149,4 @@ function TimerBlock({ expiredTimer, isConfirm, callBack }: TimerBlockProps) {
   return null;
 }
 
-export default TimerBlock;
+export default TimerBlockPhone;
