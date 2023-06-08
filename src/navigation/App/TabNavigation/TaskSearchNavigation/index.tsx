@@ -2,16 +2,15 @@ import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Header from '@/components/Header';
-import TaskCardScreen from '@/screens/tabs/TaskCardScreen';
+import { TaskCardScreen } from '@/screens/tabs/TaskCardScreen';
 import TaskSearchScreen from '@/screens/tabs/TaskSearchScreen';
 import {
   TaskSearchNavigationParamList,
   TaskSearchNavigatorScreenName,
 } from '@/types/navigation';
 
-const options = { headerShown: false };
-const screenOptions = { header: Header };
+const screenOptions = { headerShown: false };
+
 const Stack = createStackNavigator<TaskSearchNavigationParamList>();
 
 function TaskSearchNavigation() {
@@ -20,7 +19,6 @@ function TaskSearchNavigation() {
       <Stack.Screen
         name={TaskSearchNavigatorScreenName.TaskSearch}
         component={TaskSearchScreen}
-        options={options}
       />
       <Stack.Screen
         name={TaskSearchNavigatorScreenName.TaskCard}
