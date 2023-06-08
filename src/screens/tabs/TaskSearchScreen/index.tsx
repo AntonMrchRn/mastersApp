@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   FlatList,
   ListRenderItemInfo,
@@ -9,58 +9,56 @@ import {
 
 import { useNavigation } from '@react-navigation/native';
 
-import PreviewNotFound from '@/components/TabScreens/TaskSearchScreen/PreviewNotFound';
-import TaskCardItem from '@/components/TabScreens/TaskSearchScreen/TaskCardItem';
-import TypeSelectionTaskSearch from '@/components/TabScreens/TaskSearchScreen/TypeSelectionTaskSearch';
+import { CardTasks } from '@/components/TabScreens/TaskSearch/Card';
+import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound';
+import TypeSelectionTaskSearch from '@/components/TabScreens/TaskSearch/TypeSelectionTaskSearch';
+import { useAppDispatch } from '@/store';
+import {
+  getSearchTasks,
+  getTableNames,
+} from '@/store/slices/taskSearch/asyncActions';
 import { TaskCardScreenNavigationProp } from '@/types/navigation';
 import { Task } from '@/types/task';
 
 import styles from './style';
 
 const tasksMockData: Task[] = [
-  { id: 12213, test: 'Тест' },
-  { id: 4522, test: 'Тест' },
-  { id: 3243, test: 'Тест' },
-  { id: 5342, test: 'Тест' },
-  { id: 54323, test: 'Тест' },
-  { id: 34543, test: 'Тест' },
-  { id: 2313, test: 'Тест' },
+  { id: 12213, test: 'Тест1' },
+  { id: 1, test: 'Тест2' },
+  { id: 2, test: 'Тест3' },
+  { id: 3, test: 'Тест1' },
+  { id: 4, test: 'Тест2' },
+  { id: 5, test: 'Тест3' },
 ];
 
 const TaskSearchScreen = () => {
-  const [areCommon, setAreCommon] = useState<boolean>(true);
   const navigation = useNavigation<TaskCardScreenNavigationProp>();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    // dispatch(getTableNames());
+    dispatch(getSearchTasks());
+  }, []);
 
   const keyExtractor = (item: Task) => `${item.id}`;
-  const renderItem = ({ item: task }: ListRenderItemInfo<Task>) => (
-    <TaskCardItem task={task} onPress={taskItem} />
+
+  const renderItem = ({ item }: ListRenderItemInfo<Task>) => (
+    <CardTasks {...item} navigation={navigation} />
   );
-  const taskItem = () => {
-    navigation.navigate('TaskCard');
-  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapperTop}>
         <Text style={styles.textHeader}>Поиск задач</Text>
-        <TypeSelectionTaskSearch
-          areCommon={areCommon}
-          setAreCommon={setAreCommon}
-        />
+        <TypeSelectionTaskSearch onPress={() => console.log('test123')} />
       </View>
-      <View
-        style={[
-          styles.wrapperCenter,
-          tasksMockData.length > 0 && styles.wrapperList,
-        ]}
-      >
+      <View style={styles.shadowWrapper}>
         <FlatList
           data={tasksMockData}
           renderItem={renderItem}
+          style={styles.list}
           keyExtractor={keyExtractor}
-          contentContainerStyle={
-            tasksMockData?.length < 1 && styles.wrapperCenter
-          }
+          contentContainerStyle={styles.listContainer}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           ListEmptyComponent={<PreviewNotFound />}

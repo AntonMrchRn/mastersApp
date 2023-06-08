@@ -1,4 +1,4 @@
-import { apiHost } from '@/services/axios';
+import { axiosInstance } from '@/services/axios/axiosInstance';
 import {
   RecoveryPasswordResponse,
   RestorePasswordParams,
@@ -13,7 +13,7 @@ export class AuthAPI {
     password,
     isPhoneAuth,
   }: UserAuthParams): Promise<UserAuthResponse> {
-    const { data } = await apiHost.post('login?isMobile=true', {
+    const { data } = await axiosInstance.post('login?isMobile=true', {
       login: isPhoneAuth ? phoneNumber : email,
       password,
     });
@@ -27,7 +27,7 @@ export class AuthAPI {
     password,
     isPhoneAuth,
   }: UserAuthParams): Promise<RecoveryPasswordResponse> {
-    const { data } = await apiHost.patch('me/password', {
+    const { data } = await axiosInstance.patch('me/password', {
       ...(isPhoneAuth ? { phone: Number(phoneNumber) } : { email }),
       password,
     });
@@ -36,7 +36,7 @@ export class AuthAPI {
   }
 
   static async restorePassword({ password, value }: RestorePasswordParams) {
-    const { data } = await apiHost.patch('me/password', {
+    const { data } = await axiosInstance.patch('me/password', {
       code: value,
       password,
     });

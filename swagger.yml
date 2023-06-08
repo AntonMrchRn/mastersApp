@@ -1,0 +1,5175 @@
+swagger: "2.0"
+info:
+  description: API задачника Апрель
+  version: 0.1.0
+  title: taskManager
+basePath: /api/
+schemes:
+  - http
+produces:
+  - application/json
+consumes:
+  - application/json
+definitions:
+  Error:
+    description: Модель ошибки
+    properties:
+      code:
+        description: Код ошибки
+        type: integer
+        format: int64
+        example: 301
+        x-nullable: true
+        x-omitempty: true
+      message:
+        description: Текст ошибки
+        type: string
+        example: Запрашиваемый ресурс не найден
+        x-nullable: true
+        x-omitempty: true
+  Act:
+    description: Модель акта выполнения задания
+    required:
+      - content
+    properties:
+      content:
+        type: string
+        description: Содержимое акта в формате markdown
+        example: 1
+        x-nullable: true
+        x-omitempty: true
+      taskID:
+        type: integer
+        format: int64
+        example: 1
+        x-nullable: true
+        x-omitempty: true
+  AuthData:
+    description: Модель авторизации
+    required:
+      - login
+      - password
+    properties:
+      login:
+        type: string
+        description: Логин клиента (email или phone)
+        example: test@mail.ru/79180910000
+        x-nullable: true
+        x-omitempty: true
+      password:
+        type: string
+        description: Пароль клиента
+        example: 123q
+        x-nullable: true
+        x-omitempty: true
+  Car:
+    description: Модель автомобиля
+    properties:
+      ID:
+        type: integer
+        format: int64
+        description: Код автомобиля
+        example: 1
+        x-go-custom-tag: sql:"id"
+        x-nullable: true
+        x-omitempty: true
+      taskID:
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"task_id"
+        x-nullable: true
+        x-omitempty: true
+      model:
+        description: Модель (марка)
+        type: string
+        example: Лада Самара 2107
+        x-go-custom-tag: sql:"model"
+        x-nullable: true
+        x-omitempty: true
+      number:
+        description: Номер
+        type: string
+        example: ш291уе
+        x-go-custom-tag: sql:"number"
+        x-nullable: true
+        x-omitempty: true
+  Region:
+    description: Модель региона
+    properties:
+      ID:
+        type: integer
+        format: int64
+        description: Код региона
+        x-go-custom-tag: sql:"id"
+        example: 23
+        x-nullable: true
+        x-omitempty: true
+      name:
+        type: string
+        description: Название
+        example: Краснодарский край
+        x-go-custom-tag: sql:"name"
+        x-nullable: true
+        x-omitempty: true
+      slug:
+        type: string
+        description: Слаг региона
+        example: krasnodarskiy_kray
+        x-go-custom-tag: sql:"slug"
+        x-nullable: true
+        x-omitempty: true
+  Measure:
+    description: Модель единицы измерения
+    properties:
+      ID:
+        type: integer
+        format: int64
+        description: Код единицы измерения
+        x-go-custom-tag: sql:"id"
+        example: 1
+        x-nullable: true
+        x-omitempty: true
+      name:
+        type: string
+        description: Название
+        example: Рубль
+        x-go-custom-tag: sql:"name"
+        x-nullable: true
+        x-omitempty: true
+      description:
+        type: string
+        description: Описание
+        example: Российский рубль
+        x-go-custom-tag: sql:"description"
+        x-nullable: true
+        x-omitempty: true
+  Service:
+    description: Модель услуги
+    properties:
+      ID:
+        type: integer
+        format: int64
+        description: Код услуги
+        example: 1
+        x-go-custom-tag: sql:"id"
+        x-nullable: true
+        x-omitempty: true
+      setID:
+        description: Код направления
+        example: 1
+        type: integer
+        format: int64
+        x-go-custom-tag: sql:"set_id"
+        x-nullable: true
+        x-omitempty: true
+      categoryID:
+        type: integer
+        format: int64
+        example: Код категории
+        x-go-custom-tag: sql:"category_id"
+        x-nullable: true
+        x-omitempty: true
+      name:
+        type: string
+        description: Название
+        example: Монтажные работы
+        x-go-custom-tag: sql:"name"
+        x-nullable: true
+        x-omitempty: true
+      description:
+        type: string
+        description: Подробное описание услуги
+        example: Работы по установке светодиоидного оборудования
+        x-go-custom-tag: sql:"description"
+        x-nullable: true
+        x-omitempty: true
+      price:
+        type: number
+        format: float64
+        description: Стоимость
+        example: 1.05
+        x-go-custom-tag: sql:"price"
+        x-nullable: true
+        x-omitempty: true
+      measureID:
+        type: integer
+        format: int64
+        description: Код меры измерения
+        example: Рубль
+        x-go-custom-tag: sql:"measure_id"
+        x-nullable: true
+        x-omitempty: true
+  ServiceCategory:
+    description: Модель категории услуги
+    properties:
+      ID:
+        type: integer
+        format: int64
+        description: Код категории услуги
+        example: 1
+        x-go-custom-tag: sql:"id"
+        x-nullable: true
+        x-omitempty: true
+      name:
+        type: string
+        description: Название категории услуги
+        example: Монтажные работы
+        x-go-custom-tag: sql:"name"
+        x-nullable: true
+        x-omitempty: true
+      description:
+        type: string
+        description: Описание категории услуги
+        example: Описание монтажных работ
+        x-go-custom-tag: sql:"description"
+        x-nullable: true
+        x-omitempty: true
+      isImmutable:
+        type: boolean
+        description: Признак "Неизменяемая категория"
+        example: true
+        x-go-custom-tag: sql:"is_immutable"
+        x-nullable: true
+        x-omitempty: true
+  UserNew:
+    description: Модель нового пользователя
+    properties:
+      email:
+        type: string
+        description: Логин (адрес электронной почты)
+        example: test@mail.ru
+        x-go-custom-tag: sql:"login"
+        x-nullable: true
+        x-omitempty: true
+      password:
+        type: string
+        description: Пароль клиента
+        example: 123q
+        x-go-custom-tag: sql:"password"
+        x-nullable: true
+        x-omitempty: true
+      phone:
+        type: integer
+        format: int64
+        example: Логин (номер телефона)
+        x-go-custom-tag: sql:"phone"
+        x-nullable: true
+        x-omitempty: true
+  User:
+    description: Базовая модель пользователя
+    properties:
+      ID:
+        description: Идентификатор
+        type: integer
+        format: int64
+        x-go-custom-tag: sql:"id"
+        x-nullable: true
+        x-omitempty: true
+      name:
+        type: string
+        description: Имя
+        x-go-custom-tag: sql:"name"
+        x-nullable: true
+        x-omitempty: true
+      sname:
+        type: string
+        description: Фамилия
+        x-go-custom-tag: sql:"sname"
+        x-nullable: true
+        x-omitempty: true
+      pname:
+        type: string
+        description: Отчество
+        x-go-custom-tag: sql:"pname"
+        x-nullable: true
+        x-omitempty: true
+      phone:
+        type: integer
+        format: int64
+        example: Номер телефона
+        x-go-custom-tag: sql:"phone"
+        x-nullable: true
+        x-omitempty: true
+      email:
+        type: string
+        description: Логин (адрес электронной почты)
+        example: test@mail.ru
+        x-go-custom-tag: sql:"email"
+        x-nullable: true
+        x-omitempty: true
+      specialty:
+        type: string
+        description: Специальность
+        example: Экономист
+        x-go-custom-tag: sql:"specialty"
+        x-nullable: true
+        x-omitempty: true
+      regionIDs:
+        type: array
+        items:
+          type: integer
+        description: Коды регионов
+        example: 23
+        x-go-custom-tag: sql:"region_ids"
+        x-nullable: true
+        x-omitempty: true
+      entityName:
+        type: string
+        description: Юридическое лицо
+        example: ООО "Вектор"
+        x-go-custom-tag: sql:"entity_name"
+        x-nullable: true
+        x-omitempty: true
+      roleID:
+        type: integer
+        description: Код роли
+        example: 1
+        x-go-custom-tag: sql:"role_id"
+        x-nullable: true
+        x-omitempty: true
+      curatorID:
+        type: integer
+        description: Код куратора пользователя
+        example: 1
+        x-go-custom-tag: sql:"curator_id"
+        x-nullable: true
+        x-omitempty: true
+      setIDs:
+        description: Коды направлений (ИТ, общехозяйственные работы)
+        type: array
+        items:
+          type: integer
+        x-go-custom-tag: sql:"set_ids"
+        x-nullable: true
+        x-omitempty: true
+      isConfirmed:
+        type: boolean
+        description: Признак "Пользователь подтвержден"
+        example: true
+        x-go-custom-tag: sql:"is_confirmed"
+        x-nullable: true
+        x-omitempty: true
+      session:
+        type: string
+        description: Сессия
+        example: ae02ad0df6df7138d75937aa7c21f36e
+        x-go-custom-tag: sql:"session"
+        x-nullable: true
+        x-omitempty: true
+      sessionID:
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"session_id"
+        x-nullable: true
+        x-omitempty: true
+      entityTypeID:
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"entity_type_id"
+        x-nullable: true
+        x-omitempty: true
+      entityAddress:
+        type: string
+        example: Колотушкина
+        x-go-custom-tag: sql:"entity_address"
+        x-nullable: true
+        x-omitempty: true
+      leaderName:
+        type: string
+        example: ФИО руководителя организации
+        x-go-custom-tag: sql:"leader_name"
+        x-nullable: true
+        x-omitempty: true
+      ITIN:
+        description: ИНН
+        type: string
+        x-go-custom-tag: sql:"itin"
+        x-nullable: true
+        x-omitempty: true
+      RRC:
+        description: КПП
+        type: string
+        x-go-custom-tag: sql:"rrc"
+        x-nullable: true
+        x-omitempty: true
+      isApproved:
+        type: boolean
+        description: Признак "Пользователь одобрен руководителем"
+        example: true
+        x-go-custom-tag: sql:"is_approved"
+        x-nullable: true
+        x-omitempty: true
+      creationTime:
+        description: Дата и время регистрации
+        type: string
+        format: date-time
+        x-go-custom-tag: sql:"creation_time"
+        x-nullable: true
+        x-omitempty: true
+      simpleSign:
+        description: Простая цифровая подпись
+        type: string
+        x-go-custom-tag: sql:"simple_sign"
+      isTGConnected:
+        type: boolean
+        description: Признак "Пользователь подключен к TG"
+        example: true
+        x-go-custom-tag: sql:"is_tg_connected"
+        x-nullable: true
+        x-omitempty: true
+      isTGActive:
+        type: boolean
+        description: Признак "Пользователь получает уведомления"
+        example: true
+        x-go-custom-tag: sql:"is_tg_active"
+        x-nullable: true
+        x-omitempty: true
+      isSberPayment:
+        type: boolean
+        description: Признак "Оплата через Сбер"
+        example: true
+        x-go-custom-tag: sql:"is_sber_payment"
+        x-nullable: true
+        x-omitempty: true
+      isNDSPayer:
+        type: boolean
+        description: Признак "Плательщик НДС"
+        example: true
+        x-go-custom-tag: sql:"is_nds_payer"
+        x-nullable: true
+        x-omitempty: true
+  Task:
+    description: Модель изменения задания
+    properties:
+      ID:
+        description: Идентификатор
+        type: integer
+        format: int64
+        x-go-custom-tag: sql:"id"
+        x-nullable: true
+        x-omitempty: true
+      setID:
+        description: Идентификатор направления
+        type: integer
+        format: int64
+        x-go-custom-tag: sql:"set_id"
+        x-nullable: true
+        x-omitempty: true
+      name:
+        description: Наименование
+        type: string
+        x-go-custom-tag: sql:"name"
+        x-nullable: true
+        x-omitempty: true
+      description:
+        description: Описание работ
+        type: string
+        x-go-custom-tag: sql:"description"
+        x-nullable: true
+        x-omitempty: true
+      startTime:
+        description: Время начала работ
+        type: string
+        format: date-time
+        x-go-custom-tag: sql:"start_time"
+        x-nullable: true
+        x-omitempty: true
+      endTime:
+        description: Время окончания работ
+        type: string
+        format: date-time
+        x-go-custom-tag: sql:"end_time"
+        x-nullable: true
+        x-omitempty: true
+      endTimePlan:
+        description: Плановое время окончания работ
+        type: string
+        format: date-time
+        x-go-custom-tag: sql:"end_time_plan"
+        x-nullable: true
+        x-omitempty: true
+      executor:
+        description: Данные исполнителя
+        type: object
+        $ref: "#/definitions/TaskUser"
+        x-go-custom-tag: sql:"executor"
+        x-nullable: true
+        x-omitempty: true
+      budget:
+        description: Бюджет
+        type: number
+        format: float64
+        x-go-custom-tag: sql:"budget"
+        x-nullable: true
+        x-omitempty: true
+      outlay:
+        description: Смета
+        type: number
+        format: float64
+        x-go-custom-tag: sql:"outlay"
+        x-nullable: true
+        x-omitempty: true
+      statusID:
+        description: Код статуса
+        type: integer
+        x-go-custom-tag: sql:"status_id"
+        x-nullable: true
+        x-omitempty: true
+      coordinator:
+        description: Данные пользователя-координатора
+        type: object
+        $ref: "#/definitions/TaskUser"
+        x-go-custom-tag: sql:"coordinator"
+        x-nullable: true
+        x-omitempty: true
+      clientID:
+        description: Код пользователя-заказчика
+        type: integer
+        format: int64
+        x-go-custom-tag: sql:"status_id"
+        x-nullable: true
+        x-omitempty: true
+      isUrgent:
+        description: Признак "Срочная задача"
+        type: boolean
+        x-go-custom-tag: sql:"is_urgent"
+        x-nullable: true
+        x-omitempty: true
+      isNight:
+        description: Признак "Ночные работы"
+        type: boolean
+        x-go-custom-tag: sql:"is_night"
+        x-nullable: true
+        x-omitempty: true
+      isDirectum:
+        description: Признак "Создано из Директума"
+        type: boolean
+        x-go-custom-tag: sql:"is_night"
+        x-nullable: true
+        x-omitempty: true
+      stageID:
+        description: Код стадии
+        type: integer
+        x-go-custom-tag: sql:"stage_id"
+        x-nullable: true
+        x-omitempty: true
+      curator:
+        description: Данные куратора задания
+        type: object
+        $ref: "#/definitions/TaskUser"
+        x-go-custom-tag: sql:"curator"
+        x-nullable: true
+        x-omitempty: true
+      webdata:
+        description: Интернет-данные объекта
+        type: object
+        $ref: "#/definitions/ObjectWebdata"
+        x-go-custom-tag: sql:"webdata"
+        x-nullable: true
+        x-omitempty: true
+      car:
+        description: Данные автомобиля
+        type: object
+        $ref: "#/definitions/Car"
+        x-go-custom-tag: sql:"car"
+        x-nullable: true
+        x-omitempty: true
+      cancelReason:
+        description: Причина отмены задания
+        type: string
+        x-go-custom-tag: sql:"cancel_reason"
+        x-nullable: true
+        x-omitempty: true
+      services:
+        description: Список услуг
+        type: array
+        items:
+          $ref: "#/definitions/TaskService"
+        x-go-custom-tag: sql:"services"
+        x-nullable: true
+        x-omitempty: true
+      contacts:
+        description: Список контактов
+        type: array
+        items:
+          $ref: "#/definitions/TaskContact"
+        x-go-custom-tag: sql:"contacts"
+        x-nullable: true
+        x-omitempty: true
+      candidateIDs:
+        description: Список контактов
+        type: array
+        items:
+          type: integer
+          format: int64
+        x-go-custom-tag: sql:"candidate_ids"
+        x-nullable: true
+        x-omitempty: true
+      object:
+        description: Объект выполнения работ
+        type: object
+        $ref: "#/definitions/TaskObject"
+        x-go-custom-tag: sql:"object"
+        x-nullable: true
+        x-omitempty: true
+      ticketID:
+        description: Код тикета задания в Directum
+        type: integer
+        format: int64
+        x-go-custom-tag: sql:"ticket_id"
+        x-nullable: true
+        x-omitempty: true
+      isAutoOffer:
+        description: Признак "Автоматический прием предложений"
+        type: boolean
+        x-go-custom-tag: sql:"is_auto_offer"
+        x-nullable: true
+        x-omitempty: true
+      roleID:
+        description: Код роли автора
+        type: integer
+        format: int64
+        x-go-custom-tag: sql:"role_id"
+        x-nullable: true
+        x-omitempty: true
+      outlayStatusID:
+        description: Код статуса сметы (Для isAutoOffer)
+        type: integer
+        example: 1
+        x-go-custom-tag: sql:"outlay_status_id"
+        x-nullable: true
+        x-omitempty: true
+      refuseReason:
+        description: Причина отказа от задания
+        type: string
+        example: Не хочу
+        x-go-custom-tag: sql:"refuse_reason"
+        x-nullable: true
+        x-omitempty: true
+  TaskUser:
+    description: Услуга в задании
+    properties:
+      ID:
+        description: Идентификатор пользователя
+        type: integer
+        format: int64
+        x-go-custom-tag: sql:"id"
+        x-nullable: true
+        x-omitempty: true
+      name:
+        description: Имя
+        type: string
+        x-go-custom-tag: sql:"name"
+        x-nullable: true
+        x-omitempty: true
+      sname:
+        description: Фамилия
+        type: string
+        x-go-custom-tag: sql:"sname"
+        x-nullable: true
+        x-omitempty: true
+      pname:
+        description: Отчество
+        type: string
+        x-go-custom-tag: sql:"pname"
+        x-nullable: true
+        x-omitempty: true
+      phone:
+        description: Номер телефона
+        type: integer
+        format: int64
+        x-go-custom-tag: sql:"phone"
+        x-nullable: true
+        x-omitempty: true
+      isNDSPayer:
+        type: boolean
+        description: Признак "Плательщик НДС"
+        example: true
+        x-go-custom-tag: sql:"is_nds_payer"
+        x-nullable: true
+        x-omitempty: true
+      entityTypeID:
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"entity_type_id"
+        x-nullable: true
+        x-omitempty: true
+  TaskService:
+    description: Услуга в задании
+    properties:
+      ID:
+        description: Идентификатор услуги
+        type: integer
+        format: int64
+        x-go-custom-tag: sql:"id"
+        x-nullable: true
+        x-omitempty: true
+      name:
+        description: Название услуги
+        type: string
+        x-go-custom-tag: sql:"name"
+        x-nullable: true
+        x-omitempty: true
+      price:
+        description: Цена за единицу услуги
+        type: number
+        format: float64
+        x-go-custom-tag: sql:"price"
+        x-nullable: true
+        x-omitempty: true
+      description:
+        description: Описание услуги
+        type: string
+        x-go-custom-tag: sql:"description"
+        x-nullable: true
+        x-omitempty: true
+      categoryID:
+        description: Код категории
+        type: integer
+        format: int64
+        x-go-custom-tag: sql:"category_id"
+        x-nullable: true
+        x-omitempty: true
+      categoryName:
+        description: Название категории
+        type: string
+        x-go-custom-tag: sql:"category_name"
+        x-nullable: true
+        x-omitempty: true
+      setID:
+        description: Код направления
+        type: integer
+        format: int64
+        x-go-custom-tag: sql:"set_id"
+        x-nullable: true
+        x-omitempty: true
+      measureID:
+        description: Код единицы измерения
+        type: integer
+        format: int64
+        x-go-custom-tag: sql:"measure_id"
+        x-nullable: true
+        x-omitempty: true
+      count:
+        description: Количество единиц услуги
+        type: integer
+        x-go-custom-tag: sql:"count"
+        x-nullable: true
+        x-omitempty: true
+      materials:
+        description: Используемые материалы
+        type: array
+        items:
+          $ref: "#/definitions/Material"
+        x-go-custom-tag: sql:"materials"
+        x-nullable: true
+        x-omitempty: true
+      roleID:
+        description: Код роли добавившего пользователя
+        type: integer
+        x-go-custom-tag: sql:"role_id"
+        x-nullable: true
+        x-omitempty: true
+      sum:
+        description: Сумма сметы по позиции
+        type: number
+        format: float64
+        x-go-custom-tag: sql:"sum"
+        x-nullable: true
+        x-omitempty: true
+  TaskContact:
+    description: Контакт в задании
+    properties:
+      name:
+        description: Имя
+        type: string
+        x-go-custom-tag: sql:"name"
+        x-nullable: true
+        x-omitempty: true
+      sname:
+        description: Фамилия
+        type: string
+        x-go-custom-tag: sql:"sname"
+        x-nullable: true
+        x-omitempty: true
+      pname:
+        description: Отчество
+        type: string
+        x-go-custom-tag: sql:"pname"
+        x-nullable: true
+        x-omitempty: true
+      position:
+        description: Должность
+        type: string
+        x-go-custom-tag: sql:"position"
+        x-nullable: true
+        x-omitempty: true
+      phone:
+        description: Номер телефона
+        type: integer
+        format: int64
+        x-go-custom-tag: sql:"phone"
+        x-nullable: true
+        x-omitempty: true
+  TaskObject:
+    description: Модель объекта выполнения задания
+    properties:
+      regionID:
+        description: Код региона
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"region_id"
+        x-nullable: true
+        x-omitempty: true
+      name:
+        description: Название объекта
+        type: string
+        x-go-custom-tag: sql:"name"
+        x-nullable: true
+        x-omitempty: true
+      leader:
+        description: ФИО заведующего
+        type: string
+        x-go-custom-tag: sql:"leader"
+        x-nullable: true
+        x-omitempty: true
+      leaderPhone:
+        description: Номер телефона заведующего
+        type: integer
+        format: int64
+        x-go-custom-tag: sql:"leader_phone"
+        x-nullable: true
+        x-omitempty: true
+      manager:
+        description: ФИО менеджера
+        type: string
+        x-go-custom-tag: sql:"manager"
+        x-nullable: true
+        x-omitempty: true
+      webConnect:
+        description: Описание интернет-подключения
+        type: string
+        x-go-custom-tag: sql:"web_connect"
+        x-nullable: true
+        x-omitempty: true
+  TaskDirectum:
+    description: Модель задания из Directum
+    properties:
+      objectID:
+        description: Код объекта выполнения работ
+        type: string
+        example: Аптека на Петровско-Разумовской
+        x-go-custom-tag: sql:"object"
+        x-nullable: true
+        x-omitempty: true
+      phone:
+        description: Номер телефона
+        type: integer
+        format: int64
+        example: 79180000000
+        x-go-custom-tag: sql:"phone"
+        x-nullable: true
+        x-omitempty: true
+      executorID:
+        description: Код пользователя-исполнителя
+        type: integer
+        format: int64
+        x-go-custom-tag: sql:"executor_id"
+        x-nullable: true
+        x-omitempty: true
+      coordinatorID:
+        description: Код пользователя-координатора
+        type: integer
+        x-go-custom-tag: sql:"coordinator_id"
+        x-nullable: true
+        x-omitempty: true
+      name:
+        description: Название задания
+        type: string
+        example: Замена освещения
+        x-go-custom-tag: sql:"name"
+        x-nullable: true
+        x-omitempty: true
+      description:
+        description: Описание задания
+        type: string
+        example: Замена освещения в подсобном помещении
+        x-go-custom-tag: sql:"description"
+        x-nullable: true
+        x-omitempty: true
+      setID:
+        description: Код направления
+        type: integer
+        example: 1
+        x-go-custom-tag: sql:"set_id"
+        x-nullable: true
+        x-omitempty: true
+      ticketID:
+        description: Код задания в тикете
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"ticket_id"
+        x-nullable: true
+        x-omitempty: true
+  TaskComment:
+    description: Модель сообщения истории выполнения задания
+    properties:
+      ID:
+        description: Код сообщения истории
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"id"
+        x-nullable: true
+        x-omitempty: true
+      taskID:
+        description: Код задания
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"task_id"
+        x-nullable: true
+        x-omitempty: true
+      userID:
+        description: Код пользователя
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"user_id"
+        x-nullable: true
+        x-omitempty: true
+      byID:
+        description: Код сообщения цитирования
+        type: integer
+        format: integer
+        example: 1
+        x-go-custom-tag: sql:"by_id"
+        x-nullable: true
+        x-omitempty: true
+      comment:
+        description: Текстовый комментарий
+        type: string
+        example: Статус задания - создано
+        x-go-custom-tag: sql:"comment"
+        x-nullable: true
+        x-omitempty: true
+      authorTypeID:
+        description: Код автор сообщения (заказчик, исполнитель, система)
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"author_type_id"
+        x-nullable: true
+        x-omitempty: true
+      creationTime:
+        description: Время создания сообщения
+        type: string
+        format: date-time
+        example: "2022-10-03 12:16:59"
+        x-go-custom-tag: sql:"creation_time"
+        x-nullable: true
+        x-omitempty: true
+      recipientID:
+        description: Код пользователя-получателя
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"recipient_id"
+        x-nullable: true
+        x-omitempty: true
+      roleID:
+        description: Код роли пользователя-создателя коммента
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"role_id"
+        x-nullable: true
+        x-omitempty: true
+  TaskInvite:
+    description: Модель приглашения в задание
+    properties:
+      ID:
+        description: Код приглашения
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"id"
+        x-nullable: true
+        x-omitempty: true
+      taskID:
+        description: Код задания
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"task_id"
+        x-nullable: true
+        x-omitempty: true
+      userID:
+        description: Код пользователя
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"user_id"
+        x-nullable: true
+        x-omitempty: true
+      userName:
+        description: ФИО пользователя
+        type: string
+        example: Иванов
+        x-go-custom-tag: sql:"user_name"
+        x-nullable: true
+        x-omitempty: true
+      userPhone:
+        description: Номер телефона пользователя
+        type: integer
+        format: int64
+        x-go-custom-tag: sql:"user_phone"
+        x-nullable: true
+        x-omitempty: true
+      isCurator:
+        description: Признак "Является куратором"
+        type: boolean
+        x-go-custom-tag: sql:"is_curator"
+        x-nullable: true
+        x-omitempty: true
+      statusID:
+        description: Статус приглашения
+        type: integer
+        x-go-custom-tag: sql:"status_id"
+        x-nullable: true
+        x-omitempty: true
+  Material:
+    description: Модель материала
+    properties:
+      name:
+        description: Название
+        type: string
+        example: Иванов
+        x-go-custom-tag: sql:"name"
+        x-nullable: true
+        x-omitempty: true
+      count:
+        description: Количество
+        type: integer
+        example: 1
+        x-go-custom-tag: sql:"count"
+        x-nullable: true
+        x-omitempty: true
+      price:
+        description: Цена за единицу
+        type: number
+        format: float64
+        example: 1.6
+        x-go-custom-tag: sql:"price"
+        x-nullable: true
+        x-omitempty: true
+      measure:
+        description: Единица измерения
+        type: string
+        example: 
+        x-go-custom-tag: sql:"measure"
+        x-nullable: true
+        x-omitempty: true
+      roleID:
+        description: Код роли пользователя
+        type: integer
+        example: 1
+        x-go-custom-tag: sql:"role_id"
+        x-nullable: true
+        x-omitempty: true
+  Offer:
+    description: Модель предложения к заданию
+    properties:
+      ID:
+        description: Код предложения
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"id"
+        x-nullable: true
+      taskID:
+        description: Код задания
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"task_id"
+        x-nullable: true
+      comment:
+        description: Комментарий пользователя
+        type: string
+        example: Полная предоплата
+        x-go-custom-tag: sql:"comment"
+        x-nullable: true
+      clientComment:
+        description: Комментарий заказчика
+        type: string
+        example: Неполная предоплата
+        x-go-custom-tag: sql:"client_comment"
+        x-nullable: true
+      services:
+        description: Список предлагаемых услуг
+        type: array
+        items:
+          $ref: "#/definitions/TaskService"
+        x-go-custom-tag: sql:"services"
+        x-nullable: true
+      outlayStatusID:
+        description: Код статуса сметы
+        type: integer
+        x-go-custom-tag: sql:"outlay_status_id"
+        x-nullable: true
+        x-omitempty: true
+      refuseReason:
+        description: Причина отказа офферу
+        type: string
+        example: Не хочу
+        x-go-custom-tag: sql:"refuse_reason"
+        x-nullable: true
+        x-omitempty: true
+  UserChangePasswordData:
+    description: Модель данных смены пароля
+    properties:
+      email:
+        description: Электронная почта
+        type: string
+        example: test@mail.ru
+        x-go-custom-tag: sql:"email"
+        x-nullable: true
+      phone:
+        description: Номер телефона
+        type: integer
+        format: int64
+        example: 79180913717
+        x-go-custom-tag: sql:"phone"
+        x-nullable: true
+      password:
+        description: Пароль
+        type: string
+        example: qwerty322
+        x-go-custom-tag: sql:"password"
+        x-nullable: true
+      newPassword:
+        description: Новый пароль
+        type: string
+        example: qwerty322
+        x-go-custom-tag: sql:"new_password"
+        x-nullable: true
+      code:
+        description: Код подтверждения
+        type: string
+        x-go-custom-tag: sql:"code"
+        x-nullable: true
+        example: "123456"
+  UserBank:
+    description: Модель данных банковского расчетного счета пользователя
+    properties:
+      checkingAccount:
+        description: Рассчетный счет пользователя
+        type: string
+        x-go-custom-tag: sql:"checking_account"
+        x-nullable: true
+        x-omitempty: true
+      correspondingAccount:
+        description: Корреспондентский счет пользователя
+        type: string
+        x-go-custom-tag: sql:"corresponding_account"
+        x-nullable: true
+        x-omitempty: true
+      bankID:
+        description: Код банка
+        type: string
+        x-go-custom-tag: sql:"bank_id"
+        x-nullable: true
+        x-omitempty: true
+      bankName:
+        description: Название банка
+        type: string
+        x-go-custom-tag: sql:"bank_name"
+        x-nullable: true
+        x-omitempty: true
+  UserChangePhoneData:
+    description: Модель подтверждения регистрации пользователя
+    allOf:
+      - type: object
+        properties:
+          code:
+            description: Код подтверждения
+            type: string
+            x-go-custom-tag: sql:"code"
+            x-nullable: true
+            example: "123456"
+          phone:
+            description: Текущий номер телефона
+            type: integer
+            format: int64
+            x-go-custom-tag: sql:"phone"
+            x-nullable: true
+            example: 79876543210
+          newPhone:
+            description: Новый номер телефона
+            type: integer
+            format: int64
+            x-go-custom-tag: sql:"new_phone"
+            x-nullable: true
+            example: 79876543210
+  UserChangeEmailData:
+    description: Модель смены email пользователя
+    allOf:
+      - type: object
+        properties:
+          newEmail:
+            description: Новый почтовый адрес
+            type: string
+            x-go-custom-tag: sql:"new_email"
+            x-nullable: true
+            example: "mademail@mail.ru"
+  UserConfirmationResponse:
+    description: Модель ответа подтверждения регистрации пользователя
+    properties:
+      timeout:
+        description: Таймаут
+        type: integer
+        format: int64
+        example: 30
+  UserFull:
+    description: Модель с агрегированными данными пользователя
+    allOf:
+      - $ref: "#/definitions/User"
+      - $ref: "#/definitions/UserBank"
+  UserInvite:
+    description: Модель подтверждения пришлашения пользователя
+    properties:
+      link:
+        description: Ссылка на приглашения пользователя
+        type: string
+        x-go-custom-tag: sql:"link"
+        x-nullable: true
+        x-omitempty: true
+      isAccepted:
+        description: Признак "Приглашение принято"
+        type: boolean
+        x-go-custom-tag: sql:"is_accepted"
+        x-nullable: true
+        x-omitempty: true
+  ObjectWebdata:
+    description: Модель веб-данных объекта
+    properties:
+      ID:
+        description: Код
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"id"
+        x-nullable: true
+      objectID:
+        description: Код объекта
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"object_id"
+        x-nullable: true
+      login:
+        description: Логин
+        type: string
+        x-go-custom-tag: sql:"login"
+        x-nullable: true
+        example: "123456"
+      password:
+        description: Пароль
+        type: string
+        x-go-custom-tag: sql:"password"
+        x-nullable: true
+        example: 79876543210
+      description:
+        description: Описание
+        type: string
+        x-go-custom-tag: sql:"description"
+        x-nullable: true
+        example: Описание
+      connectionStage:
+        description: Код стадии подключения к сети
+        type: integer
+        x-go-custom-tag: sql:"connection_stage"
+        x-nullable: true
+        example: 1
+      connectionStageName:
+        description: Стадия подключения к сети
+        type: string
+        x-go-custom-tag: sql:"connection_stage_name"
+        x-nullable: true
+        example: 1
+  NotificationNew:
+    description: Модель нового уведомления
+    properties:
+      categoryID:
+        description: Код категории
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"category_id"
+        x-nullable: true
+      eventID:
+        description: Код события
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"event_id"
+        x-nullable: true
+      taskID:
+        description: Код задания
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"task_id"
+        x-nullable: true
+      objectID:
+        description: Код объекта (статуса, пользователя)
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"object_id"
+        x-nullable: true
+      userID:
+        description: Код пользователя-адресата
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"user_id"
+        x-nullable: true
+  NotificationRead:
+    description: Модель прочтения уведомления
+    properties:
+      ID:
+        description: Код
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"id"
+        x-nullable: true
+      isRead:
+        description: Признак "Прочитано"
+        type: boolean
+        example: true
+        x-go-custom-tag: sql:"is_read"
+        x-nullable: true
+  NotificationsReadArray:
+    description: Модель массива прочтений уведомления
+    properties:
+      notifications:
+        description: Уведомления к прочтению
+        type: array
+        items:
+          $ref: "#/definitions/NotificationRead"
+        x-go-custom-tag: sql:"notifications"
+        x-nullable: true
+  Notification:
+    description: Общая модель уведомления
+    allOf:
+      - $ref: "#/definitions/NotificationNew"
+      - type: object
+        properties:
+          ID:
+            description: Код события
+            type: integer
+            format: int64
+            example: 1
+            x-go-custom-tag: sql:"id"
+            x-nullable: true
+          header:
+            description: Заголовок уведомления
+            type: string
+            example: Новый статус задания
+            x-go-custom-tag: sql:"header"
+            x-nullable: true
+          body:
+            description: Текст уведомления
+            type: string
+            example: Заданию установлен статус "Оплачено"
+            x-go-custom-tag: sql:"body"
+            x-nullable: true
+          link:
+            description: Ссылка уведомления
+            type: string
+            example: https://mastera-service.ru/tasks/666
+            x-go-custom-tag: sql:"link"
+            x-nullable: true
+          isRead:
+            description: Признак "Прочитано"
+            type: boolean
+            example: true
+            x-go-custom-tag: sql:"is_read"
+            x-nullable: true
+          creationTime:
+            description: Дата и время создания уведомления
+            type: string
+            format: date-time
+            example: 2023-01-18 04:00:00
+            x-go-custom-tag: sql:"creation_time"
+            x-nullable: true
+          toDelete:
+            description: Признак "Помечено на удаление"
+            type: boolean
+            format: boolean
+            example: true
+            x-go-custom-tag: sql:"to_delete"
+            x-nullable: true
+  NotificationEvent:
+    description: Модель события уведомления
+    properties:
+      ID:
+        description: Код
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"id"
+        x-nullable: true
+      categoryID:
+        description: Код категории
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"category_id"
+        x-nullable: true
+      name:
+        description: Название категории
+        type: string
+        example: Статус задания
+        x-go-custom-tag: sql:"name"
+        x-nullable: true
+      description:
+        description: Описание
+        type: string
+        example: Уведомление о смене статуса задания
+        x-go-custom-tag: sql:"description"
+        x-nullable: true
+  NotificationCustomNew:
+    description: Модель кастомного уведомления
+    properties:
+      header:
+        description: Заголовок
+        type: string
+        example: Произвольное уведомление
+        x-go-custom-tag: sql:"header"
+        x-nullable: true
+      body:
+        description: Тело
+        type: string
+        example: Сообщение об ошибке
+        x-go-custom-tag: sql:"header"
+        x-nullable: true
+      recipientIDs:
+        description: Коды пользователей-получателей
+        type: array
+        items:
+          type: integer
+        x-go-custom-tag: sql:"recipient_ids"
+        x-nullable: true
+      link:
+        description: Ссылка на целевую страницу
+        type: string
+        example: https://sandbox9.apteka-aprel.ru
+        x-go-custom-tag: sql:"link"
+        x-nullable: true
+      taskID:
+        description: Код связанного задания
+        type: integer
+        format: int64
+        example: 1
+        x-go-custom-tag: sql:"task_id"
+        x-nullable: true
+paths:
+  /cars:
+    get:
+      operationId: getCars
+      summary: Получение списка автомобилей
+      description: Получение списка автомобилей по переданным параметрам
+      tags:
+        - Cars
+      parameters:
+        - name: query
+          in: query
+          type: string
+          description: Строка с параметрами запроса
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Нет данных
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - Cars
+      summary: Добавление автомобиля
+      operationId: createCar
+      description: Добавление автомобиля
+      parameters:
+        - name: body
+          in: body
+          description: Поля автомобиля
+          schema:
+            $ref: '#/definitions/Car'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Автомобиль
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не установлен
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Отказано в доступе
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - Cars
+      summary: Изменение данных автомобиля
+      operationId: updateCar
+      description: Изменение данных автомобиля
+      parameters:
+        - name: body
+          in: body
+          description: Автомобиль
+          schema:
+            $ref: '#/definitions/Car'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Автомобиль
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не установлен
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Отказано в доступе
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /cars/{ID}:
+    delete:
+      tags:
+        - Cars
+      summary: Удаление автомобиля
+      operationId: deleteCar
+      description: Удаление автомобиля
+      parameters:
+        - name: ID
+          in: path
+          description: Идентификатор автомобиля
+          type: integer
+          format: int64
+          required: true
+      responses:
+        200:
+          description: OK
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не установлен
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Отказано в доступе
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /login:
+    post:
+      operationId: loginUser
+      summary: Авторизация пользователя сервиса
+      description: Получение и запись токена пользователя в cookie
+      tags:
+        - Auth
+      parameters:
+        - name: authData
+          in: body
+          description: Авторизационные данные
+          schema:
+            $ref: '#/definitions/AuthData'
+          required: true
+        - name: isMobile
+          in: query
+          description: Признак "Запрос из мобильного приложения"
+          type: boolean
+          required: false
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Ошибка авторизации
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /relogin:
+    get:
+      operationId: reloginUser
+      summary: Авторизация пользователя сервиса
+      description: Получение и запись токена пользователя в cookie
+      tags:
+        - Auth
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Ошибка авторизации
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /logout:
+    get:
+      operationId: logoutUser
+      summary: Авторизация пользователя сервиса
+      description: Получение и запись токена пользователя в cookie
+      tags:
+        - Auth
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Ошибка авторизации
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /usercheck:
+    get:
+      operationId: userCheck
+      summary: Проверка авторизации пользователя
+      description: Проверка авторизации пользователя
+      tags:
+        - Auth
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Ошибка авторизации
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /registration/web:
+    post:
+      operationId: createUserWeb
+      summary: Создание стороннего пользователя сервиса
+      description: Создание стороннего пользователя сервиса из сайта
+      tags:
+        - Registration
+      parameters:
+        - name: user
+          in: body
+          description: Данные для создания пользователя
+          schema:
+            $ref: '#/definitions/UserNew'
+          required: true
+        - name: isMobile
+          in: query
+          description: Признак "Запрос из мобильного приложения"
+          type: boolean
+          required: false
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      operationId: confirmUserWeb
+      summary: Подтверждение регистрации пользователя
+      description: Подтверждение регистрации пользователя по email
+      tags:
+        - Registration
+      parameters:
+        - name: code
+          in: query
+          description: Код, отправленный на email или в SMS
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /regions:
+    get:
+      operationId: getRegions
+      summary: Получение списка регионов
+      description: Получение полного списка регионов
+      tags:
+        - Regions
+      parameters:
+        - name: query
+          in: query
+          type: string
+          description: Строка с параметрами запроса
+          required: true
+      responses:
+          200:
+            description: OK
+            schema:
+              type: object
+          400:
+            description: Переданы некорректные данные
+            schema:
+              $ref: "#/definitions/Error"
+          500:
+            description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+            schema:
+              $ref: "#/definitions/Error"
+          default:
+            description: Неожиданная ошибка
+            schema:
+              $ref: "#/definitions/Error"
+  /users:
+    get:
+      operationId: getUsersList
+      summary: Получение списка пользователей
+      description: Получение списка пользователей по параметрам
+      tags:
+        - Users
+      parameters:
+        - name: query
+          in: query
+          type: string
+          description: Строка с параметрами запроса
+          required: true
+      responses:
+          200:
+            description: OK
+            schema:
+              type: object
+          400:
+            description: Переданы некорректные данные
+            schema:
+              $ref: "#/definitions/Error"
+          404:
+            description: Пользователей не найдено
+            schema:
+              $ref: "#/definitions/Error"
+          500:
+            description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+            schema:
+              $ref: "#/definitions/Error"
+          default:
+            description: Неожиданная ошибка
+            schema:
+              $ref: "#/definitions/Error"
+    patch:
+      operationId: updateUser
+      summary: Изменение данных пользователя
+      description: Изменение основных и дополнительных данных пользователя 
+      tags:
+        - Users
+      parameters:
+        - name: user
+          in: body
+          description: Данные для изменения пользователя
+          schema:
+            $ref: '#/definitions/UserFull'
+          required: true
+      responses:
+          200:
+            description: OK
+            schema:
+              type: object
+          400:
+            description: Переданы некорректные данные
+            schema:
+              $ref: "#/definitions/Error"
+          500:
+            description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+            schema:
+              $ref: "#/definitions/Error"
+          default:
+            description: Неожиданная ошибка
+            schema:
+              $ref: "#/definitions/Error"
+  /users/search:
+    get:
+      operationId: searchUsers
+      summary: Поиск пользователей
+      description: Поиск пользователей
+      tags:
+        - Users
+      parameters:
+        - name: query
+          in: query
+          type: string
+          description: Строка с параметрами запроса
+          required: true
+        - in: query
+          name: searchQuery
+          required: true
+          description: Строка с поисковыми параметрами
+          type: string
+      responses:
+          200:
+            description: OK
+            schema:
+              type: object
+          400:
+            description: Переданы некорректные данные
+            schema:
+              $ref: "#/definitions/Error"
+          404:
+            description: Пользователей не найдено
+            schema:
+              $ref: "#/definitions/Error"
+          500:
+            description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+            schema:
+              $ref: "#/definitions/Error"
+          default:
+            description: Неожиданная ошибка
+            schema:
+              $ref: "#/definitions/Error"
+  /users/invite:
+    get:
+      operationId: userInviteGet
+      summary: Получение ссылки на приглашение пользователя
+      tags:
+        - Users
+      description: Получение ссылки на приглашение пользователя
+      responses:
+          200:
+            description: OK
+            schema:
+              type: object
+          400:
+            description: Переданы некорректные данные
+            schema:
+              $ref: "#/definitions/Error"
+          401:
+            description: Нет доступа к методу
+            schema:
+              $ref: "#/definitions/Error"
+          500:
+            description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+            schema:
+              $ref: "#/definitions/Error"
+          default:
+            description: Неожиданная ошибка
+            schema:
+              $ref: "#/definitions/Error"
+    post:
+      operationId: userInviteAccept
+      summary: Подтверждение приглашения пользователем
+      description: Подтверждение приглашения пользователем
+      tags:
+        - Users
+      parameters:
+        - name: user
+          in: body
+          description: Данные приглашаемого пользователя
+          schema:
+            $ref: '#/definitions/UserInvite'
+          required: true
+      responses:
+          200:
+            description: OK
+            schema:
+              type: object
+          400:
+            description: Переданы некорректные данные
+            schema:
+              $ref: "#/definitions/Error"
+          401:
+            description: Нет доступа к методу
+            schema:
+              $ref: "#/definitions/Error"
+          500:
+            description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+            schema:
+              $ref: "#/definitions/Error"
+          default:
+            description: Неожиданная ошибка
+            schema:
+              $ref: "#/definitions/Error"
+  /users/activity:
+    post:
+      operationId: changeUserActivity
+      summary: Изменение состояния активности пользователя
+      description: Изменение состояния активности пользователя
+      tags:
+        - Users
+      parameters:
+        - name: operation
+          in: query
+          description: Код действия
+          type: string
+          required: true
+        - name: auth
+          in: body
+          description: Данные для деактивации пользователя
+          schema:
+            $ref: '#/definitions/AuthData'
+          required: true
+      responses:
+          200:
+            description: OK
+            schema:
+              type: object
+          400:
+            description: Переданы некорректные данные
+            schema:
+              $ref: "#/definitions/Error"
+          500:
+            description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+            schema:
+              $ref: "#/definitions/Error"
+          default:
+            description: Неожиданная ошибка
+            schema:
+              $ref: "#/definitions/Error"
+  /me/phone/:
+    patch:
+      tags:
+        - Me
+      summary: Смена номера телефона пользователя
+      operationId: changeUserPhone
+      description: Смена номера телефона пользователя
+      parameters:
+      - name: changePhoneData
+        in: body
+        description: Данные для смены номера телефона
+        schema:
+          $ref: "#/definitions/UserChangePhoneData"
+        required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Таймаут
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Нет доступа к методу
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /me/email/:
+    patch:
+      tags:
+        - Me
+      summary: Смена почтового адреса пользователяa
+      operationId: changeUserEmail
+      description: Смена почтового адреса пользователя
+      parameters:
+        - name: changeEmailData
+          in: body
+          description: Данные для смены номера телефона
+          schema:
+            $ref: "#/definitions/UserChangeEmailData"
+          required: false
+          x-nullable: true
+        - name: code
+          in: query
+          description: Код из сообщения
+          type: string
+          required: false
+          x-nullable: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Таймаут
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Нет доступа к методу
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /me/password:
+    patch:
+      tags:
+        - Me
+      summary: Смена/восстановление пароля
+      operationId: meChangePassword
+      parameters:
+        - name: changePasswordData
+          in: body
+          description: Данные для смены/восстановления пароля
+          schema:
+            $ref: "#/definitions/UserChangePasswordData"
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Таймаут
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Ошибка авторизации
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /me/files:
+    get:
+      tags:
+        - Me
+      summary: Получение списка файлов пользователя
+      operationId: meGetFiles
+      description: Получение списка файлов пользователя
+      responses:
+        200:
+          description: OK
+          schema:
+            description: OK
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - Me
+      summary: Добавляет вложения пользователю
+      operationId: meCreateFiles
+      description: Добавляет в анкету пользователя до 5 файлов-вложений
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: file1
+          in: formData
+          type: file
+          description: Первый файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: file2
+          in: formData
+          type: file
+          description: Второй файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: file3
+          in: formData
+          type: file
+          description: Третий файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: file4
+          in: formData
+          type: file
+          description: Четвертый файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: file5
+          in: formData
+          type: file
+          description: Пятый файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: file6
+          in: formData
+          type: file
+          description: Шестой файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: file7
+          in: formData
+          type: file
+          description: Седьмой файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: file8
+          in: formData
+          type: file
+          description: Восьмой файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: file9
+          in: formData
+          type: file
+          description: Девятый файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: file10
+          in: formData
+          type: file
+          description: Десятый файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: name1
+          in: formData
+          type: string
+          description: Имя первого файла
+        - name: name2
+          in: formData
+          type: string
+          description: Имя второго файла
+        - name: name3
+          in: formData
+          type: string
+          description: Имя третьего файла
+        - name: name4
+          in: formData
+          type: string
+          description: Имя четвертого файла
+        - name: name5
+          in: formData
+          type: string
+          description: Имя пятого файла
+        - name: name6
+          in: formData
+          type: string
+          description: Имя шестого файла
+        - name: name7
+          in: formData
+          type: string
+          description: Имя седьмого файла
+        - name: name8
+          in: formData
+          type: string
+          description: Имя восьмого файла
+        - name: name9
+          in: formData
+          type: string
+          description: Имя девятого файла
+        - name: name10
+          in: formData
+          type: string
+          description: Имя десятого файла
+      responses:
+        200:
+          description: OK
+          schema:
+            description: OK
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - Me
+      summary: Изменяет вложение пользователя
+      operationId: meUpdateFile
+      description: Изменяет одно из вложений пользователя по ID
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: ID
+          in: formData
+          type: integer
+          format: int64
+          description: Код файла
+        - name: file
+          in: formData
+          type: file
+          description: Новый файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: name
+          in: formData
+          type: string
+          description: Имя файла
+      responses:
+        200:
+          description: OK
+          schema:
+            description: OK
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /me/files/{ID}:
+    delete:
+      tags:
+        - Me
+      summary: Удаляет вложение пользователя
+      operationId: meDeleteFile
+      description: Удаляет одно из вложений пользователя по ID
+      parameters:
+        - name: ID
+          in: path
+          description: Идентификатор файла
+          type: integer
+          format: int64
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: OK
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /params:
+    get:
+      tags:
+        - Params
+      summary: Получение вспомогательных параметров
+      operationId: getParams
+      description: Получает вспомогательные параметры
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Параметры
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /aux:
+    get:
+      tags:
+        - Params
+      summary: Получение данных служебных таблиц
+      operationId: getAux
+      description: Получает данные вспомогательных таблиц
+      parameters:
+        - name: query
+          in: query
+          type: string
+          description: Строка с параметрами запроса
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Параметры
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /services:
+    get:
+      tags:
+        - Services
+      summary: Получение списка услуг
+      operationId: getServices
+      description: Получение списка услуг
+      parameters:
+        - name: query
+          in: query
+          type: string
+          description: Строка с параметрами запроса
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Параметры
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      summary: Добавление новой услуги
+      tags:
+        - Services
+      operationId: createService
+      description: Добавление новой услуги с прайслистом
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/Service'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Параметры
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не определен
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Отказано в доступе
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      summary: Изменение услуги по ID
+      tags:
+        - Services
+      operationId: updateService
+      description: Изменение услуги по ID
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/Service'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Параметры
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не определен
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Отказано в доступе
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /services/{ID}:
+    delete:
+      summary: Удаление услуги по ID
+      tags:
+        - Services
+      operationId: deleteService
+      description: Удаление услуги по ID
+      parameters:
+        - name: ID
+          in: path
+          description: Идентификатор услуги
+          type: integer
+          format: int64
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Параметры
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не определен
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Отказано в доступе
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /services/search:
+    get:
+      tags:
+        - Services
+      summary: Поиск услуг
+      operationId: searchServices
+      description: Поиск услуг по заданным параметрам
+      parameters:
+        - in: query
+          name: query
+          required: true
+          type: string
+        - in: query
+          name: searchQuery
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Параметры
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /services/categories:
+    get:
+      tags:
+        - Services
+      summary: Получение списка категорий услуг
+      operationId: getServicesCategories
+      description: Получение списка категорий услуг
+      parameters:
+        - in: query
+          name: query
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Параметры
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - Services
+      summary: Создание категории услуг
+      operationId: createServicesCategory
+      description: Создание категории услуг
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/ServiceCategory'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Параметры
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - Services
+      summary: Изменение категории услуг
+      operationId: updateServicesCategory
+      description: Изменение категории услуг
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/ServiceCategory'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Параметры
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /services/categories/{ID}:
+    delete:
+      tags:
+        - Services
+      summary: Удаление категории услуг
+      operationId: deleteServicesCategory
+      description: Удаление категории услуг
+      parameters:
+        - name: ID
+          in: path
+          description: Идентификатор категории услуг
+          type: integer
+          format: int64
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Параметры
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /services/categories/search:
+    get:
+      tags:
+        - Services
+      summary: Поиск категорий услуг
+      operationId: searchServicesCategories
+      description: Поиск категорий услуг
+      parameters:
+        - in: query
+          name: query
+          required: true
+          type: string
+        - in: query
+          name: searchQuery
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Параметры
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /tasks/directum:
+    post:
+      tags:
+        - Tasks
+      summary: Создание задания из Directum
+      operationId: createTaskDirectum
+      description: Создание задания из Directum
+      parameters:
+        - name: task
+          in: body
+          description: Данные для создания задания
+          schema:
+            $ref: '#/definitions/TaskDirectum'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Задания
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не определен
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Отказано в доступе
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /tasks/web:
+    get:
+      tags:
+        - Tasks
+      summary: Получение списка заданий
+      operationId: getTasks
+      description: Получение списка заданий
+      parameters:
+        - name: query
+          in: query
+          type: string
+          description: Строка с параметрами запроса
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Задания
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        406:
+          description: Ограничение доступа
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - Tasks
+      summary: Создание задания
+      operationId: createTask
+      description: Создание задания
+      parameters:
+        - name: task
+          in: body
+          description: Данные для создания задания
+          schema:
+            $ref: '#/definitions/Task'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Задания
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не определен
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Отказано в доступе
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - Tasks
+      summary: Изменение задания
+      operationId: updateTask
+      description: Изменение задания
+      parameters:
+        - name: task
+          in: body
+          description: Данные для изменения пользователя
+          schema:
+            $ref: '#/definitions/Task'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Задания
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не определен
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Отказано в доступе
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /tasks/web/{ID}:
+    delete:
+      tags:
+        - Tasks
+      summary: Удаление задания
+      operationId: deleteTask
+      description: Удаление задания
+      parameters:
+        - name: ID
+          in: path
+          type: integer
+          description: Код задания
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Задания
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не определен
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Отказано в доступе
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /tasks/invites:
+    get:
+      tags:
+        - TasksInvites
+      summary: Получение приглашений к заданию
+      operationId: getTaskInvites
+      description: Получение приглашений к заданию
+      parameters:
+        - name: query
+          in: query
+          type: string
+          description: Строка с параметрами запроса
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Приглашения
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - TasksInvites
+      summary: Создание приглашения к заданию
+      operationId: createTaskInvite
+      description: Создание приглашения к заданию
+      parameters:
+        - name: invite
+          in: body
+          description: Данные для создания приглашения
+          schema:
+            $ref: '#/definitions/TaskInvite'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Приглашения
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не определен
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - TasksInvites
+      summary: Изменение приглашения к заданию
+      operationId: updateTaskInvite
+      description: Получение пришлашения к заданию
+      parameters:
+        - name: invite
+          in: body
+          description: Данные для изменения приглашения
+          schema:
+            $ref: '#/definitions/TaskInvite'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Приглашения
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не определен
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /tasks/invites/{ID}:
+    delete:
+      tags:
+        - TasksInvites
+      summary: Удаление приглашения к заданию
+      operationId: deleteTaskInvite
+      description: Удаление приглашения к заданию
+      parameters:
+        - name: ID
+          in: path
+          type: integer
+          description: Код приглашения
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Приглашения
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не определен
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /tasks/web/search:
+    get:
+      tags:
+        - Tasks
+      summary: Поиск заданий
+      operationId: searchTasks
+      description: Поиск заданий
+      parameters:
+        - name: query
+          in: query
+          type: string
+          description: Строка с параметрами запроса
+          required: true
+        - in: query
+          name: searchQuery
+          required: true
+          description: Строка с параметрами поиска
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Задания
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /tasks/acts:
+    post:
+      tags:
+        - Acts
+      summary: Генерация акта проведения работ
+      operationId: generateTaskAct
+      description: Генерация акта проведения работ и загрузка файла в CDN
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: taskID
+          in: formData
+          type: integer
+          description: Код задания
+          required: true
+        - name: file1
+          in: formData
+          type: file
+          description: Первый файл
+          x-mimetype:
+            application/pdf
+          required: true
+        - name: file2
+          in: formData
+          type: file
+          description: Второй файл
+          x-mimetype:
+            application/pdf
+        - name: file3
+          in: formData
+          type: file
+          description: Третий файл
+          x-mimetype:
+            application/pdf
+        - name: file4
+          in: formData
+          type: file
+          description: Четвертый файл
+          x-mimetype:
+            application/pdf
+        - name: file5
+          in: formData
+          type: file
+          description: Пятый файл
+          x-mimetype:
+            application/pdf
+        - name: file6
+          in: formData
+          type: file
+          description: Шестой файл
+          x-mimetype:
+            application/pdf
+        - name: file7
+          in: formData
+          type: file
+          description: Седьмой файл
+          x-mimetype:
+            application/pdf
+        - name: file8
+          in: formData
+          type: file
+          description: Восьмой файл
+          x-mimetype:
+            application/pdf
+        - name: file9
+          in: formData
+          type: file
+          description: Девятый файл
+          x-mimetype:
+            application/pdf
+        - name: file10
+          in: formData
+          type: file
+          description: Десятый файл
+          x-mimetype:
+            application/pdf
+        - name: name1
+          in: formData
+          type: string
+          description: Имя первого файла
+        - name: name2
+          in: formData
+          type: string
+          description: Имя второго файла
+        - name: name3
+          in: formData
+          type: string
+          description: Имя третьего файла
+        - name: name4
+          in: formData
+          type: string
+          description: Имя четвертого файла
+        - name: name5
+          in: formData
+          type: string
+          description: Имя пятого файла
+        - name: name6
+          in: formData
+          type: string
+          description: Имя шестого файла
+        - name: name7
+          in: formData
+          type: string
+          description: Имя седьмого файла
+        - name: name8
+          in: formData
+          type: string
+          description: Имя восьмого файла
+        - name: name9
+          in: formData
+          type: string
+          description: Имя девятого файла
+        - name: name10
+          in: formData
+          type: string
+          description: Имя десятого файла
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Акт
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не установлен
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Отказано в доступе
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /tasks/files/multiple:
+    post:
+      tags:
+        - Tasks
+      summary: Добавление нескольких вложений к заданиям
+      operationId: createMultipleTaskFiles
+      description: Добавление нескольких вложений к заданиям
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: taskID
+          in: formData
+          type: integer
+          description: Код задания
+          required: true
+        - name: file1
+          in: formData
+          type: file
+          description: Первый файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+            video/mpeg
+            video/mp4
+            video/ogg
+            video/webm
+          required: true
+        - name: file2
+          in: formData
+          type: file
+          description: Второй файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+            video/mpeg
+            video/mp4
+            video/ogg
+            video/webm
+        - name: file3
+          in: formData
+          type: file
+          description: Третий файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+            video/mpeg
+            video/mp4
+            video/ogg
+            video/webm
+        - name: file4
+          in: formData
+          type: file
+          description: Четвертый файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+            video/mpeg
+            video/mp4
+            video/ogg
+            video/webm
+        - name: file5
+          in: formData
+          type: file
+          description: Пятый файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+            video/mpeg
+            video/mp4
+            video/ogg
+            video/webm
+        - name: file6
+          in: formData
+          type: file
+          description: Шестой файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+            video/mpeg
+            video/mp4
+            video/ogg
+            video/webm
+        - name: file7
+          in: formData
+          type: file
+          description: Седьмой файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+            video/mpeg
+            video/mp4
+            video/ogg
+            video/webm
+        - name: file8
+          in: formData
+          type: file
+          description: Восьмой файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+            video/mpeg
+            video/mp4
+            video/ogg
+            video/webm
+        - name: file9
+          in: formData
+          type: file
+          description: Девятый файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+            video/mpeg
+            video/mp4
+            video/ogg
+            video/webm
+        - name: file10
+          in: formData
+          type: file
+          description: Десятый файл
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+            video/mpeg
+            video/mp4
+            video/ogg
+            video/webm
+        - name: name1
+          in: formData
+          type: string
+          description: Имя первого файла
+        - name: name2
+          in: formData
+          type: string
+          description: Имя второго файла
+        - name: name3
+          in: formData
+          type: string
+          description: Имя третьего файла
+        - name: name4
+          in: formData
+          type: string
+          description: Имя четвертого файла
+        - name: name5
+          in: formData
+          type: string
+          description: Имя пятого файла
+        - name: name6
+          in: formData
+          type: string
+          description: Имя шестого файла
+        - name: name7
+          in: formData
+          type: string
+          description: Имя седьмого файла
+        - name: name8
+          in: formData
+          type: string
+          description: Имя восьмого файла
+        - name: name9
+          in: formData
+          type: string
+          description: Имя девятого файла
+        - name: name10
+          in: formData
+          type: string
+          description: Имя десятого файла
+        - name: isApplication
+          in: formData
+          type: boolean
+          description: Признак "Файл приложения"
+        - name: isOffer
+          in: formData
+          type: boolean
+          description: Признак "Файл предложения"
+        - name: isCheck
+          in: formData
+          type: boolean
+          description: Признак "Файл чека"
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Задания
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /tasks/files:
+    post:
+      tags:
+        - Tasks
+      summary: Добавление вложений к заданиям
+      operationId: createTaskFile
+      description: Добавление вложений к заданиям
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: taskID
+          in: formData
+          type: integer
+          description: Код задания
+          required: true
+        - name: file
+          in: formData
+          type: file
+          description: Файл-вложение
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+            video/mpeg
+            video/mp4
+            video/ogg
+            video/webm
+          required: true
+        - name: name
+          in: formData
+          type: string
+          description: Имя файла
+        - name: isApplication
+          in: formData
+          type: boolean
+          description: Признак "Файл приложения"
+        - name: isOffer
+          in: formData
+          type: boolean
+          description: Признак "Файл предложения"
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Задания
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - Tasks
+      summary: Изменение вложения задания
+      operationId: updateTaskFile
+      description: Изменение вложения задания
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: fileID
+          in: formData
+          type: integer
+          description: Код файла
+          required: true
+        - name: file
+          in: formData
+          type: file
+          description: Файл-вложение
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+            video/mpeg
+            video/mp4
+            video/ogg
+            video/webm
+            image/gif
+          required: true
+        - name: name
+          in: formData
+          type: string
+          description: Имя файла
+        - name: isApplication
+          in: formData
+          type: boolean
+          description: Признак "Файл приложения"
+        - name: isOffer
+          in: formData
+          type: boolean
+          description: Признак "Файл предложения"
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Задания
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /tasks/files/{ID}:
+    delete:
+      tags:
+        - Tasks
+      summary: Удаление вложения задания
+      operationId: deleteTaskFile
+      description: Удаление вложения задания
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: ID
+          in: path
+          type: integer
+          description: Код файла
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Задания
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Результаты не найдены
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /tasks/counts:
+    get:
+      tags:
+        - Tasks
+      summary: Получение счетчиков заданий по коду направления
+      operationId: getTasksCounts
+      description: Получение счетчиков заданий по коду направления
+      parameters:
+        - name: setID
+          in: query
+          description: Код направления задания
+          type: integer
+          required: false
+        - name: userID
+          in: query
+          type: integer
+          description: Код пользователя
+          required: false
+        - name: regionIDs
+          in: query
+          description: Коды регионов
+          type: array
+          items:
+            type: integer
+            x-nullable: true
+            x-omitempty: true
+          required: false
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Счетчики заданий
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /tasks/payments:
+    get:
+      tags:
+        - Tasks
+      summary: Повторение выгрузки оплаты задания
+      operationId: repeatTaskPayment
+      description: Повторение выгрузки оплаты задания в 1С
+      parameters:
+        - name: taskID
+          in: query
+          description: Код задания
+          type: integer
+          required: false
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Ответ
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /tasks/comments:
+    get:
+      tags:
+        - TaskComments
+      summary: Получение комментариев к заданию
+      operationId: getTaskComments
+      description: Получение истории статусов и комментариев задания
+      parameters:
+        - name: query
+          in: query
+          description: Параметры запроса
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: История комментариев
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Комментариев не найдено
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - TaskComments
+      summary: Создание комментария к заданию
+      operationId: createTaskComment
+      description: Создание предложения
+      parameters:
+        - name: body
+          in: body
+          description: Данные для комментария к заданию
+          schema:
+            $ref: '#/definitions/TaskComment'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Предложение
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - TaskComments
+      summary: Изменение комментария к заданию
+      operationId: updateTaskComment
+      description: Изменение комментария к заданию
+      parameters:
+        - name: body
+          in: body
+          description: Данные для изменения комментария к заданию
+          schema:
+            $ref: '#/definitions/TaskComment'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Предложение
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /tasks/comments/{ID}:
+    delete:
+      tags:
+        - TaskComments
+      summary: Удаление комментария
+      operationId: deleteTaskComment
+      description: Удаление комментария
+      parameters:
+        - name: ID
+          in: path
+          description: Идентификатор комментария
+          type: integer
+          format: int64
+          required: true
+      responses:
+        200:
+          description: OK
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /objects:
+    get:
+      tags:
+        - Objects
+      summary: Получение объектов
+      operationId: getObjects
+      description: Получение объектов
+      parameters:
+        - name: query
+          in: query
+          description: Параметры запроса
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Объекты
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Комментариев не найдено
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /objects/search:
+    get:
+      tags:
+        - Objects
+      summary: Поиск объектов
+      operationId: searchObjects
+      description: Поиск объектов
+      parameters:
+        - name: query
+          in: query
+          description: Параметры запроса
+          type: string
+          required: true
+        - in: query
+          name: searchQuery
+          required: true
+          description: Строка с поисковыми параметрами
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Объекты
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Комментариев не найдено
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /objects/webdata:
+    get:
+      tags:
+        - Objects
+      summary: Получение веб-информации объектов
+      operationId: getObjectsWebdata
+      description: Получение веб-информации объектов
+      parameters:
+        - name: query
+          in: query
+          description: Параметры запроса
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Объекты
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Комментариев не найдено
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /offers/{taskID}:
+    get:
+      tags:
+        - Offers
+      summary: Получение предложений к заданию
+      operationId: getTaskOffers
+      description: Получение предложений к заданию
+      parameters:
+        - name: taskID
+          in: path
+          description: Идентификатор задания
+          type: integer
+          format: int64
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Предложения
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Предложений не найдено
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /offers:
+    get:
+      tags:
+        - Offers
+      summary: Получение предложений к заданию
+      operationId: getOffers
+      description: Получение предложений к заданию
+      parameters:
+        - name: query
+          in: query
+          description: Параметры запроса
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Предложения
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Предложений не найдено
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - Offers
+      summary: Создание предложения
+      operationId: createOffer
+      description: Создание предложения
+      parameters:
+        - name: body
+          in: body
+          description: Данные для создания предложения
+          schema:
+            $ref: '#/definitions/Offer'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Предложение
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не определен
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - Offers
+      summary: Изменение предложения
+      operationId: updateOffer
+      description: Изменение предложения
+      parameters:
+        - name: body
+          in: body
+          description: Данные для изменения предложения
+          schema:
+            $ref: '#/definitions/Offer'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Предложение
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не установлен
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /offers/{ID}:
+    delete:
+      tags:
+        - Offers
+      summary: Удаление предложения
+      operationId: deleteOffer
+      description: Удаление предложения
+      parameters:
+        - name: ID
+          in: path
+          description: Идентификатор файла
+          type: integer
+          format: int64
+          required: true
+      responses:
+        200:
+          description: OK
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не установлен
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /measures:
+    get:
+      tags:
+        - Measures
+      summary: Получение списка единиц измерения
+      operationId: getMeasures
+      description: Получение списка единиц измерения
+      parameters:
+        - name: query
+          in: query
+          description: Параметры запроса
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Измерения
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Единиц измерения не найдено
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - Measures
+      summary: Создание единицы измерения
+      operationId: createMeasure
+      description: Создание единицы измерения
+      parameters:
+        - name: body
+          in: body
+          description: Данные для создания единицы измерения
+          schema:
+            $ref: '#/definitions/Measure'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Единица измерения
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не установлен
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Отказано в доступе
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - Measures
+      summary: Изменение единицы измерения
+      operationId: updateMeasure
+      description: Изменение единицы измерения
+      parameters:
+        - name: body
+          in: body
+          description: Данные для изменения единицы измерения
+          schema:
+            $ref: '#/definitions/Measure'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Единица измерения
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не установлен
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Отказано в доступе
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /measures/{ID}:
+    delete:
+      tags:
+        - Measures
+      summary: Удаление единицы измерения
+      operationId: deleteMeasure
+      description: Удаление единицы измерения
+      parameters:
+        - name: ID
+          in: path
+          description: Идентификатор единицы измерения
+          type: integer
+          format: int64
+          required: true
+      responses:
+        200:
+          description: OK
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Доступ не установлен
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: Отказано в доступе
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /offers/files/multiple:
+    post:
+      tags:
+        - Offers
+      summary: Добавление несколько закрывающих документов
+      operationId: createMultipleOfferFiles
+      description: Добавление несколько закрывающих документов
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: offerID
+          in: formData
+          type: integer
+          description: Код предложения
+          required: true
+        - name: file1
+          in: formData
+          type: file
+          description: Файл-вложение 1
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+          required: true
+        - name: file2
+          in: formData
+          type: file
+          description: Файл-вложение 2
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: file3
+          in: formData
+          type: file
+          description: Файл-вложение 3
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: file4
+          in: formData
+          type: file
+          description: Файл-вложение 4
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: file5
+          in: formData
+          type: file
+          description: Файл-вложение 5
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: file6
+          in: formData
+          type: file
+          description: Файл-вложение 6
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: file7
+          in: formData
+          type: file
+          description: Файл-вложение 7
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: file8
+          in: formData
+          type: file
+          description: Файл-вложение 8
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: file9
+          in: formData
+          type: file
+          description: Файл-вложение 9
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: file10
+          in: formData
+          type: file
+          description: Файл-вложение 10
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+        - name: name1
+          in: formData
+          type: string
+          description: Имя файла 1
+        - name: name2
+          in: formData
+          type: string
+          description: Имя файла 2
+        - name: name3
+          in: formData
+          type: string
+          description: Имя файла 3
+        - name: name4
+          in: formData
+          type: string
+          description: Имя файла 4
+        - name: name5
+          in: formData
+          type: string
+          description: Имя файла 5
+        - name: name6
+          in: formData
+          type: string
+          description: Имя файла 6
+        - name: name7
+          in: formData
+          type: string
+          description: Имя файла 7
+        - name: name8
+          in: formData
+          type: string
+          description: Имя файла 8
+        - name: name9
+          in: formData
+          type: string
+          description: Имя файла 9
+        - name: name10
+          in: formData
+          type: string
+          description: Имя файла 10
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Предложения
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /offers/files:
+    post:
+      tags:
+        - Offers
+      summary: Добавление закрывающих документов
+      operationId: createOfferFile
+      description: Добавление закрывающих документов
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: offerID
+          in: formData
+          type: integer
+          description: Код предложения
+          required: true
+        - name: file
+          in: formData
+          type: file
+          description: Файл-вложение
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+          required: true
+        - name: name
+          in: formData
+          type: string
+          description: Имя файла
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Предложения
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - Offers
+      summary: Изменение закрывающих документов
+      operationId: updateOfferFile
+      description: Изменение закрывающих документов
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: fileID
+          in: formData
+          type: integer
+          description: Код файла
+          required: true
+        - name: file
+          in: formData
+          type: file
+          description: Файл-вложение
+          x-mimetype:
+            application/zip,
+            application/doc,
+            application/pdf,
+            application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            application/png,
+            application/jpg,
+            application/webp
+          required: true
+        - name: name
+          in: formData
+          type: string
+          description: Имя файла
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Предложения
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /offers/files/{ID}:
+    delete:
+      tags:
+        - Offers
+      summary: Удаление закрывающих документов
+      operationId: deleteOfferFile
+      description: Удаление закрывающих документов
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: ID
+          in: path
+          type: integer
+          description: Код файла
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Предложения
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /notifications/events:
+    get:
+      tags:
+        - Notifications
+      summary: Получение событий уведомлений
+      operationId: getNotificationsEvents
+      description: Получение событий уведомлений
+      parameters:
+        - name: query
+          in: query
+          description: Параметры запроса
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Категории
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Единиц измерения не найдено
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /notifications:
+    get:
+      tags:
+        - Notifications
+      summary: Получение уведомлений
+      operationId: getNotifications
+      description: Получение уведомлений по заданным параметрам
+      parameters:
+        - name: query
+          in: query
+          description: Параметры запроса
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Уведомления
+            type: object
+        400:
+          description: Переданы некорректные данные
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: Единиц измерения не найдено
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - Notifications
+      summary: Добавление уведомления
+      operationId: createNotification
+      description: Добавление уведомления по коду события
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: body
+          in: body
+          description: Данные создания уведомления
+          schema:
+            $ref: '#/definitions/NotificationNew'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Уведомление
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - Notifications
+      summary: Изменение уведомления
+      operationId: readNotification
+      description: Пометка уведомлений прочитанным/непрочитанным
+      parameters:
+        - name: body
+          in: body
+          description: Данные прочтения уведомлений
+          schema:
+            $ref: '#/definitions/NotificationsReadArray'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Уведомление
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /notifications/{ID}:
+    delete:
+      tags:
+        - Notifications
+      summary: Удаление уведомления
+      operationId: deleteNotification
+      description: Удаление уведомления
+      parameters:
+        - name: ID
+          in: path
+          description: Идентификатор уведомления
+          type: integer
+          format: int64
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Статус 200
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /notifications/custom:
+    post:
+      tags:
+        - Notifications
+      description: Отправка уведомлений произвольного содержания
+      summary: Отправка уведомлений произвольного содержания от клиента (заголовок, тело, получатели)
+      operationId: createCustomNotification
+      parameters:
+        - name: body
+          in: body
+          description: Данные прочтения уведомлений
+          schema:
+            $ref: '#/definitions/NotificationCustomNew'
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Статус 200
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /telegram/status:
+    get:
+      tags:
+        - Telegram
+      summary: Смена статуса рассылки TG
+      operationId: changeTGStatus
+      description: Смена статуса рассылки TG (Start/Stop)
+      parameters:
+        - name: isActive
+          in: query
+          description: Статус активности рассылки
+          type: boolean
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Статус 200
+            type: object
+        400:
+          description: Некорректный запрос
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: Нет доступа
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Что-то пошло не так. Мы уже работаем над устранением проблемы
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"
+  /postman/subscribe:
+    get:
+      tags:
+        - Messenger
+      summary: Подписка на канал задания через SSE
+      operationId: postmanSubscribe
+      description: Подписка на канал задания через SSE
+      parameters:
+        - name: taskID
+          in: query
+          type: integer
+          format: int64
+          description: Код задания
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Ответ
+            type: object
+        default:
+          description: Неожиданнная ошибка
+          schema:
+            $ref: "#/definitions/Error"

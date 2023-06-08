@@ -20,6 +20,7 @@ const fetchUserAuth = createAsyncThunk(
         password,
         isPhoneAuth,
       });
+
       storageMMKV.set('token', user.token);
 
       return user;
