@@ -44,7 +44,7 @@ axiosInstance.interceptors.response.use(
 
       if (error.response.status === 400 && error.response.data.code === 1009) {
         try {
-          await storageMMKV.clearAll();
+          storageMMKV.clearAll();
           dispatch(logOut());
         } catch (err) {
           console.log('ERROR_INTERCEPTORS', err);
