@@ -3,13 +3,12 @@ import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { Input, InputPhone, SegmentedControl, Spacer } from 'rn-ui-kit';
+
 import AgreementCheckBox from '@/components/auth/AgreementCheckBox';
 import ButtonAuth from '@/components/auth/ButtonAuth';
 import ForgotPassword from '@/components/auth/ForgotPassword';
-import Input from '@/components/auth/Input/Input';
-import InputPassword from '@/components/auth/Input/InputPassword';
 import LogoPreview from '@/components/auth/LogoPreview';
-import TypeSelection from '@/components/auth/TypeSelection';
 import { configApp, deviceHeight } from '@/constants/platform';
 
 import useSignInScreen from './useSignInScreen';
@@ -18,20 +17,23 @@ import styles from './style';
 
 const SignInScreen = () => {
   const {
-    tel,
+    phone,
     email,
-    setTel,
+    logIn,
+    error,
+    onFocus,
+    setPhone,
     setEmail,
-    isActive,
     password,
-    focusInput,
-    authRequest,
-    isPhoneAuth,
-    setIsActive,
+    switchTab,
+    isLoading,
     setPassword,
     passwordRef,
+    isPhoneAuth,
+    isPhoneError,
+    isEmailError,
     scrollViewRef,
-    setIsPhoneAuth,
+    isPasswordError,
     isAgreeWithTerms,
     onKeyboardWillShow,
     setIsAgreeWithTerms,
@@ -57,29 +59,51 @@ const SignInScreen = () => {
               configApp.android && deviceHeight < 593 && styles.androidHeight,
             ]}
           >
-            <TypeSelection
-              setIsPhoneAuth={setIsPhoneAuth}
-              isPhoneAuth={isPhoneAuth}
-              setTel={setTel}
-              setEmail={setEmail}
-              setIsActive={setIsActive}
+            <SegmentedControl
+              onChange={switchTab}
+              tabs={['Телефон', 'Email']}
             />
+            <Spacer size="xl" />
+            {isPhoneAuth ? (
+              <InputPhone
+                isError={isPhoneError}
+                value={phone}
+                onClear={() => setPhone('')}
+                hint={isPhoneError ? error?.message : undefined}
+                onFocus={configApp.ios ? onFocus : () => null}
+                onSubmitEditing={() => passwordRef?.current?.focus()}
+                onChangeText={(_, unmasked) => setPhone(unmasked)}
+              />
+            ) : (
+              <Input
+                value={email}
+                variant="text"
+                maxLength={60}
+                autoCapitalize="none"
+                isError={isEmailError}
+                keyboardType="email-address"
+                placeholder="Электронная почта"
+                style={styles.input}
+                onClear={() => setEmail('')}
+                hint={isEmailError ? error?.message : undefined}
+                onChangeText={(email: string) => setEmail(email)}
+                onFocus={configApp.ios ? onFocus : () => null}
+                onSubmitEditing={() => passwordRef?.current?.focus()}
+              />
+            )}
+            <Spacer size="l" />
             <Input
-              isPhoneAuth={isPhoneAuth}
-              tel={tel}
-              email={email}
-              setEmail={setEmail}
-              setTel={setTel}
-              onSubmitEditing={() => passwordRef?.current?.focus()}
-              onFocus={configApp.ios ? focusInput : () => null}
-              setIsActive={setIsActive}
-              isActive={isActive}
+              value={password}
+              ref={passwordRef}
+              variant="password"
+              style={styles.input}
+              placeholder="Пароль"
+              maxLength={64}
+              isError={isPasswordError}
+              onChangeText={setPassword}
+              hint={isPasswordError ? error?.message : undefined}
             />
-            <InputPassword
-              password={password}
-              setPassword={setPassword}
-              innerRef={passwordRef}
-            />
+            <Spacer size="xl" />
             <AgreementCheckBox
               value={isAgreeWithTerms}
               setValue={setIsAgreeWithTerms}
@@ -94,16 +118,19 @@ const SignInScreen = () => {
             ]}
           >
             <ButtonAuth
-              flag={true}
-              isPhoneAuth={isPhoneAuth}
-              tel={tel}
-              password={password}
-              email={email}
+              flag
               isDisabled
-              onPress={authRequest}
+              email={email}
+              phone={phone}
+              onPress={logIn}
+              password={password}
+              isLoading={isLoading}
+              isPhoneAuth={isPhoneAuth}
+              authError={error?.message}
               valueCheckBox={isAgreeWithTerms}
               label={'Продолжить'}
             />
+            <Spacer size={'xl'} />
             <ForgotPassword />
           </View>
         </View>

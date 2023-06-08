@@ -3,26 +3,14 @@ import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useNavigation } from '@react-navigation/native';
+import { Button } from 'rn-ui-kit';
 
 import ErrorCross from '@/assets/icons/svg/auth/ErrorCross';
-import Button from '@/components/Button';
-import { useAppDispatch } from '@/store';
-import {
-  clearAuthError,
-  clearRecoveryError,
-} from '@/store/slices/auth/actions';
 
 import styles from './style';
 
 const ErrorScreen = () => {
-  const dispatch = useAppDispatch();
   const navigation = useNavigation();
-
-  const goBack = () => {
-    dispatch(clearRecoveryError());
-    dispatch(clearAuthError(null));
-    navigation.goBack();
-  };
 
   return (
     <SafeAreaView edges={['bottom']} style={styles.container}>
@@ -35,7 +23,7 @@ const ErrorScreen = () => {
           </Text>
         </View>
       </View>
-      <Button label="Повторить попытку" onPress={goBack} />
+      <Button label="Повторить попытку" onPress={navigation.goBack} />
     </SafeAreaView>
   );
 };

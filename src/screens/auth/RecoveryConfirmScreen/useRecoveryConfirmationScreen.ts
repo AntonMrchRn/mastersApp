@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { TextInput } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   useIsFocused,
   useNavigation,
@@ -11,14 +12,15 @@ import {
 import { configApp } from '@/constants/platform';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
-  clearAuthError,
-  clearRecoveryError,
-} from '@/store/slices/auth/actions';
+  useRestorePasswordMutation,
+  useSendPasswordRecoveryCodeMutation,
+} from '@/store/api/auth';
 import {
-  recoveryPassword,
-  restorePassword,
-} from '@/store/slices/auth/asyncActions';
+  setIsRecoveryByPhone,
+  timeoutAsyncPhone,
+} from '@/store/slices/auth/actions';
 import { selectAuth } from '@/store/slices/auth/selectors';
+import { AxiosQueryErrorResponse, Error, ErrorCode } from '@/types/error';
 import {
   AuthScreenName,
   PasswordScreenNavigationProp,
@@ -30,48 +32,122 @@ const email = '';
 const isPhoneAuth = true;
 
 const useRecoveryConfirmationScreen = () => {
-  const { timeout, recoveryError } = useAppSelector(selectAuth);
+  const [sendRecoveryCode, { data: timeout, isSuccess: isCodeSuccess }] =
+    useSendPasswordRecoveryCodeMutation();
+  const [
+    restoreUserPassword,
+    {
+      data,
+      isError,
+      isLoading,
+      isSuccess: isPasswordSuccess,
+      error: recoveryPasswordError,
+    },
+  ] = useRestorePasswordMutation();
+
+  const { timeoutPhone } = useAppSelector(selectAuth);
   const dispatch = useAppDispatch();
 
   const isFocused = useIsFocused();
   const route = useRoute<RecoveryConfirmScreenRoute>();
   const navigation = useNavigation<PasswordScreenNavigationProp>();
 
-  const [value, setValue] = useState<string>('');
+  const [code, setCode] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<Error | null>(
+    (recoveryPasswordError as AxiosQueryErrorResponse)?.data
+  );
   const passwordRef = useRef<TextInput>(null);
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
-  const tel = route.params.tel;
+
+  const phone = route.params.phone;
+  const isPasswordError = error?.code === ErrorCode.IncorrectPassword;
+  const isCodeError = error?.code === ErrorCode.IncorrectVerificationCode;
 
   useEffect(() => {
-    dispatch(clearRecoveryError());
-    dispatch(clearAuthError(null));
-  }, [isFocused]);
-
-  useEffect(() => {
-    dispatch(clearRecoveryError());
+    setError(null);
   }, []);
 
   useEffect(() => {
-    dispatch(clearRecoveryError());
-  }, [password, value]);
+    setError(null);
+  }, [isFocused]);
 
-  const recoveryRequest = async () => {
-    await dispatch(
-      recoveryPassword({ phoneNumber: '7' + tel, email, password, isPhoneAuth })
-    );
-  };
+  useEffect(() => {
+    if (isPasswordSuccess) {
+      onRestorePasswordSuccess();
+    }
+  }, [isPasswordSuccess]);
 
-  const restoreRequest = () => {
-    dispatch(restorePassword({ password, value })).then(res => {
-      if (res?.payload === null || res?.payload === undefined) {
-        dispatch(clearRecoveryError());
+  useEffect(() => {
+    if (isCodeSuccess) {
+      onSendCodeSuccess();
+    }
+  }, [isCodeSuccess]);
+
+  useEffect(() => {
+    if (isError) {
+      setError((recoveryPasswordError as AxiosQueryErrorResponse)?.data);
+    }
+  }, [isError]);
+
+  useEffect(() => {
+    if (isError && isPasswordError) {
+      setError(null);
+    }
+  }, [password]);
+
+  useEffect(() => {
+    if (code?.length === 6) {
+      passwordRef?.current?.focus();
+    }
+
+    if (isError && isCodeError) {
+      setError(null);
+    }
+  }, [code]);
+
+  const onRestorePasswordSuccess = async () => {
+    try {
+      const jsonValue = JSON.stringify(data);
+      await AsyncStorage.setItem('timePhone', jsonValue);
+
+      if (data === null || data === undefined) {
+        setError(null);
         navigation.navigate(AuthScreenName.Password);
       }
+    } catch (e) {
+      console.log(`onRestorePasswordSuccess error: ${e}`);
+    }
+  };
+
+  const onSendCodeSuccess = async () => {
+    try {
+      const jsonValue = JSON.stringify(timeout);
+      await AsyncStorage.setItem('timePhone', jsonValue);
+      await dispatch(timeoutAsyncPhone(timeout));
+      dispatch(setIsRecoveryByPhone());
+    } catch (e) {
+      console.log(`onSendCodeSuccess error: ${e}`);
+    }
+  };
+
+  const sendCode = async () => {
+    await sendRecoveryCode({
+      phoneNumber: '7' + phone,
+      email,
+      password,
+      isPhoneAuth,
     });
   };
 
-  const focusInput = () => {
+  const restorePassword = async () => {
+    await restoreUserPassword({
+      code,
+      password,
+    });
+  };
+
+  const onFocus = () => {
     setTimeout(() => {
       scrollViewRef?.current?.scrollToPosition(0, OFFSET, true);
     }, 0);
@@ -87,19 +163,21 @@ const useRecoveryConfirmationScreen = () => {
   };
 
   return {
-    value,
+    code,
     email,
-    timeout,
+    error,
+    setCode,
+    onFocus,
     password,
-    setValue,
-    focusInput,
-    isPhoneAuth,
+    sendCode,
+    isLoading,
     setPassword,
+    isCodeError,
     passwordRef,
+    timeoutPhone,
     scrollViewRef,
-    recoveryError,
-    restoreRequest,
-    recoveryRequest,
+    restorePassword,
+    isPasswordError,
     onKeyboardWillShow,
   };
 };

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Keyboard, Linking, Text, TouchableOpacity, View } from 'react-native';
+import { Keyboard, Linking, Text, View } from 'react-native';
+
+import { CheckBox } from 'rn-ui-kit';
 
 import CheckBoxActive from '@/assets/icons/svg/auth/CheckBoxActive';
-import CheckBoxDisabled from '@/assets/icons/svg/auth/CheckBoxDisabled';
 
 import styles from './style';
 
@@ -29,11 +30,14 @@ const AgreementCheckBox = ({ value, setValue }: AgreementCheckBoxProps) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onPress}>
-        <View style={[styles.wrapperCheckBox, value && styles.active]}>
-          {!value ? <CheckBoxDisabled /> : <CheckBoxActive />}
-        </View>
-      </TouchableOpacity>
+      <View style={styles.wrapperCheckBox}>
+        <CheckBox
+          checked={value}
+          onPress={onPress}
+          icon={<CheckBoxActive />}
+          style={[styles.checkBox, value && styles.active]}
+        />
+      </View>
       <View style={styles.wrapper}>
         <Text style={styles.title}>
           Выражаю{' '}

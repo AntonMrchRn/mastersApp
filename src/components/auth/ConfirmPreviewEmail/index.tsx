@@ -2,20 +2,16 @@ import React from 'react';
 import { Text, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
+import { Button, Spacer } from 'rn-ui-kit';
 
-import Button from '@/components/Button';
-import { useAppDispatch } from '@/store';
-import { clearRecoveryError } from '@/store/slices/auth/actions';
 import { AuthScreenName, SignInScreenNavigationProp } from '@/types/navigation';
 
 import styles from './style';
 
 const ConfirmPreviewEmail = () => {
   const navigation = useNavigation<SignInScreenNavigationProp>();
-  const dispatch = useAppDispatch();
 
-  const onPress = () => {
-    dispatch(clearRecoveryError());
+  const navigateToSignIn = () => {
     navigation.navigate(AuthScreenName.SignIn);
   };
 
@@ -28,7 +24,8 @@ const ConfirmPreviewEmail = () => {
         </Text>
         <Text style={styles.text}>в письме</Text>
       </View>
-      <Button onPress={onPress} label="Хорошо, понятно" />
+      <Spacer size="xl" />
+      <Button label="Хорошо, понятно" onPress={navigateToSignIn} />
     </View>
   );
 };

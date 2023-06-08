@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fonts.main_700_o,
     fontWeight: '700',
-    fontSize: 23,
+    fontSize: 22,
     color: 'black',
   },
 });
