@@ -7,6 +7,7 @@ import { Card, TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
 
 import { TaskCardHeader } from '@/components/TabScreens/TaskCard/TaskCardHeader';
 import { TaskBadges } from '@/components/task/TaskBadges';
+import { useGetTaskQuery } from '@/store/api/tasks';
 import {
   TaskSearchNavigationParamList,
   TaskSearchNavigatorScreenName,
@@ -22,6 +23,7 @@ type TaskCardScreenProps = StackScreenProps<
 >;
 export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
   const { badges, tabs, onTabChange, getCurrentTab, status } = useTaskCard();
+  const ex = useGetTaskQuery();
   const theme = useTheme();
   const goBack = () => {
     if (navigation.canGoBack()) {
