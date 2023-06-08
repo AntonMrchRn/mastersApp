@@ -9,7 +9,7 @@ export const useCheckLogin = () => {
   const { isAuth } = useAppSelector(selectAuth);
   const dispatch = useDispatch();
 
-  const checkLogin = () => {
+  const checkLogin = async () => {
     try {
       const token = storageMMKV.getString('token');
 
