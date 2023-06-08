@@ -3,7 +3,7 @@ import { BaseQueryFn } from '@reduxjs/toolkit/dist/query/react';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { AxiosRequestConfig, Method } from 'axios';
 
-import { apiHost } from '@/services/axios';
+import { axiosInstance } from '@/services/axios/axiosInstance';
 import {
   AxiosQueryError,
   AxiosQueryErrorResponse,
@@ -33,11 +33,11 @@ export const axiosBaseQuery = ({
 > => {
   return async ({ url, params, method, data }) => {
     try {
-      const result = await apiHost({
-        url: apiHost.defaults.baseURL + url,
+      const result = await axiosInstance({
+        url: axiosInstance.defaults.baseURL + url,
         method,
         ...(params && { params }),
-        ...(headers && { headers: apiHost.defaults.headers }),
+        ...(headers && { headers: axiosInstance.defaults.headers }),
         ...(data && { data }),
         responseType: 'json',
       });
