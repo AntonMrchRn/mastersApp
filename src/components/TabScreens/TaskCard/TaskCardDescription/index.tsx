@@ -10,6 +10,7 @@ import { PhoneIcon } from '@/assets/icons/svg/screens/PhoneIcon';
 import { DownloadManager } from '@/components/DownloadManager';
 import { TaskAddress } from '@/components/task/TaskAddress';
 import { TaskCardStatus } from '@/screens/tabs/TaskCardScreen/useTaskCard';
+import { Contact, File } from '@/store/api/tasks/types';
 
 import { TaskDate } from '../../../task/TaskDate';
 import { TaskCardBudgetModal } from '../TaskCardBudgetModal';
@@ -23,15 +24,21 @@ type TaskCardDescriptionProps = {
   statusCode: TaskCardStatus;
   description: string;
   address: string;
+  startTime: string;
+  endTimePlan: string;
+  contacts: Contact[];
+  files: File[];
 };
 export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   statusCode,
   description,
   address,
+  startTime,
+  endTimePlan,
+  contacts,
+  files,
 }) => {
   const {
-    contacts,
-    files,
     buttons,
     banner,
     budgetModalVisible,
@@ -39,8 +46,6 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
     onRevokeBudget,
     onDateModalVisible,
     dateModalVisible,
-    dateFrom,
-    dateTo,
     inputDateValue,
     onInputDateValue,
     onDateBottomSheetButton,
@@ -75,11 +80,13 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
       <Text variant="bodySRegular" style={styles.mt24} color={theme.text.basic}>
         {description}
       </Text>
-      <View style={styles.address}>
-        <TaskAddress address={address} />
-      </View>
+      {address && (
+        <View style={styles.address}>
+          <TaskAddress address={address} />
+        </View>
+      )}
       <View style={styles.date}>
-        <TaskDate from={dateFrom} to={dateTo} />
+        <TaskDate from={startTime} to={endTimePlan} />
       </View>
       {statusCode === 'signing' && (
         <TouchableOpacity style={styles.edit} onPress={onDateModalVisible}>
@@ -117,21 +124,21 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
             </View>
             <View>
               <Text variant="bodyMBold" color={theme.text.basic}>
-                {contact.title}
+                {contact?.position}
               </Text>
               <Text
                 variant="bodySRegular"
                 color={theme.text.basic}
                 style={styles.name}
               >
-                {contact.name}
+                {contact?.sname} {contact?.name} {contact?.pname}
               </Text>
               <View style={styles.phone}>
                 <View style={styles.mr10}>
                   <PhoneIcon />
                 </View>
                 <Text variant="bodySRegular" color={theme.text.basic}>
-                  {contact.phone}
+                  {contact?.phone}
                 </Text>
               </View>
             </View>

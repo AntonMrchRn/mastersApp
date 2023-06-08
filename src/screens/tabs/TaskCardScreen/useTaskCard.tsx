@@ -28,6 +28,10 @@ export const useTaskCard = () => {
   const getTaskStatuses = useGetTaskStatusesQuery();
   const task = getTask?.data?.tasks?.[0];
   const id = task?.ID || '';
+  const files = task?.files || [];
+  const startTime = task?.startTime || '';
+  const contacts = task?.contacts || [];
+  const endTimePlan = task?.endTimePlan || '';
   const address = task?.object?.name || '';
   const description = task?.description || '';
   const statusID = task?.statusID;
@@ -81,6 +85,10 @@ export const useTaskCard = () => {
             statusCode={statusCode}
             description={description}
             address={address}
+            startTime={startTime}
+            endTimePlan={endTimePlan}
+            contacts={contacts}
+            files={files}
           />
         );
       default:

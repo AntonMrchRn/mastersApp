@@ -1,3 +1,16 @@
+export type File = {
+  url: string;
+  name: string;
+  fileID: number;
+  userID: number;
+  isCheck: boolean;
+  isOffer: boolean;
+  mime: string;
+  extension: string;
+  extensionOriginal: string;
+  isApplication: boolean;
+  size: number;
+};
 export type Service = {
   ID: number;
   categoryID: number;
@@ -42,6 +55,9 @@ export type Curator = {
   sname: string;
 };
 export type Contact = {
+  name: string;
+  phone: number;
+  pname: string;
   position: string;
   sname: string;
 };
@@ -62,7 +78,7 @@ export type Task = {
   description: string;
   executors: Executor[];
   executorsCount: number;
-  files: [];
+  files: File[];
   isCuratorAllowed: boolean;
   isDirectum: boolean;
   isNight: boolean;
@@ -108,6 +124,13 @@ export type GetTaskResponce = {
     work: number;
   } | null;
   tasks: Task[];
+};
+
+export type Status = {
+  ID: number;
+  code: string;
+  description: string;
+  tableName: string;
 };
 export type GetTaskStatusesResponce = [
   {
