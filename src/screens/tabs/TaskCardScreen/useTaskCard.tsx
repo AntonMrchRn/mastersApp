@@ -18,7 +18,8 @@ export type TaskCardStatus =
   | 'paid'
   | 'returned'
   | 'work'
-  | 'closed';
+  | 'closed'
+  | '';
 
 export const useTaskCard = () => {
   const [tab, setTab] = useState('Описание');
@@ -27,6 +28,8 @@ export const useTaskCard = () => {
   const getTaskStatuses = useGetTaskStatusesQuery();
   const task = getTask?.data?.tasks?.[0];
   const id = task?.ID || '';
+  const address = task?.object?.name || '';
+  const description = task?.description || '';
   const statusID = task?.statusID;
   const status = getTaskStatuses?.data?.find(stat => stat.ID === statusID);
   const statusCode = status?.code || '';
@@ -73,9 +76,15 @@ export const useTaskCard = () => {
   const getCurrentTab = () => {
     switch (tab) {
       case 'Описание':
-        return <TaskCardDescription status={statusCode} />;
+        return (
+          <TaskCardDescription
+            statusCode={statusCode}
+            description={description}
+            address={address}
+          />
+        );
       default:
-        return <TaskCardDescription status={statusCode} />;
+        return <></>;
     }
   };
   const onTabChange = (item: TabItem) => {

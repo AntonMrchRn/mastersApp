@@ -10,15 +10,11 @@ export type TaskCardContants = {
   name: string;
   phone: string;
 };
-export const useTaskCardDescription = (
-  status: TaskCardStatus,
-  setStatus: React.Dispatch<React.SetStateAction<TaskCardStatus>>
-) => {
+export const useTaskCardDescription = (statusCode: TaskCardStatus) => {
   const [budgetSubmission, setBudgetSubmission] = useState(false);
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [dateModalVisible, setDateModalVisible] = useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
-  const [taskCanceled, setTaskCanceled] = useState(false);
   const [budgetCanceled, setBudgetCanceled] = useState(false);
   const [dateTo, setDateTo] = useState('2023-04-17');
   const [inputDateValue, setInputDateValue] = useState('');
@@ -50,10 +46,10 @@ export const useTaskCardDescription = (
     onDateModalVisible();
   };
   const onWorkDelivery = () => {
-    setStatus('workDelivery');
+    // setStatus('workDelivery');
   };
   const onCancelTask = () => {
-    setStatus('published');
+    // setStatus('published');
     onCancelModalVisible();
   };
 
@@ -168,8 +164,8 @@ export const useTaskCardDescription = (
     variant: Variant;
     onPress?: () => void;
   }[] => {
-    switch (status) {
-      case 'published':
+    switch (statusCode) {
+      case 'active':
         if (budgetCanceled) {
           return [];
         }
@@ -189,7 +185,7 @@ export const useTaskCardDescription = (
             onPress: onBudgetSubmission,
           },
         ];
-      case 'inProgress':
+      case 'signing':
         return [
           {
             label: 'Сдать работы',
@@ -212,8 +208,8 @@ export const useTaskCardDescription = (
     icon: IconTypes;
     text: string;
   } | null => {
-    switch (status) {
-      case 'published':
+    switch (statusCode) {
+      case 'active':
         if (budgetCanceled) {
           return {
             title: 'Ваша смета отклонена координатором',
@@ -223,14 +219,14 @@ export const useTaskCardDescription = (
           };
         }
         return null;
-      case 'workDelivery':
+      case 'summarizing':
         return {
           title: 'Задача на проверке',
           type: 'info',
           icon: 'info',
           text: 'Координатор проверяет выполненные услуги. После успешной проверки задача будет передана на оплату',
         };
-      case 'done':
+      case 'completed':
         return {
           title: 'Выполненные услуги приняты',
           type: 'success',
@@ -244,7 +240,8 @@ export const useTaskCardDescription = (
           icon: 'success',
           text: 'Денежные средства переведены вам на указанные в профиле реквизиты',
         };
-      case 'cancelled':
+      case 'cancelledByExecutor':
+      case 'cancelledByCustomer':
         return {
           title: 'Задача отменена',
           type: 'error',

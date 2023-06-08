@@ -20,14 +20,14 @@ import { useTaskCardDescription } from './useTaskCardDescription';
 import { styles } from './styles';
 
 type TaskCardDescriptionProps = {
-  status: TaskCardStatus;
-  setStatus: React.Dispatch<React.SetStateAction<TaskCardStatus>>;
-  task: any;
+  statusCode: TaskCardStatus;
+  description: string;
+  address: string;
 };
 export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
-  status,
-  setStatus,
-  task,
+  statusCode,
+  description,
+  address,
 }) => {
   const {
     contacts,
@@ -47,11 +47,9 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
     cancelModalVisible,
     onCancelModalVisible,
     onCancelTask,
-  } = useTaskCardDescription(status, setStatus);
+  } = useTaskCardDescription(statusCode);
   const theme = useTheme();
-  //время
-  //task.startTime
-  //task.endTimePlan
+
   return (
     <View>
       <TaskCardBudgetModal
@@ -75,15 +73,15 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
         О задаче
       </Text>
       <Text variant="bodySRegular" style={styles.mt24} color={theme.text.basic}>
-        {task?.description}
+        {description}
       </Text>
       <View style={styles.address}>
-        <TaskAddress address={task?.object?.name} />
+        <TaskAddress address={address} />
       </View>
       <View style={styles.date}>
         <TaskDate from={dateFrom} to={dateTo} />
       </View>
-      {status === 'inProgress' && (
+      {statusCode === 'signing' && (
         <TouchableOpacity style={styles.edit} onPress={onDateModalVisible}>
           <EditIcon />
           <Text
