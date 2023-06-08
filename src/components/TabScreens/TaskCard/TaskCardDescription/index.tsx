@@ -100,58 +100,70 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
           </Text>
         </TouchableOpacity>
       )}
-      <View style={styles.contacts}>
-        <Text variant="title3" color={theme.text.basic} style={styles.mr11}>
-          Контакты
-        </Text>
-        <CaretDownIcon />
-      </View>
-      {contacts.map((contact, index) => (
-        <Card
-          isShadow
-          style={[
-            styles.card,
-            {
-              borderColor: theme.stroke.accentDisable,
-            },
-            index !== 0 && { marginTop: 16 },
-          ]}
-          key={index}
-        >
-          <View style={styles.cardBody}>
-            <View style={styles.mr16}>
-              <AvatarIcon />
-            </View>
-            <View>
-              <Text variant="bodyMBold" color={theme.text.basic}>
-                {contact?.position}
-              </Text>
-              <Text
-                variant="bodySRegular"
-                color={theme.text.basic}
-                style={styles.name}
-              >
-                {contact?.sname} {contact?.name} {contact?.pname}
-              </Text>
-              <View style={styles.phone}>
-                <View style={styles.mr10}>
-                  <PhoneIcon />
-                </View>
-                <Text variant="bodySRegular" color={theme.text.basic}>
-                  {contact?.phone}
-                </Text>
-              </View>
-            </View>
+      {contacts.length ? (
+        <>
+          <View style={styles.contacts}>
+            <Text variant="title3" color={theme.text.basic} style={styles.mr11}>
+              Контакты
+            </Text>
+            <CaretDownIcon />
           </View>
-        </Card>
-      ))}
-      <View style={styles.attachments}>
-        <Text variant="title3" color={theme.text.basic} style={styles.mr11}>
-          Вложения
-        </Text>
-        <CaretDownIcon />
-      </View>
-      <DownloadManager files={files} />
+          {contacts.map((contact, index) => (
+            <Card
+              isShadow
+              style={[
+                styles.card,
+                {
+                  borderColor: theme.stroke.accentDisable,
+                },
+                index !== 0 && { marginTop: 16 },
+              ]}
+              key={index}
+            >
+              <View style={styles.cardBody}>
+                <View style={styles.mr16}>
+                  <AvatarIcon />
+                </View>
+                <View>
+                  <Text variant="bodyMBold" color={theme.text.basic}>
+                    {contact?.position}
+                  </Text>
+                  <Text
+                    variant="bodySRegular"
+                    color={theme.text.basic}
+                    style={styles.name}
+                  >
+                    {contact?.sname} {contact?.name} {contact?.pname}
+                  </Text>
+                  <View style={styles.phone}>
+                    <View style={styles.mr10}>
+                      <PhoneIcon />
+                    </View>
+                    <Text variant="bodySRegular" color={theme.text.basic}>
+                      {contact?.phone}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </Card>
+          ))}
+        </>
+      ) : (
+        <></>
+      )}
+      {files.length ? (
+        <>
+          <View style={styles.attachments}>
+            <Text variant="title3" color={theme.text.basic} style={styles.mr11}>
+              Вложения
+            </Text>
+            <CaretDownIcon />
+          </View>
+          <DownloadManager files={files} />
+        </>
+      ) : (
+        <></>
+      )}
       <View style={styles.bottom}>
         {buttons.map((button, index) => (
           <Button
