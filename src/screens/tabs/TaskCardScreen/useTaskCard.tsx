@@ -1,116 +1,48 @@
 import React, { useState } from 'react';
 
+import dayjs from 'dayjs';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
 
-import { NightIcon } from '@/assets/icons/svg/screens/NightIcon';
 import { TaskCardDescription } from '@/components/TabScreens/TaskCard/TaskCardDescription';
-import { TaskBadge } from '@/components/task/TaskBadges';
+import { useGetTaskQuery, useGetTaskStatusesQuery } from '@/store/api/tasks';
 
 export type TaskCardStatus =
-  | 'published'
-  | 'inProgress'
-  | 'workDelivery'
-  | 'done'
+  | 'pending'
+  | 'active'
+  | 'matching'
+  | 'signing'
+  | 'summarizing'
+  | 'completed'
+  | 'cancelledByExecutor'
+  | 'cancelledByCustomer'
   | 'paid'
-  | 'cancelled'
+  | 'returned'
+  | 'work'
   | 'closed';
 
 export const useTaskCard = () => {
-  const [status, setStatus] = useState<TaskCardStatus>('inProgress');
   const [tab, setTab] = useState('Описание');
-  const getBadges = (): TaskBadge[] => {
-    switch (status) {
-      case 'published':
-        return [
-          {
-            label: 'Опубликовано',
-            icon: false,
-            variant: 'basic',
-            secondary: true,
-          },
-          {
-            label: 'Срочно',
-            icon: true,
-            variant: 'secondary',
-            secondary: true,
-          },
-          {
-            label: 'Ночные работы',
-            icon: <NightIcon />,
-            variant: 'special',
-            secondary: true,
-          },
-        ];
-      case 'inProgress':
-        return [
-          {
-            label: 'В работе',
-            icon: false,
-            variant: 'accent',
-            secondary: true,
-          },
-          {
-            label: 'Срочно',
-            icon: true,
-            variant: 'secondary',
-            secondary: true,
-          },
-          {
-            label: 'Ночные работы',
-            icon: <NightIcon />,
-            variant: 'special',
-            secondary: true,
-          },
-        ];
-      case 'workDelivery':
-        return [
-          {
-            label: 'Сдача работ',
-            icon: false,
-            variant: 'warning',
-            secondary: true,
-          },
-        ];
-      case 'done':
-        return [
-          {
-            label: 'Ожидает оплаты',
-            icon: false,
-            variant: 'special',
-            secondary: true,
-          },
-        ];
-      case 'paid':
-        return [
-          {
-            label: 'Оплачено',
-            icon: false,
-            variant: 'success',
-            secondary: true,
-          },
-        ];
-      case 'cancelled':
-        return [
-          {
-            label: 'Отменено',
-            icon: false,
-            variant: 'danger',
-            secondary: true,
-          },
-        ];
-      case 'closed':
-        return [
-          {
-            label: 'Закрыто',
-            icon: false,
-            variant: 'basic',
-            secondary: true,
-          },
-        ];
-      default:
-        return [];
-    }
-  };
+  const taskId = '926';
+  const getTask = useGetTaskQuery(taskId);
+  const getTaskStatuses = useGetTaskStatusesQuery();
+  const task = getTask?.data?.tasks?.[0];
+  const id = task?.ID || '';
+  const statusID = task?.statusID;
+  const status = getTaskStatuses?.data?.find(stat => stat.ID === statusID);
+  const statusCode = status?.code || '';
+  const name = task?.name || '';
+  const budget = `${task?.budget} ₽` || '';
+  const isNight = task?.isNight || false;
+  const isUrgent = task?.isUrgent || false;
+  const publicTime = task?.publicTime
+    ? `Опубликовано ${dayjs(task?.publicTime).format('DD MMMM в HH:mm')}`
+    : '';
+  const budgetEndTime = task?.endTimePlan
+    ? `Срок подачи сметы до ${dayjs(task?.endTimePlan).format(
+        'DD MMMM в HH:mm'
+      )}`
+    : '';
+
   const tabs: TabItem[] = [
     {
       id: 0,
@@ -141,20 +73,25 @@ export const useTaskCard = () => {
   const getCurrentTab = () => {
     switch (tab) {
       case 'Описание':
-        return <TaskCardDescription status={status} setStatus={setStatus} />;
+        return <TaskCardDescription status={statusCode} />;
       default:
-        return <TaskCardDescription status={status} setStatus={setStatus} />;
+        return <TaskCardDescription status={statusCode} />;
     }
   };
   const onTabChange = (item: TabItem) => {
     setTab(item.label);
   };
-  const badges = getBadges();
   return {
     onTabChange,
-    badges,
     tabs,
     getCurrentTab,
-    status,
+    id,
+    name,
+    budget,
+    isNight,
+    publicTime,
+    isUrgent,
+    statusCode,
+    budgetEndTime,
   };
 };

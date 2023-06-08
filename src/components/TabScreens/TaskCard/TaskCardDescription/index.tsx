@@ -22,10 +22,12 @@ import { styles } from './styles';
 type TaskCardDescriptionProps = {
   status: TaskCardStatus;
   setStatus: React.Dispatch<React.SetStateAction<TaskCardStatus>>;
+  task: any;
 };
 export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   status,
   setStatus,
+  task,
 }) => {
   const {
     contacts,
@@ -47,6 +49,9 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
     onCancelTask,
   } = useTaskCardDescription(status, setStatus);
   const theme = useTheme();
+  //время
+  //task.startTime
+  //task.endTimePlan
   return (
     <View>
       <TaskCardBudgetModal
@@ -70,21 +75,10 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
         О задаче
       </Text>
       <Text variant="bodySRegular" style={styles.mt24} color={theme.text.basic}>
-        Lorem ipsum dolor sit amet consectetur. Tincidunt ultricies egestas
-        tempus feugiat sagittis at gravida. Duis vitae elit habitant tortor
-        viverra semper dictum ultricies non. Lectus morbi ut nascetur varius.
-        Etiam urna tincidunt nulla non leo malesuada consequat orci eget. Amet
-        aliquet eu est egestas dictum interdum mattis vestibulum. Vitae integer.
-        Tincidunt ultricies egestas tempus feugiat sagittis at gravida. Duis
-        vitae elit habitant tortor viverra semper dictum ultricies non. Lectus
-        morbi ut nascetur varius.
+        {task?.description}
       </Text>
       <View style={styles.address}>
-        <TaskAddress
-          address={
-            'Краснодар, ул. Чекистов 24, кв. 89, нежилые помещения 1,2,3,4,5,6(Аптека Апрель)'
-          }
-        />
+        <TaskAddress address={task?.object?.name} />
       </View>
       <View style={styles.date}>
         <TaskDate from={dateFrom} to={dateTo} />

@@ -1,12 +1,18 @@
 import { api } from '@/store/api';
 
-import { GetTaskResponce } from './types';
+import { GetTaskResponce, GetTaskStatusesResponce } from './types';
 
 export const tasksAPI = api.injectEndpoints({
   endpoints: builder => ({
-    getTask: builder.query<GetTaskResponce, void>({
+    getTask: builder.query<GetTaskResponce, string>({
+      query: id => ({
+        url: `tasks/web?query=?ID==${id}?`,
+        method: 'GET',
+      }),
+    }),
+    getTaskStatuses: builder.query<GetTaskStatusesResponce, void>({
       query: () => ({
-        url: 'tasks/web?query=?ID==944?',
+        url: `/aux?query=?tableName==task_status?`,
         method: 'GET',
       }),
     }),
@@ -14,4 +20,4 @@ export const tasksAPI = api.injectEndpoints({
   overrideExisting: true,
 });
 
-export const { useGetTaskQuery } = tasksAPI;
+export const { useGetTaskQuery, useGetTaskStatusesQuery } = tasksAPI;

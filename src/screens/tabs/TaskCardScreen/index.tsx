@@ -7,7 +7,6 @@ import { Card, TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
 
 import { TaskCardHeader } from '@/components/TabScreens/TaskCard/TaskCardHeader';
 import { TaskBadges } from '@/components/task/TaskBadges';
-import { useGetTaskQuery } from '@/store/api/tasks';
 import {
   TaskSearchNavigationParamList,
   TaskSearchNavigatorScreenName,
@@ -21,9 +20,22 @@ type TaskCardScreenProps = StackScreenProps<
   TaskSearchNavigationParamList,
   TaskSearchNavigatorScreenName.TaskCard
 >;
+
 export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
-  const { badges, tabs, onTabChange, getCurrentTab, status } = useTaskCard();
-  const ex = useGetTaskQuery();
+  const {
+    tabs,
+    onTabChange,
+    getCurrentTab,
+    id,
+    publicTime,
+    name,
+    budget,
+    isNight,
+    isUrgent,
+    statusCode,
+    budgetEndTime,
+  } = useTaskCard();
+
   const theme = useTheme();
   const goBack = () => {
     if (navigation.canGoBack()) {
@@ -34,24 +46,28 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
     <SafeAreaView style={styles.container} edges={['top']}>
       <TaskCardHeader
         goBack={goBack}
-        title={'Задача ID 32996'}
-        description={'Опубликовано 10 апреля в 23:52'}
+        title={`Задача ID ${id}`}
+        description={publicTime}
       />
       <ScrollView style={styles.scrollView}>
         <View style={styles.body}>
           <View style={styles.badges}>
-            <TaskBadges badges={badges} />
+            <TaskBadges
+              isNight={isNight}
+              isUrgent={isUrgent}
+              statusCode={statusCode}
+            />
           </View>
           <Text variant="title2" style={styles.title} color={theme.text.basic}>
-            Какое-то длинное название задания на 2-3 строчки
+            {name}
           </Text>
           <Text variant="title3" style={styles.price} color={theme.text.basic}>
-            18 000 ₽
+            {budget}
           </Text>
-          {status === 'published' && (
+          {statusCode === 'active' && (
             <Tips
               type={'warning'}
-              text="Срок подачи сметы до 10 апреля 19:00"
+              text={budgetEndTime}
               containerStyle={styles.tips}
             />
           )}
