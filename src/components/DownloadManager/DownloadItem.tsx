@@ -20,13 +20,13 @@ import { PPTIcon } from '@/assets/icons/svg/files/PPTIcon';
 import { WEBPIcon } from '@/assets/icons/svg/files/WEBPIcon';
 import { XLSIcon } from '@/assets/icons/svg/files/XLSIcon';
 import { ZIPIcon } from '@/assets/icons/svg/files/ZIPIcon';
+import { File } from '@/store/api/tasks/types';
 import { isIOS } from '@/utils/isIOS';
 
-import { FileProps } from './index';
 import { ProgressBar } from './ProgressBar';
 
 type DownloadItemProps = {
-  file: FileProps;
+  file: File;
 };
 export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
   const [onDevice, setOnDevice] = useState(false);

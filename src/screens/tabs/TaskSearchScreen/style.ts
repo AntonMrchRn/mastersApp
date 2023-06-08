@@ -7,14 +7,30 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  shadowWrapper: {
+    flex: 1,
+    shadowColor: 'rgba(2, 52, 227, 0.12)',
+    shadowOffset: {
+      width: 0,
+      height: -4,
+    },
+    shadowOpacity: 0.7,
+    shadowRadius: 5,
+    elevation: 2,
+  },
+  list: {
+    borderTopRightRadius: 24,
+    borderTopLeftRadius: 24,
+  },
   wrapper: {
     width: '100%',
     flex: 1,
   },
-  wrapperCenter: {
-    flex: 1,
+  listContainer: {
     backgroundColor: '#fff',
     width: '100%',
+    borderTopRightRadius: 24,
+    borderTopLeftRadius: 24,
   },
   wrapperList: {
     paddingHorizontal: 12,
@@ -34,12 +50,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 5,
     backgroundColor: '#fff',
+    marginBottom: 24,
   },
   textHeader: {
     fontWeight: '700',
     fontSize: 32,
     fontFamily: fonts.main_700_o,
-    paddingBottom: 20,
+    paddingBottom: 24,
     color: 'black',
   },
 });

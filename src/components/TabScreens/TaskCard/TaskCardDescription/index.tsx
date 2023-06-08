@@ -10,6 +10,7 @@ import { PhoneIcon } from '@/assets/icons/svg/screens/PhoneIcon';
 import { DownloadManager } from '@/components/DownloadManager';
 import { TaskAddress } from '@/components/task/TaskAddress';
 import { TaskCardStatus } from '@/screens/tabs/TaskCardScreen/useTaskCard';
+import { Contact, File } from '@/store/api/tasks/types';
 
 import { TaskDate } from '../../../task/TaskDate';
 import { TaskCardBudgetModal } from '../TaskCardBudgetModal';
@@ -20,16 +21,24 @@ import { useTaskCardDescription } from './useTaskCardDescription';
 import { styles } from './styles';
 
 type TaskCardDescriptionProps = {
-  status: TaskCardStatus;
-  setStatus: React.Dispatch<React.SetStateAction<TaskCardStatus>>;
+  statusCode: TaskCardStatus;
+  description: string;
+  address: string;
+  startTime: string;
+  endTimePlan: string;
+  contacts: Contact[];
+  files: File[];
 };
 export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
-  status,
-  setStatus,
+  statusCode,
+  description,
+  address,
+  startTime,
+  endTimePlan,
+  contacts,
+  files,
 }) => {
   const {
-    contacts,
-    files,
     buttons,
     banner,
     budgetModalVisible,
@@ -37,16 +46,15 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
     onRevokeBudget,
     onDateModalVisible,
     dateModalVisible,
-    dateFrom,
-    dateTo,
     inputDateValue,
     onInputDateValue,
     onDateBottomSheetButton,
     cancelModalVisible,
     onCancelModalVisible,
     onCancelTask,
-  } = useTaskCardDescription(status, setStatus);
+  } = useTaskCardDescription(statusCode);
   const theme = useTheme();
+
   return (
     <View>
       <TaskCardBudgetModal
@@ -70,26 +78,17 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
         О задаче
       </Text>
       <Text variant="bodySRegular" style={styles.mt24} color={theme.text.basic}>
-        Lorem ipsum dolor sit amet consectetur. Tincidunt ultricies egestas
-        tempus feugiat sagittis at gravida. Duis vitae elit habitant tortor
-        viverra semper dictum ultricies non. Lectus morbi ut nascetur varius.
-        Etiam urna tincidunt nulla non leo malesuada consequat orci eget. Amet
-        aliquet eu est egestas dictum interdum mattis vestibulum. Vitae integer.
-        Tincidunt ultricies egestas tempus feugiat sagittis at gravida. Duis
-        vitae elit habitant tortor viverra semper dictum ultricies non. Lectus
-        morbi ut nascetur varius.
+        {description}
       </Text>
-      <View style={styles.address}>
-        <TaskAddress
-          address={
-            'Краснодар, ул. Чекистов 24, кв. 89, нежилые помещения 1,2,3,4,5,6(Аптека Апрель)'
-          }
-        />
-      </View>
+      {address && (
+        <View style={styles.address}>
+          <TaskAddress address={address} />
+        </View>
+      )}
       <View style={styles.date}>
-        <TaskDate from={dateFrom} to={dateTo} />
+        <TaskDate from={startTime} to={endTimePlan} />
       </View>
-      {status === 'inProgress' && (
+      {statusCode === 'signing' && (
         <TouchableOpacity style={styles.edit} onPress={onDateModalVisible}>
           <EditIcon />
           <Text
@@ -101,58 +100,70 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
           </Text>
         </TouchableOpacity>
       )}
-      <View style={styles.contacts}>
-        <Text variant="title3" color={theme.text.basic} style={styles.mr11}>
-          Контакты
-        </Text>
-        <CaretDownIcon />
-      </View>
-      {contacts.map((contact, index) => (
-        <Card
-          isShadow
-          style={[
-            styles.card,
-            {
-              borderColor: theme.stroke.accentDisable,
-            },
-            index !== 0 && { marginTop: 16 },
-          ]}
-          key={index}
-        >
-          <View style={styles.cardBody}>
-            <View style={styles.mr16}>
-              <AvatarIcon />
-            </View>
-            <View>
-              <Text variant="bodyMBold" color={theme.text.basic}>
-                {contact.title}
-              </Text>
-              <Text
-                variant="bodySRegular"
-                color={theme.text.basic}
-                style={styles.name}
-              >
-                {contact.name}
-              </Text>
-              <View style={styles.phone}>
-                <View style={styles.mr10}>
-                  <PhoneIcon />
-                </View>
-                <Text variant="bodySRegular" color={theme.text.basic}>
-                  {contact.phone}
-                </Text>
-              </View>
-            </View>
+      {contacts.length ? (
+        <>
+          <View style={styles.contacts}>
+            <Text variant="title3" color={theme.text.basic} style={styles.mr11}>
+              Контакты
+            </Text>
+            <CaretDownIcon />
           </View>
-        </Card>
-      ))}
-      <View style={styles.attachments}>
-        <Text variant="title3" color={theme.text.basic} style={styles.mr11}>
-          Вложения
-        </Text>
-        <CaretDownIcon />
-      </View>
-      <DownloadManager files={files} />
+          {contacts.map((contact, index) => (
+            <Card
+              isShadow
+              style={[
+                styles.card,
+                {
+                  borderColor: theme.stroke.accentDisable,
+                },
+                index !== 0 && { marginTop: 16 },
+              ]}
+              key={index}
+            >
+              <View style={styles.cardBody}>
+                <View style={styles.mr16}>
+                  <AvatarIcon />
+                </View>
+                <View>
+                  <Text variant="bodyMBold" color={theme.text.basic}>
+                    {contact?.position}
+                  </Text>
+                  <Text
+                    variant="bodySRegular"
+                    color={theme.text.basic}
+                    style={styles.name}
+                  >
+                    {contact?.sname} {contact?.name} {contact?.pname}
+                  </Text>
+                  <View style={styles.phone}>
+                    <View style={styles.mr10}>
+                      <PhoneIcon />
+                    </View>
+                    <Text variant="bodySRegular" color={theme.text.basic}>
+                      {contact?.phone}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </Card>
+          ))}
+        </>
+      ) : (
+        <></>
+      )}
+      {files.length ? (
+        <>
+          <View style={styles.attachments}>
+            <Text variant="title3" color={theme.text.basic} style={styles.mr11}>
+              Вложения
+            </Text>
+            <CaretDownIcon />
+          </View>
+          <DownloadManager files={files} />
+        </>
+      ) : (
+        <></>
+      )}
       <View style={styles.bottom}>
         {buttons.map((button, index) => (
           <Button
