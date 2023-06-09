@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
 
 import { TaskCardDescription } from '@/components/TabScreens/TaskCard/TaskCardDescription';
+import { TaskCardReport } from '@/components/TabScreens/TaskCard/TaskCardReport';
 import { useGetTaskQuery, useGetTaskStatusesQuery } from '@/store/api/tasks';
 
 export type TaskCardStatus =
@@ -91,6 +92,8 @@ export const useTaskCard = () => {
             files={files}
           />
         );
+      case 'Отчет':
+        return <TaskCardReport />;
       default:
         return <></>;
     }

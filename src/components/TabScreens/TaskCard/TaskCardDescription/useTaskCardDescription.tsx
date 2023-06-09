@@ -5,6 +5,17 @@ import { Variant } from 'rn-ui-kit/lib/typescript/components/Button';
 
 import { TaskCardStatus } from '@/screens/tabs/TaskCardScreen/useTaskCard';
 
+export type TaskCardBottomBanner = {
+  title: string;
+  type: Types;
+  icon: IconTypes;
+  text: string;
+} | null;
+export type TaskCardBottomButton = {
+  label: string;
+  variant: Variant;
+  onPress?: () => void;
+};
 export const useTaskCardDescription = (statusCode: TaskCardStatus) => {
   const [budgetSubmission, setBudgetSubmission] = useState(false);
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
@@ -47,11 +58,7 @@ export const useTaskCardDescription = (statusCode: TaskCardStatus) => {
     // setStatus('published');
     onCancelModalVisible();
   };
-  const getButtons = (): {
-    label: string;
-    variant: Variant;
-    onPress?: () => void;
-  }[] => {
+  const getButtons = (): TaskCardBottomButton[] => {
     switch (statusCode) {
       case 'active':
         if (budgetCanceled) {
@@ -90,12 +97,8 @@ export const useTaskCardDescription = (statusCode: TaskCardStatus) => {
         return [];
     }
   };
-  const getBanner = (): {
-    title: string;
-    type: Types;
-    icon: IconTypes;
-    text: string;
-  } | null => {
+
+  const getBanner = (): TaskCardBottomBanner => {
     switch (statusCode) {
       case 'active':
         if (budgetCanceled) {

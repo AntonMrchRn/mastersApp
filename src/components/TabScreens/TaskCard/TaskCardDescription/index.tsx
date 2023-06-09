@@ -164,25 +164,6 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
       ) : (
         <></>
       )}
-      <View style={styles.bottom}>
-        {buttons.map((button, index) => (
-          <Button
-            onPress={button.onPress}
-            key={index}
-            label={button.label}
-            variant={button.variant}
-            style={index !== 0 && { marginTop: 16 }}
-          />
-        ))}
-        {banner && (
-          <Banner
-            type={banner.type}
-            icon={banner.icon}
-            text={banner.text}
-            title={banner.title}
-          />
-        )}
-      </View>
     </View>
   );
 };

@@ -5,6 +5,9 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
+  wrapper: {
+    flexGrow: 1,
+  },
   scrollView: {
     flex: 1,
   },
@@ -28,5 +31,9 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 0,
     marginTop: 30,
+  },
+  bottom: {
+    marginTop: 24,
+    marginBottom: 12,
   },
 });

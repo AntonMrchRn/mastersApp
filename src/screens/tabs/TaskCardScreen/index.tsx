@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Card, TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
 
+import { TaskCardBottom } from '@/components/TabScreens/TaskCard/TaskCardBottom';
 import { TaskCardHeader } from '@/components/TabScreens/TaskCard/TaskCardHeader';
 import { TaskBadges } from '@/components/task/TaskBadges';
 import {
@@ -49,33 +50,49 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
         title={`Задача ID ${id}`}
         description={publicTime}
       />
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.body}>
-          <View style={styles.badges}>
-            <TaskBadges
-              isNight={isNight}
-              isUrgent={isUrgent}
-              statusCode={statusCode}
-            />
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.wrapper}
+      >
+        <View style={styles.wrapper}>
+          <View style={styles.body}>
+            <View style={styles.badges}>
+              <TaskBadges
+                isNight={isNight}
+                isUrgent={isUrgent}
+                statusCode={statusCode}
+              />
+            </View>
+            <Text
+              variant="title2"
+              style={styles.title}
+              color={theme.text.basic}
+            >
+              {name}
+            </Text>
+            <Text
+              variant="title3"
+              style={styles.price}
+              color={theme.text.basic}
+            >
+              {budget}
+            </Text>
+            {statusCode === 'active' && (
+              <Tips
+                type={'warning'}
+                text={budgetEndTime}
+                containerStyle={styles.tips}
+              />
+            )}
+            <TabControl data={tabs} initialId={0} onChange={onTabChange} />
           </View>
-          <Text variant="title2" style={styles.title} color={theme.text.basic}>
-            {name}
-          </Text>
-          <Text variant="title3" style={styles.price} color={theme.text.basic}>
-            {budget}
-          </Text>
-          {statusCode === 'active' && (
-            <Tips
-              type={'warning'}
-              text={budgetEndTime}
-              containerStyle={styles.tips}
-            />
-          )}
-          <TabControl data={tabs} initialId={0} onChange={onTabChange} />
+          <Card isShadow style={styles.card}>
+            {getCurrentTab()}
+            <View style={styles.bottom}>
+              <TaskCardBottom banner={null} buttons={[]} />
+            </View>
+          </Card>
         </View>
-        <Card isShadow style={styles.card}>
-          {getCurrentTab()}
-        </Card>
       </ScrollView>
     </SafeAreaView>
   );
