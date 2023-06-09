@@ -11,6 +11,7 @@ export const CardTasks = ({ ID, navigation }) => {
         marginBottom: 15,
         backgroundColor: 'transparent',
       }}
+      onPress={() => navigation.navigate('TaskCard')}
     >
       <Card style={{ paddingHorizontal: 0 }}>
         {/* <Text variant="title3">{test}</Text> */}

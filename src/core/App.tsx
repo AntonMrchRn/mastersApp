@@ -3,12 +3,16 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 
 import { NavigationContainer } from '@react-navigation/native';
+import dayjs from 'dayjs';
 import { ThemeProvider, ToastProvider } from 'rn-ui-kit';
 
 import { MyTheme } from '@/constants/platform';
 import RootNavigation from '@/navigation/rootNavigation';
 import { store } from '@/store';
 
+import 'dayjs/locale/ru';
+
+dayjs.locale('ru');
 const App = () => {
   return (
     <Provider store={store}>

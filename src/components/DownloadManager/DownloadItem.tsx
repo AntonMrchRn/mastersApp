@@ -20,13 +20,13 @@ import { PPTIcon } from '@/assets/icons/svg/files/PPTIcon';
 import { WEBPIcon } from '@/assets/icons/svg/files/WEBPIcon';
 import { XLSIcon } from '@/assets/icons/svg/files/XLSIcon';
 import { ZIPIcon } from '@/assets/icons/svg/files/ZIPIcon';
+import { File } from '@/store/api/tasks/types';
 import { isIOS } from '@/utils/isIOS';
 
-import { FileProps } from './index';
 import { ProgressBar } from './ProgressBar';
 
 type DownloadItemProps = {
-  file: FileProps;
+  file: File;
 };
 export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
   const [onDevice, setOnDevice] = useState(false);
@@ -198,7 +198,7 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
         >
           <View style={styles.iconContainer}>{getIcon()}</View>
           <View style={styles.titleSize}>
-            <Text variant={'bodySBold'} style={styles.title}>
+            <Text variant={'bodySBold'} style={styles.title} numberOfLines={1}>
               {title}
             </Text>
             <View style={styles.size}>
@@ -210,10 +210,8 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
         </TouchableOpacity>
         <View style={styles.action}>{getAction()}</View>
       </View>
-      {isLoading ? (
+      {isLoading && (
         <ProgressBar progress={progress} recieved={recieved} size={file.size} />
-      ) : (
-        <View style={{ height: 24 }} />
       )}
     </View>
   );

@@ -2,7 +2,6 @@ import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Header from '@/components/Header';
 import EmailScreen from '@/screens/auth/EmailScreen';
 import ErrorScreen from '@/screens/auth/ErrorScreen';
 import PasswordScreen from '@/screens/auth/PasswordScreen';
@@ -11,9 +10,6 @@ import RecoveryScreen from '@/screens/auth/RecoveryScreen';
 import SignInScreen from '@/screens/auth/SignInScreen';
 import { AuthNavigationParamList, AuthScreenName } from '@/types/navigation';
 
-const screenOptions = {
-  header: Header,
-};
 const options = {
   headerShown: false,
 };
@@ -21,7 +17,7 @@ const Stack = createStackNavigator<AuthNavigationParamList>();
 
 function AuthNavigation() {
   return (
-    <Stack.Navigator screenOptions={screenOptions}>
+    <Stack.Navigator>
       <Stack.Screen
         name={AuthScreenName.SignIn}
         component={SignInScreen}

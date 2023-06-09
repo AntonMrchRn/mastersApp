@@ -1,17 +1,82 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import React, { FC } from 'react';
+import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import styles from './style';
+import { StackScreenProps } from '@react-navigation/stack';
+import { Card, TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
 
-const TaskCardScreen = () => {
+import { TaskCardHeader } from '@/components/TabScreens/TaskCard/TaskCardHeader';
+import { TaskBadges } from '@/components/task/TaskBadges';
+import {
+  TaskSearchNavigationParamList,
+  TaskSearchNavigatorScreenName,
+} from '@/types/navigation';
+
+import { useTaskCard } from './useTaskCard';
+
+import { styles } from './styles';
+
+type TaskCardScreenProps = StackScreenProps<
+  TaskSearchNavigationParamList,
+  TaskSearchNavigatorScreenName.TaskCard
+>;
+
+export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
+  const {
+    tabs,
+    onTabChange,
+    getCurrentTab,
+    id,
+    publicTime,
+    name,
+    budget,
+    isNight,
+    isUrgent,
+    statusCode,
+    budgetEndTime,
+  } = useTaskCard();
+
+  const theme = useTheme();
+  const goBack = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+  };
   return (
-    <SafeAreaView edges={['bottom']} style={styles.container}>
-      <View style={styles.wrapperCenter}>
-        <Text>Карточка</Text>
-      </View>
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <TaskCardHeader
+        goBack={goBack}
+        title={`Задача ID ${id}`}
+        description={publicTime}
+      />
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.body}>
+          <View style={styles.badges}>
+            <TaskBadges
+              isNight={isNight}
+              isUrgent={isUrgent}
+              statusCode={statusCode}
+            />
+          </View>
+          <Text variant="title2" style={styles.title} color={theme.text.basic}>
+            {name}
+          </Text>
+          <Text variant="title3" style={styles.price} color={theme.text.basic}>
+            {budget}
+          </Text>
+          {statusCode === 'active' && (
+            <Tips
+              type={'warning'}
+              text={budgetEndTime}
+              containerStyle={styles.tips}
+            />
+          )}
+          <TabControl data={tabs} initialId={0} onChange={onTabChange} />
+        </View>
+        <Card isShadow style={styles.card}>
+          {getCurrentTab()}
+        </Card>
+      </ScrollView>
     </SafeAreaView>
   );
 };
-
-export default TaskCardScreen;
