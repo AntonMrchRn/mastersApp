@@ -31,6 +31,17 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 0,
     marginTop: 30,
+    justifyContent: 'space-between',
+    shadow: {
+      shadowColor: '#000000',
+      shadowOffset: {
+        width: 0,
+        height: -3,
+      },
+      shadowOpacity: 0.1,
+      shadowRadius: 2.22,
+      elevation: 3,
+    },
   },
   bottom: {
     marginTop: 24,

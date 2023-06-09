@@ -65,7 +65,7 @@ export const useTaskCard = () => {
   const description = task?.description || '';
   const statusID = task?.statusID;
   const status = getTaskStatuses?.data?.find(stat => stat.ID === statusID);
-  const statusCode = status?.code || '';
+  const statusCode: TaskCardStatus = status?.code || '';
   const name = task?.name || '';
   const budget = `${task?.budget} ₽` || '';
   const isNight = task?.isNight || false;
@@ -121,7 +121,12 @@ export const useTaskCard = () => {
           />
         );
       case 'Отчет':
-        return <TaskCardReport />;
+        return (
+          <TaskCardReport
+            activeBudgetCanceled={!!getBanner()}
+            statusCode={statusCode}
+          />
+        );
       default:
         return <></>;
     }

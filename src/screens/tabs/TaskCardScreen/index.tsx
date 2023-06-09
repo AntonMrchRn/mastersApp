@@ -46,7 +46,6 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
     onCancelModalVisible,
     onCancelTask,
   } = useTaskCard();
-
   const theme = useTheme();
   const goBack = () => {
     if (navigation.canGoBack()) {
