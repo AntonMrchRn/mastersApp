@@ -39,34 +39,16 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   files,
 }) => {
   const {
-    buttons,
-    banner,
-    budgetModalVisible,
-    onBudgetModalVisible,
-    onRevokeBudget,
     onDateModalVisible,
     dateModalVisible,
     inputDateValue,
     onInputDateValue,
     onDateBottomSheetButton,
-    cancelModalVisible,
-    onCancelModalVisible,
-    onCancelTask,
-  } = useTaskCardDescription(statusCode);
+  } = useTaskCardDescription();
   const theme = useTheme();
 
   return (
     <View>
-      <TaskCardBudgetModal
-        isVisible={budgetModalVisible}
-        onCancel={onBudgetModalVisible}
-        onRevoke={onRevokeBudget}
-      />
-      <TaskCardCancelBottomSheet
-        isVisible={cancelModalVisible}
-        onCancel={onCancelModalVisible}
-        onRefuse={onCancelTask}
-      />
       <TaskCardDateBottomSheet
         isVisible={dateModalVisible}
         onCancel={onDateModalVisible}
@@ -164,25 +146,6 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
       ) : (
         <></>
       )}
-      <View style={styles.bottom}>
-        {buttons.map((button, index) => (
-          <Button
-            onPress={button.onPress}
-            key={index}
-            label={button.label}
-            variant={button.variant}
-            style={index !== 0 && { marginTop: 16 }}
-          />
-        ))}
-        {banner && (
-          <Banner
-            type={banner.type}
-            icon={banner.icon}
-            text={banner.text}
-            title={banner.title}
-          />
-        )}
-      </View>
     </View>
   );
 };

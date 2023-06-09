@@ -31,10 +31,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  bottom: {
-    marginTop: 24,
-    marginBottom: 12,
-  },
   edit: {
     marginTop: 16,
     flexDirection: 'row',
