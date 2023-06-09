@@ -3,10 +3,10 @@ import { View } from 'react-native';
 
 import { Text, useTheme } from 'rn-ui-kit';
 
+import { DownloadFilesIcon } from '@/assets/icons/svg/screens/DownloadFilesIcon';
+import { NoFilesIcon } from '@/assets/icons/svg/screens/NoFilesIcon';
 import { OtesIcon } from '@/assets/icons/svg/screens/OtesIcon';
 import { TaskCardStatus } from '@/screens/tabs/TaskCardScreen/useTaskCard';
-
-import { useTaskReport } from './useTaskReport';
 
 import { styles } from './styles';
 
@@ -18,7 +18,6 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
   activeBudgetCanceled,
   statusCode,
 }) => {
-  const {} = useTaskReport();
   const theme = useTheme();
   const getContent = () => {
     switch (statusCode) {
@@ -53,8 +52,45 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
             </Text>
           </View>
         );
+      case 'signing':
+        return (
+          <View style={styles.mt36}>
+            <Text variant="title3" color={theme.text.basic}>
+              Загруженные файлы
+            </Text>
+            <View style={styles.download}>
+              <DownloadFilesIcon />
+              <Text
+                variant="bodySRegular"
+                style={styles.desc}
+                color={theme.text.neutral}
+              >
+                Загрузите файлы, подтверждающие выполнение услуг общим размером
+                не более 50 МВ
+              </Text>
+            </View>
+          </View>
+        );
       default:
-        return <></>;
+        return (
+          <View style={styles.container}>
+            <View
+              style={[
+                styles.otes,
+                { backgroundColor: theme.background.fieldMain },
+              ]}
+            >
+              <NoFilesIcon />
+            </View>
+            <Text
+              variant="title2"
+              style={styles.title}
+              color={theme.text.basic}
+            >
+              Файлов нет
+            </Text>
+          </View>
+        );
     }
   };
   return <>{getContent()}</>;
