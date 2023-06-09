@@ -39,34 +39,16 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   files,
 }) => {
   const {
-    buttons,
-    banner,
-    budgetModalVisible,
-    onBudgetModalVisible,
-    onRevokeBudget,
     onDateModalVisible,
     dateModalVisible,
     inputDateValue,
     onInputDateValue,
     onDateBottomSheetButton,
-    cancelModalVisible,
-    onCancelModalVisible,
-    onCancelTask,
-  } = useTaskCardDescription(statusCode);
+  } = useTaskCardDescription();
   const theme = useTheme();
 
   return (
     <View>
-      <TaskCardBudgetModal
-        isVisible={budgetModalVisible}
-        onCancel={onBudgetModalVisible}
-        onRevoke={onRevokeBudget}
-      />
-      <TaskCardCancelBottomSheet
-        isVisible={cancelModalVisible}
-        onCancel={onCancelModalVisible}
-        onRefuse={onCancelTask}
-      />
       <TaskCardDateBottomSheet
         isVisible={dateModalVisible}
         onCancel={onDateModalVisible}

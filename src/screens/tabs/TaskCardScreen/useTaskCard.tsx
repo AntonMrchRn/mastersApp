@@ -3,6 +3,10 @@ import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
 
+import {
+  TaskCardBottomBanner,
+  TaskCardBottomButton,
+} from '@/components/TabScreens/TaskCard/TaskCardBottom';
 import { TaskCardDescription } from '@/components/TabScreens/TaskCard/TaskCardDescription';
 import { TaskCardReport } from '@/components/TabScreens/TaskCard/TaskCardReport';
 import { useGetTaskQuery, useGetTaskStatusesQuery } from '@/store/api/tasks';
@@ -23,6 +27,30 @@ export type TaskCardStatus =
   | '';
 
 export const useTaskCard = () => {
+  const [budgetCanceled, setBudgetCanceled] = useState(false);
+  const [budgetSubmission, setBudgetSubmission] = useState(false);
+  const [budgetModalVisible, setBudgetModalVisible] = useState(false);
+  const [cancelModalVisible, setCancelModalVisible] = useState(false);
+  const onBudgetModalVisible = () => {
+    setBudgetModalVisible(!budgetModalVisible);
+  };
+  const onBudgetSubmission = () => {
+    setBudgetSubmission(!budgetSubmission);
+  };
+  const onCancelModalVisible = () => {
+    setCancelModalVisible(!cancelModalVisible);
+  };
+  const onWorkDelivery = () => {
+    //
+  };
+  const onCancelTask = () => {
+    onCancelModalVisible();
+  };
+  const onRevokeBudget = () => {
+    setBudgetSubmission(!budgetSubmission);
+    setBudgetModalVisible(!budgetModalVisible);
+  };
+
   const [tab, setTab] = useState('Описание');
   const taskId = '926';
   const getTask = useGetTaskQuery(taskId);
@@ -101,6 +129,91 @@ export const useTaskCard = () => {
   const onTabChange = (item: TabItem) => {
     setTab(item.label);
   };
+  const getBanner = (): TaskCardBottomBanner => {
+    switch (statusCode) {
+      case 'active':
+        if (budgetCanceled) {
+          return {
+            title: 'Ваша смета отклонена координатором',
+            type: 'error',
+            icon: 'alert',
+            text: 'К сожалению, теперь вы не можете стать исполнителем этой задачи',
+          };
+        }
+        return null;
+      case 'summarizing':
+        return {
+          title: 'Задача на проверке',
+          type: 'info',
+          icon: 'info',
+          text: 'Координатор проверяет выполненные услуги. После успешной проверки задача будет передана на оплату',
+        };
+      case 'completed':
+        return {
+          title: 'Выполненные услуги приняты',
+          type: 'success',
+          icon: 'success',
+          text: 'В ближайшее время оплата поступит на вашу банковскую карту/счет',
+        };
+      case 'paid':
+        return {
+          title: 'Оплата произведена',
+          type: 'success',
+          icon: 'success',
+          text: 'Денежные средства переведены вам на указанные в профиле реквизиты',
+        };
+      case 'cancelledByExecutor':
+      case 'cancelledByCustomer':
+        return {
+          title: 'Задача отменена',
+          type: 'error',
+          icon: 'alert',
+          text: 'По инициативе координатора выполнение задачи прекращено',
+        };
+      default:
+        return null;
+    }
+  };
+  const getButtons = (): TaskCardBottomButton[] => {
+    switch (statusCode) {
+      case 'active':
+        if (budgetCanceled) {
+          return [];
+        }
+        if (budgetSubmission) {
+          return [
+            {
+              label: 'Отозвать смету',
+              variant: 'outlineDanger',
+              onPress: onBudgetModalVisible,
+            },
+          ];
+        }
+        return [
+          {
+            label: 'Подать смету',
+            variant: 'accent',
+            onPress: onBudgetSubmission,
+          },
+        ];
+      case 'signing':
+        return [
+          {
+            label: 'Сдать работы',
+            variant: 'accent',
+            onPress: onWorkDelivery,
+          },
+          {
+            label: 'Отказаться от задачи',
+            variant: 'outlineDanger',
+            onPress: onCancelModalVisible,
+          },
+        ];
+      default:
+        return [];
+    }
+  };
+
   return {
     onTabChange,
     tabs,
@@ -113,5 +226,13 @@ export const useTaskCard = () => {
     isUrgent,
     statusCode,
     budgetEndTime,
+    getBanner,
+    getButtons,
+    budgetModalVisible,
+    onBudgetModalVisible,
+    onRevokeBudget,
+    cancelModalVisible,
+    onCancelModalVisible,
+    onCancelTask,
   };
 };

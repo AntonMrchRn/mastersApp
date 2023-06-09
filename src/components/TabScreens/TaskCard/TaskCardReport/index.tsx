@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { View } from 'react-native';
 
-import { Button, Text, useTheme } from 'rn-ui-kit';
+import { Text, useTheme } from 'rn-ui-kit';
 
 import { OtesIcon } from '@/assets/icons/svg/screens/OtesIcon';
 
@@ -28,7 +28,6 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({}) => {
         Вы сможете отправлять файлы для подтверждения выполненных услуг в случае
         назначения вас исполнителем
       </Text>
-      <Button label="Подать смету" variant="accent" style={styles.button} />
     </View>
   );
 };

@@ -19,5 +19,4 @@ export const styles = StyleSheet.create({
     marginTop: 12,
     textAlign: 'center',
   },
-  button: { marginTop: 62, marginBottom: 12 },
 });

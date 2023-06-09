@@ -1,12 +1,20 @@
 import React, { FC } from 'react';
 
 import { Banner, Button } from 'rn-ui-kit';
+import { IconTypes, Types } from 'rn-ui-kit/lib/typescript/components/Banner';
+import { Variant } from 'rn-ui-kit/lib/typescript/components/Button';
 
-import {
-  TaskCardBottomBanner,
-  TaskCardBottomButton,
-} from './TaskCardDescription/useTaskCardDescription';
-
+export type TaskCardBottomBanner = {
+  title: string;
+  type: Types;
+  icon: IconTypes;
+  text: string;
+} | null;
+export type TaskCardBottomButton = {
+  label: string;
+  variant: Variant;
+  onPress?: () => void;
+};
 type TaskCardBottomProps = {
   banner: TaskCardBottomBanner;
   buttons: TaskCardBottomButton[];

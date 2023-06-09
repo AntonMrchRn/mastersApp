@@ -6,6 +6,8 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { Card, TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
 
 import { TaskCardBottom } from '@/components/TabScreens/TaskCard/TaskCardBottom';
+import { TaskCardBudgetModal } from '@/components/TabScreens/TaskCard/TaskCardBudgetModal';
+import { TaskCardCancelBottomSheet } from '@/components/TabScreens/TaskCard/TaskCardCancelBottomSheet';
 import { TaskCardHeader } from '@/components/TabScreens/TaskCard/TaskCardHeader';
 import { TaskBadges } from '@/components/task/TaskBadges';
 import {
@@ -35,6 +37,14 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
     isUrgent,
     statusCode,
     budgetEndTime,
+    getBanner,
+    getButtons,
+    budgetModalVisible,
+    onBudgetModalVisible,
+    onRevokeBudget,
+    cancelModalVisible,
+    onCancelModalVisible,
+    onCancelTask,
   } = useTaskCard();
 
   const theme = useTheme();
@@ -45,6 +55,16 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
   };
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
+      <TaskCardBudgetModal
+        isVisible={budgetModalVisible}
+        onCancel={onBudgetModalVisible}
+        onRevoke={onRevokeBudget}
+      />
+      <TaskCardCancelBottomSheet
+        isVisible={cancelModalVisible}
+        onCancel={onCancelModalVisible}
+        onRefuse={onCancelTask}
+      />
       <TaskCardHeader
         goBack={goBack}
         title={`Задача ID ${id}`}
@@ -89,7 +109,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
           <Card isShadow style={styles.card}>
             {getCurrentTab()}
             <View style={styles.bottom}>
-              <TaskCardBottom banner={null} buttons={[]} />
+              <TaskCardBottom banner={getBanner()} buttons={getButtons()} />
             </View>
           </Card>
         </View>
