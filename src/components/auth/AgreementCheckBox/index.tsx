@@ -1,4 +1,5 @@
 import React from 'react';
+import { useController } from 'react-hook-form';
 import { Keyboard, Linking, Text, View } from 'react-native';
 
 import { CheckBox } from 'rn-ui-kit';
@@ -13,29 +14,28 @@ enum URL {
   offer = 'https://mastera-service.ru/docs/public-offer.pdf',
 }
 
-type AgreementCheckBoxProps = {
-  value: boolean;
-  setValue: (isCheckBoxChanged: boolean) => void;
-};
+const AgreementCheckBox = () => {
+  const { field } = useController({
+    name: 'isAgreeWithTerms',
+  });
 
-const AgreementCheckBox = ({ value, setValue }: AgreementCheckBoxProps) => {
   const openLink = (url: URL) => {
     Linking.openURL(url);
   };
 
   const onPress = () => {
     Keyboard.dismiss();
-    setValue(!value);
+    field.onChange(!field.value);
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.wrapperCheckBox}>
         <CheckBox
-          checked={value}
           onPress={onPress}
+          checked={field.value}
           icon={<CheckBoxActive />}
-          style={[styles.checkBox, value && styles.active]}
+          style={[styles.checkBox, field.value && styles.active]}
         />
       </View>
       <View style={styles.wrapper}>

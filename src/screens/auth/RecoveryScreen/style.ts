@@ -36,6 +36,9 @@ const styles = StyleSheet.create({
   input: {
     width: '100%',
   },
+  btn: {
+    height: 48,
+  },
 });
 
 export default styles;

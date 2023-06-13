@@ -33,7 +33,7 @@ function TimerBlockPhone({
   isConfirm,
   callBack,
 }: TimerBlockPhoneProps) {
-  const { isRecoveryByPhone, isActiveTimer } = useAppSelector(selectAuth);
+  const { isRecoveryByPhone, isActiveTimerPhone } = useAppSelector(selectAuth);
   const dispatch = useDispatch();
 
   const [timeMilliSeconds, setTimeMilliSeconds] = useState<number>(Date.now());
@@ -105,7 +105,7 @@ function TimerBlockPhone({
     };
   }, []);
 
-  if (!isActiveTimer && isConfirm) {
+  if (!isActiveTimerPhone && isConfirm) {
     const onSendCode = () => {
       setIsLoading(true);
       callBack && callBack();

@@ -1,7 +1,7 @@
 type InitialState = {
   user: null | UserAuthResponse;
   isAuth: boolean;
-  isActiveTimer: boolean;
+  isActiveTimerPhone: boolean;
   isRecoveryByPhone: boolean;
   isRecoveryByEmail: boolean;
   isActiveTimerEmail: boolean;

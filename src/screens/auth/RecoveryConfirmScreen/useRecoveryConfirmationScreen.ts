@@ -1,15 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import { TextInput } from 'react-native';
+import { useEffect, useRef } from 'react';
+import { FieldPath } from 'react-hook-form/dist/types/path';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  useIsFocused,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { configApp } from '@/constants/platform';
+import useRecoveryConfirmationForm from '@/screens/auth/RecoveryConfirmScreen/useRecoveryConfirmationForm';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   useRestorePasswordMutation,
@@ -20,7 +17,8 @@ import {
   timeoutAsyncPhone,
 } from '@/store/slices/auth/actions';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import { AxiosQueryErrorResponse, Error, ErrorCode } from '@/types/error';
+import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
+import { RecoveryConfirmationFormValues } from '@/types/form';
 import {
   AuthScreenName,
   PasswordScreenNavigationProp,
@@ -29,7 +27,14 @@ import {
 
 const OFFSET = 0;
 const email = '';
+const password = '';
 const isPhoneAuth = true;
+const inputNameByErrorCode: Partial<
+  Record<ErrorCode, FieldPath<RecoveryConfirmationFormValues>>
+> = {
+  [ErrorCode.IncorrectVerificationCode]: 'code',
+  [ErrorCode.IncorrectPassword]: 'password',
+};
 
 const useRecoveryConfirmationScreen = () => {
   const [sendRecoveryCode, { data: timeout, isSuccess: isCodeSuccess }] =
@@ -44,33 +49,17 @@ const useRecoveryConfirmationScreen = () => {
       error: recoveryPasswordError,
     },
   ] = useRestorePasswordMutation();
+  const { errors, methods, isDisabled } = useRecoveryConfirmationForm();
 
   const { timeoutPhone } = useAppSelector(selectAuth);
   const dispatch = useAppDispatch();
 
-  const isFocused = useIsFocused();
   const route = useRoute<RecoveryConfirmScreenRoute>();
   const navigation = useNavigation<PasswordScreenNavigationProp>();
-
-  const [code, setCode] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [error, setError] = useState<Error | null>(
-    (recoveryPasswordError as AxiosQueryErrorResponse)?.data
-  );
-  const passwordRef = useRef<TextInput>(null);
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
   const phone = route.params.phone;
-  const isPasswordError = error?.code === ErrorCode.IncorrectPassword;
-  const isCodeError = error?.code === ErrorCode.IncorrectVerificationCode;
-
-  useEffect(() => {
-    setError(null);
-  }, []);
-
-  useEffect(() => {
-    setError(null);
-  }, [isFocused]);
+  const error = (recoveryPasswordError as AxiosQueryErrorResponse)?.data;
 
   useEffect(() => {
     if (isPasswordSuccess) {
@@ -86,25 +75,18 @@ const useRecoveryConfirmationScreen = () => {
 
   useEffect(() => {
     if (isError) {
-      setError((recoveryPasswordError as AxiosQueryErrorResponse)?.data);
+      if (error?.code === ErrorCode.Server) {
+        return navigation.navigate(AuthScreenName.Error);
+      }
+
+      const inputName = inputNameByErrorCode[error?.code];
+      if (inputName) {
+        methods.setError(inputName, {
+          message: error?.message,
+        });
+      }
     }
   }, [isError]);
-
-  useEffect(() => {
-    if (isError && isPasswordError) {
-      setError(null);
-    }
-  }, [password]);
-
-  useEffect(() => {
-    if (code?.length === 6) {
-      passwordRef?.current?.focus();
-    }
-
-    if (isError && isCodeError) {
-      setError(null);
-    }
-  }, [code]);
 
   const onRestorePasswordSuccess = async () => {
     try {
@@ -112,7 +94,6 @@ const useRecoveryConfirmationScreen = () => {
       await AsyncStorage.setItem('timePhone', jsonValue);
 
       if (data === null || data === undefined) {
-        setError(null);
         navigation.navigate(AuthScreenName.Password);
       }
     } catch (e) {
@@ -140,7 +121,10 @@ const useRecoveryConfirmationScreen = () => {
     });
   };
 
-  const restorePassword = async () => {
+  const restorePassword = async ({
+    code,
+    password,
+  }: RecoveryConfirmationFormValues) => {
     await restoreUserPassword({
       code,
       password,
@@ -163,22 +147,16 @@ const useRecoveryConfirmationScreen = () => {
   };
 
   return {
-    code,
-    email,
-    error,
-    setCode,
+    errors,
+    methods,
     onFocus,
-    password,
     sendCode,
     isLoading,
-    setPassword,
-    isCodeError,
-    passwordRef,
+    isDisabled,
     timeoutPhone,
     scrollViewRef,
-    restorePassword,
-    isPasswordError,
     onKeyboardWillShow,
+    restorePassword: methods.handleSubmit(restorePassword),
   };
 };
 

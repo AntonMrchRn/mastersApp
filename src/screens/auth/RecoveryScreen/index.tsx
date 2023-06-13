@@ -1,16 +1,18 @@
 import React from 'react';
+import { FormProvider } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import normalize from 'react-native-normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Input, InputPhone, SegmentedControl, Spacer } from 'rn-ui-kit';
+import { Button, SegmentedControl, Spacer } from 'rn-ui-kit';
 
-import ButtonAuth from '@/components/auth/ButtonAuth';
 import ForgotPreview from '@/components/auth/ForgotPreview';
 import LogoPreview from '@/components/auth/LogoPreview';
 import TimerBlockEmail from '@/components/auth/Timer/TimerBlockEmail';
 import TimerBlockPhone from '@/components/auth/Timer/TimerBlockPhone';
+import ControlledInput from '@/components/ControlledInput';
+import ControlledInputPhone from '@/components/ControlledInputPhone';
 import { configApp } from '@/constants/platform';
 
 import useRecoveryScreen from './useRecoveryScreen';
@@ -19,21 +21,17 @@ import styles from './style';
 
 const RecoveryScreen = () => {
   const {
-    phone,
-    email,
-    error,
+    errors,
+    methods,
     onFocus,
     sendCode,
-    setPhone,
-    setEmail,
-    password,
     switchTab,
     isLoading,
+    isDisabled,
     isPhoneAuth,
+    isInvalidEmail,
     timeoutPhone,
     timeoutEmail,
-    isPhoneError,
-    isEmailError,
     scrollViewRef,
     onKeyboardWillShow,
   } = useRecoveryScreen();
@@ -56,43 +54,38 @@ const RecoveryScreen = () => {
           <ForgotPreview />
           <SegmentedControl onChange={switchTab} tabs={['Телефон', 'Email']} />
           <Spacer size="xl" />
-          {isPhoneAuth ? (
-            <InputPhone
-              isError={isPhoneError}
-              value={phone}
-              onClear={() => setPhone('')}
-              containerStyle={styles.input}
-              hint={isPhoneError ? error?.message : undefined}
-              onFocus={configApp.ios ? onFocus : () => null}
-              onChangeText={(_, unmasked) => setPhone(unmasked)}
+          <FormProvider {...methods}>
+            {isPhoneAuth ? (
+              <ControlledInputPhone
+                name="phone"
+                hint={errors.phone?.message}
+                containerStyle={styles.input}
+                isError={!!errors.phone?.message}
+                onFocus={configApp.ios ? onFocus : () => null}
+              />
+            ) : (
+              <ControlledInput
+                name="email"
+                maxLength={60}
+                variant="text"
+                autoCapitalize="none"
+                keyboardType="email-address"
+                containerStyle={styles.input}
+                placeholder="Электронная почта"
+                onFocus={configApp.ios ? onFocus : () => null}
+                isError={!!errors.email?.message && !isInvalidEmail}
+                hint={isInvalidEmail ? undefined : errors.email?.message}
+              />
+            )}
+            <Spacer size="xl" />
+            <Button
+              onPress={sendCode}
+              style={styles.btn}
+              disabled={isDisabled}
+              isPending={isLoading}
+              label={isPhoneAuth ? 'Получить СМС с кодом' : 'Получить ссылку'}
             />
-          ) : (
-            <Input
-              value={email}
-              variant="text"
-              autoCapitalize="none"
-              isError={isEmailError}
-              keyboardType="email-address"
-              onClear={() => setEmail('')}
-              containerStyle={styles.input}
-              placeholder="Электронная почта"
-              hint={isEmailError ? error?.message : undefined}
-              onChangeText={(email: string) => setEmail(email)}
-              onFocus={configApp.ios ? onFocus : () => null}
-            />
-          )}
-          <Spacer size="xl" />
-          <ButtonAuth
-            isDisabled
-            phone={phone}
-            email={email}
-            withOutPassword
-            onPress={sendCode}
-            password={password}
-            isLoading={isLoading}
-            isPhoneAuth={isPhoneAuth}
-            label={isPhoneAuth ? 'Получить СМС с кодом' : 'Получить ссылку'}
-          />
+          </FormProvider>
           <View style={styles.containerTimer}>
             {isPhoneAuth
               ? !!timeoutPhone && (
