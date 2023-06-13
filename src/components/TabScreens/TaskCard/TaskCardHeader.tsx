@@ -22,7 +22,6 @@ export const TaskCardHeader: FC<TaskCardHeaderProps> = ({
     container: {
       height: 45,
       alignItems: 'center',
-      width: '100%',
       flexDirection: 'row',
       justifyContent: 'space-between',
       backgroundColor: '#fff',
@@ -37,8 +36,7 @@ export const TaskCardHeader: FC<TaskCardHeaderProps> = ({
       alignItems: 'center',
     },
     fix: {
-      width: '15%',
-      height: '100%',
+      width: 45,
     },
   });
 
@@ -48,12 +46,16 @@ export const TaskCardHeader: FC<TaskCardHeaderProps> = ({
         <ArrowBack />
       </TouchableOpacity>
       <View style={styles.wrapper}>
-        <Text variant="bodyMBold" color={theme.text.basic}>
-          {title}
-        </Text>
-        <Text variant="captionRegular" color={theme.text.neutral}>
-          {description}
-        </Text>
+        {title && (
+          <Text variant="bodyMBold" color={theme.text.basic}>
+            {title}
+          </Text>
+        )}
+        {description && (
+          <Text variant="captionRegular" color={theme.text.neutral}>
+            {description}
+          </Text>
+        )}
       </View>
       <View style={styles.fix} />
     </View>

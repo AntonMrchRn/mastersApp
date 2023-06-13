@@ -1,6 +1,6 @@
 import { api } from '@/store/api';
 
-import { GetTaskResponce, GetTaskStatusesResponce } from './types';
+import { GetTaskResponce, GetTaskStatusesResponce, Task } from './types';
 
 export const tasksAPI = api.injectEndpoints({
   endpoints: builder => ({
@@ -8,6 +8,13 @@ export const tasksAPI = api.injectEndpoints({
       query: id => ({
         url: `tasks/web?query=?ID==${id}?`,
         method: 'GET',
+      }),
+    }),
+    patchTask: builder.mutation<GetTaskResponce, Task>({
+      query: body => ({
+        url: `tasks/web`,
+        method: 'PATCH',
+        body,
       }),
     }),
     getTaskStatuses: builder.query<GetTaskStatusesResponce, void>({
@@ -20,4 +27,8 @@ export const tasksAPI = api.injectEndpoints({
   overrideExisting: true,
 });
 
-export const { useGetTaskQuery, useGetTaskStatusesQuery } = tasksAPI;
+export const {
+  useGetTaskQuery,
+  useGetTaskStatusesQuery,
+  usePatchTaskMutation,
+} = tasksAPI;
