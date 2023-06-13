@@ -1,8 +1,9 @@
-import userAuth from './reducer';
+import auth from './reducer';
 
 export const {
   login,
   logOut,
+  setUserAuth,
   timerOnEmail,
   timerOffEmail,
   timerOnPhone,
@@ -13,4 +14,4 @@ export const {
   setIsRecoveryByPhone,
   clearIsRecoveryByPhone,
   clearIsRecoveryByEmail,
-} = userAuth.actions;
+} = auth.actions;

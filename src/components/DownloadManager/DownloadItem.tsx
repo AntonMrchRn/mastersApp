@@ -20,8 +20,8 @@ import { PPTIcon } from '@/assets/icons/svg/files/PPTIcon';
 import { WEBPIcon } from '@/assets/icons/svg/files/WEBPIcon';
 import { XLSIcon } from '@/assets/icons/svg/files/XLSIcon';
 import { ZIPIcon } from '@/assets/icons/svg/files/ZIPIcon';
+import { configApp } from '@/constants/platform';
 import { File } from '@/store/api/tasks/types';
-import { isIOS } from '@/utils/isIOS';
 
 import { ProgressBar } from './ProgressBar';
 
@@ -157,7 +157,7 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
 
   const handleOpen = () => {
     if (onDevice) {
-      isIOS
+      configApp.ios
         ? ReactNativeBlobUtil.ios.openDocument(FILE_PATH)
         : ReactNativeBlobUtil.android.actionViewIntent(FILE_PATH, file.mime);
     }

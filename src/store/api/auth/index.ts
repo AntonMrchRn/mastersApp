@@ -52,6 +52,6 @@ export const authAPI = api.injectEndpoints({
 
 export const {
   useGetUserAuthMutation,
-  useSendPasswordRecoveryCodeMutation,
   useRestorePasswordMutation,
+  useSendPasswordRecoveryCodeMutation,
 } = authAPI;
