@@ -118,6 +118,7 @@ export const useTaskCard = () => {
       //id профиля
       executors: [{ ID: 222 }],
     });
+    getTask.refetch();
   };
   const onCancelModalVisible = () => {
     setCancelModalVisible(!cancelModalVisible);
