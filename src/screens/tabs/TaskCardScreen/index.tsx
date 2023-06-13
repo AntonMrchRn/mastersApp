@@ -15,7 +15,7 @@ import {
   TaskSearchNavigatorScreenName,
 } from '@/types/navigation';
 
-import { useTaskCard } from './useTaskCard';
+import { TaskType, useTaskCard } from './useTaskCard';
 
 import { styles } from './styles';
 
@@ -45,6 +45,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
     cancelModalVisible,
     onCancelModalVisible,
     onCancelTask,
+    subsetID,
   } = useTaskCard();
   const theme = useTheme();
   const goBack = () => {
@@ -96,13 +97,14 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
             >
               {budget}
             </Text>
-            {statusCode === 'active' && (
-              <Tips
-                type={'warning'}
-                text={budgetEndTime}
-                containerStyle={styles.tips}
-              />
-            )}
+            {statusCode === 'active' &&
+              subsetID !== TaskType.COMMON_FIRST_RESPONCE && (
+                <Tips
+                  type={'warning'}
+                  text={budgetEndTime}
+                  containerStyle={styles.tips}
+                />
+              )}
             <TabControl data={tabs} initialId={0} onChange={onTabChange} />
           </View>
           <Card isShadow style={styles.card}>

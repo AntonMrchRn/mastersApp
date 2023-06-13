@@ -30,6 +30,14 @@ export type TaskCardStatus =
   | 'closed'
   | '';
 
+export enum TaskType {
+  IT_AUCTION_SALE = 1,
+  IT_FIRST_RESPONCE = 2,
+  IT_INTERNAL_EXECUTIVES = 3,
+  COMMON_AUCTION_SALE = 4,
+  COMMON_FIRST_RESPONCE = 5,
+}
+
 export const useTaskCard = () => {
   const [tab, setTab] = useState('Описание');
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
@@ -44,7 +52,6 @@ export const useTaskCard = () => {
   const task = getTask?.data?.tasks?.[0];
   const id = task?.ID || 0;
   const subsetID = task?.subsetID || '';
-  const isCommonFirstResponse = subsetID === 5;
   const files = task?.files || [];
   const startTime = task?.startTime || '';
   const contacts = task?.contacts || [];
@@ -213,7 +220,7 @@ export const useTaskCard = () => {
           ];
         }
         if (outlayStatusID === 1) {
-          return isCommonFirstResponse
+          return subsetID === TaskType.COMMON_FIRST_RESPONCE
             ? [
                 {
                   label: 'Принять задачу',
@@ -268,5 +275,6 @@ export const useTaskCard = () => {
     cancelModalVisible,
     onCancelModalVisible,
     onCancelTask,
+    subsetID,
   };
 };
