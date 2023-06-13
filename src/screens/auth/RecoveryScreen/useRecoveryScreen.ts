@@ -9,7 +9,6 @@ import { configApp } from '@/constants/platform';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useSendPasswordRecoveryCodeMutation } from '@/store/api/auth';
 import {
-  login,
   setIsRecoveryByEmail,
   setIsRecoveryByPhone,
   timeoutAsyncEmail,

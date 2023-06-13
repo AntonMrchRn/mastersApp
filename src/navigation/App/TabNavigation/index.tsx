@@ -30,7 +30,7 @@ function AppNavigation() {
         options={{
           title: 'Поиск задач',
           tabBarIcon: color => (
-            <TaskSearch color={color.focused ? '#3F51B5' : '#707070'} />
+            <TaskSearch fill={color.focused ? '#3F51B5' : '#707070'} />
           ),
         }}
       />
@@ -40,7 +40,7 @@ function AppNavigation() {
         options={{
           title: 'Мои задач',
           tabBarIcon: color => (
-            <Employees color={color.focused ? '#3F51B5' : '#707070'} />
+            <Employees fill={color.focused ? '#3F51B5' : '#707070'} />
           ),
         }}
       />
@@ -50,7 +50,7 @@ function AppNavigation() {
         options={{
           title: 'Профиль',
           tabBarIcon: color => (
-            <Profile color={color.focused ? '#3F51B5' : '#707070'} />
+            <Profile fill={color.focused ? '#3F51B5' : '#707070'} />
           ),
         }}
       />

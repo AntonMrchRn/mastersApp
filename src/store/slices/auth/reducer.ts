@@ -13,8 +13,8 @@ const initialState: InitialState = {
   isRecoveryByEmail: false,
 };
 
-const userAuth = createSlice({
-  name: 'userAuth',
+const auth = createSlice({
+  name: 'auth',
   initialState,
   reducers: {
     login: state => {
@@ -22,6 +22,9 @@ const userAuth = createSlice({
     },
     logOut: state => {
       state.isAuth = false;
+    },
+    setUserAuth: (state, { payload }) => {
+      state.user = payload;
     },
     setIsRecoveryByPhone: state => {
       state.isRecoveryByPhone = true;
@@ -56,4 +59,4 @@ const userAuth = createSlice({
   },
 });
 
-export default userAuth;
+export default auth;

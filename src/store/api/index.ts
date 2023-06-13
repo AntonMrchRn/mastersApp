@@ -1,7 +1,7 @@
 import { SerializedError } from '@reduxjs/toolkit';
 import { BaseQueryFn } from '@reduxjs/toolkit/dist/query/react';
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { AxiosRequestConfig, Method } from 'axios';
+import { AxiosHeaderValue, AxiosRequestConfig, Method } from 'axios';
 
 import { axiosInstance } from '@/services/axios/axiosInstance';
 import {
@@ -12,26 +12,21 @@ import {
 
 const SERIALIZED_ERROR_STATUS = 400;
 
-type IAxiosBaseQuery = {
-  headers?: (headers: { [key: string]: string }) => { [key: string]: string };
-};
-
-type IBaseQuery = {
+type BaseQuery = {
   url: string;
   method: Method;
   error?: AxiosQueryErrorResponse;
   data?: AxiosRequestConfig['data'];
+  headers?: { [key: string]: AxiosHeaderValue };
   params?: AxiosRequestConfig['params'];
 };
 
-export const axiosBaseQuery = ({
-  headers,
-}: IAxiosBaseQuery): BaseQueryFn<
-  IBaseQuery,
+export const axiosBaseQuery = (): BaseQueryFn<
+  BaseQuery,
   unknown,
   AxiosQueryErrorResponse
 > => {
-  return async ({ url, params, method, data }) => {
+  return async ({ url, params, method, data, headers }) => {
     try {
       const result = await axiosInstance({
         url: axiosInstance.defaults.baseURL + url,
@@ -71,6 +66,6 @@ export const axiosBaseQuery = ({
 };
 
 export const api = createApi({
-  baseQuery: axiosBaseQuery({}),
+  baseQuery: axiosBaseQuery(),
   endpoints: () => ({}),
 });
