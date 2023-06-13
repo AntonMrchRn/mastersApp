@@ -31,57 +31,20 @@ export type TaskCardStatus =
   | '';
 
 export const useTaskCard = () => {
+  const [tab, setTab] = useState('Описание');
+  const [budgetModalVisible, setBudgetModalVisible] = useState(false);
+  const [cancelModalVisible, setCancelModalVisible] = useState(false);
+
   const taskId = '978';
   const getTask = useGetTaskQuery(taskId);
   const getTaskStatuses = useGetTaskStatusesQuery();
 
-  const task = getTask?.data?.tasks?.[0];
-  const id = task?.ID || 0;
-
   const [patchTask, taskMutation] = usePatchTaskMutation();
 
-  const [budgetModalVisible, setBudgetModalVisible] = useState(false);
-  const [cancelModalVisible, setCancelModalVisible] = useState(false);
-  const onBudgetModalVisible = () => {
-    setBudgetModalVisible(!budgetModalVisible);
-  };
-  const onBudgetSubmission = () => {
-    //
-  };
-  const onTaskSubmission = () => {
-    patchTask({
-      //id таски
-      ID: id,
-      //статус для принятия в работу
-      statusID: 11,
-      //id профиля
-      executors: [{ ID: 222 }],
-    });
-  };
-  const onCancelModalVisible = () => {
-    setCancelModalVisible(!cancelModalVisible);
-  };
-  const onWorkDelivery = () => {
-    //
-  };
-  const onCancelTask = () => {
-    onCancelModalVisible();
-  };
-  const onRevokeBudget = () => {
-    //TODO необходимо сначала получить оффер юзера по этой таске
-    //https://sandbox8.apteka-april.ru/api/offers?query=?taskID==977*userID==81?
-    //далее необходимо удалить этот оффер через DELETE offers/id
-    setBudgetModalVisible(!budgetModalVisible);
-  };
-
-  const [tab, setTab] = useState('Описание');
-
+  const task = getTask?.data?.tasks?.[0];
+  const id = task?.ID || 0;
   const subsetID = task?.subsetID || '';
   const isCommonFirstResponse = subsetID === 5;
-  console.log(
-    '🚀 ~ file: useTaskCard.tsx:62 ~ useTaskCard ~ isFirstResponse:',
-    isCommonFirstResponse
-  );
   const files = task?.files || [];
   const startTime = task?.startTime || '';
   const contacts = task?.contacts || [];
@@ -132,6 +95,38 @@ export const useTaskCard = () => {
       icon: false,
     },
   ];
+
+  const onBudgetModalVisible = () => {
+    setBudgetModalVisible(!budgetModalVisible);
+  };
+  const onBudgetSubmission = () => {
+    //
+  };
+  const onTaskSubmission = () => {
+    patchTask({
+      //id таски
+      ID: id,
+      //статус для принятия в работу
+      statusID: 11,
+      //id профиля
+      executors: [{ ID: 222 }],
+    });
+  };
+  const onCancelModalVisible = () => {
+    setCancelModalVisible(!cancelModalVisible);
+  };
+  const onWorkDelivery = () => {
+    //
+  };
+  const onCancelTask = () => {
+    onCancelModalVisible();
+  };
+  const onRevokeBudget = () => {
+    //TODO необходимо сначала получить оффер юзера по этой таске
+    //https://sandbox8.apteka-april.ru/api/offers?query=?taskID==977*userID==81?
+    //далее необходимо удалить этот оффер через DELETE offers/id
+    setBudgetModalVisible(!budgetModalVisible);
+  };
   const getCurrentTab = () => {
     switch (tab) {
       case 'Описание':
