@@ -9,29 +9,30 @@ import {
 } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from 'rn-ui-kit';
 
 import { CardTasks } from '@/components/TabScreens/TaskSearch/Card';
 import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound';
 import TypeSelectionTaskSearch from '@/components/TabScreens/TaskSearch/TypeSelectionTaskSearch';
 import { useAppDispatch, useAppSelector } from '@/store';
-import {
-  getSearchTasks,
-  getTableNames,
-} from '@/store/slices/taskSearch/asyncActions';
+import { useGetTableNamesQuery } from '@/store/api/tasks';
+import { getSearchTasks } from '@/store/slices/taskSearch/asyncActions';
 import { TaskCardScreenNavigationProp } from '@/types/navigation';
 import { Task } from '@/types/task';
 
 import styles from './style';
 
 const TaskSearchScreen = () => {
-  const [activeTab, setActiveTab] = useState(1);
   const navigation = useNavigation<TaskCardScreenNavigationProp>();
   const dispatch = useAppDispatch();
+  const theme = useTheme();
 
+  const [activeTab, setActiveTab] = useState(1);
   const { list, loadingList } = useAppSelector(state => state.taskSearch);
 
+  const { data: tableNames } = useGetTableNamesQuery();
+
   useEffect(() => {
-    dispatch(getTableNames());
     dispatch(getSearchTasks({ idList: activeTab }));
   }, []);
 
@@ -45,11 +46,14 @@ const TaskSearchScreen = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapperTop}>
         <Text style={styles.textHeader}>Поиск задач</Text>
-        <TypeSelectionTaskSearch setActiveTab={setActiveTab} />
+        <TypeSelectionTaskSearch
+          setActiveTab={setActiveTab}
+          tableNames={tableNames}
+        />
       </View>
       <View style={styles.shadowWrapper}>
         <FlatList
-          data={list?.tasks}
+          data={list.tasks}
           renderItem={renderItem}
           onRefresh={() => dispatch(getSearchTasks({ idList: activeTab }))}
           refreshing={loadingList}
@@ -57,11 +61,20 @@ const TaskSearchScreen = () => {
           keyExtractor={keyExtractor}
           contentContainerStyle={[
             styles.listContainer,
-            !list?.tasks?.length && styles.wrapper,
+            !list?.tasks?.length && loadingList && styles.wrapper,
           ]}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          ListEmptyComponent={<PreviewNotFound />}
+          ListEmptyComponent={
+            loadingList ? (
+              <ActivityIndicator
+                size={'large'}
+                color={theme.background.accent}
+              />
+            ) : (
+              <PreviewNotFound />
+            )
+          }
         />
       </View>
     </SafeAreaView>

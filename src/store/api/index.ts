@@ -12,11 +12,7 @@ import {
 
 const SERIALIZED_ERROR_STATUS = 400;
 
-type IAxiosBaseQuery = {
-  headers?: (headers: { [key: string]: string }) => { [key: string]: string };
-};
-
-type IBaseQuery = {
+type BaseQuery = {
   url: string;
   method: Method;
   error?: AxiosQueryErrorResponse;
@@ -24,10 +20,8 @@ type IBaseQuery = {
   params?: AxiosRequestConfig['params'];
 };
 
-export const axiosBaseQuery = ({
-  headers,
-}: IAxiosBaseQuery): BaseQueryFn<
-  IBaseQuery,
+export const axiosBaseQuery = (): BaseQueryFn<
+  BaseQuery,
   unknown,
   AxiosQueryErrorResponse
 > => {
@@ -37,8 +31,8 @@ export const axiosBaseQuery = ({
         url: axiosInstance.defaults.baseURL + url,
         method,
         ...(params && { params }),
-        ...(headers && { headers: axiosInstance.defaults.headers }),
         ...(data && { data }),
+        headers: axiosInstance.defaults.headers,
         responseType: 'json',
       });
 
@@ -71,6 +65,6 @@ export const axiosBaseQuery = ({
 };
 
 export const api = createApi({
-  baseQuery: axiosBaseQuery({}),
+  baseQuery: axiosBaseQuery(),
   endpoints: () => ({}),
 });

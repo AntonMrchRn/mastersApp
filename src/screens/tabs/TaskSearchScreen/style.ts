@@ -12,10 +12,10 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(2, 52, 227, 0.12)',
     shadowOffset: {
       width: 0,
-      height: -4,
+      height: -6,
     },
-    shadowOpacity: 0.7,
-    shadowRadius: 5,
+    shadowOpacity: 0.6,
+    shadowRadius: 4,
     elevation: 2,
   },
   list: {
@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
   wrapper: {
     width: '100%',
     flex: 1,
+    justifyContent: 'center',
   },
   listContainer: {
     backgroundColor: '#fff',

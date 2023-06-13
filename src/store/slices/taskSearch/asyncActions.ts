@@ -5,7 +5,7 @@ import { axiosInstance } from '@/services/axios/axiosInstance';
 
 const getSearchTasks = createAsyncThunk(
   '/searchTask',
-  async ({ idList }, thunkApi) => {
+  async ({ idList }: { idList: number }, thunkApi) => {
     try {
       const { data } = await axiosInstance.get(
         `tasks/web?query=?setID==${idList}?ID,desc,30,0`
