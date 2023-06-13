@@ -1,5 +1,5 @@
 import { api } from '@/store/api';
-import { UserResponse } from '@/store/slices/user/types';
+import { UserResponse } from '@/store/api/user/types';
 
 export const userAPI = api
   .enhanceEndpoints({

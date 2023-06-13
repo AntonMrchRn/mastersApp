@@ -1,7 +1,3 @@
-type InitialState = {
-  user: User | null;
-};
-
 type UserResponse = {
   count: number;
   users: User[];
@@ -53,4 +49,4 @@ type File = {
   extension: string;
 };
 
-export type { UserResponse, InitialState };
+export type { UserResponse };
