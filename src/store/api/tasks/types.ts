@@ -25,18 +25,18 @@ export type Service = {
   sum: number;
 };
 export type Executor = {
-  ID: number;
-  email: string;
-  entityTypeID: number;
-  isAccept: boolean;
-  isApproved: boolean;
-  isConfirm: boolean;
-  isNDSPayer: boolean;
-  isSberPayment: boolean;
-  memberID: number;
-  name: string;
-  pname: string;
-  sname: string;
+  ID?: number;
+  email?: string;
+  entityTypeID?: number;
+  isAccept?: boolean;
+  isApproved?: boolean;
+  isConfirm?: boolean;
+  isNDSPayer?: boolean;
+  isSberPayment?: boolean;
+  memberID?: number;
+  name?: string;
+  pname?: string;
+  sname?: string;
 };
 export type Curator = {
   ID: number;

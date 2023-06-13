@@ -9,7 +9,11 @@ import {
 } from '@/components/TabScreens/TaskCard/TaskCardBottom';
 import { TaskCardDescription } from '@/components/TabScreens/TaskCard/TaskCardDescription';
 import { TaskCardReport } from '@/components/TabScreens/TaskCard/TaskCardReport';
-import { useGetTaskQuery, useGetTaskStatusesQuery } from '@/store/api/tasks';
+import {
+  useGetTaskQuery,
+  useGetTaskStatusesQuery,
+  usePatchTaskMutation,
+} from '@/store/api/tasks';
 
 export type TaskCardStatus =
   | 'pending'
@@ -27,6 +31,15 @@ export type TaskCardStatus =
   | '';
 
 export const useTaskCard = () => {
+  const taskId = '978';
+  const getTask = useGetTaskQuery(taskId);
+  const getTaskStatuses = useGetTaskStatusesQuery();
+
+  const task = getTask?.data?.tasks?.[0];
+  const id = task?.ID || 0;
+
+  const [patchTask, taskMutation] = usePatchTaskMutation();
+
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const onBudgetModalVisible = () => {
@@ -36,7 +49,14 @@ export const useTaskCard = () => {
     //
   };
   const onTaskSubmission = () => {
-    //
+    patchTask({
+      //id таски
+      ID: id,
+      //статус для принятия в работу
+      statusID: 11,
+      //id профиля
+      executors: [{ ID: 222 }],
+    });
   };
   const onCancelModalVisible = () => {
     setCancelModalVisible(!cancelModalVisible);
@@ -55,11 +75,7 @@ export const useTaskCard = () => {
   };
 
   const [tab, setTab] = useState('Описание');
-  const taskId = '978';
-  const getTask = useGetTaskQuery(taskId);
-  const getTaskStatuses = useGetTaskStatusesQuery();
-  const task = getTask?.data?.tasks?.[0];
-  const id = task?.ID || '';
+
   const subsetID = task?.subsetID || '';
   const isCommonFirstResponse = subsetID === 5;
   console.log(
