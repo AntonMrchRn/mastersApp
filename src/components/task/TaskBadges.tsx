@@ -6,18 +6,18 @@ import { Badge } from 'rn-ui-kit';
 import { NightIcon } from '@/assets/icons/svg/screens/NightIcon';
 
 type TaskBadgesProps = {
-  isNight: boolean;
-  isUrgent: boolean;
-  statusCode: string;
+  isNight?: boolean;
+  isUrgent?: boolean;
+  statusID?: number;
 };
 export const TaskBadges: FC<TaskBadgesProps> = ({
   isNight,
   isUrgent,
-  statusCode,
+  statusID,
 }) => {
   const getBadges = () => {
-    switch (statusCode) {
-      case 'active':
+    switch (statusID) {
+      case 2:
         return (
           <Badge
             secondary={true}
@@ -27,7 +27,7 @@ export const TaskBadges: FC<TaskBadgesProps> = ({
             style={styles.badge}
           />
         );
-      case 'work':
+      case 11:
         return (
           <Badge
             secondary={true}
@@ -37,7 +37,7 @@ export const TaskBadges: FC<TaskBadgesProps> = ({
             style={styles.badge}
           />
         );
-      case 'summarizing':
+      case 5:
         return (
           <Badge
             secondary={true}
@@ -47,7 +47,7 @@ export const TaskBadges: FC<TaskBadgesProps> = ({
             style={styles.badge}
           />
         );
-      case 'completed':
+      case 6:
         return (
           <Badge
             secondary={true}
@@ -57,7 +57,7 @@ export const TaskBadges: FC<TaskBadgesProps> = ({
             style={styles.badge}
           />
         );
-      case 'paid':
+      case 9:
         return (
           <Badge
             secondary={true}
@@ -67,8 +67,8 @@ export const TaskBadges: FC<TaskBadgesProps> = ({
             style={styles.badge}
           />
         );
-      case 'cancelledByCustomer':
-      case 'cancelledByExecutor':
+      case 7:
+      case 8:
         return (
           <Badge
             secondary={true}
@@ -78,7 +78,7 @@ export const TaskBadges: FC<TaskBadgesProps> = ({
             style={styles.badge}
           />
         );
-      case 'closed':
+      case 12:
         return (
           <Badge
             secondary={true}

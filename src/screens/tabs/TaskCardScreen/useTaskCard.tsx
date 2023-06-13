@@ -277,5 +277,6 @@ export const useTaskCard = () => {
     onCancelModalVisible,
     onCancelTask,
     subsetID,
+    statusID,
   };
 };

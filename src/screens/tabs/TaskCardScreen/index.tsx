@@ -46,6 +46,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
     onCancelModalVisible,
     onCancelTask,
     subsetID,
+    statusID,
   } = useTaskCard();
   const theme = useTheme();
   const goBack = () => {
@@ -80,7 +81,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
               <TaskBadges
                 isNight={isNight}
                 isUrgent={isUrgent}
-                statusCode={statusCode}
+                statusID={statusID}
               />
             </View>
             <Text
