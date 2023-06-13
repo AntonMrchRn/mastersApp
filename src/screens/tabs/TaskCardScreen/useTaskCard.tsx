@@ -27,15 +27,16 @@ export type TaskCardStatus =
   | '';
 
 export const useTaskCard = () => {
-  const [budgetCanceled, setBudgetCanceled] = useState(false);
-  const [budgetSubmission, setBudgetSubmission] = useState(false);
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const onBudgetModalVisible = () => {
     setBudgetModalVisible(!budgetModalVisible);
   };
   const onBudgetSubmission = () => {
-    setBudgetSubmission(!budgetSubmission);
+    //
+  };
+  const onTaskSubmission = () => {
+    //
   };
   const onCancelModalVisible = () => {
     setCancelModalVisible(!cancelModalVisible);
@@ -47,16 +48,24 @@ export const useTaskCard = () => {
     onCancelModalVisible();
   };
   const onRevokeBudget = () => {
-    setBudgetSubmission(!budgetSubmission);
+    //TODO необходимо сначала получить оффер юзера по этой таске
+    //https://sandbox8.apteka-april.ru/api/offers?query=?taskID==977*userID==81?
+    //далее необходимо удалить этот оффер через DELETE offers/id
     setBudgetModalVisible(!budgetModalVisible);
   };
 
   const [tab, setTab] = useState('Описание');
-  const taskId = '926';
+  const taskId = '978';
   const getTask = useGetTaskQuery(taskId);
   const getTaskStatuses = useGetTaskStatusesQuery();
   const task = getTask?.data?.tasks?.[0];
   const id = task?.ID || '';
+  const subsetID = task?.subsetID || '';
+  const isCommonFirstResponse = subsetID === 5;
+  console.log(
+    '🚀 ~ file: useTaskCard.tsx:62 ~ useTaskCard ~ isFirstResponse:',
+    isCommonFirstResponse
+  );
   const files = task?.files || [];
   const startTime = task?.startTime || '';
   const contacts = task?.contacts || [];
@@ -64,6 +73,7 @@ export const useTaskCard = () => {
   const address = task?.object?.name || '';
   const description = task?.description || '';
   const statusID = task?.statusID;
+  const outlayStatusID = task?.outlayStatusID;
   const status = getTaskStatuses?.data?.find(stat => stat.ID === statusID);
   const statusCode: TaskCardStatus = status?.code || '';
   const name = task?.name || '';
@@ -137,7 +147,7 @@ export const useTaskCard = () => {
   const getBanner = (): TaskCardBottomBanner => {
     switch (statusCode) {
       case 'active':
-        if (budgetCanceled) {
+        if (outlayStatusID === 4) {
           return {
             title: 'Ваша смета отклонена координатором',
             type: 'error',
@@ -182,10 +192,7 @@ export const useTaskCard = () => {
   const getButtons = (): TaskCardBottomButton[] => {
     switch (statusCode) {
       case 'active':
-        if (budgetCanceled) {
-          return [];
-        }
-        if (budgetSubmission) {
+        if (outlayStatusID === 2) {
           return [
             {
               label: 'Отозвать смету',
@@ -194,13 +201,24 @@ export const useTaskCard = () => {
             },
           ];
         }
-        return [
-          {
-            label: 'Подать смету',
-            variant: 'accent',
-            onPress: onBudgetSubmission,
-          },
-        ];
+        if (outlayStatusID === 1) {
+          return isCommonFirstResponse
+            ? [
+                {
+                  label: 'Принять задачу',
+                  variant: 'accent',
+                  onPress: onTaskSubmission,
+                },
+              ]
+            : [
+                {
+                  label: 'Подать смету',
+                  variant: 'accent',
+                  onPress: onBudgetSubmission,
+                },
+              ];
+        }
+        return [];
       case 'signing':
         return [
           {

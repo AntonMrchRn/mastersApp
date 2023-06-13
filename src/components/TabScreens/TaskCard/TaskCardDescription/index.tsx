@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
-import { Banner, Button, Card, Text, useTheme } from 'rn-ui-kit';
+import { Card, Text, useTheme } from 'rn-ui-kit';
 
 import { AvatarIcon } from '@/assets/icons/svg/screens/AvatarIcon';
 import { CaretDownIcon } from '@/assets/icons/svg/screens/CaretDownIcon';
@@ -13,8 +13,6 @@ import { TaskCardStatus } from '@/screens/tabs/TaskCardScreen/useTaskCard';
 import { Contact, File } from '@/store/api/tasks/types';
 
 import { TaskDate } from '../../../task/TaskDate';
-import { TaskCardBudgetModal } from '../TaskCardBudgetModal';
-import { TaskCardCancelBottomSheet } from '../TaskCardCancelBottomSheet';
 import { TaskCardDateBottomSheet } from '../TaskCardDateBottomSheet';
 import { useTaskCardDescription } from './useTaskCardDescription';
 
