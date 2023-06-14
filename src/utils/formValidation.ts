@@ -8,6 +8,10 @@ const emailRegExp =
 const phoneValidation = {
   phone: Yup.string().length(10, '').required(''),
 };
+
+const cancelTaskValidation = {
+  cancelTask: Yup.string().required(''),
+};
 const emailValidation = {
   email: Yup.string()
     .matches(emailRegExp, { message: emailErrorMessage })
@@ -30,6 +34,7 @@ const recoveryConfirmationValidation = {
   ...passwordValidation,
 };
 
+const cancelTaskValidationSchema = Yup.object().shape(cancelTaskValidation);
 const phoneValidationSchema = Yup.object().shape(phoneValidation);
 const emailValidationSchema = Yup.object().shape(emailValidation);
 const signInWithPhoneValidationSchema = Yup.object().shape(
@@ -49,4 +54,5 @@ export {
   signInWithPhoneValidationSchema,
   signInWithEmailValidationSchema,
   recoveryConfirmationValidationSchema,
+  cancelTaskValidationSchema,
 };

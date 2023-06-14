@@ -52,10 +52,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   name: {
-    marginTop: 8,
+    marginTop: 4,
   },
   phone: {
-    marginTop: 4,
     flexDirection: 'row',
     alignItems: 'center',
   },

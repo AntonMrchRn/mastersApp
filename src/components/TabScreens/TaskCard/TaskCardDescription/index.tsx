@@ -1,16 +1,14 @@
 import React, { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
-import { Card, Text, useTheme } from 'rn-ui-kit';
+import { Spacer, Text, useTheme } from 'rn-ui-kit';
 
-import { AvatarIcon } from '@/assets/icons/svg/screens/AvatarIcon';
 import { CaretDownIcon } from '@/assets/icons/svg/screens/CaretDownIcon';
 import { EditIcon } from '@/assets/icons/svg/screens/EditIcon';
-import { PhoneIcon } from '@/assets/icons/svg/screens/PhoneIcon';
 import { DownloadManager } from '@/components/DownloadManager';
 import { TaskAddress } from '@/components/task/TaskAddress';
-import { StatusType } from '@/screens/tabs/TaskCardScreen/useTaskCard';
 import { Contact, File } from '@/store/api/tasks/types';
+import { StatusType } from '@/types/task';
 
 import { TaskDate } from '../../../task/TaskDate';
 import { TaskCardDateBottomSheet } from '../TaskCardDateBottomSheet';
@@ -26,6 +24,7 @@ type TaskCardDescriptionProps = {
   endTimePlan: string;
   contacts: Contact[];
   files: File[];
+  onChangeEndTimePlan: (time: string) => Promise<void>;
 };
 export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   statusID,
@@ -35,6 +34,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   endTimePlan,
   contacts,
   files,
+  onChangeEndTimePlan,
 }) => {
   const {
     onDateModalVisible,
@@ -42,7 +42,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
     inputDateValue,
     onInputDateValue,
     onDateBottomSheetButton,
-  } = useTaskCardDescription();
+  } = useTaskCardDescription(onChangeEndTimePlan);
   const theme = useTheme();
 
   return (
@@ -68,7 +68,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
       <View style={styles.date}>
         <TaskDate from={startTime} to={endTimePlan} />
       </View>
-      {statusID === StatusType.SIGNING && (
+      {statusID === StatusType.WORK && (
         <TouchableOpacity style={styles.edit} onPress={onDateModalVisible}>
           <EditIcon />
           <Text
@@ -89,43 +89,26 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
             <CaretDownIcon />
           </View>
           {contacts.map((contact, index) => (
-            <Card
-              isShadow
-              style={[
-                styles.card,
-                {
-                  borderColor: theme.stroke.accentDisable,
-                },
-                index !== 0 && { marginTop: 16 },
-              ]}
-              key={index}
-            >
-              <View style={styles.cardBody}>
-                <View style={styles.mr16}>
-                  <AvatarIcon />
-                </View>
-                <View>
-                  <Text variant="bodyMBold" color={theme.text.basic}>
-                    {contact?.position}
+            <View key={index}>
+              <View>
+                <Text variant="captionRegular" color={theme.text.neutral}>
+                  {contact?.position}
+                </Text>
+                <Text
+                  variant="bodyMRegular"
+                  color={theme.text.basic}
+                  style={styles.name}
+                >
+                  {contact?.sname} {contact?.name} {contact?.pname}
+                </Text>
+                <View style={styles.phone}>
+                  <Text variant="bodyMRegular" color={theme.text.basic}>
+                    + {contact?.phone}
                   </Text>
-                  <Text
-                    variant="bodySRegular"
-                    color={theme.text.basic}
-                    style={styles.name}
-                  >
-                    {contact?.sname} {contact?.name} {contact?.pname}
-                  </Text>
-                  <View style={styles.phone}>
-                    <View style={styles.mr10}>
-                      <PhoneIcon />
-                    </View>
-                    <Text variant="bodySRegular" color={theme.text.basic}>
-                      {contact?.phone}
-                    </Text>
-                  </View>
                 </View>
               </View>
-            </Card>
+              <Spacer size={'m'} separator="top" />
+            </View>
           ))}
         </>
       ) : (

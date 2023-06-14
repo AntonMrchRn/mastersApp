@@ -1,7 +1,10 @@
 import { useState } from 'react';
 
-export const useTaskCardDescription = () => {
-  const [dateTo, setDateTo] = useState('2023-04-17');
+import dayjs from 'dayjs';
+
+export const useTaskCardDescription = (
+  onChangeEndTimePlan: (time: string) => Promise<void>
+) => {
   const [inputDateValue, setInputDateValue] = useState('');
   const [dateModalVisible, setDateModalVisible] = useState(false);
 
@@ -15,7 +18,8 @@ export const useTaskCardDescription = () => {
   const onDateBottomSheetButton = () => {
     const dateArray = inputDateValue.split('/');
     const currentDate = `20${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`;
-    setDateTo(currentDate);
+    const time = dayjs(currentDate).toISOString();
+    onChangeEndTimePlan(time);
     setInputDateValue('');
     onDateModalVisible();
   };

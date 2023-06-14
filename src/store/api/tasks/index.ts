@@ -11,10 +11,10 @@ export const tasksAPI = api.injectEndpoints({
       }),
     }),
     patchTask: builder.mutation<GetTaskResponce, Task>({
-      query: body => ({
+      query: data => ({
         url: `tasks/web`,
         method: 'PATCH',
-        body,
+        data,
       }),
     }),
     getTaskStatuses: builder.query<GetTaskStatusesResponce, void>({

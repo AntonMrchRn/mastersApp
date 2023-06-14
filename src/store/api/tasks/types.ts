@@ -63,6 +63,7 @@ export type Contact = {
 };
 export type Task = {
   ID?: number;
+  refuseReason?: string;
   budget?: number;
   candidateIDs?: number[];
   contacts?: Contact[];
