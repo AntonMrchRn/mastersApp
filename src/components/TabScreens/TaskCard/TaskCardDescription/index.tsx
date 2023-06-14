@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
-import { Card, Text, useTheme } from 'rn-ui-kit';
+import { Card, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { AvatarIcon } from '@/assets/icons/svg/screens/AvatarIcon';
 import { CaretDownIcon } from '@/assets/icons/svg/screens/CaretDownIcon';
@@ -91,43 +91,26 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
             <CaretDownIcon />
           </View>
           {contacts.map((contact, index) => (
-            <Card
-              isShadow
-              style={[
-                styles.card,
-                {
-                  borderColor: theme.stroke.accentDisable,
-                },
-                index !== 0 && { marginTop: 16 },
-              ]}
-              key={index}
-            >
-              <View style={styles.cardBody}>
-                <View style={styles.mr16}>
-                  <AvatarIcon />
-                </View>
-                <View>
-                  <Text variant="bodyMBold" color={theme.text.basic}>
-                    {contact?.position}
+            <View key={index}>
+              <View>
+                <Text variant="captionRegular" color={theme.text.neutral}>
+                  {contact?.position}
+                </Text>
+                <Text
+                  variant="bodyMRegular"
+                  color={theme.text.basic}
+                  style={styles.name}
+                >
+                  {contact?.sname} {contact?.name} {contact?.pname}
+                </Text>
+                <View style={styles.phone}>
+                  <Text variant="bodyMRegular" color={theme.text.basic}>
+                    + {contact?.phone}
                   </Text>
-                  <Text
-                    variant="bodySRegular"
-                    color={theme.text.basic}
-                    style={styles.name}
-                  >
-                    {contact?.sname} {contact?.name} {contact?.pname}
-                  </Text>
-                  <View style={styles.phone}>
-                    <View style={styles.mr10}>
-                      <PhoneIcon />
-                    </View>
-                    <Text variant="bodySRegular" color={theme.text.basic}>
-                      {contact?.phone}
-                    </Text>
-                  </View>
                 </View>
               </View>
-            </Card>
+              <Spacer size={'m'} separator="top" />
+            </View>
           ))}
         </>
       ) : (
