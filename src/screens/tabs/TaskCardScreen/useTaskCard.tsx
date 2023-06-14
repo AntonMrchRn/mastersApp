@@ -15,27 +15,62 @@ import {
   usePatchTaskMutation,
 } from '@/store/api/tasks';
 
-export type TaskCardStatus =
-  | 'pending'
-  | 'active'
-  | 'matching'
-  | 'signing'
-  | 'summarizing'
-  | 'completed'
-  | 'cancelledByExecutor'
-  | 'cancelledByCustomer'
-  | 'paid'
-  | 'returned'
-  | 'work'
-  | 'closed'
-  | '';
-
 export enum TaskType {
   IT_AUCTION_SALE = 1,
   IT_FIRST_RESPONCE = 2,
   IT_INTERNAL_EXECUTIVES = 3,
   COMMON_AUCTION_SALE = 4,
   COMMON_FIRST_RESPONCE = 5,
+}
+export enum StatusType {
+  /**
+   * Подготовка
+   */
+  PENDING = 1,
+  /**
+   * Опубликовано
+   */
+  ACTIVE = 2,
+  /**
+   * Согласование смет
+   */
+  MATCHING = 3,
+  /**
+   * Выполнение / Подписание документов
+   */
+  SIGNING = 4,
+  /**
+   * Сдача работ
+   */
+  SUMMARIZING = 5,
+  /**
+   * Выполнено
+   */
+  COMPLETED = 6,
+  /**
+   * Отменено исполнителем
+   */
+  CANCELLED_BY_EXECUTOR = 7,
+  /**
+   * Отменено заказчиком
+   */
+  CANCELLED_BY_CUSTOMER = 8,
+  /**
+   * Оплачено
+   */
+  PAID = 9,
+  /**
+   * Возвращено на доработку
+   */
+  RETURNED = 10,
+  /**
+   * В работе
+   */
+  WORK = 11,
+  /**
+   * Закрыто
+   */
+  CLOSED = 12,
 }
 
 export const useTaskCard = () => {
@@ -45,7 +80,6 @@ export const useTaskCard = () => {
 
   const taskId = '978';
   const getTask = useGetTaskQuery(taskId);
-  const getTaskStatuses = useGetTaskStatusesQuery();
 
   const [patchTask, taskMutation] = usePatchTaskMutation();
 
@@ -58,10 +92,8 @@ export const useTaskCard = () => {
   const endTimePlan = task?.endTimePlan || '';
   const address = task?.object?.name || '';
   const description = task?.description || '';
-  const statusID = task?.statusID;
+  const statusID: StatusType | undefined = task?.statusID;
   const outlayStatusID = task?.outlayStatusID;
-  const status = getTaskStatuses?.data?.find(stat => stat.ID === statusID);
-  const statusCode: TaskCardStatus = status?.code || '';
   const name = task?.name || '';
   const budget = `${task?.budget} ₽` || '';
   const isNight = task?.isNight || false;
@@ -140,7 +172,7 @@ export const useTaskCard = () => {
       case 'Описание':
         return (
           <TaskCardDescription
-            statusCode={statusCode}
+            statusID={statusID}
             description={description}
             address={address}
             startTime={startTime}
@@ -153,7 +185,7 @@ export const useTaskCard = () => {
         return (
           <TaskCardReport
             activeBudgetCanceled={!!getBanner()}
-            statusCode={statusCode}
+            statusID={statusID}
           />
         );
       default:
@@ -164,8 +196,8 @@ export const useTaskCard = () => {
     setTab(item.label);
   };
   const getBanner = (): TaskCardBottomBanner => {
-    switch (statusCode) {
-      case 'active':
+    switch (statusID) {
+      case StatusType.ACTIVE:
         if (outlayStatusID === 4) {
           return {
             title: 'Ваша смета отклонена координатором',
@@ -175,29 +207,29 @@ export const useTaskCard = () => {
           };
         }
         return null;
-      case 'summarizing':
+      case StatusType.SUMMARIZING:
         return {
           title: 'Задача на проверке',
           type: 'info',
           icon: 'info',
           text: 'Координатор проверяет выполненные услуги. После успешной проверки задача будет передана на оплату',
         };
-      case 'completed':
+      case StatusType.COMPLETED:
         return {
           title: 'Выполненные услуги приняты',
           type: 'success',
           icon: 'success',
           text: 'В ближайшее время оплата поступит на вашу банковскую карту/счет',
         };
-      case 'paid':
+      case StatusType.PAID:
         return {
           title: 'Оплата произведена',
           type: 'success',
           icon: 'success',
           text: 'Денежные средства переведены вам на указанные в профиле реквизиты',
         };
-      case 'cancelledByExecutor':
-      case 'cancelledByCustomer':
+      case StatusType.CANCELLED_BY_CUSTOMER:
+      case StatusType.CANCELLED_BY_EXECUTOR:
         return {
           title: 'Задача отменена',
           type: 'error',
@@ -209,8 +241,8 @@ export const useTaskCard = () => {
     }
   };
   const getButtons = (): TaskCardBottomButton[] => {
-    switch (statusCode) {
-      case 'active':
+    switch (statusID) {
+      case StatusType.ACTIVE:
         if (outlayStatusID === 2) {
           return [
             {
@@ -238,7 +270,7 @@ export const useTaskCard = () => {
               ];
         }
         return [];
-      case 'signing':
+      case StatusType.SIGNING:
         return [
           {
             label: 'Сдать работы',
@@ -266,7 +298,6 @@ export const useTaskCard = () => {
     isNight,
     publicTime,
     isUrgent,
-    statusCode,
     budgetEndTime,
     getBanner,
     getButtons,

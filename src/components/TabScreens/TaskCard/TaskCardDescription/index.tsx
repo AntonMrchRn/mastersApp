@@ -9,7 +9,7 @@ import { EditIcon } from '@/assets/icons/svg/screens/EditIcon';
 import { PhoneIcon } from '@/assets/icons/svg/screens/PhoneIcon';
 import { DownloadManager } from '@/components/DownloadManager';
 import { TaskAddress } from '@/components/task/TaskAddress';
-import { TaskCardStatus } from '@/screens/tabs/TaskCardScreen/useTaskCard';
+import { StatusType } from '@/screens/tabs/TaskCardScreen/useTaskCard';
 import { Contact, File } from '@/store/api/tasks/types';
 
 import { TaskDate } from '../../../task/TaskDate';
@@ -19,7 +19,7 @@ import { useTaskCardDescription } from './useTaskCardDescription';
 import { styles } from './styles';
 
 type TaskCardDescriptionProps = {
-  statusCode: TaskCardStatus;
+  statusID: StatusType | undefined;
   description: string;
   address: string;
   startTime: string;
@@ -28,7 +28,7 @@ type TaskCardDescriptionProps = {
   files: File[];
 };
 export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
-  statusCode,
+  statusID,
   description,
   address,
   startTime,
@@ -68,7 +68,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
       <View style={styles.date}>
         <TaskDate from={startTime} to={endTimePlan} />
       </View>
-      {statusCode === 'signing' && (
+      {statusID === StatusType.SIGNING && (
         <TouchableOpacity style={styles.edit} onPress={onDateModalVisible}>
           <EditIcon />
           <Text
