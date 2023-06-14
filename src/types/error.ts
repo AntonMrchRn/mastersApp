@@ -19,7 +19,7 @@ type AxiosQueryErrorResponse = {
 };
 
 type Error = {
-  code: number;
+  code: ErrorCode;
   message: string;
 };
 

@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { TextInput } from 'react-native';
+import { FieldPath } from 'react-hook-form/dist/types/path';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import { configApp } from '@/constants/platform';
 import { storageMMKV } from '@/mmkv/storage';
+import useSignInForm from '@/screens/auth/SignInScreen/useSignInForm';
 import { useAppDispatch } from '@/store';
 import { useGetUserAuthMutation } from '@/store/api/auth';
 import {
@@ -17,10 +18,22 @@ import {
 } from '@/store/slices/auth/actions';
 import { AuthTab, authTabByIndex } from '@/types/authTab';
 import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
-import { Error } from '@/types/error';
+import {
+  SignInFormValues,
+  SignInWithEmailFormValues,
+  SignInWithPhoneFormValues,
+} from '@/types/form';
 import { AuthScreenName, ErrorScreenNavigationProp } from '@/types/navigation';
+import { emailErrorMessage } from '@/utils/formValidation';
 
 const OFFSET = 0;
+const inputNameByErrorCode: Partial<
+  Record<ErrorCode, FieldPath<SignInFormValues>>
+> = {
+  [ErrorCode.IncorrectPhone]: 'phone',
+  [ErrorCode.IncorrectEmail]: 'email',
+  [ErrorCode.IncorrectPassword]: 'password',
+};
 
 const useSignInScreen = () => {
   const [
@@ -28,25 +41,19 @@ const useSignInScreen = () => {
     { data: userAuth, isSuccess, isLoading, isError, error: authError },
   ] = useGetUserAuthMutation();
 
-  const isFocused = useIsFocused();
   const dispatch = useAppDispatch();
   const navigation = useNavigation<ErrorScreenNavigationProp>();
 
-  const [phone, setPhone] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
   const [activeTab, setActiveTab] = useState<AuthTab>(AuthTab.Phone);
-  const [isAgreeWithTerms, setIsAgreeWithTerms] = useState<boolean>(false);
-  const [error, setError] = useState<Error | null>(
-    (authError as AxiosQueryErrorResponse)?.data
-  );
-  const passwordRef = useRef<TextInput>(null);
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
   const isPhoneAuth = activeTab === AuthTab.Phone;
-  const isPhoneError = error?.code === ErrorCode.IncorrectPhone;
-  const isEmailError = error?.code === ErrorCode.IncorrectEmail;
-  const isPasswordError = error?.code === ErrorCode.IncorrectPassword;
+  const error = (authError as AxiosQueryErrorResponse)?.data;
+  const { errors, methods, isDisabled } = useSignInForm(isPhoneAuth);
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   useEffect(() => {
     if (isError) {
@@ -54,52 +61,27 @@ const useSignInScreen = () => {
         return navigation.navigate(AuthScreenName.Error);
       }
 
-      setError((authError as AxiosQueryErrorResponse)?.data);
+      const inputName = inputNameByErrorCode[error?.code];
+      if (inputName) {
+        methods.setError(inputName, {
+          message: error?.message,
+        });
+      }
     }
   }, [isError]);
 
   useEffect(() => {
-    setPhone('');
-    setEmail('');
-    setError(null);
-  }, [activeTab]);
-
-  useEffect(() => {
-    if (isPasswordError) {
-      setError(null);
-    }
-  }, [password]);
-
-  useEffect(() => {
-    getData();
-    setError(null);
-  }, []);
-
-  useEffect(() => {
-    setError(null);
-  }, [isFocused]);
-
-  useEffect(() => {
-    if (phone?.length === 10) {
-      passwordRef.current?.focus();
-    }
-
-    setError(null);
-  }, [phone, email]);
-
-  useEffect(() => {
     if (isSuccess && userAuth) {
-      storageMMKV.set('token', userAuth.token);
-      dispatch(login());
-      dispatch(setUserAuth(userAuth));
-      setError(null);
+      onLoginSuccess(userAuth.token);
     }
   }, [isSuccess]);
 
-  const logIn = async () => {
+  const logIn = async (values: SignInFormValues) => {
     await getUserAuth({
-      login: isPhoneAuth ? '7' + phone : email,
-      password,
+      login: isPhoneAuth
+        ? '7' + (values as SignInWithPhoneFormValues).phone
+        : (values as SignInWithEmailFormValues).email,
+      password: values.password,
     });
   };
 
@@ -130,32 +112,28 @@ const useSignInScreen = () => {
     }, 200);
   };
 
-  const switchTab = (index: number) => {
-    setError(null);
-    setActiveTab(authTabByIndex[index] as AuthTab);
+  const switchTab = (tabIndex: number) => {
+    setActiveTab(authTabByIndex[tabIndex] as AuthTab);
+  };
+
+  const onLoginSuccess = (token: string) => {
+    storageMMKV.set('token', token);
+    dispatch(login());
+    dispatch(setUserAuth(userAuth));
   };
 
   return {
-    phone,
-    email,
-    logIn,
-    error,
+    errors,
+    methods,
     onFocus,
-    setPhone,
-    setEmail,
-    password,
     switchTab,
     isLoading,
-    setPassword,
-    passwordRef,
+    isDisabled,
     isPhoneAuth,
-    isPhoneError,
-    isEmailError,
     scrollViewRef,
-    isPasswordError,
-    isAgreeWithTerms,
     onKeyboardWillShow,
-    setIsAgreeWithTerms,
+    logIn: methods.handleSubmit(logIn),
+    isInvalidEmail: errors.email?.message === emailErrorMessage,
   };
 };
 

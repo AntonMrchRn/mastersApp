@@ -7,7 +7,7 @@ const initialState: InitialState = {
   isAuth: false,
   timeoutPhone: null,
   timeoutEmail: null,
-  isActiveTimer: false,
+  isActiveTimerPhone: false,
   isActiveTimerEmail: false,
   isRecoveryByPhone: false,
   isRecoveryByEmail: false,
@@ -39,10 +39,10 @@ const auth = createSlice({
       state.isRecoveryByEmail = false;
     },
     timerOnPhone: state => {
-      state.isActiveTimer = true;
+      state.isActiveTimerPhone = true;
     },
     timerOffPhone: state => {
-      state.isActiveTimer = false;
+      state.isActiveTimerPhone = false;
     },
     timerOnEmail: state => {
       state.isActiveTimerEmail = true;
