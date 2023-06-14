@@ -6,22 +6,22 @@ import { Text, useTheme } from 'rn-ui-kit';
 import { DownloadFilesIcon } from '@/assets/icons/svg/screens/DownloadFilesIcon';
 import { NoFilesIcon } from '@/assets/icons/svg/screens/NoFilesIcon';
 import { OtesIcon } from '@/assets/icons/svg/screens/OtesIcon';
-import { TaskCardStatus } from '@/screens/tabs/TaskCardScreen/useTaskCard';
+import { StatusType } from '@/screens/tabs/TaskCardScreen/useTaskCard';
 
 import { styles } from './styles';
 
 type TaskCardReportProps = {
   activeBudgetCanceled: boolean;
-  statusCode: TaskCardStatus;
+  statusID: StatusType | undefined;
 };
 export const TaskCardReport: FC<TaskCardReportProps> = ({
   activeBudgetCanceled,
-  statusCode,
+  statusID,
 }) => {
   const theme = useTheme();
   const getContent = () => {
-    switch (statusCode) {
-      case 'active':
+    switch (statusID) {
+      case StatusType.ACTIVE:
         return (
           <View style={styles.container}>
             <View
@@ -52,7 +52,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
             </Text>
           </View>
         );
-      case 'signing':
+      case StatusType.SIGNING:
         return (
           <View style={styles.mt36}>
             <Text variant="title3" color={theme.text.basic}>

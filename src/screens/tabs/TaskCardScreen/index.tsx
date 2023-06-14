@@ -15,7 +15,7 @@ import {
   TaskSearchNavigatorScreenName,
 } from '@/types/navigation';
 
-import { TaskType, useTaskCard } from './useTaskCard';
+import { StatusType, TaskType, useTaskCard } from './useTaskCard';
 
 import { styles } from './styles';
 
@@ -35,7 +35,6 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
     budget,
     isNight,
     isUrgent,
-    statusCode,
     budgetEndTime,
     getBanner,
     getButtons,
@@ -98,7 +97,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
             >
               {budget}
             </Text>
-            {statusCode === 'active' &&
+            {statusID === StatusType.ACTIVE &&
               subsetID !== TaskType.COMMON_FIRST_RESPONCE && (
                 <Tips
                   type={'warning'}
