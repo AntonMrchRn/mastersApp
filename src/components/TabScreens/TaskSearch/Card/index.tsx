@@ -3,7 +3,8 @@ import { TouchableOpacity } from 'react-native';
 
 import { Card, Spacer, Text } from 'rn-ui-kit';
 
-export const CardTasks = ({ ID, navigation }) => {
+export const CardTasks = ({ name, description, navigation }, ...props) => {
+  console.log('props', props);
   return (
     <TouchableOpacity
       style={{
@@ -14,10 +15,9 @@ export const CardTasks = ({ ID, navigation }) => {
       onPress={() => navigation.navigate('TaskCard')}
     >
       <Card style={{ paddingHorizontal: 0 }}>
-        {/* <Text variant="title3">{test}</Text> */}
-        <Text variant="bodySRegular">{ID}</Text>
-        {/* <Text variant="captionRegular">{test}</Text> */}
-        {/* <Text variant="captionRegular">{test}</Text> */}
+        <Text variant="title3">{name}</Text>
+        <Text variant="bodySRegular">{description}</Text>
+        <Text variant="captionRegular">{description}</Text>
       </Card>
       <Spacer size="xs" separator="bottom" />
     </TouchableOpacity>
