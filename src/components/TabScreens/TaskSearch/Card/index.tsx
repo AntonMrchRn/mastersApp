@@ -6,11 +6,16 @@ import { Card, Spacer, Text } from 'rn-ui-kit';
 import { TaskAddress } from '@/components/task/TaskAddress';
 import { TaskBadges } from '@/components/task/TaskBadges';
 import { TaskDate } from '@/components/task/TaskDate';
-import { CardItem } from '@/types/task';
+import { Task } from '@/store/api/tasks/types';
+import { TaskCardScreenNavigationProp } from '@/types/navigation';
 
 import { styles } from './styles';
 
-export const CardTasks: FC<CardItem> = ({
+type CardTasksProp = Task & {
+  navigation: TaskCardScreenNavigationProp;
+};
+
+export const CardTasks: FC<CardTasksProp> = ({
   object,
   startTime = '',
   endTimePlan = '',
