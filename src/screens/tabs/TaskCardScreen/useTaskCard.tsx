@@ -31,6 +31,7 @@ export const useTaskCard = () => {
   const subsetID = task?.subsetID || '';
   const files = task?.files || [];
   const startTime = task?.startTime || '';
+  const endTime = task?.endTime || '';
   const contacts = task?.contacts || [];
   const endTimePlan = task?.endTimePlan || '';
   const address = task?.object?.name || '';
@@ -101,6 +102,20 @@ export const useTaskCard = () => {
   const onWorkDelivery = () => {
     //
   };
+  const onChangeEndTimePlan = async (time: string) => {
+    //при изменении любого из времени нужно передавать все три поля
+    await patchTask({
+      //id таски
+      ID: id,
+      //планируемый срок окончания
+      endTimePlan: time,
+      //срок окончания
+      endTime,
+      //срок начала
+      startTime,
+    });
+    getTask.refetch();
+  };
   const onCancelTask = () => {
     onCancelModalVisible();
   };
@@ -122,6 +137,7 @@ export const useTaskCard = () => {
             endTimePlan={endTimePlan}
             contacts={contacts}
             files={files}
+            onChangeEndTimePlan={onChangeEndTimePlan}
           />
         );
       case 'Отчет':

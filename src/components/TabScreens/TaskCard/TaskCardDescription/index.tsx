@@ -26,6 +26,7 @@ type TaskCardDescriptionProps = {
   endTimePlan: string;
   contacts: Contact[];
   files: File[];
+  onChangeEndTimePlan: (time: string) => Promise<void>;
 };
 export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   statusID,
@@ -35,6 +36,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   endTimePlan,
   contacts,
   files,
+  onChangeEndTimePlan,
 }) => {
   const {
     onDateModalVisible,
@@ -42,7 +44,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
     inputDateValue,
     onInputDateValue,
     onDateBottomSheetButton,
-  } = useTaskCardDescription();
+  } = useTaskCardDescription(onChangeEndTimePlan);
   const theme = useTheme();
 
   return (
