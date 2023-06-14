@@ -17,6 +17,7 @@
     "test:types": "tsc"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.1.0",
     "@react-native-async-storage/async-storage": "^1.17.12",
     "@react-navigation/bottom-tabs": "^6.5.5",
     "@react-navigation/native": "^6.1.4",
@@ -26,6 +27,7 @@
     "dayjs": "^1.11.8",
     "pretty-bytes": "^6.1.0",
     "react": "18.1.0",
+    "react-hook-form": "^7.44.3",
     "react-native": "0.70.8",
     "react-native-blob-util": "^0.18.2",
     "react-native-confirmation-code-field": "^7.3.1",
@@ -47,8 +49,9 @@
     "react-native-text-input-mask": "^3.1.4",
     "react-redux": "^8.0.5",
     "redux-flipper": "^2.0.2",
-    "rn-ui-kit": "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#0.1.15",
-    "redux-persist": "^6.0.0"
+    "rn-ui-kit": "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#0.1.16",
+    "redux-persist": "^6.0.0",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

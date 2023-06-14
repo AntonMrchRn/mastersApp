@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
+import { FieldPath } from 'react-hook-form/dist/types/path';
 import { Keyboard } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import { configApp } from '@/constants/platform';
+import useRecoveryForm from '@/screens/auth/RecoveryScreen/useRecoveryForm';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useSendPasswordRecoveryCodeMutation } from '@/store/api/auth';
 import {
@@ -16,14 +18,22 @@ import {
 } from '@/store/slices/auth/actions';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { AuthTab, authTabByIndex } from '@/types/authTab';
-import { AxiosQueryErrorResponse, Error, ErrorCode } from '@/types/error';
+import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
+import { EmailValue, PhoneValue, RecoveryFormValues } from '@/types/form';
 import {
   AuthScreenName,
   CompositeRecoveryConfirmAndEmailNavigationProp,
 } from '@/types/navigation';
+import { emailErrorMessage } from '@/utils/formValidation';
 
 const OFFSET = 0;
 const password = '';
+const inputNameByErrorCode: Partial<
+  Record<ErrorCode, FieldPath<RecoveryFormValues>>
+> = {
+  [ErrorCode.IncorrectPhone]: 'phone',
+  [ErrorCode.IncorrectEmail]: 'email',
+};
 
 const useRecoveryScreen = () => {
   const [
@@ -37,52 +47,34 @@ const useRecoveryScreen = () => {
 
   const navigation =
     useNavigation<CompositeRecoveryConfirmAndEmailNavigationProp>();
-  const isFocused = useIsFocused();
 
-  const [phone, setPhone] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
   const [activeTab, setActiveTab] = useState<AuthTab>(AuthTab.Phone);
-  const [error, setError] = useState<Error | null>(
-    (recoveryError as AxiosQueryErrorResponse)?.data
-  );
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
   const isPhoneAuth = activeTab === AuthTab.Phone;
-  const isPhoneError = error?.code === ErrorCode.IncorrectPhone;
-  const isEmailError = error?.code === ErrorCode.IncorrectEmail;
+  const error = (recoveryError as AxiosQueryErrorResponse)?.data;
+  const { errors, methods, isDisabled, phone } = useRecoveryForm(isPhoneAuth);
 
   useEffect(() => {
     if (isError) {
-      setError((recoveryError as AxiosQueryErrorResponse)?.data);
+      if (error?.code === ErrorCode.Server) {
+        return navigation.navigate(AuthScreenName.Error);
+      }
+
+      const inputName = inputNameByErrorCode[error?.code];
+      if (inputName) {
+        methods.setError(inputName, {
+          message: error?.message,
+        });
+      }
     }
   }, [isError]);
 
   useEffect(() => {
-    if (phone?.length === 10) {
-      Keyboard.dismiss();
-    }
-
-    setError(null);
-  }, [phone, email]);
-
-  useEffect(() => {
-    setPhone('');
-    setEmail('');
-    setError(null);
-  }, [activeTab]);
-
-  useEffect(() => {
-    setError(null);
-  }, []);
-
-  useEffect(() => {
-    setError(null);
-  }, [isFocused]);
-
-  useEffect(() => {
     if (isRecoveryByPhone && isPhoneAuth && !isRecoveryByEmail) {
-      navigation.navigate(AuthScreenName.RecoveryConfirm, { phone });
-      setError(null);
+      navigation.navigate(AuthScreenName.RecoveryConfirm, {
+        phone,
+      });
     }
     if (!isPhoneAuth) {
       Keyboard.dismiss();
@@ -114,17 +106,16 @@ const useRecoveryScreen = () => {
     }
   };
 
-  const sendCode = async () => {
+  const sendCode = async (values: RecoveryFormValues) => {
     await sendRecoveryCode({
-      phoneNumber: '7' + phone,
-      email,
+      phoneNumber: '7' + (values as PhoneValue).phone,
+      email: (values as EmailValue).email,
       password,
       isPhoneAuth,
     });
   };
 
   const switchTab = (index: number) => {
-    setError(null);
     setActiveTab(authTabByIndex[index] as AuthTab);
   };
 
@@ -144,23 +135,19 @@ const useRecoveryScreen = () => {
   };
 
   return {
-    phone,
-    email,
-    error,
+    errors,
+    methods,
     onFocus,
-    sendCode,
-    setPhone,
-    setEmail,
-    password,
     switchTab,
     isLoading,
+    isDisabled,
     isPhoneAuth,
     timeoutPhone,
     timeoutEmail,
-    isPhoneError,
-    isEmailError,
     scrollViewRef,
     onKeyboardWillShow,
+    sendCode: methods.handleSubmit(sendCode),
+    isInvalidEmail: errors.email?.message === emailErrorMessage,
   };
 };
 

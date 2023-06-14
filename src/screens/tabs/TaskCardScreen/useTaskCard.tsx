@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import dayjs from 'dayjs';
+import { useToast } from 'rn-ui-kit';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
 
 import {
@@ -9,59 +10,36 @@ import {
 } from '@/components/TabScreens/TaskCard/TaskCardBottom';
 import { TaskCardDescription } from '@/components/TabScreens/TaskCard/TaskCardDescription';
 import { TaskCardReport } from '@/components/TabScreens/TaskCard/TaskCardReport';
-import {
-  useGetTaskQuery,
-  useGetTaskStatusesQuery,
-  usePatchTaskMutation,
-} from '@/store/api/tasks';
-
-export type TaskCardStatus =
-  | 'pending'
-  | 'active'
-  | 'matching'
-  | 'signing'
-  | 'summarizing'
-  | 'completed'
-  | 'cancelledByExecutor'
-  | 'cancelledByCustomer'
-  | 'paid'
-  | 'returned'
-  | 'work'
-  | 'closed'
-  | '';
-
-export enum TaskType {
-  IT_AUCTION_SALE = 1,
-  IT_FIRST_RESPONCE = 2,
-  IT_INTERNAL_EXECUTIVES = 3,
-  COMMON_AUCTION_SALE = 4,
-  COMMON_FIRST_RESPONCE = 5,
-}
+import { useAppSelector } from '@/store';
+import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
+import { selectAuth } from '@/store/slices/auth/selectors';
+import { StatusType, TaskType } from '@/types/task';
 
 export const useTaskCard = () => {
   const [tab, setTab] = useState('Описание');
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
 
+  const toast = useToast();
+  const { user } = useAppSelector(selectAuth);
+
   const taskId = '978';
   const getTask = useGetTaskQuery(taskId);
-  const getTaskStatuses = useGetTaskStatusesQuery();
 
-  const [patchTask, taskMutation] = usePatchTaskMutation();
+  const [patchTask] = usePatchTaskMutation();
 
   const task = getTask?.data?.tasks?.[0];
   const id = task?.ID || 0;
   const subsetID = task?.subsetID || '';
   const files = task?.files || [];
   const startTime = task?.startTime || '';
+  const endTime = task?.endTime || '';
   const contacts = task?.contacts || [];
   const endTimePlan = task?.endTimePlan || '';
   const address = task?.object?.name || '';
   const description = task?.description || '';
-  const statusID = task?.statusID;
+  const statusID: StatusType | undefined = task?.statusID;
   const outlayStatusID = task?.outlayStatusID;
-  const status = getTaskStatuses?.data?.find(stat => stat.ID === statusID);
-  const statusCode: TaskCardStatus = status?.code || '';
   const name = task?.name || '';
   const budget = `${task?.budget} ₽` || '';
   const isNight = task?.isNight || false;
@@ -109,24 +87,74 @@ export const useTaskCard = () => {
   const onBudgetSubmission = () => {
     //
   };
-  const onTaskSubmission = () => {
-    patchTask({
-      //id таски
-      ID: id,
-      //статус для принятия в работу
-      statusID: 11,
-      //id профиля
-      executors: [{ ID: 222 }],
-    });
-    getTask.refetch();
+  const onTaskSubmission = async () => {
+    try {
+      await patchTask({
+        //id таски
+        ID: id,
+        //статус для принятия в работу
+        statusID: 11,
+        //id профиля
+        executors: [{ ID: user?.userID }],
+      }).unwrap();
+    } catch (error) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'data' in error &&
+        typeof error.data === 'object' &&
+        error.data !== null &&
+        'message' in error.data &&
+        typeof error.data.message === 'string'
+      ) {
+        toast.show({
+          type: 'error',
+          title: error.data.message,
+          contentHeight: 120,
+        });
+      }
+    } finally {
+      getTask.refetch();
+    }
   };
   const onCancelModalVisible = () => {
     setCancelModalVisible(!cancelModalVisible);
   };
-  const onWorkDelivery = () => {
-    //
+  const onWorkDelivery = async () => {
+    await patchTask({
+      //id таски
+      ID: id,
+      //перевод таски в статус Сдача работ
+      statusID: 5,
+    });
+    getTask.refetch();
   };
-  const onCancelTask = () => {
+  const onChangeEndTimePlan = async (time: string) => {
+    //при изменении любого из времени нужно передавать все три поля
+    await patchTask({
+      //id таски
+      ID: id,
+      //планируемый срок окончания
+      endTimePlan: time,
+      //срок окончания
+      endTime,
+      //срок начала
+      startTime,
+    });
+    getTask.refetch();
+  };
+  const onCancelTask = async (text: string) => {
+    //если это общие, то
+    //первый отклик - патч задания, refuseReason, id задания
+    //если лоты то - патч оффера, id оффера, taskID, refuseReason
+    //в ИТ там все иначе 🙂
+    await patchTask({
+      //id таски
+      ID: id,
+      //причина отказа
+      refuseReason: text,
+    });
+    getTask.refetch();
     onCancelModalVisible();
   };
   const onRevokeBudget = () => {
@@ -140,20 +168,21 @@ export const useTaskCard = () => {
       case 'Описание':
         return (
           <TaskCardDescription
-            statusCode={statusCode}
+            statusID={statusID}
             description={description}
             address={address}
             startTime={startTime}
             endTimePlan={endTimePlan}
             contacts={contacts}
             files={files}
+            onChangeEndTimePlan={onChangeEndTimePlan}
           />
         );
       case 'Отчет':
         return (
           <TaskCardReport
             activeBudgetCanceled={!!getBanner()}
-            statusCode={statusCode}
+            statusID={statusID}
           />
         );
       default:
@@ -164,8 +193,8 @@ export const useTaskCard = () => {
     setTab(item.label);
   };
   const getBanner = (): TaskCardBottomBanner => {
-    switch (statusCode) {
-      case 'active':
+    switch (statusID) {
+      case StatusType.ACTIVE:
         if (outlayStatusID === 4) {
           return {
             title: 'Ваша смета отклонена координатором',
@@ -175,29 +204,29 @@ export const useTaskCard = () => {
           };
         }
         return null;
-      case 'summarizing':
+      case StatusType.SUMMARIZING:
         return {
           title: 'Задача на проверке',
           type: 'info',
           icon: 'info',
           text: 'Координатор проверяет выполненные услуги. После успешной проверки задача будет передана на оплату',
         };
-      case 'completed':
+      case StatusType.COMPLETED:
         return {
           title: 'Выполненные услуги приняты',
           type: 'success',
           icon: 'success',
           text: 'В ближайшее время оплата поступит на вашу банковскую карту/счет',
         };
-      case 'paid':
+      case StatusType.PAID:
         return {
           title: 'Оплата произведена',
           type: 'success',
           icon: 'success',
           text: 'Денежные средства переведены вам на указанные в профиле реквизиты',
         };
-      case 'cancelledByExecutor':
-      case 'cancelledByCustomer':
+      case StatusType.CANCELLED_BY_CUSTOMER:
+      case StatusType.CANCELLED_BY_EXECUTOR:
         return {
           title: 'Задача отменена',
           type: 'error',
@@ -209,8 +238,8 @@ export const useTaskCard = () => {
     }
   };
   const getButtons = (): TaskCardBottomButton[] => {
-    switch (statusCode) {
-      case 'active':
+    switch (statusID) {
+      case StatusType.ACTIVE:
         if (outlayStatusID === 2) {
           return [
             {
@@ -238,7 +267,15 @@ export const useTaskCard = () => {
               ];
         }
         return [];
-      case 'signing':
+      case StatusType.WORK:
+        return [
+          {
+            label: 'Отказаться от задачи',
+            variant: 'outlineDanger',
+            onPress: onCancelModalVisible,
+          },
+        ];
+      case StatusType.PENDING:
         return [
           {
             label: 'Сдать работы',
@@ -266,7 +303,6 @@ export const useTaskCard = () => {
     isNight,
     publicTime,
     isUrgent,
-    statusCode,
     budgetEndTime,
     getBanner,
     getButtons,
