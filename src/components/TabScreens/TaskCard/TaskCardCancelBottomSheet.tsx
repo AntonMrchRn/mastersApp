@@ -1,7 +1,12 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
 
-import { BottomSheet, Button, Input } from 'rn-ui-kit';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { BottomSheet, Button } from 'rn-ui-kit';
+
+import ControlledInput from '@/components/ControlledInput';
+import { cancelTaskValidationSchema } from '@/utils/formValidation';
 
 type TaskCardCancelBottomSheetProps = {
   isVisible: boolean;
@@ -13,13 +18,18 @@ export const TaskCardCancelBottomSheet: FC<TaskCardCancelBottomSheetProps> = ({
   onCancel,
   onRefuse,
 }) => {
-  const [value, setValue] = useState('');
+  const methods = useForm({
+    defaultValues: { cancelTask: '' },
+    resolver: yupResolver(cancelTaskValidationSchema),
+    mode: 'onChange',
+  });
 
-  const onChangeText = (text: string) => {
-    setValue(text);
-  };
-  const onRefucePress = () => {
-    onRefuse(value);
+  const {
+    formState: { isValid },
+  } = methods;
+
+  const onRefucePress = ({ cancelTask }: { cancelTask: string }) => {
+    onRefuse(cancelTask);
   };
 
   const styles = StyleSheet.create({
@@ -43,29 +53,30 @@ export const TaskCardCancelBottomSheet: FC<TaskCardCancelBottomSheetProps> = ({
       titleStyle={styles.textLeft}
       subtitleStyle={styles.textLeft}
     >
-      <View style={styles.mt24}>
-        <Input
-          variant={'textarea'}
-          label="Причина отказа"
-          value={value}
-          onChangeText={onChangeText}
-        />
+      <FormProvider {...methods}>
+        <View style={styles.mt24}>
+          <ControlledInput
+            name={'cancelTask'}
+            variant={'textarea'}
+            label="Причина отказа"
+          />
+          <Button
+            size="M"
+            variant="accent"
+            label="Отмена"
+            style={styles.mt24}
+            onPress={onCancel}
+          />
+        </View>
         <Button
           size="M"
-          variant="accent"
-          label="Отмена"
-          style={styles.mt24}
-          onPress={onCancel}
+          variant="outlineDanger"
+          label="Отказаться"
+          style={styles.mt16}
+          onPress={methods.handleSubmit(onRefucePress)}
+          disabled={!isValid}
         />
-      </View>
-      <Button
-        size="M"
-        variant="outlineDanger"
-        label="Отказаться"
-        style={styles.mt16}
-        onPress={onRefucePress}
-        disabled={!value}
-      />
+      </FormProvider>
     </BottomSheet>
   );
 };
