@@ -1,12 +1,10 @@
 import React, { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
-import { Card, Spacer, Text, useTheme } from 'rn-ui-kit';
+import { Spacer, Text, useTheme } from 'rn-ui-kit';
 
-import { AvatarIcon } from '@/assets/icons/svg/screens/AvatarIcon';
 import { CaretDownIcon } from '@/assets/icons/svg/screens/CaretDownIcon';
 import { EditIcon } from '@/assets/icons/svg/screens/EditIcon';
-import { PhoneIcon } from '@/assets/icons/svg/screens/PhoneIcon';
 import { DownloadManager } from '@/components/DownloadManager';
 import { TaskAddress } from '@/components/task/TaskAddress';
 import { Contact, File } from '@/store/api/tasks/types';

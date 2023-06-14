@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import dayjs from 'dayjs';
+import { useToast } from 'rn-ui-kit';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
 
 import {
@@ -19,6 +20,7 @@ export const useTaskCard = () => {
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
 
+  const toast = useToast();
   const { user } = useAppSelector(selectAuth);
 
   const taskId = '978';
@@ -86,21 +88,46 @@ export const useTaskCard = () => {
     //
   };
   const onTaskSubmission = async () => {
-    await patchTask({
-      //id таски
-      ID: id,
-      //статус для принятия в работу
-      statusID: 11,
-      //id профиля
-      executors: [{ ID: user?.userID }],
-    });
-    getTask.refetch();
+    try {
+      await patchTask({
+        //id таски
+        ID: id,
+        //статус для принятия в работу
+        statusID: 11,
+        //id профиля
+        executors: [{ ID: user?.userID }],
+      }).unwrap();
+    } catch (error) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'data' in error &&
+        typeof error.data === 'object' &&
+        error.data !== null &&
+        'message' in error.data &&
+        typeof error.data.message === 'string'
+      ) {
+        toast.show({
+          type: 'error',
+          title: error.data.message,
+          contentHeight: 120,
+        });
+      }
+    } finally {
+      getTask.refetch();
+    }
   };
   const onCancelModalVisible = () => {
     setCancelModalVisible(!cancelModalVisible);
   };
-  const onWorkDelivery = () => {
-    //
+  const onWorkDelivery = async () => {
+    await patchTask({
+      //id таски
+      ID: id,
+      //перевод таски в статус Сдача работ
+      statusID: 5,
+    });
+    getTask.refetch();
   };
   const onChangeEndTimePlan = async (time: string) => {
     //при изменении любого из времени нужно передавать все три поля
@@ -116,7 +143,18 @@ export const useTaskCard = () => {
     });
     getTask.refetch();
   };
-  const onCancelTask = () => {
+  const onCancelTask = async (text: string) => {
+    //если это общие, то
+    //первый отклик - патч задания, refuseReason, id задания
+    //если лоты то - патч оффера, id оффера, taskID, refuseReason
+    //в ИТ там все иначе 🙂
+    await patchTask({
+      //id таски
+      ID: id,
+      //причина отказа
+      refuseReason: text,
+    });
+    getTask.refetch();
     onCancelModalVisible();
   };
   const onRevokeBudget = () => {
@@ -230,6 +268,14 @@ export const useTaskCard = () => {
         }
         return [];
       case StatusType.WORK:
+        return [
+          {
+            label: 'Отказаться от задачи',
+            variant: 'outlineDanger',
+            onPress: onCancelModalVisible,
+          },
+        ];
+      case StatusType.PENDING:
         return [
           {
             label: 'Сдать работы',

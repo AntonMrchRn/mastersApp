@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BottomSheet, Button, Input } from 'rn-ui-kit';
@@ -6,13 +6,22 @@ import { BottomSheet, Button, Input } from 'rn-ui-kit';
 type TaskCardCancelBottomSheetProps = {
   isVisible: boolean;
   onCancel: () => void;
-  onRefuse: () => void;
+  onRefuse: (text: string) => Promise<void>;
 };
 export const TaskCardCancelBottomSheet: FC<TaskCardCancelBottomSheetProps> = ({
   isVisible,
   onCancel,
   onRefuse,
 }) => {
+  const [value, setValue] = useState('');
+
+  const onChangeText = (text: string) => {
+    setValue(text);
+  };
+  const onRefucePress = () => {
+    onRefuse(value);
+  };
+
   const styles = StyleSheet.create({
     mt16: {
       marginTop: 16,
@@ -35,7 +44,12 @@ export const TaskCardCancelBottomSheet: FC<TaskCardCancelBottomSheetProps> = ({
       subtitleStyle={styles.textLeft}
     >
       <View style={styles.mt24}>
-        <Input variant={'textarea'} label="Причина отказа" />
+        <Input
+          variant={'textarea'}
+          label="Причина отказа"
+          value={value}
+          onChangeText={onChangeText}
+        />
         <Button
           size="M"
           variant="accent"
@@ -49,7 +63,8 @@ export const TaskCardCancelBottomSheet: FC<TaskCardCancelBottomSheetProps> = ({
         variant="outlineDanger"
         label="Отказаться"
         style={styles.mt16}
-        onPress={onRefuse}
+        onPress={onRefucePress}
+        disabled={!value}
       />
     </BottomSheet>
   );
