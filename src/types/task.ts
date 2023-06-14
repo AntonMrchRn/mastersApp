@@ -1,7 +1,9 @@
-export type Task = {
-  id: number;
-  test: string;
+type TaskSearch = {
+  ID?: number;
 };
+
+export type { TaskSearch };
+
 export enum TaskType {
   IT_AUCTION_SALE = 1,
   IT_FIRST_RESPONCE = 2,

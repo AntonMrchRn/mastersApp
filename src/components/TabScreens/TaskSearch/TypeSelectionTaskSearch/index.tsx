@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
+import { View } from 'react-native';
 
 import { SegmentedControl } from 'rn-ui-kit';
 
-import { useAppSelector } from '@/store';
+import { useAppDispatch } from '@/store';
+import { getSearchTasks } from '@/store/slices/taskSearch/asyncActions';
 
-type TypeSelectionTaskSearchProps = {
-  onPress?: () => void;
-};
+import { styles } from './style';
 
 type TypeSelectionItem = {
   ID: number;
@@ -15,20 +15,35 @@ type TypeSelectionItem = {
   tableName?: string;
 };
 
-const TypeSelectionTaskSearch: FC<TypeSelectionTaskSearchProps> = ({
-  onPress,
-}: TypeSelectionTaskSearchProps) => {
-  const { tableNames } = useAppSelector(state => state.taskSearch);
+type PropsTypeSelection = {
+  setActiveTab: (activeTab: number) => void;
+  tableNames: TypeSelectionItem[] | undefined;
+};
+
+const TypeSelectionTaskSearch: FC<PropsTypeSelection> = ({
+  setActiveTab,
+  tableNames = [],
+}) => {
+  const dispatch = useAppDispatch();
 
   const descriptions = tableNames.map(
     (item: TypeSelectionItem) => item.description
   );
 
+  const onChange = (res: number) => {
+    const activeTab = res + 1;
+
+    dispatch(getSearchTasks({ idList: activeTab }));
+    setActiveTab(activeTab);
+  };
+
   return (
-    <SegmentedControl
-      onChange={res => console.log('res', tableNames[res].code)}
-      tabs={descriptions.length ? descriptions : ['', '']}
-    />
+    <View style={styles.wrapper}>
+      <SegmentedControl
+        onChange={onChange}
+        tabs={descriptions.length ? descriptions : ['', '']}
+      />
+    </View>
   );
 };
 

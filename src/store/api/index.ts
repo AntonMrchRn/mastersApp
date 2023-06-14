@@ -32,8 +32,8 @@ export const axiosBaseQuery = (): BaseQueryFn<
         url: axiosInstance.defaults.baseURL + url,
         method,
         ...(params && { params }),
-        ...(headers && { headers: axiosInstance.defaults.headers }),
         ...(data && { data }),
+        headers: axiosInstance.defaults.headers,
         responseType: 'json',
       });
 

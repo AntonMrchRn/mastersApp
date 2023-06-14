@@ -4,7 +4,7 @@ import normalize from 'react-native-normalize';
 import { fonts } from '@/constants/fonts';
 import { configApp } from '@/constants/platform';
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     height: configApp.ios ? normalize(28, 'height') : normalize(35, 'height'),
     width: '100%',
@@ -14,6 +14,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: '#EBF0F9',
     borderRadius: 7,
+  },
+  wrapper: {
+    alignItems: 'center',
   },
   btn: {
     backgroundColor: '#EBF0F9',
