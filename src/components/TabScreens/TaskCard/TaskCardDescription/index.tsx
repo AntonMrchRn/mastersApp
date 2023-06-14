@@ -68,7 +68,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
       <View style={styles.date}>
         <TaskDate from={startTime} to={endTimePlan} />
       </View>
-      {statusID === StatusType.SIGNING && (
+      {statusID === StatusType.WORK && (
         <TouchableOpacity style={styles.edit} onPress={onDateModalVisible}>
           <EditIcon />
           <Text

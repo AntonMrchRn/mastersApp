@@ -52,7 +52,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
             </Text>
           </View>
         );
-      case StatusType.SIGNING:
+      case StatusType.WORK:
         return (
           <View style={styles.mt36}>
             <Text variant="title3" color={theme.text.basic}>

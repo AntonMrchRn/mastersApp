@@ -9,7 +9,9 @@ import {
 } from '@/components/TabScreens/TaskCard/TaskCardBottom';
 import { TaskCardDescription } from '@/components/TabScreens/TaskCard/TaskCardDescription';
 import { TaskCardReport } from '@/components/TabScreens/TaskCard/TaskCardReport';
+import { useAppSelector } from '@/store';
 import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
+import { selectAuth } from '@/store/slices/auth/selectors';
 import { StatusType, TaskType } from '@/types/task';
 
 export const useTaskCard = () => {
@@ -17,10 +19,12 @@ export const useTaskCard = () => {
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
 
+  const { user } = useAppSelector(selectAuth);
+
   const taskId = '978';
   const getTask = useGetTaskQuery(taskId);
 
-  const [patchTask, taskMutation] = usePatchTaskMutation();
+  const [patchTask] = usePatchTaskMutation();
 
   const task = getTask?.data?.tasks?.[0];
   const id = task?.ID || 0;
@@ -80,14 +84,14 @@ export const useTaskCard = () => {
   const onBudgetSubmission = () => {
     //
   };
-  const onTaskSubmission = () => {
-    patchTask({
+  const onTaskSubmission = async () => {
+    await patchTask({
       //id таски
       ID: id,
       //статус для принятия в работу
       statusID: 11,
       //id профиля
-      executors: [{ ID: 222 }],
+      executors: [{ ID: user?.userID }],
     });
     getTask.refetch();
   };
@@ -209,7 +213,7 @@ export const useTaskCard = () => {
               ];
         }
         return [];
-      case StatusType.SIGNING:
+      case StatusType.WORK:
         return [
           {
             label: 'Сдать работы',
