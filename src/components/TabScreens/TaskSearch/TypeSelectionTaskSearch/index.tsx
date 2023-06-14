@@ -1,9 +1,12 @@
 import React, { FC } from 'react';
+import { View } from 'react-native';
 
 import { SegmentedControl } from 'rn-ui-kit';
 
 import { useAppDispatch } from '@/store';
 import { getSearchTasks } from '@/store/slices/taskSearch/asyncActions';
+
+import { styles } from './style';
 
 type TypeSelectionItem = {
   ID: number;
@@ -35,10 +38,12 @@ const TypeSelectionTaskSearch: FC<PropsTypeSelection> = ({
   };
 
   return (
-    <SegmentedControl
-      onChange={onChange}
-      tabs={descriptions.length ? descriptions : ['', '']}
-    />
+    <View style={styles.wrapper}>
+      <SegmentedControl
+        onChange={onChange}
+        tabs={descriptions.length ? descriptions : ['', '']}
+      />
+    </View>
   );
 };
 

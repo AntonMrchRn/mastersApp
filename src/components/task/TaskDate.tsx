@@ -14,18 +14,26 @@ export const TaskDate: FC<TaskDateProps> = ({ from, to }) => {
   const theme = useTheme();
   const styles = StyleSheet.create({
     ml10: {
-      marginLeft: 10,
+      marginLeft: 7,
     },
     date: {
       marginTop: 8,
       flexDirection: 'row',
+      alignItems: 'center',
     },
+    wrapperIcon: { width: 20, bottom: 2 },
   });
 
   return (
     <View style={styles.date}>
-      <CalendarCheckIcon />
-      <Text variant="bodySRegular" color={theme.text.basic} style={styles.ml10}>
+      <View style={styles.wrapperIcon}>
+        <CalendarCheckIcon />
+      </View>
+      <Text
+        variant="captionRegular"
+        color={theme.text.basic}
+        style={styles.ml10}
+      >
         с {dayjs(from).format('DD MMMM YYYY')} по{' '}
         {dayjs(to).format('DD MMMM YYYY')}
       </Text>

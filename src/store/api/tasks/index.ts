@@ -26,7 +26,15 @@ export const tasksAPI = api
           method: 'GET',
         }),
       }),
+      patchTask: builder.mutation<GetTaskResponce, Task>({
+        query: body => ({
+          url: `tasks/web`,
+          method: 'PATCH',
+          body,
+        }),
+      }),
     }),
+
     overrideExisting: true,
   });
 
@@ -34,4 +42,5 @@ export const {
   useGetTaskQuery,
   useGetTaskStatusesQuery,
   useGetTableNamesQuery,
+  usePatchTaskMutation,
 } = tasksAPI;

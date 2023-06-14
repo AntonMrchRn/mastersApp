@@ -27,6 +27,7 @@ type TaskCardDescriptionProps = {
   contacts: Contact[];
   files: File[];
 };
+
 export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   statusCode,
   description,

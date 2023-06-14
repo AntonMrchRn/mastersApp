@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderTopRightRadius: 24,
     borderTopLeftRadius: 24,
+    paddingTop: 25,
   },
   wrapperList: {
     paddingHorizontal: 12,

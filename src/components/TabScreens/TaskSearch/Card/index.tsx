@@ -1,23 +1,49 @@
-import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import React, { FC } from 'react';
+import { TouchableOpacity, View } from 'react-native';
 
 import { Card, Spacer, Text } from 'rn-ui-kit';
 
-export const CardTasks = ({ name, description, navigation }, ...props) => {
-  console.log('props', props);
+import { TaskAddress } from '@/components/task/TaskAddress';
+import { TaskBadges } from '@/components/task/TaskBadges';
+import { TaskDate } from '@/components/task/TaskDate';
+import { CardItem } from '@/types/task';
+
+import { styles } from './styles';
+
+export const CardTasks: FC<CardItem> = ({
+  object,
+  startTime = '',
+  endTimePlan = '',
+  name,
+  description,
+  navigation,
+  statusID,
+  isUrgent,
+  isNight,
+}) => {
+  const address = object?.name || '';
+
   return (
     <TouchableOpacity
-      style={{
-        paddingHorizontal: 20,
-        marginBottom: 15,
-        backgroundColor: 'transparent',
-      }}
+      style={styles.btn}
       onPress={() => navigation.navigate('TaskCard')}
     >
-      <Card style={{ paddingHorizontal: 0 }}>
-        <Text variant="title3">{name}</Text>
+      <Card style={styles.wrapper}>
+        <View style={styles.wrapperBadge}>
+          <TaskBadges
+            statusID={statusID}
+            isUrgent={isUrgent}
+            isNight={isNight}
+          />
+        </View>
+        <Text variant="title3" style={styles.wrapperTitle}>
+          {name}
+        </Text>
         <Text variant="bodySRegular">{description}</Text>
-        <Text variant="captionRegular">{description}</Text>
+        <View style={styles.wrapperAddress}>
+          <TaskAddress address={address} />
+        </View>
+        <TaskDate from={startTime} to={endTimePlan} />
       </Card>
       <Spacer size="xs" separator="bottom" />
     </TouchableOpacity>
