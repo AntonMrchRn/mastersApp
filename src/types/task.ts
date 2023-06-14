@@ -1,3 +1,7 @@
+export type Task = {
+  id: number;
+  test: string;
+};
 export enum TaskType {
   IT_AUCTION_SALE = 1,
   IT_FIRST_RESPONCE = 2,
