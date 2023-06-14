@@ -9,7 +9,11 @@ import {
 } from '@/components/TabScreens/TaskCard/TaskCardBottom';
 import { TaskCardDescription } from '@/components/TabScreens/TaskCard/TaskCardDescription';
 import { TaskCardReport } from '@/components/TabScreens/TaskCard/TaskCardReport';
-import { useGetTaskQuery, useGetTaskStatusesQuery } from '@/store/api/tasks';
+import {
+  useGetTaskQuery,
+  useGetTaskStatusesQuery,
+  usePatchTaskMutation,
+} from '@/store/api/tasks';
 
 export type TaskCardStatus =
   | 'pending'
@@ -26,37 +30,28 @@ export type TaskCardStatus =
   | 'closed'
   | '';
 
+export enum TaskType {
+  IT_AUCTION_SALE = 1,
+  IT_FIRST_RESPONCE = 2,
+  IT_INTERNAL_EXECUTIVES = 3,
+  COMMON_AUCTION_SALE = 4,
+  COMMON_FIRST_RESPONCE = 5,
+}
+
 export const useTaskCard = () => {
-  const [budgetCanceled, setBudgetCanceled] = useState(false);
-  const [budgetSubmission, setBudgetSubmission] = useState(false);
+  const [tab, setTab] = useState('Описание');
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
-  const onBudgetModalVisible = () => {
-    setBudgetModalVisible(!budgetModalVisible);
-  };
-  const onBudgetSubmission = () => {
-    setBudgetSubmission(!budgetSubmission);
-  };
-  const onCancelModalVisible = () => {
-    setCancelModalVisible(!cancelModalVisible);
-  };
-  const onWorkDelivery = () => {
-    //
-  };
-  const onCancelTask = () => {
-    onCancelModalVisible();
-  };
-  const onRevokeBudget = () => {
-    setBudgetSubmission(!budgetSubmission);
-    setBudgetModalVisible(!budgetModalVisible);
-  };
 
-  const [tab, setTab] = useState('Описание');
-  const taskId = '926';
+  const taskId = '978';
   const getTask = useGetTaskQuery(taskId);
   const getTaskStatuses = useGetTaskStatusesQuery();
+
+  const [patchTask, taskMutation] = usePatchTaskMutation();
+
   const task = getTask?.data?.tasks?.[0];
-  const id = task?.ID || '';
+  const id = task?.ID || 0;
+  const subsetID = task?.subsetID || '';
   const files = task?.files || [];
   const startTime = task?.startTime || '';
   const contacts = task?.contacts || [];
@@ -64,6 +59,7 @@ export const useTaskCard = () => {
   const address = task?.object?.name || '';
   const description = task?.description || '';
   const statusID = task?.statusID;
+  const outlayStatusID = task?.outlayStatusID;
   const status = getTaskStatuses?.data?.find(stat => stat.ID === statusID);
   const statusCode: TaskCardStatus = status?.code || '';
   const name = task?.name || '';
@@ -106,6 +102,39 @@ export const useTaskCard = () => {
       icon: false,
     },
   ];
+
+  const onBudgetModalVisible = () => {
+    setBudgetModalVisible(!budgetModalVisible);
+  };
+  const onBudgetSubmission = () => {
+    //
+  };
+  const onTaskSubmission = () => {
+    patchTask({
+      //id таски
+      ID: id,
+      //статус для принятия в работу
+      statusID: 11,
+      //id профиля
+      executors: [{ ID: 222 }],
+    });
+    getTask.refetch();
+  };
+  const onCancelModalVisible = () => {
+    setCancelModalVisible(!cancelModalVisible);
+  };
+  const onWorkDelivery = () => {
+    //
+  };
+  const onCancelTask = () => {
+    onCancelModalVisible();
+  };
+  const onRevokeBudget = () => {
+    //TODO необходимо сначала получить оффер юзера по этой таске
+    //https://sandbox8.apteka-april.ru/api/offers?query=?taskID==977*userID==81?
+    //далее необходимо удалить этот оффер через DELETE offers/id
+    setBudgetModalVisible(!budgetModalVisible);
+  };
   const getCurrentTab = () => {
     switch (tab) {
       case 'Описание':
@@ -137,7 +166,7 @@ export const useTaskCard = () => {
   const getBanner = (): TaskCardBottomBanner => {
     switch (statusCode) {
       case 'active':
-        if (budgetCanceled) {
+        if (outlayStatusID === 4) {
           return {
             title: 'Ваша смета отклонена координатором',
             type: 'error',
@@ -182,10 +211,7 @@ export const useTaskCard = () => {
   const getButtons = (): TaskCardBottomButton[] => {
     switch (statusCode) {
       case 'active':
-        if (budgetCanceled) {
-          return [];
-        }
-        if (budgetSubmission) {
+        if (outlayStatusID === 2) {
           return [
             {
               label: 'Отозвать смету',
@@ -194,13 +220,24 @@ export const useTaskCard = () => {
             },
           ];
         }
-        return [
-          {
-            label: 'Подать смету',
-            variant: 'accent',
-            onPress: onBudgetSubmission,
-          },
-        ];
+        if (outlayStatusID === 1) {
+          return subsetID === TaskType.COMMON_FIRST_RESPONCE
+            ? [
+                {
+                  label: 'Принять задачу',
+                  variant: 'accent',
+                  onPress: onTaskSubmission,
+                },
+              ]
+            : [
+                {
+                  label: 'Подать смету',
+                  variant: 'accent',
+                  onPress: onBudgetSubmission,
+                },
+              ];
+        }
+        return [];
       case 'signing':
         return [
           {
@@ -239,5 +276,7 @@ export const useTaskCard = () => {
     cancelModalVisible,
     onCancelModalVisible,
     onCancelTask,
+    subsetID,
+    statusID,
   };
 };

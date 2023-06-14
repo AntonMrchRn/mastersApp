@@ -1,15 +1,15 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
 
-import { TabBarIconProps } from './types';
+import { IconProps } from '@/assets/icons/svg/types';
 
-const Support = ({ color }: TabBarIconProps) => (
+const Support = ({ fill }: IconProps) => (
   <Svg
     width="24"
     height="24"
     viewBox="0 0 24 24"
     fill="none"
-    stroke={color}
+    stroke={fill}
     stroke-width="2"
     stroke-linecap="round"
     stroke-linejoin="round"

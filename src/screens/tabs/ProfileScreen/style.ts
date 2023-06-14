@@ -1,24 +1,35 @@
 import { StyleSheet } from 'react-native';
 
-import { fonts } from '@/constants/fonts';
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
   },
-  wrapperCenter: {
+  wrapper: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: '#fff',
     width: '100%',
-    padding: 15,
+    paddingVertical: 12,
   },
-  text: {
-    fontFamily: fonts.main_400,
-    color: 'black',
-    fontWeight: '400',
+  title: {
+    textAlign: 'left',
+    paddingHorizontal: 20,
+  },
+  exitBtn: {
+    marginHorizontal: 20,
+    alignSelf: 'stretch',
+    width: 'auto',
+    marginTop: 'auto',
+    borderWidth: 2,
+    borderRadius: 12,
+  },
+  modalTitle: {
+    marginTop: 12,
+    textAlign: 'left',
+  },
+  cancelBtn: {
+    borderWidth: 2,
+    borderRadius: 12,
   },
 });
 

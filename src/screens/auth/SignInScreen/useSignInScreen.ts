@@ -11,6 +11,7 @@ import { useAppDispatch } from '@/store';
 import { useGetUserAuthMutation } from '@/store/api/auth';
 import {
   login,
+  setUserAuth,
   timeoutAsyncEmail,
   timeoutAsyncPhone,
 } from '@/store/slices/auth/actions';
@@ -90,6 +91,7 @@ const useSignInScreen = () => {
     if (isSuccess && userAuth) {
       storageMMKV.set('token', userAuth.token);
       dispatch(login());
+      dispatch(setUserAuth(userAuth));
       setError(null);
     }
   }, [isSuccess]);

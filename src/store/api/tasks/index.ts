@@ -1,6 +1,6 @@
 import { api } from '@/store/api';
 
-import { GetTaskResponce, GetTaskStatusesResponce } from './types';
+import { GetTaskResponce, GetTaskStatusesResponce, Task } from './types';
 
 export const tasksAPI = api
   .enhanceEndpoints({
