@@ -16,9 +16,10 @@ import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound'
 import TypeSelectionTaskSearch from '@/components/TabScreens/TaskSearch/TypeSelectionTaskSearch';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useGetTableNamesQuery } from '@/store/api/tasks';
+import { Task } from '@/store/api/tasks/types';
 import { getSearchTasks } from '@/store/slices/taskSearch/asyncActions';
 import { TaskCardScreenNavigationProp } from '@/types/navigation';
-import { Task } from '@/types/task';
+import { TaskSearch } from '@/types/task';
 
 import styles from './style';
 
@@ -36,7 +37,7 @@ const TaskSearchScreen = () => {
     dispatch(getSearchTasks({ idList: activeTab }));
   }, []);
 
-  const keyExtractor = (item: Task) => `${item.ID}`;
+  const keyExtractor = (item: TaskSearch) => `${item.ID}`;
 
   const renderItem = ({ item }: ListRenderItemInfo<Task>) => (
     <CardTasks {...item} navigation={navigation} />
