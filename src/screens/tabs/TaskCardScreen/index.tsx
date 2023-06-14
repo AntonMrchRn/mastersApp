@@ -14,8 +14,9 @@ import {
   TaskSearchNavigationParamList,
   TaskSearchNavigatorScreenName,
 } from '@/types/navigation';
+import { StatusType, TaskType } from '@/types/task';
 
-import { StatusType, TaskType, useTaskCard } from './useTaskCard';
+import { useTaskCard } from './useTaskCard';
 
 import { styles } from './styles';
 

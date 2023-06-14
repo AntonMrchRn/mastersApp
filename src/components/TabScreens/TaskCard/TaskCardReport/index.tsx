@@ -6,7 +6,7 @@ import { Text, useTheme } from 'rn-ui-kit';
 import { DownloadFilesIcon } from '@/assets/icons/svg/screens/DownloadFilesIcon';
 import { NoFilesIcon } from '@/assets/icons/svg/screens/NoFilesIcon';
 import { OtesIcon } from '@/assets/icons/svg/screens/OtesIcon';
-import { StatusType } from '@/screens/tabs/TaskCardScreen/useTaskCard';
+import { StatusType } from '@/types/task';
 
 import { styles } from './styles';
 

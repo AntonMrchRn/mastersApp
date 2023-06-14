@@ -9,8 +9,8 @@ import { EditIcon } from '@/assets/icons/svg/screens/EditIcon';
 import { PhoneIcon } from '@/assets/icons/svg/screens/PhoneIcon';
 import { DownloadManager } from '@/components/DownloadManager';
 import { TaskAddress } from '@/components/task/TaskAddress';
-import { StatusType } from '@/screens/tabs/TaskCardScreen/useTaskCard';
 import { Contact, File } from '@/store/api/tasks/types';
+import { StatusType } from '@/types/task';
 
 import { TaskDate } from '../../../task/TaskDate';
 import { TaskCardDateBottomSheet } from '../TaskCardDateBottomSheet';
