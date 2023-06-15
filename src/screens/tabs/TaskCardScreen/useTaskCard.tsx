@@ -19,6 +19,7 @@ export const useTaskCard = () => {
   const [tab, setTab] = useState('Описание');
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
+  const [uploadModalVisible, setUploadModalVisible] = useState(false);
 
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
@@ -83,6 +84,9 @@ export const useTaskCard = () => {
 
   const onBudgetModalVisible = () => {
     setBudgetModalVisible(!budgetModalVisible);
+  };
+  const onUploadModalVisible = () => {
+    setUploadModalVisible(!uploadModalVisible);
   };
   const onBudgetSubmission = () => {
     //
@@ -268,6 +272,15 @@ export const useTaskCard = () => {
         }
         return [];
       case StatusType.WORK:
+        if (tab === 'Отчет') {
+          return [
+            {
+              label: 'Загрузить файлы',
+              variant: 'accent',
+              onPress: onUploadModalVisible,
+            },
+          ];
+        }
         return [
           {
             label: 'Отказаться от задачи',
@@ -314,5 +327,7 @@ export const useTaskCard = () => {
     onCancelTask,
     subsetID,
     statusID,
+    uploadModalVisible,
+    onUploadModalVisible,
   };
 };
