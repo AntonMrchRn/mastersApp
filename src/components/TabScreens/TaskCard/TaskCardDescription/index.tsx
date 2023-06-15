@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
+import { MaskedText } from 'react-native-mask-text';
 
 import { Spacer, Text, useTheme } from 'rn-ui-kit';
 
@@ -89,28 +90,32 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
             </Text>
             <CaretDownIcon />
           </View>
-          {contacts.map((contact, index) => (
-            <View key={index}>
-              <View>
-                <Text variant="captionRegular" color={theme.text.neutral}>
-                  {contact?.position}
-                </Text>
-                <Text
-                  variant="bodyMRegular"
-                  color={theme.text.basic}
-                  style={styles.name}
-                >
-                  {contact?.sname} {contact?.name} {contact?.pname}
-                </Text>
-                <View style={styles.phone}>
-                  <Text variant="bodyMRegular" color={theme.text.basic}>
-                    + {contact?.phone}
+          {contacts.map((contact, index) => {
+            return (
+              <View key={index}>
+                <View>
+                  <Text variant="captionRegular" color={theme.text.neutral}>
+                    {contact?.position}
                   </Text>
+                  <Text
+                    variant="bodyMRegular"
+                    color={theme.text.basic}
+                    style={styles.name}
+                  >
+                    {contact?.sname} {contact?.name} {contact?.pname}
+                  </Text>
+                  {contact?.phone && (
+                    <View style={styles.phone}>
+                      <MaskedText mask="+ 9 (999) 999-99-99">
+                        {contact?.phone?.toString()}
+                      </MaskedText>
+                    </View>
+                  )}
                 </View>
+                <Spacer size={'m'} separator="top" />
               </View>
-              <Spacer size={'m'} separator="top" />
-            </View>
-          ))}
+            );
+          })}
         </>
       ) : (
         <></>
