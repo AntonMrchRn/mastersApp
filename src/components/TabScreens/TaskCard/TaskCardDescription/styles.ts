@@ -58,4 +58,11 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  phoneText: {
+    fontFamily: 'Nunito Sans Regular',
+    fontStyle: 'normal',
+    fontWeight: '400',
+    fontSize: 17,
+    lineHeight: 24,
+  },
 });

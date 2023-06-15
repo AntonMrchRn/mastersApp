@@ -106,7 +106,10 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
                   </Text>
                   {contact?.phone && (
                     <View style={styles.phone}>
-                      <MaskedText mask="+ 9 (999) 999-99-99">
+                      <MaskedText
+                        mask="+ 9 (999) 999-99-99"
+                        style={[styles.phoneText, { color: theme.text.basic }]}
+                      >
                         {contact?.phone?.toString()}
                       </MaskedText>
                     </View>
