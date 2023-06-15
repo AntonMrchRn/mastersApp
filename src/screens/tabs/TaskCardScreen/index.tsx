@@ -3,7 +3,7 @@ import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { StackScreenProps } from '@react-navigation/stack';
-import { Card, TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
+import { TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
 
 import { TaskCardBottom } from '@/components/TabScreens/TaskCard/TaskCardBottom';
 import { TaskCardBudgetModal } from '@/components/TabScreens/TaskCard/TaskCardBudgetModal';
@@ -49,11 +49,13 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
     statusID,
   } = useTaskCard();
   const theme = useTheme();
+
   const goBack = () => {
     if (navigation.canGoBack()) {
       navigation.goBack();
     }
   };
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <TaskCardBudgetModal
@@ -116,12 +118,12 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
               contentContainerStyle={{ paddingLeft: 20 }}
             />
           </View>
-          <Card isShadow style={styles.card}>
+          <View style={styles.card}>
             {getCurrentTab()}
             <View style={styles.bottom}>
               <TaskCardBottom banner={getBanner()} buttons={getButtons()} />
             </View>
-          </Card>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
