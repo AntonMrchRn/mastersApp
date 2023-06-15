@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import DocumentPicker from 'react-native-document-picker';
 
-import { BottomSheet, Button, Spacer, Text, useTheme } from 'rn-ui-kit';
+import { BottomSheet, Button, Text, useTheme } from 'rn-ui-kit';
 
 import { FileIcon } from '@/assets/icons/svg/files/FileIcon';
 import { CameraIcon } from '@/assets/icons/svg/screens/CameraIcon';
@@ -29,6 +30,12 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
     },
     action: {
       flexDirection: 'row',
+      paddingVertical: 16,
+    },
+    line: {
+      width: '100%',
+      height: 1,
+      backgroundColor: theme.background.neutralDisableSecond,
     },
   });
 
@@ -38,8 +45,20 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
   const takePictureOrVideo = () => {
     onClose();
   };
-  const takeFromFiles = () => {
-    onClose();
+  const takeFromFiles = async () => {
+    try {
+      const doc = await DocumentPicker.pick();
+      console.log(
+        '🚀 ~ file: TaskCardUploadBottomSheet.tsx:50 ~ takeFromFiles ~ doc:',
+        doc
+      );
+      onClose();
+    } catch (err) {
+      console.log(
+        '🚀 ~ file: TaskCardUploadBottomSheet.tsx:53 ~ takeFromFiles ~ err:',
+        err
+      );
+    }
   };
 
   const actions = [
@@ -70,16 +89,15 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
     >
       <View style={styles.mt24}>
         {actions.map(action => (
-          <TouchableOpacity key={action.title} onPress={action.action}>
-            <Spacer size={'l'} />
-            <View style={styles.action}>
+          <View key={action.title}>
+            <TouchableOpacity onPress={action.action} style={styles.action}>
               <View style={styles.icon}>{action.icon}</View>
               <Text variant="bodyMRegular" color={theme.text.basic}>
                 {action.title}
               </Text>
-            </View>
-            <Spacer size={'l'} separator="bottom" />
-          </TouchableOpacity>
+            </TouchableOpacity>
+            <View style={styles.line} />
+          </View>
         ))}
         <Button
           size="M"
