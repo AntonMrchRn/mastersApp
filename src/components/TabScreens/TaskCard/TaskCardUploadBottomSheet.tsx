@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 import { BottomSheet, Button, Text, useTheme } from 'rn-ui-kit';
 
@@ -39,11 +40,35 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
     },
   });
 
-  const takeFromGallery = () => {
-    onClose();
+  const takeFromGallery = async () => {
+    try {
+      const result = await launchImageLibrary({ mediaType: 'mixed' });
+      console.log(
+        '🚀 ~ file: TaskCardUploadBottomSheet.tsx:46 ~ takeFromGallery ~ result:',
+        result
+      );
+      onClose();
+    } catch (err) {
+      console.log(
+        '🚀 ~ file: TaskCardUploadBottomSheet.tsx:49 ~ takeFromGallery ~ err:',
+        err
+      );
+    }
   };
-  const takePictureOrVideo = () => {
-    onClose();
+  const takePictureOrVideo = async () => {
+    try {
+      const result = await launchCamera({ mediaType: 'mixed' });
+      console.log(
+        '🚀 ~ file: TaskCardUploadBottomSheet.tsx:49 ~ takePictureOrVideo ~ result:',
+        result
+      );
+      onClose();
+    } catch (err) {
+      console.log(
+        '🚀 ~ file: TaskCardUploadBottomSheet.tsx:55 ~ takePictureOrVideo ~ err:',
+        err
+      );
+    }
   };
   const takeFromFiles = async () => {
     try {

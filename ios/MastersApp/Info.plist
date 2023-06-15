@@ -37,6 +37,12 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string/>
+	<key>NSCameraUsageDescription</key>
+	<string/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>NunitoSans-Black.ttf</string>
