@@ -1,6 +1,9 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
+  mt16: {
+    marginTop: 16,
+  },
   container: {
     flex: 1,
     backgroundColor: 'white',
@@ -26,22 +29,23 @@ export const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
+    width: '100%',
+    alignSelf: 'flex-start',
+    paddingVertical: 14,
+    backgroundColor: 'white',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingHorizontal: 20,
-    paddingVertical: 0,
     marginTop: 30,
     justifyContent: 'space-between',
-    shadow: {
-      shadowColor: '#000000',
-      shadowOffset: {
-        width: 0,
-        height: -3,
-      },
-      shadowOpacity: 0.1,
-      shadowRadius: 2.22,
-      elevation: 3,
+    shadowColor: 'rgba(2, 52, 227, 0.12)',
+    shadowOffset: {
+      width: 0,
+      height: -6,
     },
+    shadowOpacity: 0.6,
+    shadowRadius: 4,
+    elevation: 2,
   },
   bottom: {
     marginTop: 24,
