@@ -6,6 +6,7 @@ import { Text, useTheme } from 'rn-ui-kit';
 import { DownloadFilesIcon } from '@/assets/icons/svg/screens/DownloadFilesIcon';
 import { NoFilesIcon } from '@/assets/icons/svg/screens/NoFilesIcon';
 import { OtesIcon } from '@/assets/icons/svg/screens/OtesIcon';
+import { UploadManager } from '@/components/FileManager/UploadManager';
 import { File } from '@/store/api/tasks/types';
 import { StatusType } from '@/types/task';
 
@@ -59,7 +60,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
             </Text>
             <View style={styles.mt24}>
               {files.length ? (
-                <></>
+                <UploadManager files={files} />
               ) : (
                 <View style={styles.download}>
                   <DownloadFilesIcon />
