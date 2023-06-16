@@ -33,7 +33,7 @@ export const axiosBaseQuery = (): BaseQueryFn<
         method,
         ...(params && { params }),
         ...(data && { data }),
-        headers: axiosInstance.defaults.headers,
+        headers: { ...axiosInstance.defaults.headers, ...headers },
         responseType: 'json',
       });
 

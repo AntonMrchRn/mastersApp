@@ -5,7 +5,6 @@ export const styles = StyleSheet.create({
     marginTop: 36,
   },
   download: {
-    marginTop: 24,
     flexDirection: 'row',
   },
   container: {
@@ -19,7 +18,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  title: {
+  mt24: {
     marginTop: 24,
   },
   description: {

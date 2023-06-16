@@ -27,14 +27,29 @@ export const tasksAPI = api
         }),
       }),
       patchTask: builder.mutation<GetTaskResponce, Task>({
-        query: body => ({
+        query: data => ({
           url: `tasks/web`,
           method: 'PATCH',
-          body,
+          data,
+        }),
+      }),
+      postTasksFiles: builder.mutation<object, FormData>({
+        query: data => ({
+          url: `tasks/files/multiple`,
+          method: 'POST',
+          data,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }),
+      }),
+      deleteTasksFiles: builder.mutation<object, string>({
+        query: id => ({
+          url: `tasks/files/${id}`,
+          method: 'DELETE',
         }),
       }),
     }),
-
     overrideExisting: true,
   });
 
@@ -43,4 +58,6 @@ export const {
   useGetTaskStatusesQuery,
   useGetTableNamesQuery,
   usePatchTaskMutation,
+  usePostTasksFilesMutation,
+  useDeleteTasksFilesMutation,
 } = tasksAPI;

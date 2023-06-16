@@ -45,7 +45,7 @@ export const ProgressBar: FC<ProgressBarProps> = ({
       </View>
       <View style={styles.progressTextContainer}>
         <Text variant={'captionRegular'} style={styles.regularText}>
-          загружено {prettyBytes(recieved)} / {size} MB
+          загружено {prettyBytes(recieved)} / {prettyBytes(size)}
         </Text>
         <Text variant={'captionRegular'} style={styles.regularText}>
           {progress}%
