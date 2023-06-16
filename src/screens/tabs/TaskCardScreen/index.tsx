@@ -50,6 +50,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
     statusID,
     uploadModalVisible,
     onUploadModalVisible,
+    taskId,
   } = useTaskCard();
   const theme = useTheme();
 
@@ -74,6 +75,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
       <TaskCardUploadBottomSheet
         isVisible={uploadModalVisible}
         onClose={onUploadModalVisible}
+        taskId={taskId}
       />
       <TaskCardHeader
         goBack={goBack}

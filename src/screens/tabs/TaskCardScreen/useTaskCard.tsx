@@ -187,6 +187,7 @@ export const useTaskCard = () => {
           <TaskCardReport
             activeBudgetCanceled={!!getBanner()}
             statusID={statusID}
+            files={files}
           />
         );
       default:
@@ -329,5 +330,6 @@ export const useTaskCard = () => {
     statusID,
     uploadModalVisible,
     onUploadModalVisible,
+    taskId,
   };
 };

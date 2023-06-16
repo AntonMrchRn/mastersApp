@@ -6,6 +6,7 @@ import { Text, useTheme } from 'rn-ui-kit';
 import { DownloadFilesIcon } from '@/assets/icons/svg/screens/DownloadFilesIcon';
 import { NoFilesIcon } from '@/assets/icons/svg/screens/NoFilesIcon';
 import { OtesIcon } from '@/assets/icons/svg/screens/OtesIcon';
+import { File } from '@/store/api/tasks/types';
 import { StatusType } from '@/types/task';
 
 import { styles } from './styles';
@@ -13,10 +14,12 @@ import { styles } from './styles';
 type TaskCardReportProps = {
   activeBudgetCanceled: boolean;
   statusID: StatusType | undefined;
+  files: File[];
 };
 export const TaskCardReport: FC<TaskCardReportProps> = ({
   activeBudgetCanceled,
   statusID,
+  files,
 }) => {
   const theme = useTheme();
   const getContent = () => {
@@ -32,11 +35,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
             >
               <OtesIcon />
             </View>
-            <Text
-              variant="title2"
-              style={styles.title}
-              color={theme.text.basic}
-            >
+            <Text variant="title2" style={styles.mt24} color={theme.text.basic}>
               {activeBudgetCanceled
                 ? 'Отчет  недоступен'
                 : 'Отчет пока недоступен'}
@@ -58,16 +57,22 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
             <Text variant="title3" color={theme.text.basic}>
               Загруженные файлы
             </Text>
-            <View style={styles.download}>
-              <DownloadFilesIcon />
-              <Text
-                variant="bodySRegular"
-                style={styles.desc}
-                color={theme.text.neutral}
-              >
-                Загрузите файлы, подтверждающие выполнение услуг общим размером
-                не более 50 МВ
-              </Text>
+            <View style={styles.mt24}>
+              {files.length ? (
+                <></>
+              ) : (
+                <View style={styles.download}>
+                  <DownloadFilesIcon />
+                  <Text
+                    variant="bodySRegular"
+                    style={styles.desc}
+                    color={theme.text.neutral}
+                  >
+                    Загрузите файлы, подтверждающие выполнение услуг общим
+                    размером не более 50 МВ
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
         );
@@ -82,11 +87,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
             >
               <NoFilesIcon />
             </View>
-            <Text
-              variant="title2"
-              style={styles.title}
-              color={theme.text.basic}
-            >
+            <Text variant="title2" style={styles.mt24} color={theme.text.basic}>
               Файлов нет
             </Text>
           </View>

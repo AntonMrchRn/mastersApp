@@ -3,23 +3,30 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
-import { BottomSheet, Button, Text, useTheme } from 'rn-ui-kit';
+import { BottomSheet, Button, Text, useTheme, useToast } from 'rn-ui-kit';
 
 import { FileIcon } from '@/assets/icons/svg/files/FileIcon';
 import { CameraIcon } from '@/assets/icons/svg/screens/CameraIcon';
 import { GalleryIcon } from '@/assets/icons/svg/screens/GalleryIcon';
-import { usePostTasksFilesMutation } from '@/store/api/tasks';
+import { useGetTaskQuery, usePostTasksFilesMutation } from '@/store/api/tasks';
 
 type TaskCardUploadBottomSheetProps = {
   isVisible: boolean;
+  taskId: string;
   onClose: () => void;
 };
 export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
   isVisible,
   onClose,
+  taskId,
 }) => {
   const theme = useTheme();
+  const toast = useToast();
+
+  const getTask = useGetTaskQuery(taskId);
+
   const [postTasksFiles, taskFilesMutation] = usePostTasksFilesMutation();
+
   const styles = StyleSheet.create({
     icon: {
       width: 24,
@@ -49,12 +56,8 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
         selectionLimit: 10,
       });
       if (!result?.didCancel) {
-        console.log(
-          '🚀 ~ file: TaskCardUploadBottomSheet.tsx:46 ~ takeFromGallery ~ result:',
-          result
-        );
         const formData = new FormData();
-        formData.append('taskID', 978);
+        formData.append('taskID', taskId);
         formData.append('isApplication', true);
         formData.append('isOffer', false);
         formData.append('isCheck', false);
@@ -66,18 +69,27 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
           });
           formData.append(`name${Number(index) + 1}`, asset?.fileName);
         });
-        const responce = await postTasksFiles(formData);
-        console.log(
-          '🚀 ~ file: TaskCardUploadBottomSheet.tsx:68 ~ takeFromGallery ~ responce:',
-          responce
-        );
+        onClose();
+        await postTasksFiles(formData).unwrap();
+        getTask.refetch();
       }
+    } catch (error) {
       onClose();
-    } catch (err) {
-      console.log(
-        '🚀 ~ file: TaskCardUploadBottomSheet.tsx:49 ~ takeFromGallery ~ err:',
-        err
-      );
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'data' in error &&
+        typeof error.data === 'object' &&
+        error.data !== null &&
+        'message' in error.data &&
+        typeof error.data.message === 'string'
+      ) {
+        toast.show({
+          type: 'error',
+          title: error.data.message,
+          contentHeight: 120,
+        });
+      }
     }
   };
   const takePictureOrVideo = async () => {
