@@ -9,7 +9,7 @@ export type File = {
   extension: string;
   extensionOriginal: string;
   isApplication: boolean;
-  size: number;
+  sizeBytes: number;
 };
 export type Service = {
   ID: number;

@@ -27,14 +27,23 @@ export const tasksAPI = api
         }),
       }),
       patchTask: builder.mutation<GetTaskResponce, Task>({
-        query: body => ({
+        query: data => ({
           url: `tasks/web`,
           method: 'PATCH',
-          body,
+          data,
+        }),
+      }),
+      postTasksFiles: builder.mutation<object, FormData>({
+        query: data => ({
+          url: `tasks/files/multiple`,
+          method: 'POST',
+          data,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         }),
       }),
     }),
-
     overrideExisting: true,
   });
 
@@ -43,4 +52,5 @@ export const {
   useGetTaskStatusesQuery,
   useGetTableNamesQuery,
   usePatchTaskMutation,
+  usePostTasksFilesMutation,
 } = tasksAPI;

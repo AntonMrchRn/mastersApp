@@ -8,6 +8,7 @@ import { BottomSheet, Button, Text, useTheme } from 'rn-ui-kit';
 import { FileIcon } from '@/assets/icons/svg/files/FileIcon';
 import { CameraIcon } from '@/assets/icons/svg/screens/CameraIcon';
 import { GalleryIcon } from '@/assets/icons/svg/screens/GalleryIcon';
+import { usePostTasksFilesMutation } from '@/store/api/tasks';
 
 type TaskCardUploadBottomSheetProps = {
   isVisible: boolean;
@@ -18,6 +19,7 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
   onClose,
 }) => {
   const theme = useTheme();
+  const [postTasksFiles, taskFilesMutation] = usePostTasksFilesMutation();
   const styles = StyleSheet.create({
     icon: {
       width: 24,
@@ -42,11 +44,34 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
 
   const takeFromGallery = async () => {
     try {
-      const result = await launchImageLibrary({ mediaType: 'mixed' });
-      console.log(
-        '🚀 ~ file: TaskCardUploadBottomSheet.tsx:46 ~ takeFromGallery ~ result:',
-        result
-      );
+      const result = await launchImageLibrary({
+        mediaType: 'mixed',
+        selectionLimit: 10,
+      });
+      if (!result?.didCancel) {
+        console.log(
+          '🚀 ~ file: TaskCardUploadBottomSheet.tsx:46 ~ takeFromGallery ~ result:',
+          result
+        );
+        const formData = new FormData();
+        formData.append('taskID', 978);
+        formData.append('isApplication', true);
+        formData.append('isOffer', false);
+        formData.append('isCheck', false);
+        result?.assets?.map((asset, index) => {
+          formData.append(`file${Number(index) + 1}`, {
+            uri: asset?.uri,
+            type: asset.type,
+            name: asset.fileName,
+          });
+          formData.append(`name${Number(index) + 1}`, asset?.fileName);
+        });
+        const responce = await postTasksFiles(formData);
+        console.log(
+          '🚀 ~ file: TaskCardUploadBottomSheet.tsx:68 ~ takeFromGallery ~ responce:',
+          responce
+        );
+      }
       onClose();
     } catch (err) {
       console.log(
@@ -57,11 +82,15 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
   };
   const takePictureOrVideo = async () => {
     try {
-      const result = await launchCamera({ mediaType: 'mixed' });
-      console.log(
-        '🚀 ~ file: TaskCardUploadBottomSheet.tsx:49 ~ takePictureOrVideo ~ result:',
-        result
-      );
+      const result = await launchCamera({
+        mediaType: 'mixed',
+      });
+      if (!result?.didCancel) {
+        console.log(
+          '🚀 ~ file: TaskCardUploadBottomSheet.tsx:46 ~ takePictureOrVideo ~ result:',
+          result
+        );
+      }
       onClose();
     } catch (err) {
       console.log(

@@ -5,6 +5,7 @@ import ReactNativeBlobUtil, {
   StatefulPromise,
 } from 'react-native-blob-util';
 
+import prettyBytes from 'pretty-bytes';
 import { Text, useTheme } from 'rn-ui-kit';
 
 import { CloseFileIcon } from '@/assets/icons/svg/files/CloseFileIcon';
@@ -203,7 +204,7 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
             </Text>
             <View style={styles.size}>
               <Text variant={'captionRegular'} style={styles.regularText}>
-                {file.size} Mb
+                {prettyBytes(file.sizeBytes)}
               </Text>
             </View>
           </View>
@@ -211,7 +212,11 @@ export const DownloadItem: FC<DownloadItemProps> = ({ file }) => {
         <View style={styles.action}>{getAction()}</View>
       </View>
       {isLoading && (
-        <ProgressBar progress={progress} recieved={recieved} size={file.size} />
+        <ProgressBar
+          progress={progress}
+          recieved={recieved}
+          size={file.sizeBytes}
+        />
       )}
     </View>
   );
