@@ -16,11 +16,13 @@ type TaskCardReportProps = {
   activeBudgetCanceled: boolean;
   statusID: StatusType | undefined;
   files: File[];
+  taskId: string;
 };
 export const TaskCardReport: FC<TaskCardReportProps> = ({
   activeBudgetCanceled,
   statusID,
   files,
+  taskId,
 }) => {
   const theme = useTheme();
   const getContent = () => {
@@ -60,7 +62,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
             </Text>
             <View style={styles.mt24}>
               {files.length ? (
-                <UploadManager files={files} />
+                <UploadManager files={files} taskId={taskId} />
               ) : (
                 <View style={styles.download}>
                   <DownloadFilesIcon />

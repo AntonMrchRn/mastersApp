@@ -25,7 +25,7 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
 
   const getTask = useGetTaskQuery(taskId);
 
-  const [postTasksFiles, taskFilesMutation] = usePostTasksFilesMutation();
+  const [postTasksFiles] = usePostTasksFilesMutation();
 
   const styles = StyleSheet.create({
     icon: {

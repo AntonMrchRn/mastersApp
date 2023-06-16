@@ -43,6 +43,12 @@ export const tasksAPI = api
           },
         }),
       }),
+      deleteTasksFiles: builder.mutation<object, string>({
+        query: id => ({
+          url: `tasks/files/${id}`,
+          method: 'DELETE',
+        }),
+      }),
     }),
     overrideExisting: true,
   });
@@ -53,4 +59,5 @@ export const {
   useGetTableNamesQuery,
   usePatchTaskMutation,
   usePostTasksFilesMutation,
+  useDeleteTasksFilesMutation,
 } = tasksAPI;

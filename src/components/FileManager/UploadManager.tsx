@@ -7,8 +7,9 @@ import { UploadItem } from './UploadItem';
 
 type UploadManagerProps = {
   files: File[];
+  taskId: string;
 };
-export const UploadManager: FC<UploadManagerProps> = ({ files }) => {
+export const UploadManager: FC<UploadManagerProps> = ({ files, taskId }) => {
   const styles = StyleSheet.create({
     container: {
       width: '100%',
@@ -18,7 +19,7 @@ export const UploadManager: FC<UploadManagerProps> = ({ files }) => {
   return (
     <View style={styles.container}>
       {files.map(file => {
-        return <UploadItem file={file} key={file.url} />;
+        return <UploadItem file={file} key={file.url} taskId={taskId} />;
       })}
     </View>
   );

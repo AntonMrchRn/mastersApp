@@ -188,6 +188,7 @@ export const useTaskCard = () => {
             activeBudgetCanceled={!!getBanner()}
             statusID={statusID}
             files={files}
+            taskId={taskId}
           />
         );
       default:
