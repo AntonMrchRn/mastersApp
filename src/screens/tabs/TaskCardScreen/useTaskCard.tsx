@@ -199,49 +199,52 @@ export const useTaskCard = () => {
     setTab(item.label);
   };
   const getBanner = (): TaskCardBottomBanner => {
-    switch (statusID) {
-      case StatusType.ACTIVE:
-        if (outlayStatusID === 4) {
+    if (tab === 'Описание') {
+      switch (statusID) {
+        case StatusType.ACTIVE:
+          if (outlayStatusID === 4) {
+            return {
+              title: 'Ваша смета отклонена координатором',
+              type: 'error',
+              icon: 'alert',
+              text: 'К сожалению, теперь вы не можете стать исполнителем этой задачи',
+            };
+          }
+          return null;
+        case StatusType.SUMMARIZING:
           return {
-            title: 'Ваша смета отклонена координатором',
+            title: 'Задача на проверке',
+            type: 'info',
+            icon: 'info',
+            text: 'Координатор проверяет выполненные услуги. После успешной проверки задача будет передана на оплату',
+          };
+        case StatusType.COMPLETED:
+          return {
+            title: 'Выполненные услуги приняты',
+            type: 'success',
+            icon: 'success',
+            text: 'В ближайшее время оплата поступит на вашу банковскую карту/счет',
+          };
+        case StatusType.PAID:
+          return {
+            title: 'Оплата произведена',
+            type: 'success',
+            icon: 'success',
+            text: 'Денежные средства переведены вам на указанные в профиле реквизиты',
+          };
+        case StatusType.CANCELLED_BY_CUSTOMER:
+        case StatusType.CANCELLED_BY_EXECUTOR:
+          return {
+            title: 'Задача отменена',
             type: 'error',
             icon: 'alert',
-            text: 'К сожалению, теперь вы не можете стать исполнителем этой задачи',
+            text: 'По инициативе координатора выполнение задачи прекращено',
           };
-        }
-        return null;
-      case StatusType.SUMMARIZING:
-        return {
-          title: 'Задача на проверке',
-          type: 'info',
-          icon: 'info',
-          text: 'Координатор проверяет выполненные услуги. После успешной проверки задача будет передана на оплату',
-        };
-      case StatusType.COMPLETED:
-        return {
-          title: 'Выполненные услуги приняты',
-          type: 'success',
-          icon: 'success',
-          text: 'В ближайшее время оплата поступит на вашу банковскую карту/счет',
-        };
-      case StatusType.PAID:
-        return {
-          title: 'Оплата произведена',
-          type: 'success',
-          icon: 'success',
-          text: 'Денежные средства переведены вам на указанные в профиле реквизиты',
-        };
-      case StatusType.CANCELLED_BY_CUSTOMER:
-      case StatusType.CANCELLED_BY_EXECUTOR:
-        return {
-          title: 'Задача отменена',
-          type: 'error',
-          icon: 'alert',
-          text: 'По инициативе координатора выполнение задачи прекращено',
-        };
-      default:
-        return null;
+        default:
+          return null;
+      }
     }
+    return null;
   };
   const getButtons = (): TaskCardBottomButton[] => {
     switch (statusID) {
@@ -275,6 +278,20 @@ export const useTaskCard = () => {
         return [];
       case StatusType.WORK:
         if (tab === 'Отчет') {
+          if (files.length) {
+            return [
+              {
+                label: 'Сдать работы',
+                variant: 'accent',
+                onPress: onWorkDelivery,
+              },
+              {
+                label: 'Загрузить еще файлы',
+                variant: 'outlineAccent',
+                onPress: onUploadModalVisible,
+              },
+            ];
+          }
           return [
             {
               label: 'Загрузить файлы',
@@ -285,11 +302,29 @@ export const useTaskCard = () => {
         }
         return [
           {
+            label: 'Сдать работы',
+            variant: 'accent',
+            onPress: onWorkDelivery,
+          },
+          {
             label: 'Отказаться от задачи',
             variant: 'outlineDanger',
             onPress: onCancelModalVisible,
           },
         ];
+      case StatusType.SUMMARIZING:
+      case StatusType.COMPLETED:
+      case StatusType.PAID:
+        if (tab === 'Отчет') {
+          return [
+            {
+              label: 'Загрузить еще файлы',
+              variant: 'accent',
+              onPress: onUploadModalVisible,
+            },
+          ];
+        }
+        return [];
       case StatusType.PENDING:
         return [
           {

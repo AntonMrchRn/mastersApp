@@ -55,6 +55,9 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
           </View>
         );
       case StatusType.WORK:
+      case StatusType.SUMMARIZING:
+      case StatusType.COMPLETED:
+      case StatusType.PAID:
         return (
           <View style={styles.mt36}>
             <Text variant="title3" color={theme.text.basic}>
@@ -62,7 +65,20 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
             </Text>
             <View style={styles.mt24}>
               {files.length ? (
-                <UploadManager files={files} taskId={taskId} />
+                <>
+                  <UploadManager files={files} taskId={taskId} />
+                  <View style={styles.mt36}></View>
+                  <Text variant="title3" color={theme.text.basic}>
+                    Закрывающие документы
+                  </Text>
+                  <Text
+                    variant="bodySRegular"
+                    style={styles.mt8}
+                    color={theme.text.neutral}
+                  >
+                    Пока здесь ничего нет
+                  </Text>
+                </>
               ) : (
                 <View style={styles.download}>
                   <DownloadFilesIcon />
@@ -81,19 +97,47 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
         );
       default:
         return (
-          <View style={styles.container}>
-            <View
-              style={[
-                styles.otes,
-                { backgroundColor: theme.background.fieldMain },
-              ]}
-            >
-              <NoFilesIcon />
-            </View>
-            <Text variant="title2" style={styles.mt24} color={theme.text.basic}>
-              Файлов нет
-            </Text>
-          </View>
+          <>
+            {files.length ? (
+              <View style={styles.mt36}>
+                <Text variant="title3" color={theme.text.basic}>
+                  Загруженные файлы
+                </Text>
+                <View style={styles.mt24}>
+                  <UploadManager files={files} taskId={taskId} />
+                  <View style={styles.mt36}></View>
+                  <Text variant="title3" color={theme.text.basic}>
+                    Закрывающие документы
+                  </Text>
+                  <Text
+                    variant="bodySRegular"
+                    style={styles.mt8}
+                    color={theme.text.neutral}
+                  >
+                    Пока здесь ничего нет
+                  </Text>
+                </View>
+              </View>
+            ) : (
+              <View style={styles.container}>
+                <View
+                  style={[
+                    styles.otes,
+                    { backgroundColor: theme.background.fieldMain },
+                  ]}
+                >
+                  <NoFilesIcon />
+                </View>
+                <Text
+                  variant="title2"
+                  style={styles.mt24}
+                  color={theme.text.basic}
+                >
+                  Файлов нет
+                </Text>
+              </View>
+            )}
+          </>
         );
     }
   };

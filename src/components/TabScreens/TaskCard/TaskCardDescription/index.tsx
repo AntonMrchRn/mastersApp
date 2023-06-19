@@ -67,9 +67,11 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
           <TaskAddress address={address} />
         </View>
       )}
-      <View style={styles.date}>
-        <TaskDate from={startTime} to={endTimePlan} />
-      </View>
+      {(startTime || endTimePlan) && (
+        <View style={styles.date}>
+          <TaskDate from={startTime} to={endTimePlan} />
+        </View>
+      )}
       {statusID === StatusType.WORK && (
         <TouchableOpacity style={styles.edit} onPress={onDateModalVisible}>
           <EditIcon />

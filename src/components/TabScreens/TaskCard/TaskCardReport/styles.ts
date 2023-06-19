@@ -1,6 +1,12 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
+  mt8: {
+    marginTop: 8,
+  },
+  mt24: {
+    marginTop: 24,
+  },
   mt36: {
     marginTop: 36,
   },
@@ -17,9 +23,6 @@ export const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  mt24: {
-    marginTop: 24,
   },
   description: {
     marginTop: 12,
