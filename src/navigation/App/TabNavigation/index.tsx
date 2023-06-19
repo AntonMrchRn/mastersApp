@@ -38,7 +38,7 @@ function AppNavigation() {
         name={BottomTab.MyTasksNavigation}
         component={MyTasksNavigation}
         options={{
-          title: 'Мои задач',
+          title: 'Мои задачи',
           tabBarIcon: color => (
             <Employees fill={color.focused ? '#3F51B5' : '#707070'} />
           ),

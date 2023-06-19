@@ -6,7 +6,7 @@ import { getSearchTasks, getTableNames } from './asyncActions';
 import { InitialState } from './types';
 
 const initialState: InitialState = {
-  list: [],
+  list: {},
   tableNames: [],
   loadingNames: false,
   loadingList: false,
@@ -18,7 +18,9 @@ const taskSearch = createSlice({
   name: 'taskSearch',
   initialState,
   reducers: {
-    // login: state => {},
+    clearList: state => {
+      state.list = {};
+    },
   },
   extraReducers: builder => {
     // get search tasks
@@ -54,5 +56,7 @@ const taskSearch = createSlice({
     });
   },
 });
+
+export const { clearList } = taskSearch.actions;
 
 export default taskSearch;

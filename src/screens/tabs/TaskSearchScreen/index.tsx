@@ -11,7 +11,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from 'rn-ui-kit';
 
-import { CardTasks } from '@/components/TabScreens/TaskSearch/Card';
+import CardTasks from '@/components/TabScreens/TaskSearch/Card';
 import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound';
 import TypeSelectionTaskSearch from '@/components/TabScreens/TaskSearch/TypeSelectionTaskSearch';
 import { useAppDispatch, useAppSelector } from '@/store';
@@ -28,13 +28,13 @@ const TaskSearchScreen = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
-  const [activeTab, setActiveTab] = useState(1);
+  const [selectedTab, setSelectedTab] = useState(1);
   const { list, loadingList } = useAppSelector(state => state.taskSearch);
 
   const { data: tableNames } = useGetTableNamesQuery();
 
   useEffect(() => {
-    dispatch(getSearchTasks({ idList: activeTab }));
+    dispatch(getSearchTasks({ idList: selectedTab }));
   }, []);
 
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
@@ -43,40 +43,45 @@ const TaskSearchScreen = () => {
     <CardTasks {...item} navigation={navigation} />
   );
 
+  const onRefresh = () => dispatch(getSearchTasks({ idList: selectedTab }));
+  const onEndReached = () =>
+    dispatch(
+      getSearchTasks({
+        idList: selectedTab,
+        numberOfPosts: list.tasks ? list?.tasks?.length + 30 : 30,
+      })
+    );
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapperTop}>
         <Text style={styles.textHeader}>Поиск задач</Text>
         <TypeSelectionTaskSearch
-          setActiveTab={setActiveTab}
+          setActiveTab={setSelectedTab}
           tableNames={tableNames}
         />
       </View>
       <View style={styles.shadowWrapper}>
-        <FlatList
-          data={list.tasks}
-          renderItem={renderItem}
-          onRefresh={() => dispatch(getSearchTasks({ idList: activeTab }))}
-          refreshing={loadingList}
-          style={styles.list}
-          keyExtractor={keyExtractor}
-          contentContainerStyle={[
-            styles.listContainer,
-            !list?.tasks?.length && loadingList && styles.wrapper,
-          ]}
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          ListEmptyComponent={
-            loadingList ? (
-              <ActivityIndicator
-                size={'large'}
-                color={theme.background.accent}
-              />
-            ) : (
-              <PreviewNotFound />
-            )
-          }
-        />
+        {loadingList && !list.tasks?.length ? (
+          <ActivityIndicator size={'large'} color={theme.background.accent} />
+        ) : (
+          <FlatList
+            scrollsToTop
+            data={list?.tasks}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            style={styles.list}
+            onRefresh={onRefresh}
+            refreshing={loadingList}
+            contentContainerStyle={[styles.listContainer]}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            ListEmptyComponent={<PreviewNotFound />}
+            initialNumToRender={4}
+            onEndReachedThreshold={7}
+            onEndReached={onEndReached}
+          />
+        )}
       </View>
     </SafeAreaView>
   );

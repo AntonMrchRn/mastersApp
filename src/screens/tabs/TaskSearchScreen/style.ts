@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
   },
   shadowWrapper: {
     flex: 1,
+    justifyContent: 'center',
     shadowColor: 'rgba(2, 52, 227, 0.12)',
     shadowOffset: {
       width: 0,
