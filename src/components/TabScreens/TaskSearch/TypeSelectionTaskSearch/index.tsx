@@ -5,6 +5,7 @@ import { SegmentedControl } from 'rn-ui-kit';
 
 import { useAppDispatch } from '@/store';
 import { getSearchTasks } from '@/store/slices/taskSearch/asyncActions';
+import { clearList } from '@/store/slices/taskSearch/reducer';
 
 import { styles } from './style';
 
@@ -31,6 +32,7 @@ const TypeSelectionTaskSearch: FC<PropsTypeSelection> = ({
   );
 
   const onChange = (res: number) => {
+    dispatch(clearList());
     const activeTab = res + 1;
 
     dispatch(getSearchTasks({ idList: activeTab }));
