@@ -58,6 +58,7 @@ export const FileItem: FC<FileItemProps> = ({
     },
     iconTitleSize: {
       flexDirection: 'row',
+      alignItems: 'center',
       flexShrink: 1,
       flexGrow: 1,
     },
@@ -75,6 +76,8 @@ export const FileItem: FC<FileItemProps> = ({
     action: {
       alignItems: 'center',
       justifyContent: 'center',
+      paddingLeft: 20,
+      bottom: 5,
     },
   });
 

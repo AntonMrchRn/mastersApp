@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
 import { Card, Spacer, Text } from 'rn-ui-kit';
@@ -15,7 +15,7 @@ type CardTasksProp = Task & {
   navigation: TaskCardScreenNavigationProp;
 };
 
-export const CardTasks: FC<CardTasksProp> = ({
+const CardTasks: FC<CardTasksProp> = ({
   object,
   startTime = '',
   endTimePlan = '',
@@ -54,3 +54,5 @@ export const CardTasks: FC<CardTasksProp> = ({
     </TouchableOpacity>
   );
 };
+
+export default memo(CardTasks);
