@@ -114,8 +114,8 @@ export type Task = {
   };
 };
 export type GetTaskResponce = {
-  count: number;
-  extraCounts: {
+  count?: number;
+  extraCounts?: {
     canceled: number;
     completed: number;
     matching: number;
@@ -124,7 +124,7 @@ export type GetTaskResponce = {
     summarizing: number;
     work: number;
   } | null;
-  tasks: Task[];
+  tasks?: Task[];
 };
 
 export type Status = {
