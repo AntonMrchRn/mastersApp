@@ -302,6 +302,11 @@ export const useTaskCard = () => {
         }
         return [
           {
+            label: 'Сдать работы',
+            variant: 'accent',
+            onPress: onWorkDelivery,
+          },
+          {
             label: 'Отказаться от задачи',
             variant: 'outlineDanger',
             onPress: onCancelModalVisible,
