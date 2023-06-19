@@ -9,7 +9,6 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "post-install": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'",
     "android-clean": "cd ./android && ./gradlew clean",
     "android-clean-build": "cd ./android && ./gradlew cleanBuildCache",
     "build-apk": "cd ./android && ./gradlew assembleRelease",

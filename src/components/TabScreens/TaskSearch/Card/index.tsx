@@ -34,25 +34,27 @@ const CardTasks: FC<CardTasksProp> = ({
       onPress={() => navigation.navigate('TaskCard')}
     >
       <Card style={styles.wrapper}>
-        <View style={styles.wrapperBadge}>
-          <TaskBadges
-            statusID={statusID}
-            isUrgent={isUrgent}
-            isNight={isNight}
-          />
-        </View>
-        <Text variant="title3" style={styles.wrapperTitle}>
-          {name}
-        </Text>
-        <Text variant="bodySRegular">{description}</Text>
-        <View style={styles.wrapperAddress}>
-          <TaskAddress address={address} />
-        </View>
-        {(startTime || endTimePlan) && (
-          <TaskDate from={startTime} to={endTimePlan} />
-        )}
+        <>
+          <View style={styles.wrapperBadge}>
+            <TaskBadges
+              statusID={statusID}
+              isUrgent={isUrgent}
+              isNight={isNight}
+            />
+          </View>
+          <Text variant="title3" style={styles.wrapperTitle}>
+            {name}
+          </Text>
+          <Text variant="bodySRegular">{description}</Text>
+          <View style={styles.wrapperAddress}>
+            <TaskAddress address={address} />
+          </View>
+          {(startTime || endTimePlan) && (
+            <TaskDate from={startTime} to={endTimePlan} />
+          )}
+          <Spacer size="xs" separator="bottom" />
+        </>
       </Card>
-      <Spacer size="xs" separator="bottom" />
     </TouchableOpacity>
   );
 };
