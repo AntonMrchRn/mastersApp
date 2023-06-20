@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import dayjs from 'dayjs';
 import { useToast } from 'rn-ui-kit';
@@ -27,6 +27,19 @@ export const useTaskCard = () => {
   const taskId = '978';
   const getTask = useGetTaskQuery(taskId);
 
+  useEffect(() => {
+    if (
+      getTask?.error &&
+      'data' in getTask?.error &&
+      getTask?.error?.data?.message
+    ) {
+      toast.show({
+        type: 'error',
+        title: getTask?.error?.data?.message,
+        contentHeight: 120,
+      });
+    }
+  }, []);
   const [patchTask] = usePatchTaskMutation();
 
   const task = getTask?.data?.tasks?.[0];
