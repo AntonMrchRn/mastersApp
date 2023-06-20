@@ -1,13 +1,17 @@
 import React, { FC } from 'react';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
+import { useSelector } from 'react-redux';
 
+import prettyBytes from 'pretty-bytes';
 import { Text, useTheme } from 'rn-ui-kit';
 
 import { DownloadFilesIcon } from '@/assets/icons/svg/screens/DownloadFilesIcon';
 import { NoFilesIcon } from '@/assets/icons/svg/screens/NoFilesIcon';
 import { OtesIcon } from '@/assets/icons/svg/screens/OtesIcon';
+import { ProgressBar } from '@/components/FileManager/ProgressBar';
 import { UploadManager } from '@/components/FileManager/UploadManager';
 import { File } from '@/store/api/tasks/types';
+import { selectTasks } from '@/store/slices/tasks/selectors';
 import { StatusType } from '@/types/task';
 
 import { styles } from './styles';
@@ -25,6 +29,11 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
   taskId,
 }) => {
   const theme = useTheme();
+  const progressesSelector = useSelector(selectTasks).progresses;
+  const progresses = Object.values(progressesSelector);
+  const dates = Object.keys(progressesSelector);
+  console.log('🚀 ~ file: index.tsx:33 ~ dates:', dates);
+  console.log('🚀 ~ file: index.tsx:31 ~ progresses:', progresses);
   const getContent = () => {
     switch (statusID) {
       case StatusType.ACTIVE:
@@ -67,6 +76,74 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
               {files.length ? (
                 <>
                   <UploadManager files={files} taskId={taskId} />
+                  {progresses.map((progress, index) => {
+                    if (progress.progress === 1) {
+                      return null;
+                    }
+                    return (
+                      <View key={dates[index]} style={{ marginTop: 24 }}>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                          }}
+                        >
+                          <Text variant={'bodyMRegular'}>
+                            Загружается {progress.files.length} файла
+                          </Text>
+                          <TouchableOpacity>
+                            <Text variant={'bodySBold'}>Отмена</Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View style={{ marginTop: 16 }}>
+                          <ProgressBar
+                            progress={Math.round(
+                              (progress?.progress || 1) * 100
+                            )}
+                            loaded={progress?.loaded}
+                            size={progress?.total || 0}
+                          />
+                        </View>
+                        <View
+                          style={{
+                            marginTop: 16,
+                            borderLeftWidth: 2,
+                            paddingLeft: 12,
+                            borderColor: theme.stroke.disableDivider,
+                          }}
+                        >
+                          {progress.files.map((file, index) => (
+                            <View
+                              key={file.name}
+                              style={[
+                                {
+                                  flexDirection: 'row',
+                                  justifyContent: 'space-between',
+                                },
+                                index !== 0 && { marginTop: 4 },
+                              ]}
+                            >
+                              <Text
+                                variant={'bodySRegular'}
+                                numberOfLines={1}
+                                style={{ width: '80%' }}
+                                color={theme.text.basic}
+                              >
+                                {file.name}
+                              </Text>
+                              <Text
+                                variant={'bodySRegular'}
+                                numberOfLines={1}
+                                color={theme.text.neutral}
+                              >
+                                {prettyBytes(file.size)}
+                              </Text>
+                            </View>
+                          ))}
+                        </View>
+                      </View>
+                    );
+                  })}
                   <View style={styles.mt36}></View>
                   <Text variant="title3" color={theme.text.basic}>
                     Закрывающие документы
@@ -105,6 +182,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
                 </Text>
                 <View style={styles.mt24}>
                   <UploadManager files={files} taskId={taskId} />
+
                   <View style={styles.mt36}></View>
                   <Text variant="title3" color={theme.text.basic}>
                     Закрывающие документы

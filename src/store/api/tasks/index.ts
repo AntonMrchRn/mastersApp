@@ -1,6 +1,14 @@
+import { store } from '@/store';
 import { api } from '@/store/api';
+import { setProgresses } from '@/store/slices/tasks/actions';
+import { Progress } from '@/store/slices/tasks/types';
 
-import { GetTaskResponce, GetTaskStatusesResponce, Task } from './types';
+import {
+  GetTaskResponce,
+  GetTaskStatusesResponce,
+  PostTasksFilesRequest,
+  Task,
+} from './types';
 
 export const tasksAPI = api
   .enhanceEndpoints({
@@ -33,15 +41,32 @@ export const tasksAPI = api
           data,
         }),
       }),
-      postTasksFiles: builder.mutation<object, FormData>({
-        query: data => ({
-          url: `tasks/files/multiple`,
-          method: 'POST',
-          data,
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }),
+      postTasksFiles: builder.mutation<object, PostTasksFilesRequest>({
+        query: ({ formData, files, date }) => {
+          return {
+            url: `tasks/files/multiple`,
+            method: 'POST',
+            data: formData,
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+            onUploadProgress: progressEvent => {
+              const progress: Progress = {
+                loaded: progressEvent.loaded,
+                total: progressEvent.total,
+                progress: progressEvent.progress,
+                bytes: progressEvent.bytes,
+                rate: progressEvent.rate,
+                estimated: progressEvent.estimated,
+                upload: progressEvent.upload,
+                download: progressEvent.download,
+                files,
+              };
+              const payload = { [date]: progress };
+              store.dispatch(setProgresses(payload));
+            },
+          };
+        },
       }),
       deleteTasksFiles: builder.mutation<object, string>({
         query: id => ({

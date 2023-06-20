@@ -1,4 +1,4 @@
-export type File = {
+type File = {
   url: string;
   name: string;
   fileID: number;
@@ -11,7 +11,7 @@ export type File = {
   isApplication: boolean;
   sizeBytes: number;
 };
-export type Service = {
+type Service = {
   ID: number;
   categoryID: number;
   categoryName: string;
@@ -24,7 +24,7 @@ export type Service = {
   setID: number;
   sum: number;
 };
-export type Executor = {
+type Executor = {
   ID?: number;
   email?: string;
   entityTypeID?: number;
@@ -38,7 +38,7 @@ export type Executor = {
   pname?: string;
   sname?: string;
 };
-export type Curator = {
+type Curator = {
   ID: number;
   entityTypeID: number;
   invitedIDs: number[];
@@ -54,14 +54,14 @@ export type Curator = {
   pname: string;
   sname: string;
 };
-export type Contact = {
+type Contact = {
   name: string;
   phone: number;
   pname: string;
   position: string;
   sname: string;
 };
-export type Task = {
+type Task = {
   ID?: number;
   refuseReason?: string;
   budget?: number;
@@ -113,7 +113,7 @@ export type Task = {
     password?: string;
   };
 };
-export type GetTaskResponce = {
+type GetTaskResponce = {
   count?: number;
   extraCounts?: {
     canceled: number;
@@ -126,14 +126,13 @@ export type GetTaskResponce = {
   } | null;
   tasks?: Task[];
 };
-
-export type Status = {
+type Status = {
   ID: number;
   code: string;
   description: string;
   tableName: string;
 };
-export type GetTaskStatusesResponce = [
+type GetTaskStatusesResponce = [
   {
     ID: 1;
     code: 'pending';
@@ -207,3 +206,21 @@ export type GetTaskStatusesResponce = [
     tableName: 'task_status';
   }
 ];
+type PostTasksFilesRequest = {
+  formData: FormData;
+  files: { name: string; size: number }[];
+  date: string;
+};
+
+export type {
+  PostTasksFilesRequest,
+  GetTaskStatusesResponce,
+  Status,
+  GetTaskResponce,
+  Task,
+  Executor,
+  Service,
+  File,
+  Contact,
+  Curator,
+};

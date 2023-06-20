@@ -76,6 +76,7 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
       });
       if (!result?.didCancel) {
         const formData = getFormData();
+        let files: { name: string; size: number }[] = [];
         result?.assets?.map((asset, index) => {
           formData.append(`file${Number(index) + 1}`, {
             uri: asset?.uri,
@@ -83,9 +84,14 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
             name: asset.fileName,
           });
           formData.append(`name${Number(index) + 1}`, asset?.fileName);
+          files = files.concat({
+            name: asset?.fileName || `name${Number(index) + 1}`,
+            size: asset?.fileSize || 0,
+          });
         });
         onClose();
-        await postTasksFiles(formData).unwrap();
+        const date = new Date().toISOString();
+        await postTasksFiles({ formData, files, date }).unwrap();
         getTask.refetch();
       }
     } catch (error) {
@@ -114,6 +120,7 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
       });
       if (!result?.didCancel) {
         const formData = getFormData();
+        let files: { name: string; size: number }[] = [];
         result?.assets?.map((asset, index) => {
           formData.append(`file${Number(index) + 1}`, {
             uri: asset?.uri,
@@ -121,9 +128,15 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
             name: asset.fileName,
           });
           formData.append(`name${Number(index) + 1}`, asset?.fileName);
+          files = files.concat({
+            name: asset?.fileName || `name${Number(index) + 1}`,
+            size: asset?.fileSize || 0,
+          });
         });
         onClose();
-        await postTasksFiles(formData).unwrap();
+        const date = new Date().toISOString();
+        const ex = postTasksFiles({ formData, files, date });
+        ex.requestId;
         getTask.refetch();
       }
     } catch (error) {
@@ -155,6 +168,7 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
     try {
       const result = await DocumentPicker.pick();
       const formData = getFormData();
+      let files: { name: string; size: number }[] = [];
       result?.map((asset, index) => {
         formData.append(`file${Number(index) + 1}`, {
           uri: asset?.uri,
@@ -162,9 +176,14 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
           name: asset.name,
         });
         formData.append(`name${Number(index) + 1}`, asset?.name);
+        files = files.concat({
+          name: asset?.name || `name${Number(index) + 1}`,
+          size: asset?.size || 0,
+        });
       });
       onClose();
-      await postTasksFiles(formData).unwrap();
+      const date = new Date().toISOString();
+      await postTasksFiles({ formData, files, date }).unwrap();
       getTask.refetch();
     } catch (error) {
       onClose();

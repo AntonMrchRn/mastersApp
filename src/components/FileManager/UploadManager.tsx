@@ -18,8 +18,12 @@ export const UploadManager: FC<UploadManagerProps> = ({ files, taskId }) => {
 
   return (
     <View style={styles.container}>
-      {files.map(file => {
-        return <UploadItem file={file} key={file.url} taskId={taskId} />;
+      {files.map((file, index) => {
+        return (
+          <View style={[index !== 0 && { marginTop: 8 }]} key={file.url}>
+            <UploadItem file={file} taskId={taskId} />
+          </View>
+        );
       })}
     </View>
   );
