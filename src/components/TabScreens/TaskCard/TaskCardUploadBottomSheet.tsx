@@ -20,11 +20,22 @@ type TaskCardUploadBottomSheetProps = {
   isVisible: boolean;
   taskId: string;
   onClose: () => void;
+  handleUpload: ({
+    formData,
+    files,
+  }: {
+    formData: FormData;
+    files: {
+      name: string;
+      size: number;
+    }[];
+  }) => Promise<void>;
 };
 export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
   isVisible,
   onClose,
   taskId,
+  handleUpload,
 }) => {
   const theme = useTheme();
   const toast = useToast();
@@ -88,9 +99,7 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
           });
         });
         onClose();
-        const date = new Date().toISOString();
-        const request = postTasksFiles({ formData, files, date });
-        await request.unwrap();
+        await handleUpload({ formData, files });
         getTask.refetch();
       }
     } catch (error) {

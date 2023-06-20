@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -27,6 +27,8 @@ type TaskCardReportProps = {
   uploadModalVisible: boolean;
   onUploadModalVisible: () => void;
 };
+const controller = new AbortController();
+
 export const TaskCardReport: FC<TaskCardReportProps> = ({
   activeBudgetCanceled,
   statusID,
@@ -36,11 +38,31 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
   onUploadModalVisible,
 }) => {
   const theme = useTheme();
-
+  const [postTasksFiles] = usePostTasksFilesMutation();
+  const handleUpload = async ({
+    formData,
+    files,
+  }: {
+    formData: FormData;
+    files: {
+      name: string;
+      size: number;
+    }[];
+  }) => {
+    const date = new Date().toISOString();
+    const request = postTasksFiles({
+      formData,
+      files,
+      date,
+      signal: controller.signal,
+    });
+    await request.unwrap();
+  };
   const progressesSelector = useSelector(selectTasks).progresses;
   const progresses = Object.values(progressesSelector);
   const dates = Object.keys(progressesSelector);
-
+  console.log('🚀 ~ file: index.tsx:33 ~ dates:', dates);
+  console.log('🚀 ~ file: index.tsx:31 ~ progresses:', progresses);
   const getContent = () => {
     switch (statusID) {
       case StatusType.ACTIVE:
@@ -99,7 +121,12 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
                             Загружается {progress.files.length} файла
                           </Text>
                           <TouchableOpacity>
-                            <Text variant={'bodySBold'}>Отмена</Text>
+                            <Text
+                              variant={'bodySBold'}
+                              onPress={() => controller.abort()}
+                            >
+                              Отмена
+                            </Text>
                           </TouchableOpacity>
                         </View>
                         <View style={{ marginTop: 16 }}>
@@ -232,6 +259,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
         isVisible={uploadModalVisible}
         onClose={onUploadModalVisible}
         taskId={taskId}
+        handleUpload={handleUpload}
       />
       {getContent()}
     </>
