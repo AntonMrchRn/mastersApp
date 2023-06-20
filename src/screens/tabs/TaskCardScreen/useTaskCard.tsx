@@ -15,7 +15,7 @@ import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { StatusType, TaskType } from '@/types/task';
 
-export const useTaskCard = () => {
+export const useTaskCard = (taskId: string) => {
   const [tab, setTab] = useState('Описание');
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
@@ -24,7 +24,6 @@ export const useTaskCard = () => {
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
 
-  const taskId = '978';
   const getTask = useGetTaskQuery(taskId);
 
   useEffect(() => {
@@ -39,7 +38,8 @@ export const useTaskCard = () => {
         contentHeight: 120,
       });
     }
-  }, []);
+  }, [getTask?.error]);
+
   const [patchTask] = usePatchTaskMutation();
 
   const task = getTask?.data?.tasks?.[0];
@@ -379,6 +379,5 @@ export const useTaskCard = () => {
     statusID,
     uploadModalVisible,
     onUploadModalVisible,
-    taskId,
   };
 };

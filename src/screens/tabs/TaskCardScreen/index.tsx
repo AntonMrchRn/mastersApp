@@ -26,7 +26,11 @@ type TaskCardScreenProps = StackScreenProps<
   TaskSearchNavigatorScreenName.TaskCard
 >;
 
-export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
+export const TaskCardScreen: FC<TaskCardScreenProps> = ({
+  navigation,
+  route,
+}) => {
+  const taskId = route.params.taskId.toString();
   const {
     tabs,
     onTabChange,
@@ -50,8 +54,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({ navigation }) => {
     statusID,
     uploadModalVisible,
     onUploadModalVisible,
-    taskId,
-  } = useTaskCard();
+  } = useTaskCard(taskId);
   const theme = useTheme();
 
   const goBack = () => {
