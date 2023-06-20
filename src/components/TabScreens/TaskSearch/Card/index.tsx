@@ -52,9 +52,9 @@ const CardTasks: FC<CardTasksProp> = ({
           {(startTime || endTimePlan) && (
             <TaskDate from={startTime} to={endTimePlan} />
           )}
-          <Spacer size="xs" separator="bottom" />
         </>
       </Card>
+      <Spacer size="xs" separator="bottom" />
     </TouchableOpacity>
   );
 };

@@ -17,7 +17,10 @@ import TypeSelectionTaskSearch from '@/components/TabScreens/TaskSearch/TypeSele
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useGetTableNamesQuery } from '@/store/api/tasks';
 import { Task } from '@/store/api/tasks/types';
-import { getSearchTasks } from '@/store/slices/taskSearch/asyncActions';
+import {
+  getSearchTasks,
+  refreshTasks,
+} from '@/store/slices/taskSearch/asyncActions';
 import { TaskCardScreenNavigationProp } from '@/types/navigation';
 import { TaskSearch } from '@/types/task';
 
@@ -29,13 +32,9 @@ const TaskSearchScreen = () => {
   const theme = useTheme();
 
   const [selectedTab, setSelectedTab] = useState(1);
-  const { list, loadingList } = useAppSelector(state => state.taskSearch);
+  const { data, loadingList } = useAppSelector(state => state.taskSearch);
 
   const { data: tableNames } = useGetTableNamesQuery();
-
-  useEffect(() => {
-    dispatch(getSearchTasks({ idList: selectedTab }));
-  }, []);
 
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
 
@@ -43,14 +42,21 @@ const TaskSearchScreen = () => {
     <CardTasks {...item} navigation={navigation} />
   );
 
-  const onRefresh = () => dispatch(getSearchTasks({ idList: selectedTab }));
-  const onEndReached = () =>
-    dispatch(
-      getSearchTasks({
-        idList: selectedTab,
-        numberOfPosts: list.tasks ? list?.tasks?.length + 30 : 30,
-      })
-    );
+  const onRefresh = () => dispatch(refreshTasks({ idList: selectedTab }));
+
+  const onEndReached = () => {
+    !loadingList &&
+      dispatch(
+        getSearchTasks({
+          idList: selectedTab,
+          fromTask: data?.length,
+        })
+      );
+  };
+
+  useEffect(() => {
+    onRefresh();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -62,18 +68,21 @@ const TaskSearchScreen = () => {
         />
       </View>
       <View style={styles.shadowWrapper}>
-        {loadingList && !list.tasks?.length ? (
+        {loadingList && !data.length ? (
           <ActivityIndicator size={'large'} color={theme.background.accent} />
         ) : (
           <FlatList
             scrollsToTop
-            data={list?.tasks}
+            data={data}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
             style={styles.list}
             onRefresh={onRefresh}
             refreshing={loadingList}
-            contentContainerStyle={[styles.listContainer]}
+            contentContainerStyle={[
+              styles.listContainer,
+              !data?.length && styles.container,
+            ]}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             ListEmptyComponent={<PreviewNotFound />}

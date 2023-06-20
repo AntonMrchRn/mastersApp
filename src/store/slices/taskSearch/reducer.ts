@@ -2,11 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { Error } from '@/types/error';
 
-import { getSearchTasks, getTableNames } from './asyncActions';
+import { getSearchTasks, getTableNames, refreshTasks } from './asyncActions';
 import { InitialState } from './types';
 
 const initialState: InitialState = {
   list: {},
+  data: [],
   tableNames: [],
   loadingNames: false,
   loadingList: false,
@@ -19,7 +20,7 @@ const taskSearch = createSlice({
   initialState,
   reducers: {
     clearList: state => {
-      state.list = {};
+      state.data = [];
     },
   },
   extraReducers: builder => {
@@ -31,10 +32,28 @@ const taskSearch = createSlice({
       getSearchTasks.fulfilled,
       (state, { payload }: PayloadAction<InitialState['list']>) => {
         state.list = payload;
+        state.data = [...state.data, ...payload.tasks];
         state.loadingList = false;
       }
     );
     builder.addCase(getSearchTasks.rejected, (state, { payload }) => {
+      state.errorList = payload as Error;
+      state.loadingList = false;
+    });
+
+    // refresh tasks
+    builder.addCase(refreshTasks.pending, state => {
+      state.loadingList = true;
+    });
+    builder.addCase(
+      refreshTasks.fulfilled,
+      (state, { payload }: PayloadAction<InitialState['list']>) => {
+        state.list = payload;
+        state.data = [...payload.tasks];
+        state.loadingList = false;
+      }
+    );
+    builder.addCase(refreshTasks.rejected, (state, { payload }) => {
       state.errorList = payload as Error;
       state.loadingList = false;
     });
