@@ -9,7 +9,6 @@ import { TaskCardBottom } from '@/components/TabScreens/TaskCard/TaskCardBottom'
 import { TaskCardBudgetModal } from '@/components/TabScreens/TaskCard/TaskCardBudgetModal';
 import { TaskCardCancelBottomSheet } from '@/components/TabScreens/TaskCard/TaskCardCancelBottomSheet';
 import { TaskCardHeader } from '@/components/TabScreens/TaskCard/TaskCardHeader';
-import { TaskCardUploadBottomSheet } from '@/components/TabScreens/TaskCard/TaskCardUploadBottomSheet';
 import { TaskBadges } from '@/components/task/TaskBadges';
 import {
   TaskSearchNavigationParamList,
@@ -52,8 +51,6 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
     onCancelTask,
     subsetID,
     statusID,
-    uploadModalVisible,
-    onUploadModalVisible,
   } = useTaskCard(taskId);
   const theme = useTheme();
 
@@ -75,11 +72,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
         onCancel={onCancelModalVisible}
         onRefuse={onCancelTask}
       />
-      <TaskCardUploadBottomSheet
-        isVisible={uploadModalVisible}
-        onClose={onUploadModalVisible}
-        taskId={taskId}
-      />
+
       <TaskCardHeader
         goBack={goBack}
         title={`Задача ID ${id}`}

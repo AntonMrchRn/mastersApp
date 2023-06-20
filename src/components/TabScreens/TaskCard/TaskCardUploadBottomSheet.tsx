@@ -28,11 +28,9 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
 }) => {
   const theme = useTheme();
   const toast = useToast();
-
   const getTask = useGetTaskQuery(taskId);
 
   const [postTasksFiles] = usePostTasksFilesMutation();
-
   const styles = StyleSheet.create({
     icon: {
       width: 24,
@@ -91,7 +89,8 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
         });
         onClose();
         const date = new Date().toISOString();
-        await postTasksFiles({ formData, files, date }).unwrap();
+        const request = postTasksFiles({ formData, files, date });
+        await request.unwrap();
         getTask.refetch();
       }
     } catch (error) {
@@ -115,9 +114,7 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
   };
   const takeMedia = async (mediaType: MediaType) => {
     try {
-      const result = await launchCamera({
-        mediaType,
-      });
+      const result = await launchCamera({ mediaType });
       if (!result?.didCancel) {
         const formData = getFormData();
         let files: { name: string; size: number }[] = [];
@@ -135,8 +132,8 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
         });
         onClose();
         const date = new Date().toISOString();
-        const ex = postTasksFiles({ formData, files, date });
-        ex.requestId;
+        const request = postTasksFiles({ formData, files, date });
+        await request.unwrap();
         getTask.refetch();
       }
     } catch (error) {
@@ -159,10 +156,10 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
     }
   };
   const takePicture = async () => {
-    takeMedia('photo');
+    await takeMedia('photo');
   };
   const takeVideo = async () => {
-    takeMedia('video');
+    await takeMedia('video');
   };
   const takeFromFiles = async () => {
     try {

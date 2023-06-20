@@ -210,6 +210,7 @@ type PostTasksFilesRequest = {
   formData: FormData;
   files: { name: string; size: number }[];
   date: string;
+  signal?: AbortSignal;
 };
 
 export type {

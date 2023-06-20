@@ -26,6 +26,7 @@ type BaseQuery = {
   headers?: { [key: string]: AxiosHeaderValue };
   params?: AxiosRequestConfig['params'];
   onUploadProgress?: ((progressEvent: AxiosProgressEvent) => void) | undefined;
+  signal?: GenericAbortSignal | undefined;
 };
 
 export const axiosBaseQuery = (): BaseQueryFn<
@@ -33,7 +34,15 @@ export const axiosBaseQuery = (): BaseQueryFn<
   unknown,
   AxiosQueryErrorResponse
 > => {
-  return async ({ url, params, method, data, headers, onUploadProgress }) => {
+  return async ({
+    url,
+    params,
+    method,
+    data,
+    headers,
+    onUploadProgress,
+    signal,
+  }) => {
     try {
       const result = await axiosInstance({
         url: axiosInstance.defaults.baseURL + url,
@@ -42,7 +51,8 @@ export const axiosBaseQuery = (): BaseQueryFn<
         ...(data && { data }),
         headers: { ...axiosInstance.defaults.headers, ...headers },
         responseType: 'json',
-        onUploadProgress: onUploadProgress,
+        onUploadProgress,
+        signal,
       });
 
       return {

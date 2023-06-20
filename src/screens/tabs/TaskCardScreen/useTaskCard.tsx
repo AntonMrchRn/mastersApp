@@ -202,6 +202,8 @@ export const useTaskCard = (taskId: string) => {
             statusID={statusID}
             files={files}
             taskId={taskId}
+            uploadModalVisible={uploadModalVisible}
+            onUploadModalVisible={onUploadModalVisible}
           />
         );
       default:
@@ -377,7 +379,5 @@ export const useTaskCard = (taskId: string) => {
     onCancelTask,
     subsetID,
     statusID,
-    uploadModalVisible,
-    onUploadModalVisible,
   };
 };

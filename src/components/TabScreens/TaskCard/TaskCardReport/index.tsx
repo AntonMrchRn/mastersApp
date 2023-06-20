@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -10,9 +10,12 @@ import { NoFilesIcon } from '@/assets/icons/svg/screens/NoFilesIcon';
 import { OtesIcon } from '@/assets/icons/svg/screens/OtesIcon';
 import { ProgressBar } from '@/components/FileManager/ProgressBar';
 import { UploadManager } from '@/components/FileManager/UploadManager';
+import { usePostTasksFilesMutation } from '@/store/api/tasks';
 import { File } from '@/store/api/tasks/types';
 import { selectTasks } from '@/store/slices/tasks/selectors';
 import { StatusType } from '@/types/task';
+
+import { TaskCardUploadBottomSheet } from '../TaskCardUploadBottomSheet';
 
 import { styles } from './styles';
 
@@ -21,19 +24,23 @@ type TaskCardReportProps = {
   statusID: StatusType | undefined;
   files: File[];
   taskId: string;
+  uploadModalVisible: boolean;
+  onUploadModalVisible: () => void;
 };
 export const TaskCardReport: FC<TaskCardReportProps> = ({
   activeBudgetCanceled,
   statusID,
   files,
   taskId,
+  uploadModalVisible,
+  onUploadModalVisible,
 }) => {
   const theme = useTheme();
+
   const progressesSelector = useSelector(selectTasks).progresses;
   const progresses = Object.values(progressesSelector);
   const dates = Object.keys(progressesSelector);
-  console.log('🚀 ~ file: index.tsx:33 ~ dates:', dates);
-  console.log('🚀 ~ file: index.tsx:31 ~ progresses:', progresses);
+
   const getContent = () => {
     switch (statusID) {
       case StatusType.ACTIVE:
@@ -219,5 +226,14 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
         );
     }
   };
-  return <>{getContent()}</>;
+  return (
+    <>
+      <TaskCardUploadBottomSheet
+        isVisible={uploadModalVisible}
+        onClose={onUploadModalVisible}
+        taskId={taskId}
+      />
+      {getContent()}
+    </>
+  );
 };

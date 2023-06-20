@@ -42,7 +42,7 @@ export const tasksAPI = api
         }),
       }),
       postTasksFiles: builder.mutation<object, PostTasksFilesRequest>({
-        query: ({ formData, files, date }) => {
+        query: ({ formData, files, date, signal }) => {
           return {
             url: `tasks/files/multiple`,
             method: 'POST',
@@ -50,6 +50,7 @@ export const tasksAPI = api
             headers: {
               'Content-Type': 'multipart/form-data',
             },
+            signal,
             onUploadProgress: progressEvent => {
               const progress: Progress = {
                 loaded: progressEvent.loaded,
