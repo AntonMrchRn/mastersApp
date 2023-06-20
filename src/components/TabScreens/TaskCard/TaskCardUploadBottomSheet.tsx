@@ -14,7 +14,9 @@ import { CameraIcon } from '@/assets/icons/svg/screens/CameraIcon';
 import { GalleryIcon } from '@/assets/icons/svg/screens/GalleryIcon';
 import { VideoIcon } from '@/assets/icons/svg/screens/VideoIcon';
 import { configApp } from '@/constants/platform';
+import { useAppDispatch } from '@/store';
 import { useGetTaskQuery, usePostTasksFilesMutation } from '@/store/api/tasks';
+import { deleteProgress } from '@/store/slices/tasks/actions';
 
 type TaskCardUploadBottomSheetProps = {
   isVisible: boolean;
@@ -23,12 +25,14 @@ type TaskCardUploadBottomSheetProps = {
   handleUpload: ({
     formData,
     files,
+    date,
   }: {
     formData: FormData;
     files: {
       name: string;
       size: number;
     }[];
+    date: string;
   }) => Promise<void>;
 };
 export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
@@ -40,6 +44,7 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
   const theme = useTheme();
   const toast = useToast();
   const getTask = useGetTaskQuery(taskId);
+  const dispatch = useAppDispatch();
 
   const [postTasksFiles] = usePostTasksFilesMutation();
   const styles = StyleSheet.create({
@@ -78,6 +83,8 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
   };
 
   const takeFromGallery = async () => {
+    const date = new Date().toISOString();
+
     try {
       const result = await launchImageLibrary({
         mediaType: 'mixed',
@@ -99,7 +106,7 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
           });
         });
         onClose();
-        await handleUpload({ formData, files });
+        await handleUpload({ formData, files, date });
         getTask.refetch();
       }
     } catch (error) {
@@ -113,11 +120,15 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
         'message' in error.data &&
         typeof error.data.message === 'string'
       ) {
-        toast.show({
-          type: 'error',
-          title: error.data.message,
-          contentHeight: 120,
-        });
+        if (error.data.message === 'CanceledError: canceled') {
+          dispatch(deleteProgress(date));
+        } else {
+          toast.show({
+            type: 'error',
+            title: error.data.message,
+            contentHeight: 120,
+          });
+        }
       }
     }
   };

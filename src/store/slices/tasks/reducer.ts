@@ -13,6 +13,9 @@ const tasks = createSlice({
     setProgresses: (state, action) => {
       state.progresses = { ...state.progresses, ...action.payload };
     },
+    deleteProgress: (state, action) => {
+      delete state.progresses[action.payload];
+    },
   },
 });
 
