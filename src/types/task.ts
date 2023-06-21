@@ -5,6 +5,7 @@ export enum TaskType {
   COMMON_AUCTION_SALE = 4,
   COMMON_FIRST_RESPONCE = 5,
 }
+
 export enum StatusType {
   /**
    * Подготовка

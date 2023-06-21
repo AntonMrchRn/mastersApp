@@ -7,15 +7,23 @@ import prettyBytes from 'pretty-bytes';
 import { Text, useTheme } from 'rn-ui-kit';
 
 import { selectTasks } from '@/store/slices/tasks/selectors';
+import { StatusType } from '@/types/task';
 
 import { controllers } from '../TabScreens/TaskCard/TaskCardReport';
 import { ProgressBar } from './ProgressBar';
 
-export const UploadProgress: FC = () => {
+type UploadProgressProps = {
+  statusID: StatusType | undefined;
+};
+export const UploadProgress: FC<UploadProgressProps> = ({ statusID }) => {
   const theme = useTheme();
   const progressesSelector = useSelector(selectTasks).progresses;
+
+  const canDelete =
+    statusID && [StatusType.SUMMARIZING, StatusType.WORK].includes(statusID);
   const progresses = Object.values(progressesSelector);
   const dates = Object.keys(progressesSelector);
+
   const styles = StyleSheet.create({
     mt24: {
       marginTop: 24,
@@ -49,11 +57,13 @@ export const UploadProgress: FC = () => {
                   '%d файлов'
                 )}
               </Text>
-              <TouchableOpacity onPress={() => controllers?.[date]?.abort()}>
-                <Text variant={'bodySBold'} color={theme.text.basic}>
-                  Отмена
-                </Text>
-              </TouchableOpacity>
+              {canDelete && (
+                <TouchableOpacity onPress={() => controllers?.[date]?.abort()}>
+                  <Text variant={'bodySBold'} color={theme.text.basic}>
+                    Отмена
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
             <View style={styles.mt16}>
               <ProgressBar

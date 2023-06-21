@@ -89,7 +89,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
               {files.length ? (
                 <>
                   <UploadManager files={files} taskId={taskId} />
-                  <UploadProgress />
+                  <UploadProgress statusID={statusID} />
                   <View style={styles.mt36}></View>
                   <Text variant="title3" color={theme.text.basic}>
                     Закрывающие документы
