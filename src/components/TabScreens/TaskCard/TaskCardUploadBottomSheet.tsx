@@ -182,12 +182,6 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
       dispatch(deleteProgress(date));
     }
   };
-  const takePicture = async () => {
-    await takeMedia('photo');
-  };
-  const takeVideo = async () => {
-    await takeMedia('video');
-  };
   const takeFromFiles = async () => {
     const date = new Date().toISOString();
     try {
@@ -230,6 +224,12 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
     } finally {
       dispatch(deleteProgress(date));
     }
+  };
+  const takePicture = async () => {
+    await takeMedia('photo');
+  };
+  const takeVideo = async () => {
+    await takeMedia('video');
   };
 
   const actions = [
