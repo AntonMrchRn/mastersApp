@@ -88,8 +88,12 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
             <View style={styles.mt24}>
               {files.length ? (
                 <>
-                  <UploadManager files={files} taskId={taskId} />
-                  <UploadProgress statusID={statusID} />
+                  <UploadManager
+                    files={files}
+                    taskId={taskId}
+                    statusID={statusID}
+                  />
+                  <UploadProgress />
                   <View style={styles.mt36}></View>
                   <Text variant="title3" color={theme.text.basic}>
                     Закрывающие документы
@@ -127,7 +131,11 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
                   Загруженные файлы
                 </Text>
                 <View style={styles.mt24}>
-                  <UploadManager files={files} taskId={taskId} />
+                  <UploadManager
+                    files={files}
+                    taskId={taskId}
+                    statusID={statusID}
+                  />
 
                   <View style={styles.mt36}></View>
                   <Text variant="title3" color={theme.text.basic}>

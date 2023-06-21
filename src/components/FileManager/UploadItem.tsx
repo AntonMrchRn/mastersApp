@@ -13,8 +13,13 @@ import { FileItem } from './FileItem';
 type UploadItemProps = {
   taskId: string;
   file: File;
+  canDelete: boolean | undefined;
 };
-export const UploadItem: FC<UploadItemProps> = ({ file, taskId }) => {
+export const UploadItem: FC<UploadItemProps> = ({
+  file,
+  taskId,
+  canDelete,
+}) => {
   const getTask = useGetTaskQuery(taskId);
 
   const [deleteTasksFiles] = useDeleteTasksFilesMutation();
@@ -32,11 +37,14 @@ export const UploadItem: FC<UploadItemProps> = ({ file, taskId }) => {
   };
 
   const getAction = () => {
-    return (
-      <TouchableOpacity onPress={handleDelete}>
-        <DeleteFileIcon />
-      </TouchableOpacity>
-    );
+    if (canDelete) {
+      return (
+        <TouchableOpacity onPress={handleDelete}>
+          <DeleteFileIcon />
+        </TouchableOpacity>
+      );
+    }
+    return null;
   };
 
   return (
