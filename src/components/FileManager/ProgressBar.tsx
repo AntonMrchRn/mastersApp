@@ -6,12 +6,12 @@ import { Text, useTheme } from 'rn-ui-kit';
 
 type ProgressBarProps = {
   progress: number;
-  recieved: number;
+  loaded: number;
   size: number;
 };
 export const ProgressBar: FC<ProgressBarProps> = ({
   progress,
-  recieved,
+  loaded,
   size,
 }) => {
   const theme = useTheme();
@@ -45,7 +45,7 @@ export const ProgressBar: FC<ProgressBarProps> = ({
       </View>
       <View style={styles.progressTextContainer}>
         <Text variant={'captionRegular'} style={styles.regularText}>
-          загружено {prettyBytes(recieved)} / {prettyBytes(size)}
+          загружено {prettyBytes(loaded)} / {prettyBytes(size)}
         </Text>
         <Text variant={'captionRegular'} style={styles.regularText}>
           {progress}%

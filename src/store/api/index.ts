@@ -1,7 +1,13 @@
 import { SerializedError } from '@reduxjs/toolkit';
 import { BaseQueryFn } from '@reduxjs/toolkit/dist/query/react';
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { AxiosHeaderValue, AxiosRequestConfig, Method } from 'axios';
+import {
+  AxiosHeaderValue,
+  AxiosProgressEvent,
+  AxiosRequestConfig,
+  GenericAbortSignal,
+  Method,
+} from 'axios';
 
 import { axiosInstance } from '@/services/axios/axiosInstance';
 import {
@@ -19,6 +25,8 @@ type BaseQuery = {
   data?: AxiosRequestConfig['data'];
   headers?: { [key: string]: AxiosHeaderValue };
   params?: AxiosRequestConfig['params'];
+  onUploadProgress?: ((progressEvent: AxiosProgressEvent) => void) | undefined;
+  signal?: GenericAbortSignal | undefined;
 };
 
 export const axiosBaseQuery = (): BaseQueryFn<
@@ -26,7 +34,15 @@ export const axiosBaseQuery = (): BaseQueryFn<
   unknown,
   AxiosQueryErrorResponse
 > => {
-  return async ({ url, params, method, data, headers }) => {
+  return async ({
+    url,
+    params,
+    method,
+    data,
+    headers,
+    onUploadProgress,
+    signal,
+  }) => {
     try {
       const result = await axiosInstance({
         url: axiosInstance.defaults.baseURL + url,
@@ -35,6 +51,8 @@ export const axiosBaseQuery = (): BaseQueryFn<
         ...(data && { data }),
         headers: { ...axiosInstance.defaults.headers, ...headers },
         responseType: 'json',
+        onUploadProgress,
+        signal,
       });
 
       return {

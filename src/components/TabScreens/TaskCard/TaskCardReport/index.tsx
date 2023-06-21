@@ -7,8 +7,12 @@ import { DownloadFilesIcon } from '@/assets/icons/svg/screens/DownloadFilesIcon'
 import { NoFilesIcon } from '@/assets/icons/svg/screens/NoFilesIcon';
 import { OtesIcon } from '@/assets/icons/svg/screens/OtesIcon';
 import { UploadManager } from '@/components/FileManager/UploadManager';
+import { UploadProgress } from '@/components/FileManager/UploadProgress';
+import { usePostTasksFilesMutation } from '@/store/api/tasks';
 import { File } from '@/store/api/tasks/types';
-import { StatusType } from '@/types/task';
+import { HandleUpload, StatusType } from '@/types/task';
+
+import { TaskCardUploadBottomSheet } from '../TaskCardUploadBottomSheet';
 
 import { styles } from './styles';
 
@@ -17,14 +21,32 @@ type TaskCardReportProps = {
   statusID: StatusType | undefined;
   files: File[];
   taskId: string;
+  uploadModalVisible: boolean;
+  onUploadModalVisible: () => void;
 };
+
+export let controllers: { [x: string]: AbortController } = {};
 export const TaskCardReport: FC<TaskCardReportProps> = ({
   activeBudgetCanceled,
   statusID,
   files,
   taskId,
+  uploadModalVisible,
+  onUploadModalVisible,
 }) => {
   const theme = useTheme();
+  const [postTasksFiles] = usePostTasksFilesMutation();
+  const handleUpload = async ({ formData, files, date }: HandleUpload) => {
+    const controller = new AbortController();
+    const request = postTasksFiles({
+      formData,
+      files,
+      date,
+      signal: controller.signal,
+    });
+    controllers = { ...controllers, [date]: controller };
+    await request.unwrap();
+  };
   const getContent = () => {
     switch (statusID) {
       case StatusType.ACTIVE:
@@ -66,7 +88,12 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
             <View style={styles.mt24}>
               {files.length ? (
                 <>
-                  <UploadManager files={files} taskId={taskId} />
+                  <UploadManager
+                    files={files}
+                    taskId={taskId}
+                    statusID={statusID}
+                  />
+                  <UploadProgress />
                   <View style={styles.mt36}></View>
                   <Text variant="title3" color={theme.text.basic}>
                     Закрывающие документы
@@ -104,7 +131,12 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
                   Загруженные файлы
                 </Text>
                 <View style={styles.mt24}>
-                  <UploadManager files={files} taskId={taskId} />
+                  <UploadManager
+                    files={files}
+                    taskId={taskId}
+                    statusID={statusID}
+                  />
+                  <UploadProgress />
                   <View style={styles.mt36}></View>
                   <Text variant="title3" color={theme.text.basic}>
                     Закрывающие документы
@@ -141,5 +173,15 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
         );
     }
   };
-  return <>{getContent()}</>;
+  return (
+    <>
+      <TaskCardUploadBottomSheet
+        isVisible={uploadModalVisible}
+        onClose={onUploadModalVisible}
+        taskId={taskId}
+        handleUpload={handleUpload}
+      />
+      {getContent()}
+    </>
+  );
 };

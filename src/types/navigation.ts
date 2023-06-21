@@ -68,7 +68,7 @@ type ProfileNavigationParamList = {
 
 type TaskSearchNavigationParamList = {
   TaskSearch: undefined;
-  TaskCard: undefined;
+  TaskCard: { taskId: number };
 };
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<
