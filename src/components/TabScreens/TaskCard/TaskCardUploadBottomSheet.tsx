@@ -15,7 +15,7 @@ import { GalleryIcon } from '@/assets/icons/svg/screens/GalleryIcon';
 import { VideoIcon } from '@/assets/icons/svg/screens/VideoIcon';
 import { configApp } from '@/constants/platform';
 import { useAppDispatch } from '@/store';
-import { useGetTaskQuery, usePostTasksFilesMutation } from '@/store/api/tasks';
+import { useGetTaskQuery } from '@/store/api/tasks';
 import { deleteProgress } from '@/store/slices/tasks/actions';
 
 type TaskCardUploadBottomSheetProps = {
@@ -46,7 +46,6 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
   const getTask = useGetTaskQuery(taskId);
   const dispatch = useAppDispatch();
 
-  const [postTasksFiles] = usePostTasksFilesMutation();
   const styles = StyleSheet.create({
     icon: {
       width: 24,
@@ -84,7 +83,6 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
 
   const takeFromGallery = async () => {
     const date = new Date().toISOString();
-
     try {
       const result = await launchImageLibrary({
         mediaType: 'mixed',
@@ -118,21 +116,21 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
         typeof error.data === 'object' &&
         error.data !== null &&
         'message' in error.data &&
-        typeof error.data.message === 'string'
+        typeof error.data.message === 'string' &&
+        error.data.message !== 'CanceledError: canceled'
       ) {
-        if (error.data.message === 'CanceledError: canceled') {
-          dispatch(deleteProgress(date));
-        } else {
-          toast.show({
-            type: 'error',
-            title: error.data.message,
-            contentHeight: 120,
-          });
-        }
+        toast.show({
+          type: 'error',
+          title: error.data.message,
+          contentHeight: 120,
+        });
       }
+    } finally {
+      dispatch(deleteProgress(date));
     }
   };
   const takeMedia = async (mediaType: MediaType) => {
+    const date = new Date().toISOString();
     try {
       const result = await launchCamera({ mediaType });
       if (!result?.didCancel) {
@@ -151,9 +149,7 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
           });
         });
         onClose();
-        const date = new Date().toISOString();
-        const request = postTasksFiles({ formData, files, date });
-        await request.unwrap();
+        await handleUpload({ formData, files, date });
         getTask.refetch();
       }
     } catch (error) {
@@ -165,7 +161,8 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
         typeof error.data === 'object' &&
         error.data !== null &&
         'message' in error.data &&
-        typeof error.data.message === 'string'
+        typeof error.data.message === 'string' &&
+        error.data.message !== 'CanceledError: canceled'
       ) {
         toast.show({
           type: 'error',
@@ -173,6 +170,8 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
           contentHeight: 120,
         });
       }
+    } finally {
+      dispatch(deleteProgress(date));
     }
   };
   const takePicture = async () => {
@@ -182,6 +181,7 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
     await takeMedia('video');
   };
   const takeFromFiles = async () => {
+    const date = new Date().toISOString();
     try {
       const result = await DocumentPicker.pick();
       const formData = getFormData();
@@ -199,8 +199,7 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
         });
       });
       onClose();
-      const date = new Date().toISOString();
-      await postTasksFiles({ formData, files, date }).unwrap();
+      await handleUpload({ formData, files, date });
       getTask.refetch();
     } catch (error) {
       onClose();
@@ -211,7 +210,8 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
         typeof error.data === 'object' &&
         error.data !== null &&
         'message' in error.data &&
-        typeof error.data.message === 'string'
+        typeof error.data.message === 'string' &&
+        error.data.message !== 'CanceledError: canceled'
       ) {
         toast.show({
           type: 'error',
@@ -219,6 +219,8 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
           contentHeight: 120,
         });
       }
+    } finally {
+      dispatch(deleteProgress(date));
     }
   };
 
