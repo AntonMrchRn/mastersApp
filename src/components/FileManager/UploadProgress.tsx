@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
 
+import plural from 'plural-ru';
 import prettyBytes from 'pretty-bytes';
 import { Text, useTheme } from 'rn-ui-kit';
 
@@ -40,7 +41,13 @@ export const UploadProgress: FC = () => {
           <View key={dates[index]} style={styles.mt24}>
             <View style={styles.rowBetween}>
               <Text variant={'bodyMRegular'} color={theme.text.basic}>
-                Загружается {progress.files.length} файла
+                Загружается{' '}
+                {plural(
+                  progress.files.length,
+                  '%d файл',
+                  '%d файла',
+                  '%d файлов'
+                )}
               </Text>
               <TouchableOpacity onPress={() => controllers?.[date]?.abort()}>
                 <Text variant={'bodySBold'} color={theme.text.basic}>
