@@ -133,24 +133,32 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
     const date = new Date().toISOString();
     try {
       const result = await launchCamera({ mediaType });
-      if (!result?.didCancel) {
-        const formData = getFormData();
-        let files: { name: string; size: number }[] = [];
-        result?.assets?.map((asset, index) => {
-          formData.append(`file${Number(index) + 1}`, {
-            uri: asset?.uri,
-            type: asset.type,
-            name: asset.fileName,
-          });
-          formData.append(`name${Number(index) + 1}`, asset?.fileName);
-          files = files.concat({
-            name: asset?.fileName || `name${Number(index) + 1}`,
-            size: asset?.fileSize || 0,
-          });
+      if (result.errorCode === 'camera_unavailable') {
+        toast.show({
+          type: 'error',
+          title: 'Камера недоступна',
+          contentHeight: 100,
         });
-        onClose();
-        await handleUpload({ formData, files, date });
-        getTask.refetch();
+      } else {
+        if (!result?.didCancel) {
+          const formData = getFormData();
+          let files: { name: string; size: number }[] = [];
+          result?.assets?.map((asset, index) => {
+            formData.append(`file${Number(index) + 1}`, {
+              uri: asset?.uri,
+              type: asset.type,
+              name: asset.fileName,
+            });
+            formData.append(`name${Number(index) + 1}`, asset?.fileName);
+            files = files.concat({
+              name: asset?.fileName || `name${Number(index) + 1}`,
+              size: asset?.fileSize || 0,
+            });
+          });
+          onClose();
+          await handleUpload({ formData, files, date });
+          getTask.refetch();
+        }
       }
     } catch (error) {
       onClose();
