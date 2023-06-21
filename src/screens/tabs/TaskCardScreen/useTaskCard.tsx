@@ -13,10 +13,10 @@ import { TaskCardReport } from '@/components/TabScreens/TaskCard/TaskCardReport'
 import { useAppSelector } from '@/store';
 import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import { StatusType, TaskType } from '@/types/task';
+import { StatusType, TaskTab, TaskType } from '@/types/task';
 
 export const useTaskCard = (taskId: string) => {
-  const [tab, setTab] = useState('Описание');
+  const [tab, setTab] = useState<TaskTab>(TaskTab.DESCRIPTION);
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
@@ -70,27 +70,27 @@ export const useTaskCard = (taskId: string) => {
   const tabs: TabItem[] = [
     {
       id: 0,
-      label: 'Описание',
+      label: TaskTab.DESCRIPTION,
       icon: false,
     },
     {
       id: 1,
-      label: 'Смета',
+      label: TaskTab.ESTIMATE,
       icon: false,
     },
     {
       id: 2,
-      label: 'Комментарии',
+      label: TaskTab.COMMENTS,
       icon: false,
     },
     {
       id: 3,
-      label: 'Отчет',
+      label: TaskTab.REPORT,
       icon: false,
     },
     {
       id: 4,
-      label: 'История',
+      label: TaskTab.HISTORY,
       icon: false,
     },
   ];
@@ -211,7 +211,7 @@ export const useTaskCard = (taskId: string) => {
     }
   };
   const onTabChange = (item: TabItem) => {
-    setTab(item.label);
+    setTab(item.label as TaskTab);
   };
   const getBanner = (): TaskCardBottomBanner => {
     if (tab === 'Описание') {

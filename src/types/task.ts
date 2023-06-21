@@ -5,7 +5,6 @@ export enum TaskType {
   COMMON_AUCTION_SALE = 4,
   COMMON_FIRST_RESPONCE = 5,
 }
-
 export enum StatusType {
   /**
    * Подготовка
@@ -56,6 +55,13 @@ export enum StatusType {
    */
   CLOSED = 12,
 }
+export enum TaskTab {
+  DESCRIPTION = 'Описание',
+  ESTIMATE = 'Смета',
+  COMMENTS = 'Комментарии',
+  REPORT = 'Отчет',
+  HISTORY = 'История',
+}
 type TaskSearch = {
   ID?: number;
 };
@@ -67,4 +73,5 @@ type HandleUpload = {
   }[];
   date: string;
 };
+
 export type { TaskSearch, HandleUpload };
