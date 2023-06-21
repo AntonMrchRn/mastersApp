@@ -136,7 +136,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
                     taskId={taskId}
                     statusID={statusID}
                   />
-
+                  <UploadProgress />
                   <View style={styles.mt36}></View>
                   <Text variant="title3" color={theme.text.basic}>
                     Закрывающие документы
