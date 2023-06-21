@@ -17,23 +17,13 @@ import { configApp } from '@/constants/platform';
 import { useAppDispatch } from '@/store';
 import { useGetTaskQuery } from '@/store/api/tasks';
 import { deleteProgress } from '@/store/slices/tasks/actions';
+import { HandleUpload } from '@/types/task';
 
 type TaskCardUploadBottomSheetProps = {
   isVisible: boolean;
   taskId: string;
   onClose: () => void;
-  handleUpload: ({
-    formData,
-    files,
-    date,
-  }: {
-    formData: FormData;
-    files: {
-      name: string;
-      size: number;
-    }[];
-    date: string;
-  }) => Promise<void>;
+  handleUpload: ({ formData, files, date }: HandleUpload) => Promise<void>;
 };
 export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
   isVisible,

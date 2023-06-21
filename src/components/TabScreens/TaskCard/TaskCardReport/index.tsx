@@ -1,19 +1,16 @@
 import React, { FC } from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { View } from 'react-native';
 
-import prettyBytes from 'pretty-bytes';
 import { Text, useTheme } from 'rn-ui-kit';
 
 import { DownloadFilesIcon } from '@/assets/icons/svg/screens/DownloadFilesIcon';
 import { NoFilesIcon } from '@/assets/icons/svg/screens/NoFilesIcon';
 import { OtesIcon } from '@/assets/icons/svg/screens/OtesIcon';
-import { ProgressBar } from '@/components/FileManager/ProgressBar';
 import { UploadManager } from '@/components/FileManager/UploadManager';
+import { UploadProgress } from '@/components/FileManager/UploadProgress';
 import { usePostTasksFilesMutation } from '@/store/api/tasks';
 import { File } from '@/store/api/tasks/types';
-import { selectTasks } from '@/store/slices/tasks/selectors';
-import { StatusType } from '@/types/task';
+import { HandleUpload, StatusType } from '@/types/task';
 
 import { TaskCardUploadBottomSheet } from '../TaskCardUploadBottomSheet';
 
@@ -27,7 +24,8 @@ type TaskCardReportProps = {
   uploadModalVisible: boolean;
   onUploadModalVisible: () => void;
 };
-let controllers: { [x: string]: AbortController } = {};
+
+export let controllers: { [x: string]: AbortController } = {};
 export const TaskCardReport: FC<TaskCardReportProps> = ({
   activeBudgetCanceled,
   statusID,
@@ -38,18 +36,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
 }) => {
   const theme = useTheme();
   const [postTasksFiles] = usePostTasksFilesMutation();
-  const handleUpload = async ({
-    formData,
-    files,
-    date,
-  }: {
-    formData: FormData;
-    files: {
-      name: string;
-      size: number;
-    }[];
-    date: string;
-  }) => {
+  const handleUpload = async ({ formData, files, date }: HandleUpload) => {
     const controller = new AbortController();
     const request = postTasksFiles({
       formData,
@@ -60,9 +47,6 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
     controllers = { ...controllers, [date]: controller };
     await request.unwrap();
   };
-  const progressesSelector = useSelector(selectTasks).progresses;
-  const progresses = Object.values(progressesSelector);
-  const dates = Object.keys(progressesSelector);
   const getContent = () => {
     switch (statusID) {
       case StatusType.ACTIVE:
@@ -105,77 +89,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
               {files.length ? (
                 <>
                   <UploadManager files={files} taskId={taskId} />
-                  {progresses.map((progress, index) => {
-                    if (progress.progress === 1) {
-                      return null;
-                    }
-                    const key = dates[index] as string;
-                    return (
-                      <View key={dates[index]} style={{ marginTop: 24 }}>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                          }}
-                        >
-                          <Text variant={'bodyMRegular'}>
-                            Загружается {progress.files.length} файла
-                          </Text>
-                          <TouchableOpacity
-                            onPress={() => controllers?.[key]?.abort()}
-                          >
-                            <Text variant={'bodySBold'}>Отмена</Text>
-                          </TouchableOpacity>
-                        </View>
-                        <View style={{ marginTop: 16 }}>
-                          <ProgressBar
-                            progress={Math.round(
-                              (progress?.progress || 1) * 100
-                            )}
-                            loaded={progress?.loaded}
-                            size={progress?.total || 0}
-                          />
-                        </View>
-                        <View
-                          style={{
-                            marginTop: 16,
-                            borderLeftWidth: 2,
-                            paddingLeft: 12,
-                            borderColor: theme.stroke.disableDivider,
-                          }}
-                        >
-                          {progress.files.map((file, index) => (
-                            <View
-                              key={file.name}
-                              style={[
-                                {
-                                  flexDirection: 'row',
-                                  justifyContent: 'space-between',
-                                },
-                                index !== 0 && { marginTop: 4 },
-                              ]}
-                            >
-                              <Text
-                                variant={'bodySRegular'}
-                                numberOfLines={1}
-                                style={{ width: '80%' }}
-                                color={theme.text.basic}
-                              >
-                                {file.name}
-                              </Text>
-                              <Text
-                                variant={'bodySRegular'}
-                                numberOfLines={1}
-                                color={theme.text.neutral}
-                              >
-                                {prettyBytes(file.size)}
-                              </Text>
-                            </View>
-                          ))}
-                        </View>
-                      </View>
-                    );
-                  })}
+                  <UploadProgress />
                   <View style={styles.mt36}></View>
                   <Text variant="title3" color={theme.text.basic}>
                     Закрывающие документы
