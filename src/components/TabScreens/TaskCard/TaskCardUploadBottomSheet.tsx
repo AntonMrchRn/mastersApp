@@ -81,7 +81,6 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
     sizes: { size: number; type: string }[];
     isDoc: boolean;
   }): boolean => {
-    console.log('🚀 ~ file: TaskCardUploadBottomSheet.tsx:84 ~ sizes:', sizes);
     const allSizes = sizes.reduce<number>((acc, size) => acc + size.size, 0);
     if (allSizes >= MB * 250) {
       return false;
