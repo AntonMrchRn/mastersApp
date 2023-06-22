@@ -1,9 +1,3 @@
-type TaskSearch = {
-  ID?: number;
-};
-
-export type { TaskSearch };
-
 export enum TaskType {
   IT_AUCTION_SALE = 1,
   IT_FIRST_RESPONCE = 2,
@@ -61,3 +55,23 @@ export enum StatusType {
    */
   CLOSED = 12,
 }
+export enum TaskTab {
+  DESCRIPTION = 'Описание',
+  ESTIMATE = 'Смета',
+  COMMENTS = 'Комментарии',
+  REPORT = 'Отчет',
+  HISTORY = 'История',
+}
+type TaskSearch = {
+  ID?: number;
+};
+type HandleUpload = {
+  formData: FormData;
+  files: {
+    name: string;
+    size: number;
+  }[];
+  date: string;
+};
+
+export type { TaskSearch, HandleUpload };

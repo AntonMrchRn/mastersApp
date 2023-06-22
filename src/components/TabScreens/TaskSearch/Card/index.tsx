@@ -7,7 +7,10 @@ import { TaskAddress } from '@/components/task/TaskAddress';
 import { TaskBadges } from '@/components/task/TaskBadges';
 import { TaskDate } from '@/components/task/TaskDate';
 import { Task } from '@/store/api/tasks/types';
-import { TaskCardScreenNavigationProp } from '@/types/navigation';
+import {
+  TaskCardScreenNavigationProp,
+  TaskSearchNavigatorScreenName,
+} from '@/types/navigation';
 
 import { styles } from './styles';
 
@@ -25,14 +28,19 @@ const CardTasks: FC<CardTasksProp> = ({
   statusID,
   isUrgent,
   isNight,
+  ID,
 }) => {
   const address = object?.name || '';
 
+  const onPress = () => {
+    if (typeof ID === 'number') {
+      navigation.navigate(TaskSearchNavigatorScreenName.TaskCard, {
+        taskId: ID,
+      });
+    }
+  };
   return (
-    <TouchableOpacity
-      style={styles.btn}
-      onPress={() => navigation.navigate('TaskCard')}
-    >
+    <TouchableOpacity style={styles.btn} onPress={onPress}>
       <Card style={styles.wrapper}>
         <>
           <View style={styles.wrapperBadge}>

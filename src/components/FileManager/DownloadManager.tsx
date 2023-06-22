@@ -17,8 +17,12 @@ export const DownloadManager: FC<DownloadManagerProps> = ({ files }) => {
 
   return (
     <View style={styles.container}>
-      {files.map(file => {
-        return <DownloadItem file={file} key={file.url} />;
+      {files.map((file, index) => {
+        return (
+          <View style={[index !== 0 && { marginTop: 8 }]} key={file.url}>
+            <DownloadItem file={file} key={file.url} />
+          </View>
+        );
       })}
     </View>
   );

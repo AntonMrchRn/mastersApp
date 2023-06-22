@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import dayjs from 'dayjs';
 import { useToast } from 'rn-ui-kit';
@@ -13,10 +13,10 @@ import { TaskCardReport } from '@/components/TabScreens/TaskCard/TaskCardReport'
 import { useAppSelector } from '@/store';
 import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import { StatusType, TaskType } from '@/types/task';
+import { StatusType, TaskTab, TaskType } from '@/types/task';
 
-export const useTaskCard = () => {
-  const [tab, setTab] = useState('Описание');
+export const useTaskCard = (taskId: string) => {
+  const [tab, setTab] = useState<TaskTab>(TaskTab.DESCRIPTION);
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
@@ -24,8 +24,21 @@ export const useTaskCard = () => {
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
 
-  const taskId = '978';
   const getTask = useGetTaskQuery(taskId);
+
+  useEffect(() => {
+    if (
+      getTask?.error &&
+      'data' in getTask?.error &&
+      getTask?.error?.data?.message
+    ) {
+      toast.show({
+        type: 'error',
+        title: getTask?.error?.data?.message,
+        contentHeight: 120,
+      });
+    }
+  }, [getTask?.error]);
 
   const [patchTask] = usePatchTaskMutation();
 
@@ -57,27 +70,27 @@ export const useTaskCard = () => {
   const tabs: TabItem[] = [
     {
       id: 0,
-      label: 'Описание',
+      label: TaskTab.DESCRIPTION,
       icon: false,
     },
     {
       id: 1,
-      label: 'Смета',
+      label: TaskTab.ESTIMATE,
       icon: false,
     },
     {
       id: 2,
-      label: 'Комментарии',
+      label: TaskTab.COMMENTS,
       icon: false,
     },
     {
       id: 3,
-      label: 'Отчет',
+      label: TaskTab.REPORT,
       icon: false,
     },
     {
       id: 4,
-      label: 'История',
+      label: TaskTab.HISTORY,
       icon: false,
     },
   ];
@@ -189,6 +202,8 @@ export const useTaskCard = () => {
             statusID={statusID}
             files={files}
             taskId={taskId}
+            uploadModalVisible={uploadModalVisible}
+            onUploadModalVisible={onUploadModalVisible}
           />
         );
       default:
@@ -196,7 +211,7 @@ export const useTaskCard = () => {
     }
   };
   const onTabChange = (item: TabItem) => {
-    setTab(item.label);
+    setTab(item.label as TaskTab);
   };
   const getBanner = (): TaskCardBottomBanner => {
     if (tab === 'Описание') {
@@ -364,8 +379,5 @@ export const useTaskCard = () => {
     onCancelTask,
     subsetID,
     statusID,
-    uploadModalVisible,
-    onUploadModalVisible,
-    taskId,
   };
 };

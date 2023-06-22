@@ -46,7 +46,6 @@ export const FileItem: FC<FileItemProps> = ({
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: 8,
     },
     iconContainer: {
       width: 52,
@@ -129,7 +128,7 @@ export const FileItem: FC<FileItemProps> = ({
         <View style={styles.action}>{action}</View>
       </View>
       {isLoading && (
-        <ProgressBar progress={progress} recieved={recieved} size={sizeBytes} />
+        <ProgressBar progress={progress} loaded={recieved} size={sizeBytes} />
       )}
     </View>
   );

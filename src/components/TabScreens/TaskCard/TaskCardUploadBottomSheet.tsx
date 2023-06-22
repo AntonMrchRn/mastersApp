@@ -14,24 +14,27 @@ import { CameraIcon } from '@/assets/icons/svg/screens/CameraIcon';
 import { GalleryIcon } from '@/assets/icons/svg/screens/GalleryIcon';
 import { VideoIcon } from '@/assets/icons/svg/screens/VideoIcon';
 import { configApp } from '@/constants/platform';
-import { useGetTaskQuery, usePostTasksFilesMutation } from '@/store/api/tasks';
+import { useAppDispatch } from '@/store';
+import { useGetTaskQuery } from '@/store/api/tasks';
+import { deleteProgress } from '@/store/slices/tasks/actions';
+import { HandleUpload } from '@/types/task';
 
 type TaskCardUploadBottomSheetProps = {
   isVisible: boolean;
   taskId: string;
   onClose: () => void;
+  handleUpload: ({ formData, files, date }: HandleUpload) => Promise<void>;
 };
 export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
   isVisible,
   onClose,
   taskId,
+  handleUpload,
 }) => {
   const theme = useTheme();
   const toast = useToast();
-
   const getTask = useGetTaskQuery(taskId);
-
-  const [postTasksFiles] = usePostTasksFilesMutation();
+  const dispatch = useAppDispatch();
 
   const styles = StyleSheet.create({
     icon: {
@@ -69,6 +72,7 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
   };
 
   const takeFromGallery = async () => {
+    const date = new Date().toISOString();
     try {
       const result = await launchImageLibrary({
         mediaType: 'mixed',
@@ -76,6 +80,7 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
       });
       if (!result?.didCancel) {
         const formData = getFormData();
+        let files: { name: string; size: number }[] = [];
         result?.assets?.map((asset, index) => {
           formData.append(`file${Number(index) + 1}`, {
             uri: asset?.uri,
@@ -83,9 +88,13 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
             name: asset.fileName,
           });
           formData.append(`name${Number(index) + 1}`, asset?.fileName);
+          files = files.concat({
+            name: asset?.fileName || `name${Number(index) + 1}`,
+            size: asset?.fileSize || 0,
+          });
         });
         onClose();
-        await postTasksFiles(formData).unwrap();
+        await handleUpload({ formData, files, date });
         getTask.refetch();
       }
     } catch (error) {
@@ -97,7 +106,8 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
         typeof error.data === 'object' &&
         error.data !== null &&
         'message' in error.data &&
-        typeof error.data.message === 'string'
+        typeof error.data.message === 'string' &&
+        error.data.message !== 'CanceledError: canceled'
       ) {
         toast.show({
           type: 'error',
@@ -105,26 +115,40 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
           contentHeight: 120,
         });
       }
+    } finally {
+      dispatch(deleteProgress(date));
     }
   };
   const takeMedia = async (mediaType: MediaType) => {
+    const date = new Date().toISOString();
     try {
-      const result = await launchCamera({
-        mediaType,
-      });
-      if (!result?.didCancel) {
-        const formData = getFormData();
-        result?.assets?.map((asset, index) => {
-          formData.append(`file${Number(index) + 1}`, {
-            uri: asset?.uri,
-            type: asset.type,
-            name: asset.fileName,
-          });
-          formData.append(`name${Number(index) + 1}`, asset?.fileName);
+      const result = await launchCamera({ mediaType });
+      if (result.errorCode === 'camera_unavailable') {
+        toast.show({
+          type: 'error',
+          title: 'Камера недоступна',
+          contentHeight: 100,
         });
-        onClose();
-        await postTasksFiles(formData).unwrap();
-        getTask.refetch();
+      } else {
+        if (!result?.didCancel) {
+          const formData = getFormData();
+          let files: { name: string; size: number }[] = [];
+          result?.assets?.map((asset, index) => {
+            formData.append(`file${Number(index) + 1}`, {
+              uri: asset?.uri,
+              type: asset.type,
+              name: asset.fileName,
+            });
+            formData.append(`name${Number(index) + 1}`, asset?.fileName);
+            files = files.concat({
+              name: asset?.fileName || `name${Number(index) + 1}`,
+              size: asset?.fileSize || 0,
+            });
+          });
+          onClose();
+          await handleUpload({ formData, files, date });
+          getTask.refetch();
+        }
       }
     } catch (error) {
       onClose();
@@ -135,7 +159,8 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
         typeof error.data === 'object' &&
         error.data !== null &&
         'message' in error.data &&
-        typeof error.data.message === 'string'
+        typeof error.data.message === 'string' &&
+        error.data.message !== 'CanceledError: canceled'
       ) {
         toast.show({
           type: 'error',
@@ -143,18 +168,16 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
           contentHeight: 120,
         });
       }
+    } finally {
+      dispatch(deleteProgress(date));
     }
   };
-  const takePicture = async () => {
-    takeMedia('photo');
-  };
-  const takeVideo = async () => {
-    takeMedia('video');
-  };
   const takeFromFiles = async () => {
+    const date = new Date().toISOString();
     try {
       const result = await DocumentPicker.pick();
       const formData = getFormData();
+      let files: { name: string; size: number }[] = [];
       result?.map((asset, index) => {
         formData.append(`file${Number(index) + 1}`, {
           uri: asset?.uri,
@@ -162,9 +185,13 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
           name: asset.name,
         });
         formData.append(`name${Number(index) + 1}`, asset?.name);
+        files = files.concat({
+          name: asset?.name || `name${Number(index) + 1}`,
+          size: asset?.size || 0,
+        });
       });
       onClose();
-      await postTasksFiles(formData).unwrap();
+      await handleUpload({ formData, files, date });
       getTask.refetch();
     } catch (error) {
       onClose();
@@ -175,7 +202,8 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
         typeof error.data === 'object' &&
         error.data !== null &&
         'message' in error.data &&
-        typeof error.data.message === 'string'
+        typeof error.data.message === 'string' &&
+        error.data.message !== 'CanceledError: canceled'
       ) {
         toast.show({
           type: 'error',
@@ -183,7 +211,15 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
           contentHeight: 120,
         });
       }
+    } finally {
+      dispatch(deleteProgress(date));
     }
+  };
+  const takePicture = async () => {
+    await takeMedia('photo');
+  };
+  const takeVideo = async () => {
+    await takeMedia('video');
   };
 
   const actions = [
