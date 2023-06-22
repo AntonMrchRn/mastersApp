@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { View } from 'react-native';
 
-import { Text, useTheme } from 'rn-ui-kit';
+import { Banner, Text, useTheme } from 'rn-ui-kit';
 
 import { DownloadFilesIcon } from '@/assets/icons/svg/screens/DownloadFilesIcon';
 import { NoFilesIcon } from '@/assets/icons/svg/screens/NoFilesIcon';
@@ -35,6 +35,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
   onUploadModalVisible,
 }) => {
   const theme = useTheme();
+  const [banner, setBanner] = useState(false);
   const [postTasksFiles] = usePostTasksFilesMutation();
   const handleUpload = async ({ formData, files, date }: HandleUpload) => {
     const controller = new AbortController();
@@ -115,7 +116,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
                     color={theme.text.neutral}
                   >
                     Загрузите файлы, подтверждающие выполнение услуг общим
-                    размером не более 50 МВ
+                    размером не более 250 МВ
                   </Text>
                 </View>
               )}
@@ -181,6 +182,22 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
         taskId={taskId}
         handleUpload={handleUpload}
       />
+      {banner && (
+        <Banner
+          containerStyle={{
+            position: 'absolute',
+            zIndex: 1,
+            alignSelf: 'center',
+            bottom: 170,
+          }}
+          type={'error'}
+          icon={'alert'}
+          title="Превышен лимит загрузки"
+          text={
+            'Максимальный размер загружаемого файла:\n ● изображения до 20 МБ форматов jpg, jpeg, png, webp\n ● видео до 50 МБ\nОбщий размер загружаемых файлов не более 250 МВ'
+          }
+        />
+      )}
       {getContent()}
     </>
   );
