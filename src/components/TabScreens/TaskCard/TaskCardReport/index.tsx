@@ -36,6 +36,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
 }) => {
   const theme = useTheme();
   const [banner, setBanner] = useState(false);
+  const onBanner = () => setBanner(!banner);
   const [postTasksFiles] = usePostTasksFilesMutation();
   const handleUpload = async ({ formData, files, date }: HandleUpload) => {
     const controller = new AbortController();
@@ -181,9 +182,11 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
         onClose={onUploadModalVisible}
         taskId={taskId}
         handleUpload={handleUpload}
+        onBanner={onBanner}
       />
       {banner && (
         <Banner
+          onClosePress={onBanner}
           containerStyle={{
             position: 'absolute',
             zIndex: 1,

@@ -24,12 +24,14 @@ type TaskCardUploadBottomSheetProps = {
   taskId: string;
   onClose: () => void;
   handleUpload: ({ formData, files, date }: HandleUpload) => Promise<void>;
+  onBanner: () => void;
 };
 export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
   isVisible,
   onClose,
   taskId,
   handleUpload,
+  onBanner,
 }) => {
   const theme = useTheme();
   const toast = useToast();
@@ -70,7 +72,37 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
     formData.append('isCheck', false);
     return formData;
   };
-
+  const MB = 1000000;
+  const imgTypes = ['image/jpeg', 'image/png', 'image/webp'];
+  const checkSizes = ({
+    sizes,
+    isDoc,
+  }: {
+    sizes: { size: number; type: string }[];
+    isDoc: boolean;
+  }): boolean => {
+    console.log('🚀 ~ file: TaskCardUploadBottomSheet.tsx:84 ~ sizes:', sizes);
+    const allSizes = sizes.reduce<number>((acc, size) => acc + size.size, 0);
+    if (allSizes >= MB * 250) {
+      return false;
+    }
+    if (!isDoc) {
+      const moreThan20MB = sizes.filter(siz => siz.size >= 20 * MB);
+      if (moreThan20MB.length) {
+        const moreThan20MBImage = moreThan20MB.find(si =>
+          imgTypes.includes(si.type)
+        );
+        if (moreThan20MBImage) {
+          return false;
+        }
+        const moreThan50MB = moreThan20MB.find(si => si.size >= 50 * MB);
+        if (moreThan50MB) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
   const takeFromGallery = async () => {
     const date = new Date().toISOString();
     try {
@@ -81,6 +113,7 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
       if (!result?.didCancel) {
         const formData = getFormData();
         let files: { name: string; size: number }[] = [];
+        let sizes: { size: number; type: string }[] = [];
         result?.assets?.map((asset, index) => {
           formData.append(`file${Number(index) + 1}`, {
             uri: asset?.uri,
@@ -92,10 +125,19 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
             name: asset?.fileName || `name${Number(index) + 1}`,
             size: asset?.fileSize || 0,
           });
+          sizes = sizes.concat({
+            size: asset?.fileSize || 0,
+            type: asset?.type || '',
+          });
         });
         onClose();
-        await handleUpload({ formData, files, date });
-        getTask.refetch();
+        const check = checkSizes({ sizes, isDoc: false });
+        if (check) {
+          await handleUpload({ formData, files, date });
+          getTask.refetch();
+        } else {
+          onBanner();
+        }
       }
     } catch (error) {
       onClose();
