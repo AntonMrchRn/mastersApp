@@ -25,6 +25,9 @@ const styles = StyleSheet.create({
     color: '#707070',
     textAlign: 'center',
   },
+  btn: {
+    marginTop: 24,
+  },
 });
 
 export default styles;
