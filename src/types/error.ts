@@ -7,6 +7,7 @@ enum ErrorCode {
   IncorrectPhone = 20004,
   IncorrectVerificationCode = 20005,
   NetworkError = 30001,
+  NoAccess = 20007,
 }
 
 type AxiosQueryError = {

@@ -7,8 +7,8 @@ type InitialState = {
   tableNames: [];
   loadingNames: boolean;
   loadingList: boolean;
-  errorList: object | null | Error;
-  errorNames: object | null | Error;
+  errorList: Error | null;
+  errorNames: null | Error;
 };
 
 export type { InitialState };

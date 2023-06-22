@@ -36,6 +36,10 @@ enum ProfileNavigatorScreenName {
   Profile = 'Profile',
 }
 
+export type RootStackParamList = {
+  ProfileNavigation: { id: number } | undefined;
+};
+
 type RootNavigationParamList = {
   [RootScreenName.AppNavigator]: undefined;
   [RootScreenName.AuthNavigator]: undefined;

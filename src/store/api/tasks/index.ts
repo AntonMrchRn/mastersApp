@@ -33,6 +33,9 @@ export const tasksAPI = api
           url: `aux?query=?tableName==set?`,
           method: 'GET',
         }),
+        transformResponse: (res: GetTaskStatusesResponce) => {
+          return res;
+        },
       }),
       patchTask: builder.mutation<GetTaskResponce, Task>({
         query: data => ({

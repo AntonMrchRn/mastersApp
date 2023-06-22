@@ -3,7 +3,7 @@ import { AxiosError } from 'axios';
 
 import { axiosInstance } from '@/services/axios/axiosInstance';
 
-type ArgRequest = {
+type RequestArgs = {
   idList: number;
   numberOfPosts?: number;
   fromTask?: number;
@@ -12,7 +12,7 @@ type ArgRequest = {
 const getSearchTasks = createAsyncThunk(
   '/searchTask',
   async (
-    { idList, numberOfPosts = 30, fromTask = 0 }: ArgRequest,
+    { idList, numberOfPosts = 30, fromTask = 0 }: RequestArgs,
     thunkApi
   ) => {
     try {
@@ -30,7 +30,7 @@ const getSearchTasks = createAsyncThunk(
 const refreshTasks = createAsyncThunk(
   '/refreshTasks',
   async (
-    { idList, numberOfPosts = 30, fromTask = 0 }: ArgRequest,
+    { idList, numberOfPosts = 30, fromTask = 0 }: RequestArgs,
     thunkApi
   ) => {
     try {
@@ -45,14 +45,4 @@ const refreshTasks = createAsyncThunk(
   }
 );
 
-const getTableNames = createAsyncThunk('/tableNames', async (_, thunkApi) => {
-  try {
-    const { data } = await axiosInstance.get('aux?query=?tableName==set?');
-
-    return data;
-  } catch (error) {
-    return thunkApi.rejectWithValue((error as AxiosError).response?.data);
-  }
-});
-
-export { getSearchTasks, getTableNames, refreshTasks };
+export { getSearchTasks, refreshTasks };

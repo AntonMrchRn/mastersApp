@@ -32,18 +32,18 @@ const TaskSearchScreen = () => {
   const theme = useTheme();
 
   const [selectedTab, setSelectedTab] = useState(1);
-  const { data, loadingList } = useAppSelector(state => state.taskSearch);
+  const { data, loadingList, errorList } = useAppSelector(
+    state => state.taskSearch
+  );
 
   const { data: tableNames } = useGetTableNamesQuery();
 
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
-
   const renderItem = ({ item }: ListRenderItemInfo<Task>) => (
     <CardTasks {...item} navigation={navigation} />
   );
 
   const onRefresh = () => dispatch(refreshTasks({ idList: selectedTab }));
-
   const onEndReached = () => {
     !loadingList &&
       dispatch(
@@ -68,7 +68,9 @@ const TaskSearchScreen = () => {
         />
       </View>
       <View style={styles.shadowWrapper}>
-        {loadingList && !data.length ? (
+        {errorList?.code === 20007 ? (
+          <PreviewNotFound type={2} />
+        ) : loadingList && !data.length ? (
           <ActivityIndicator size={'large'} color={theme.background.accent} />
         ) : (
           <FlatList
@@ -85,7 +87,7 @@ const TaskSearchScreen = () => {
             ]}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-            ListEmptyComponent={<PreviewNotFound />}
+            ListEmptyComponent={<PreviewNotFound type={1} />}
             initialNumToRender={4}
             onEndReachedThreshold={7}
             onEndReached={onEndReached}
