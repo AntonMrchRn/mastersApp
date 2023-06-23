@@ -174,6 +174,7 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
         if (!result?.didCancel) {
           const formData = getFormData();
           let files: { name: string; size: number }[] = [];
+          let sizes: { size: number; type: string }[] = [];
           result?.assets?.map((asset, index) => {
             formData.append(`file${Number(index) + 1}`, {
               uri: asset?.uri,
@@ -185,10 +186,20 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
               name: asset?.fileName || `name${Number(index) + 1}`,
               size: asset?.fileSize || 0,
             });
+            sizes = sizes.concat({
+              size: asset?.fileSize || 0,
+              type: asset?.type || '',
+            });
           });
           onClose();
-          await handleUpload({ formData, files, date });
+          const check = checkSizes({ sizes, isDoc: false });
           getTask.refetch();
+          if (check) {
+            await handleUpload({ formData, files, date });
+            getTask.refetch();
+          } else {
+            onBanner();
+          }
         }
       }
     } catch (error) {
@@ -219,6 +230,7 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
       const result = await DocumentPicker.pick();
       const formData = getFormData();
       let files: { name: string; size: number }[] = [];
+      let sizes: { size: number; type: string }[] = [];
       result?.map((asset, index) => {
         formData.append(`file${Number(index) + 1}`, {
           uri: asset?.uri,
@@ -230,10 +242,20 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
           name: asset?.name || `name${Number(index) + 1}`,
           size: asset?.size || 0,
         });
+        sizes = sizes.concat({
+          size: asset?.size || 0,
+          type: asset?.type || '',
+        });
       });
       onClose();
-      await handleUpload({ formData, files, date });
+      const check = checkSizes({ sizes, isDoc: false });
       getTask.refetch();
+      if (check) {
+        await handleUpload({ formData, files, date });
+        getTask.refetch();
+      } else {
+        onBanner();
+      }
     } catch (error) {
       onClose();
       if (
