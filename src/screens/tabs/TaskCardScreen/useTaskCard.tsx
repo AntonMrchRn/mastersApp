@@ -28,9 +28,13 @@ export const useTaskCard = (taskId: string) => {
 
   useEffect(() => {
     if (
-      getTask?.error &&
-      'data' in getTask?.error &&
-      getTask?.error?.data?.message
+      typeof getTask.error === 'object' &&
+      getTask.error !== null &&
+      'data' in getTask.error &&
+      typeof getTask.error.data === 'object' &&
+      getTask.error.data !== null &&
+      'message' in getTask.error.data &&
+      typeof getTask.error.data.message === 'string'
     ) {
       toast.show({
         type: 'error',
