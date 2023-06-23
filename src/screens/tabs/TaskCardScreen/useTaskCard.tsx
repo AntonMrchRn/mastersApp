@@ -9,6 +9,7 @@ import {
   TaskCardBottomButton,
 } from '@/components/TabScreens/TaskCard/TaskCardBottom';
 import { TaskCardDescription } from '@/components/TabScreens/TaskCard/TaskCardDescription';
+import { TaskCardEstimate } from '@/components/TabScreens/TaskCard/TaskCardEstimate';
 import { TaskCardReport } from '@/components/TabScreens/TaskCard/TaskCardReport';
 import { useAppSelector } from '@/store';
 import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
@@ -24,13 +25,18 @@ export const useTaskCard = (taskId: string) => {
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
 
-  const getTask = useGetTaskQuery(taskId);
+  const getTask = useGetTaskQuery('926');
+  // const getTask = useGetTaskQuery(taskId);
 
   useEffect(() => {
     if (
-      getTask?.error &&
-      'data' in getTask?.error &&
-      getTask?.error?.data?.message
+      typeof getTask.error === 'object' &&
+      getTask.error !== null &&
+      'data' in getTask.error &&
+      typeof getTask.error.data === 'object' &&
+      getTask.error.data !== null &&
+      'message' in getTask.error.data &&
+      typeof getTask.error.data.message === 'string'
     ) {
       toast.show({
         type: 'error',
@@ -182,7 +188,7 @@ export const useTaskCard = (taskId: string) => {
   };
   const getCurrentTab = () => {
     switch (tab) {
-      case 'Описание':
+      case TaskTab.DESCRIPTION:
         return (
           <TaskCardDescription
             statusID={statusID}
@@ -195,7 +201,9 @@ export const useTaskCard = (taskId: string) => {
             onChangeEndTimePlan={onChangeEndTimePlan}
           />
         );
-      case 'Отчет':
+      case TaskTab.ESTIMATE:
+        return <TaskCardEstimate />;
+      case TaskTab.REPORT:
         return (
           <TaskCardReport
             activeBudgetCanceled={!!getBanner()}
@@ -214,7 +222,7 @@ export const useTaskCard = (taskId: string) => {
     setTab(item.label as TaskTab);
   };
   const getBanner = (): TaskCardBottomBanner => {
-    if (tab === 'Описание') {
+    if (tab === TaskTab.DESCRIPTION) {
       switch (statusID) {
         case StatusType.ACTIVE:
           if (outlayStatusID === 4) {
@@ -292,7 +300,7 @@ export const useTaskCard = (taskId: string) => {
         }
         return [];
       case StatusType.WORK:
-        if (tab === 'Отчет') {
+        if (tab === TaskTab.REPORT) {
           if (files.length) {
             return [
               {
@@ -330,7 +338,7 @@ export const useTaskCard = (taskId: string) => {
       case StatusType.SUMMARIZING:
       case StatusType.COMPLETED:
       case StatusType.PAID:
-        if (tab === 'Отчет') {
+        if (tab === TaskTab.REPORT) {
           return [
             {
               label: 'Загрузить еще файлы',
