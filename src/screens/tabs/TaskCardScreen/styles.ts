@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     alignSelf: 'flex-start',
-    paddingVertical: 14,
+    paddingBottom: 14,
     backgroundColor: 'white',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
