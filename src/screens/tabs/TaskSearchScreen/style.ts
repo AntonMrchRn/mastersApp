@@ -8,16 +8,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   shadowWrapper: {
+    backgroundColor: '#fff',
+    borderTopRightRadius: 24,
+    borderTopLeftRadius: 24,
     flex: 1,
     justifyContent: 'center',
-    shadowColor: 'rgba(2, 52, 227, 0.12)',
-    shadowOffset: {
-      width: 0,
-      height: -6,
-    },
-    shadowOpacity: 0.6,
-    shadowRadius: 4,
-    elevation: 2,
   },
   list: {
     borderTopRightRadius: 24,

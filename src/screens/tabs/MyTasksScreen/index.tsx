@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
-import { useTheme } from 'rn-ui-kit';
+import { SegmentedControl, TabControl, useTheme } from 'rn-ui-kit';
 
 import CardTasks from '@/components/TabScreens/TaskSearch/Card';
 import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound';
@@ -24,6 +24,8 @@ import { TaskCardScreenNavigationProp } from '@/types/navigation';
 import { TaskSearch } from '@/types/task';
 
 import styles from './style';
+import { configApp } from '@/constants/platform';
+import { taskTypesData } from './mock.data';
 
 const MyTasksScreen = () => {
   const navigation = useNavigation<TaskCardScreenNavigationProp>();
@@ -58,13 +60,22 @@ const MyTasksScreen = () => {
   useEffect(() => {
     onRefresh();
   }, []);
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapperTop}>
         <Text style={styles.textHeader}>Мои задачи</Text>
       </View>
-      <View style={styles.shadowWrapper}>
+      <TabControl
+        style={{ marginBottom: 25, paddingHorizontal: 20 }}
+        initialId={1}
+        data={taskTypesData}
+      />
+      <View
+        style={[
+          styles.shadowWrapper,
+          !!data?.length && { ...configApp.shadow },
+        ]}
+      >
         {errorList?.code === 20007 ? (
           <PreviewNotFound type={3} />
         ) : loadingList && !data.length ? (

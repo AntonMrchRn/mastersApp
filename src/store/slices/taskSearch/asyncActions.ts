@@ -16,6 +16,7 @@ const getSearchTasks = createAsyncThunk(
     thunkApi
   ) => {
     try {
+      // TODO изменить квери параметры для оптимизации
       const { data } = await axiosInstance.get(
         `tasks/web?query=?setID==${idList}?ID,desc,${numberOfPosts},${fromTask}`
       );

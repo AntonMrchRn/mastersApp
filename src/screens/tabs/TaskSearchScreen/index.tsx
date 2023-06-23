@@ -25,6 +25,7 @@ import { TaskCardScreenNavigationProp } from '@/types/navigation';
 import { TaskSearch } from '@/types/task';
 
 import styles from './style';
+import { configApp } from '@/constants/platform';
 
 const TaskSearchScreen = () => {
   const navigation = useNavigation<TaskCardScreenNavigationProp>();
@@ -69,7 +70,12 @@ const TaskSearchScreen = () => {
           tableNames={tableNames}
         />
       </View>
-      <View style={styles.shadowWrapper}>
+      <View
+        style={[
+          styles.shadowWrapper,
+          !!data?.length && { ...configApp.shadow },
+        ]}
+      >
         {errorList?.code === 20007 ? (
           <PreviewNotFound type={2} />
         ) : loadingList && !data.length ? (
