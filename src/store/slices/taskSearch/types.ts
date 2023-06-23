@@ -3,7 +3,7 @@ import { Error } from '@/types/error';
 
 type InitialState = {
   list: GetTaskResponce;
-  data: Task[];
+  data?: Task[];
   tableNames: [];
   loadingNames: boolean;
   loadingList: boolean;
