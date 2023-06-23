@@ -10,6 +10,7 @@ import TaskSearchClear from '@/assets/icons/svg/screens/TaskSearchClear';
 import { BottomTab, RootStackParamList } from '@/types/navigation';
 
 import styles from './style';
+import { InfoIcon } from '@/assets/icons/svg/screens/InfoIcon';
 
 export type PreviewProps = {
   type?: number;
@@ -45,6 +46,24 @@ const PreviewNotFound: FC<PreviewProps> = ({ type }) => {
           onPress={onPress}
           style={styles.btn}
         />
+      </View>
+    );
+  }
+  if (type === 3) {
+    const { navigate } =
+      useNavigation<StackNavigationProp<RootStackParamList>>();
+
+    const onPress = () => navigate(BottomTab.TaskSearchNavigation);
+
+    return (
+      <View style={styles.wrapperNotFound}>
+        <InfoIcon />
+        <Text style={styles.title}>Задач пока нет</Text>
+        <Text style={styles.text}>
+          Здесь будут отображаться задачи, в которых вы участвуете или подали
+          смету. Найдите свою первую задачу с помощью поиска
+        </Text>
+        <Button label="Найти задачу" onPress={onPress} style={styles.btn} />
       </View>
     );
   } else return <></>;

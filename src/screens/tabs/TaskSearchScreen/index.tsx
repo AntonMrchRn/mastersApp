@@ -32,9 +32,11 @@ const TaskSearchScreen = () => {
   const theme = useTheme();
 
   const [selectedTab, setSelectedTab] = useState(1);
-  const { data, loadingList, errorList } = useAppSelector(
-    state => state.taskSearch
-  );
+  const {
+    data = [],
+    loadingList,
+    errorList,
+  } = useAppSelector(state => state.taskSearch);
 
   const { data: tableNames } = useGetTableNamesQuery();
 
