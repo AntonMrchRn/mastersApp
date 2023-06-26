@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { View } from 'react-native';
 
 import { Spacer, Text, useTheme } from 'rn-ui-kit';
@@ -7,6 +7,8 @@ import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
 import { Service } from '@/store/api/tasks/types';
 import { OutlayStatusType, StatusType } from '@/types/task';
+
+import { TaskCardAddEstimateBottomSheet } from '../TaskCardAddEstimateBottomSheet';
 
 import { styles } from './styles';
 
@@ -22,6 +24,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   statusID,
 }) => {
   const theme = useTheme();
+  const [sheetVisible, setSheetVisible] = useState(false);
   const allSum = services.reduce((acc, val) => acc + val.sum, 0);
   const onEdit = (id: number) => {
     //
@@ -29,13 +32,33 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   const onDelete = (id: number) => {
     //
   };
+  const onSheetVisible = () => {
+    setSheetVisible(!sheetVisible);
+  };
   return (
     <>
+      <TaskCardAddEstimateBottomSheet
+        isVisible={sheetVisible}
+        onCancel={onSheetVisible}
+        pressMaterial={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+        pressService={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
       <View>
         <Spacer size={'xxxl'} />
         {outlayStatusID && statusID === StatusType.WORK && (
-          <TaskEstimateOutline outlayStatusID={outlayStatusID} />
+          <TaskEstimateOutline
+            outlayStatusID={outlayStatusID}
+            onPress={onSheetVisible}
+          />
         )}
+        <TaskEstimateOutline
+          outlayStatusID={outlayStatusID}
+          onPress={onSheetVisible}
+        />
         <Text variant={'title3'} color={theme.text.basic} style={styles.mb8}>
           Перечень услуг и материалов
         </Text>
