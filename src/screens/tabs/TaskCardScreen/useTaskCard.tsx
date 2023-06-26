@@ -14,7 +14,7 @@ import { TaskCardReport } from '@/components/TabScreens/TaskCard/TaskCardReport'
 import { useAppSelector } from '@/store';
 import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import { StatusType, TaskTab, TaskType } from '@/types/task';
+import { OutlayStatusType, StatusType, TaskTab, TaskType } from '@/types/task';
 
 export const useTaskCard = (taskId: string) => {
   const [tab, setTab] = useState<TaskTab>(TaskTab.DESCRIPTION);
@@ -61,7 +61,7 @@ export const useTaskCard = (taskId: string) => {
   const address = task?.object?.name || '';
   const description = task?.description || '';
   const statusID: StatusType | undefined = task?.statusID;
-  const outlayStatusID = task?.outlayStatusID;
+  const outlayStatusID: OutlayStatusType | undefined = task?.outlayStatusID;
   const name = task?.name || '';
   const budget = `${task?.budget} ₽` || '';
   const isNight = task?.isNight || false;
@@ -204,7 +204,12 @@ export const useTaskCard = (taskId: string) => {
           />
         );
       case TaskTab.ESTIMATE:
-        return <TaskCardEstimate services={services} />;
+        return (
+          <TaskCardEstimate
+            services={services}
+            outlayStatusID={outlayStatusID}
+          />
+        );
       case TaskTab.REPORT:
         return (
           <TaskCardReport
