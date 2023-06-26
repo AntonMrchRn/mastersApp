@@ -11,10 +11,14 @@ import { Service } from '@/store/api/tasks/types';
 type TaskEstimateItemProps = {
   service: Service;
   previewActions: boolean;
+  firstAction: () => void;
+  secondAction: () => void;
 };
 export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   service,
   previewActions,
+  firstAction,
+  secondAction,
 }) => {
   const items = [
     {
@@ -38,12 +42,8 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
       containerStyle={styles.containerStyle}
       variant={'default'}
       previewActions={previewActions}
-      fistAction={function (): void {
-        throw new Error('Function not implemented.');
-      }}
-      secondAction={function (): void {
-        throw new Error('Function not implemented.');
-      }}
+      firstAction={firstAction}
+      secondAction={secondAction}
       title={service?.name || ''}
       items={items}
     />
