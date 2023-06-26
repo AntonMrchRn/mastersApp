@@ -55,6 +55,36 @@ export enum StatusType {
    */
   CLOSED = 12,
 }
+export enum OutlayStatusType {
+  /**
+   * Подготовка
+   */
+  PENDING = 1,
+  /**
+   * Согласование
+   */
+  MATCHING = 2,
+  /**
+   * Согласовано
+   */
+  READY = 3,
+  /**
+   * Отказано
+   */
+  CANCELLED = 4,
+  /**
+   * Возвращено на доработку
+   */
+  RETURNED = 5,
+  /**
+   * В процессе оплаты
+   */
+  IN_PAYMENT = 6,
+  /**
+   * Оплачена
+   */
+  PAID = 7,
+}
 export enum TaskTab {
   DESCRIPTION = 'Описание',
   ESTIMATE = 'Смета',
