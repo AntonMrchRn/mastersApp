@@ -21,8 +21,9 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   outlayStatusID,
   statusID,
 }) => {
+  console.log('🚀 ~ file: index.tsx:24 ~ services:', services);
   const theme = useTheme();
-
+  const allSum = services.reduce((acc, val) => acc + val.sum, 0);
   return (
     <View>
       <Spacer size={'xxxl'} />
@@ -40,6 +41,32 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           </View>
         );
       })}
+      <View style={styles.bottom}>
+        <View style={styles.row}>
+          <Text variant="bodySBold" color={theme.text.basic}>
+            Всего по работам
+          </Text>
+          <Text variant="bodySBold" color={theme.text.basic}>
+            {allSum} ₽
+          </Text>
+        </View>
+        <View style={styles.row}>
+          <Text variant="bodySBold" color={theme.text.basic}>
+            Всего по материалам
+          </Text>
+          <Text variant="bodySBold" color={theme.text.basic}>
+            0 ₽
+          </Text>
+        </View>
+        <View style={styles.row}>
+          <Text variant="bodySBold" color={theme.text.accent}>
+            ИТОГО
+          </Text>
+          <Text variant="bodySBold" color={theme.text.accent}>
+            {allSum} ₽
+          </Text>
+        </View>
+      </View>
     </View>
   );
 };
