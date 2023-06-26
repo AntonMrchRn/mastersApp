@@ -11,6 +11,12 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'off',
     '@typescript-eslint/no-explicit-any': 'error',
     'no-useless-escape': 'off',
+    'react/self-closing-comp': [
+      'error',
+      {
+        component: true,
+      },
+    ],
     '@typescript-eslint/no-var-requires': 'off',
     'simple-import-sort/imports': [
       'error',

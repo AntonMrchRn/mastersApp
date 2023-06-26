@@ -25,7 +25,8 @@ export const useTaskCard = (taskId: string) => {
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
 
-  const getTask = useGetTaskQuery('926');
+  // const getTask = useGetTaskQuery('926');
+  const getTask = useGetTaskQuery('996');
   // const getTask = useGetTaskQuery(taskId);
 
   useEffect(() => {
@@ -52,6 +53,7 @@ export const useTaskCard = (taskId: string) => {
   const id = task?.ID || 0;
   const subsetID = task?.subsetID || '';
   const files = task?.files || [];
+  const services = task?.services || [];
   const startTime = task?.startTime || '';
   const endTime = task?.endTime || '';
   const contacts = task?.contacts || [];
@@ -202,7 +204,7 @@ export const useTaskCard = (taskId: string) => {
           />
         );
       case TaskTab.ESTIMATE:
-        return <TaskCardEstimate />;
+        return <TaskCardEstimate services={services} />;
       case TaskTab.REPORT:
         return (
           <TaskCardReport
