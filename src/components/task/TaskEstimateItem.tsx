@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { StyleSheet } from 'react-native';
 
 import { Swipeable } from 'rn-ui-kit';
 
@@ -25,8 +26,12 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({ service }) => {
       icon: <CalculatorIcon />,
     },
   ];
+  const styles = StyleSheet.create({
+    containerStyle: { paddingRight: 20, paddingHorizontal: 0 },
+  });
   return (
     <Swipeable
+      containerStyle={styles.containerStyle}
       variant={'default'}
       fistAction={function (): void {
         throw new Error('Function not implemented.');

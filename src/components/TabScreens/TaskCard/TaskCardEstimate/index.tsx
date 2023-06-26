@@ -26,8 +26,9 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   return (
     <View>
       <Spacer size={'xxxl'} />
-      {/* {outlayStatusID && statusID === StatusType.WORK && ( */}
-      <TaskEstimateOutline outlayStatusID={outlayStatusID} />
+      {outlayStatusID && statusID === StatusType.WORK && (
+        <TaskEstimateOutline outlayStatusID={outlayStatusID} />
+      )}
       <Text variant={'title3'} color={theme.text.basic} style={styles.mb8}>
         Перечень услуг и материалов
       </Text>

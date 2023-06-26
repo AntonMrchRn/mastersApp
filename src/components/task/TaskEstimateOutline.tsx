@@ -8,11 +8,11 @@ import { OutlayStatusType } from '@/types/task';
 
 type TaskEstimateOutlineProps = {
   outlayStatusID: OutlayStatusType | undefined;
-  onButtonPress?: () => void;
+  onPress?: () => void;
 };
 export const TaskEstimateOutline: FC<TaskEstimateOutlineProps> = ({
   outlayStatusID,
-  onButtonPress,
+  onPress,
 }) => {
   const theme = useTheme();
   const styles = StyleSheet.create({
@@ -50,7 +50,7 @@ export const TaskEstimateOutline: FC<TaskEstimateOutlineProps> = ({
   return (
     <View style={styles.container}>
       {getBadge()}
-      <TouchableOpacity style={styles.button} onPress={onButtonPress}>
+      <TouchableOpacity style={styles.button} onPress={onPress}>
         <PlusIcon />
         <Text variant="bodySBold" color={theme.text.basic} style={styles.text}>
           Добавить
