@@ -10,8 +10,12 @@ import { Service } from '@/store/api/tasks/types';
 
 type TaskEstimateItemProps = {
   service: Service;
+  previewActions: boolean;
 };
-export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({ service }) => {
+export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
+  service,
+  previewActions,
+}) => {
   const items = [
     {
       text: `${service.price} ₽ за шт.`,
@@ -33,6 +37,7 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({ service }) => {
     <Swipeable
       containerStyle={styles.containerStyle}
       variant={'default'}
+      previewActions={previewActions}
       fistAction={function (): void {
         throw new Error('Function not implemented.');
       }}

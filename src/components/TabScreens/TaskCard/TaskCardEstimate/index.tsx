@@ -33,10 +33,10 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
       <Text variant={'title3'} color={theme.text.basic} style={styles.mb8}>
         Перечень услуг и материалов
       </Text>
-      {services.map(service => {
+      {services.map((service, index) => {
         return (
           <View key={service.ID}>
-            <TaskEstimateItem service={service} />
+            <TaskEstimateItem service={service} previewActions={!index} />
             <Spacer size={0} separator="bottom" />
           </View>
         );
