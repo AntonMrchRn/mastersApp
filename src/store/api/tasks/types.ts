@@ -84,10 +84,6 @@ type Task = {
     pname?: string;
     sname?: string;
   };
-  authorTypeID: number;
-  comment: string;
-  creationTime: string;
-  taskID: number;
   count?: number;
   createdTime?: string;
   curators?: Curator[];
