@@ -10,6 +10,7 @@ import {
 } from '@/components/TabScreens/TaskCard/TaskCardBottom';
 import { TaskCardDescription } from '@/components/TabScreens/TaskCard/TaskCardDescription';
 import { TaskCardEstimate } from '@/components/TabScreens/TaskCard/TaskCardEstimate';
+import { TaskCardHisory } from '@/components/TabScreens/TaskCard/TaskCardHistory';
 import { TaskCardReport } from '@/components/TabScreens/TaskCard/TaskCardReport';
 import { useAppSelector } from '@/store';
 import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
@@ -26,7 +27,6 @@ export const useTaskCard = (taskId: string) => {
   const { user } = useAppSelector(selectAuth);
 
   const getTask = useGetTaskQuery('926');
-  // const getTask = useGetTaskQuery(taskId);
 
   useEffect(() => {
     if (
@@ -214,6 +214,8 @@ export const useTaskCard = (taskId: string) => {
             onUploadModalVisible={onUploadModalVisible}
           />
         );
+      case TaskTab.HISTORY:
+        return <TaskCardHisory taskId={taskId} />;
       default:
         return <></>;
     }

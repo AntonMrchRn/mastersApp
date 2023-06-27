@@ -4,6 +4,9 @@ export const styles = StyleSheet.create({
   mt16: {
     marginTop: 16,
   },
+  contentContainerTab: {
+    paddingHorizontal: 20,
+  },
   container: {
     flex: 1,
     backgroundColor: 'white',
