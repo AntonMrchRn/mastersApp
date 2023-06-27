@@ -26,6 +26,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   statusID,
   taskId,
 }) => {
+  console.log('🚀 ~ file: index.tsx:29 ~ services:', services);
   const theme = useTheme();
   const toast = useToast();
   const getTask = useGetTaskQuery(taskId.toString());
@@ -61,7 +62,8 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     const newServices = services.filter(servic => servic.ID !== id);
     await patchTask({
       //id таски
-      // ID: taskId,
+      ID: taskId,
+      //массив услуг
       services: newServices,
     });
     getTask.refetch();
