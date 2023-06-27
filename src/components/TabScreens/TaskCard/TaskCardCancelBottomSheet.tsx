@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { BottomSheet, Button } from 'rn-ui-kit';
 
-import ControlledInput from '@/components/ControlledInput';
+import ControlledInput from '@/components/inputs/ControlledInput';
 import { cancelTaskValidationSchema } from '@/utils/formValidation';
 
 type TaskCardCancelBottomSheetProps = {

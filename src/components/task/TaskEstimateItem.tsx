@@ -1,40 +1,85 @@
 import React, { FC } from 'react';
+import { StyleSheet } from 'react-native';
 
 import { Swipeable } from 'rn-ui-kit';
+import { Variant } from 'rn-ui-kit/lib/typescript/components/Swipeable';
 
 import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
 import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { PriceIcon } from '@/assets/icons/svg/estimate/PriceIcon';
-import { Service } from '@/store/api/tasks/types';
+import { RoleType } from '@/types/task';
 
 type TaskEstimateItemProps = {
-  service: Service;
+  previewActions?: boolean;
+  firstAction: () => void;
+  secondAction: () => void;
+  title?: string;
+  price?: number;
+  count?: number;
+  sum?: number;
+  roleID: RoleType;
 };
-export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({ service }) => {
+export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
+  previewActions,
+  firstAction,
+  secondAction,
+  title = '',
+  price = 0,
+  count = 0,
+  sum = 0,
+  roleID,
+}) => {
   const items = [
     {
-      text: `${service.price} ₽ за шт.`,
+      text: `${price} ₽ за шт.`,
       icon: <PriceIcon />,
     },
     {
-      text: `${service.count} шт.`,
+      text: `${count} шт.`,
       icon: <CubeIcon />,
     },
     {
-      text: `${service.sum} ₽`,
+      text: `${sum} ₽`,
       icon: <CalculatorIcon />,
     },
   ];
+
+  const getVariant = (): Variant => {
+    switch (roleID) {
+      case RoleType.EXTERNAL_EXECUTOR:
+      case RoleType.INTERNAL_EXECUTOR:
+        return 'user';
+      case RoleType.COORDINATOR:
+        return 'coordinator';
+      default:
+        return 'default';
+    }
+  };
+  const getLabel = (): string => {
+    switch (roleID) {
+      case RoleType.EXTERNAL_EXECUTOR:
+      case RoleType.INTERNAL_EXECUTOR:
+        return 'Изменено исполнителем';
+      case RoleType.COORDINATOR:
+        return 'Изменено координатором';
+      default:
+        return '';
+    }
+  };
+
+  const styles = StyleSheet.create({
+    containerStyle: { paddingRight: 20, paddingHorizontal: 0 },
+  });
+
   return (
     <Swipeable
-      variant={'default'}
-      fistAction={function (): void {
-        throw new Error('Function not implemented.');
-      }}
-      secondAction={function (): void {
-        throw new Error('Function not implemented.');
-      }}
-      title={service?.name || ''}
+      label={getLabel()}
+      containerStyle={styles.containerStyle}
+      variant={getVariant()}
+      previewActions={previewActions}
+      firstAction={firstAction}
+      secondAction={secondAction}
+      title={title}
       items={items}
     />
   );

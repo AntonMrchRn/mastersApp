@@ -3,6 +3,8 @@ import { NativeStackNavigationProp } from 'react-native-screens/native-stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
+import { Material, Service } from '@/store/api/tasks/types';
+
 enum AuthScreenName {
   SignIn = 'SignIn',
   Recovery = 'Recovery',
@@ -26,6 +28,7 @@ enum RootScreenName {
 enum TaskSearchNavigatorScreenName {
   TaskSearch = 'TaskSearch',
   TaskCard = 'TaskCard',
+  EstimateEdit = 'EstimateEdit',
 }
 
 enum MyTasksNavigatorScreenName {
@@ -73,6 +76,11 @@ type ProfileNavigationParamList = {
 type TaskSearchNavigationParamList = {
   TaskSearch: undefined;
   TaskCard: { taskId: number };
+  EstimateEdit: {
+    taskId: number;
+    serviceId: number;
+    materialName?: string;
+  };
 };
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<

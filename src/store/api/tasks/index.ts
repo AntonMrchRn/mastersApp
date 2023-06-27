@@ -4,7 +4,7 @@ import { setProgresses } from '@/store/slices/tasks/actions';
 import { Progress } from '@/store/slices/tasks/types';
 
 import {
-  GetTaskHistory,
+  GetTaskHistoryResponce,
   GetTaskResponce,
   GetTaskStatusesResponce,
   PostTasksFilesRequest,
@@ -23,7 +23,7 @@ export const tasksAPI = api
           method: 'GET',
         }),
       }),
-      getTaskHistory: builder.query<GetTaskHistory, string>({
+      getTaskHistory: builder.query<GetTaskHistoryResponce, string>({
         query: id => ({
           url: `tasks/comments?query=?ID==${id}*authorTypeID==3?creationTime,asc,,`,
           method: 'GET',
