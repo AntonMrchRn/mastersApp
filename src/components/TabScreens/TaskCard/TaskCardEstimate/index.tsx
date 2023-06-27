@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { View } from 'react-native';
 
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Spacer, Text, useTheme } from 'rn-ui-kit';
+import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
@@ -28,6 +28,8 @@ type TaskCardEstimateProps = {
     TaskSearchNavigatorScreenName.TaskCard,
     undefined
   >;
+  onEstimateBottomVisible: () => void;
+  estimateBottomVisible: boolean;
 };
 
 export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
@@ -36,6 +38,8 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   statusID,
   taskId,
   navigation,
+  onEstimateBottomVisible,
+  estimateBottomVisible,
 }) => {
   const {
     sheetVisible,
@@ -45,10 +49,14 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     onEdit,
     onDeleteService,
     onDeleteMaterial,
+    onPressMaterial,
+    onPressService,
   } = useTaskCardEstimate({
     services,
     taskId,
     navigation,
+    onEstimateBottomVisible,
+    estimateBottomVisible,
   });
   const theme = useTheme();
 
@@ -57,12 +65,8 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
       <TaskCardAddEstimateBottomSheet
         isVisible={sheetVisible}
         onCancel={onSheetVisible}
-        pressMaterial={function (): void {
-          throw new Error('Function not implemented.');
-        }}
-        pressService={function (): void {
-          throw new Error('Function not implemented.');
-        }}
+        pressMaterial={onPressMaterial}
+        pressService={onPressService}
       />
       <View>
         <Spacer size={'xxxl'} />
@@ -72,10 +76,10 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             onPress={onSheetVisible}
           />
         )}
-        {/* <TaskEstimateOutline
+        <TaskEstimateOutline
           outlayStatusID={outlayStatusID}
           onPress={onSheetVisible}
-        /> */}
+        />
         <Text variant={'title3'} color={theme.text.basic} style={styles.mb8}>
           Перечень услуг и материалов
         </Text>
