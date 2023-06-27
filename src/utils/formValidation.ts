@@ -12,6 +12,9 @@ const phoneValidation = {
 const cancelTaskValidation = {
   cancelTask: Yup.string().required(''),
 };
+const estimateCountValidation = {
+  estimateCount: Yup.string().required('Укажите количество услуги / материала'),
+};
 const emailValidation = {
   email: Yup.string()
     .matches(emailRegExp, { message: emailErrorMessage })
@@ -35,6 +38,9 @@ const recoveryConfirmationValidation = {
 };
 
 const cancelTaskValidationSchema = Yup.object().shape(cancelTaskValidation);
+const estimateCountValidationSchema = Yup.object().shape(
+  estimateCountValidation
+);
 const phoneValidationSchema = Yup.object().shape(phoneValidation);
 const emailValidationSchema = Yup.object().shape(emailValidation);
 const signInWithPhoneValidationSchema = Yup.object().shape(
@@ -55,4 +61,5 @@ export {
   signInWithEmailValidationSchema,
   recoveryConfirmationValidationSchema,
   cancelTaskValidationSchema,
+  estimateCountValidationSchema,
 };

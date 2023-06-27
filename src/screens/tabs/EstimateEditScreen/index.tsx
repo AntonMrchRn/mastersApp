@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 
+import { yupResolver } from '@hookform/resolvers/yup';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
@@ -13,6 +14,7 @@ import {
   TaskSearchNavigationParamList,
   TaskSearchNavigatorScreenName,
 } from '@/types/navigation';
+import { estimateCountValidationSchema } from '@/utils/formValidation';
 
 import { styles } from './styles';
 
@@ -44,9 +46,12 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
 
   const methods = useForm({
     defaultValues: { estimateCount: '' },
+    resolver: yupResolver(estimateCountValidationSchema),
     mode: 'onChange',
   });
-
+  const {
+    formState: { errors },
+  } = methods;
   const onPress = ({ estimateCount }: { estimateCount: string }) => {
     console.log(
       '🚀 ~ file: index.tsx:50 ~ onPress ~ estimateCount:',
@@ -109,6 +114,8 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
           name={'estimateCount'}
           variant={'text'}
           label={'Количество'}
+          hint={errors.estimateCount?.message}
+          isError={!!errors.estimateCount?.message}
         />
         <Spacer size={'xl'} />
         <Button label={'Сохранить'} onPress={methods.handleSubmit(onPress)} />
