@@ -209,6 +209,7 @@ export const useTaskCard = (taskId: string) => {
             services={services}
             outlayStatusID={outlayStatusID}
             statusID={statusID}
+            taskId={id}
           />
         );
       case TaskTab.REPORT:
