@@ -50,7 +50,6 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     taskId,
     navigation,
   });
-  console.log('🚀 ~ file: index.tsx:53 ~ services:', services);
   const theme = useTheme();
 
   return (

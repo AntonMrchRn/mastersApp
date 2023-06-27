@@ -23,4 +23,7 @@ export const styles = StyleSheet.create({
   rowText: {
     marginLeft: 4,
   },
+  button: {
+    borderRadius: 12,
+  },
 });
