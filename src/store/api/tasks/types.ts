@@ -137,7 +137,7 @@ type GetTaskResponce = {
   } | null;
   tasks?: Task[];
 };
-type GetTaskHistory = {
+type GetTaskHistoryResponce = {
   status?: string;
   endpointName?: string;
   requestId: string;
@@ -253,5 +253,5 @@ export type {
   Contact,
   Curator,
   Material,
-  GetTaskHistory,
+  GetTaskHistoryResponce,
 };
