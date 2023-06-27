@@ -1,8 +1,23 @@
 export enum TaskType {
+  /**
+   * IT- ЛОТЫ
+   */
   IT_AUCTION_SALE = 1,
+  /**
+   * IT- Первый отклик
+   */
   IT_FIRST_RESPONCE = 2,
+  /**
+   * IT- Внутренние исполнители
+   */
   IT_INTERNAL_EXECUTIVES = 3,
+  /**
+   * Общие- ЛОТЫ
+   */
   COMMON_AUCTION_SALE = 4,
+  /**
+   * Общие- Первый отклик
+   */
   COMMON_FIRST_RESPONCE = 5,
 }
 export enum StatusType {
