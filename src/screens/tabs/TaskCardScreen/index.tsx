@@ -51,14 +51,9 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
     onCancelTask,
     subsetID,
     statusID,
-  } = useTaskCard(taskId);
+    goBack,
+  } = useTaskCard({ taskId, navigation });
   const theme = useTheme();
-
-  const goBack = () => {
-    if (navigation.canGoBack()) {
-      navigation.goBack();
-    }
-  };
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>

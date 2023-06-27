@@ -1,15 +1,15 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { View } from 'react-native';
 
-import { Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
+import { Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
-import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
-import { Material, Service } from '@/store/api/tasks/types';
+import { Service } from '@/store/api/tasks/types';
 import { OutlayStatusType, StatusType } from '@/types/task';
 
 import { TaskCardAddEstimateBottomSheet } from '../TaskCardAddEstimateBottomSheet';
+import { useTaskCardEstimate } from './useTaskCardEstimate';
 
 import { styles } from './styles';
 
@@ -26,69 +26,19 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   statusID,
   taskId,
 }) => {
+  const {
+    sheetVisible,
+    onSheetVisible,
+    allSum,
+    materialsSum,
+    onEdit,
+    onDeleteService,
+    onDeleteMaterial,
+  } = useTaskCardEstimate({
+    services,
+    taskId,
+  });
   const theme = useTheme();
-  const toast = useToast();
-  const getTask = useGetTaskQuery(taskId.toString());
-
-  const [patchTask, mutationTask] = usePatchTaskMutation();
-
-  const [sheetVisible, setSheetVisible] = useState(false);
-
-  const allSum = services.reduce((acc, val) => acc + val.sum, 0);
-  const allMaterials = services.reduce<Material[]>(
-    (acc, val) =>
-      acc.concat(typeof val.materials !== 'undefined' ? val.materials : []),
-    []
-  );
-  const materialsSum = allMaterials.reduce(
-    (acc, val) => acc + (val?.count || 0) * (val?.price || 0),
-    0
-  );
-  useEffect(() => {
-    if (mutationTask.error && 'data' in mutationTask.error) {
-      toast.show({
-        type: 'error',
-        title: mutationTask?.error?.data?.message,
-        contentHeight: 120,
-      });
-    }
-  }, [mutationTask.error]);
-
-  const onEdit = (id: number) => {
-    getTask.refetch();
-  };
-  const onDeleteService = async (serviceId: number) => {
-    const newServices = services.filter(servic => servic.ID !== serviceId);
-    await patchTask({
-      //id таски
-      ID: taskId,
-      //массив услуг
-      services: newServices,
-    });
-    getTask.refetch();
-  };
-  const onDeleteMaterial = async (service: Service, material: Material) => {
-    const newMaterials = service.materials?.filter(
-      materia => materia !== material
-    );
-    const newService = { ...service, materials: newMaterials };
-    const newServices = services.reduce<Service[]>((acc, val) => {
-      if (val.ID === newService.ID) {
-        return acc.concat(newService);
-      }
-      return acc.concat(val);
-    }, []);
-    await patchTask({
-      //id таски
-      ID: taskId,
-      //массив услуг
-      services: newServices,
-    });
-    getTask.refetch();
-  };
-  const onSheetVisible = () => {
-    setSheetVisible(!sheetVisible);
-  };
 
   return (
     <>
@@ -133,6 +83,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                 price={service?.price}
                 count={service?.count}
                 sum={service?.sum}
+                roleID={service?.roleID}
               />
               <Spacer size={0} separator="bottom" />
               {service?.materials?.map((material, inde) => {
@@ -148,6 +99,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                       price={material?.price}
                       count={material?.count}
                       sum={(material?.count || 0) * (material?.price || 0)}
+                      roleID={material?.roleID}
                     />
                     <Spacer size={0} separator="bottom" />
                   </View>

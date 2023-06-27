@@ -26,6 +26,7 @@ enum RootScreenName {
 enum TaskSearchNavigatorScreenName {
   TaskSearch = 'TaskSearch',
   TaskCard = 'TaskCard',
+  EstimateEdit = 'EstimateEdit',
 }
 
 enum MyTasksNavigatorScreenName {
@@ -73,6 +74,7 @@ type ProfileNavigationParamList = {
 type TaskSearchNavigationParamList = {
   TaskSearch: undefined;
   TaskCard: { taskId: number };
+  EstimateEdit: undefined;
 };
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<
