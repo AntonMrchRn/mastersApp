@@ -1,11 +1,13 @@
 import React, { FC } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 
 import { StackScreenProps } from '@react-navigation/stack';
-import { Spacer, Text, useTheme } from 'rn-ui-kit';
+import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { PriceIcon } from '@/assets/icons/svg/estimate/PriceIcon';
+import ControlledInput from '@/components/inputs/ControlledInput';
 import { useGetTaskQuery } from '@/store/api/tasks';
 import {
   TaskSearchNavigationParamList,
@@ -39,8 +41,18 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
   const material = materialName
     ? service?.materials?.find(materia => materia.name === materialName)
     : undefined;
-  console.log('🚀 ~ file: index.tsx:39 ~ service ~ service:', service);
 
+  const methods = useForm({
+    defaultValues: { estimateCount: '' },
+    mode: 'onChange',
+  });
+
+  const onPress = ({ estimateCount }: { estimateCount: string }) => {
+    console.log(
+      '🚀 ~ file: index.tsx:50 ~ onPress ~ estimateCount:',
+      estimateCount
+    );
+  };
   return (
     <View style={styles.container}>
       <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
@@ -92,6 +104,15 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
         </Text>
       </View>
       <Spacer size={'l'} />
+      <FormProvider {...methods}>
+        <ControlledInput
+          name={'estimateCount'}
+          variant={'text'}
+          label={'Количество'}
+        />
+        <Spacer size={'xl'} />
+        <Button label={'Сохранить'} onPress={methods.handleSubmit(onPress)} />
+      </FormProvider>
     </View>
   );
 };
