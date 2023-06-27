@@ -23,6 +23,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   outlayStatusID,
   statusID,
 }) => {
+  console.log('🚀 ~ file: index.tsx:26 ~ services:', services);
   const theme = useTheme();
   const [sheetVisible, setSheetVisible] = useState(false);
   const allSum = services.reduce((acc, val) => acc + val.sum, 0);
@@ -55,10 +56,10 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             onPress={onSheetVisible}
           />
         )}
-        <TaskEstimateOutline
+        {/* <TaskEstimateOutline
           outlayStatusID={outlayStatusID}
           onPress={onSheetVisible}
-        />
+        /> */}
         <Text variant={'title3'} color={theme.text.basic} style={styles.mb8}>
           Перечень услуг и материалов
         </Text>

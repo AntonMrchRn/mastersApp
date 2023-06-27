@@ -92,6 +92,14 @@ export enum TaskTab {
   REPORT = 'Отчет',
   HISTORY = 'История',
 }
+export enum RoleType {
+  INTERNAL_EXECUTOR = 1,
+  EXTERNAL_EXECUTOR = 2,
+  SUPERVISOR = 3,
+  AGGREGATOR = 4,
+  COORDINATOR = 5,
+  CLIENT = 6,
+}
 type TaskSearch = {
   ID?: number;
 };
