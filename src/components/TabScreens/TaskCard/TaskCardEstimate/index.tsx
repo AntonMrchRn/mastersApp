@@ -1,66 +1,38 @@
 import React, { FC } from 'react';
 import { View } from 'react-native';
 
-import { Spacer, SwipeList, Text, useTheme } from 'rn-ui-kit';
-import { SwipeListData } from 'rn-ui-kit/lib/typescript/components/SwipeList';
+import { Spacer, Text, useTheme } from 'rn-ui-kit';
+
+import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
+import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
+import { Service } from '@/store/api/tasks/types';
+import { OutlayStatusType } from '@/types/task';
 
 import { styles } from './styles';
 
-type TaskCardEstimateProps = {};
+type TaskCardEstimateProps = {
+  services: Service[];
+  outlayStatusID: OutlayStatusType | undefined;
+};
 
-export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({}) => {
+export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({ services }) => {
   const theme = useTheme();
-  const swipeListData = [
-    {
-      id: '0',
-      label: 'label0',
-      title: 'title0',
-      items: [
-        {
-          id: 'i0',
-          text: 'text0',
-        },
-      ],
-    },
-    {
-      id: '01',
-      label: 'label01',
-      title: 'title01',
-      items: [
-        {
-          id: 'i01',
-          text: 'text01',
-        },
-      ],
-    },
-    {
-      id: '02',
-      label: 'label02',
-      title: 'title02',
-      items: [
-        {
-          id: 'i02',
-          text: 'text02',
-        },
-      ],
-    },
-  ];
+
   return (
     <View>
       <Spacer size={'xxxl'} />
+      <TaskEstimateOutline />
       <Text variant={'title3'} color={theme.text.basic} style={styles.mb8}>
         Перечень услуг и материалов
       </Text>
-      <SwipeList
-        data={swipeListData}
-        variant={'default'}
-        fistAction={function (item: SwipeListData): void {
-          throw new Error('Function not implemented.');
-        }}
-        secondAction={function (item: SwipeListData): void {
-          throw new Error('Function not implemented.');
-        }}
-      />
+      {services.map(service => {
+        return (
+          <View key={service.ID}>
+            <TaskEstimateItem service={service} />
+            <Spacer size={0} separator="bottom" />
+          </View>
+        );
+      })}
     </View>
   );
 };
