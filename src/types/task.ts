@@ -93,11 +93,29 @@ export enum TaskTab {
   HISTORY = 'История',
 }
 export enum RoleType {
+  /**
+   * Внутренний исполнитель
+   */
   INTERNAL_EXECUTOR = 1,
+  /**
+   * Внешний исполнитель
+   */
   EXTERNAL_EXECUTOR = 2,
+  /**
+   * Руководитель
+   */
   SUPERVISOR = 3,
+  /**
+   * Агрегатор
+   */
   AGGREGATOR = 4,
+  /**
+   * Координатор
+   */
   COORDINATOR = 5,
+  /**
+   * Заказчик
+   */
   CLIENT = 6,
 }
 type TaskSearch = {
