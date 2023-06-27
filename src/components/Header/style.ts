@@ -28,15 +28,6 @@ const styles = StyleSheet.create({
     width: '15%',
     height: '100%',
   },
-  label: {
-    fontSize: 15,
-    color: '#000',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
-    fontFamily: fonts.main_400,
-    fontWeight: '400',
-  },
 });
 
 export default styles;

@@ -1,11 +1,16 @@
 import React, { FC } from 'react';
 import { View } from 'react-native';
 
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
 import { Service } from '@/store/api/tasks/types';
+import {
+  TaskSearchNavigationParamList,
+  TaskSearchNavigatorScreenName,
+} from '@/types/navigation';
 import { OutlayStatusType, StatusType } from '@/types/task';
 
 import { TaskCardAddEstimateBottomSheet } from '../TaskCardAddEstimateBottomSheet';
@@ -18,6 +23,11 @@ type TaskCardEstimateProps = {
   outlayStatusID: OutlayStatusType | undefined;
   statusID: StatusType | undefined;
   taskId: number;
+  navigation: StackNavigationProp<
+    TaskSearchNavigationParamList,
+    TaskSearchNavigatorScreenName.TaskCard,
+    undefined
+  >;
 };
 
 export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
@@ -25,6 +35,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   outlayStatusID,
   statusID,
   taskId,
+  navigation,
 }) => {
   const {
     sheetVisible,
@@ -37,6 +48,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   } = useTaskCardEstimate({
     services,
     taskId,
+    navigation,
   });
   const theme = useTheme();
 

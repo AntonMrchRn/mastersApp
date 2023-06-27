@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { StackScreenProps } from '@react-navigation/stack';
@@ -10,8 +11,6 @@ import {
 } from '@/types/navigation';
 
 import { styles } from './styles';
-import { View } from 'react-native';
-import Header from '@/components/Header';
 
 type EstimateEditScreenProps = StackScreenProps<
   TaskSearchNavigationParamList,

@@ -232,6 +232,7 @@ export const useTaskCard = ({
             outlayStatusID={outlayStatusID}
             statusID={statusID}
             taskId={id}
+            navigation={navigation}
           />
         );
       case TaskTab.REPORT:

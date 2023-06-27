@@ -2,6 +2,7 @@ import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
+import Header from '@/components/Header';
 import { EstimateEditScreen } from '@/screens/tabs/EstimateEditScreen';
 import { TaskCardScreen } from '@/screens/tabs/TaskCardScreen';
 import TaskSearchScreen from '@/screens/tabs/TaskSearchScreen';
@@ -14,7 +15,7 @@ const screenOptions = { headerShown: false };
 
 const Stack = createStackNavigator<TaskSearchNavigationParamList>();
 
-function TaskSearchNavigation() {
+const TaskSearchNavigation = () => {
   return (
     <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen
@@ -28,9 +29,13 @@ function TaskSearchNavigation() {
       <Stack.Screen
         name={TaskSearchNavigatorScreenName.EstimateEdit}
         component={EstimateEditScreen}
+        options={{
+          headerShown: true,
+          header: props => <Header {...props} label={'Редактирование сметы'} />,
+        }}
       />
     </Stack.Navigator>
   );
-}
+};
 
 export default TaskSearchNavigation;

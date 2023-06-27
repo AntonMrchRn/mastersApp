@@ -1,16 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import { StackNavigationProp } from '@react-navigation/stack';
 import { useToast } from 'rn-ui-kit';
 
 import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
 import { Material, Service } from '@/store/api/tasks/types';
+import {
+  TaskSearchNavigationParamList,
+  TaskSearchNavigatorScreenName,
+} from '@/types/navigation';
 
 export const useTaskCardEstimate = ({
   services,
   taskId,
+  navigation,
 }: {
   services: Service[];
   taskId: number;
+  navigation: StackNavigationProp<
+    TaskSearchNavigationParamList,
+    TaskSearchNavigatorScreenName.TaskCard,
+    undefined
+  >;
 }) => {
   const toast = useToast();
 
@@ -35,7 +46,7 @@ export const useTaskCardEstimate = ({
     setSheetVisible(!sheetVisible);
   };
   const onEdit = (id: number) => {
-    getTask.refetch();
+    navigation.navigate(TaskSearchNavigatorScreenName.EstimateEdit);
   };
   const onDeleteService = async (serviceId: number) => {
     const newServices = services.filter(servic => servic.ID !== serviceId);
