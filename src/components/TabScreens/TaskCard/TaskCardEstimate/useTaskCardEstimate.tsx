@@ -45,8 +45,12 @@ export const useTaskCardEstimate = ({
   const onSheetVisible = () => {
     setSheetVisible(!sheetVisible);
   };
-  const onEdit = (id: number) => {
-    navigation.navigate(TaskSearchNavigatorScreenName.EstimateEdit);
+  const onEdit = (serviceId: number, materialName?: string) => {
+    navigation.navigate(TaskSearchNavigatorScreenName.EstimateEdit, {
+      taskId,
+      serviceId,
+      materialName,
+    });
   };
   const onDeleteService = async (serviceId: number) => {
     const newServices = services.filter(servic => servic.ID !== serviceId);
@@ -77,7 +81,7 @@ export const useTaskCardEstimate = ({
     });
     getTask.refetch();
   };
-
+  //TODO при добавлении материала проверять чтобы имя не совпадало с другими именами в массиве материалов к конкретной услуге
   useEffect(() => {
     if (mutationTask.error && 'data' in mutationTask.error) {
       toast.show({

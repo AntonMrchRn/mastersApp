@@ -50,6 +50,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     taskId,
     navigation,
   });
+  console.log('🚀 ~ file: index.tsx:53 ~ services:', services);
   const theme = useTheme();
 
   return (
@@ -80,7 +81,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           Перечень услуг и материалов
         </Text>
         {services.map(service => {
-          const firstAction = () => {
+          const firstActionService = () => {
             onEdit(service.ID);
           };
           const secondActionService = () => {
@@ -89,7 +90,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           return (
             <View key={service.ID}>
               <TaskEstimateItem
-                firstAction={firstAction}
+                firstAction={firstActionService}
                 secondAction={secondActionService}
                 title={service?.name}
                 price={service?.price}
@@ -99,13 +100,16 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
               />
               <Spacer size={0} separator="bottom" />
               {service?.materials?.map((material, inde) => {
+                const firstActionMaterial = () => {
+                  onEdit(service.ID, material.name);
+                };
                 const secondActionMaterial = () => {
                   onDeleteMaterial(service, material);
                 };
                 return (
                   <View key={material.measure + material.name + inde}>
                     <TaskEstimateItem
-                      firstAction={firstAction}
+                      firstAction={firstActionMaterial}
                       secondAction={secondActionMaterial}
                       title={material?.name}
                       price={material?.price}

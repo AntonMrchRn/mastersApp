@@ -3,10 +3,24 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     backgroundColor: 'white',
+    marginHorizontal: 20,
   },
   title: {
-    marginTop: 24,
+    marginVertical: 24,
+  },
+  name: {
+    marginTop: 8,
+  },
+  description: {
+    marginTop: 4,
+  },
+  row: {
+    marginTop: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  rowText: {
+    marginLeft: 4,
   },
 });
