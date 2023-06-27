@@ -7242,9 +7242,9 @@ rimraf@~2.6.2:
   dependencies:
     glob "^7.1.3"
 
-"rn-ui-kit@git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#0.1.26":
-  version "0.1.26"
-  resolved "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#e54a57548e849cdfffa4ca459a4050ea41ce0420"
+"rn-ui-kit@git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#0.2.5":
+  version "0.2.5"
+  resolved "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#f09a8d5ef817cb0fe164034612d6711aa4e903a3"
 
 run-parallel@^1.1.9:
   version "1.2.0"

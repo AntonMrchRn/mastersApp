@@ -9,10 +9,11 @@ import {
 } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
-import { SegmentedControl, TabControl, useTheme } from 'rn-ui-kit';
+import { TabControl, useTheme } from 'rn-ui-kit';
 
 import CardTasks from '@/components/TabScreens/TaskSearch/Card';
 import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound';
+import { configApp } from '@/constants/platform';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useGetTableNamesQuery } from '@/store/api/tasks';
 import { Task } from '@/store/api/tasks/types';
@@ -23,9 +24,9 @@ import {
 import { TaskCardScreenNavigationProp } from '@/types/navigation';
 import { TaskSearch } from '@/types/task';
 
+import { taskSections } from './mock.data';
+
 import styles from './style';
-import { configApp } from '@/constants/platform';
-import { taskTypesData } from './mock.data';
 
 const MyTasksScreen = () => {
   const navigation = useNavigation<TaskCardScreenNavigationProp>();
@@ -66,9 +67,9 @@ const MyTasksScreen = () => {
         <Text style={styles.textHeader}>Мои задачи</Text>
       </View>
       <TabControl
-        style={{ marginBottom: 25, paddingHorizontal: 20 }}
+        contentContainerStyle={styles.wrapperTab}
         initialId={1}
-        data={taskTypesData}
+        data={taskSections}
       />
       <View
         style={[

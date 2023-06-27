@@ -51,7 +51,7 @@
     "react-redux": "^8.0.5",
     "redux-flipper": "^2.0.2",
     "redux-persist": "^6.0.0",
-    "rn-ui-kit": "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#0.1.26",
+    "rn-ui-kit": "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#0.2.5",
     "yup": "^1.2.0"
   },
   "devDependencies": {

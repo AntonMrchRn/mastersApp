@@ -1,4 +1,3 @@
-import { configApp } from '@/constants/platform';
 import { StyleSheet } from 'react-native';
 
 import { fonts } from '@/constants/fonts';
@@ -7,6 +6,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  wrapperTab: {
+    marginBottom: 25,
+    paddingHorizontal: 20,
   },
   shadowWrapper: {
     flex: 1,
