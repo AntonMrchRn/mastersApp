@@ -26,7 +26,6 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   statusID,
   taskId,
 }) => {
-  console.log('🚀 ~ file: index.tsx:29 ~ services:', services);
   const theme = useTheme();
   const toast = useToast();
   const getTask = useGetTaskQuery(taskId.toString());
@@ -58,8 +57,27 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   const onEdit = (id: number) => {
     getTask.refetch();
   };
-  const onDeleteService = async (id: number) => {
-    const newServices = services.filter(servic => servic.ID !== id);
+  const onDeleteService = async (serviceId: number) => {
+    const newServices = services.filter(servic => servic.ID !== serviceId);
+    await patchTask({
+      //id таски
+      ID: taskId,
+      //массив услуг
+      services: newServices,
+    });
+    getTask.refetch();
+  };
+  const onDeleteMaterial = async (service: Service, material: Material) => {
+    const newMaterials = service.materials?.filter(
+      materia => materia !== material
+    );
+    const newService = { ...service, materials: newMaterials };
+    const newServices = services.reduce<Service[]>((acc, val) => {
+      if (val.ID === newService.ID) {
+        return acc.concat(newService);
+      }
+      return acc.concat(val);
+    }, []);
     await patchTask({
       //id таски
       ID: taskId,
@@ -103,14 +121,14 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           const firstAction = () => {
             onEdit(service.ID);
           };
-          const secondAction = () => {
+          const secondActionService = () => {
             onDeleteService(service.ID);
           };
           return (
             <View key={service.ID}>
               <TaskEstimateItem
                 firstAction={firstAction}
-                secondAction={secondAction}
+                secondAction={secondActionService}
                 title={service?.name}
                 price={service?.price}
                 count={service?.count}
@@ -118,11 +136,14 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
               />
               <Spacer size={0} separator="bottom" />
               {service?.materials?.map((material, inde) => {
+                const secondActionMaterial = () => {
+                  onDeleteMaterial(service, material);
+                };
                 return (
                   <View key={material.measure + material.name + inde}>
                     <TaskEstimateItem
                       firstAction={firstAction}
-                      secondAction={secondAction}
+                      secondAction={secondActionMaterial}
                       title={material?.name}
                       price={material?.price}
                       count={material?.count}
