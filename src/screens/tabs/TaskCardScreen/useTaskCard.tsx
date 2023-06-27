@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { StackNavigationProp } from '@react-navigation/stack';
 import dayjs from 'dayjs';
 import { useToast } from 'rn-ui-kit';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
@@ -10,13 +11,28 @@ import {
 } from '@/components/TabScreens/TaskCard/TaskCardBottom';
 import { TaskCardDescription } from '@/components/TabScreens/TaskCard/TaskCardDescription';
 import { TaskCardEstimate } from '@/components/TabScreens/TaskCard/TaskCardEstimate';
+import { TaskCardHisory } from '@/components/TabScreens/TaskCard/TaskCardHistory';
 import { TaskCardReport } from '@/components/TabScreens/TaskCard/TaskCardReport';
 import { useAppSelector } from '@/store';
 import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import { StatusType, TaskTab, TaskType } from '@/types/task';
+import {
+  TaskSearchNavigationParamList,
+  TaskSearchNavigatorScreenName,
+} from '@/types/navigation';
+import { OutlayStatusType, StatusType, TaskTab, TaskType } from '@/types/task';
 
-export const useTaskCard = (taskId: string) => {
+export const useTaskCard = ({
+  taskId,
+  navigation,
+}: {
+  taskId: string;
+  navigation: StackNavigationProp<
+    TaskSearchNavigationParamList,
+    TaskSearchNavigatorScreenName.TaskCard,
+    undefined
+  >;
+}) => {
   const [tab, setTab] = useState<TaskTab>(TaskTab.DESCRIPTION);
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
@@ -25,7 +41,8 @@ export const useTaskCard = (taskId: string) => {
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
 
-  const getTask = useGetTaskQuery('926');
+  // const getTask = useGetTaskQuery('926');
+  const getTask = useGetTaskQuery('996');
   // const getTask = useGetTaskQuery(taskId);
 
   useEffect(() => {
@@ -52,6 +69,7 @@ export const useTaskCard = (taskId: string) => {
   const id = task?.ID || 0;
   const subsetID = task?.subsetID || '';
   const files = task?.files || [];
+  const services = task?.services || [];
   const startTime = task?.startTime || '';
   const endTime = task?.endTime || '';
   const contacts = task?.contacts || [];
@@ -59,7 +77,7 @@ export const useTaskCard = (taskId: string) => {
   const address = task?.object?.name || '';
   const description = task?.description || '';
   const statusID: StatusType | undefined = task?.statusID;
-  const outlayStatusID = task?.outlayStatusID;
+  const outlayStatusID: OutlayStatusType | undefined = task?.outlayStatusID;
   const name = task?.name || '';
   const budget = `${task?.budget} ₽` || '';
   const isNight = task?.isNight || false;
@@ -186,6 +204,12 @@ export const useTaskCard = (taskId: string) => {
     //далее необходимо удалить этот оффер через DELETE offers/id
     setBudgetModalVisible(!budgetModalVisible);
   };
+  const goBack = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+  };
+
   const getCurrentTab = () => {
     switch (tab) {
       case TaskTab.DESCRIPTION:
@@ -202,7 +226,15 @@ export const useTaskCard = (taskId: string) => {
           />
         );
       case TaskTab.ESTIMATE:
-        return <TaskCardEstimate />;
+        return (
+          <TaskCardEstimate
+            services={services}
+            outlayStatusID={outlayStatusID}
+            statusID={statusID}
+            taskId={id}
+            navigation={navigation}
+          />
+        );
       case TaskTab.REPORT:
         return (
           <TaskCardReport
@@ -214,6 +246,8 @@ export const useTaskCard = (taskId: string) => {
             onUploadModalVisible={onUploadModalVisible}
           />
         );
+      case TaskTab.HISTORY:
+        return <TaskCardHisory taskId={taskId} />;
       default:
         return <></>;
     }
@@ -387,5 +421,6 @@ export const useTaskCard = (taskId: string) => {
     onCancelTask,
     subsetID,
     statusID,
+    goBack,
   };
 };

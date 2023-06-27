@@ -1,4 +1,5 @@
 import React from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 
@@ -16,19 +17,21 @@ import 'dayjs/locale/ru';
 dayjs.locale('ru');
 const App = () => {
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <SafeAreaProvider>
-          <ThemeProvider>
-            <ToastProvider>
-              <NavigationContainer theme={MyTheme}>
-                <RootNavigation />
-              </NavigationContainer>
-            </ToastProvider>
-          </ThemeProvider>
-        </SafeAreaProvider>
-      </PersistGate>
-    </Provider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <SafeAreaProvider>
+            <ThemeProvider>
+              <ToastProvider>
+                <NavigationContainer theme={MyTheme}>
+                  <RootNavigation />
+                </NavigationContainer>
+              </ToastProvider>
+            </ThemeProvider>
+          </SafeAreaProvider>
+        </PersistGate>
+      </Provider>
+    </GestureHandlerRootView>
   );
 };
 

@@ -1,8 +1,23 @@
 export enum TaskType {
+  /**
+   * IT- ЛОТЫ
+   */
   IT_AUCTION_SALE = 1,
+  /**
+   * IT- Первый отклик
+   */
   IT_FIRST_RESPONCE = 2,
+  /**
+   * IT- Внутренние исполнители
+   */
   IT_INTERNAL_EXECUTIVES = 3,
+  /**
+   * Общие- ЛОТЫ
+   */
   COMMON_AUCTION_SALE = 4,
+  /**
+   * Общие- Первый отклик
+   */
   COMMON_FIRST_RESPONCE = 5,
 }
 export enum StatusType {
@@ -55,12 +70,68 @@ export enum StatusType {
    */
   CLOSED = 12,
 }
+export enum OutlayStatusType {
+  /**
+   * Подготовка
+   */
+  PENDING = 1,
+  /**
+   * Согласование
+   */
+  MATCHING = 2,
+  /**
+   * Согласовано
+   */
+  READY = 3,
+  /**
+   * Отказано
+   */
+  CANCELLED = 4,
+  /**
+   * Возвращено на доработку
+   */
+  RETURNED = 5,
+  /**
+   * В процессе оплаты
+   */
+  IN_PAYMENT = 6,
+  /**
+   * Оплачена
+   */
+  PAID = 7,
+}
 export enum TaskTab {
   DESCRIPTION = 'Описание',
   ESTIMATE = 'Смета',
   COMMENTS = 'Комментарии',
   REPORT = 'Отчет',
   HISTORY = 'История',
+}
+export enum RoleType {
+  /**
+   * Внутренний исполнитель
+   */
+  INTERNAL_EXECUTOR = 1,
+  /**
+   * Внешний исполнитель
+   */
+  EXTERNAL_EXECUTOR = 2,
+  /**
+   * Руководитель
+   */
+  SUPERVISOR = 3,
+  /**
+   * Агрегатор
+   */
+  AGGREGATOR = 4,
+  /**
+   * Координатор
+   */
+  COORDINATOR = 5,
+  /**
+   * Заказчик
+   */
+  CLIENT = 6,
 }
 type TaskSearch = {
   ID?: number;

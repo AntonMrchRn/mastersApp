@@ -9,8 +9,8 @@ import { Button, SegmentedControl, Spacer } from 'rn-ui-kit';
 import AgreementCheckBox from '@/components/auth/AgreementCheckBox';
 import ForgotPassword from '@/components/auth/ForgotPassword';
 import LogoPreview from '@/components/auth/LogoPreview';
-import ControlledInput from '@/components/ControlledInput';
-import ControlledInputPhone from '@/components/ControlledInputPhone';
+import ControlledInput from '@/components/inputs/ControlledInput';
+import ControlledInputPhone from '@/components/inputs/ControlledInputPhone';
 import { configApp, deviceHeight } from '@/constants/platform';
 
 import useSignInScreen from './useSignInScreen';

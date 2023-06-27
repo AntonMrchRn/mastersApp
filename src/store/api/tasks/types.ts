@@ -1,3 +1,5 @@
+import { OutlayStatusType, RoleType } from '@/types/task';
+
 type File = {
   url: string;
   name: string;
@@ -11,6 +13,13 @@ type File = {
   isApplication: boolean;
   sizeBytes: number;
 };
+type Material = {
+  count: number;
+  measure: string;
+  name: string;
+  price: number;
+  roleID: RoleType;
+};
 type Service = {
   ID: number;
   categoryID: number;
@@ -20,9 +29,10 @@ type Service = {
   measureID: number;
   name: string;
   price: number;
-  roleID: number;
+  roleID: RoleType;
   setID: number;
   sum: number;
+  materials?: Material[];
 };
 type Executor = {
   ID?: number;
@@ -74,6 +84,7 @@ type Task = {
     pname?: string;
     sname?: string;
   };
+  count?: number;
   createdTime?: string;
   curators?: Curator[];
   description?: string;
@@ -93,7 +104,7 @@ type Task = {
     regionID?: number;
   };
   offerIDs?: number[];
-  outlayStatusID?: number;
+  outlayStatusID?: OutlayStatusType;
   publicTime?: string;
   services?: Service[];
   setID?: number;
@@ -125,6 +136,23 @@ type GetTaskResponce = {
     work: number;
   } | null;
   tasks?: Task[];
+};
+type GetTaskHistoryResponce = {
+  status?: string;
+  endpointName?: string;
+  requestId: string;
+  originalArgs: string;
+  startedTimeStamp: number;
+  fulfilledTimeStamp: number;
+  isUninitialized: boolean;
+  isLoading: boolean;
+  isSuccess: boolean;
+  isError: boolean;
+  currentData: Task[];
+  work: number;
+  data?: {
+    taskComment: Task[];
+  };
 };
 type Status = {
   ID: number;
@@ -224,4 +252,6 @@ export type {
   File,
   Contact,
   Curator,
+  Material,
+  GetTaskHistoryResponce,
 };
