@@ -9,8 +9,8 @@ import { Button, Spacer } from 'rn-ui-kit';
 import ConfirmPreview from '@/components/auth/ConfirmPreview';
 import LogoPreview from '@/components/auth/LogoPreview';
 import TimerBlockPhone from '@/components/auth/Timer/TimerBlockPhone';
-import ControlledInput from '@/components/ControlledInput';
-import ControlledInputCode from '@/components/ControlledInputCode';
+import ControlledInput from '@/components/inputs/ControlledInput';
+import ControlledInputCode from '@/components/inputs/ControlledInputCode';
 import { configApp } from '@/constants/platform';
 
 import useRecoveryConfirmationScreen from './useRecoveryConfirmationScreen';

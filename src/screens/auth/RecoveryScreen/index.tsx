@@ -11,8 +11,8 @@ import ForgotPreview from '@/components/auth/ForgotPreview';
 import LogoPreview from '@/components/auth/LogoPreview';
 import TimerBlockEmail from '@/components/auth/Timer/TimerBlockEmail';
 import TimerBlockPhone from '@/components/auth/Timer/TimerBlockPhone';
-import ControlledInput from '@/components/ControlledInput';
-import ControlledInputPhone from '@/components/ControlledInputPhone';
+import ControlledInput from '@/components/inputs/ControlledInput';
+import ControlledInputPhone from '@/components/inputs/ControlledInputPhone';
 import { configApp } from '@/constants/platform';
 
 import useRecoveryScreen from './useRecoveryScreen';
