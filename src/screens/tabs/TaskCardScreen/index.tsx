@@ -120,7 +120,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
               initialId={0}
               onChange={onTabChange}
               style={styles.mt16}
-              contentContainerStyle={{ paddingLeft: 20 }}
+              contentContainerStyle={styles.contentContainerTab}
             />
           </View>
           <View style={styles.card}>

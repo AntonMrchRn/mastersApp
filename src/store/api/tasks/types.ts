@@ -84,6 +84,11 @@ type Task = {
     pname?: string;
     sname?: string;
   };
+  authorTypeID: number;
+  comment: string;
+  creationTime: string;
+  taskID: number;
+  count?: number;
   createdTime?: string;
   curators?: Curator[];
   description?: string;
@@ -135,6 +140,23 @@ type GetTaskResponce = {
     work: number;
   } | null;
   tasks?: Task[];
+};
+type GetTaskHistory = {
+  status?: string;
+  endpointName?: string;
+  requestId: string;
+  originalArgs: string;
+  startedTimeStamp: number;
+  fulfilledTimeStamp: number;
+  isUninitialized: boolean;
+  isLoading: boolean;
+  isSuccess: boolean;
+  isError: boolean;
+  currentData: Task[];
+  work: number;
+  data?: {
+    taskComment: Task[];
+  };
 };
 type Status = {
   ID: number;
@@ -235,4 +257,5 @@ export type {
   Contact,
   Curator,
   Material,
+  GetTaskHistory,
 };
