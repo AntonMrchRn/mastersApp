@@ -5,7 +5,7 @@ import { Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
-import { Service } from '@/store/api/tasks/types';
+import { Material, Service } from '@/store/api/tasks/types';
 import { OutlayStatusType, StatusType } from '@/types/task';
 
 import { TaskCardAddEstimateBottomSheet } from '../TaskCardAddEstimateBottomSheet';
@@ -23,10 +23,18 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   outlayStatusID,
   statusID,
 }) => {
-  console.log('🚀 ~ file: index.tsx:26 ~ services:', services);
   const theme = useTheme();
   const [sheetVisible, setSheetVisible] = useState(false);
   const allSum = services.reduce((acc, val) => acc + val.sum, 0);
+  const allMaterials = services.reduce<Material[]>(
+    (acc, val) =>
+      acc.concat(typeof val.materials !== 'undefined' ? val.materials : []),
+    []
+  );
+  const materialsSum = allMaterials.reduce(
+    (acc, val) => acc + (val?.count || 0) * (val?.price || 0),
+    0
+  );
   const onEdit = (id: number) => {
     //
   };
@@ -73,12 +81,30 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           return (
             <View key={service.ID}>
               <TaskEstimateItem
-                service={service}
                 previewActions={!index}
                 firstAction={firstAction}
                 secondAction={secondAction}
+                title={service?.name}
+                price={service?.price}
+                count={service?.count}
+                sum={service?.sum}
               />
               <Spacer size={0} separator="bottom" />
+              {service?.materials?.map((material, inde) => {
+                return (
+                  <View key={material.measure + material.name + inde}>
+                    <TaskEstimateItem
+                      firstAction={firstAction}
+                      secondAction={secondAction}
+                      title={material?.name}
+                      price={material?.price}
+                      count={material?.count}
+                      sum={(material?.count || 0) * (material?.price || 0)}
+                    />
+                    <Spacer size={0} separator="bottom" />
+                  </View>
+                );
+              })}
             </View>
           );
         })}
@@ -96,7 +122,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
               Всего по материалам
             </Text>
             <Text variant="bodySBold" color={theme.text.basic}>
-              0 ₽
+              {materialsSum} ₽
             </Text>
           </View>
           <View style={styles.row}>

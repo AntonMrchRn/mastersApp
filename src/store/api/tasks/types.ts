@@ -234,4 +234,5 @@ export type {
   File,
   Contact,
   Curator,
+  Material,
 };

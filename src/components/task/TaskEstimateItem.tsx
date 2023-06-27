@@ -6,31 +6,36 @@ import { Swipeable } from 'rn-ui-kit';
 import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
 import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { PriceIcon } from '@/assets/icons/svg/estimate/PriceIcon';
-import { Service } from '@/store/api/tasks/types';
 
 type TaskEstimateItemProps = {
-  service: Service;
-  previewActions: boolean;
+  previewActions?: boolean;
   firstAction: () => void;
   secondAction: () => void;
+  title?: string;
+  price?: number;
+  count?: number;
+  sum?: number;
 };
 export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
-  service,
   previewActions,
   firstAction,
   secondAction,
+  title = '',
+  price = 0,
+  count = 0,
+  sum = 0,
 }) => {
   const items = [
     {
-      text: `${service.price} ₽ за шт.`,
+      text: `${price} ₽ за шт.`,
       icon: <PriceIcon />,
     },
     {
-      text: `${service.count} шт.`,
+      text: `${count} шт.`,
       icon: <CubeIcon />,
     },
     {
-      text: `${service.sum} ₽`,
+      text: `${sum} ₽`,
       icon: <CalculatorIcon />,
     },
   ];
@@ -44,7 +49,7 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
       previewActions={previewActions}
       firstAction={firstAction}
       secondAction={secondAction}
-      title={service?.name || ''}
+      title={title}
       items={items}
     />
   );
