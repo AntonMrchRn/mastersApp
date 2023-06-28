@@ -14,6 +14,7 @@ import { useTheme } from 'rn-ui-kit';
 import CardTasks from '@/components/TabScreens/TaskSearch/Card';
 import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound';
 import TypeSelectionTaskSearch from '@/components/TabScreens/TaskSearch/TypeSelectionTaskSearch';
+import { configApp } from '@/constants/platform';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useGetTableNamesQuery } from '@/store/api/tasks';
 import { Task } from '@/store/api/tasks/types';
@@ -25,7 +26,6 @@ import { TaskCardScreenNavigationProp } from '@/types/navigation';
 import { TaskSearch } from '@/types/task';
 
 import styles from './style';
-import { configApp } from '@/constants/platform';
 
 const TaskSearchScreen = () => {
   const navigation = useNavigation<TaskCardScreenNavigationProp>();

@@ -39,7 +39,7 @@ const MyTasksScreen = () => {
     data = [],
     loadingList,
     errorList,
-  } = useAppSelector(state => state.taskSearch);
+  } = useAppSelector(state => state.myTasks);
 
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
 

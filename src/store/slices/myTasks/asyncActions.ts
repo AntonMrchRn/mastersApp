@@ -40,7 +40,7 @@ const refreshMyTasks = createAsyncThunk(
 
     try {
       const { data } = await axiosInstance.get(
-        `tasks/web?query=?(creatorID==${userID}*coordinator==ID^^${userID})*setID==${idList}?ID,desc,${numberOfPosts},${fromTask}`
+        `tasks/web?query=?(creatorID==${userID}||coordinator==ID^^${userID})*setID==${idList}?ID,desc,${numberOfPosts},${fromTask}`
       );
 
       return data;
