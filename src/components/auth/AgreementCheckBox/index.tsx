@@ -30,14 +30,12 @@ const AgreementCheckBox = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.wrapperCheckBox}>
-        <CheckBox
-          onPress={onPress}
-          checked={field.value}
-          icon={<CheckBoxActive />}
-          style={[styles.checkBox, field.value && styles.active]}
-        />
-      </View>
+      <CheckBox
+        onPress={onPress}
+        checked={field.value}
+        icon={<CheckBoxActive />}
+        style={[styles.checkBox, field.value && styles.active]}
+      />
       <View style={styles.wrapper}>
         <Text style={styles.title}>
           Выражаю{' '}

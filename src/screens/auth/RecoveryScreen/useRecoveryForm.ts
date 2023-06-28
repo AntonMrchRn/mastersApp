@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, UseFormReturn } from 'react-hook-form';
 import { Keyboard } from 'react-native';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,8 +8,8 @@ import { useIsFocused } from '@react-navigation/native';
 import { useAppSelector } from '@/store';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import {
+  authPhoneValidationSchema,
   emailValidationSchema,
-  phoneValidationSchema,
 } from '@/utils/formValidation';
 
 const defaultValues = {
@@ -19,11 +19,11 @@ const defaultValues = {
 
 const useRecoveryForm = (isPhoneAuth: boolean) => {
   const isFocused = useIsFocused();
-  const { isActiveTimerPhone, isActiveTimerEmail } = useAppSelector(selectAuth);
+  const { isActivePhoneTimer, isActiveEmailTimer } = useAppSelector(selectAuth);
   const methods = useForm({
-    defaultValues: defaultValues,
+    defaultValues: isPhoneAuth ? { phone: '' } : { email: '' },
     resolver: yupResolver(
-      isPhoneAuth ? phoneValidationSchema : emailValidationSchema
+      isPhoneAuth ? authPhoneValidationSchema : emailValidationSchema
     ),
     mode: 'onChange',
   });
@@ -35,8 +35,8 @@ const useRecoveryForm = (isPhoneAuth: boolean) => {
   } = methods;
   const email = watch('email');
   const phone = watch('phone');
-  const isPhoneTimer = isActiveTimerPhone && isPhoneAuth;
-  const isEmailTimer = isActiveTimerEmail && !isPhoneAuth;
+  const isPhoneTimer = isActivePhoneTimer && isPhoneAuth;
+  const isEmailTimer = isActiveEmailTimer && !isPhoneAuth;
   const isDisabled =
     !isValid || !!Object.keys(errors).length || isPhoneTimer || isEmailTimer;
 
@@ -52,7 +52,7 @@ const useRecoveryForm = (isPhoneAuth: boolean) => {
     if (phone?.length === 10) {
       Keyboard.dismiss();
     }
-  }, [phone, email]);
+  }, [phone]);
 
   return {
     phone,

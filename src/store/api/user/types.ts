@@ -49,4 +49,32 @@ type File = {
   extension: string;
 };
 
-export type { UserResponse };
+type EntityType = {
+  ID: number;
+  code: string;
+  description: string;
+};
+
+type ConfirmationCodeResponse = {
+  timeout: number;
+};
+
+type PhoneEditingResponse = {
+  data: User;
+};
+
+type PersonalDataEditingParams = {
+  ID: number;
+  name: string;
+  sname: string;
+  pname: string;
+};
+
+export type {
+  User,
+  EntityType,
+  UserResponse,
+  PhoneEditingResponse,
+  ConfirmationCodeResponse,
+  PersonalDataEditingParams,
+};

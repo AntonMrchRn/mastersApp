@@ -7,13 +7,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 15,
   },
   wrapperSignIn: {
     flex: 1,
     alignItems: 'center',
     width: '100%',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    padding: 15,
   },
   text: {
     fontSize: 15,
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: normalize(325, 'height'),
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
   },
   title: {
     fontFamily: fonts.main_700_o,

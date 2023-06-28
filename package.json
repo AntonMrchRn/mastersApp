@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "android-clean": "cd ./android && ./gradlew clean",
     "android-clean-build": "cd ./android && ./gradlew cleanBuildCache",
+    "clear-cache": "react-native start --reset-cache",
     "build-apk": "cd ./android && ./gradlew assembleRelease",
     "build-aab": "cd ./android && ./gradlew bundleRelease",
     "test:types": "tsc"
@@ -50,7 +51,7 @@
     "react-redux": "^8.0.5",
     "redux-flipper": "^2.0.2",
     "redux-persist": "^6.0.0",
-    "rn-ui-kit": "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#0.2.6",
+    "rn-ui-kit": "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#0.2.10",
     "yup": "^1.2.0"
   },
   "devDependencies": {

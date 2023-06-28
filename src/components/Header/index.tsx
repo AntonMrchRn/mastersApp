@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useNavigation } from '@react-navigation/native';
 import { StackHeaderProps } from '@react-navigation/stack';
 import { Text, useTheme } from 'rn-ui-kit';
 
@@ -9,26 +9,40 @@ import ArrowBack from '@/assets/icons/svg/auth/ArrowBack';
 
 import styles from './style';
 
-type HeaderProps = StackHeaderProps & {
-  label?: string;
-};
+type HeaderProps = {
+  title?: string;
+  description?: string;
+} & StackHeaderProps;
 
-const Header: FC<HeaderProps> = ({ navigation, label = '' }) => {
+const Header = ({ title, description }: HeaderProps) => {
   const theme = useTheme();
+  const navigation = useNavigation();
+
+  const goBack = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+  };
+
   return (
-    <SafeAreaView style={styles.wrapper} edges={['top']}>
-      <View style={styles.container}>
-        <View style={styles.lateralWrapper}>
-          <TouchableOpacity style={styles.btnBack} onPress={navigation.goBack}>
-            <ArrowBack />
-          </TouchableOpacity>
-        </View>
-        <Text variant={'bodyMBold'} color={theme.text.basic}>
-          {label}
-        </Text>
-        <View style={styles.fix} />
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.btnBack} onPress={goBack}>
+        <ArrowBack />
+      </TouchableOpacity>
+      <View style={styles.wrapper}>
+        {title && (
+          <Text variant="bodyMBold" color={theme.text.basic}>
+            {title}
+          </Text>
+        )}
+        {description && (
+          <Text variant="captionRegular" color={theme.text.neutral}>
+            {description}
+          </Text>
+        )}
       </View>
-    </SafeAreaView>
+      <View style={styles.fix} />
+    </View>
   );
 };
 

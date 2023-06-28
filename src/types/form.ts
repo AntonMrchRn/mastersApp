@@ -6,6 +6,10 @@ type EmailValue = {
   email: string;
 };
 
+type CodeValue = {
+  code: string;
+};
+
 type SignInWithPhoneFormValues = {
   password: string;
   isAgreeWithTerms: boolean;
@@ -24,11 +28,19 @@ type RecoveryConfirmationFormValues = {
   password: string;
 };
 
+type PersonalDataValues = {
+  name: string;
+  sname: string;
+  pname: string;
+};
+
 export type {
+  CodeValue,
   EmailValue,
   PhoneValue,
   SignInFormValues,
   RecoveryFormValues,
+  PersonalDataValues,
   SignInWithEmailFormValues,
   SignInWithPhoneFormValues,
   RecoveryConfirmationFormValues,

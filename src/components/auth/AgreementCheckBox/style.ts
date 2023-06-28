@@ -7,16 +7,10 @@ import { configApp } from '@/constants/platform';
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: normalize(configApp.ios ? 45 : 85, 'height'),
     flexDirection: 'row',
     justifyContent: 'center',
     paddingHorizontal: 15,
     paddingTop: 5,
-  },
-  wrapperCheckBox: {
-    width: normalize(22, 'width'),
-    alignItems: 'center',
-    justifyContent: 'flex-start',
   },
   active: {
     backgroundColor: configApp.brandColor,

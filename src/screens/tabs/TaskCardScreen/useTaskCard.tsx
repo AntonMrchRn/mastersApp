@@ -204,11 +204,6 @@ export const useTaskCard = ({
     //далее необходимо удалить этот оффер через DELETE offers/id
     setBudgetModalVisible(!budgetModalVisible);
   };
-  const goBack = () => {
-    if (navigation.canGoBack()) {
-      navigation.goBack();
-    }
-  };
 
   const getCurrentTab = () => {
     switch (tab) {
@@ -421,6 +416,5 @@ export const useTaskCard = ({
     onCancelTask,
     subsetID,
     statusID,
-    goBack,
   };
 };

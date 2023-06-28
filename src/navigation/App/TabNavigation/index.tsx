@@ -21,41 +21,39 @@ const screenOptions = {
 };
 const Tab = createBottomTabNavigator<TabNavigationParamList>();
 
-function AppNavigation() {
-  return (
-    <Tab.Navigator screenOptions={screenOptions}>
-      <Tab.Screen
-        name={BottomTab.TaskSearchNavigation}
-        component={TaskSearchNavigation}
-        options={{
-          title: 'Поиск задач',
-          tabBarIcon: color => (
-            <TaskSearch fill={color.focused ? '#3F51B5' : '#707070'} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name={BottomTab.MyTasksNavigation}
-        component={MyTasksNavigation}
-        options={{
-          title: 'Мои задачи',
-          tabBarIcon: color => (
-            <Employees fill={color.focused ? '#3F51B5' : '#707070'} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name={BottomTab.ProfileNavigation}
-        component={ProfileNavigation}
-        options={{
-          title: 'Профиль',
-          tabBarIcon: color => (
-            <Profile fill={color.focused ? '#3F51B5' : '#707070'} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
-  );
-}
+const AppNavigation = () => (
+  <Tab.Navigator screenOptions={screenOptions}>
+    <Tab.Screen
+      name={BottomTab.TaskSearchNavigation}
+      component={TaskSearchNavigation}
+      options={{
+        title: 'Поиск задач',
+        tabBarIcon: color => (
+          <TaskSearch fill={color.focused ? '#3F51B5' : '#707070'} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name={BottomTab.MyTasksNavigation}
+      component={MyTasksNavigation}
+      options={{
+        title: 'Мои задачи',
+        tabBarIcon: color => (
+          <Employees fill={color.focused ? '#3F51B5' : '#707070'} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name={BottomTab.ProfileNavigation}
+      component={ProfileNavigation}
+      options={{
+        title: 'Профиль',
+        tabBarIcon: color => (
+          <Profile fill={color.focused ? '#3F51B5' : '#707070'} />
+        ),
+      }}
+    />
+  </Tab.Navigator>
+);
 
 export default AppNavigation;
