@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useNavigation } from '@react-navigation/native';
 import { Text, useTheme } from 'rn-ui-kit';
@@ -24,24 +25,26 @@ const Header = ({ title, description }: HeaderProps) => {
   };
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.btnBack} onPress={goBack}>
-        <ArrowBack />
-      </TouchableOpacity>
-      <View style={styles.wrapper}>
-        {title && (
-          <Text variant="bodyMBold" color={theme.text.basic}>
-            {title}
-          </Text>
-        )}
-        {description && (
-          <Text variant="captionRegular" color={theme.text.neutral}>
-            {description}
-          </Text>
-        )}
+    <SafeAreaView edges={['top']}>
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.btnBack} onPress={goBack}>
+          <ArrowBack />
+        </TouchableOpacity>
+        <View style={styles.wrapper}>
+          {title && (
+            <Text variant="bodyMBold" color={theme.text.basic}>
+              {title}
+            </Text>
+          )}
+          {description && (
+            <Text variant="captionRegular" color={theme.text.neutral}>
+              {description}
+            </Text>
+          )}
+        </View>
+        <View style={styles.fix} />
       </View>
-      <View style={styles.fix} />
-    </View>
+    </SafeAreaView>
   );
 };
 

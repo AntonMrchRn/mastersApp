@@ -26,6 +26,7 @@ enum TaskSearchNavigatorScreenName {
   TaskSearch = 'TaskSearch',
   TaskCard = 'TaskCard',
   EstimateEdit = 'EstimateEdit',
+  EstimateAddMaterial = 'EstimateAddMaterial',
 }
 enum MyTasksNavigatorScreenName {
   MyTasks = 'MyTasks',
@@ -86,6 +87,7 @@ type TaskSearchNavigationParamList = {
     serviceId: number;
     materialName?: string;
   };
+  EstimateAddMaterial: { serviceId: number; taskId: number };
 };
 
 type RecoveryConfirmationScreenRoute = RouteProp<

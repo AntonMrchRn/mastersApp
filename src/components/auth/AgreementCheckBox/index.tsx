@@ -4,8 +4,6 @@ import { Keyboard, Linking, Text, View } from 'react-native';
 
 import { CheckBox } from 'rn-ui-kit';
 
-import CheckBoxActive from '@/assets/icons/svg/auth/CheckBoxActive';
-
 import styles from './style';
 
 enum URL {
@@ -33,9 +31,9 @@ const AgreementCheckBox = () => {
       <CheckBox
         onPress={onPress}
         checked={field.value}
-        icon={<CheckBoxActive />}
-        style={[styles.checkBox, field.value && styles.active]}
+        style={field.value && styles.active}
       />
+
       <View style={styles.wrapper}>
         <Text style={styles.title}>
           Выражаю{' '}

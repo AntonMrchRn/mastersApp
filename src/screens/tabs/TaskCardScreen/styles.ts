@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+import { deviceWidth } from '@/constants/platform';
+
 export const styles = StyleSheet.create({
   mt16: {
     marginTop: 16,
@@ -53,5 +55,11 @@ export const styles = StyleSheet.create({
   bottom: {
     marginTop: 24,
     marginBottom: 12,
+  },
+  estimateBottom: {
+    gap: 16,
+    marginHorizontal: 20,
+    width: deviceWidth - 40,
+    backgroundColor: 'white',
   },
 });

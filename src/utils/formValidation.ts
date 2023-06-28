@@ -11,6 +11,15 @@ const authPhoneValidation = {
 const cancelTaskValidation = {
   cancelTask: Yup.string().required(''),
 };
+const estimateCountValidation = {
+  estimateCount: Yup.string().required('Укажите количество услуги / материала'),
+};
+const estimateAddMaterialValidation = {
+  name: Yup.string().required('Укажите название материала'),
+  count: Yup.string().required('Укажите количество материала'),
+  price: Yup.string().required('Укажите цену за одну единицу измерения'),
+  measure: Yup.string().required('Выберите единицу измерения'),
+};
 const phoneValidation = {
   phone: Yup.string()
     .length(10, 'Введите корректный номер телефона')
@@ -48,6 +57,12 @@ const personalDataValidation = {
 };
 
 const cancelTaskValidationSchema = Yup.object().shape(cancelTaskValidation);
+const estimateCountValidationSchema = Yup.object().shape(
+  estimateCountValidation
+);
+const estimateAddMaterialValidationSchema = Yup.object().shape(
+  estimateAddMaterialValidation
+);
 const phoneValidationSchema = Yup.object().shape(phoneValidation);
 const authPhoneValidationSchema = Yup.object().shape(authPhoneValidation);
 const emailValidationSchema = Yup.object().shape(emailValidation);
@@ -74,4 +89,6 @@ export {
   signInWithPhoneValidationSchema,
   signInWithEmailValidationSchema,
   recoveryConfirmationValidationSchema,
+  estimateCountValidationSchema,
+  estimateAddMaterialValidationSchema,
 };

@@ -9,21 +9,25 @@ export const styles = StyleSheet.create({
   title: {
     marginVertical: 24,
   },
-  name: {
-    marginTop: 8,
-  },
-  description: {
-    marginTop: 4,
-  },
-  row: {
-    marginTop: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  rowText: {
-    marginLeft: 4,
-  },
   button: {
     borderRadius: 12,
+  },
+  inputs: {
+    gap: 16,
+  },
+  measure: {
+    flexDirection: 'row',
+    marginTop: 4,
+    paddingVertical: 20,
+    justifyContent: 'space-between',
+  },
+  measureItem: {
+    gap: 4,
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  cube: {
+    marginRight: 8,
   },
 });

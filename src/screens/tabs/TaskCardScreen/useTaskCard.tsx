@@ -37,13 +37,15 @@ export const useTaskCard = ({
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
+  const [estimateBottomVisible, setEstimateBottomVisible] = useState(false);
+  const [selectedServiceId, setSelectedServiceId] = useState<number>();
 
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
 
   // const getTask = useGetTaskQuery('926');
-  // const getTask = useGetTaskQuery('996');
-  const getTask = useGetTaskQuery(taskId);
+  const getTask = useGetTaskQuery('996');
+  // const getTask = useGetTaskQuery(taskId);
 
   useEffect(() => {
     if (
@@ -119,6 +121,9 @@ export const useTaskCard = ({
     },
   ];
 
+  const onEstimateBottomVisible = () => {
+    setEstimateBottomVisible(!estimateBottomVisible);
+  };
   const onBudgetModalVisible = () => {
     setBudgetModalVisible(!budgetModalVisible);
   };
@@ -127,6 +132,16 @@ export const useTaskCard = ({
   };
   const onBudgetSubmission = () => {
     //
+  };
+  const onAddEstimateMaterial = () => {
+    if (selectedServiceId) {
+      navigation.navigate(TaskSearchNavigatorScreenName.EstimateAddMaterial, {
+        serviceId: selectedServiceId,
+        taskId: id,
+      });
+      onEstimateBottomVisible();
+      setSelectedServiceId(undefined);
+    }
   };
   const onTaskSubmission = async () => {
     try {
@@ -228,6 +243,10 @@ export const useTaskCard = ({
             statusID={statusID}
             taskId={id}
             navigation={navigation}
+            onEstimateBottomVisible={onEstimateBottomVisible}
+            estimateBottomVisible={estimateBottomVisible}
+            selectedServiceId={selectedServiceId}
+            setSelectedServiceId={setSelectedServiceId}
           />
         );
       case TaskTab.REPORT:
@@ -416,5 +435,9 @@ export const useTaskCard = ({
     onCancelTask,
     subsetID,
     statusID,
+    estimateBottomVisible,
+    onEstimateBottomVisible,
+    selectedServiceId,
+    onAddEstimateMaterial,
   };
 };

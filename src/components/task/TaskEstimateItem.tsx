@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Swipeable } from 'rn-ui-kit';
 import { Variant } from 'rn-ui-kit/lib/typescript/components/Swipeable';
@@ -18,6 +18,7 @@ type TaskEstimateItemProps = {
   count?: number;
   sum?: number;
   roleID: RoleType;
+  canSwipe: boolean;
 };
 export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   previewActions,
@@ -28,6 +29,7 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   count = 0,
   sum = 0,
   roleID,
+  canSwipe,
 }) => {
   const items = [
     {
@@ -69,18 +71,22 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
 
   const styles = StyleSheet.create({
     containerStyle: { paddingRight: 20, paddingHorizontal: 0 },
+    wrapper: { width: '100%' },
   });
 
   return (
-    <Swipeable
-      label={getLabel()}
-      containerStyle={styles.containerStyle}
-      variant={getVariant()}
-      previewActions={previewActions}
-      firstAction={firstAction}
-      secondAction={secondAction}
-      title={title}
-      items={items}
-    />
+    <View style={styles.wrapper}>
+      <Swipeable
+        label={getLabel()}
+        containerStyle={styles.containerStyle}
+        variant={getVariant()}
+        previewActions={previewActions}
+        firstAction={firstAction}
+        secondAction={secondAction}
+        title={title}
+        items={items}
+        canSwipe={canSwipe}
+      />
+    </View>
   );
 };

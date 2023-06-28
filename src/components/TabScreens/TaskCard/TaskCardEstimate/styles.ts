@@ -13,4 +13,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  itemRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  radio: { marginRight: 12, height: 20, width: 20 },
 });

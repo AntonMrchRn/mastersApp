@@ -1,18 +1,21 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 
+import { yupResolver } from '@hookform/resolvers/yup';
 import { StackScreenProps } from '@react-navigation/stack';
-import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
+import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
 import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { PriceIcon } from '@/assets/icons/svg/estimate/PriceIcon';
 import ControlledInput from '@/components/inputs/ControlledInput';
-import { useGetTaskQuery } from '@/store/api/tasks';
+import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
+import { Material, Service } from '@/store/api/tasks/types';
 import {
   TaskSearchNavigationParamList,
   TaskSearchNavigatorScreenName,
 } from '@/types/navigation';
+import { estimateCountValidationSchema } from '@/utils/formValidation';
 
 import { styles } from './styles';
 
@@ -26,12 +29,25 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
   route,
 }) => {
   const theme = useTheme();
+  const toast = useToast();
 
   const serviceId = route.params.serviceId;
   const materialName = route.params.materialName;
   const taskId = route.params.taskId;
 
   const getTask = useGetTaskQuery(taskId.toString());
+
+  const [patchTask, mutationTask] = usePatchTaskMutation();
+
+  useEffect(() => {
+    if (mutationTask.error && 'data' in mutationTask.error) {
+      toast.show({
+        type: 'error',
+        title: mutationTask?.error?.data?.message,
+        contentHeight: 120,
+      });
+    }
+  }, [mutationTask.error]);
 
   const task = getTask?.data && getTask?.data?.tasks && getTask?.data?.tasks[0];
   const services = task?.services || [];
@@ -44,14 +60,38 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
 
   const methods = useForm({
     defaultValues: { estimateCount: '' },
+    resolver: yupResolver(estimateCountValidationSchema),
     mode: 'onChange',
   });
-
-  const onPress = ({ estimateCount }: { estimateCount: string }) => {
-    console.log(
-      '🚀 ~ file: index.tsx:50 ~ onPress ~ estimateCount:',
-      estimateCount
-    );
+  const {
+    formState: { errors },
+  } = methods;
+  const onSubmit = async ({ estimateCount }: { estimateCount: string }) => {
+    const newServices = services.reduce<Service[]>((acc, val) => {
+      if (val.ID === serviceId) {
+        if (materialName) {
+          const newMaterial = val.materials?.reduce<Material[]>((ac, va) => {
+            if (va.name === materialName) {
+              return ac.concat({ ...va, count: +estimateCount });
+            }
+            return ac.concat(va);
+          }, []);
+          return acc.concat({ ...val, materials: newMaterial });
+        }
+        return acc.concat({ ...val, count: +estimateCount });
+      }
+      return acc.concat(val);
+    }, []);
+    await patchTask({
+      //id таски
+      ID: taskId,
+      //массив услуг
+      services: newServices,
+    });
+    getTask.refetch();
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
   };
   return (
     <View style={styles.container}>
@@ -109,9 +149,15 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
           name={'estimateCount'}
           variant={'text'}
           label={'Количество'}
+          hint={errors.estimateCount?.message}
+          isError={!!errors.estimateCount?.message}
         />
         <Spacer size={'xl'} />
-        <Button label={'Сохранить'} onPress={methods.handleSubmit(onPress)} />
+        <Button
+          label={'Сохранить'}
+          onPress={methods.handleSubmit(onSubmit)}
+          style={styles.button}
+        />
       </FormProvider>
     </View>
   );

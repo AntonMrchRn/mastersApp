@@ -14,6 +14,8 @@ export const useTaskCardEstimate = ({
   services,
   taskId,
   navigation,
+  onEstimateBottomVisible,
+  estimateBottomVisible,
 }: {
   services: Service[];
   taskId: number;
@@ -22,6 +24,8 @@ export const useTaskCardEstimate = ({
     TaskSearchNavigatorScreenName.TaskCard,
     undefined
   >;
+  onEstimateBottomVisible: () => void;
+  estimateBottomVisible: boolean;
 }) => {
   const toast = useToast();
 
@@ -44,6 +48,14 @@ export const useTaskCardEstimate = ({
 
   const onSheetVisible = () => {
     setSheetVisible(!sheetVisible);
+  };
+  const onPressMaterial = () => {
+    !estimateBottomVisible && onEstimateBottomVisible();
+    onSheetVisible();
+  };
+  const onPressService = () => {
+    !estimateBottomVisible && onEstimateBottomVisible();
+    onSheetVisible();
   };
   const onEdit = (serviceId: number, materialName?: string) => {
     navigation.navigate(TaskSearchNavigatorScreenName.EstimateEdit, {
@@ -100,5 +112,7 @@ export const useTaskCardEstimate = ({
     onEdit,
     onDeleteService,
     onDeleteMaterial,
+    onPressMaterial,
+    onPressService,
   };
 };

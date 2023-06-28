@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { View } from 'react-native';
 
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Spacer, Text, useTheme } from 'rn-ui-kit';
+import { Button, RadioButton, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
@@ -28,6 +28,12 @@ type TaskCardEstimateProps = {
     TaskSearchNavigatorScreenName.TaskCard,
     undefined
   >;
+  onEstimateBottomVisible: () => void;
+  estimateBottomVisible: boolean;
+  selectedServiceId: number | undefined;
+  setSelectedServiceId: React.Dispatch<
+    React.SetStateAction<number | undefined>
+  >;
 };
 
 export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
@@ -36,6 +42,10 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   statusID,
   taskId,
   navigation,
+  onEstimateBottomVisible,
+  estimateBottomVisible,
+  selectedServiceId,
+  setSelectedServiceId,
 }) => {
   const {
     sheetVisible,
@@ -45,12 +55,15 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     onEdit,
     onDeleteService,
     onDeleteMaterial,
+    onPressMaterial,
+    onPressService,
   } = useTaskCardEstimate({
     services,
     taskId,
     navigation,
+    onEstimateBottomVisible,
+    estimateBottomVisible,
   });
-  console.log('🚀 ~ file: index.tsx:53 ~ services:', services);
   const theme = useTheme();
 
   return (
@@ -58,12 +71,8 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
       <TaskCardAddEstimateBottomSheet
         isVisible={sheetVisible}
         onCancel={onSheetVisible}
-        pressMaterial={function (): void {
-          throw new Error('Function not implemented.');
-        }}
-        pressService={function (): void {
-          throw new Error('Function not implemented.');
-        }}
+        pressMaterial={onPressMaterial}
+        pressService={onPressService}
       />
       <View>
         <Spacer size={'xxxl'} />
@@ -73,10 +82,10 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             onPress={onSheetVisible}
           />
         )}
-        {/* <TaskEstimateOutline
+        <TaskEstimateOutline
           outlayStatusID={outlayStatusID}
           onPress={onSheetVisible}
-        /> */}
+        />
         <Text variant={'title3'} color={theme.text.basic} style={styles.mb8}>
           Перечень услуг и материалов
         </Text>
@@ -87,17 +96,30 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           const secondActionService = () => {
             onDeleteService(service.ID);
           };
+          const radioPress = () => {
+            setSelectedServiceId(service.ID);
+          };
           return (
             <View key={service.ID}>
-              <TaskEstimateItem
-                firstAction={firstActionService}
-                secondAction={secondActionService}
-                title={service?.name}
-                price={service?.price}
-                count={service?.count}
-                sum={service?.sum}
-                roleID={service?.roleID}
-              />
+              <View style={styles.itemRow}>
+                {estimateBottomVisible && (
+                  <RadioButton
+                    checked={selectedServiceId === service.ID}
+                    style={styles.radio}
+                    onPress={radioPress}
+                  />
+                )}
+                <TaskEstimateItem
+                  firstAction={firstActionService}
+                  secondAction={secondActionService}
+                  title={service?.name}
+                  price={service?.price}
+                  count={service?.count}
+                  sum={service?.sum}
+                  roleID={service?.roleID}
+                  canSwipe={!estimateBottomVisible}
+                />
+              </View>
               <Spacer size={0} separator="bottom" />
               {service?.materials?.map((material, inde) => {
                 const firstActionMaterial = () => {
@@ -116,6 +138,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                       count={material?.count}
                       sum={(material?.count || 0) * (material?.price || 0)}
                       roleID={material?.roleID}
+                      canSwipe={!estimateBottomVisible}
                     />
                     <Spacer size={0} separator="bottom" />
                   </View>
