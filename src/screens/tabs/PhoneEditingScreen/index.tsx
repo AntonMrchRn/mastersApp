@@ -4,8 +4,8 @@ import { SafeAreaView, View } from 'react-native';
 
 import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
-import ControlledInputPhone from '@/components/ControlledInputPhone';
 import Header from '@/components/Header';
+import ControlledInputPhone from '@/components/inputs/ControlledInputPhone';
 import Title from '@/components/TabScreens/ProfileScreen/Title';
 import TimerBlockPhoneProfile from '@/components/Timer/TimerBlockPhoneProfile';
 import { DismissKeyboardView } from '@/hocs/DismissKeyboardView';

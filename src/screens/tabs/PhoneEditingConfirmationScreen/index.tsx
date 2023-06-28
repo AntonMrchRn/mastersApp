@@ -5,8 +5,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
-import ControlledInputCode from '@/components/ControlledInputCode';
 import Header from '@/components/Header';
+import ControlledInputCode from '@/components/inputs/ControlledInputCode';
 import TimerBlockPhoneProfile from '@/components/Timer/TimerBlockPhoneProfile';
 import { DismissKeyboardView } from '@/hocs/DismissKeyboardView';
 import usePhoneEditingConfirmation from '@/screens/tabs/PhoneEditingConfirmationScreen/usePhoneEditingConfirmation';
@@ -50,7 +50,6 @@ const PhoneEditingConfirmationScreen = () => {
             />
             <Spacer size={errors.code?.message ? 'xl' : 'xxl'} />
             <Button
-              // style={styles.btn}
               disabled={isDisabled}
               isPending={isLoading}
               label="Подтвердить телефон"

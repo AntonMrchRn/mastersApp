@@ -2,7 +2,6 @@ import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
-import { StackHeaderProps } from '@react-navigation/stack';
 import { Text, useTheme } from 'rn-ui-kit';
 
 import ArrowBack from '@/assets/icons/svg/auth/ArrowBack';
@@ -12,7 +11,7 @@ import styles from './style';
 type HeaderProps = {
   title?: string;
   description?: string;
-} & StackHeaderProps;
+};
 
 const Header = ({ title, description }: HeaderProps) => {
   const theme = useTheme();

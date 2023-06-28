@@ -5,8 +5,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, Spacer } from 'rn-ui-kit';
 
-import ControlledInput from '@/components/ControlledInput';
 import Header from '@/components/Header';
+import ControlledInput from '@/components/inputs/ControlledInput';
 import Title from '@/components/TabScreens/ProfileScreen/Title';
 import { DismissKeyboardView } from '@/hocs/DismissKeyboardView';
 import usePersonalDataEditing from '@/screens/tabs/PersonalDataEditingScreen/usePersonalDataEditing';

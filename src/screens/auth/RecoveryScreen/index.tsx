@@ -9,10 +9,9 @@ import { Button, SegmentedControl, Spacer } from 'rn-ui-kit';
 
 import ForgotPreview from '@/components/auth/ForgotPreview';
 import LogoPreview from '@/components/auth/LogoPreview';
-
 import Header from '@/components/Header';
-import ControlledInputPhone from '@/components/inputs/ControlledInputPhone';
 import ControlledInput from '@/components/inputs/ControlledInput';
+import ControlledInputPhone from '@/components/inputs/ControlledInputPhone';
 import TimerBlockEmailAuth from '@/components/Timer/TimerBlockEmailAuth';
 import TimerBlockPhoneAuth from '@/components/Timer/TimerBlockPhoneAuth';
 import { configApp } from '@/constants/platform';

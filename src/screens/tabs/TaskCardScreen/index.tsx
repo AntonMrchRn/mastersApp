@@ -25,7 +25,10 @@ type TaskCardScreenProps = StackScreenProps<
   TaskSearchNavigatorScreenName.TaskCard
 >;
 
-export const TaskCardScreen: FC<TaskCardScreenProps> = ({ route }) => {
+export const TaskCardScreen: FC<TaskCardScreenProps> = ({
+  navigation,
+  route,
+}) => {
   const taskId = route.params.taskId.toString();
   const {
     tabs,
