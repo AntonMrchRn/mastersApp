@@ -10,18 +10,18 @@ import {
 
 import { useNavigation } from '@react-navigation/native';
 import { TabControl, useTheme } from 'rn-ui-kit';
+import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
 
 import CardTasks from '@/components/TabScreens/TaskSearch/Card';
 import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound';
 import { configApp } from '@/constants/platform';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { useGetTableNamesQuery } from '@/store/api/tasks';
 import { Task } from '@/store/api/tasks/types';
-import { refreshMyTasks } from '@/store/slices/myTasks/asyncActions';
 import {
-  getSearchTasks,
-  refreshTasks,
-} from '@/store/slices/taskSearch/asyncActions';
+  getMyTasks,
+  refreshMyTasks,
+} from '@/store/slices/myTasks/asyncActions';
+import { getSearchTasks } from '@/store/slices/taskSearch/asyncActions';
 import { TaskCardScreenNavigationProp } from '@/types/navigation';
 import { TaskSearch } from '@/types/task';
 
@@ -51,13 +51,23 @@ const MyTasksScreen = () => {
   const onEndReached = () => {
     !loadingList &&
       dispatch(
-        getSearchTasks({
+        getMyTasks({
           idList: selectedTab,
           fromTask: data?.length,
         })
       );
   };
-
+  const onChangeTab = (item: TabItem) => {
+    if (item.id !== selectedTab) {
+      dispatch(
+        getMyTasks({
+          idList: item.id,
+          fromTask: 0,
+        })
+      );
+      setSelectedTab(item.id);
+    }
+  };
   useEffect(() => {
     onRefresh();
   }, []);
@@ -71,6 +81,7 @@ const MyTasksScreen = () => {
         contentContainerStyle={styles.wrapperTab}
         initialId={1}
         data={taskSections}
+        onChange={onChangeTab}
       />
       <View
         style={[
@@ -78,7 +89,7 @@ const MyTasksScreen = () => {
           !!data?.length && { ...configApp.shadow },
         ]}
       >
-        {errorList?.code === 20007 ? (
+        {/* {errorList?.code === 20007 ? (
           <PreviewNotFound type={3} />
         ) : loadingList && !data.length ? (
           <ActivityIndicator size={'large'} color={theme.background.accent} />
@@ -102,7 +113,7 @@ const MyTasksScreen = () => {
             onEndReachedThreshold={7}
             onEndReached={onEndReached}
           />
-        )}
+        )} */}
       </View>
     </SafeAreaView>
   );
