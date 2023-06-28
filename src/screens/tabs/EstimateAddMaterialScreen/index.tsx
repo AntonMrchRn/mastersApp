@@ -135,10 +135,6 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
       name: 'М/П',
     },
     {
-      text: 'Час',
-      name: 'Час',
-    },
-    {
       text: 'Штука (шт.)',
       name: 'Шт.',
     },
