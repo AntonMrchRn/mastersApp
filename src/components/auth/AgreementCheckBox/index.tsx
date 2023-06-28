@@ -4,8 +4,6 @@ import { Keyboard, Linking, Text, View } from 'react-native';
 
 import { CheckBox } from 'rn-ui-kit';
 
-import CheckBoxActive from '@/assets/icons/svg/auth/CheckBoxActive';
-
 import styles from './style';
 
 enum URL {
