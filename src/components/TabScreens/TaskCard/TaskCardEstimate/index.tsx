@@ -117,6 +117,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                   count={service?.count}
                   sum={service?.sum}
                   roleID={service?.roleID}
+                  canSwipe={!estimateBottomVisible}
                 />
               </View>
               <Spacer size={0} separator="bottom" />
@@ -137,6 +138,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                       count={material?.count}
                       sum={(material?.count || 0) * (material?.price || 0)}
                       roleID={material?.roleID}
+                      canSwipe={!estimateBottomVisible}
                     />
                     <Spacer size={0} separator="bottom" />
                   </View>
