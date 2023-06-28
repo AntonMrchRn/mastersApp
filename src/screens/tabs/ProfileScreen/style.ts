@@ -7,29 +7,18 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     flex: 1,
-    backgroundColor: '#fff',
     width: '100%',
-    paddingVertical: 12,
+    paddingVertical: 24,
+    paddingHorizontal: 20,
   },
   title: {
     textAlign: 'left',
-    paddingHorizontal: 20,
   },
-  exitBtn: {
-    marginHorizontal: 20,
-    alignSelf: 'stretch',
-    width: 'auto',
-    marginTop: 'auto',
-    borderWidth: 2,
-    borderRadius: 12,
+  loader: {
+    flex: 1,
   },
-  modalTitle: {
-    marginTop: 12,
-    textAlign: 'left',
-  },
-  cancelBtn: {
-    borderWidth: 2,
-    borderRadius: 12,
+  content: {
+    flexGrow: 1,
   },
 });
 

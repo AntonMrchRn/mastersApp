@@ -9,16 +9,16 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingHorizontal: 20,
     backgroundColor: '#fff',
   },
   wrapper: {
     backgroundColor: '#fff',
+    alignItems: 'center',
   },
   btnBack: {
     width: 45,
     paddingVertical: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   lateralWrapper: {
     width: '15%',

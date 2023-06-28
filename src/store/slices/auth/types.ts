@@ -1,12 +1,12 @@
 type InitialState = {
   user: null | UserAuthResponse;
   isAuth: boolean;
-  isActiveTimerPhone: boolean;
   isRecoveryByPhone: boolean;
   isRecoveryByEmail: boolean;
-  isActiveTimerEmail: boolean;
-  timeoutPhone: null | { timeout: number };
-  timeoutEmail: null | { timeout: number };
+  isActiveEmailTimer: boolean;
+  isActivePhoneTimer: boolean;
+  phoneTimeout: null | { timeout: number };
+  emailTimeout: null | { timeout: number };
 };
 
 type UserAuthParams = {

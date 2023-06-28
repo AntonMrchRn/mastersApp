@@ -2,12 +2,14 @@ import { AxiosError } from 'axios';
 
 enum ErrorCode {
   Server = 20001,
-  IncorrectPassword = 20002,
   IncorrectEmail = 20003,
   IncorrectPhone = 20004,
+  IncorrectPassword = 20002,
   IncorrectVerificationCode = 20005,
-  NetworkError = 30001,
   NoAccess = 20007,
+  PhoneAlreadyRegistered = 8025,
+  EmailAlreadyRegistered = 8021,
+  NetworkError = 30001,
 }
 
 type AxiosQueryError = {

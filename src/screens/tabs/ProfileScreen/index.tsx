@@ -1,97 +1,78 @@
-import React, { useState } from 'react';
-import { SafeAreaView, View } from 'react-native';
+import React from 'react';
+import { ActivityIndicator, SafeAreaView, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import { BottomSheet, Button, Spacer, Text } from 'rn-ui-kit';
-import { useTheme } from 'rn-ui-kit';
+import { Spacer, TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
 
-import Logout from '@/assets/icons/svg/screens/Logout';
-import UserInfoBlock from '@/components/TabScreens/ProfileScreen/UserInfoBlock';
-import { storageMMKV } from '@/mmkv/storage';
-import { useAppDispatch, useAppSelector } from '@/store';
-import { useGetUserQuery } from '@/store/api/user';
-import { logOut } from '@/store/slices/auth/actions';
-import { selectAuth } from '@/store/slices/auth/selectors';
-import { convertPhone } from '@/utils/convertPhone';
+import AccountTab from '@/components/TabScreens/ProfileScreen/AccountTab';
+import ActivityTab from '@/components/TabScreens/ProfileScreen/ActivityTab';
+import CommonTab from '@/components/TabScreens/ProfileScreen/CommonTab';
+import PaymentTab from '@/components/TabScreens/ProfileScreen/PaymentTab';
+import useProfile from '@/screens/tabs/ProfileScreen/useProfile';
+import { ProfileTab } from '@/types/tab';
 
 import styles from './style';
 
+const confirmationPendingMessage =
+  'Ваша учетная запись в ожидании подтверждения. Проверка обычно длится один рабочий день. Пожалуйста, для выполнения задач дождитесь окончания проверки';
+
+const tabs = [
+  { id: 0, label: ProfileTab.Common },
+  { id: 1, label: ProfileTab.Payment },
+  { id: 2, label: ProfileTab.Activity },
+  { id: 3, label: ProfileTab.Account },
+];
+
 const ProfileScreen = () => {
-  const dispatch = useAppDispatch();
   const theme = useTheme();
-
-  const { user: authUser } = useAppSelector(selectAuth);
-  const { data: usersData } = useGetUserQuery(authUser?.userID, {
-    skip: !authUser?.userID,
-    refetchOnFocus: true,
-  });
-
-  const [isVisible, setIsVisible] = useState<boolean>(false);
-  const user = usersData?.users[0];
-  const isNameExist = !!user?.name && !!user.sname;
-
-  const onOpenModal = () => setIsVisible(true);
-  const onCloseModal = () => setIsVisible(false);
-  const onExit = () => {
-    onCloseModal();
-    storageMMKV.clearAll();
-    dispatch(logOut());
-  };
+  const {
+    user,
+    warning,
+    activeTab,
+    switchTab,
+    isLoading,
+    isApprovalNotificationVisible,
+  } = useProfile();
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.wrapper}>
-        <Text variant="title1" style={styles.title}>
-          {isNameExist ? `${user.name} ${user.sname}` : 'Профиль'}
-        </Text>
-        <Spacer size="xl" />
-        {!!user?.phone && (
-          <UserInfoBlock label="Телефон" info={convertPhone(user.phone)} />
-        )}
-        {!!user?.email && (
-          <UserInfoBlock label="Адрес электронной почты" info={user?.email} />
-        )}
-        <Button
-          onPress={onOpenModal}
-          label="Выйти из профиля"
-          labelStyle={{ color: theme.text.accent }}
-          icon={<Logout fill={theme.stroke.accent} />}
-          style={[
-            styles.exitBtn,
-            {
-              backgroundColor: theme.background.main,
-              borderColor: theme.stroke.accent,
-            },
-          ]}
-        />
-        <BottomSheet
-          isVisible={isVisible}
-          titleStyle={styles.modalTitle}
-          onBackdropPress={onCloseModal}
-          onSwipeComplete={onCloseModal}
-          title="Вы уверены, что хотите выйти из своего профиля?"
-        >
-          <Spacer size="xl" />
-          <Button
-            label="Выйти"
-            onPress={onExit}
-            style={{ backgroundColor: theme.background.danger }}
-          />
-          <Spacer size="l" />
-          <Button
-            label="Отмена"
-            onPress={onCloseModal}
-            labelStyle={{ color: theme.text.accent }}
-            style={[
-              styles.cancelBtn,
-              {
-                backgroundColor: theme.background.main,
-                borderColor: theme.stroke.accent,
-              },
-            ]}
-          />
-          <Spacer size="l" />
-        </BottomSheet>
-      </View>
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.wrapper}>
+          <Text variant="title1" style={styles.title}>
+            Профиль
+          </Text>
+          {isLoading ? (
+            <ActivityIndicator
+              size="large"
+              style={styles.loader}
+              color={theme.background.accent}
+            />
+          ) : (
+            <View>
+              {(!user?.isApproved || !!warning) && <Spacer size="xl" />}
+              {user && !user?.isApproved && !warning && (
+                <Tips type="info" text={confirmationPendingMessage} />
+              )}
+              {!!warning && <Tips type="warning" text={warning} />}
+              <Spacer size="xxl" />
+              <TabControl data={tabs} initialId={0} onChange={switchTab} />
+              <Spacer size="l" />
+              {activeTab === ProfileTab.Common && user && (
+                <CommonTab
+                  user={user}
+                  isApprovalNotificationVisible={isApprovalNotificationVisible}
+                />
+              )}
+              {activeTab === ProfileTab.Payment && <PaymentTab />}
+              {activeTab === ProfileTab.Activity && <ActivityTab />}
+              {activeTab === ProfileTab.Account && <AccountTab />}
+            </View>
+          )}
+        </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
