@@ -13,7 +13,7 @@ import ControlledInput from '@/components/inputs/ControlledInput';
 import ControlledInputPhone from '@/components/inputs/ControlledInputPhone';
 import { configApp, deviceHeight } from '@/constants/platform';
 
-import useSignInScreen from './useSignInScreen';
+import useSignInScreen from './useSignIn';
 
 import styles from './style';
 

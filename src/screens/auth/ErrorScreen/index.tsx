@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Button } from 'rn-ui-kit';
 
 import ErrorCross from '@/assets/icons/svg/auth/ErrorCross';
+import Header from '@/components/Header';
 
 import styles from './style';
 
@@ -13,7 +14,8 @@ const ErrorScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView edges={['bottom']} style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <Header />
       <View style={styles.wrapperSignIn}>
         <View style={styles.containerInfo}>
           <ErrorCross />
@@ -22,8 +24,8 @@ const ErrorScreen = () => {
             Повторите попытку или попробуйте войти позже, скоро мы всё починим
           </Text>
         </View>
+        <Button label="Повторить попытку" onPress={navigation.goBack} />
       </View>
-      <Button label="Повторить попытку" onPress={navigation.goBack} />
     </SafeAreaView>
   );
 };

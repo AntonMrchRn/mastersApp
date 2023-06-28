@@ -15,7 +15,7 @@ const initialState: InitialState = {
   errorNames: null,
 };
 
-const taskSearch = createSlice({
+const myTasks = createSlice({
   name: 'taskSearch',
   initialState,
   reducers: {
@@ -33,7 +33,7 @@ const taskSearch = createSlice({
       getSearchTasks.fulfilled,
       (state, { payload }: PayloadAction<InitialState['list']>) => {
         state.list = payload;
-        state.data = [...state.data, ...(<[]>payload.tasks)];
+        state.data = state.data?.concat(<[]>payload.tasks);
 
         state.loadingList = false;
       }
@@ -62,6 +62,6 @@ const taskSearch = createSlice({
   },
 });
 
-export const { clearList } = taskSearch.actions;
+export const { clearList } = myTasks.actions;
 
-export default taskSearch;
+export default myTasks;

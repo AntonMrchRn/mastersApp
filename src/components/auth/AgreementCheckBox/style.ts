@@ -7,7 +7,6 @@ import { configApp } from '@/constants/platform';
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: normalize(configApp.ios ? 45 : 85, 'height'),
     flexDirection: 'row',
     justifyContent: 'center',
     paddingHorizontal: 15,

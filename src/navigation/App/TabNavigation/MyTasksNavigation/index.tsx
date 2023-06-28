@@ -11,16 +11,14 @@ import {
 const options = { headerShown: false };
 const Stack = createStackNavigator<MyTasksNavigationParamList>();
 
-function MyTasksNavigation() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name={MyTasksNavigatorScreenName.MyTasks}
-        component={MyTasksScreen}
-        options={options}
-      />
-    </Stack.Navigator>
-  );
-}
+const MyTasksNavigation = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name={MyTasksNavigatorScreenName.MyTasks}
+      component={MyTasksScreen}
+      options={options}
+    />
+  </Stack.Navigator>
+);
 
 export default MyTasksNavigation;

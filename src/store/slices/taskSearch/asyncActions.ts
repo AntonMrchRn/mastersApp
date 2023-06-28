@@ -10,12 +10,13 @@ type RequestArgs = {
 };
 
 const getSearchTasks = createAsyncThunk(
-  '/searchTask',
+  '/getSearchTasks',
   async (
     { idList, numberOfPosts = 30, fromTask = 0 }: RequestArgs,
     thunkApi
   ) => {
     try {
+      // TODO изменить квери параметры для оптимизации
       const { data } = await axiosInstance.get(
         `tasks/web?query=?setID==${idList}?ID,desc,${numberOfPosts},${fromTask}`
       );

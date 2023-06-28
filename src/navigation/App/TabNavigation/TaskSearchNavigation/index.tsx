@@ -32,7 +32,7 @@ const TaskSearchNavigation = () => {
         component={EstimateEditScreen}
         options={{
           headerShown: true,
-          header: props => <Header {...props} label={'Редактирование сметы'} />,
+          header: props => <Header {...props} title={'Редактирование сметы'} />,
         }}
       />
       <Stack.Screen
@@ -40,7 +40,7 @@ const TaskSearchNavigation = () => {
         component={EstimateAddMaterialScreen}
         options={{
           headerShown: true,
-          header: props => <Header {...props} label={'Новый материал'} />,
+          header: props => <Header {...props} title={'Новый материал'} />,
         }}
       />
     </Stack.Navigator>

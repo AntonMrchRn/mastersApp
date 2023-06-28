@@ -9,13 +9,14 @@ import { Button, SegmentedControl, Spacer } from 'rn-ui-kit';
 
 import ForgotPreview from '@/components/auth/ForgotPreview';
 import LogoPreview from '@/components/auth/LogoPreview';
-import TimerBlockEmail from '@/components/auth/Timer/TimerBlockEmail';
-import TimerBlockPhone from '@/components/auth/Timer/TimerBlockPhone';
+import Header from '@/components/Header';
 import ControlledInput from '@/components/inputs/ControlledInput';
 import ControlledInputPhone from '@/components/inputs/ControlledInputPhone';
+import TimerBlockEmailAuth from '@/components/Timer/TimerBlockEmailAuth';
+import TimerBlockPhoneAuth from '@/components/Timer/TimerBlockPhoneAuth';
 import { configApp } from '@/constants/platform';
 
-import useRecoveryScreen from './useRecoveryScreen';
+import useRecovery from './useRecovery';
 
 import styles from './style';
 
@@ -30,14 +31,15 @@ const RecoveryScreen = () => {
     isDisabled,
     isPhoneAuth,
     isInvalidEmail,
-    timeoutPhone,
-    timeoutEmail,
+    phoneTimeout,
+    emailTimeout,
     scrollViewRef,
     onKeyboardWillShow,
-  } = useRecoveryScreen();
+  } = useRecovery();
 
   return (
-    <SafeAreaView edges={['bottom']} style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <Header />
       <KeyboardAwareScrollView
         ref={scrollViewRef}
         enableOnAndroid={true}
@@ -88,14 +90,14 @@ const RecoveryScreen = () => {
           </FormProvider>
           <View style={styles.containerTimer}>
             {isPhoneAuth
-              ? !!timeoutPhone && (
-                  <TimerBlockPhone
-                    expiredTimer={Number(timeoutPhone?.timeout * 1000)}
+              ? !!phoneTimeout && (
+                  <TimerBlockPhoneAuth
+                    expiredTimer={Number(phoneTimeout?.timeout * 1000)}
                   />
                 )
-              : !!timeoutEmail && (
-                  <TimerBlockEmail
-                    expiredTimer={Number(timeoutEmail?.timeout * 1000)}
+              : !!emailTimeout && (
+                  <TimerBlockEmailAuth
+                    expiredTimer={Number(emailTimeout?.timeout * 1000)}
                   />
                 )}
           </View>

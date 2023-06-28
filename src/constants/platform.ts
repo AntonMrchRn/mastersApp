@@ -51,71 +51,24 @@ const configApp = {
   shadow:
     platform === 'ios'
       ? {
-          shadowColor: '#575757',
+          shadowColor: 'rgba(2, 52, 227, 0.12)',
           shadowOffset: {
             width: 0,
-            height: 1,
+            height: -6,
           },
-          shadowOpacity: 0.3,
-          shadowRadius: 2.5,
-          elevation: 3,
+          shadowOpacity: 0.6,
+          shadowRadius: 4,
+          elevation: 2,
         }
       : {
-          shadowColor: '#000',
+          shadowColor: 'rgba(2, 52, 227, 0.12)',
           shadowOffset: {
             width: 0,
-            height: 0,
+            height: -6,
           },
-          shadowOpacity: 0.35,
-          shadowRadius: 3,
-
-          elevation: 6,
-        },
-
-  shadowChat:
-    platform === 'ios'
-      ? {
-          shadowColor: '#575757',
-          shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-          shadowOpacity: 0.3,
-          shadowRadius: 2.5,
-          elevation: 3,
-        }
-      : {
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-          shadowOpacity: 0.8,
-          shadowRadius: 2.5,
-          elevation: 3,
-        },
-
-  shadowLight:
-    platform === 'ios'
-      ? {
-          shadowColor: '#575757',
-          shadowOffset: {
-            width: 0,
-            height: 0,
-          },
-          shadowOpacity: 0.3,
-          shadowRadius: 2.5,
-          elevation: 3,
-        }
-      : {
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 0,
-          },
-          shadowOpacity: 0.8,
-          shadowRadius: 2.5,
-          elevation: 3,
+          shadowOpacity: 0.6,
+          shadowRadius: 4,
+          elevation: 2,
         },
 };
 

@@ -5,10 +5,10 @@ import { InitialState } from './types';
 const initialState: InitialState = {
   user: null,
   isAuth: false,
-  timeoutPhone: null,
-  timeoutEmail: null,
-  isActiveTimerPhone: false,
-  isActiveTimerEmail: false,
+  phoneTimeout: null,
+  emailTimeout: null,
+  isActivePhoneTimer: false,
+  isActiveEmailTimer: false,
   isRecoveryByPhone: false,
   isRecoveryByEmail: false,
 };
@@ -26,35 +26,29 @@ const auth = createSlice({
     setUserAuth: (state, { payload }) => {
       state.user = payload;
     },
-    setIsRecoveryByPhone: state => {
-      state.isRecoveryByPhone = true;
+    setIsRecoveryByPhone: (state, { payload }) => {
+      state.isRecoveryByPhone = payload;
     },
-    setIsRecoveryByEmail: state => {
-      state.isRecoveryByEmail = true;
+    setIsRecoveryByEmail: (state, { payload }) => {
+      state.isRecoveryByEmail = payload;
     },
-    clearIsRecoveryByPhone: state => {
-      state.isRecoveryByPhone = false;
+    timerOnAuthPhone: state => {
+      state.isActivePhoneTimer = true;
     },
-    clearIsRecoveryByEmail: state => {
-      state.isRecoveryByEmail = false;
+    timerOffAuthPhone: state => {
+      state.isActivePhoneTimer = false;
     },
-    timerOnPhone: state => {
-      state.isActiveTimerPhone = true;
+    timerOnAuthEmail: state => {
+      state.isActiveEmailTimer = true;
     },
-    timerOffPhone: state => {
-      state.isActiveTimerPhone = false;
+    timerOffAuthEmail: state => {
+      state.isActiveEmailTimer = false;
     },
-    timerOnEmail: state => {
-      state.isActiveTimerEmail = true;
+    setAuthPhoneTimeout: (state, { payload }) => {
+      state.phoneTimeout = payload;
     },
-    timerOffEmail: state => {
-      state.isActiveTimerEmail = false;
-    },
-    timeoutAsyncPhone: (state, { payload }) => {
-      state.timeoutPhone = payload;
-    },
-    timeoutAsyncEmail: (state, { payload }) => {
-      state.timeoutEmail = payload;
+    setAuthEmailTimeout: (state, { payload }) => {
+      state.emailTimeout = payload;
     },
   },
 });

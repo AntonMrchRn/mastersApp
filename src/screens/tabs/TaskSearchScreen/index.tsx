@@ -14,6 +14,7 @@ import { useTheme } from 'rn-ui-kit';
 import CardTasks from '@/components/TabScreens/TaskSearch/Card';
 import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound';
 import TypeSelectionTaskSearch from '@/components/TabScreens/TaskSearch/TypeSelectionTaskSearch';
+import { configApp } from '@/constants/platform';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useGetTableNamesQuery } from '@/store/api/tasks';
 import { Task } from '@/store/api/tasks/types';
@@ -32,9 +33,11 @@ const TaskSearchScreen = () => {
   const theme = useTheme();
 
   const [selectedTab, setSelectedTab] = useState(1);
-  const { data, loadingList, errorList } = useAppSelector(
-    state => state.taskSearch
-  );
+  const {
+    data = [],
+    loadingList,
+    errorList,
+  } = useAppSelector(state => state.taskSearch);
 
   const { data: tableNames } = useGetTableNamesQuery();
 
@@ -67,7 +70,12 @@ const TaskSearchScreen = () => {
           tableNames={tableNames}
         />
       </View>
-      <View style={styles.shadowWrapper}>
+      <View
+        style={[
+          styles.shadowWrapper,
+          !!data?.length && { ...configApp.shadow },
+        ]}
+      >
         {errorList?.code === 20007 ? (
           <PreviewNotFound type={2} />
         ) : loadingList && !data.length ? (
