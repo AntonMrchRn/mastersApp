@@ -40,6 +40,7 @@ enum ProfileNavigatorScreenName {
 
 export type RootStackParamList = {
   ProfileNavigation: { id: number } | undefined;
+  TaskSearchNavigation: { id: number } | undefined;
 };
 
 type RootNavigationParamList = {

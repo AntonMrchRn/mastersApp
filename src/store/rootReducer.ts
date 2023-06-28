@@ -7,6 +7,7 @@ import user from '@/store/slices/user/reducer';
 
 import { tasksAPI } from './api/tasks';
 
+import myTasks from './slices/myTasks/reducer';
 import tasks from './slices/tasks/reducer';
 import taskSearch from './slices/taskSearch/reducer';
 
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   user: user.reducer,
   tasks: tasks.reducer,
   taskSearch: taskSearch.reducer,
+  myTasks: myTasks.reducer,
   [authAPI.reducerPath]: authAPI.reducer,
   [userAPI.reducerPath]: userAPI.reducer,
   [tasksAPI.reducerPath]: tasksAPI.reducer,
