@@ -55,6 +55,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
     estimateBottomVisible,
     onEstimateBottomVisible,
     selectedServiceId,
+    onAddEstimateMaterial,
   } = useTaskCard({ taskId, navigation });
   const theme = useTheme();
 
@@ -133,7 +134,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
           <View style={styles.estimateBottom}>
             <Button
               label="Выбрать"
-              onPress={onEstimateBottomVisible}
+              onPress={onAddEstimateMaterial}
               disabled={!selectedServiceId}
             />
             <Button

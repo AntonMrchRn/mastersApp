@@ -29,6 +29,7 @@ enum TaskSearchNavigatorScreenName {
   TaskSearch = 'TaskSearch',
   TaskCard = 'TaskCard',
   EstimateEdit = 'EstimateEdit',
+  EstimateAddMaterial = 'EstimateAddMaterial',
 }
 
 enum MyTasksNavigatorScreenName {
@@ -81,6 +82,7 @@ type TaskSearchNavigationParamList = {
     serviceId: number;
     materialName?: string;
   };
+  EstimateAddMaterial: { serviceId: number; taskId: number };
 };
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<

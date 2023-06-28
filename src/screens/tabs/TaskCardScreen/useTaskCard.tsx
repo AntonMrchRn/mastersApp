@@ -133,6 +133,16 @@ export const useTaskCard = ({
   const onBudgetSubmission = () => {
     //
   };
+  const onAddEstimateMaterial = () => {
+    if (selectedServiceId) {
+      navigation.navigate(TaskSearchNavigatorScreenName.EstimateAddMaterial, {
+        serviceId: selectedServiceId,
+        taskId: id,
+      });
+      onEstimateBottomVisible();
+      setSelectedServiceId(undefined);
+    }
+  };
   const onTaskSubmission = async () => {
     try {
       await patchTask({
@@ -434,5 +444,6 @@ export const useTaskCard = ({
     estimateBottomVisible,
     onEstimateBottomVisible,
     selectedServiceId,
+    onAddEstimateMaterial,
   };
 };
