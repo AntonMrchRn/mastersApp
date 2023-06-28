@@ -144,5 +144,9 @@ type HandleUpload = {
   }[];
   date: string;
 };
+type Measure = {
+  text: string;
+  name: string;
+};
 
-export type { TaskSearch, HandleUpload };
+export type { TaskSearch, HandleUpload, Measure };

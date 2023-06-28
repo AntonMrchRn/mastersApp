@@ -19,6 +19,7 @@ const estimateAddMaterialValidation = {
   name: Yup.string().required('Укажите название материала'),
   count: Yup.string().required('Укажите количество материала'),
   price: Yup.string().required('Укажите цену за одну единицу измерения'),
+  measure: Yup.string().required('Выберите единицу измерения'),
 };
 const emailValidation = {
   email: Yup.string()
