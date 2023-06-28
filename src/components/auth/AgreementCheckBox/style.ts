@@ -13,20 +13,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingTop: 5,
   },
-  wrapperCheckBox: {
-    width: normalize(22, 'width'),
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
   active: {
     backgroundColor: configApp.brandColor,
-  },
-  checkBox: {
-    // height: normalize(21, 'width'),
-    // width: normalize(21, 'width'),
-    // borderWidth: 1,
-    // borderRadius: 4,
-    // borderColor: configApp.brandColor,
   },
   title: {
     fontWeight: '400',

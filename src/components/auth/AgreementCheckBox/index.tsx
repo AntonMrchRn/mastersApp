@@ -33,8 +33,7 @@ const AgreementCheckBox = () => {
       <CheckBox
         onPress={onPress}
         checked={field.value}
-        // icon={<CheckBoxActive />}
-        style={[styles.checkBox, field.value && styles.active]}
+        style={field.value && styles.active}
       />
 
       <View style={styles.wrapper}>
