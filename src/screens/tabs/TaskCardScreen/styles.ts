@@ -57,8 +57,6 @@ export const styles = StyleSheet.create({
     marginBottom: 12,
   },
   estimateBottom: {
-    position: 'absolute',
-    bottom: 0,
     gap: 16,
     marginHorizontal: 20,
     width: deviceWidth - 40,

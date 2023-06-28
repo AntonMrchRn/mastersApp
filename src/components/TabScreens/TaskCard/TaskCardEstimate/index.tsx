@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { View } from 'react-native';
 
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
+import { Button, RadioButton, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
@@ -30,6 +30,10 @@ type TaskCardEstimateProps = {
   >;
   onEstimateBottomVisible: () => void;
   estimateBottomVisible: boolean;
+  selectedServiceId: number | undefined;
+  setSelectedServiceId: React.Dispatch<
+    React.SetStateAction<number | undefined>
+  >;
 };
 
 export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
@@ -40,6 +44,8 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   navigation,
   onEstimateBottomVisible,
   estimateBottomVisible,
+  selectedServiceId,
+  setSelectedServiceId,
 }) => {
   const {
     sheetVisible,
@@ -90,17 +96,29 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           const secondActionService = () => {
             onDeleteService(service.ID);
           };
+          const radioPress = () => {
+            setSelectedServiceId(service.ID);
+          };
           return (
             <View key={service.ID}>
-              <TaskEstimateItem
-                firstAction={firstActionService}
-                secondAction={secondActionService}
-                title={service?.name}
-                price={service?.price}
-                count={service?.count}
-                sum={service?.sum}
-                roleID={service?.roleID}
-              />
+              <View style={styles.itemRow}>
+                {estimateBottomVisible && (
+                  <RadioButton
+                    checked={selectedServiceId === service.ID}
+                    style={styles.radio}
+                    onPress={radioPress}
+                  />
+                )}
+                <TaskEstimateItem
+                  firstAction={firstActionService}
+                  secondAction={secondActionService}
+                  title={service?.name}
+                  price={service?.price}
+                  count={service?.count}
+                  sum={service?.sum}
+                  roleID={service?.roleID}
+                />
+              </View>
               <Spacer size={0} separator="bottom" />
               {service?.materials?.map((material, inde) => {
                 const firstActionMaterial = () => {

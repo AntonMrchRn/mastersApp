@@ -38,6 +38,7 @@ export const useTaskCard = ({
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [estimateBottomVisible, setEstimateBottomVisible] = useState(false);
+  const [selectedServiceId, setSelectedServiceId] = useState<number>();
 
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
@@ -239,6 +240,8 @@ export const useTaskCard = ({
             navigation={navigation}
             onEstimateBottomVisible={onEstimateBottomVisible}
             estimateBottomVisible={estimateBottomVisible}
+            selectedServiceId={selectedServiceId}
+            setSelectedServiceId={setSelectedServiceId}
           />
         );
       case TaskTab.REPORT:
@@ -430,5 +433,6 @@ export const useTaskCard = ({
     goBack,
     estimateBottomVisible,
     onEstimateBottomVisible,
+    selectedServiceId,
   };
 };
