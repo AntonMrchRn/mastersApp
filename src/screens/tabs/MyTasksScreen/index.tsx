@@ -17,6 +17,7 @@ import { configApp } from '@/constants/platform';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useGetTableNamesQuery } from '@/store/api/tasks';
 import { Task } from '@/store/api/tasks/types';
+import { refreshMyTasks } from '@/store/slices/myTasks/asyncActions';
 import {
   getSearchTasks,
   refreshTasks,
@@ -40,14 +41,13 @@ const MyTasksScreen = () => {
     errorList,
   } = useAppSelector(state => state.taskSearch);
 
-  const { data: tableNames } = useGetTableNamesQuery();
-
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
+
   const renderItem = ({ item }: ListRenderItemInfo<Task>) => (
     <CardTasks {...item} navigation={navigation} />
   );
 
-  const onRefresh = () => dispatch(refreshTasks({ idList: selectedTab }));
+  const onRefresh = () => dispatch(refreshMyTasks({ idList: selectedTab }));
   const onEndReached = () => {
     !loadingList &&
       dispatch(
@@ -61,6 +61,7 @@ const MyTasksScreen = () => {
   useEffect(() => {
     onRefresh();
   }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapperTop}>

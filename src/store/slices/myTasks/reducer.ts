@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { Error } from '@/types/error';
 
-import { getSearchTasks, refreshTasks } from './asyncActions';
+import { getMyTasks, refreshMyTasks } from './asyncActions';
 import { InitialState } from './types';
 
 const initialState: InitialState = {
@@ -15,8 +15,8 @@ const initialState: InitialState = {
   errorNames: null,
 };
 
-const myTasks = createSlice({
-  name: 'taskSearch',
+const taskSearch = createSlice({
+  name: 'myTasks',
   initialState,
   reducers: {
     clearList: state => {
@@ -26,42 +26,41 @@ const myTasks = createSlice({
   },
   extraReducers: builder => {
     // get search tasks
-    builder.addCase(getSearchTasks.pending, state => {
+    builder.addCase(getMyTasks.pending, state => {
       state.loadingList = true;
     });
     builder.addCase(
-      getSearchTasks.fulfilled,
+      getMyTasks.fulfilled,
       (state, { payload }: PayloadAction<InitialState['list']>) => {
         state.list = payload;
         state.data = state.data?.concat(<[]>payload.tasks);
-
         state.loadingList = false;
       }
     );
-    builder.addCase(getSearchTasks.rejected, (state, { payload }) => {
+    builder.addCase(getMyTasks.rejected, (state, { payload }) => {
       state.errorList = payload as Error;
       state.loadingList = false;
     });
 
-    // refresh tasks
-    builder.addCase(refreshTasks.pending, state => {
+    // refresh my tasks
+    builder.addCase(refreshMyTasks.pending, state => {
       state.loadingList = true;
     });
     builder.addCase(
-      refreshTasks.fulfilled,
+      refreshMyTasks.fulfilled,
       (state, { payload }: PayloadAction<InitialState['list']>) => {
         state.list = payload;
         state.data = payload.tasks;
         state.loadingList = false;
       }
     );
-    builder.addCase(refreshTasks.rejected, (state, { payload }) => {
+    builder.addCase(refreshMyTasks.rejected, (state, { payload }) => {
       state.errorList = payload as Error;
       state.loadingList = false;
     });
   },
 });
 
-export const { clearList } = myTasks.actions;
+export const { clearList } = taskSearch.actions;
 
-export default myTasks;
+export default taskSearch;
