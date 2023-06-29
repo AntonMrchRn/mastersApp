@@ -1,7 +1,10 @@
 import React, { FC } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
 
 import { BottomSheet, Button } from 'rn-ui-kit';
+
+import ControlledInput from '@/components/inputs/ControlledInput';
 
 type AddServiceBottomSheetProps = {
   isVisible: boolean;
@@ -19,9 +22,22 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = ({
       marginVertical: 20,
     },
     container: {
-      marginTop: 12,
+      marginTop: 16,
     },
   });
+  const methods = useForm({
+    defaultValues: {
+      serviceName: '',
+    },
+    mode: 'onChange',
+  });
+  const {
+    formState: { errors },
+    watch,
+  } = methods;
+
+  const serviceName = watch('serviceName');
+
   return (
     <BottomSheet
       onSwipeComplete={onCancel}
@@ -34,11 +50,18 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = ({
       }
     >
       <View style={styles.container}>
+        <FormProvider {...methods}>
+          <ControlledInput
+            name={'serviceName'}
+            placeholder={'Искать по названию'}
+            variant={'text'}
+            keyboardType="numeric"
+          />
+        </FormProvider>
         <Button
           style={styles.button}
           size="M"
-          variant="outlineAccent"
-          label="Отмена"
+          label="Выбрать"
           onPress={onCancel}
         />
       </View>

@@ -60,7 +60,6 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
     (acc, val) => acc.concat(val?.name || []),
     []
   );
-  console.log('🚀 ~ file: index.tsx:63 ~ materialsNames:', materialsNames);
   const methods = useForm({
     defaultValues: {
       name: '',
