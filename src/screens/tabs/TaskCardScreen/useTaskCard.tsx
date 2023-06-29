@@ -73,7 +73,6 @@ export const useTaskCard = ({
   const files = task?.files || [];
   const services = task?.services || [];
   const startTime = task?.startTime || '';
-  const endTime = task?.endTime || '';
   const contacts = task?.contacts || [];
   const endTimePlan = task?.endTimePlan || '';
   const address = task?.object?.name || '';
@@ -185,20 +184,6 @@ export const useTaskCard = ({
     });
     getTask.refetch();
   };
-  const onChangeEndTimePlan = async (time: string) => {
-    //при изменении любого из времени нужно передавать все три поля
-    await patchTask({
-      //id таски
-      ID: id,
-      //планируемый срок окончания
-      endTimePlan: time,
-      //срок окончания
-      endTime,
-      //срок начала
-      startTime,
-    });
-    getTask.refetch();
-  };
   const onCancelTask = async (text: string) => {
     //если это общие, то
     //первый отклик - патч задания, refuseReason, id задания
@@ -225,14 +210,12 @@ export const useTaskCard = ({
       case TaskTab.DESCRIPTION:
         return (
           <TaskCardDescription
-            statusID={statusID}
             description={description}
             address={address}
             startTime={startTime}
             endTimePlan={endTimePlan}
             contacts={contacts}
             files={files}
-            onChangeEndTimePlan={onChangeEndTimePlan}
           />
         );
       case TaskTab.ESTIMATE:

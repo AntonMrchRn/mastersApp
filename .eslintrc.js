@@ -11,6 +11,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'off',
     '@typescript-eslint/no-explicit-any': 'error',
     'no-useless-escape': 'off',
+    'react/display-name': 'off',
     'react/self-closing-comp': [
       'error',
       {

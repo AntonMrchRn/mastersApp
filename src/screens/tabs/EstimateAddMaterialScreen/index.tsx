@@ -54,7 +54,12 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
 
   const task = getTask?.data && getTask?.data?.tasks && getTask?.data?.tasks[0];
   const services = task?.services || [];
-
+  const materials =
+    services.find(serv => serv.ID === serviceId)?.materials || [];
+  const materialsNames = materials.reduce<string[]>(
+    (acc, val) => acc.concat(val?.name || []),
+    []
+  );
   const methods = useForm({
     defaultValues: {
       name: '',
@@ -70,6 +75,9 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
     watch,
   } = methods;
 
+  const name = watch('name');
+  const count = watch('count');
+  const price = watch('price');
   const measure = watch('measure');
 
   const onSubmit = async ({
@@ -85,6 +93,13 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
       return toast.show({
         type: 'error',
         title: 'Не удалось определить роль пользователя',
+        contentHeight: 120,
+      });
+    }
+    if (materialsNames.includes(name)) {
+      return toast.show({
+        type: 'error',
+        title: 'Имя материала не должно совпадать с имеющимся в услуге',
         contentHeight: 120,
       });
     }
@@ -140,54 +155,55 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
     },
   ];
   return (
-    <>
-      <View style={styles.container}>
-        <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
-          Заполните данные о материале
-        </Text>
+    <View style={styles.container}>
+      <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
+        Заполните данные о материале
+      </Text>
+      <Spacer size={'xl'} />
+      <FormProvider {...methods}>
+        <View style={styles.inputs}>
+          <ControlledInput
+            name={'name'}
+            label={name ? 'Наименование' : undefined}
+            placeholder={'Наименование'}
+            variant={'text'}
+            hint={errors.name?.message}
+            isError={!!errors.name?.message}
+          />
+          <ControlledInput
+            name={'count'}
+            label={count ? 'Количество' : undefined}
+            placeholder={'Количество'}
+            variant={'text'}
+            hint={errors.count?.message}
+            isError={!!errors.count?.message}
+            keyboardType="numeric"
+          />
+          <ControlledInput
+            name={'price'}
+            label={price ? 'Цена' : undefined}
+            placeholder={'Цена'}
+            variant={'text'}
+            keyboardType="numeric"
+            hint={
+              errors.price?.message ||
+              'Указывается в рублях за одну единицу измерения'
+            }
+            isError={!!errors.price?.message}
+          />
+        </View>
+        <MeasureItem
+          measure={measure}
+          measures={measures}
+          error={errors.measure?.message}
+        />
         <Spacer size={'xl'} />
-        <FormProvider {...methods}>
-          <View style={styles.inputs}>
-            <ControlledInput
-              name={'name'}
-              label={'Наименование'}
-              variant={'text'}
-              hint={errors.name?.message}
-              isError={!!errors.name?.message}
-            />
-            <ControlledInput
-              name={'count'}
-              label={'Количество'}
-              variant={'text'}
-              hint={errors.count?.message}
-              isError={!!errors.count?.message}
-              keyboardType="numeric"
-            />
-            <ControlledInput
-              name={'price'}
-              label={'Цена'}
-              variant={'text'}
-              keyboardType="numeric"
-              hint={
-                errors.price?.message ||
-                'Указывается в рублях за одну единицу измерения'
-              }
-              isError={!!errors.price?.message}
-            />
-          </View>
-          <MeasureItem
-            measure={measure}
-            measures={measures}
-            error={errors.measure?.message}
-          />
-          <Spacer size={'xl'} />
-          <Button
-            label={'Добавить'}
-            onPress={methods.handleSubmit(onSubmit)}
-            style={styles.button}
-          />
-        </FormProvider>
-      </View>
-    </>
+        <Button
+          label={'Добавить'}
+          onPress={methods.handleSubmit(onSubmit)}
+          style={styles.button}
+        />
+      </FormProvider>
+    </View>
   );
 };

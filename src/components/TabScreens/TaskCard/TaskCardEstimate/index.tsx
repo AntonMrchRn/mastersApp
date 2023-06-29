@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { View } from 'react-native';
 
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Button, RadioButton, Spacer, Text, useTheme } from 'rn-ui-kit';
+import { RadioButton, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
@@ -13,6 +13,7 @@ import {
 } from '@/types/navigation';
 import { OutlayStatusType, StatusType } from '@/types/task';
 
+import { AddServiceBottomSheet } from '../AddServiceBottomSheet';
 import { TaskCardAddEstimateBottomSheet } from '../TaskCardAddEstimateBottomSheet';
 import { useTaskCardEstimate } from './useTaskCardEstimate';
 
@@ -48,8 +49,8 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   setSelectedServiceId,
 }) => {
   const {
-    sheetVisible,
-    onSheetVisible,
+    estimateSheetVisible,
+    onEstimateSheetVisible,
     allSum,
     materialsSum,
     onEdit,
@@ -57,6 +58,8 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     onDeleteMaterial,
     onPressMaterial,
     onPressService,
+    serviceSheetVisible,
+    onServiceSheetVisible,
   } = useTaskCardEstimate({
     services,
     taskId,
@@ -69,22 +72,23 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   return (
     <>
       <TaskCardAddEstimateBottomSheet
-        isVisible={sheetVisible}
-        onCancel={onSheetVisible}
+        isVisible={estimateSheetVisible}
+        onCancel={onEstimateSheetVisible}
         pressMaterial={onPressMaterial}
         pressService={onPressService}
       />
+      <AddServiceBottomSheet onCancel={onServiceSheetVisible} />
       <View>
         <Spacer size={'xxxl'} />
         {outlayStatusID && statusID === StatusType.WORK && (
           <TaskEstimateOutline
             outlayStatusID={outlayStatusID}
-            onPress={onSheetVisible}
+            onPress={onEstimateSheetVisible}
           />
         )}
         <TaskEstimateOutline
           outlayStatusID={outlayStatusID}
-          onPress={onSheetVisible}
+          onPress={onEstimateSheetVisible}
         />
         <Text variant={'title3'} color={theme.text.basic} style={styles.mb8}>
           Перечень услуг и материалов
