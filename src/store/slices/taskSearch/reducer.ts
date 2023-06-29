@@ -33,7 +33,9 @@ const myTasks = createSlice({
       getSearchTasks.fulfilled,
       (state, { payload }: PayloadAction<InitialState['list']>) => {
         state.list = payload;
-        state.data = state.data?.concat(<[]>payload.tasks);
+        state.data = payload.tasks?.length
+          ? state.data?.concat(<[]>payload.tasks)
+          : state.data;
 
         state.loadingList = false;
       }

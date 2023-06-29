@@ -5,8 +5,8 @@ type InitialState = {
   list: GetTaskResponce;
   data?: Task[];
   tableNames: [];
-  loadingNames: boolean;
   loadingList: boolean;
+  loadingEndReched: boolean;
   errorList: Error | null;
   errorNames: null | Error;
 };

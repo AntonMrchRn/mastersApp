@@ -9,8 +9,8 @@ const initialState: InitialState = {
   list: {},
   data: [],
   tableNames: [],
-  loadingNames: false,
   loadingList: false,
+  loadingEndReched: false,
   errorList: null,
   errorNames: null,
 };
@@ -27,19 +27,22 @@ const taskSearch = createSlice({
   extraReducers: builder => {
     // get search tasks
     builder.addCase(getMyTasks.pending, state => {
-      state.loadingList = true;
+      state.loadingEndReched = true;
     });
     builder.addCase(
       getMyTasks.fulfilled,
       (state, { payload }: PayloadAction<InitialState['list']>) => {
         state.list = payload;
-        state.data = state.data?.concat(<[]>payload.tasks);
-        state.loadingList = false;
+        state.data = payload.tasks?.length
+          ? state.data?.concat(<[]>payload.tasks)
+          : state.data;
+
+        state.loadingEndReched = false;
       }
     );
     builder.addCase(getMyTasks.rejected, (state, { payload }) => {
       state.errorList = payload as Error;
-      state.loadingList = false;
+      state.loadingEndReched = false;
     });
 
     // refresh my tasks

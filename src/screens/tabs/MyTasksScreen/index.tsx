@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -21,11 +21,9 @@ import {
   getMyTasks,
   refreshMyTasks,
 } from '@/store/slices/myTasks/asyncActions';
-import { getSearchTasks } from '@/store/slices/taskSearch/asyncActions';
+import { clearList } from '@/store/slices/myTasks/reducer';
 import { TaskCardScreenNavigationProp } from '@/types/navigation';
 import { TaskSearch } from '@/types/task';
-
-import { taskSections } from './mock.data';
 
 import styles from './style';
 
@@ -39,6 +37,7 @@ const MyTasksScreen = () => {
     data = [],
     loadingList,
     errorList,
+    list: { mobileCounts = [] },
   } = useAppSelector(state => state.myTasks);
 
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
@@ -48,19 +47,23 @@ const MyTasksScreen = () => {
   );
 
   const onRefresh = () => dispatch(refreshMyTasks({ idList: selectedTab }));
-  const onEndReached = () => {
-    !loadingList &&
-      dispatch(
-        getMyTasks({
-          idList: selectedTab,
-          fromTask: data?.length,
-        })
-      );
-  };
+
+  const cachedOnEndReached = useCallback(() => {
+    !loadingList && data.length && data.length > 4
+      ? dispatch(
+          getMyTasks({
+            idList: selectedTab,
+            fromTask: data?.length,
+          })
+        )
+      : null;
+  }, [data]);
+
   const onChangeTab = (item: TabItem) => {
     if (item.id !== selectedTab) {
+      dispatch(clearList());
       dispatch(
-        getMyTasks({
+        refreshMyTasks({
           idList: item.id,
           fromTask: 0,
         })
@@ -68,6 +71,7 @@ const MyTasksScreen = () => {
       setSelectedTab(item.id);
     }
   };
+
   useEffect(() => {
     onRefresh();
   }, []);
@@ -80,7 +84,7 @@ const MyTasksScreen = () => {
       <TabControl
         contentContainerStyle={styles.wrapperTab}
         initialId={1}
-        data={taskSections}
+        data={mobileCounts}
         onChange={onChangeTab}
       />
       <View
@@ -89,7 +93,7 @@ const MyTasksScreen = () => {
           !!data?.length && { ...configApp.shadow },
         ]}
       >
-        {/* {errorList?.code === 20007 ? (
+        {errorList?.code === 20007 ? (
           <PreviewNotFound type={3} />
         ) : loadingList && !data.length ? (
           <ActivityIndicator size={'large'} color={theme.background.accent} />
@@ -110,10 +114,10 @@ const MyTasksScreen = () => {
             showsHorizontalScrollIndicator={false}
             ListEmptyComponent={<PreviewNotFound type={1} />}
             initialNumToRender={4}
-            onEndReachedThreshold={7}
-            onEndReached={onEndReached}
+            onEndReachedThreshold={0.5}
+            onEndReached={cachedOnEndReached}
           />
-        )} */}
+        )}
       </View>
     </SafeAreaView>
   );

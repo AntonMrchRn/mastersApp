@@ -71,6 +71,11 @@ type Contact = {
   position: string;
   sname: string;
 };
+type CountMobile = {
+  id: number;
+  count: number;
+  label: string;
+};
 type Task = {
   ID?: number;
   refuseReason?: string;
@@ -135,6 +140,7 @@ type GetTaskResponce = {
     summarizing: number;
     work: number;
   } | null;
+  mobileCounts?: CountMobile[];
   tasks?: Task[];
 };
 type GetTaskHistoryResponce = {

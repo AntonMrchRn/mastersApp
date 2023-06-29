@@ -43,7 +43,7 @@ const TypeSelectionTaskSearch: FC<PropsTypeSelection> = ({
     <View style={styles.wrapper}>
       <SegmentedControl
         onChange={onChange}
-        tabs={descriptions.length ? descriptions : ['', '']}
+        tabs={descriptions.length ? descriptions : ['IT услуги', 'Общие']}
       />
     </View>
   );

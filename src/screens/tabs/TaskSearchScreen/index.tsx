@@ -46,14 +46,16 @@ const TaskSearchScreen = () => {
   );
 
   const onRefresh = () => dispatch(refreshTasks({ idList: selectedTab }));
+
   const onEndReached = () => {
-    !loadingList &&
-      dispatch(
-        getSearchTasks({
-          idList: selectedTab,
-          fromTask: data?.length,
-        })
-      );
+    !loadingList && data.length
+      ? dispatch(
+          getSearchTasks({
+            idList: selectedTab,
+            fromTask: data?.length,
+          })
+        )
+      : null;
   };
 
   useEffect(() => {
