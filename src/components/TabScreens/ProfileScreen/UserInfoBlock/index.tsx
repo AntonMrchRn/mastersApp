@@ -42,11 +42,9 @@ const UserInfoBlock = ({
           </TouchableOpacity>
         )}
       </TouchableOpacity>
-      <View
-        style={[
-          styles.line,
-          { backgroundColor: theme.background.neutralDisableSecond },
-        ]}
+      <Spacer
+        separator="bottom"
+        separatorColor={theme.background.neutralDisableSecond}
       />
     </>
   );

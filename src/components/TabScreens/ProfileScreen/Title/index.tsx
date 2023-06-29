@@ -3,14 +3,16 @@ import { View } from 'react-native';
 
 import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
+import { scaleFontSize } from '@/utils/scale';
+
 import styles from './style';
 
 type TitleProps = {
   title: string;
   withButton?: boolean;
-  icon?: ReactElement;
   buttonLabel?: string;
   onPress?: () => void;
+  icon?: ReactElement | boolean;
 };
 
 const Title = ({
@@ -24,7 +26,14 @@ const Title = ({
 
   return (
     <View style={styles.container}>
-      <Text variant="title3">{title}</Text>
+      <Text
+        variant="title3"
+        style={{
+          fontSize: scaleFontSize(20),
+        }}
+      >
+        {title}
+      </Text>
       {withButton && (
         <>
           <Spacer size="l" horizontal />
@@ -32,10 +41,13 @@ const Title = ({
             style={[styles.btn, { backgroundColor: theme.background.main }]}
             icon={icon}
             onPress={onPress}
+            size="S"
             label={buttonLabel}
+            variant="ghost"
             labelStyle={[
               styles.label,
               {
+                fontSize: scaleFontSize(15),
                 color: theme.text.basic,
               },
             ]}

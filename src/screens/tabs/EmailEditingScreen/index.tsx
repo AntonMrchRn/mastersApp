@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormProvider } from 'react-hook-form';
-import { SafeAreaView, View } from 'react-native';
+import { View } from 'react-native';
 
 import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
@@ -27,7 +27,7 @@ const EmailEditingScreen = () => {
   } = useEmailEditing();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Header title={`${isEmailExist ? 'Изменение' : 'Добавление'} почты`} />
       <DismissKeyboardView>
         <View style={styles.content}>
@@ -71,7 +71,7 @@ const EmailEditingScreen = () => {
           )}
         </View>
       </DismissKeyboardView>
-    </SafeAreaView>
+    </View>
   );
 };
 

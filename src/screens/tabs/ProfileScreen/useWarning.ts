@@ -1,12 +1,7 @@
 import { useAppSelector } from '@/store';
 import { useGetEntityTypesQuery, useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
-
-enum UserEntityType {
-  'self' = 'Самозанятый',
-  'company' = 'Юридическое лицо',
-  'individual' = 'Индивидуальный предприниматель',
-}
+import { UserEntityType } from '@/types/user';
 
 const useWarning = () => {
   const { user: authUser } = useAppSelector(selectAuth);

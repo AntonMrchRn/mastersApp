@@ -55,6 +55,18 @@ const personalDataValidation = {
   sname: Yup.string().required('Укажите фамилию'),
   pname: Yup.string().required('Укажите отчество'),
 };
+const bankDetailsValidation = {
+  bankID: Yup.string()
+    .length(9, 'Укажите 9-значный номер БИК банка в цифровом формате')
+    .required('Укажите 9-значный номер БИК банка в цифровом формате'),
+  bankName: Yup.string().required('Укажите полное наименование банка'),
+  checkingAccount: Yup.string()
+    .length(20, 'Укажите 20-значный номер счета в цифровом формате')
+    .required('Укажите 20-значный номер счета в цифровом формате'),
+  correspondingAccount: Yup.string()
+    .length(20, 'Укажите 20-значный номер счета в цифровом формате')
+    .required('Укажите 20-значный номер счета в цифровом формате'),
+};
 
 const cancelTaskValidationSchema = Yup.object().shape(cancelTaskValidation);
 const estimateCountValidationSchema = Yup.object().shape(
@@ -77,6 +89,7 @@ const recoveryConfirmationValidationSchema = Yup.object().shape(
   recoveryConfirmationValidation
 );
 const personalDataValidationSchema = Yup.object().shape(personalDataValidation);
+const bankDetailsValidationSchema = Yup.object().shape(bankDetailsValidation);
 
 export {
   emailErrorMessage,
@@ -85,6 +98,7 @@ export {
   phoneValidationSchema,
   authPhoneValidationSchema,
   cancelTaskValidationSchema,
+  bankDetailsValidationSchema,
   personalDataValidationSchema,
   signInWithPhoneValidationSchema,
   signInWithEmailValidationSchema,

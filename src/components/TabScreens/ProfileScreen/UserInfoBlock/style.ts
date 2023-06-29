@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 12,
+    paddingTop: 12,
   },
   pressableContainer: {
     flexDirection: 'row',

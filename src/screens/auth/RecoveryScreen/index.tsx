@@ -3,7 +3,6 @@ import { FormProvider } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import normalize from 'react-native-normalize';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, SegmentedControl, Spacer } from 'rn-ui-kit';
 
@@ -38,7 +37,7 @@ const RecoveryScreen = () => {
   } = useRecovery();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Header />
       <KeyboardAwareScrollView
         ref={scrollViewRef}
@@ -103,7 +102,7 @@ const RecoveryScreen = () => {
           </View>
         </View>
       </KeyboardAwareScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
