@@ -23,7 +23,16 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = ({
     },
   });
   return (
-    <BottomSheet onSwipeComplete={onCancel} isVisible={isVisible}>
+    <BottomSheet
+      onSwipeComplete={onCancel}
+      isVisible={isVisible}
+      closeIcon
+      closeIconPress={onCancel}
+      title={'Добавление услуги'}
+      subtitle={
+        'Воспользуйтесь поиском или выберите подходящую категорию услуги'
+      }
+    >
       <View style={styles.container}>
         <Button
           style={styles.button}
