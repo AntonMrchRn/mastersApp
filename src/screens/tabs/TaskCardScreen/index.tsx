@@ -58,7 +58,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
   const theme = useTheme();
 
   return (
-    <>
+    <View style={styles.container}>
       <TaskCardBudgetModal
         isVisible={budgetModalVisible}
         onCancel={onBudgetModalVisible}
@@ -137,6 +137,6 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
           />
         </View>
       )}
-    </>
+    </View>
   );
 };

@@ -140,54 +140,52 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
     },
   ];
   return (
-    <>
-      <View style={styles.container}>
-        <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
-          Заполните данные о материале
-        </Text>
+    <View style={styles.container}>
+      <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
+        Заполните данные о материале
+      </Text>
+      <Spacer size={'xl'} />
+      <FormProvider {...methods}>
+        <View style={styles.inputs}>
+          <ControlledInput
+            name={'name'}
+            label={'Наименование'}
+            variant={'text'}
+            hint={errors.name?.message}
+            isError={!!errors.name?.message}
+          />
+          <ControlledInput
+            name={'count'}
+            label={'Количество'}
+            variant={'text'}
+            hint={errors.count?.message}
+            isError={!!errors.count?.message}
+            keyboardType="numeric"
+          />
+          <ControlledInput
+            name={'price'}
+            label={'Цена'}
+            variant={'text'}
+            keyboardType="numeric"
+            hint={
+              errors.price?.message ||
+              'Указывается в рублях за одну единицу измерения'
+            }
+            isError={!!errors.price?.message}
+          />
+        </View>
+        <MeasureItem
+          measure={measure}
+          measures={measures}
+          error={errors.measure?.message}
+        />
         <Spacer size={'xl'} />
-        <FormProvider {...methods}>
-          <View style={styles.inputs}>
-            <ControlledInput
-              name={'name'}
-              label={'Наименование'}
-              variant={'text'}
-              hint={errors.name?.message}
-              isError={!!errors.name?.message}
-            />
-            <ControlledInput
-              name={'count'}
-              label={'Количество'}
-              variant={'text'}
-              hint={errors.count?.message}
-              isError={!!errors.count?.message}
-              keyboardType="numeric"
-            />
-            <ControlledInput
-              name={'price'}
-              label={'Цена'}
-              variant={'text'}
-              keyboardType="numeric"
-              hint={
-                errors.price?.message ||
-                'Указывается в рублях за одну единицу измерения'
-              }
-              isError={!!errors.price?.message}
-            />
-          </View>
-          <MeasureItem
-            measure={measure}
-            measures={measures}
-            error={errors.measure?.message}
-          />
-          <Spacer size={'xl'} />
-          <Button
-            label={'Добавить'}
-            onPress={methods.handleSubmit(onSubmit)}
-            style={styles.button}
-          />
-        </FormProvider>
-      </View>
-    </>
+        <Button
+          label={'Добавить'}
+          onPress={methods.handleSubmit(onSubmit)}
+          style={styles.button}
+        />
+      </FormProvider>
+    </View>
   );
 };
