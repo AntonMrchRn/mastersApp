@@ -33,10 +33,11 @@ enum MyTasksNavigatorScreenName {
 }
 enum ProfileNavigatorScreenName {
   Profile = 'Profile',
+  BankDetails = 'BankDetails',
   EmailEditing = 'EmailEditing',
   PhoneEditing = 'PhoneEditing',
-  PhoneEditingConfirmation = 'PhoneEditingConfirmation',
   PersonalDataEditing = 'PersonalDataEditing',
+  PhoneEditingConfirmation = 'PhoneEditingConfirmation',
 }
 
 export type RootStackParamList = {
@@ -68,6 +69,12 @@ type MyTasksNavigationParamList = {
 };
 type ProfileNavigationParamList = {
   Profile: undefined;
+  BankDetails: {
+    bankID?: string | null;
+    bankName?: string | null;
+    checkingAccount?: string | null;
+    correspondingAccount?: string | null;
+  };
   EmailEditing: {
     email: string | null;
   };
@@ -106,6 +113,10 @@ type PhoneEditingConfirmationScreenRoute = RouteProp<
   ProfileNavigationParamList,
   ProfileNavigatorScreenName.PhoneEditingConfirmation
 >;
+type BankDetailsScreenRoute = RouteProp<
+  ProfileNavigationParamList,
+  ProfileNavigatorScreenName.BankDetails
+>;
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<
   AuthNavigationParamList,
@@ -130,6 +141,10 @@ type TaskCardScreenNavigationProp = NativeStackNavigationProp<
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   ProfileNavigationParamList,
   ProfileNavigatorScreenName.Profile
+>;
+type BankDetailsScreenNavigationProp = NativeStackNavigationProp<
+  ProfileNavigationParamList,
+  ProfileNavigatorScreenName.BankDetails
 >;
 type PhoneEditingConfirmationScreenNavigationProp = NativeStackNavigationProp<
   ProfileNavigationParamList,
@@ -171,6 +186,7 @@ export type {
   TaskSearchNavigationParamList,
   EmailEditingScreenRoute,
   PhoneEditingScreenRoute,
+  BankDetailsScreenRoute,
   RecoveryConfirmationScreenRoute,
   PhoneEditingConfirmationScreenRoute,
   ErrorScreenNavigationProp,
@@ -179,6 +195,7 @@ export type {
   PasswordScreenNavigationProp,
   RecoveryScreenNavigationProp,
   TaskCardScreenNavigationProp,
+  BankDetailsScreenNavigationProp,
   PhoneEditingConfirmationScreenNavigationProp,
   CompositeEditingNavigationProp,
   CompositeRecoveryConfirmationAndEmailNavigationProp,

@@ -13,7 +13,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     justifyContent: 'space-between',
-    padding: 15,
+    paddingHorizontal: 15,
+    paddingBottom: 40,
   },
   text: {
     fontSize: 15,

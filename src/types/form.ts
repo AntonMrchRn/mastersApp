@@ -28,10 +28,17 @@ type RecoveryConfirmationFormValues = {
   password: string;
 };
 
-type PersonalDataValues = {
+type PersonalDataFormValues = {
   name: string;
   sname: string;
   pname: string;
+};
+
+type BankDetailsFormValues = {
+  bankID: string;
+  bankName: string;
+  checkingAccount: string;
+  correspondingAccount: string;
 };
 
 export type {
@@ -40,7 +47,8 @@ export type {
   PhoneValue,
   SignInFormValues,
   RecoveryFormValues,
-  PersonalDataValues,
+  BankDetailsFormValues,
+  PersonalDataFormValues,
   SignInWithEmailFormValues,
   SignInWithPhoneFormValues,
   RecoveryConfirmationFormValues,

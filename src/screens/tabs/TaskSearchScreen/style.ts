@@ -46,7 +46,8 @@ const styles = StyleSheet.create({
   wrapperTop: {
     width: '100%',
     paddingHorizontal: 20,
-    paddingVertical: 5,
+    paddingTop: 24,
+    paddingBottom: 5,
     backgroundColor: '#fff',
     marginBottom: 24,
   },

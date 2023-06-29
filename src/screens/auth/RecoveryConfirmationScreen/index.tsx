@@ -9,8 +9,8 @@ import { Button, Spacer } from 'rn-ui-kit';
 import ConfirmPreview from '@/components/auth/ConfirmPreview';
 import LogoPreview from '@/components/auth/LogoPreview';
 import Header from '@/components/Header';
-import ControlledInputCode from '@/components/inputs/ControlledInputCode';
 import ControlledInput from '@/components/inputs/ControlledInput';
+import ControlledInputCode from '@/components/inputs/ControlledInputCode';
 import TimerBlockPhoneAuth from '@/components/Timer/TimerBlockPhoneAuth';
 import { configApp } from '@/constants/platform';
 
@@ -33,7 +33,7 @@ const RecoveryConfirmationScreen = () => {
   } = useRecoveryConfirmation();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Header />
       <KeyboardAwareScrollView
         ref={scrollViewRef}
@@ -83,7 +83,7 @@ const RecoveryConfirmationScreen = () => {
           )}
         </View>
       </KeyboardAwareScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

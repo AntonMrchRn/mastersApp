@@ -1,10 +1,12 @@
 import { api } from '@/store/api';
 import {
+  BankDetailsEditingParams,
   ConfirmationCodeResponse,
   EntityType,
   PersonalDataEditingParams,
   PhoneEditingResponse,
   User,
+  UserParamsResponse,
   UserResponse,
 } from '@/store/api/user/types';
 
@@ -66,14 +68,30 @@ export const userAPI = api
         }),
         invalidatesTags: ['user'],
       }),
+      editBankDetails: builder.mutation<User, BankDetailsEditingParams>({
+        query: data => ({
+          url: 'users',
+          method: 'PATCH',
+          data: data,
+        }),
+        invalidatesTags: ['user'],
+      }),
+      getUserParams: builder.query<UserParamsResponse, void>({
+        query: () => ({
+          url: 'params',
+          method: 'GET',
+        }),
+      }),
     }),
     overrideExisting: true,
   });
 
 export const {
   useGetUserQuery,
+  useGetUserParamsQuery,
   useGetEntityTypesQuery,
   useEditPhoneMutation,
+  useEditBankDetailsMutation,
   useEditPersonalDataMutation,
   useSendEmailConfirmationCodeMutation,
   useSendPhoneConfirmationCodeMutation,

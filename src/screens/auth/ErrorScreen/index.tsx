@@ -14,7 +14,7 @@ const ErrorScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Header />
       <View style={styles.wrapperSignIn}>
         <View style={styles.containerInfo}>
@@ -26,7 +26,7 @@ const ErrorScreen = () => {
         </View>
         <Button label="Повторить попытку" onPress={navigation.goBack} />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

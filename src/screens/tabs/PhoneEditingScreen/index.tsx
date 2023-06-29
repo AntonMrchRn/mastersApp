@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormProvider } from 'react-hook-form';
-import { SafeAreaView, View } from 'react-native';
+import { View } from 'react-native';
 
 import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
@@ -26,7 +26,7 @@ const PhoneEditingScreen = () => {
   } = usePhoneEditing();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Header title={`${isPhoneExist ? 'Изменение' : 'Добавление'} телефона`} />
       <DismissKeyboardView>
         <View style={styles.content}>
@@ -61,7 +61,7 @@ const PhoneEditingScreen = () => {
           )}
         </View>
       </DismissKeyboardView>
-    </SafeAreaView>
+    </View>
   );
 };
 
