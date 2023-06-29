@@ -4,6 +4,7 @@ import { setProgresses } from '@/store/slices/tasks/actions';
 import { Progress } from '@/store/slices/tasks/types';
 
 import {
+  GetServicesCategoriesResponce,
   GetTaskHistoryResponce,
   GetTaskResponce,
   GetTaskStatusesResponce,
@@ -35,6 +36,14 @@ export const tasksAPI = api
           method: 'GET',
         }),
       }),
+      getServicesCategories: builder.query<GetServicesCategoriesResponce, void>(
+        {
+          query: () => ({
+            url: `services/categories?query=??`,
+            method: 'GET',
+          }),
+        }
+      ),
       getTableNames: builder.query<GetTaskStatusesResponce, void>({
         query: () => ({
           url: `aux?query=?tableName==set?`,
@@ -97,4 +106,5 @@ export const {
   usePatchTaskMutation,
   usePostTasksFilesMutation,
   useDeleteTasksFilesMutation,
+  useGetServicesCategoriesQuery,
 } = tasksAPI;
