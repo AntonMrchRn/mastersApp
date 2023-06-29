@@ -73,7 +73,6 @@ export const useTaskCard = ({
   const files = task?.files || [];
   const services = task?.services || [];
   const startTime = task?.startTime || '';
-  const endTime = task?.endTime || '';
   const contacts = task?.contacts || [];
   const endTimePlan = task?.endTimePlan || '';
   const address = task?.object?.name || '';

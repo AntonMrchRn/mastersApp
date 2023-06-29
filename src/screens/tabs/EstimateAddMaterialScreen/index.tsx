@@ -54,7 +54,13 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
 
   const task = getTask?.data && getTask?.data?.tasks && getTask?.data?.tasks[0];
   const services = task?.services || [];
-
+  const materials =
+    services.find(serv => serv.ID === serviceId)?.materials || [];
+  const materialsNames = materials.reduce<string[]>(
+    (acc, val) => acc.concat(val?.name || []),
+    []
+  );
+  console.log('🚀 ~ file: index.tsx:63 ~ materialsNames:', materialsNames);
   const methods = useForm({
     defaultValues: {
       name: '',
@@ -85,6 +91,13 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
       return toast.show({
         type: 'error',
         title: 'Не удалось определить роль пользователя',
+        contentHeight: 120,
+      });
+    }
+    if (materialsNames.includes(name)) {
+      return toast.show({
+        type: 'error',
+        title: 'Имя материала не должно совпадать с имеющимся в услуге',
         contentHeight: 120,
       });
     }
