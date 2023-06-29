@@ -33,7 +33,8 @@ export const useTaskCardEstimate = ({
 
   const [patchTask, mutationTask] = usePatchTaskMutation();
 
-  const [sheetVisible, setSheetVisible] = useState(false);
+  const [estimateSheetVisible, setEstimateSheetVisible] = useState(false);
+  const [serviceSheetVisible, setServiceSheetVisible] = useState(false);
 
   const allSum = services.reduce((acc, val) => acc + val.sum, 0);
   const allMaterials = services.reduce<Material[]>(
@@ -46,16 +47,22 @@ export const useTaskCardEstimate = ({
     0
   );
 
-  const onSheetVisible = () => {
-    setSheetVisible(!sheetVisible);
+  const onEstimateSheetVisible = () => {
+    setEstimateSheetVisible(!estimateSheetVisible);
+  };
+  const onServiceSheetVisible = () => {
+    setServiceSheetVisible(!serviceSheetVisible);
   };
   const onPressMaterial = () => {
     !estimateBottomVisible && onEstimateBottomVisible();
-    onSheetVisible();
+    onEstimateSheetVisible();
   };
   const onPressService = () => {
-    !estimateBottomVisible && onEstimateBottomVisible();
-    onSheetVisible();
+    estimateBottomVisible && onEstimateBottomVisible();
+    onEstimateSheetVisible();
+    setTimeout(() => {
+      onServiceSheetVisible();
+    }, 500);
   };
   const onEdit = (serviceId: number, materialName?: string) => {
     navigation.navigate(TaskSearchNavigatorScreenName.EstimateEdit, {
@@ -93,7 +100,6 @@ export const useTaskCardEstimate = ({
     });
     getTask.refetch();
   };
-  //TODO при добавлении материала проверять чтобы имя не совпадало с другими именами в массиве материалов к конкретной услуге
   useEffect(() => {
     if (mutationTask.error && 'data' in mutationTask.error) {
       toast.show({
@@ -105,8 +111,8 @@ export const useTaskCardEstimate = ({
   }, [mutationTask.error]);
 
   return {
-    sheetVisible,
-    onSheetVisible,
+    estimateSheetVisible,
+    onEstimateSheetVisible,
     allSum,
     materialsSum,
     onEdit,
@@ -114,5 +120,7 @@ export const useTaskCardEstimate = ({
     onDeleteMaterial,
     onPressMaterial,
     onPressService,
+    onServiceSheetVisible,
+    serviceSheetVisible,
   };
 };

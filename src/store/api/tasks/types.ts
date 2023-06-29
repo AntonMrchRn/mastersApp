@@ -234,6 +234,15 @@ type GetTaskStatusesResponce = [
     tableName: 'task_status';
   }
 ];
+type ServicesCategory = {
+  ID: number;
+  description: string;
+  isImmutable: boolean;
+  name: string;
+};
+type GetServicesCategoriesResponce = {
+  categories: ServicesCategory[];
+};
 type PostTasksFilesRequest = {
   formData: FormData;
   files: { name: string; size: number }[];
@@ -254,4 +263,6 @@ export type {
   Curator,
   Material,
   GetTaskHistoryResponce,
+  ServicesCategory,
+  GetServicesCategoriesResponce,
 };

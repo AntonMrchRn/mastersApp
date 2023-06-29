@@ -3,6 +3,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { NavigationContainer } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -24,7 +25,9 @@ const App = () => {
             <ThemeProvider>
               <ToastProvider>
                 <NavigationContainer theme={MyTheme}>
-                  <RootNavigation />
+                  <BottomSheetModalProvider>
+                    <RootNavigation />
+                  </BottomSheetModalProvider>
                 </NavigationContainer>
               </ToastProvider>
             </ThemeProvider>
