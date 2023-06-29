@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { View } from 'react-native';
 
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Button, RadioButton, Spacer, Text, useTheme } from 'rn-ui-kit';
+import { RadioButton, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
@@ -77,10 +77,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
         pressMaterial={onPressMaterial}
         pressService={onPressService}
       />
-      <AddServiceBottomSheet
-        isVisible={serviceSheetVisible}
-        onCancel={onServiceSheetVisible}
-      />
+      <AddServiceBottomSheet onCancel={onServiceSheetVisible} />
       <View>
         <Spacer size={'xxxl'} />
         {outlayStatusID && statusID === StatusType.WORK && (
