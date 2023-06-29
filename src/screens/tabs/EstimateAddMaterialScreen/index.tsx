@@ -76,6 +76,9 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
     watch,
   } = methods;
 
+  const name = watch('name');
+  const count = watch('count');
+  const price = watch('price');
   const measure = watch('measure');
 
   const onSubmit = async ({
@@ -162,14 +165,16 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
         <View style={styles.inputs}>
           <ControlledInput
             name={'name'}
-            label={'Наименование'}
+            label={name ? 'Наименование' : undefined}
+            placeholder={'Наименование'}
             variant={'text'}
             hint={errors.name?.message}
             isError={!!errors.name?.message}
           />
           <ControlledInput
             name={'count'}
-            label={'Количество'}
+            label={count ? 'Количество' : undefined}
+            placeholder={'Количество'}
             variant={'text'}
             hint={errors.count?.message}
             isError={!!errors.count?.message}
@@ -177,7 +182,8 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
           />
           <ControlledInput
             name={'price'}
-            label={'Цена'}
+            label={price ? 'Цена' : undefined}
+            placeholder={'Цена'}
             variant={'text'}
             keyboardType="numeric"
             hint={
