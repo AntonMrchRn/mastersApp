@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormProvider } from 'react-hook-form';
 import { View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, Spacer } from 'rn-ui-kit';
 
@@ -17,7 +16,7 @@ const PersonalDataEditingScreen = () => {
   const { errors, methods, isLoading, editData } = usePersonalDataEditing();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Header title="Персональные данные" />
       <DismissKeyboardView>
         <View style={styles.content}>
@@ -71,7 +70,7 @@ const PersonalDataEditingScreen = () => {
           </FormProvider>
         </View>
       </DismissKeyboardView>
-    </SafeAreaView>
+    </View>
   );
 };
 

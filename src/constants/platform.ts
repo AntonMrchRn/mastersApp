@@ -72,10 +72,4 @@ const configApp = {
         },
 };
 
-function opacify(color = '#ffffff', opacity = 1) {
-  const o = Math.round(opacity * 256);
-  const hexOpacity = o.toString(16);
-  return color.concat(hexOpacity);
-}
-
-export { opacify, MyTheme, configApp, deviceHeight, deviceWidth };
+export { MyTheme, configApp, deviceHeight, deviceWidth };

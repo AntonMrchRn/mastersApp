@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useAppSelector } from '@/store';
 import { useEditPersonalDataMutation, useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import { PersonalDataValues } from '@/types/form';
+import { PersonalDataFormValues } from '@/types/form';
 import {
   ProfileNavigatorScreenName,
   ProfileScreenNavigationProp,
@@ -44,7 +44,7 @@ const usePersonalDataEditing = () => {
     }
   }, [isSuccess]);
 
-  const editData = ({ name, sname, pname }: PersonalDataValues) => {
+  const editData = ({ name, sname, pname }: PersonalDataFormValues) => {
     if (user?.ID) {
       editPersonalData({
         ID: user?.ID,

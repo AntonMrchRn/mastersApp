@@ -9,13 +9,13 @@ import Header from '@/components/Header';
 import styles from './style';
 
 const EmailScreen = () => (
-  <SafeAreaView style={styles.container}>
+  <View style={styles.container}>
     <Header />
     <View style={styles.wrapperSignIn}>
       <LogoPreview label="Восстановление пароля" height={135} />
       <ConfirmPreviewEmail />
     </View>
-  </SafeAreaView>
+  </View>
 );
 
 export default EmailScreen;

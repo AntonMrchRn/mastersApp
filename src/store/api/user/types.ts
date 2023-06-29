@@ -70,11 +70,27 @@ type PersonalDataEditingParams = {
   pname: string;
 };
 
+type BankDetailsEditingParams = {
+  ID: number;
+  bankID: string;
+  bankName: string;
+  checkingAccount: string;
+  correspondingAccount: string;
+};
+
+type UserParamsResponse = {
+  sberLink: string;
+  tgBotTag: string;
+  regionsCount: number;
+};
+
 export type {
   User,
   EntityType,
   UserResponse,
+  UserParamsResponse,
   PhoneEditingResponse,
   ConfirmationCodeResponse,
+  BankDetailsEditingParams,
   PersonalDataEditingParams,
 };

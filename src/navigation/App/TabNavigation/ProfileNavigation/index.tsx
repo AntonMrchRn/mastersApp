@@ -2,6 +2,7 @@ import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
+import BankDetailsScreen from '@/screens/tabs/BankDetailsScreen';
 import EmailEditingScreen from '@/screens/tabs/EmailEditingScreen';
 import PersonalDataEditingScreen from '@/screens/tabs/PersonalDataEditingScreen';
 import PhoneEditingConfirmationScreen from '@/screens/tabs/PhoneEditingConfirmationScreen';
@@ -36,6 +37,10 @@ const ProfileNavigation = () => (
     <Stack.Screen
       name={ProfileNavigatorScreenName.PersonalDataEditing}
       component={PersonalDataEditingScreen}
+    />
+    <Stack.Screen
+      name={ProfileNavigatorScreenName.BankDetails}
+      component={BankDetailsScreen}
     />
   </Stack.Navigator>
 );

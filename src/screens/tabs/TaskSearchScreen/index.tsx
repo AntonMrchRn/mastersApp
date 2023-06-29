@@ -4,12 +4,11 @@ import {
   FlatList,
   ListRenderItemInfo,
   SafeAreaView,
-  Text,
   View,
 } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
-import { useTheme } from 'rn-ui-kit';
+import { Text, useTheme } from 'rn-ui-kit';
 
 import CardTasks from '@/components/TabScreens/TaskSearch/Card';
 import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound';
@@ -64,7 +63,9 @@ const TaskSearchScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapperTop}>
-        <Text style={styles.textHeader}>Поиск задач</Text>
+        <Text variant="title1" style={styles.textHeader}>
+          Поиск задач
+        </Text>
         <TypeSelectionTaskSearch
           setActiveTab={setSelectedTab}
           tableNames={tableNames}
