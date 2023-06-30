@@ -3,7 +3,7 @@ import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { StackScreenProps } from '@react-navigation/stack';
-import { TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
+import { Banner, TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
 
 import Header from '@/components/Header';
 import { TaskCardBottom } from '@/components/TabScreens/TaskCard/TaskCardBottom';
@@ -48,6 +48,10 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
     onCancelTask,
     subsetID,
     statusID,
+    estimateBannerVisible,
+    onEstimateBannerVisible,
+    onEstimateBannerPress,
+    ref,
   } = useTaskCard({ taskId, navigation });
   const theme = useTheme();
 
@@ -102,6 +106,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
                 )}
             </View>
             <TabControl
+              ref={ref}
               data={tabs}
               initialId={0}
               onChange={onTabChange}
@@ -113,6 +118,19 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
         </View>
       </ScrollView>
       <View style={styles.bottom}>
+        {estimateBannerVisible && (
+          <View style={styles.mb16}>
+            <Banner
+              type={'error'}
+              icon={'alert'}
+              title={'Смета не согласована'}
+              text="Перед сдачей задачи координатор должен согласовать смету"
+              buttonText="Перейти в Смету"
+              onClosePress={onEstimateBannerVisible}
+              onButtonPress={onEstimateBannerPress}
+            />
+          </View>
+        )}
         <TaskCardBottom banner={getBanner()} buttons={getButtons()} />
       </View>
     </SafeAreaView>

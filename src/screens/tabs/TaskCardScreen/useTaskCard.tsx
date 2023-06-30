@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { StackNavigationProp } from '@react-navigation/stack';
 import dayjs from 'dayjs';
@@ -36,13 +36,18 @@ export const useTaskCard = ({
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [estimateBottomVisible, setEstimateBottomVisible] = useState(false);
   const [selectedServiceId, setSelectedServiceId] = useState<number>();
+  const [estimateBannerVisible, setEstimateBannerVisible] = useState(false);
+
+  const ref = useRef<{
+    setId: (id: number) => void;
+  }>(null);
 
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
 
   // const getTask = useGetTaskQuery('926');
-  const getTask = useGetTaskQuery('996');
-  // const getTask = useGetTaskQuery(taskId);
+  // const getTask = useGetTaskQuery('996');
+  const getTask = useGetTaskQuery(taskId);
 
   useEffect(() => {
     if (
@@ -130,6 +135,9 @@ export const useTaskCard = ({
     },
   ];
 
+  const onEstimateBannerVisible = () => {
+    setEstimateBannerVisible(!estimateBannerVisible);
+  };
   const onEstimateBottomVisible = () => {
     setEstimateBottomVisible(!estimateBottomVisible);
   };
@@ -138,6 +146,11 @@ export const useTaskCard = ({
   };
   const onUploadModalVisible = () => {
     setUploadModalVisible(!uploadModalVisible);
+  };
+  const onEstimateBannerPress = () => {
+    onEstimateBannerVisible();
+    ref.current?.setId(1);
+    setTab(TaskTab.ESTIMATE);
   };
   const onBudgetSubmission = () => {
     //
@@ -186,12 +199,17 @@ export const useTaskCard = ({
     setCancelModalVisible(!cancelModalVisible);
   };
   const onWorkDelivery = async () => {
-    await patchTask({
-      //id таски
-      ID: id,
-      //перевод таски в статус Сдача работ
-      statusID: 5,
-    });
+    if (outlayStatusID !== OutlayStatusType.READY) {
+      !estimateBannerVisible && onEstimateBannerVisible();
+    } else {
+      await patchTask({
+        //id таски
+        ID: id,
+        //перевод таски в статус Сдача работ
+        statusID: 5,
+      });
+    }
+
     getTask.refetch();
   };
   const onCancelTask = async (text: string) => {
@@ -207,6 +225,23 @@ export const useTaskCard = ({
     });
     getTask.refetch();
     onCancelModalVisible();
+  };
+  const onSendEstimateForApproval = async () => {
+    if (outlayStatusID === OutlayStatusType.MATCHING) {
+      toast.show({
+        type: 'info',
+        title: 'Смета уже отправлена на согласование',
+        contentHeight: 120,
+      });
+    } else {
+      await patchTask({
+        //id таски
+        ID: id,
+        //меняем статус сметы на Согласование
+        outlayStatusID: OutlayStatusType.MATCHING,
+      });
+    }
+    getTask.refetch();
   };
   const onRevokeBudget = () => {
     //TODO необходимо сначала получить оффер юзера по этой таске
@@ -364,20 +399,36 @@ export const useTaskCard = ({
             },
           ];
         }
-        if (tab === TaskTab.ESTIMATE && estimateBottomVisible) {
-          return [
-            {
-              label: 'Выбрать',
-              variant: 'accent',
-              onPress: onAddEstimateMaterial,
-              disabled: !selectedServiceId,
-            },
-            {
-              label: 'Отменить',
-              variant: 'outlineAccent',
-              onPress: onEstimateBottomVisible,
-            },
-          ];
+        if (tab === TaskTab.ESTIMATE) {
+          if (estimateBottomVisible) {
+            return [
+              {
+                label: 'Выбрать',
+                variant: 'accent',
+                onPress: onAddEstimateMaterial,
+                disabled: !selectedServiceId,
+              },
+              {
+                label: 'Отменить',
+                variant: 'outlineAccent',
+                onPress: onEstimateBottomVisible,
+              },
+            ];
+          }
+          if (outlayStatusID !== OutlayStatusType.READY) {
+            return [
+              {
+                label: 'Отправить смету на согласование',
+                variant: 'accent',
+                onPress: onSendEstimateForApproval,
+              },
+              {
+                label: 'Отказаться от задачи',
+                variant: 'outlineDanger',
+                onPress: onCancelModalVisible,
+              },
+            ];
+          }
         }
         return [
           {
@@ -443,5 +494,9 @@ export const useTaskCard = ({
     onCancelTask,
     subsetID,
     statusID,
+    estimateBannerVisible,
+    onEstimateBannerVisible,
+    onEstimateBannerPress,
+    ref,
   };
 };
