@@ -3,8 +3,6 @@ import { NativeStackNavigationProp } from 'react-native-screens/native-stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-import { Material, Service } from '@/store/api/tasks/types';
-
 enum AuthScreenName {
   SignIn = 'SignIn',
   Recovery = 'Recovery',
@@ -24,9 +22,6 @@ enum RootScreenName {
 }
 enum TaskSearchNavigatorScreenName {
   TaskSearch = 'TaskSearch',
-  TaskCard = 'TaskCard',
-  EstimateEdit = 'EstimateEdit',
-  EstimateAddMaterial = 'EstimateAddMaterial',
 }
 enum MyTasksNavigatorScreenName {
   MyTasks = 'MyTasks',
@@ -38,6 +33,11 @@ enum ProfileNavigatorScreenName {
   PhoneEditing = 'PhoneEditing',
   PersonalDataEditing = 'PersonalDataEditing',
   PhoneEditingConfirmation = 'PhoneEditingConfirmation',
+}
+enum TaskNavigatorScreenName {
+  TaskCard = 'TaskCard',
+  EstimateEdit = 'EstimateEdit',
+  EstimateAddMaterial = 'EstimateAddMaterial',
 }
 
 export type RootStackParamList = {
@@ -88,6 +88,8 @@ type ProfileNavigationParamList = {
 };
 type TaskSearchNavigationParamList = {
   TaskSearch: undefined;
+};
+type TaskNavigationParamList = {
   TaskCard: { taskId: number };
   EstimateEdit: {
     taskId: number;
@@ -136,7 +138,7 @@ type ErrorScreenNavigationProp = NativeStackNavigationProp<
 >;
 type TaskCardScreenNavigationProp = NativeStackNavigationProp<
   TaskSearchNavigationParamList,
-  TaskSearchNavigatorScreenName.TaskCard
+  TaskSearchNavigatorScreenName.TaskSearch
 >;
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   ProfileNavigationParamList,
@@ -176,6 +178,7 @@ export {
   MyTasksNavigatorScreenName,
   ProfileNavigatorScreenName,
   TaskSearchNavigatorScreenName,
+  TaskNavigatorScreenName,
 };
 export type {
   TabNavigationParamList,
@@ -199,4 +202,5 @@ export type {
   PhoneEditingConfirmationScreenNavigationProp,
   CompositeEditingNavigationProp,
   CompositeRecoveryConfirmationAndEmailNavigationProp,
+  TaskNavigationParamList,
 };

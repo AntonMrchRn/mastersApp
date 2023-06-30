@@ -23,26 +23,6 @@ const TaskSearchNavigation = () => {
         name={TaskSearchNavigatorScreenName.TaskSearch}
         component={TaskSearchScreen}
       />
-      <Stack.Screen
-        name={TaskSearchNavigatorScreenName.TaskCard}
-        component={TaskCardScreen}
-      />
-      <Stack.Screen
-        name={TaskSearchNavigatorScreenName.EstimateEdit}
-        component={EstimateEditScreen}
-        options={{
-          headerShown: true,
-          header: props => <Header {...props} title={'Редактирование сметы'} />,
-        }}
-      />
-      <Stack.Screen
-        name={TaskSearchNavigatorScreenName.EstimateAddMaterial}
-        component={EstimateAddMaterialScreen}
-        options={{
-          headerShown: true,
-          header: props => <Header {...props} title={'Новый материал'} />,
-        }}
-      />
     </Stack.Navigator>
   );
 };
