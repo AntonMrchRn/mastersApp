@@ -5,12 +5,12 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Button } from 'rn-ui-kit';
 
+import { InfoIcon } from '@/assets/icons/svg/screens/InfoIcon';
 import { NotFoundIcon } from '@/assets/icons/svg/screens/NotFoundIcon';
 import TaskSearchClear from '@/assets/icons/svg/screens/TaskSearchClear';
 import { BottomTab, RootStackParamList } from '@/types/navigation';
 
 import styles from './style';
-import { InfoIcon } from '@/assets/icons/svg/screens/InfoIcon';
 
 export type PreviewProps = {
   type?: number;

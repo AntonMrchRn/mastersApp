@@ -6,6 +6,9 @@ export const styles = StyleSheet.create({
   mt16: {
     marginTop: 16,
   },
+  mb16: {
+    marginBottom: 16,
+  },
   contentContainerTab: {
     paddingHorizontal: 20,
   },
@@ -53,8 +56,8 @@ export const styles = StyleSheet.create({
     elevation: 2,
   },
   bottom: {
-    marginTop: 24,
     marginBottom: 12,
+    marginHorizontal: 20,
   },
   estimateBottom: {
     gap: 16,

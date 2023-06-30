@@ -9,6 +9,7 @@ import {
   TaskSearchNavigationParamList,
   TaskSearchNavigatorScreenName,
 } from '@/types/navigation';
+import { OutlayStatusType, StatusType } from '@/types/task';
 
 export const useTaskCardEstimate = ({
   services,
@@ -78,6 +79,8 @@ export const useTaskCardEstimate = ({
       ID: taskId,
       //массив услуг
       services: newServices,
+      //при удалении сметы она снова становится не согласована
+      outlayStatusID: OutlayStatusType.PENDING,
     });
     getTask.refetch();
   };
@@ -97,6 +100,8 @@ export const useTaskCardEstimate = ({
       ID: taskId,
       //массив услуг
       services: newServices,
+      //при удалении сметы она снова становится не согласована
+      outlayStatusID: OutlayStatusType.PENDING,
     });
     getTask.refetch();
   };

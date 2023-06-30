@@ -10,7 +10,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider, ToastProvider } from 'rn-ui-kit';
 
 import { MyTheme } from '@/constants/platform';
-import RootNavigation from '@/navigation/rootNavigation';
+import { AppNavigation } from '@/navigation/AppNavigation';
 import { persistor, store } from '@/store';
 
 import 'dayjs/locale/ru';
@@ -26,7 +26,7 @@ const App = () => {
               <ToastProvider>
                 <NavigationContainer theme={MyTheme}>
                   <BottomSheetModalProvider>
-                    <RootNavigation />
+                    <AppNavigation />
                   </BottomSheetModalProvider>
                 </NavigationContainer>
               </ToastProvider>

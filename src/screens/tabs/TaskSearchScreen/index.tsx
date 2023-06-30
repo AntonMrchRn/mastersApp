@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -7,13 +7,16 @@ import {
   View,
 } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { CompositeScreenProps } from '@react-navigation/native';
+import { StackScreenProps } from '@react-navigation/stack';
 import { Text, useTheme } from 'rn-ui-kit';
 
 import CardTasks from '@/components/TabScreens/TaskSearch/Card';
 import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound';
 import TypeSelectionTaskSearch from '@/components/TabScreens/TaskSearch/TypeSelectionTaskSearch';
 import { configApp } from '@/constants/platform';
+import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useGetTableNamesQuery } from '@/store/api/tasks';
 import { Task } from '@/store/api/tasks/types';
@@ -21,13 +24,16 @@ import {
   getSearchTasks,
   refreshTasks,
 } from '@/store/slices/taskSearch/asyncActions';
-import { TaskCardScreenNavigationProp } from '@/types/navigation';
+import { BottomTab, TabNavigationParamList } from '@/types/navigation';
 import { TaskSearch } from '@/types/task';
 
 import styles from './style';
 
-const TaskSearchScreen = () => {
-  const navigation = useNavigation<TaskCardScreenNavigationProp>();
+export type TaskSearchScreenProps = CompositeScreenProps<
+  BottomTabScreenProps<TabNavigationParamList, BottomTab.TaskSearch>,
+  StackScreenProps<AppStackParamList>
+>;
+const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
@@ -40,9 +46,14 @@ const TaskSearchScreen = () => {
 
   const { data: tableNames } = useGetTableNamesQuery();
 
+  const onItemPress = (id: number) => {
+    navigation.navigate(AppScreenName.TaskCard, {
+      taskId: id,
+    });
+  };
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
   const renderItem = ({ item }: ListRenderItemInfo<Task>) => (
-    <CardTasks {...item} navigation={navigation} />
+    <CardTasks {...item} onItemPress={onItemPress} />
   );
 
   const onRefresh = () => dispatch(refreshTasks({ idList: selectedTab }));

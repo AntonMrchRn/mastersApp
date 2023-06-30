@@ -6,11 +6,8 @@ import { RadioButton, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
+import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { Service } from '@/store/api/tasks/types';
-import {
-  TaskSearchNavigationParamList,
-  TaskSearchNavigatorScreenName,
-} from '@/types/navigation';
 import { OutlayStatusType, StatusType } from '@/types/task';
 
 import { AddServiceBottomSheet } from '../AddServiceBottomSheet';
@@ -25,8 +22,8 @@ type TaskCardEstimateProps = {
   statusID: StatusType | undefined;
   taskId: number;
   navigation: StackNavigationProp<
-    TaskSearchNavigationParamList,
-    TaskSearchNavigatorScreenName.TaskCard,
+    AppStackParamList,
+    AppScreenName.TaskCard,
     undefined
   >;
   onEstimateBottomVisible: () => void;
@@ -69,6 +66,8 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   });
   const theme = useTheme();
 
+  const canSwipe = !estimateBottomVisible && statusID === StatusType.WORK;
+
   return (
     <>
       <TaskCardAddEstimateBottomSheet
@@ -86,10 +85,6 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             onPress={onEstimateSheetVisible}
           />
         )}
-        <TaskEstimateOutline
-          outlayStatusID={outlayStatusID}
-          onPress={onEstimateSheetVisible}
-        />
         <Text variant={'title3'} color={theme.text.basic} style={styles.mb8}>
           Перечень услуг и материалов
         </Text>
@@ -121,7 +116,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                   count={service?.count}
                   sum={service?.sum}
                   roleID={service?.roleID}
-                  canSwipe={!estimateBottomVisible}
+                  canSwipe={canSwipe}
                 />
               </View>
               <Spacer size={0} separator="bottom" />
@@ -142,7 +137,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                       count={material?.count}
                       sum={(material?.count || 0) * (material?.price || 0)}
                       roleID={material?.roleID}
-                      canSwipe={!estimateBottomVisible}
+                      canSwipe={canSwipe}
                     />
                     <Spacer size={0} separator="bottom" />
                   </View>

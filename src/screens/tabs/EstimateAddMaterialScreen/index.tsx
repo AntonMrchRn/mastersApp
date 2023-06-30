@@ -9,21 +9,18 @@ import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
 import ControlledInput from '@/components/inputs/ControlledInput';
 import { MeasureItem } from '@/components/TabScreens/EstimateAddMaterialScreen/MeasureItem';
+import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
 import { Service } from '@/store/api/tasks/types';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import {
-  TaskSearchNavigationParamList,
-  TaskSearchNavigatorScreenName,
-} from '@/types/navigation';
-import { Measure } from '@/types/task';
+import { Measure, OutlayStatusType } from '@/types/task';
 import { estimateAddMaterialValidationSchema } from '@/utils/formValidation';
 
 import { styles } from './styles';
 
 type EstimateAddMaterialScreenProps = StackScreenProps<
-  TaskSearchNavigationParamList,
-  TaskSearchNavigatorScreenName.EstimateAddMaterial
+  AppStackParamList,
+  AppScreenName.EstimateAddMaterial
 >;
 
 export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
@@ -122,6 +119,8 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
       ID: taskId,
       //массив услуг
       services: newServices,
+      //при изменении сметы она снова становится не согласована
+      outlayStatusID: OutlayStatusType.PENDING,
     });
     getTask.refetch();
     if (navigation.canGoBack()) {

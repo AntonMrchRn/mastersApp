@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { StackNavigationProp } from '@react-navigation/stack';
 import dayjs from 'dayjs';
@@ -13,13 +13,10 @@ import { TaskCardDescription } from '@/components/TabScreens/TaskCard/TaskCardDe
 import { TaskCardEstimate } from '@/components/TabScreens/TaskCard/TaskCardEstimate';
 import { TaskCardHisory } from '@/components/TabScreens/TaskCard/TaskCardHistory';
 import { TaskCardReport } from '@/components/TabScreens/TaskCard/TaskCardReport';
+import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppSelector } from '@/store';
 import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import {
-  TaskSearchNavigationParamList,
-  TaskSearchNavigatorScreenName,
-} from '@/types/navigation';
 import { OutlayStatusType, StatusType, TaskTab, TaskType } from '@/types/task';
 
 export const useTaskCard = ({
@@ -28,8 +25,8 @@ export const useTaskCard = ({
 }: {
   taskId: string;
   navigation: StackNavigationProp<
-    TaskSearchNavigationParamList,
-    TaskSearchNavigatorScreenName.TaskCard,
+    AppStackParamList,
+    AppScreenName.TaskCard,
     undefined
   >;
 }) => {
@@ -39,6 +36,11 @@ export const useTaskCard = ({
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [estimateBottomVisible, setEstimateBottomVisible] = useState(false);
   const [selectedServiceId, setSelectedServiceId] = useState<number>();
+  const [estimateBannerVisible, setEstimateBannerVisible] = useState(false);
+
+  const ref = useRef<{
+    setId: (id: number) => void;
+  }>(null);
 
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
@@ -77,11 +79,24 @@ export const useTaskCard = ({
   const endTimePlan = task?.endTimePlan || '';
   const address = task?.object?.name || '';
   const description = task?.description || '';
+  /**
+   * Статус задачи
+   */
   const statusID: StatusType | undefined = task?.statusID;
+  // const statusID: StatusType | undefined = 11;
+  /**
+   * Статус сметы
+   */
   const outlayStatusID: OutlayStatusType | undefined = task?.outlayStatusID;
   const name = task?.name || '';
   const budget = `${task?.budget} ₽` || '';
+  /**
+   * Ночные работы
+   */
   const isNight = task?.isNight || false;
+  /**
+   * Срочная задача
+   */
   const isUrgent = task?.isUrgent || false;
   const publicTime = task?.publicTime
     ? `Опубликовано ${dayjs(task?.publicTime).format('DD MMMM в HH:mm')}`
@@ -120,6 +135,9 @@ export const useTaskCard = ({
     },
   ];
 
+  const onEstimateBannerVisible = () => {
+    setEstimateBannerVisible(!estimateBannerVisible);
+  };
   const onEstimateBottomVisible = () => {
     setEstimateBottomVisible(!estimateBottomVisible);
   };
@@ -129,12 +147,17 @@ export const useTaskCard = ({
   const onUploadModalVisible = () => {
     setUploadModalVisible(!uploadModalVisible);
   };
+  const onEstimateBannerPress = () => {
+    onEstimateBannerVisible();
+    ref.current?.setId(1);
+    setTab(TaskTab.ESTIMATE);
+  };
   const onBudgetSubmission = () => {
     //
   };
   const onAddEstimateMaterial = () => {
     if (selectedServiceId) {
-      navigation.navigate(TaskSearchNavigatorScreenName.EstimateAddMaterial, {
+      navigation.navigate(AppScreenName.EstimateAddMaterial, {
         serviceId: selectedServiceId,
         taskId: id,
       });
@@ -176,12 +199,17 @@ export const useTaskCard = ({
     setCancelModalVisible(!cancelModalVisible);
   };
   const onWorkDelivery = async () => {
-    await patchTask({
-      //id таски
-      ID: id,
-      //перевод таски в статус Сдача работ
-      statusID: 5,
-    });
+    if (outlayStatusID !== OutlayStatusType.READY) {
+      !estimateBannerVisible && onEstimateBannerVisible();
+    } else {
+      await patchTask({
+        //id таски
+        ID: id,
+        //перевод таски в статус Сдача работ
+        statusID: 5,
+      });
+    }
+
     getTask.refetch();
   };
   const onCancelTask = async (text: string) => {
@@ -197,6 +225,23 @@ export const useTaskCard = ({
     });
     getTask.refetch();
     onCancelModalVisible();
+  };
+  const onSendEstimateForApproval = async () => {
+    if (outlayStatusID === OutlayStatusType.MATCHING) {
+      toast.show({
+        type: 'info',
+        title: 'Смета уже отправлена на согласование',
+        contentHeight: 120,
+      });
+    } else {
+      await patchTask({
+        //id таски
+        ID: id,
+        //меняем статус сметы на Согласование
+        outlayStatusID: OutlayStatusType.MATCHING,
+      });
+    }
+    getTask.refetch();
   };
   const onRevokeBudget = () => {
     //TODO необходимо сначала получить оффер юзера по этой таске
@@ -354,6 +399,37 @@ export const useTaskCard = ({
             },
           ];
         }
+        if (tab === TaskTab.ESTIMATE) {
+          if (estimateBottomVisible) {
+            return [
+              {
+                label: 'Выбрать',
+                variant: 'accent',
+                onPress: onAddEstimateMaterial,
+                disabled: !selectedServiceId,
+              },
+              {
+                label: 'Отменить',
+                variant: 'outlineAccent',
+                onPress: onEstimateBottomVisible,
+              },
+            ];
+          }
+          if (outlayStatusID !== OutlayStatusType.READY) {
+            return [
+              {
+                label: 'Отправить смету на согласование',
+                variant: 'accent',
+                onPress: onSendEstimateForApproval,
+              },
+              {
+                label: 'Отказаться от задачи',
+                variant: 'outlineDanger',
+                onPress: onCancelModalVisible,
+              },
+            ];
+          }
+        }
         return [
           {
             label: 'Сдать работы',
@@ -418,9 +494,9 @@ export const useTaskCard = ({
     onCancelTask,
     subsetID,
     statusID,
-    estimateBottomVisible,
-    onEstimateBottomVisible,
-    selectedServiceId,
-    onAddEstimateMaterial,
+    estimateBannerVisible,
+    onEstimateBannerVisible,
+    onEstimateBannerPress,
+    ref,
   };
 };

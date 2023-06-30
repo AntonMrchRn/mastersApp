@@ -7,15 +7,11 @@ import { TaskAddress } from '@/components/task/TaskAddress';
 import { TaskBadges } from '@/components/task/TaskBadges';
 import { TaskDate } from '@/components/task/TaskDate';
 import { Task } from '@/store/api/tasks/types';
-import {
-  TaskCardScreenNavigationProp,
-  TaskSearchNavigatorScreenName,
-} from '@/types/navigation';
 
 import { styles } from './styles';
 
 type CardTasksProp = Task & {
-  navigation: TaskCardScreenNavigationProp;
+  onItemPress: (id: number) => void;
 };
 
 const CardTasks: FC<CardTasksProp> = ({
@@ -24,19 +20,17 @@ const CardTasks: FC<CardTasksProp> = ({
   endTimePlan = '',
   name,
   description,
-  navigation,
   statusID,
   isUrgent,
   isNight,
   ID,
+  onItemPress,
 }) => {
   const address = object?.name || '';
 
   const onPress = () => {
     if (typeof ID === 'number') {
-      navigation.navigate(TaskSearchNavigatorScreenName.TaskCard, {
-        taskId: ID,
-      });
+      onItemPress(ID);
     }
   };
   return (

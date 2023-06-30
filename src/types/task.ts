@@ -72,7 +72,7 @@ export enum StatusType {
 }
 export enum OutlayStatusType {
   /**
-   * Подготовка
+   * Подготовка (смета не согласована)
    */
   PENDING = 1,
   /**
@@ -101,10 +101,25 @@ export enum OutlayStatusType {
   PAID = 7,
 }
 export enum TaskTab {
+  /**
+   * Описание
+   */
   DESCRIPTION = 'Описание',
+  /**
+   * Смета
+   */
   ESTIMATE = 'Смета',
+  /**
+   * Комментарии
+   */
   COMMENTS = 'Комментарии',
+  /**
+   * Отчет
+   */
   REPORT = 'Отчет',
+  /**
+   * История
+   */
   HISTORY = 'История',
 }
 export enum RoleType {
