@@ -16,6 +16,7 @@ import CardTasks from '@/components/TabScreens/TaskSearch/Card';
 import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound';
 import TypeSelectionTaskSearch from '@/components/TabScreens/TaskSearch/TypeSelectionTaskSearch';
 import { configApp } from '@/constants/platform';
+import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useGetTableNamesQuery } from '@/store/api/tasks';
 import { Task } from '@/store/api/tasks/types';
@@ -23,19 +24,14 @@ import {
   getSearchTasks,
   refreshTasks,
 } from '@/store/slices/taskSearch/asyncActions';
-import {
-  BottomTab,
-  TabNavigationParamList,
-  TaskNavigationParamList,
-  TaskNavigatorScreenName,
-} from '@/types/navigation';
+import { BottomTab, TabNavigationParamList } from '@/types/navigation';
 import { TaskSearch } from '@/types/task';
 
 import styles from './style';
 
 export type TaskSearchScreenProps = CompositeScreenProps<
   BottomTabScreenProps<TabNavigationParamList, BottomTab.TaskSearch>,
-  StackScreenProps<TaskNavigationParamList>
+  StackScreenProps<AppStackParamList>
 >;
 const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch();
@@ -51,7 +47,7 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
   const { data: tableNames } = useGetTableNamesQuery();
 
   const onItemPress = (id: number) => {
-    navigation.navigate(TaskNavigatorScreenName.TaskCard, {
+    navigation.navigate(AppScreenName.TaskCard, {
       taskId: id,
     });
   };

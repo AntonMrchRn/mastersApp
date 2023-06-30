@@ -3,22 +3,14 @@ import { NativeStackNavigationProp } from 'react-native-screens/native-stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
+import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
+
 enum BottomTab {
   TaskSearch = 'TaskSearch',
   MyTasks = 'MyTasks',
   ProfileNavigation = 'ProfileNavigation',
 }
-enum AppScreenName {
-  AppNavigator = 'AppNavigator',
-  AuthNavigator = 'AuthNavigator',
-  TaskNavigator = 'AuthNavigator',
-  SignIn = 'SignIn',
-  Recovery = 'Recovery',
-  Email = 'Email',
-  RecoveryConfirmation = 'RecoveryConfirmation',
-  Password = 'Password',
-  Error = 'Error',
-}
+
 enum ProfileNavigatorScreenName {
   Profile = 'Profile',
   BankDetails = 'BankDetails',
@@ -27,25 +19,6 @@ enum ProfileNavigatorScreenName {
   PersonalDataEditing = 'PersonalDataEditing',
   PhoneEditingConfirmation = 'PhoneEditingConfirmation',
 }
-enum TaskNavigatorScreenName {
-  TaskCard = 'TaskCard',
-  EstimateEdit = 'EstimateEdit',
-  EstimateAddMaterial = 'EstimateAddMaterial',
-}
-
-export type AppStackParamList = {
-  ProfileNavigation: { id: number } | undefined;
-  TaskSearchNavigation: { id: number } | undefined;
-  [AppScreenName.SignIn]: undefined;
-  [AppScreenName.AppNavigator]: undefined;
-  [AppScreenName.Email]: undefined;
-  [AppScreenName.Recovery]: undefined;
-  [AppScreenName.Password]: undefined;
-  [AppScreenName.RecoveryConfirmation]: {
-    phone: string;
-  };
-  [AppScreenName.Error]: undefined;
-};
 
 type TabNavigationParamList = {
   [BottomTab.TaskSearch]: undefined;
@@ -70,15 +43,6 @@ type ProfileNavigationParamList = {
     phone: string;
   };
   PersonalDataEditing: undefined;
-};
-type TaskNavigationParamList = {
-  TaskCard: { taskId: number };
-  EstimateEdit: {
-    taskId: number;
-    serviceId: number;
-    materialName?: string;
-  };
-  EstimateAddMaterial: { serviceId: number; taskId: number };
 };
 
 type RecoveryConfirmationScreenRoute = RouteProp<
@@ -150,12 +114,7 @@ type CompositeEditingNavigationProp = CompositeNavigationProp<
   >
 >;
 
-export {
-  BottomTab,
-  AppScreenName,
-  ProfileNavigatorScreenName,
-  TaskNavigatorScreenName,
-};
+export { BottomTab, ProfileNavigatorScreenName };
 export type {
   TabNavigationParamList,
   ProfileNavigationParamList,
@@ -174,5 +133,4 @@ export type {
   PhoneEditingConfirmationScreenNavigationProp,
   CompositeEditingNavigationProp,
   CompositeRecoveryConfirmationAndEmailNavigationProp,
-  TaskNavigationParamList,
 };

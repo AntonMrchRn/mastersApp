@@ -6,7 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 import { Button } from 'rn-ui-kit';
 
 import InfoCheckBox from '@/assets/icons/svg/auth/InfoCheckBox';
-import { AuthScreenName, SignInScreenNavigationProp } from '@/types/navigation';
+import { AppScreenName } from '@/navigation/AppNavigation';
+import { SignInScreenNavigationProp } from '@/types/navigation';
 
 import styles from './style';
 
@@ -14,7 +15,7 @@ const PasswordScreen = () => {
   const navigation = useNavigation<SignInScreenNavigationProp>();
 
   const goToSignIn = () => {
-    navigation.navigate(AuthScreenName.SignIn);
+    navigation.navigate(AppScreenName.SignIn);
   };
 
   return (

@@ -15,14 +15,42 @@ import SignInScreen from '@/screens/auth/SignInScreen';
 import { EstimateAddMaterialScreen } from '@/screens/tabs/EstimateAddMaterialScreen';
 import { EstimateEditScreen } from '@/screens/tabs/EstimateEditScreen';
 import { TaskCardScreen } from '@/screens/tabs/TaskCardScreen';
-import {
-  AppScreenName,
-  AppStackParamList,
-  TaskNavigatorScreenName,
-} from '@/types/navigation';
 
 const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<AppStackParamList>();
+
+export enum AppScreenName {
+  AppNavigator = 'AppNavigator',
+  AuthNavigator = 'AuthNavigator',
+  TaskNavigator = 'AuthNavigator',
+  SignIn = 'SignIn',
+  Recovery = 'Recovery',
+  Email = 'Email',
+  RecoveryConfirmation = 'RecoveryConfirmation',
+  Password = 'Password',
+  Error = 'Error',
+  TaskCard = 'TaskCard',
+  EstimateEdit = 'EstimateEdit',
+  EstimateAddMaterial = 'EstimateAddMaterial',
+}
+export type AppStackParamList = {
+  [AppScreenName.SignIn]: undefined;
+  [AppScreenName.AppNavigator]: undefined;
+  [AppScreenName.Email]: undefined;
+  [AppScreenName.Recovery]: undefined;
+  [AppScreenName.Password]: undefined;
+  [AppScreenName.RecoveryConfirmation]: {
+    phone: string;
+  };
+  [AppScreenName.Error]: undefined;
+  [AppScreenName.TaskCard]: { taskId: number };
+  [AppScreenName.EstimateEdit]: {
+    taskId: number;
+    serviceId: number;
+    materialName?: string;
+  };
+  [AppScreenName.EstimateAddMaterial]: { serviceId: number; taskId: number };
+};
 
 export const AppNavigation = () => {
   const { checkLogin, isAuth } = useCheckLogin();
@@ -48,11 +76,11 @@ export const AppNavigation = () => {
             component={TabNavigation}
           />
           <Stack.Screen
-            name={TaskNavigatorScreenName.TaskCard}
+            name={AppScreenName.TaskCard}
             component={TaskCardScreen}
           />
           <Stack.Screen
-            name={TaskNavigatorScreenName.EstimateEdit}
+            name={AppScreenName.EstimateEdit}
             component={EstimateEditScreen}
             options={{
               headerShown: true,
@@ -62,7 +90,7 @@ export const AppNavigation = () => {
             }}
           />
           <Stack.Screen
-            name={TaskNavigatorScreenName.EstimateAddMaterial}
+            name={AppScreenName.EstimateAddMaterial}
             component={EstimateAddMaterialScreen}
             options={{
               headerShown: true,

@@ -13,13 +13,10 @@ import { TaskCardDescription } from '@/components/TabScreens/TaskCard/TaskCardDe
 import { TaskCardEstimate } from '@/components/TabScreens/TaskCard/TaskCardEstimate';
 import { TaskCardHisory } from '@/components/TabScreens/TaskCard/TaskCardHistory';
 import { TaskCardReport } from '@/components/TabScreens/TaskCard/TaskCardReport';
+import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppSelector } from '@/store';
 import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import {
-  TaskSearchNavigationParamList,
-  TaskSearchNavigatorScreenName,
-} from '@/types/navigation';
 import { OutlayStatusType, StatusType, TaskTab, TaskType } from '@/types/task';
 
 export const useTaskCard = ({
@@ -28,8 +25,8 @@ export const useTaskCard = ({
 }: {
   taskId: string;
   navigation: StackNavigationProp<
-    TaskSearchNavigationParamList,
-    TaskSearchNavigatorScreenName.TaskCard,
+    AppStackParamList,
+    AppScreenName.TaskCard,
     undefined
   >;
 }) => {
@@ -147,7 +144,7 @@ export const useTaskCard = ({
   };
   const onAddEstimateMaterial = () => {
     if (selectedServiceId) {
-      navigation.navigate(TaskSearchNavigatorScreenName.EstimateAddMaterial, {
+      navigation.navigate(AppScreenName.EstimateAddMaterial, {
         serviceId: selectedServiceId,
         taskId: id,
       });

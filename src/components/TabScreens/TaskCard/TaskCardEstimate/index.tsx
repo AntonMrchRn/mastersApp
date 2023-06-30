@@ -6,11 +6,8 @@ import { RadioButton, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
+import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { Service } from '@/store/api/tasks/types';
-import {
-  TaskSearchNavigationParamList,
-  TaskSearchNavigatorScreenName,
-} from '@/types/navigation';
 import { OutlayStatusType, StatusType } from '@/types/task';
 
 import { AddServiceBottomSheet } from '../AddServiceBottomSheet';
@@ -25,8 +22,8 @@ type TaskCardEstimateProps = {
   statusID: StatusType | undefined;
   taskId: number;
   navigation: StackNavigationProp<
-    TaskSearchNavigationParamList,
-    TaskSearchNavigatorScreenName.TaskCard,
+    AppStackParamList,
+    AppScreenName.TaskCard,
     undefined
   >;
   onEstimateBottomVisible: () => void;

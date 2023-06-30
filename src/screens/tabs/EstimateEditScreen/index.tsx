@@ -9,20 +9,17 @@ import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { PriceIcon } from '@/assets/icons/svg/estimate/PriceIcon';
 import ControlledInput from '@/components/inputs/ControlledInput';
+import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
 import { Material, Service } from '@/store/api/tasks/types';
-import {
-  TaskSearchNavigationParamList,
-  TaskSearchNavigatorScreenName,
-} from '@/types/navigation';
 import { OutlayStatusType } from '@/types/task';
 import { estimateCountValidationSchema } from '@/utils/formValidation';
 
 import { styles } from './styles';
 
 type EstimateEditScreenProps = StackScreenProps<
-  TaskSearchNavigationParamList,
-  TaskSearchNavigatorScreenName.EstimateEdit
+  AppStackParamList,
+  AppScreenName.EstimateEdit
 >;
 
 export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
