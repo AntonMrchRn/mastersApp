@@ -44,8 +44,8 @@ export const useTaskCard = ({
   const { user } = useAppSelector(selectAuth);
 
   // const getTask = useGetTaskQuery('926');
-  const getTask = useGetTaskQuery('996');
-  // const getTask = useGetTaskQuery(taskId);
+  // const getTask = useGetTaskQuery('996');
+  const getTask = useGetTaskQuery(taskId);
 
   useEffect(() => {
     if (
