@@ -16,7 +16,7 @@ import {
   TaskSearchNavigationParamList,
   TaskSearchNavigatorScreenName,
 } from '@/types/navigation';
-import { Measure } from '@/types/task';
+import { Measure, OutlayStatusType } from '@/types/task';
 import { estimateAddMaterialValidationSchema } from '@/utils/formValidation';
 
 import { styles } from './styles';
@@ -122,6 +122,8 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
       ID: taskId,
       //массив услуг
       services: newServices,
+      //при изменении сметы она снова становится не согласована
+      outlayStatusID: OutlayStatusType.PENDING,
     });
     getTask.refetch();
     if (navigation.canGoBack()) {

@@ -15,6 +15,7 @@ import {
   TaskSearchNavigationParamList,
   TaskSearchNavigatorScreenName,
 } from '@/types/navigation';
+import { OutlayStatusType } from '@/types/task';
 import { estimateCountValidationSchema } from '@/utils/formValidation';
 
 import { styles } from './styles';
@@ -87,6 +88,8 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
       ID: taskId,
       //массив услуг
       services: newServices,
+      //при изменении сметы она снова становится не согласована
+      outlayStatusID: OutlayStatusType.PENDING,
     });
     getTask.refetch();
     if (navigation.canGoBack()) {

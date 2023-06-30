@@ -77,11 +77,24 @@ export const useTaskCard = ({
   const endTimePlan = task?.endTimePlan || '';
   const address = task?.object?.name || '';
   const description = task?.description || '';
+  /**
+   * Статус задачи
+   */
   const statusID: StatusType | undefined = task?.statusID;
+  // const statusID: StatusType | undefined = 11;
+  /**
+   * Статус сметы
+   */
   const outlayStatusID: OutlayStatusType | undefined = task?.outlayStatusID;
   const name = task?.name || '';
   const budget = `${task?.budget} ₽` || '';
+  /**
+   * Ночные работы
+   */
   const isNight = task?.isNight || false;
+  /**
+   * Срочная задача
+   */
   const isUrgent = task?.isUrgent || false;
   const publicTime = task?.publicTime
     ? `Опубликовано ${dayjs(task?.publicTime).format('DD MMMM в HH:mm')}`
