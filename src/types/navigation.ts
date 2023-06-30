@@ -47,10 +47,6 @@ export type AppStackParamList = {
   [AppScreenName.Error]: undefined;
 };
 
-type RootNavigationParamList = {
-  [AppScreenName.AppNavigator]: undefined;
-  [AppScreenName.AuthNavigator]: undefined;
-};
 type TabNavigationParamList = {
   [BottomTab.TaskSearch]: undefined;
   [BottomTab.MyTasks]: undefined;
@@ -162,7 +158,6 @@ export {
 };
 export type {
   TabNavigationParamList,
-  RootNavigationParamList,
   ProfileNavigationParamList,
   EmailEditingScreenRoute,
   PhoneEditingScreenRoute,
