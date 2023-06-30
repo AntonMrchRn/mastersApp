@@ -3,28 +3,21 @@ import { NativeStackNavigationProp } from 'react-native-screens/native-stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-enum AuthScreenName {
+enum BottomTab {
+  TaskSearch = 'TaskSearch',
+  MyTasks = 'MyTasks',
+  ProfileNavigation = 'ProfileNavigation',
+}
+enum AppScreenName {
+  AppNavigator = 'AppNavigator',
+  AuthNavigator = 'AuthNavigator',
+  TaskNavigator = 'AuthNavigator',
   SignIn = 'SignIn',
   Recovery = 'Recovery',
   Email = 'Email',
   RecoveryConfirmation = 'RecoveryConfirmation',
   Password = 'Password',
   Error = 'Error',
-}
-enum BottomTab {
-  TaskSearchNavigation = 'TaskSearchNavigation',
-  MyTasksNavigation = 'MyTasksNavigation',
-  ProfileNavigation = 'ProfileNavigation',
-}
-enum RootScreenName {
-  AppNavigator = 'AppNavigator',
-  AuthNavigator = 'AuthNavigator',
-}
-enum TaskSearchNavigatorScreenName {
-  TaskSearch = 'TaskSearch',
-}
-enum MyTasksNavigatorScreenName {
-  MyTasks = 'MyTasks',
 }
 enum ProfileNavigatorScreenName {
   Profile = 'Profile',
@@ -40,32 +33,28 @@ enum TaskNavigatorScreenName {
   EstimateAddMaterial = 'EstimateAddMaterial',
 }
 
-export type RootStackParamList = {
+export type AppStackParamList = {
   ProfileNavigation: { id: number } | undefined;
   TaskSearchNavigation: { id: number } | undefined;
+  [AppScreenName.SignIn]: undefined;
+  [AppScreenName.AppNavigator]: undefined;
+  [AppScreenName.Email]: undefined;
+  [AppScreenName.Recovery]: undefined;
+  [AppScreenName.Password]: undefined;
+  [AppScreenName.RecoveryConfirmation]: {
+    phone: string;
+  };
+  [AppScreenName.Error]: undefined;
 };
 
 type RootNavigationParamList = {
-  [RootScreenName.AppNavigator]: undefined;
-  [RootScreenName.AuthNavigator]: undefined;
-};
-type AuthNavigationParamList = {
-  [AuthScreenName.SignIn]: undefined;
-  [AuthScreenName.Email]: undefined;
-  [AuthScreenName.Recovery]: undefined;
-  [AuthScreenName.Password]: undefined;
-  [AuthScreenName.RecoveryConfirmation]: {
-    phone: string;
-  };
-  [AuthScreenName.Error]: undefined;
+  [AppScreenName.AppNavigator]: undefined;
+  [AppScreenName.AuthNavigator]: undefined;
 };
 type TabNavigationParamList = {
-  [BottomTab.TaskSearchNavigation]: undefined;
-  [BottomTab.MyTasksNavigation]: undefined;
+  [BottomTab.TaskSearch]: undefined;
+  [BottomTab.MyTasks]: undefined;
   [BottomTab.ProfileNavigation]: undefined;
-};
-type MyTasksNavigationParamList = {
-  MyTasks: undefined;
 };
 type ProfileNavigationParamList = {
   Profile: undefined;
@@ -86,9 +75,6 @@ type ProfileNavigationParamList = {
   };
   PersonalDataEditing: undefined;
 };
-type TaskSearchNavigationParamList = {
-  TaskSearch: undefined;
-};
 type TaskNavigationParamList = {
   TaskCard: { taskId: number };
   EstimateEdit: {
@@ -100,8 +86,8 @@ type TaskNavigationParamList = {
 };
 
 type RecoveryConfirmationScreenRoute = RouteProp<
-  AuthNavigationParamList,
-  AuthScreenName.RecoveryConfirmation
+  AppStackParamList,
+  AppScreenName.RecoveryConfirmation
 >;
 type PhoneEditingScreenRoute = RouteProp<
   ProfileNavigationParamList,
@@ -121,24 +107,24 @@ type BankDetailsScreenRoute = RouteProp<
 >;
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<
-  AuthNavigationParamList,
-  AuthScreenName.SignIn
+  AppStackParamList,
+  AppScreenName.SignIn
 >;
 type PasswordScreenNavigationProp = NativeStackNavigationProp<
-  AuthNavigationParamList,
-  AuthScreenName.Password
+  AppStackParamList,
+  AppScreenName.Password
 >;
 type RecoveryScreenNavigationProp = NativeStackNavigationProp<
-  AuthNavigationParamList,
-  AuthScreenName.Recovery
+  AppStackParamList,
+  AppScreenName.Recovery
 >;
 type ErrorScreenNavigationProp = NativeStackNavigationProp<
-  AuthNavigationParamList,
-  AuthScreenName.Error
+  AppStackParamList,
+  AppScreenName.Error
 >;
 type TaskCardScreenNavigationProp = NativeStackNavigationProp<
-  TaskSearchNavigationParamList,
-  TaskSearchNavigatorScreenName.TaskSearch
+  TabNavigationParamList,
+  BottomTab.TaskSearch
 >;
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   ProfileNavigationParamList,
@@ -154,11 +140,8 @@ type PhoneEditingConfirmationScreenNavigationProp = NativeStackNavigationProp<
 >;
 type CompositeRecoveryConfirmationAndEmailNavigationProp =
   CompositeNavigationProp<
-    StackNavigationProp<
-      AuthNavigationParamList,
-      AuthScreenName.RecoveryConfirmation
-    >,
-    StackNavigationProp<AuthNavigationParamList, AuthScreenName.Email>
+    StackNavigationProp<AppStackParamList, AppScreenName.RecoveryConfirmation>,
+    StackNavigationProp<AppStackParamList, AppScreenName.Email>
   >;
 type CompositeEditingNavigationProp = CompositeNavigationProp<
   StackNavigationProp<
@@ -173,20 +156,14 @@ type CompositeEditingNavigationProp = CompositeNavigationProp<
 
 export {
   BottomTab,
-  AuthScreenName,
-  RootScreenName,
-  MyTasksNavigatorScreenName,
+  AppScreenName,
   ProfileNavigatorScreenName,
-  TaskSearchNavigatorScreenName,
   TaskNavigatorScreenName,
 };
 export type {
   TabNavigationParamList,
   RootNavigationParamList,
-  AuthNavigationParamList,
   ProfileNavigationParamList,
-  MyTasksNavigationParamList,
-  TaskSearchNavigationParamList,
   EmailEditingScreenRoute,
   PhoneEditingScreenRoute,
   BankDetailsScreenRoute,
