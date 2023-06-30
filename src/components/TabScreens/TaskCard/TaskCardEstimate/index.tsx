@@ -69,6 +69,8 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   });
   const theme = useTheme();
 
+  const canSwipe = !estimateBottomVisible && statusID === StatusType.WORK;
+
   return (
     <>
       <TaskCardAddEstimateBottomSheet
@@ -86,10 +88,6 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             onPress={onEstimateSheetVisible}
           />
         )}
-        <TaskEstimateOutline
-          outlayStatusID={outlayStatusID}
-          onPress={onEstimateSheetVisible}
-        />
         <Text variant={'title3'} color={theme.text.basic} style={styles.mb8}>
           Перечень услуг и материалов
         </Text>
@@ -121,7 +119,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                   count={service?.count}
                   sum={service?.sum}
                   roleID={service?.roleID}
-                  canSwipe={!estimateBottomVisible}
+                  canSwipe={canSwipe}
                 />
               </View>
               <Spacer size={0} separator="bottom" />
@@ -142,7 +140,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                       count={material?.count}
                       sum={(material?.count || 0) * (material?.price || 0)}
                       roleID={material?.roleID}
-                      canSwipe={!estimateBottomVisible}
+                      canSwipe={canSwipe}
                     />
                     <Spacer size={0} separator="bottom" />
                   </View>

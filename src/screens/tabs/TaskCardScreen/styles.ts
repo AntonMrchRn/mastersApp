@@ -53,8 +53,8 @@ export const styles = StyleSheet.create({
     elevation: 2,
   },
   bottom: {
-    marginTop: 24,
     marginBottom: 12,
+    marginHorizontal: 20,
   },
   estimateBottom: {
     gap: 16,

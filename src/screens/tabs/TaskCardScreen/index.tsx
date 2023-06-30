@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { ScrollView, View } from 'react-native';
 
 import { StackScreenProps } from '@react-navigation/stack';
-import { Button, TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
+import { TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
 
 import Header from '@/components/Header';
 import { TaskCardBottom } from '@/components/TabScreens/TaskCard/TaskCardBottom';
@@ -50,10 +50,6 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
     onCancelTask,
     subsetID,
     statusID,
-    estimateBottomVisible,
-    onEstimateBottomVisible,
-    selectedServiceId,
-    onAddEstimateMaterial,
   } = useTaskCard({ taskId, navigation });
   const theme = useTheme();
 
@@ -115,28 +111,12 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
               contentContainerStyle={styles.contentContainerTab}
             />
           </View>
-          <View style={styles.card}>
-            {getCurrentTab()}
-            <View style={styles.bottom}>
-              <TaskCardBottom banner={getBanner()} buttons={getButtons()} />
-            </View>
-          </View>
+          <View style={styles.card}>{getCurrentTab()}</View>
         </View>
       </ScrollView>
-      {estimateBottomVisible && (
-        <View style={styles.estimateBottom}>
-          <Button
-            label="Выбрать"
-            onPress={onAddEstimateMaterial}
-            disabled={!selectedServiceId}
-          />
-          <Button
-            variant="outlineAccent"
-            label="Отменить"
-            onPress={onEstimateBottomVisible}
-          />
-        </View>
-      )}
+      <View style={styles.bottom}>
+        <TaskCardBottom banner={getBanner()} buttons={getButtons()} />
+      </View>
     </View>
   );
 };

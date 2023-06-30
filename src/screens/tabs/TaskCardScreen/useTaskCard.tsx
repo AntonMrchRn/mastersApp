@@ -354,6 +354,21 @@ export const useTaskCard = ({
             },
           ];
         }
+        if (tab === TaskTab.ESTIMATE && estimateBottomVisible) {
+          return [
+            {
+              label: 'Выбрать',
+              variant: 'accent',
+              onPress: onAddEstimateMaterial,
+              disabled: !selectedServiceId,
+            },
+            {
+              label: 'Отменить',
+              variant: 'outlineAccent',
+              onPress: onEstimateBottomVisible,
+            },
+          ];
+        }
         return [
           {
             label: 'Сдать работы',
@@ -418,9 +433,5 @@ export const useTaskCard = ({
     onCancelTask,
     subsetID,
     statusID,
-    estimateBottomVisible,
-    onEstimateBottomVisible,
-    selectedServiceId,
-    onAddEstimateMaterial,
   };
 };

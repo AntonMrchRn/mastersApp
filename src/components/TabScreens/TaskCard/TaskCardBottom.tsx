@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { StyleSheet, View } from 'react-native';
 
 import { Banner, Button } from 'rn-ui-kit';
 import { IconTypes, Types } from 'rn-ui-kit/lib/typescript/components/Banner';
@@ -14,6 +15,7 @@ export type TaskCardBottomButton = {
   label: string;
   variant: Variant;
   onPress?: () => void;
+  disabled?: boolean;
 };
 type TaskCardBottomProps = {
   banner: TaskCardBottomBanner;
@@ -23,15 +25,20 @@ export const TaskCardBottom: FC<TaskCardBottomProps> = ({
   banner,
   buttons,
 }) => {
+  const styles = StyleSheet.create({
+    container: {
+      gap: 16,
+    },
+  });
   return (
-    <>
+    <View style={styles.container}>
       {buttons.map((button, index) => (
         <Button
           onPress={button.onPress}
           key={index}
           label={button.label}
           variant={button.variant}
-          style={index !== 0 && { marginTop: 16 }}
+          disabled={button.disabled}
         />
       ))}
       {banner && (
@@ -42,6 +49,6 @@ export const TaskCardBottom: FC<TaskCardBottomProps> = ({
           title={banner.title}
         />
       )}
-    </>
+    </View>
   );
 };
