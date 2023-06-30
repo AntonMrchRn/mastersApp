@@ -41,7 +41,7 @@ export const ProgressBar: FC<ProgressBarProps> = ({
   return (
     <View>
       <View style={styles.progressLine}>
-        <View style={styles.progressFill}></View>
+        <View style={styles.progressFill} />
       </View>
       <View style={styles.progressTextContainer}>
         <Text variant={'captionRegular'} style={styles.regularText}>
