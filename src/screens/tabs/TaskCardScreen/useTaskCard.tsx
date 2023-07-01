@@ -46,8 +46,8 @@ export const useTaskCard = ({
   const { user } = useAppSelector(selectAuth);
 
   // const getTask = useGetTaskQuery('926');
-  // const getTask = useGetTaskQuery('996');
-  const getTask = useGetTaskQuery(taskId);
+  const getTask = useGetTaskQuery('996');
+  // const getTask = useGetTaskQuery(taskId);
 
   useEffect(() => {
     if (
@@ -348,7 +348,16 @@ export const useTaskCard = ({
   const getButtons = (): TaskCardBottomButton[] => {
     switch (statusID) {
       case StatusType.ACTIVE:
-        if (outlayStatusID === 2) {
+        if (subsetID === TaskType.COMMON_FIRST_RESPONCE) {
+          return [
+            {
+              label: 'Принять задачу',
+              variant: 'accent',
+              onPress: onTaskSubmission,
+            },
+          ];
+        }
+        if (outlayStatusID === OutlayStatusType.MATCHING) {
           return [
             {
               label: 'Отозвать смету',
@@ -357,22 +366,14 @@ export const useTaskCard = ({
             },
           ];
         }
-        if (outlayStatusID === 1) {
-          return subsetID === TaskType.COMMON_FIRST_RESPONCE
-            ? [
-                {
-                  label: 'Принять задачу',
-                  variant: 'accent',
-                  onPress: onTaskSubmission,
-                },
-              ]
-            : [
-                {
-                  label: 'Подать смету',
-                  variant: 'accent',
-                  onPress: onBudgetSubmission,
-                },
-              ];
+        if (outlayStatusID === OutlayStatusType.PENDING) {
+          return [
+            {
+              label: 'Подать смету',
+              variant: 'accent',
+              onPress: onBudgetSubmission,
+            },
+          ];
         }
         return [];
       case StatusType.WORK:

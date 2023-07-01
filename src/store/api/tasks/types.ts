@@ -1,4 +1,4 @@
-import { OutlayStatusType, RoleType } from '@/types/task';
+import { OutlayStatusType, RoleType, TaskType } from '@/types/task';
 
 type File = {
   url: string;
@@ -115,7 +115,7 @@ type Task = {
   setID?: number;
   stage?: string;
   statusID?: number;
-  subsetID?: number;
+  subsetID?: TaskType;
   startTime?: string;
   endTime?: string;
   endTimePlan?: string;
