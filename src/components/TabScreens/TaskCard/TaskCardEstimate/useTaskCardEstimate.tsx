@@ -1,15 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useToast } from 'rn-ui-kit';
 
+import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
 import { Material, Service } from '@/store/api/tasks/types';
-import {
-  TaskSearchNavigationParamList,
-  TaskSearchNavigatorScreenName,
-} from '@/types/navigation';
-import { OutlayStatusType, StatusType } from '@/types/task';
+import { OutlayStatusType } from '@/types/task';
 
 export const useTaskCardEstimate = ({
   services,
@@ -21,8 +19,8 @@ export const useTaskCardEstimate = ({
   services: Service[];
   taskId: number;
   navigation: StackNavigationProp<
-    TaskSearchNavigationParamList,
-    TaskSearchNavigatorScreenName.TaskCard,
+    AppStackParamList,
+    AppScreenName.TaskCard,
     undefined
   >;
   onEstimateBottomVisible: () => void;
@@ -30,12 +28,13 @@ export const useTaskCardEstimate = ({
 }) => {
   const toast = useToast();
 
+  const bsRef = useRef<BottomSheetModal>(null);
+
   const getTask = useGetTaskQuery(taskId.toString());
 
   const [patchTask, mutationTask] = usePatchTaskMutation();
 
   const [estimateSheetVisible, setEstimateSheetVisible] = useState(false);
-  const [serviceSheetVisible, setServiceSheetVisible] = useState(false);
 
   const allSum = services.reduce((acc, val) => acc + val.sum, 0);
   const allMaterials = services.reduce<Material[]>(
@@ -51,8 +50,8 @@ export const useTaskCardEstimate = ({
   const onEstimateSheetVisible = () => {
     setEstimateSheetVisible(!estimateSheetVisible);
   };
-  const onServiceSheetVisible = () => {
-    setServiceSheetVisible(!serviceSheetVisible);
+  const addServiceBottomSheetClose = () => {
+    bsRef.current?.close();
   };
   const onPressMaterial = () => {
     !estimateBottomVisible && onEstimateBottomVisible();
@@ -62,11 +61,11 @@ export const useTaskCardEstimate = ({
     estimateBottomVisible && onEstimateBottomVisible();
     onEstimateSheetVisible();
     setTimeout(() => {
-      onServiceSheetVisible();
+      bsRef.current?.present();
     }, 500);
   };
   const onEdit = (serviceId: number, materialName?: string) => {
-    navigation.navigate(TaskSearchNavigatorScreenName.EstimateEdit, {
+    navigation.navigate(AppScreenName.EstimateEdit, {
       taskId,
       serviceId,
       materialName,
@@ -125,7 +124,7 @@ export const useTaskCardEstimate = ({
     onDeleteMaterial,
     onPressMaterial,
     onPressService,
-    onServiceSheetVisible,
-    serviceSheetVisible,
+    bsRef,
+    addServiceBottomSheetClose,
   };
 };

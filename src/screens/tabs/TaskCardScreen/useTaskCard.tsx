@@ -82,8 +82,8 @@ export const useTaskCard = ({
   /**
    * Статус задачи
    */
-  const statusID: StatusType | undefined = task?.statusID;
-  // const statusID: StatusType | undefined = 11;
+  // const statusID: StatusType | undefined = task?.statusID;
+  const statusID: StatusType | undefined = 11;
   /**
    * Статус сметы
    */

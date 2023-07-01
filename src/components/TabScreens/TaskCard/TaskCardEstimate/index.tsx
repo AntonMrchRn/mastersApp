@@ -45,6 +45,8 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   selectedServiceId,
   setSelectedServiceId,
 }) => {
+  const theme = useTheme();
+
   const {
     estimateSheetVisible,
     onEstimateSheetVisible,
@@ -55,8 +57,8 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     onDeleteMaterial,
     onPressMaterial,
     onPressService,
-    serviceSheetVisible,
-    onServiceSheetVisible,
+    bsRef,
+    addServiceBottomSheetClose,
   } = useTaskCardEstimate({
     services,
     taskId,
@@ -64,7 +66,6 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     onEstimateBottomVisible,
     estimateBottomVisible,
   });
-  const theme = useTheme();
 
   const canSwipe = !estimateBottomVisible && statusID === StatusType.WORK;
 
@@ -76,7 +77,10 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
         pressMaterial={onPressMaterial}
         pressService={onPressService}
       />
-      <AddServiceBottomSheet onCancel={onServiceSheetVisible} />
+      <AddServiceBottomSheet
+        ref={bsRef}
+        onCancel={addServiceBottomSheetClose}
+      />
       <View>
         <Spacer size={'xxxl'} />
         {outlayStatusID && statusID === StatusType.WORK && (
