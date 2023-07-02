@@ -1,19 +1,19 @@
 import React, { FC } from 'react';
 import { View } from 'react-native';
 
-import { Button, Chips, Spacer, Text, useTheme } from 'rn-ui-kit';
+import { Button, Chips, Spacer } from 'rn-ui-kit';
 
-import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { ServicesCategory } from '@/store/api/tasks/types';
 
-import { styles } from './styles';
-import { Item } from './Item';
+import { ServiceItem } from '../../../task/ServiceItem';
 
-type CategoryItemProps = {
+import { styles } from './styles';
+
+type CategoryContainerProps = {
   chipses: ServicesCategory[];
   setChipses: React.Dispatch<React.SetStateAction<ServicesCategory[]>>;
 };
-export const CategoryItem: FC<CategoryItemProps> = ({
+export const CategoryContainer: FC<CategoryContainerProps> = ({
   chipses,
   setChipses,
 }) => {
@@ -35,7 +35,11 @@ export const CategoryItem: FC<CategoryItemProps> = ({
           );
         })}
       </View>
-      <Item />
+      <View>
+        <ServiceItem />
+        <Button label={'Добавить'} size={'S'} style={styles.itemButton} />
+        <Spacer size={15} separator="bottom" />
+      </View>
     </View>
   );
 };

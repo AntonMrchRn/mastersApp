@@ -19,7 +19,7 @@ import ControlledInput from '@/components/inputs/ControlledInput';
 import { useGetServicesCategoriesQuery } from '@/store/api/tasks';
 import { ServicesCategory } from '@/store/api/tasks/types';
 
-import { CategoryItem } from './CategoryItem';
+import { CategoryContainer } from './CategoryContainer';
 import { SearchItem } from './SearchItem';
 
 import { styles } from './styles';
@@ -132,7 +132,7 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
               </>
             )}
             {chipses.length ? (
-              <CategoryItem chipses={chipses} setChipses={setChipses} />
+              <CategoryContainer chipses={chipses} setChipses={setChipses} />
             ) : (
               <></>
             )}

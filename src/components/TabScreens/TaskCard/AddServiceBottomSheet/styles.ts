@@ -33,9 +33,6 @@ export const styles = StyleSheet.create({
     columnGap: 8,
     flexWrap: 'wrap',
   },
-  itemTitle: {
-    marginVertical: 8,
-  },
   itemButton: {
     marginTop: 8,
     alignSelf: 'flex-end',
