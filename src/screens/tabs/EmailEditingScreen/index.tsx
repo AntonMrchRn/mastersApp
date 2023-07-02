@@ -33,7 +33,7 @@ const EmailEditingScreen = () => {
         <View style={styles.content}>
           <Spacer size="xl" />
           <Title
-            title={`Введите ${isEmailExist ? 'новый' : ''} адрес эл. почты`}
+            title={`Введите ${isEmailExist ? 'новый ' : ''}адрес эл. почты`}
           />
           <Spacer />
           <Text variant="bodyMRegular" color={theme.text.neutral}>

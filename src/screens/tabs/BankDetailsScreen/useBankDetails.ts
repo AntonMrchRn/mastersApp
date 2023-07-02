@@ -4,9 +4,11 @@ import { Keyboard } from 'react-native';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useToast } from 'rn-ui-kit';
 
+import useConnectionInfo from '@/hooks/useConnectionInfo';
 import { useAppSelector } from '@/store';
-import { useEditBankDetailsMutation } from '@/store/api/user';
+import { useEditUserMutation } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { BankDetailsFormValues } from '@/types/form';
 import {
@@ -17,13 +19,15 @@ import {
 import { bankDetailsValidationSchema } from '@/utils/formValidation';
 
 const useBankDetails = () => {
+  useConnectionInfo();
+  const toast = useToast();
   const navigation = useNavigation<ProfileScreenNavigationProp>();
   const { params } = useRoute<BankDetailsScreenRoute>();
 
   const { user: authUser } = useAppSelector(selectAuth);
 
-  const [editBankDetails, { isLoading, isSuccess }] =
-    useEditBankDetailsMutation();
+  const [editBankDetails, { isLoading, isSuccess, isError }] =
+    useEditUserMutation();
 
   const methods = useForm({
     defaultValues: {
@@ -39,8 +43,13 @@ const useBankDetails = () => {
     setFocus,
     watch,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = methods;
+  const isDataExist =
+    !!params?.bankName &&
+    !!params?.bankID &&
+    !!params?.checkingAccount &&
+    !!params?.correspondingAccount;
   const bankID = watch('bankID');
   const checkingAccount = watch('checkingAccount');
   const correspondingAccount = watch('correspondingAccount');
@@ -52,17 +61,29 @@ const useBankDetails = () => {
   }, [isSuccess]);
 
   useEffect(() => {
-    if (checkingAccount.length === 20) {
-      setFocus('bankID');
+    if (isError) {
+      toast.show({
+        type: 'error',
+        title: 'Изменение данных невозможно',
+        contentHeight: 100,
+      });
     }
-
-    if (bankID.length === 9) {
-      setFocus('correspondingAccount');
-    }
-  }, [bankID, checkingAccount]);
+  }, [isError]);
 
   useEffect(() => {
-    if (correspondingAccount.length === 20) {
+    if (checkingAccount.length === 20 && isDirty) {
+      setFocus('bankID');
+    }
+  }, [checkingAccount]);
+
+  useEffect(() => {
+    if (bankID.length === 9 && isDirty) {
+      setFocus('correspondingAccount');
+    }
+  }, [bankID]);
+
+  useEffect(() => {
+    if (correspondingAccount.length === 20 && isDirty) {
       Keyboard.dismiss();
     }
   }, [correspondingAccount]);
@@ -84,7 +105,13 @@ const useBankDetails = () => {
     }
   };
 
-  return { errors, methods, isLoading, onSave: handleSubmit(onSave) };
+  return {
+    errors,
+    methods,
+    isLoading,
+    isDisabled: isDataExist && !isDirty,
+    onSave: handleSubmit(onSave),
+  };
 };
 
 export default useBankDetails;

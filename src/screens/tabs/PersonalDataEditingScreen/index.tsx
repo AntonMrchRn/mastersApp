@@ -13,7 +13,8 @@ import usePersonalDataEditing from '@/screens/tabs/PersonalDataEditingScreen/use
 import styles from './style';
 
 const PersonalDataEditingScreen = () => {
-  const { errors, methods, isLoading, editData } = usePersonalDataEditing();
+  const { errors, methods, isLoading, isDisabled, editData } =
+    usePersonalDataEditing();
 
   return (
     <View style={styles.container}>
@@ -63,7 +64,9 @@ const PersonalDataEditingScreen = () => {
             />
             <Spacer size="xl" />
             <Button
+              style={styles.btn}
               label="Сохранить"
+              disabled={isDisabled}
               isPending={isLoading}
               onPress={editData}
             />

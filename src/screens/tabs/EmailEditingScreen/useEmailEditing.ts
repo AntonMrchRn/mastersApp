@@ -8,7 +8,9 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
+import { useToast } from 'rn-ui-kit';
 
+import useConnectionInfo from '@/hooks/useConnectionInfo';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useSendEmailConfirmationCodeMutation } from '@/store/api/user';
 import {
@@ -26,7 +28,9 @@ import {
 import { emailValidationSchema } from '@/utils/formValidation';
 
 const useEmailEditing = () => {
+  useConnectionInfo();
   const isFocused = useIsFocused();
+  const toast = useToast();
   const route = useRoute<EmailEditingScreenRoute>();
   const navigation = useNavigation<ProfileScreenNavigationProp>();
   const dispatch = useAppDispatch();
@@ -68,10 +72,19 @@ const useEmailEditing = () => {
   }, [isSuccess]);
 
   useEffect(() => {
-    if (error?.code === ErrorCode.EmailAlreadyRegistered)
-      setError('email', {
+    if (error?.code === ErrorCode.EmailAlreadyRegistered) {
+      return setError('email', {
         message: error?.message,
       });
+    }
+
+    if (isError) {
+      toast.show({
+        type: 'error',
+        title: 'Изменение данных невозможно',
+        contentHeight: 100,
+      });
+    }
   }, [isError]);
 
   useEffect(() => {

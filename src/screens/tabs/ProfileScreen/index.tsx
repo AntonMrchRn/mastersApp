@@ -31,6 +31,7 @@ const ProfileScreen = () => {
     activeTab,
     switchTab,
     isLoading,
+    isConnected,
     isApprovalNotificationVisible,
   } = useProfile();
 
@@ -44,7 +45,7 @@ const ProfileScreen = () => {
           <Text variant="title1" style={styles.title}>
             Профиль
           </Text>
-          {isLoading ? (
+          {isLoading || !isConnected ? (
             <ActivityIndicator
               size="large"
               style={styles.loader}
@@ -58,17 +59,21 @@ const ProfileScreen = () => {
               )}
               {!!warning && <Tips type="warning" text={warning} />}
               <Spacer size="xxl" />
-              <TabControl data={tabs} initialId={0} onChange={switchTab} />
+              <TabControl
+                data={tabs}
+                onChange={switchTab}
+                initialId={isConnected ? activeTab.id : 0}
+              />
               <Spacer size="l" />
-              {activeTab === ProfileTab.Common && user && (
+              {activeTab.label === ProfileTab.Common && user && (
                 <CommonTab
                   user={user}
                   isApprovalNotificationVisible={isApprovalNotificationVisible}
                 />
               )}
-              {activeTab === ProfileTab.Payment && <PaymentTab />}
-              {activeTab === ProfileTab.Activity && <ActivityTab />}
-              {activeTab === ProfileTab.Account && <AccountTab />}
+              {activeTab.label === ProfileTab.Payment && <PaymentTab />}
+              {activeTab.label === ProfileTab.Activity && <ActivityTab />}
+              {activeTab.label === ProfileTab.Account && <AccountTab />}
             </View>
           )}
         </View>

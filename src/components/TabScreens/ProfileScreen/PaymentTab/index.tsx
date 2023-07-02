@@ -1,13 +1,22 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, Linking, TouchableOpacity, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
-import { Button, CheckBox, Spacer, Text, Tooltip, useTheme } from 'rn-ui-kit';
+import {
+  Button,
+  CheckBox,
+  Spacer,
+  Text,
+  Tooltip,
+  useTheme,
+  useToast,
+} from 'rn-ui-kit';
 
 import PencilIcon from '@/assets/icons/svg/screens/PencilIcon';
 import QuestionIcon from '@/assets/icons/svg/screens/QuestionIcon';
 import Title from '@/components/TabScreens/ProfileScreen/Title';
 import UserInfoBlock from '@/components/TabScreens/ProfileScreen/UserInfoBlock';
+import useConnectionInfo from '@/hooks/useConnectionInfo';
 import { useAppSelector } from '@/store';
 import {
   useGetEntityTypesQuery,
@@ -15,6 +24,7 @@ import {
   useGetUserQuery,
 } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
+import { AxiosQueryErrorResponse } from '@/types/error';
 import {
   BankDetailsScreenNavigationProp,
   ProfileNavigatorScreenName,
@@ -29,17 +39,32 @@ const payerTooltipCoords = { x: -171, y: 100 };
 
 const PaymentTab = () => {
   const theme = useTheme();
+  const toast = useToast();
+  const isConnected = useConnectionInfo();
   const navigation = useNavigation<BankDetailsScreenNavigationProp>();
 
   const { user: authUser } = useAppSelector(selectAuth);
 
   const { data: user } = useGetUserQuery(authUser?.userID, {
-    skip: !authUser?.userID,
+    skip: !authUser?.userID || !isConnected,
   });
-  const { data: params } = useGetUserParamsQuery();
-  const { data: entityType } = useGetEntityTypesQuery(undefined, {
-    selectFromResult: ({ data }) => ({
+  const {
+    data: params,
+    error: paramsError,
+    isError: isParamsError,
+  } = useGetUserParamsQuery(undefined, {
+    skip: !isConnected,
+  });
+  const {
+    data: entityType,
+    error: entityError,
+    isError: isEntityError,
+  } = useGetEntityTypesQuery(undefined, {
+    skip: !isConnected,
+    selectFromResult: ({ data, error, isError }) => ({
       data: data?.find(entityType => entityType.ID === user?.entityTypeID),
+      error: error,
+      isError: isError,
     }),
   });
 
@@ -70,6 +95,18 @@ const PaymentTab = () => {
       (isCompany && user.entityName && user.RRC))
   );
 
+  useEffect(() => {
+    if (isEntityError || isParamsError) {
+      toast.show({
+        type: 'error',
+        title: (
+          (entityError ? entityError : paramsError) as AxiosQueryErrorResponse
+        )?.data?.message,
+        contentHeight: 120,
+      });
+    }
+  }, [isEntityError, isParamsError]);
+
   const onPayerTooltipOpen = () => setIsPayerTooltipVisible(true);
   const onPayerTooltipClose = () => setIsPayerTooltipVisible(false);
   const onSelfTooltipOpen = () => setIsSelfTooltipVisible(true);
@@ -84,6 +121,12 @@ const PaymentTab = () => {
         await Linking.openURL(params.sberLink);
       } else {
         console.log('goToSber link unsupported');
+        toast.show({
+          type: 'error',
+          title:
+            'Не удалось перейти в «Свое дело». Пожалуйста, повторите позже',
+          contentHeight: 120,
+        });
       }
     }
   }, [params?.sberLink]);

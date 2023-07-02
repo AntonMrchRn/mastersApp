@@ -73,7 +73,7 @@ const useRecovery = () => {
   useEffect(() => {
     if (isRecoveryByPhone && isPhoneAuth && !isRecoveryByEmail) {
       navigation.navigate(AuthScreenName.RecoveryConfirmation, {
-        phone,
+        phone: phone as PhoneValue['phone'],
       });
     }
     if (!isPhoneAuth) {
@@ -147,7 +147,7 @@ const useRecovery = () => {
     scrollViewRef,
     onKeyboardWillShow,
     sendCode: methods.handleSubmit(sendCode),
-    isInvalidEmail: errors.email?.message === emailErrorMessage,
+    isInvalidEmail: errors?.email?.message === emailErrorMessage,
   };
 };
 

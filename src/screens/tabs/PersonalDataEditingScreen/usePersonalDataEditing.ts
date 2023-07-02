@@ -3,9 +3,11 @@ import { useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation } from '@react-navigation/native';
+import { useToast } from 'rn-ui-kit';
 
+import useConnectionInfo from '@/hooks/useConnectionInfo';
 import { useAppSelector } from '@/store';
-import { useEditPersonalDataMutation, useGetUserQuery } from '@/store/api/user';
+import { useEditUserMutation, useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { PersonalDataFormValues } from '@/types/form';
 import {
@@ -15,14 +17,16 @@ import {
 import { personalDataValidationSchema } from '@/utils/formValidation';
 
 const usePersonalDataEditing = () => {
+  useConnectionInfo();
+  const toast = useToast();
   const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   const { user: authUser } = useAppSelector(selectAuth);
   const { data: user } = useGetUserQuery(authUser?.userID, {
     skip: !authUser?.userID,
   });
-  const [editPersonalData, { isSuccess, isLoading }] =
-    useEditPersonalDataMutation();
+  const [editPersonalData, { isSuccess, isLoading, isError }] =
+    useEditUserMutation();
 
   const methods = useForm({
     defaultValues: {
@@ -35,14 +39,25 @@ const usePersonalDataEditing = () => {
   });
   const {
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = methods;
+  const isDataExist = !!user?.name && !!user?.sname && !!user?.pname;
 
   useEffect(() => {
     if (isSuccess) {
       navigation.navigate(ProfileNavigatorScreenName.Profile);
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (isError) {
+      toast.show({
+        type: 'error',
+        title: 'Изменение данных невозможно',
+        contentHeight: 100,
+      });
+    }
+  }, [isError]);
 
   const editData = ({ name, sname, pname }: PersonalDataFormValues) => {
     if (user?.ID) {
@@ -59,6 +74,7 @@ const usePersonalDataEditing = () => {
     errors,
     methods,
     isLoading,
+    isDisabled: !isDirty && isDataExist,
     editData: handleSubmit(editData),
   };
 };
