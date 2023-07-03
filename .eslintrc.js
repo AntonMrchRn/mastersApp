@@ -9,6 +9,7 @@ module.exports = {
   plugins: ['@typescript-eslint', 'prettier', 'simple-import-sort'],
   rules: {
     'react-hooks/exhaustive-deps': 'off',
+    'react/prop-types': 'off',
     '@typescript-eslint/no-explicit-any': 'error',
     'no-useless-escape': 'off',
     'react/display-name': 'off',

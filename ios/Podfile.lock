@@ -340,7 +340,7 @@ PODS:
     - React-Core
   - react-native-image-picker (5.6.0):
     - React-Core
-  - react-native-mmkv (2.9.0):
+  - react-native-mmkv (2.10.0):
     - MMKV (>= 1.2.13)
     - React-Core
   - react-native-netinfo (9.4.1):
@@ -671,7 +671,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  boost: 57d2868c099736d80fcd648bf211b4431e51a558
+  boost: a7c83b31436843459a1961bfd74b96033dc77234
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: c511d4cd0210f416cb5c289bd5ae6b36d909b048
@@ -692,7 +692,7 @@ SPEC CHECKSUMS:
   MMKV: 9c6c3fa4ddd849f28c7b9a5c9d23aab84f14ee35
   MMKVCore: 9bb7440b170181ac5b81f542ac258103542e693d
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
+  RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
   RCTRequired: f6187ec763637e6a57f5728dd9a3bdabc6d6b4e0
   RCTTypeSafety: a01aca2dd3b27fa422d5239252ad38e54e958750
   React: 741b4f5187e7a2137b69c88e65f940ba40600b4b
@@ -710,7 +710,7 @@ SPEC CHECKSUMS:
   react-native-document-picker: 2b8f18667caee73a96708a82b284a4f40b30a156
   react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
   react-native-image-picker: db60857e03d63721f19b6f4027de20429ddd9cba
-  react-native-mmkv: 93e75d89608552fdcd83e957c97dc9d548a7ebd1
+  react-native-mmkv: 725623a679fec884bf18a37400e753afb8a1b924
   react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
   react-native-safe-area-context: 36cc67648134e89465663b8172336a19eeda493d
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
@@ -738,4 +738,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: b1fd72ce60acef4e3ddf0e89635c9f7bc77916db
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1

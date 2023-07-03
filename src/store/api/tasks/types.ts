@@ -1,4 +1,4 @@
-import { OutlayStatusType, RoleType } from '@/types/task';
+import { OutlayStatusType, RoleType, TaskType } from '@/types/task';
 
 type File = {
   url: string;
@@ -23,16 +23,17 @@ type Material = {
 type Service = {
   ID: number;
   categoryID: number;
-  categoryName: string;
-  count: number;
+  categoryName?: string;
+  count?: number;
   description: string;
   measureID: number;
   name: string;
   price: number;
   roleID: RoleType;
   setID: number;
-  sum: number;
+  sum?: number;
   materials?: Material[];
+  measureName?: string;
 };
 type Executor = {
   ID?: number;
@@ -115,7 +116,7 @@ type Task = {
   setID?: number;
   stage?: string;
   statusID?: number;
-  subsetID?: number;
+  subsetID?: TaskType;
   startTime?: string;
   endTime?: string;
   endTimePlan?: string;
@@ -255,7 +256,10 @@ type PostTasksFilesRequest = {
   date: string;
   signal?: AbortSignal;
 };
-
+type GetServicesResponce = {
+  count: number;
+  services: Service[];
+};
 export type {
   PostTasksFilesRequest,
   GetTaskStatusesResponce,
@@ -271,4 +275,5 @@ export type {
   GetTaskHistoryResponce,
   ServicesCategory,
   GetServicesCategoriesResponce,
+  GetServicesResponce,
 };

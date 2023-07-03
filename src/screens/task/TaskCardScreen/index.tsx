@@ -52,6 +52,8 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
     onEstimateBannerVisible,
     onEstimateBannerPress,
     ref,
+    onCantDeleteBannerVisible,
+    cantDeleteBannerVisible,
   } = useTaskCard({ taskId, navigation });
   const theme = useTheme();
 
@@ -128,6 +130,16 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
               buttonText="Перейти в Смету"
               onClosePress={onEstimateBannerVisible}
               onButtonPress={onEstimateBannerPress}
+            />
+          </View>
+        )}
+        {cantDeleteBannerVisible && (
+          <View style={styles.mb16}>
+            <Banner
+              type={'error'}
+              icon={'alert'}
+              text="Нельзя полностью удалить все услуги из сметы"
+              onClosePress={onCantDeleteBannerVisible}
             />
           </View>
         )}

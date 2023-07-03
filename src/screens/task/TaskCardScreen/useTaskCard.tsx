@@ -37,6 +37,7 @@ export const useTaskCard = ({
   const [estimateBottomVisible, setEstimateBottomVisible] = useState(false);
   const [selectedServiceId, setSelectedServiceId] = useState<number>();
   const [estimateBannerVisible, setEstimateBannerVisible] = useState(false);
+  const [cantDeleteBannerVisible, setCantDeleteBannerVisible] = useState(false);
 
   const ref = useRef<{
     setId: (id: number) => void;
@@ -45,7 +46,6 @@ export const useTaskCard = ({
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
 
-  // const getTask = useGetTaskQuery('926');
   // const getTask = useGetTaskQuery('996');
   const getTask = useGetTaskQuery(taskId);
 
@@ -136,6 +136,9 @@ export const useTaskCard = ({
     },
   ];
 
+  const onCantDeleteBannerVisible = () => {
+    setCantDeleteBannerVisible(!cantDeleteBannerVisible);
+  };
   const onEstimateBannerVisible = () => {
     setEstimateBannerVisible(!estimateBannerVisible);
   };
@@ -276,6 +279,7 @@ export const useTaskCard = ({
             estimateBottomVisible={estimateBottomVisible}
             selectedServiceId={selectedServiceId}
             setSelectedServiceId={setSelectedServiceId}
+            onCantDeleteBannerVisible={onCantDeleteBannerVisible}
           />
         );
       case TaskTab.REPORT:
@@ -349,7 +353,16 @@ export const useTaskCard = ({
   const getButtons = (): TaskCardBottomButton[] => {
     switch (statusID) {
       case StatusType.ACTIVE:
-        if (outlayStatusID === 2) {
+        if (subsetID === TaskType.COMMON_FIRST_RESPONCE) {
+          return [
+            {
+              label: 'Принять задачу',
+              variant: 'accent',
+              onPress: onTaskSubmission,
+            },
+          ];
+        }
+        if (outlayStatusID === OutlayStatusType.MATCHING) {
           return [
             {
               label: 'Отозвать смету',
@@ -358,22 +371,14 @@ export const useTaskCard = ({
             },
           ];
         }
-        if (outlayStatusID === 1) {
-          return subsetID === TaskType.COMMON_FIRST_RESPONCE
-            ? [
-                {
-                  label: 'Принять задачу',
-                  variant: 'accent',
-                  onPress: onTaskSubmission,
-                },
-              ]
-            : [
-                {
-                  label: 'Подать смету',
-                  variant: 'accent',
-                  onPress: onBudgetSubmission,
-                },
-              ];
+        if (outlayStatusID === OutlayStatusType.PENDING) {
+          return [
+            {
+              label: 'Подать смету',
+              variant: 'accent',
+              onPress: onBudgetSubmission,
+            },
+          ];
         }
         return [];
       case StatusType.WORK:
@@ -422,6 +427,7 @@ export const useTaskCard = ({
                 label: 'Отправить смету на согласование',
                 variant: 'accent',
                 onPress: onSendEstimateForApproval,
+                disabled: outlayStatusID === OutlayStatusType.MATCHING,
               },
               {
                 label: 'Отказаться от задачи',
@@ -500,5 +506,7 @@ export const useTaskCard = ({
     onEstimateBannerVisible,
     onEstimateBannerPress,
     ref,
+    onCantDeleteBannerVisible,
+    cantDeleteBannerVisible,
   };
 };

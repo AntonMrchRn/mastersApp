@@ -12,9 +12,11 @@ import PasswordScreen from '@/screens/auth/PasswordScreen';
 import RecoveryConfirmationScreen from '@/screens/auth/RecoveryConfirmationScreen';
 import RecoveryScreen from '@/screens/auth/RecoveryScreen';
 import SignInScreen from '@/screens/auth/SignInScreen';
-import { EstimateAddMaterialScreen } from '@/screens/tabs/EstimateAddMaterialScreen';
-import { EstimateEditScreen } from '@/screens/tabs/EstimateEditScreen';
-import { TaskCardScreen } from '@/screens/tabs/TaskCardScreen';
+import { EstimateAddMaterialScreen } from '@/screens/task/EstimateAddMaterialScreen';
+import { EstimateAddServiceScreen } from '@/screens/task/EstimateAddServiceScreen';
+import { EstimateEditScreen } from '@/screens/task/EstimateEditScreen';
+import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
+import { Service } from '@/store/api/tasks/types';
 
 const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<AppStackParamList>();
@@ -30,6 +32,7 @@ export enum AppScreenName {
   TaskCard = 'TaskCard',
   EstimateEdit = 'EstimateEdit',
   EstimateAddMaterial = 'EstimateAddMaterial',
+  EstimateAddService = 'EstimateAddService',
 }
 export type AppStackParamList = {
   [AppScreenName.SignIn]: undefined;
@@ -48,6 +51,7 @@ export type AppStackParamList = {
     materialName?: string;
   };
   [AppScreenName.EstimateAddMaterial]: { serviceId: number; taskId: number };
+  [AppScreenName.EstimateAddService]: { taskId: number; service: Service };
 };
 
 export const AppNavigation = () => {
@@ -95,6 +99,14 @@ export const AppNavigation = () => {
               header: props => <Header {...props} title={'Новый материал'} />,
             }}
           />
+          <Stack.Screen
+            name={AppScreenName.EstimateAddService}
+            component={EstimateAddServiceScreen}
+            options={{
+              headerShown: true,
+              header: props => <Header {...props} title={'Новая услуга'} />,
+            }}
+          />
         </>
       ) : (
         <>
@@ -112,9 +124,9 @@ export const AppNavigation = () => {
             name={AppScreenName.Password}
             component={PasswordScreen}
           />
-          <Stack.Screen name={AppScreenName.Error} component={ErrorScreen} />
         </>
       )}
+      <Stack.Screen name={AppScreenName.Error} component={ErrorScreen} />
     </Stack.Navigator>
   );
 };

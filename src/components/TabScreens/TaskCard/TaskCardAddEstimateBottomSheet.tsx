@@ -21,6 +21,7 @@ export const TaskCardAddEstimateBottomSheet: FC<
     },
     container: {
       marginTop: 12,
+      marginBottom: 12,
     },
   });
   return (

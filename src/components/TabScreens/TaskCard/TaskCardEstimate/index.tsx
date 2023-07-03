@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { View } from 'react-native';
 
+import { useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RadioButton, Spacer, Text, useTheme } from 'rn-ui-kit';
 
@@ -32,6 +33,7 @@ type TaskCardEstimateProps = {
   setSelectedServiceId: React.Dispatch<
     React.SetStateAction<number | undefined>
   >;
+  onCantDeleteBannerVisible: () => void;
 };
 
 export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
@@ -44,7 +46,10 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   estimateBottomVisible,
   selectedServiceId,
   setSelectedServiceId,
+  onCantDeleteBannerVisible,
 }) => {
+  const theme = useTheme();
+  const isFocused = useIsFocused();
   const {
     estimateSheetVisible,
     onEstimateSheetVisible,
@@ -55,8 +60,8 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     onDeleteMaterial,
     onPressMaterial,
     onPressService,
-    serviceSheetVisible,
-    onServiceSheetVisible,
+    bsRef,
+    addServiceBottomSheetClose,
   } = useTaskCardEstimate({
     services,
     taskId,
@@ -64,10 +69,15 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     onEstimateBottomVisible,
     estimateBottomVisible,
   });
-  const theme = useTheme();
 
   const canSwipe = !estimateBottomVisible && statusID === StatusType.WORK;
-
+  const addService = (service: Service) => {
+    navigation.navigate(AppScreenName.EstimateAddService, {
+      service,
+      taskId,
+    });
+    bsRef.current?.close();
+  };
   return (
     <>
       <TaskCardAddEstimateBottomSheet
@@ -76,7 +86,13 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
         pressMaterial={onPressMaterial}
         pressService={onPressService}
       />
-      <AddServiceBottomSheet onCancel={onServiceSheetVisible} />
+      {isFocused && (
+        <AddServiceBottomSheet
+          ref={bsRef}
+          onCancel={addServiceBottomSheetClose}
+          addService={addService}
+        />
+      )}
       <View>
         <Spacer size={'xxxl'} />
         {outlayStatusID && statusID === StatusType.WORK && (
@@ -93,7 +109,11 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             onEdit(service.ID);
           };
           const secondActionService = () => {
-            onDeleteService(service.ID);
+            if (services.length > 1) {
+              onDeleteService(service.ID);
+            } else {
+              onCantDeleteBannerVisible();
+            }
           };
           const radioPress = () => {
             setSelectedServiceId(service.ID);

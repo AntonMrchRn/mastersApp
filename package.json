@@ -26,11 +26,11 @@
     "@react-navigation/stack": "^6.3.17",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.4.0",
-    "dayjs": "^1.11.8",
+    "dayjs": "^1.11.9",
     "plural-ru": "^2.0.2",
     "pretty-bytes": "^6.1.0",
     "react": "18.2.0",
-    "react-hook-form": "^7.45.0",
+    "react-hook-form": "^7.45.1",
     "react-native": "0.71.11",
     "react-native-blob-util": "^0.18.3",
     "react-native-confirmation-code-field": "^7.3.1",
@@ -41,7 +41,7 @@
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-mask-input": "^1.2.3",
     "react-native-mask-text": "^0.14.1",
-    "react-native-mmkv": "2.9.0",
+    "react-native-mmkv": "2.10.0",
     "react-native-modal": "^13.0.1",
     "react-native-normalize": "^1.0.1",
     "react-native-reanimated": "^3.3.0",
@@ -53,7 +53,7 @@
     "react-redux": "^8.1.1",
     "redux-flipper": "^2.0.2",
     "redux-persist": "^6.0.0",
-    "rn-ui-kit": "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#0.3.2",
+    "rn-ui-kit": "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#0.3.5",
     "yup": "^1.2.0"
   },
   "devDependencies": {
@@ -64,8 +64,7 @@
     "@tsconfig/react-native": "^2.0.2",
     "@types/jest": "^29.5.1",
     "@types/node": "^20.1.0",
-    "@types/react": "^18.2.0",
-    "@types/react-native": "^0.71.6",
+    "@types/react": "^18.2.14",
     "@types/react-test-renderer": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.59.7",
     "@typescript-eslint/parser": "^5.17.0",
@@ -77,7 +76,7 @@
     "metro-react-native-babel-preset": "0.73.10",
     "prettier": "^2.4.1",
     "react-test-renderer": "18.2.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.1.6"
   },
   "jest": {
     "preset": "react-native"

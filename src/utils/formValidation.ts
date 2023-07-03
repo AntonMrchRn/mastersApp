@@ -23,6 +23,9 @@ const estimateAddMaterialValidation = {
   price: Yup.string().required('Укажите цену за одну единицу измерения'),
   measure: Yup.string().required('Выберите единицу измерения'),
 };
+const estimateAddServiceValidation = {
+  count: Yup.string().required('Укажите количество услуги'),
+};
 const phoneValidation = {
   phone: Yup.string()
     .length(10, 'Введите корректный номер телефона')
@@ -95,6 +98,9 @@ const estimateCountValidationSchema = Yup.object().shape(
 const estimateAddMaterialValidationSchema = Yup.object().shape(
   estimateAddMaterialValidation
 );
+const estimateAddServiceValidationSchema = Yup.object().shape(
+  estimateAddServiceValidation
+);
 const phoneValidationSchema = Yup.object().shape(phoneValidation);
 const emailValidationSchema = Yup.object().shape(emailValidation);
 const codeValidationSchema = Yup.object().shape(codeValidation);
@@ -131,4 +137,5 @@ export {
   recoveryConfirmationValidationSchema,
   estimateCountValidationSchema,
   estimateAddMaterialValidationSchema,
+  estimateAddServiceValidationSchema,
 };
