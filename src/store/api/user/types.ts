@@ -84,6 +84,8 @@ type UserParamsResponse = {
   regionsCount: number;
 };
 
+type UserEditingParams = PersonalDataEditingParams | BankDetailsEditingParams;
+
 export type {
   User,
   EntityType,
@@ -91,6 +93,5 @@ export type {
   UserParamsResponse,
   PhoneEditingResponse,
   ConfirmationCodeResponse,
-  BankDetailsEditingParams,
-  PersonalDataEditingParams,
+  UserEditingParams,
 };

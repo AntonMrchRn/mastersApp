@@ -4,23 +4,24 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useIsFocused } from '@react-navigation/native';
 
+import { SignInFormValues } from '@/types/form';
 import {
   signInWithEmailValidationSchema,
   signInWithPhoneValidationSchema,
 } from '@/utils/formValidation';
 
-const defaultValues = {
-  phone: '',
-  email: '',
+const partialDefaults = {
   password: '',
   isAgreeWithTerms: false,
 };
 
 const useSignInForm = (isPhoneAuth: boolean) => {
   const isFocused = useIsFocused();
-  const methods = useForm({
-    defaultValues: defaultValues,
-    resolver: yupResolver(
+  const methods = useForm<SignInFormValues>({
+    defaultValues: isPhoneAuth
+      ? { phone: '', ...partialDefaults }
+      : { email: '', ...partialDefaults },
+    resolver: yupResolver<SignInFormValues>(
       isPhoneAuth
         ? signInWithPhoneValidationSchema
         : signInWithEmailValidationSchema

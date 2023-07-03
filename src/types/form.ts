@@ -11,17 +11,22 @@ type CodeValue = {
 };
 
 type SignInWithPhoneFormValues = {
+  email?: string;
   password: string;
   isAgreeWithTerms: boolean;
 } & PhoneValue;
 
 type SignInWithEmailFormValues = {
+  phone?: string;
   password: string;
   isAgreeWithTerms: boolean;
 } & EmailValue;
 
+type RecoveryPhoneFormValues = { email?: string } & PhoneValue;
+type RecoveryEmailFormValues = { phone?: string } & EmailValue;
+
 type SignInFormValues = SignInWithPhoneFormValues | SignInWithEmailFormValues;
-type RecoveryFormValues = PhoneValue | EmailValue;
+type RecoveryFormValues = RecoveryPhoneFormValues | RecoveryEmailFormValues;
 
 type RecoveryConfirmationFormValues = {
   code: string;

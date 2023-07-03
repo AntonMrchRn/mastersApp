@@ -12,6 +12,9 @@ const styles = StyleSheet.create({
   input: {
     paddingRight: 8,
   },
+  btn: {
+    height: 48,
+  },
 });
 
 export default styles;

@@ -49,6 +49,7 @@ const PhoneEditingConfirmationScreen = () => {
             />
             <Spacer size={errors.code?.message ? 'xl' : 'xxl'} />
             <Button
+              style={styles.btn}
               disabled={isDisabled}
               isPending={isLoading}
               label="Подтвердить телефон"

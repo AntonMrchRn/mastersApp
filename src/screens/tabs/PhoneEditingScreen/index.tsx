@@ -32,7 +32,7 @@ const PhoneEditingScreen = () => {
         <View style={styles.content}>
           <Spacer size="xl" />
           <Title
-            title={`Введите ${isPhoneExist ? 'новый' : ''} номер телефона`}
+            title={`Введите ${isPhoneExist ? 'новый ' : ''}номер телефона`}
           />
           <Spacer />
           <Text variant="bodyMRegular" color={theme.text.neutral}>

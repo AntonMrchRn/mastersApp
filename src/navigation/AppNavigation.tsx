@@ -21,8 +21,6 @@ const Stack = createStackNavigator<AppStackParamList>();
 
 export enum AppScreenName {
   AppNavigator = 'AppNavigator',
-  AuthNavigator = 'AuthNavigator',
-  TaskNavigator = 'AuthNavigator',
   SignIn = 'SignIn',
   Recovery = 'Recovery',
   Email = 'Email',
