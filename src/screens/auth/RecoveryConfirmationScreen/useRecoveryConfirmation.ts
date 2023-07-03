@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { configApp } from '@/constants/platform';
+import { AppScreenName } from '@/navigation/AppNavigation';
 import useRecoveryConfirmationForm from '@/screens/auth/RecoveryConfirmationScreen/useRecoveryConfirmationForm';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
@@ -20,7 +21,6 @@ import { selectAuth } from '@/store/slices/auth/selectors';
 import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
 import { RecoveryConfirmationFormValues } from '@/types/form';
 import {
-  AuthScreenName,
   PasswordScreenNavigationProp,
   RecoveryConfirmationScreenRoute,
 } from '@/types/navigation';
@@ -77,7 +77,7 @@ const useRecoveryConfirmation = () => {
   useEffect(() => {
     if (isError) {
       if (error?.code === ErrorCode.Server) {
-        return navigation.navigate(AuthScreenName.Error);
+        return navigation.navigate(AppScreenName.Error);
       }
 
       const inputName = inputNameByErrorCode[error?.code];
@@ -95,7 +95,7 @@ const useRecoveryConfirmation = () => {
       await AsyncStorage.setItem('authPhoneTimeout', jsonValue);
 
       if (data === null || data === undefined) {
-        navigation.navigate(AuthScreenName.Password);
+        navigation.navigate(AppScreenName.Password);
       }
     } catch (e) {
       console.log(`onRestorePasswordSuccess error: ${e}`);
