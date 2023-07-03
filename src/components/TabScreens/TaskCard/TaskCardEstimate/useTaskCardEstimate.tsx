@@ -36,7 +36,7 @@ export const useTaskCardEstimate = ({
 
   const [estimateSheetVisible, setEstimateSheetVisible] = useState(false);
 
-  const allSum = services.reduce((acc, val) => acc + val.sum, 0);
+  const allSum = services.reduce((acc, val) => acc + (val?.sum || 0), 0);
   const allMaterials = services.reduce<Material[]>(
     (acc, val) =>
       acc.concat(typeof val.materials !== 'undefined' ? val.materials : []),

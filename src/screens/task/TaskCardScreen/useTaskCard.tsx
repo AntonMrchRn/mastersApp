@@ -421,6 +421,7 @@ export const useTaskCard = ({
                 label: 'Отправить смету на согласование',
                 variant: 'accent',
                 onPress: onSendEstimateForApproval,
+                disabled: outlayStatusID === OutlayStatusType.MATCHING,
               },
               {
                 label: 'Отказаться от задачи',
