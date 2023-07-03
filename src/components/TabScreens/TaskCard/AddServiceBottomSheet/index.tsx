@@ -94,6 +94,7 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
                 onChangeText={onChangeText}
                 value={serviceName}
                 onClear={onClear}
+                containerStyle={styles.mb24}
               />
             )}
             {!chipses.length && !serviceName.length && (

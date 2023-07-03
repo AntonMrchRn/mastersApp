@@ -7,11 +7,13 @@ export const styles = StyleSheet.create({
   mv8: {
     marginVertical: 8,
   },
+  mb24: {
+    marginBottom: 24,
+  },
   button: {
     marginTop: 24,
   },
   title: {
-    marginTop: 24,
     marginBottom: 12,
   },
   container: {
