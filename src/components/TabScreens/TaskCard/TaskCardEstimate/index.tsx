@@ -112,12 +112,6 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           const radioPress = () => {
             setSelectedServiceId(service.ID);
           };
-          const addServicePress = (service: Service) => {
-            navigation.navigate(AppScreenName.EstimateAddService, {
-              taskId,
-              service,
-            });
-          };
           return (
             <View key={service.ID}>
               <View style={styles.itemRow}>
