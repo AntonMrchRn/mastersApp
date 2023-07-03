@@ -1,4 +1,10 @@
-import React, { FC, ForwardedRef, forwardRef, useState } from 'react';
+import React, {
+  FC,
+  ForwardedRef,
+  forwardRef,
+  useCallback,
+  useState,
+} from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -15,11 +21,14 @@ import {
 } from 'rn-ui-kit';
 
 import { SearchIcon } from '@/assets/icons/svg/estimate/SearchIcon';
-import { useGetServicesCategoriesQuery } from '@/store/api/tasks';
+import {
+  useGetServicesCategoriesQuery,
+  useLazyGetServicesByNameQuery,
+} from '@/store/api/tasks';
 import { Service, ServicesCategory } from '@/store/api/tasks/types';
 
 import { CategoryContainer } from './CategoryContainer';
-import { SearchItem } from './SearchItem';
+import { SearchContainer } from './SearchContainer';
 
 import { styles } from './styles';
 let timeout: number;
@@ -41,23 +50,27 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
     >([]);
 
     const categories = useGetServicesCategoriesQuery();
+    const [trigger, result] = useLazyGetServicesByNameQuery();
     const subtitle =
       !chipses.length && !serviceName.length
         ? 'Воспользуйтесь поиском или выберите подходящую категорию услуги'
         : undefined;
 
-    const onChoose = () => {
+    const onChoose = useCallback(() => {
       setSelectCategories([]);
       setChipses(selectCategories);
+    }, [selectCategories]);
+    const onClear = () => {
+      serviceName && setServiceName('');
     };
-    const onChangeText = (text: string) => {
+    const onChangeText = useCallback((text: string) => {
       setServiceName(text);
       timeout && clearTimeout(timeout);
-      const ex = setTimeout(() => {
-        console.log('🚀 ~ file: index.tsx:56 ~ onChangeText ~ text:', text);
+      const timer = setTimeout(() => {
+        text && trigger(text);
       }, 1000);
-      timeout = ex;
-    };
+      timeout = timer;
+    }, []);
     return (
       <>
         <BottomSheetModal
@@ -80,6 +93,7 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
                 iconLeft={<SearchIcon />}
                 onChangeText={onChangeText}
                 value={serviceName}
+                onClear={onClear}
               />
             )}
             {!chipses.length && !serviceName.length && (
@@ -139,7 +153,15 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
             ) : (
               <></>
             )}
-            {serviceName.length ? <SearchItem /> : <></>}
+            {serviceName.length ? (
+              <SearchContainer
+                data={result.data}
+                loader={result.isLoading || result.isFetching}
+                addService={addService}
+              />
+            ) : (
+              <></>
+            )}
           </BottomSheetScrollView>
         </BottomSheetModal>
       </>

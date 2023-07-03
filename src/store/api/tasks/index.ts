@@ -45,6 +45,12 @@ export const tasksAPI = api.injectEndpoints({
         method: 'GET',
       }),
     }),
+    getServicesByName: builder.query<GetServicesResponce, string>({
+      query: categoryName => ({
+        url: `services?query=??&searchQuery=${categoryName}?`,
+        method: 'GET',
+      }),
+    }),
     getTableNames: builder.query<GetTaskStatusesResponce, void>({
       query: () => ({
         url: `aux?query=?tableName==set?`,
@@ -109,4 +115,5 @@ export const {
   useDeleteTasksFilesMutation,
   useGetServicesCategoriesQuery,
   useGetServicesByCategoriesQuery,
+  useLazyGetServicesByNameQuery,
 } = tasksAPI;

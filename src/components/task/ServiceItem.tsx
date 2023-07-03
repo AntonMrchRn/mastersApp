@@ -34,26 +34,32 @@ export const ServiceItem: FC<ServiceItemProps> = ({ service }) => {
     <View>
       <Spacer size={'l'} />
       {service?.categoryName && (
-        <Text variant={'captionRegular'} color={theme.text.neutral}>
-          {service.categoryName}
-        </Text>
+        <View>
+          <Text variant={'captionRegular'} color={theme.text.neutral}>
+            {service?.categoryName}
+          </Text>
+        </View>
       )}
       {service?.name && (
-        <Text
-          variant={'bodyMBold'}
-          color={theme.text.basic}
-          style={styles.itemTitle}
-        >
-          {service?.name}
-        </Text>
+        <View>
+          <Text
+            variant={'bodyMBold'}
+            color={theme.text.basic}
+            style={styles.itemTitle}
+          >
+            {service?.name}
+          </Text>
+        </View>
       )}
       {service?.description && (
-        <Text variant={'bodySRegular'} color={theme.text.basic}>
-          {service?.description}
-        </Text>
+        <View>
+          <Text variant={'bodySRegular'} color={theme.text.basic}>
+            {service?.description}
+          </Text>
+        </View>
       )}
       <View style={styles.items}>
-        {service?.price && (
+        {service?.price ? (
           <View style={styles.rowDirection}>
             <PriceIcon />
             <Text
@@ -61,9 +67,11 @@ export const ServiceItem: FC<ServiceItemProps> = ({ service }) => {
               color={theme.text.neutral}
               style={styles.ml4}
             >
-              {`${service?.price} ₽`}
+              {service?.price} ₽
             </Text>
           </View>
+        ) : (
+          <></>
         )}
         {service?.measureName && (
           <View style={styles.rowDirection}>
