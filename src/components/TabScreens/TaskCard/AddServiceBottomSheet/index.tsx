@@ -17,7 +17,7 @@ import {
 import { SearchIcon } from '@/assets/icons/svg/estimate/SearchIcon';
 import ControlledInput from '@/components/inputs/ControlledInput';
 import { useGetServicesCategoriesQuery } from '@/store/api/tasks';
-import { ServicesCategory } from '@/store/api/tasks/types';
+import { Service, ServicesCategory } from '@/store/api/tasks/types';
 
 import { CategoryContainer } from './CategoryContainer';
 import { SearchItem } from './SearchItem';
@@ -27,9 +27,10 @@ import { styles } from './styles';
 type AddServiceBottomSheetProps = {
   onCancel: () => void;
   ref?: ForwardedRef<BottomSheetModalMethods>;
+  addService: (service: Service) => void;
 };
 export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
-  ({ onCancel }, ref) => {
+  ({ onCancel, addService }, ref) => {
     const theme = useTheme();
     const insets = useSafeAreaInsets();
 
@@ -72,7 +73,7 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
             style={styles.container}
             showsVerticalScrollIndicator={false}
           >
-            {!chipses && (
+            {!chipses.length && (
               <FormProvider {...methods}>
                 <ControlledInput
                   name={'serviceName'}
@@ -132,7 +133,11 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
               </>
             )}
             {chipses.length ? (
-              <CategoryContainer chipses={chipses} setChipses={setChipses} />
+              <CategoryContainer
+                chipses={chipses}
+                setChipses={setChipses}
+                addService={addService}
+              />
             ) : (
               <></>
             )}

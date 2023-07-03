@@ -4,6 +4,9 @@ export const styles = StyleSheet.create({
   ml4: {
     marginLeft: 4,
   },
+  mv8: {
+    marginVertical: 8,
+  },
   button: {
     marginTop: 24,
   },

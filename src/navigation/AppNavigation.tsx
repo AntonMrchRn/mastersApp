@@ -16,6 +16,7 @@ import { EstimateAddMaterialScreen } from '@/screens/task/EstimateAddMaterialScr
 import { EstimateAddServiceScreen } from '@/screens/task/EstimateAddServiceScreen';
 import { EstimateEditScreen } from '@/screens/task/EstimateEditScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
+import { Service } from '@/store/api/tasks/types';
 
 const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<AppStackParamList>();
@@ -50,7 +51,7 @@ export type AppStackParamList = {
     materialName?: string;
   };
   [AppScreenName.EstimateAddMaterial]: { serviceId: number; taskId: number };
-  [AppScreenName.EstimateAddService]: { taskId: number };
+  [AppScreenName.EstimateAddService]: { taskId: number; service: Service };
 };
 
 export const AppNavigation = () => {
@@ -69,10 +70,7 @@ export const AppNavigation = () => {
   }, []);
 
   return (
-    <Stack.Navigator
-      screenOptions={screenOptions}
-      initialRouteName={AppScreenName.EstimateAddService}
-    >
+    <Stack.Navigator screenOptions={screenOptions}>
       {isAuth ? (
         <>
           <Stack.Screen

@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 
 import { Button, Chips, Spacer } from 'rn-ui-kit';
 
-import { ServicesCategory } from '@/store/api/tasks/types';
+import { useGetServicesByCategoriesQuery } from '@/store/api/tasks';
+import { Service, ServicesCategory } from '@/store/api/tasks/types';
 
 import { ServiceItem } from '../../../task/ServiceItem';
 
@@ -12,11 +13,18 @@ import { styles } from './styles';
 type CategoryContainerProps = {
   chipses: ServicesCategory[];
   setChipses: React.Dispatch<React.SetStateAction<ServicesCategory[]>>;
+  addService: (service: Service) => void;
 };
 export const CategoryContainer: FC<CategoryContainerProps> = ({
   chipses,
   setChipses,
+  addService,
 }) => {
+  const serviceIDs = chipses
+    .reduce<number[]>((acc, val) => acc.concat(val.ID), [])
+    .join(',');
+  const services = useGetServicesByCategoriesQuery(serviceIDs);
+
   return (
     <View>
       <View style={styles.chipses}>
@@ -35,11 +43,29 @@ export const CategoryContainer: FC<CategoryContainerProps> = ({
           );
         })}
       </View>
-      <View>
-        <ServiceItem />
-        <Button label={'Добавить'} size={'S'} style={styles.itemButton} />
-        <Spacer size={15} separator="bottom" />
-      </View>
+      {services.isLoading && services.isFetching ? (
+        <ActivityIndicator />
+      ) : (
+        <>
+          {services?.data?.services?.map(service => {
+            const onPress = () => {
+              addService(service);
+            };
+            return (
+              <View key={service.ID}>
+                <ServiceItem service={service} />
+                <Button
+                  label={'Добавить'}
+                  size={'S'}
+                  style={styles.itemButton}
+                  onPress={onPress}
+                />
+                <Spacer size={15} separator="bottom" />
+              </View>
+            );
+          })}
+        </>
+      )}
     </View>
   );
 };

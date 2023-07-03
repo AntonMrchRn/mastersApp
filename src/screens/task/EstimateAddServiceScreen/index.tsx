@@ -3,15 +3,17 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { useSelector } from 'react-redux';
 
+import { yupResolver } from '@hookform/resolvers/yup';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
 import ControlledInput from '@/components/inputs/ControlledInput';
 import { ServiceItem } from '@/components/task/ServiceItem';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
-import { usePatchTaskMutation } from '@/store/api/tasks';
+import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import { Measure } from '@/types/task';
+import { OutlayStatusType } from '@/types/task';
+import { estimateAddServiceValidationSchema } from '@/utils/formValidation';
 
 import { styles } from './styles';
 
@@ -29,7 +31,10 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
 
   const userRole = useSelector(selectAuth).user?.roleID;
 
-  // const getTask = useGetTaskQuery(taskId.toString());
+  const taskId = route.params.taskId;
+  const service = route.params.service;
+
+  const getTask = useGetTaskQuery(taskId.toString());
 
   const [patchTask, mutationTask] = usePatchTaskMutation();
 
@@ -43,13 +48,13 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
     }
   }, [mutationTask.error]);
 
-  // const task = getTask?.data && getTask?.data?.tasks && getTask?.data?.tasks[0];
-  // const services = task?.services || [];
+  const task = getTask?.data && getTask?.data?.tasks && getTask?.data?.tasks[0];
+  const services = task?.services || [];
   const methods = useForm({
     defaultValues: {
       count: '',
     },
-    // resolver: yupResolver(estimateAddMaterialValidationSchema),
+    resolver: yupResolver(estimateAddServiceValidationSchema),
     mode: 'onChange',
   });
   const {
@@ -59,9 +64,11 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
 
   const count = watch('count');
 
-  const name = 'name';
-  const price = 'price';
-  const measure = 'measure';
+  const goBack = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+  };
 
   const onSubmit = async ({ count }: { count: string }) => {
     if (!userRole) {
@@ -71,53 +78,30 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
         contentHeight: 120,
       });
     }
-    // const newServices = [];
-    // await patchTask({
-    //   //id таски
-    //   ID: taskId,
-    //   //массив услуг
-    //   services: newServices,
-    //   //при изменении сметы она снова становится не согласована
-    //   outlayStatusID: OutlayStatusType.PENDING,
-    // });
-    // getTask.refetch();
-    if (navigation.canGoBack()) {
-      navigation.goBack();
-    }
+    const newServices = services.concat({
+      ...service,
+      count: +count,
+      sum: +count * service.price,
+      roleID: userRole,
+    });
+    await patchTask({
+      //id таски
+      ID: taskId,
+      //массив услуг
+      services: newServices,
+      //при изменении сметы она снова становится не согласована
+      outlayStatusID: OutlayStatusType.PENDING,
+    });
+    getTask.refetch();
+    goBack();
   };
-  const measures: Measure[] = [
-    {
-      text: 'Метр (м.)',
-      name: 'М',
-    },
-    {
-      text: 'Квадратный метр (кв.м.)',
-      name: 'М²',
-    },
-    {
-      text: 'Кубический метр (куб.м.)',
-      name: 'М³',
-    },
-    {
-      text: 'Километр (км.)',
-      name: 'Км',
-    },
-    {
-      text: 'Погонный метр (п.м.)',
-      name: 'М/П',
-    },
-    {
-      text: 'Штука (шт.)',
-      name: 'Шт.',
-    },
-  ];
   return (
     <View style={styles.container}>
       <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
         Заполните данные об услуге
       </Text>
       <Spacer size={'xl'} />
-      <ServiceItem />
+      <ServiceItem service={service} />
       <FormProvider {...methods}>
         <View style={styles.input}>
           <ControlledInput
@@ -134,7 +118,7 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
         <View style={styles.row}>
           <Button
             label={'Отменить'}
-            onPress={methods.handleSubmit(onSubmit)}
+            onPress={goBack}
             variant={'outlineAccent'}
             style={styles.button}
           />

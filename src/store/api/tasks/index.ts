@@ -5,6 +5,7 @@ import { Progress } from '@/store/slices/tasks/types';
 
 import {
   GetServicesCategoriesResponce,
+  GetServicesResponce,
   GetTaskHistoryResponce,
   GetTaskResponce,
   GetTaskStatusesResponce,
@@ -35,6 +36,12 @@ export const tasksAPI = api.injectEndpoints({
     getServicesCategories: builder.query<GetServicesCategoriesResponce, void>({
       query: () => ({
         url: `services/categories?query=??`,
+        method: 'GET',
+      }),
+    }),
+    getServicesByCategories: builder.query<GetServicesResponce, string>({
+      query: categoryIds => ({
+        url: `services?query=?categoryID==${categoryIds}?`,
         method: 'GET',
       }),
     }),
@@ -101,4 +108,5 @@ export const {
   usePostTasksFilesMutation,
   useDeleteTasksFilesMutation,
   useGetServicesCategoriesQuery,
+  useGetServicesByCategoriesQuery,
 } = tasksAPI;

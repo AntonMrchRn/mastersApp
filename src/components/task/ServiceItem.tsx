@@ -5,8 +5,12 @@ import { Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { PriceIcon } from '@/assets/icons/svg/estimate/PriceIcon';
+import { Service } from '@/store/api/tasks/types';
 
-export const ServiceItem: FC = () => {
+type ServiceItemProps = {
+  service: Service;
+};
+export const ServiceItem: FC<ServiceItemProps> = ({ service }) => {
   const theme = useTheme();
 
   const styles = StyleSheet.create({
@@ -29,40 +33,50 @@ export const ServiceItem: FC = () => {
   return (
     <View>
       <Spacer size={'l'} />
-      <Text variant={'captionRegular'} color={theme.text.neutral}>
-        Категория услуг
-      </Text>
-      <Text
-        variant={'bodyMBold'}
-        color={theme.text.basic}
-        style={styles.itemTitle}
-      >
-        Очень длинное название услуги, возможно на 2-3 строчки
-      </Text>
-      <Text variant={'bodySRegular'} color={theme.text.basic}>
-        Описание услуги, раскрывающее подробности предаставляемой услуги
-      </Text>
+      {service?.categoryName && (
+        <Text variant={'captionRegular'} color={theme.text.neutral}>
+          {service.categoryName}
+        </Text>
+      )}
+      {service?.name && (
+        <Text
+          variant={'bodyMBold'}
+          color={theme.text.basic}
+          style={styles.itemTitle}
+        >
+          {service.name}
+        </Text>
+      )}
+      {service?.description && (
+        <Text variant={'bodySRegular'} color={theme.text.basic}>
+          {service.description}
+        </Text>
+      )}
       <View style={styles.items}>
-        <View style={styles.rowDirection}>
-          <PriceIcon />
-          <Text
-            variant={'bodySRegular'}
-            color={theme.text.neutral}
-            style={styles.ml4}
-          >
-            100r в шт.
-          </Text>
-        </View>
-        <View style={styles.rowDirection}>
-          <CubeIcon />
-          <Text
-            variant={'bodySRegular'}
-            color={theme.text.neutral}
-            style={styles.ml4}
-          >
-            Измеряется в шт.
-          </Text>
-        </View>
+        {service?.price && (
+          <View style={styles.rowDirection}>
+            <PriceIcon />
+            <Text
+              variant={'bodySRegular'}
+              color={theme.text.neutral}
+              style={styles.ml4}
+            >
+              {`${service.price} ₽`}
+            </Text>
+          </View>
+        )}
+        {service?.measureName && (
+          <View style={styles.rowDirection}>
+            <CubeIcon />
+            <Text
+              variant={'bodySRegular'}
+              color={theme.text.neutral}
+              style={styles.ml4}
+            >
+              Измеряется в {service.measureName.toLowerCase()}
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   );

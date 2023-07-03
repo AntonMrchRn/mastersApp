@@ -68,7 +68,13 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   });
 
   const canSwipe = !estimateBottomVisible && statusID === StatusType.WORK;
-
+  const addService = (service: Service) => {
+    navigation.navigate(AppScreenName.EstimateAddService, {
+      service,
+      taskId,
+    });
+    bsRef.current?.close();
+  };
   return (
     <>
       <TaskCardAddEstimateBottomSheet
@@ -80,6 +86,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
       <AddServiceBottomSheet
         ref={bsRef}
         onCancel={addServiceBottomSheetClose}
+        addService={addService}
       />
       <View>
         <Spacer size={'xxxl'} />
@@ -101,6 +108,12 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           };
           const radioPress = () => {
             setSelectedServiceId(service.ID);
+          };
+          const addServicePress = (service: Service) => {
+            navigation.navigate(AppScreenName.EstimateAddService, {
+              taskId,
+              service,
+            });
           };
           return (
             <View key={service.ID}>
