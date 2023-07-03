@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { View } from 'react-native';
 
+import { useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RadioButton, Spacer, Text, useTheme } from 'rn-ui-kit';
 
@@ -46,7 +47,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   setSelectedServiceId,
 }) => {
   const theme = useTheme();
-
+  const isFocused = useIsFocused();
   const {
     estimateSheetVisible,
     onEstimateSheetVisible,
@@ -83,11 +84,13 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
         pressMaterial={onPressMaterial}
         pressService={onPressService}
       />
-      <AddServiceBottomSheet
-        ref={bsRef}
-        onCancel={addServiceBottomSheetClose}
-        addService={addService}
-      />
+      {isFocused && (
+        <AddServiceBottomSheet
+          ref={bsRef}
+          onCancel={addServiceBottomSheetClose}
+          addService={addService}
+        />
+      )}
       <View>
         <Spacer size={'xxxl'} />
         {outlayStatusID && statusID === StatusType.WORK && (

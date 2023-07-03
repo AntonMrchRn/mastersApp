@@ -89,7 +89,6 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
               <Input
                 placeholder={'Искать по названию'}
                 variant={'text'}
-                keyboardType="numeric"
                 iconLeft={<SearchIcon />}
                 onChangeText={onChangeText}
                 value={serviceName}
