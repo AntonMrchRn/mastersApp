@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
 import { configApp } from '@/constants/platform';
+import useConnectionInfo from '@/hooks/useConnectionInfo';
 import { storageMMKV } from '@/mmkv/storage';
 import useSignInForm from '@/screens/auth/SignInScreen/useSignInForm';
 import { useAppDispatch } from '@/store';
@@ -36,6 +37,7 @@ const inputNameByErrorCode: Partial<
 };
 
 const useSignIn = () => {
+  useConnectionInfo();
   const dispatch = useAppDispatch();
   const navigation = useNavigation<ErrorScreenNavigationProp>();
 
@@ -133,7 +135,7 @@ const useSignIn = () => {
     scrollViewRef,
     onKeyboardWillShow,
     logIn: methods.handleSubmit(logIn),
-    isInvalidEmail: errors.email?.message === emailErrorMessage,
+    isInvalidEmail: errors?.email?.message === emailErrorMessage,
   };
 };
 

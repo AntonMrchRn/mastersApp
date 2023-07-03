@@ -12,7 +12,7 @@ import useBankDetails from '@/screens/tabs/BankDetailsScreen/useBankDetails';
 import styles from './style';
 
 const BankDetailsScreen = () => {
-  const { errors, methods, isLoading, onSave } = useBankDetails();
+  const { errors, methods, isLoading, isDisabled, onSave } = useBankDetails();
 
   return (
     <View style={styles.container}>
@@ -80,6 +80,7 @@ const BankDetailsScreen = () => {
             <Button
               label="Сохранить"
               style={styles.btn}
+              disabled={isDisabled}
               isPending={isLoading}
               onPress={onSave}
             />

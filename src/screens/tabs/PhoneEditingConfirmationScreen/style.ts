@@ -16,6 +16,9 @@ const styles = StyleSheet.create({
   title: {
     alignSelf: 'flex-start',
   },
+  btn: {
+    height: 48,
+  },
 });
 
 export default styles;

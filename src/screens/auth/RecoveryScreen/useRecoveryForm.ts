@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useForm, UseFormReturn } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Keyboard } from 'react-native';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,23 +7,21 @@ import { useIsFocused } from '@react-navigation/native';
 
 import { useAppSelector } from '@/store';
 import { selectAuth } from '@/store/slices/auth/selectors';
+import { RecoveryFormValues } from '@/types/form';
 import {
-  authPhoneValidationSchema,
-  emailValidationSchema,
+  recoveryEmailValidationSchema,
+  recoveryPhoneValidationSchema,
 } from '@/utils/formValidation';
-
-const defaultValues = {
-  phone: '',
-  email: '',
-};
 
 const useRecoveryForm = (isPhoneAuth: boolean) => {
   const isFocused = useIsFocused();
   const { isActivePhoneTimer, isActiveEmailTimer } = useAppSelector(selectAuth);
-  const methods = useForm({
+  const methods = useForm<RecoveryFormValues>({
     defaultValues: isPhoneAuth ? { phone: '' } : { email: '' },
-    resolver: yupResolver(
-      isPhoneAuth ? authPhoneValidationSchema : emailValidationSchema
+    resolver: yupResolver<RecoveryFormValues>(
+      isPhoneAuth
+        ? recoveryPhoneValidationSchema
+        : recoveryEmailValidationSchema
     ),
     mode: 'onChange',
   });
@@ -45,7 +43,7 @@ const useRecoveryForm = (isPhoneAuth: boolean) => {
   }, [isFocused]);
 
   useEffect(() => {
-    reset(defaultValues);
+    reset({ phone: '', email: '' });
   }, [isPhoneAuth]);
 
   useEffect(() => {

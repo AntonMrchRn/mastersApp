@@ -5,7 +5,9 @@ import { Keyboard } from 'react-native';
 import { yupResolver } from '@hookform/resolvers/yup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useToast } from 'rn-ui-kit';
 
+import useConnectionInfo from '@/hooks/useConnectionInfo';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useSendPhoneConfirmationCodeMutation } from '@/store/api/user';
 import {
@@ -23,8 +25,10 @@ import {
 import { phoneValidationSchema } from '@/utils/formValidation';
 
 const usePhoneEditing = () => {
+  useConnectionInfo();
   const navigation =
     useNavigation<PhoneEditingConfirmationScreenNavigationProp>();
+  const toast = useToast();
   const route = useRoute<PhoneEditingScreenRoute>();
   const dispatch = useAppDispatch();
 
@@ -61,8 +65,16 @@ const usePhoneEditing = () => {
 
   useEffect(() => {
     if (error?.code === ErrorCode.PhoneAlreadyRegistered) {
-      setError('phone', {
+      return setError('phone', {
         message: error?.message,
+      });
+    }
+
+    if (isError) {
+      toast.show({
+        type: 'error',
+        title: 'Изменение данных невозможно',
+        contentHeight: 100,
       });
     }
   }, [isError]);
