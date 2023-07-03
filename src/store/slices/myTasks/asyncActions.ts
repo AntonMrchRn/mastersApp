@@ -43,7 +43,7 @@ const getEndpont = ({
       return `(creatorID==${userID}||coordinator==ID^^${userID})*(statusID==6,12||statusID==9*toClose==false)*setID==1,2?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //Отмененные
     case 7:
-      return `(creatorID==${userID}||coordinator==ID^^${userID})*setID==1,2*statusID==7,8?ID,desc,${numberOfPosts},${fromTask}&isMine=true;`;
+      return `(creatorID==${userID}||coordinator==ID^^${userID})*setID==1,2*statusID==7,8?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //К закрытию
     case 8:
       return `(creatorID==${userID}||coordinator==ID^^${userID})*setID==1,2*toClose==true?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;

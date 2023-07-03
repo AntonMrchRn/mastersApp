@@ -77,9 +77,9 @@ PODS:
     - hermes-engine/Pre-built (= 0.71.11)
   - hermes-engine/Pre-built (0.71.11)
   - libevent (2.1.12)
-  - MMKV (1.2.16):
-    - MMKVCore (~> 1.2.16)
-  - MMKVCore (1.2.16)
+  - MMKV (1.3.0):
+    - MMKVCore (~> 1.3.0)
+  - MMKVCore (1.3.0)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
     - boost
@@ -475,7 +475,7 @@ PODS:
     - React-RCTImage
   - RNSVG (13.9.0):
     - React-Core
-  - SocketRocket (0.6.0)
+  - SocketRocket (0.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -689,8 +689,8 @@ SPEC CHECKSUMS:
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   hermes-engine: 34c863b446d0135b85a6536fa5fd89f48196f848
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  MMKV: 784471ce430a2e2d16afef9053d63fab1b357d9e
-  MMKVCore: 9cfef4c48c6c46f66226fc2e4634d78490206a48
+  MMKV: 9c6c3fa4ddd849f28c7b9a5c9d23aab84f14ee35
+  MMKVCore: 9bb7440b170181ac5b81f542ac258103542e693d
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: f6187ec763637e6a57f5728dd9a3bdabc6d6b4e0
@@ -732,7 +732,7 @@ SPEC CHECKSUMS:
   RNReanimated: 9976fbaaeb8a188c36026154c844bf374b3b7eeb
   RNScreens: 68fd1060f57dd1023880bf4c05d74784b5392789
   RNSVG: 53c661b76829783cdaf9b7a57258f3d3b4c28315
-  SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
+  SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: f7decafdc5e8c125e6fa0da38a687e35238420fa
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

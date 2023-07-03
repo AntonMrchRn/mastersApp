@@ -90,6 +90,7 @@ export const useTaskCard = ({
   const outlayStatusID: OutlayStatusType | undefined = task?.outlayStatusID;
   const name = task?.name || '';
   const budget = `${task?.budget} ₽` || '';
+
   /**
    * Ночные работы
    */
@@ -468,6 +469,7 @@ export const useTaskCard = ({
             onPress: onCancelModalVisible,
           },
         ];
+
       default:
         return [];
     }
