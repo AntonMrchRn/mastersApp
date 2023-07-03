@@ -44,12 +44,12 @@ export const ServiceItem: FC<ServiceItemProps> = ({ service }) => {
           color={theme.text.basic}
           style={styles.itemTitle}
         >
-          {service.name}
+          {service?.name}
         </Text>
       )}
       {service?.description && (
         <Text variant={'bodySRegular'} color={theme.text.basic}>
-          {service.description}
+          {service?.description}
         </Text>
       )}
       <View style={styles.items}>
@@ -61,7 +61,7 @@ export const ServiceItem: FC<ServiceItemProps> = ({ service }) => {
               color={theme.text.neutral}
               style={styles.ml4}
             >
-              {`${service.price} ₽`}
+              {`${service?.price} ₽`}
             </Text>
           </View>
         )}
@@ -73,7 +73,7 @@ export const ServiceItem: FC<ServiceItemProps> = ({ service }) => {
               color={theme.text.neutral}
               style={styles.ml4}
             >
-              Измеряется в {service.measureName.toLowerCase()}
+              Измеряется в {service?.measureName?.toLowerCase()}
             </Text>
           </View>
         )}

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 
-import { Button, Chips, Spacer } from 'rn-ui-kit';
+import { Button, Chips, Spacer, useTheme } from 'rn-ui-kit';
 
 import { useGetServicesByCategoriesQuery } from '@/store/api/tasks';
 import { Service, ServicesCategory } from '@/store/api/tasks/types';
@@ -20,6 +20,7 @@ export const CategoryContainer: FC<CategoryContainerProps> = ({
   setChipses,
   addService,
 }) => {
+  const theme = useTheme();
   const serviceIDs = chipses
     .reduce<number[]>((acc, val) => acc.concat(val.ID), [])
     .join(',');
@@ -44,7 +45,9 @@ export const CategoryContainer: FC<CategoryContainerProps> = ({
         })}
       </View>
       {services.isLoading && services.isFetching ? (
-        <ActivityIndicator />
+        <View style={styles.center}>
+          <ActivityIndicator size={'large'} color={theme.background.accent} />
+        </View>
       ) : (
         <>
           {services?.data?.services?.map(service => {

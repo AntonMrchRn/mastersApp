@@ -40,4 +40,8 @@ export const styles = StyleSheet.create({
     marginTop: 8,
     alignSelf: 'flex-end',
   },
+  center: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
