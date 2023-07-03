@@ -46,8 +46,8 @@ export const useTaskCard = ({
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
 
-  const getTask = useGetTaskQuery('996');
-  // const getTask = useGetTaskQuery(taskId);
+  // const getTask = useGetTaskQuery('996');
+  const getTask = useGetTaskQuery(taskId);
 
   useEffect(() => {
     if (
@@ -82,8 +82,8 @@ export const useTaskCard = ({
   /**
    * Статус задачи
    */
-  // const statusID: StatusType | undefined = task?.statusID;
-  const statusID: StatusType | undefined = 11;
+  const statusID: StatusType | undefined = task?.statusID;
+  // const statusID: StatusType | undefined = 11;
   /**
    * Статус сметы
    */
