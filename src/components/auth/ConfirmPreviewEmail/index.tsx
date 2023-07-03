@@ -4,7 +4,8 @@ import { Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Spacer } from 'rn-ui-kit';
 
-import { AuthScreenName, SignInScreenNavigationProp } from '@/types/navigation';
+import { AppScreenName } from '@/navigation/AppNavigation';
+import { SignInScreenNavigationProp } from '@/types/navigation';
 
 import styles from './style';
 
@@ -12,7 +13,7 @@ const ConfirmPreviewEmail = () => {
   const navigation = useNavigation<SignInScreenNavigationProp>();
 
   const navigateToSignIn = () => {
-    navigation.navigate(AuthScreenName.SignIn);
+    navigation.navigate(AppScreenName.SignIn);
   };
 
   return (

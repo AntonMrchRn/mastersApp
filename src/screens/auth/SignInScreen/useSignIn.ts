@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { configApp } from '@/constants/platform';
 import useConnectionInfo from '@/hooks/useConnectionInfo';
 import { storageMMKV } from '@/mmkv/storage';
+import { AppScreenName } from '@/navigation/AppNavigation';
 import useSignInForm from '@/screens/auth/SignInScreen/useSignInForm';
 import { useAppDispatch } from '@/store';
 import { useGetUserAuthMutation } from '@/store/api/auth';
@@ -23,7 +24,7 @@ import {
   SignInWithEmailFormValues,
   SignInWithPhoneFormValues,
 } from '@/types/form';
-import { AuthScreenName, ErrorScreenNavigationProp } from '@/types/navigation';
+import { ErrorScreenNavigationProp } from '@/types/navigation';
 import { AuthTab, authTabByIndex } from '@/types/tab';
 import { emailErrorMessage } from '@/utils/formValidation';
 
@@ -60,7 +61,7 @@ const useSignIn = () => {
   useEffect(() => {
     if (isError) {
       if (error?.code === ErrorCode.Server) {
-        return navigation.navigate(AuthScreenName.Error);
+        return navigation.navigate(AppScreenName.Error);
       }
 
       const inputName = inputNameByErrorCode[error?.code];

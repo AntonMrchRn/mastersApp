@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
 import { configApp } from '@/constants/platform';
+import { AppScreenName } from '@/navigation/AppNavigation';
 import useRecoveryForm from '@/screens/auth/RecoveryScreen/useRecoveryForm';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useSendPasswordRecoveryCodeMutation } from '@/store/api/auth';
@@ -19,10 +20,7 @@ import {
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
 import { EmailValue, PhoneValue, RecoveryFormValues } from '@/types/form';
-import {
-  AuthScreenName,
-  CompositeRecoveryConfirmationAndEmailNavigationProp,
-} from '@/types/navigation';
+import { CompositeRecoveryConfirmationAndEmailNavigationProp } from '@/types/navigation';
 import { AuthTab, authTabByIndex } from '@/types/tab';
 import { emailErrorMessage } from '@/utils/formValidation';
 
@@ -58,7 +56,7 @@ const useRecovery = () => {
   useEffect(() => {
     if (isError) {
       if (error?.code === ErrorCode.Server) {
-        return navigation.navigate(AuthScreenName.Error);
+        return navigation.navigate(AppScreenName.Error);
       }
 
       const inputName = inputNameByErrorCode[error?.code];
@@ -72,13 +70,13 @@ const useRecovery = () => {
 
   useEffect(() => {
     if (isRecoveryByPhone && isPhoneAuth && !isRecoveryByEmail) {
-      navigation.navigate(AuthScreenName.RecoveryConfirmation, {
+      navigation.navigate(AppScreenName.RecoveryConfirmation, {
         phone: phone as PhoneValue['phone'],
       });
     }
     if (!isPhoneAuth) {
       Keyboard.dismiss();
-      navigation.navigate(AuthScreenName.Email);
+      navigation.navigate(AppScreenName.Email);
     }
   }, [isRecoveryByPhone, isRecoveryByEmail]);
 
