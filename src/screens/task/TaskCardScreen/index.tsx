@@ -14,6 +14,7 @@ import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { StatusType, TaskType } from '@/types/task';
 
 import { useTaskCard } from './useTaskCard';
+import { Wrapper } from './wrapper';
 
 import { styles } from './styles';
 
@@ -27,8 +28,10 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
   route,
 }) => {
   const taskId = route.params.taskId.toString();
+
   const {
     tabs,
+    tab,
     onTabChange,
     getCurrentTab,
     id,
@@ -70,10 +73,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
         onRefuse={onCancelTask}
       />
       <Header title={`Задача ID ${id}`} description={publicTime} />
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.wrapper}
-      >
+      <Wrapper isScroll={tab === 'Комментарии'}>
         <View style={styles.wrapper}>
           <View>
             <View style={styles.body}>
@@ -118,7 +118,8 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
           </View>
           <View style={styles.card}>{getCurrentTab()}</View>
         </View>
-      </ScrollView>
+      </Wrapper>
+
       <View style={styles.bottom}>
         {estimateBannerVisible && (
           <View style={styles.mb16}>

@@ -9,6 +9,7 @@ import {
   TaskCardBottomBanner,
   TaskCardBottomButton,
 } from '@/components/TabScreens/TaskCard/TaskCardBottom';
+import { TaskCardComment } from '@/components/TabScreens/TaskCard/TaskCardComment';
 import { TaskCardDescription } from '@/components/TabScreens/TaskCard/TaskCardDescription';
 import { TaskCardEstimate } from '@/components/TabScreens/TaskCard/TaskCardEstimate';
 import { TaskCardHisory } from '@/components/TabScreens/TaskCard/TaskCardHistory';
@@ -295,6 +296,8 @@ export const useTaskCard = ({
         );
       case TaskTab.HISTORY:
         return <TaskCardHisory taskId={taskId} />;
+      case TaskTab.COMMENTS:
+        return <TaskCardComment taskId={taskId} statusID={statusID} />;
       default:
         return <></>;
     }
@@ -302,6 +305,7 @@ export const useTaskCard = ({
   const onTabChange = (item: TabItem) => {
     setTab(item.label as TaskTab);
   };
+
   const getBanner = (): TaskCardBottomBanner => {
     if (tab === TaskTab.DESCRIPTION) {
       switch (statusID) {
@@ -350,6 +354,7 @@ export const useTaskCard = ({
     }
     return null;
   };
+
   const getButtons = (): TaskCardBottomButton[] => {
     switch (statusID) {
       case StatusType.ACTIVE:
@@ -484,6 +489,7 @@ export const useTaskCard = ({
   return {
     onTabChange,
     tabs,
+    tab,
     getCurrentTab,
     id,
     name,
