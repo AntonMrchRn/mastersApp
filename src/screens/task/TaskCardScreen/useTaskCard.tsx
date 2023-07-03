@@ -37,6 +37,7 @@ export const useTaskCard = ({
   const [estimateBottomVisible, setEstimateBottomVisible] = useState(false);
   const [selectedServiceId, setSelectedServiceId] = useState<number>();
   const [estimateBannerVisible, setEstimateBannerVisible] = useState(false);
+  const [cantDeleteBannerVisible, setCantDeleteBannerVisible] = useState(false);
 
   const ref = useRef<{
     setId: (id: number) => void;
@@ -45,8 +46,8 @@ export const useTaskCard = ({
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
 
-  // const getTask = useGetTaskQuery('996');
-  const getTask = useGetTaskQuery(taskId);
+  const getTask = useGetTaskQuery('996');
+  // const getTask = useGetTaskQuery(taskId);
 
   useEffect(() => {
     if (
@@ -81,8 +82,8 @@ export const useTaskCard = ({
   /**
    * Статус задачи
    */
-  const statusID: StatusType | undefined = task?.statusID;
-  // const statusID: StatusType | undefined = 11;
+  // const statusID: StatusType | undefined = task?.statusID;
+  const statusID: StatusType | undefined = 11;
   /**
    * Статус сметы
    */
@@ -134,6 +135,9 @@ export const useTaskCard = ({
     },
   ];
 
+  const onCantDeleteBannerVisible = () => {
+    setCantDeleteBannerVisible(!cantDeleteBannerVisible);
+  };
   const onEstimateBannerVisible = () => {
     setEstimateBannerVisible(!estimateBannerVisible);
   };
@@ -274,6 +278,7 @@ export const useTaskCard = ({
             estimateBottomVisible={estimateBottomVisible}
             selectedServiceId={selectedServiceId}
             setSelectedServiceId={setSelectedServiceId}
+            onCantDeleteBannerVisible={onCantDeleteBannerVisible}
           />
         );
       case TaskTab.REPORT:
@@ -499,5 +504,7 @@ export const useTaskCard = ({
     onEstimateBannerVisible,
     onEstimateBannerPress,
     ref,
+    onCantDeleteBannerVisible,
+    cantDeleteBannerVisible,
   };
 };

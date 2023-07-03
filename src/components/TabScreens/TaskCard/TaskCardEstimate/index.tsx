@@ -33,6 +33,7 @@ type TaskCardEstimateProps = {
   setSelectedServiceId: React.Dispatch<
     React.SetStateAction<number | undefined>
   >;
+  onCantDeleteBannerVisible: () => void;
 };
 
 export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
@@ -45,6 +46,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   estimateBottomVisible,
   selectedServiceId,
   setSelectedServiceId,
+  onCantDeleteBannerVisible,
 }) => {
   const theme = useTheme();
   const isFocused = useIsFocused();
@@ -107,7 +109,11 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             onEdit(service.ID);
           };
           const secondActionService = () => {
-            onDeleteService(service.ID);
+            if (services.length > 1) {
+              onDeleteService(service.ID);
+            } else {
+              onCantDeleteBannerVisible();
+            }
           };
           const radioPress = () => {
             setSelectedServiceId(service.ID);
