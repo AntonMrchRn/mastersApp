@@ -5,6 +5,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RadioButton, Spacer, Text, useTheme } from 'rn-ui-kit';
 
+import { CalculatorLargeIcon } from '@/assets/icons/svg/estimate/CalculatorLargeIcon';
 import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
@@ -69,7 +70,6 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     onEstimateBottomVisible,
     estimateBottomVisible,
   });
-
   const canSwipe = !estimateBottomVisible && statusID === StatusType.WORK;
   const addService = (service: Service) => {
     navigation.navigate(AppScreenName.EstimateAddService, {
@@ -78,6 +78,34 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     });
     bsRef.current?.close();
   };
+  if (!services.length) {
+    return (
+      <View style={styles.container}>
+        <View
+          style={[
+            styles.icon,
+            {
+              backgroundColor: theme.background.fieldMain,
+            },
+          ]}
+        >
+          <CalculatorLargeIcon />
+        </View>
+        <Spacer size={'xl'} />
+        <Text variant={'title2'} color={theme.text.basic}>
+          Сметы нет
+        </Text>
+        <Spacer size={12} />
+        <Text
+          variant={'bodySRegular'}
+          color={theme.text.neutral}
+          style={styles.text}
+        >
+          Данная задача не предусматривает наличие сметы
+        </Text>
+      </View>
+    );
+  }
   return (
     <>
       <TaskCardAddEstimateBottomSheet

@@ -99,7 +99,8 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
                 {budget}
               </Text>
               {statusID === StatusType.ACTIVE &&
-                subsetID !== TaskType.COMMON_FIRST_RESPONCE && (
+                subsetID !== TaskType.COMMON_FIRST_RESPONCE &&
+                budgetEndTime && (
                   <Tips
                     type={'warning'}
                     text={budgetEndTime}
