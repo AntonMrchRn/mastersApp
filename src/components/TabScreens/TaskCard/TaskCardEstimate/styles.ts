@@ -18,4 +18,16 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   radio: { marginRight: 12, height: 20, width: 20 },
+  container: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  icon: {
+    padding: 20,
+    borderRadius: 16,
+  },
+  text: {
+    textAlign: 'center',
+  },
 });
