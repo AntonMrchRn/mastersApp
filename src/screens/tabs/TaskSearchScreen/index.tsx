@@ -25,13 +25,13 @@ import {
   getSearchTasks,
   refreshTasks,
 } from '@/store/slices/taskSearch/asyncActions';
-import { BottomTab, TabNavigationParamList } from '@/types/navigation';
+import { BottomTabName, TabNavigationParamList } from '@/types/navigation';
 import { TaskSearch } from '@/types/task';
 
 import styles from './style';
 
 export type TaskSearchScreenProps = CompositeScreenProps<
-  BottomTabScreenProps<TabNavigationParamList, BottomTab.TaskSearch>,
+  BottomTabScreenProps<TabNavigationParamList, BottomTabName.TaskSearch>,
   StackScreenProps<AppStackParamList>
 >;
 const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {

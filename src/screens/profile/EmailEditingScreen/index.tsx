@@ -9,7 +9,7 @@ import ControlledInput from '@/components/inputs/ControlledInput';
 import Title from '@/components/TabScreens/ProfileScreen/Title';
 import TimerBlockEmailProfile from '@/components/Timer/TimerBlockEmailProfile';
 import { DismissKeyboardView } from '@/hocs/DismissKeyboardView';
-import useEmailEditing from '@/screens/tabs/EmailEditingScreen/useEmailEditing';
+import useEmailEditing from '@/screens/profile/EmailEditingScreen/useEmailEditing';
 
 import styles from './style';
 

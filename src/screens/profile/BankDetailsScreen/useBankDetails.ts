@@ -7,13 +7,13 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 
 import useConnectionInfo from '@/hooks/useConnectionInfo';
+import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { useAppSelector } from '@/store';
 import { useEditUserMutation } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { BankDetailsFormValues } from '@/types/form';
 import {
   BankDetailsScreenRoute,
-  ProfileNavigatorScreenName,
   ProfileScreenNavigationProp,
 } from '@/types/navigation';
 import { bankDetailsValidationSchema } from '@/utils/formValidation';
@@ -56,7 +56,7 @@ const useBankDetails = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      navigation.navigate(ProfileNavigatorScreenName.Profile);
+      navigation.navigate(ProfileScreenName.Profile);
     }
   }, [isSuccess]);
 

@@ -11,6 +11,7 @@ import {
 import { useToast } from 'rn-ui-kit';
 
 import useConnectionInfo from '@/hooks/useConnectionInfo';
+import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useSendEmailConfirmationCodeMutation } from '@/store/api/user';
 import {
@@ -22,7 +23,6 @@ import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
 import { EmailValue } from '@/types/form';
 import {
   EmailEditingScreenRoute,
-  ProfileNavigatorScreenName,
   ProfileScreenNavigationProp,
 } from '@/types/navigation';
 import { emailValidationSchema } from '@/utils/formValidation';
@@ -97,7 +97,7 @@ const useEmailEditing = () => {
       await AsyncStorage.setItem('profileEmailTimeout', jsonValue);
       await dispatch(setProfileEmailTimeout(timeout));
       dispatch(setIsEmailEditing(true));
-      navigation.navigate(ProfileNavigatorScreenName.Profile);
+      navigation.navigate(ProfileScreenName.Profile);
     } catch (e) {
       console.log(`onSuccess error: ${e}`);
     }

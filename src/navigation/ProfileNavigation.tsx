@@ -2,47 +2,64 @@ import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import BankDetailsScreen from '@/screens/tabs/BankDetailsScreen';
-import EmailEditingScreen from '@/screens/tabs/EmailEditingScreen';
-import PersonalDataEditingScreen from '@/screens/tabs/PersonalDataEditingScreen';
-import PhoneEditingConfirmationScreen from '@/screens/tabs/PhoneEditingConfirmationScreen';
-import PhoneEditingScreen from '@/screens/tabs/PhoneEditingScreen';
+import BankDetailsScreen from '@/screens/profile/BankDetailsScreen';
+import EmailEditingScreen from '@/screens/profile/EmailEditingScreen';
+import PersonalDataEditingScreen from '@/screens/profile/PersonalDataEditingScreen';
+import PhoneEditingConfirmationScreen from '@/screens/profile/PhoneEditingConfirmationScreen';
+import PhoneEditingScreen from '@/screens/profile/PhoneEditingScreen';
 import ProfileScreen from '@/screens/tabs/ProfileScreen';
-import {
-  ProfileNavigationParamList,
-  ProfileNavigatorScreenName,
-} from '@/types/navigation';
 
+export enum ProfileScreenName {
+  Profile = 'Profile',
+  BankDetails = 'BankDetails',
+  EmailEditing = 'EmailEditing',
+  PhoneEditing = 'PhoneEditing',
+  PersonalDataEditing = 'PersonalDataEditing',
+  PhoneEditingConfirmation = 'PhoneEditingConfirmation',
+}
+export type ProfileStackParamList = {
+  [ProfileScreenName.Profile]: undefined;
+  [ProfileScreenName.BankDetails]: {
+    bankID?: string | null;
+    bankName?: string | null;
+    checkingAccount?: string | null;
+    correspondingAccount?: string | null;
+  };
+  [ProfileScreenName.EmailEditing]: {
+    email: string | null;
+  };
+  [ProfileScreenName.PhoneEditing]: {
+    phone: string | null;
+  };
+  [ProfileScreenName.PhoneEditingConfirmation]: {
+    phone: string;
+  };
+  [ProfileScreenName.PersonalDataEditing]: undefined;
+};
 const screenOptions = { headerShown: false };
-const Stack = createStackNavigator<ProfileNavigationParamList>();
-
-const ProfileNavigation = () => (
+const Stack = createStackNavigator<ProfileStackParamList>();
+export const ProfileNavigation = () => (
   <Stack.Navigator screenOptions={screenOptions}>
+    <Stack.Screen name={ProfileScreenName.Profile} component={ProfileScreen} />
     <Stack.Screen
-      name={ProfileNavigatorScreenName.Profile}
-      component={ProfileScreen}
-    />
-    <Stack.Screen
-      name={ProfileNavigatorScreenName.EmailEditing}
+      name={ProfileScreenName.EmailEditing}
       component={EmailEditingScreen}
     />
     <Stack.Screen
-      name={ProfileNavigatorScreenName.PhoneEditing}
+      name={ProfileScreenName.PhoneEditing}
       component={PhoneEditingScreen}
     />
     <Stack.Screen
-      name={ProfileNavigatorScreenName.PhoneEditingConfirmation}
+      name={ProfileScreenName.PhoneEditingConfirmation}
       component={PhoneEditingConfirmationScreen}
     />
     <Stack.Screen
-      name={ProfileNavigatorScreenName.PersonalDataEditing}
+      name={ProfileScreenName.PersonalDataEditing}
       component={PersonalDataEditingScreen}
     />
     <Stack.Screen
-      name={ProfileNavigatorScreenName.BankDetails}
+      name={ProfileScreenName.BankDetails}
       component={BankDetailsScreen}
     />
   </Stack.Navigator>
 );
-
-export default ProfileNavigation;

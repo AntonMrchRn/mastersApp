@@ -7,6 +7,7 @@ import { Banner, Button, Spacer, useTheme } from 'rn-ui-kit';
 import PencilIcon from '@/assets/icons/svg/screens/PencilIcon';
 import Title from '@/components/TabScreens/ProfileScreen/Title';
 import UserInfoBlock from '@/components/TabScreens/ProfileScreen/UserInfoBlock';
+import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { useAppDispatch } from '@/store';
 import { User } from '@/store/api/user/types';
 import {
@@ -14,10 +15,7 @@ import {
   setProfileEmailTimeout,
   setProfilePhoneTimeout,
 } from '@/store/slices/user/actions';
-import {
-  CompositeEditingNavigationProp,
-  ProfileNavigatorScreenName,
-} from '@/types/navigation';
+import { CompositeEditingNavigationProp } from '@/types/navigation';
 import { convertPhone } from '@/utils/convertPhone';
 
 import styles from './style';
@@ -50,19 +48,19 @@ const CommonTab = ({ user, isApprovalNotificationVisible }: CommonTabProps) => {
   };
 
   const editEmail = () => {
-    navigation.navigate(ProfileNavigatorScreenName.EmailEditing, {
+    navigation.navigate(ProfileScreenName.EmailEditing, {
       email: user?.email,
     });
   };
 
   const editPhone = () => {
-    navigation.navigate(ProfileNavigatorScreenName.PhoneEditing, {
+    navigation.navigate(ProfileScreenName.PhoneEditing, {
       phone: user?.phone ? `${user?.phone}`.substring(1) : null,
     });
   };
 
   const navigateToPersonalData = () => {
-    navigation.navigate(ProfileNavigatorScreenName.PersonalDataEditing);
+    navigation.navigate(ProfileScreenName.PersonalDataEditing);
   };
 
   return (

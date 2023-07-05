@@ -7,7 +7,7 @@ import { Button, Spacer, Text } from 'rn-ui-kit';
 import Header from '@/components/Header';
 import ControlledInput from '@/components/inputs/ControlledInput';
 import { DismissKeyboardView } from '@/hocs/DismissKeyboardView';
-import useBankDetails from '@/screens/tabs/BankDetailsScreen/useBankDetails';
+import useBankDetails from '@/screens/profile/BankDetailsScreen/useBankDetails';
 
 import styles from './style';
 

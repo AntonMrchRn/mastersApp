@@ -9,9 +9,8 @@ import TaskSearch from '@/assets/icons/svg/tabBar/TaskSearch';
 import { fonts } from '@/constants/fonts';
 import MyTasksScreen from '@/screens/tabs/MyTasksScreen';
 import TaskSearchScreen from '@/screens/tabs/TaskSearchScreen';
-import { BottomTab, TabNavigationParamList } from '@/types/navigation';
 
-import ProfileNavigation from './ProfileNavigation';
+import { ProfileNavigation } from './ProfileNavigation';
 
 const styles = StyleSheet.create({
   label: {
@@ -27,12 +26,22 @@ const screenOptions = {
   tabBarInactiveTintColor: '#707070',
   tabBarLabelStyle: styles.label,
 };
-const Tab = createBottomTabNavigator<TabNavigationParamList>();
 
+export enum BottomTabName {
+  TaskSearch = 'TaskSearch',
+  MyTasks = 'MyTasks',
+  ProfileNavigation = 'ProfileNavigation',
+}
+export type BottomTabParamList = {
+  [BottomTabName.TaskSearch]: undefined;
+  [BottomTabName.MyTasks]: undefined;
+  [BottomTabName.ProfileNavigation]: undefined;
+};
+const Tab = createBottomTabNavigator<BottomTabParamList>();
 export const TabNavigation = () => (
   <Tab.Navigator screenOptions={screenOptions}>
     <Tab.Screen
-      name={BottomTab.TaskSearch}
+      name={BottomTabName.TaskSearch}
       component={TaskSearchScreen}
       options={{
         title: 'Поиск задач',
@@ -42,7 +51,7 @@ export const TabNavigation = () => (
       }}
     />
     <Tab.Screen
-      name={BottomTab.MyTasks}
+      name={BottomTabName.MyTasks}
       component={MyTasksScreen}
       options={{
         title: 'Мои задачи',
@@ -52,7 +61,7 @@ export const TabNavigation = () => (
       }}
     />
     <Tab.Screen
-      name={BottomTab.ProfileNavigation}
+      name={BottomTabName.ProfileNavigation}
       component={ProfileNavigation}
       options={{
         title: 'Профиль',
