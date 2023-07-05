@@ -7,6 +7,7 @@ import { Spacer, TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
 import AccountTab from '@/components/TabScreens/ProfileScreen/AccountTab';
 import ActivityTab from '@/components/TabScreens/ProfileScreen/ActivityTab';
 import CommonTab from '@/components/TabScreens/ProfileScreen/CommonTab';
+import EntityTypeModal from '@/components/TabScreens/ProfileScreen/EntityTypeModal';
 import PaymentTab from '@/components/TabScreens/ProfileScreen/PaymentTab';
 import useProfile from '@/screens/tabs/ProfileScreen/useProfile';
 import { ProfileTab } from '@/types/tab';
@@ -31,8 +32,9 @@ const ProfileScreen = () => {
     activeTab,
     switchTab,
     isLoading,
-    isConnected,
+    isEntityModalVisible,
     isApprovalNotificationVisible,
+    setIsEntityModalVisible,
   } = useProfile();
 
   return (
@@ -45,7 +47,7 @@ const ProfileScreen = () => {
           <Text variant="title1" style={styles.title}>
             Профиль
           </Text>
-          {isLoading || !isConnected ? (
+          {isLoading || !user ? (
             <ActivityIndicator
               size="large"
               style={styles.loader}
@@ -59,11 +61,7 @@ const ProfileScreen = () => {
               )}
               {!!warning && <Tips type="warning" text={warning} />}
               <Spacer size="xxl" />
-              <TabControl
-                data={tabs}
-                onChange={switchTab}
-                initialId={isConnected ? activeTab.id : 0}
-              />
+              <TabControl data={tabs} onChange={switchTab} initialId={0} />
               <Spacer size="l" />
               {activeTab.label === ProfileTab.Common && user && (
                 <CommonTab
@@ -71,10 +69,37 @@ const ProfileScreen = () => {
                   isApprovalNotificationVisible={isApprovalNotificationVisible}
                 />
               )}
-              {activeTab.label === ProfileTab.Payment && <PaymentTab />}
+              {activeTab.label === ProfileTab.Payment && user && (
+                <PaymentTab
+                  user={user}
+                  entityType={user?.entityTypeDescription}
+                  onEntityModalOpen={() => setIsEntityModalVisible(true)}
+                />
+              )}
               {activeTab.label === ProfileTab.Activity && <ActivityTab />}
               {activeTab.label === ProfileTab.Account && <AccountTab />}
             </View>
+          )}
+          {user && (
+            <EntityTypeModal
+              typeValues={{
+                ID: user.ID,
+                RRC: user.RRC,
+                ITIN: user.ITIN,
+                entityName: user.entityName,
+                isNDSPayer: user.isNDSPayer,
+              }}
+              isVisible={isEntityModalVisible}
+              onCloseModal={() => setIsEntityModalVisible(false)}
+              type={
+                user.ITIN && user.entityTypeID
+                  ? {
+                      id: user.entityTypeID,
+                      description: user.entityTypeDescription,
+                    }
+                  : undefined
+              }
+            />
           )}
         </View>
       </KeyboardAwareScrollView>

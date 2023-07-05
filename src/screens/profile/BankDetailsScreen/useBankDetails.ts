@@ -6,7 +6,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 
-import useConnectionInfo from '@/hooks/useConnectionInfo';
 import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { useAppSelector } from '@/store';
 import { useEditUserMutation } from '@/store/api/user';
@@ -19,7 +18,6 @@ import {
 import { bankDetailsValidationSchema } from '@/utils/formValidation';
 
 const useBankDetails = () => {
-  useConnectionInfo();
   const toast = useToast();
   const navigation = useNavigation<ProfileScreenNavigationProp>();
   const { params } = useRoute<BankDetailsScreenRoute>();

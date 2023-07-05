@@ -1,11 +1,11 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  payerContainer: {
+  tooltipTitle: {
+    marginRight: 8,
+  },
+  payerTooltip: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 20,
-    alignItems: 'center',
   },
 });
 

@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Header from '@/components/Header';
 import { useCheckLogin } from '@/hooks/useCheckLogin';
+import useConnectionToast from '@/hooks/useConnectionToast';
 import { TabNavigation } from '@/navigation/TabNavigation';
 import EmailScreen from '@/screens/auth/EmailScreen';
 import ErrorScreen from '@/screens/auth/ErrorScreen';
@@ -53,6 +54,7 @@ export type AppStackParamList = {
 const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<AppStackParamList>();
 export const AppNavigation = () => {
+  useConnectionToast();
   const { checkLogin, isAuth } = useCheckLogin();
   const [isLoad, setIsLoad] = useState<boolean>(false);
 

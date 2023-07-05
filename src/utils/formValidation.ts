@@ -90,6 +90,21 @@ const bankDetailsValidation = {
     })
     .length(20, 'Укажите 20-значный номер счета в цифровом формате'),
 };
+const itinValidation = {
+  ITIN: Yup.string()
+    .required('Укажите 12-значный номер ИНН в цифровом формате')
+    .length(12, 'Укажите 12-значный номер ИНН в цифровом формате'),
+};
+const entityNameValidation = {
+  entityName: Yup.string()
+    .required('Наименование должно содержать не менее 4 символов')
+    .min(4, 'Наименование должно содержать не менее 4 символов'),
+};
+const rrcValidation = {
+  RRC: Yup.string()
+    .required('Укажите 9-значный номер КПП в цифровом формате')
+    .length(9, 'Укажите 9-значный номер КПП в цифровом формате'),
+};
 
 const cancelTaskValidationSchema = Yup.object().shape(cancelTaskValidation);
 const estimateCountValidationSchema = Yup.object().shape(
@@ -101,26 +116,38 @@ const estimateAddMaterialValidationSchema = Yup.object().shape(
 const estimateAddServiceValidationSchema = Yup.object().shape(
   estimateAddServiceValidation
 );
+
 const phoneValidationSchema = Yup.object().shape(phoneValidation);
 const emailValidationSchema = Yup.object().shape(emailValidation);
 const codeValidationSchema = Yup.object().shape(codeValidation);
-const signInWithPhoneValidationSchema = Yup.object().shape({
-  ...signInWithPhoneValidation,
-});
-const signInWithEmailValidationSchema = Yup.object().shape({
-  ...signInWithEmailValidation,
-});
-const recoveryPhoneValidationSchema = Yup.object().shape({
-  ...recoveryPhoneValidation,
-});
-const recoveryEmailValidationSchema = Yup.object().shape({
-  ...recoveryEmailValidation,
-});
+const signInWithPhoneValidationSchema = Yup.object().shape(
+  signInWithPhoneValidation
+);
+const signInWithEmailValidationSchema = Yup.object().shape(
+  signInWithEmailValidation
+);
+const recoveryPhoneValidationSchema = Yup.object().shape(
+  recoveryPhoneValidation
+);
+const recoveryEmailValidationSchema = Yup.object().shape(
+  recoveryEmailValidation
+);
 const recoveryConfirmationValidationSchema = Yup.object().shape(
   recoveryConfirmationValidation
 );
+
 const personalDataValidationSchema = Yup.object().shape(personalDataValidation);
 const bankDetailsValidationSchema = Yup.object().shape(bankDetailsValidation);
+const selfEmployedEntityValidationSchema = Yup.object().shape(itinValidation);
+const individualEntityValidationSchema = Yup.object().shape({
+  ...itinValidation,
+  ...entityNameValidation,
+});
+const companyEntityValidationSchema = Yup.object().shape({
+  ...itinValidation,
+  ...entityNameValidation,
+  ...rrcValidation,
+});
 
 export {
   emailErrorMessage,
@@ -138,4 +165,7 @@ export {
   estimateCountValidationSchema,
   estimateAddMaterialValidationSchema,
   estimateAddServiceValidationSchema,
+  selfEmployedEntityValidationSchema,
+  individualEntityValidationSchema,
+  companyEntityValidationSchema,
 };

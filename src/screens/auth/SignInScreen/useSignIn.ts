@@ -6,7 +6,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
 import { configApp } from '@/constants/platform';
-import useConnectionInfo from '@/hooks/useConnectionInfo';
 import { storageMMKV } from '@/mmkv/storage';
 import { AppScreenName } from '@/navigation/AppNavigation';
 import useSignInForm from '@/screens/auth/SignInScreen/useSignInForm';
@@ -38,7 +37,6 @@ const inputNameByErrorCode: Partial<
 };
 
 const useSignIn = () => {
-  useConnectionInfo();
   const dispatch = useAppDispatch();
   const navigation = useNavigation<ErrorScreenNavigationProp>();
 
@@ -79,7 +77,7 @@ const useSignIn = () => {
     }
   }, [isSuccess]);
 
-  const logIn = async (values: SignInFormValues) => {
+  const signIn = async (values: SignInFormValues) => {
     await getUserAuth({
       login: isPhoneAuth
         ? '7' + (values as SignInWithPhoneFormValues).phone
@@ -135,7 +133,7 @@ const useSignIn = () => {
     isPhoneAuth,
     scrollViewRef,
     onKeyboardWillShow,
-    logIn: methods.handleSubmit(logIn),
+    signIn: methods.handleSubmit(signIn),
     isInvalidEmail: errors?.email?.message === emailErrorMessage,
   };
 };

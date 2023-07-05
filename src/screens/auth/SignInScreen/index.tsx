@@ -19,7 +19,7 @@ import styles from './style';
 
 const SignInScreen = () => {
   const {
-    logIn,
+    signIn,
     errors,
     methods,
     onFocus,
@@ -103,7 +103,7 @@ const SignInScreen = () => {
               ]}
             >
               <Button
-                onPress={logIn}
+                onPress={signIn}
                 style={styles.btn}
                 label="Продолжить"
                 disabled={isDisabled}

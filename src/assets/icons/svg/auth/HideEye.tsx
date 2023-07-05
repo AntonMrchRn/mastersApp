@@ -51,6 +51,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     marginRight: 2,
-    // backgroundColor: 'red',
   },
 });
