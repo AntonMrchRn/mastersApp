@@ -8,6 +8,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 
 import useConnectionInfo from '@/hooks/useConnectionInfo';
+import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useSendPhoneConfirmationCodeMutation } from '@/store/api/user';
 import {
@@ -20,7 +21,6 @@ import { PhoneValue } from '@/types/form';
 import {
   PhoneEditingConfirmationScreenNavigationProp,
   PhoneEditingScreenRoute,
-  ProfileNavigatorScreenName,
 } from '@/types/navigation';
 import { phoneValidationSchema } from '@/utils/formValidation';
 
@@ -91,7 +91,7 @@ const usePhoneEditing = () => {
       await AsyncStorage.setItem('profilePhoneTimeout', jsonValue);
       dispatch(setProfilePhoneTimeout(timeout));
       dispatch(setIsPhoneEditing(true));
-      navigation.navigate(ProfileNavigatorScreenName.PhoneEditingConfirmation, {
+      navigation.navigate(ProfileScreenName.PhoneEditingConfirmation, {
         phone,
       });
     } catch (e) {

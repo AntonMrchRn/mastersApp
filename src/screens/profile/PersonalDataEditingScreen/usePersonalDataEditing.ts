@@ -6,14 +6,12 @@ import { useNavigation } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 
 import useConnectionInfo from '@/hooks/useConnectionInfo';
+import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { useAppSelector } from '@/store';
 import { useEditUserMutation, useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { PersonalDataFormValues } from '@/types/form';
-import {
-  ProfileNavigatorScreenName,
-  ProfileScreenNavigationProp,
-} from '@/types/navigation';
+import { ProfileScreenNavigationProp } from '@/types/navigation';
 import { personalDataValidationSchema } from '@/utils/formValidation';
 
 const usePersonalDataEditing = () => {
@@ -45,7 +43,7 @@ const usePersonalDataEditing = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      navigation.navigate(ProfileNavigatorScreenName.Profile);
+      navigation.navigate(ProfileScreenName.Profile);
     }
   }, [isSuccess]);
 

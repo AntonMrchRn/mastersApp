@@ -4,66 +4,31 @@ import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
-
-enum BottomTab {
-  TaskSearch = 'TaskSearch',
-  MyTasks = 'MyTasks',
-  ProfileNavigation = 'ProfileNavigation',
-}
-
-enum ProfileNavigatorScreenName {
-  Profile = 'Profile',
-  BankDetails = 'BankDetails',
-  EmailEditing = 'EmailEditing',
-  PhoneEditing = 'PhoneEditing',
-  PersonalDataEditing = 'PersonalDataEditing',
-  PhoneEditingConfirmation = 'PhoneEditingConfirmation',
-}
-
-type TabNavigationParamList = {
-  [BottomTab.TaskSearch]: undefined;
-  [BottomTab.MyTasks]: undefined;
-  [BottomTab.ProfileNavigation]: undefined;
-};
-type ProfileNavigationParamList = {
-  Profile: undefined;
-  BankDetails: {
-    bankID?: string | null;
-    bankName?: string | null;
-    checkingAccount?: string | null;
-    correspondingAccount?: string | null;
-  };
-  EmailEditing: {
-    email: string | null;
-  };
-  PhoneEditing: {
-    phone: string | null;
-  };
-  PhoneEditingConfirmation: {
-    phone: string;
-  };
-  PersonalDataEditing: undefined;
-};
+import {
+  ProfileScreenName,
+  ProfileStackParamList,
+} from '@/navigation/ProfileNavigation';
+import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 
 type RecoveryConfirmationScreenRoute = RouteProp<
   AppStackParamList,
   AppScreenName.RecoveryConfirmation
 >;
 type PhoneEditingScreenRoute = RouteProp<
-  ProfileNavigationParamList,
-  ProfileNavigatorScreenName.PhoneEditing
+  ProfileStackParamList,
+  ProfileScreenName.PhoneEditing
 >;
 type EmailEditingScreenRoute = RouteProp<
-  ProfileNavigationParamList,
-  ProfileNavigatorScreenName.EmailEditing
+  ProfileStackParamList,
+  ProfileScreenName.EmailEditing
 >;
 type PhoneEditingConfirmationScreenRoute = RouteProp<
-  ProfileNavigationParamList,
-  ProfileNavigatorScreenName.PhoneEditingConfirmation
+  ProfileStackParamList,
+  ProfileScreenName.PhoneEditingConfirmation
 >;
 type BankDetailsScreenRoute = RouteProp<
-  ProfileNavigationParamList,
-  ProfileNavigatorScreenName.BankDetails
+  ProfileStackParamList,
+  ProfileScreenName.BankDetails
 >;
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<
@@ -83,20 +48,20 @@ type ErrorScreenNavigationProp = NativeStackNavigationProp<
   AppScreenName.Error
 >;
 type TaskCardScreenNavigationProp = NativeStackNavigationProp<
-  TabNavigationParamList,
-  BottomTab.TaskSearch
+  BottomTabParamList,
+  BottomTabName.TaskSearch
 >;
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
-  ProfileNavigationParamList,
-  ProfileNavigatorScreenName.Profile
+  ProfileStackParamList,
+  ProfileScreenName.Profile
 >;
 type BankDetailsScreenNavigationProp = NativeStackNavigationProp<
-  ProfileNavigationParamList,
-  ProfileNavigatorScreenName.BankDetails
+  ProfileStackParamList,
+  ProfileScreenName.BankDetails
 >;
 type PhoneEditingConfirmationScreenNavigationProp = NativeStackNavigationProp<
-  ProfileNavigationParamList,
-  ProfileNavigatorScreenName.PhoneEditingConfirmation
+  ProfileStackParamList,
+  ProfileScreenName.PhoneEditingConfirmation
 >;
 type CompositeRecoveryConfirmationAndEmailNavigationProp =
   CompositeNavigationProp<
@@ -104,20 +69,11 @@ type CompositeRecoveryConfirmationAndEmailNavigationProp =
     StackNavigationProp<AppStackParamList, AppScreenName.Email>
   >;
 type CompositeEditingNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<
-    ProfileNavigationParamList,
-    ProfileNavigatorScreenName.EmailEditing
-  >,
-  StackNavigationProp<
-    ProfileNavigationParamList,
-    ProfileNavigatorScreenName.PhoneEditing
-  >
+  StackNavigationProp<ProfileStackParamList, ProfileScreenName.EmailEditing>,
+  StackNavigationProp<ProfileStackParamList, ProfileScreenName.PhoneEditing>
 >;
 
-export { BottomTab, ProfileNavigatorScreenName };
 export type {
-  TabNavigationParamList,
-  ProfileNavigationParamList,
   EmailEditingScreenRoute,
   PhoneEditingScreenRoute,
   BankDetailsScreenRoute,

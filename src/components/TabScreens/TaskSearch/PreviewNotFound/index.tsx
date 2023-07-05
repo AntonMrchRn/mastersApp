@@ -8,7 +8,7 @@ import { Button } from 'rn-ui-kit';
 import { InfoIcon } from '@/assets/icons/svg/screens/InfoIcon';
 import { NotFoundIcon } from '@/assets/icons/svg/screens/NotFoundIcon';
 import TaskSearchClear from '@/assets/icons/svg/screens/TaskSearchClear';
-import { BottomTab, RootStackParamList } from '@/types/navigation';
+import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 
 import styles from './style';
 
@@ -30,9 +30,9 @@ const PreviewNotFound: FC<PreviewProps> = ({ type }) => {
   }
   if (type === 2) {
     const { navigate } =
-      useNavigation<StackNavigationProp<RootStackParamList>>();
+      useNavigation<StackNavigationProp<BottomTabParamList>>();
 
-    const onPress = () => navigate(BottomTab.ProfileNavigation);
+    const onPress = () => navigate(BottomTabName.ProfileNavigation);
 
     return (
       <View style={styles.wrapperNotFound}>
@@ -51,9 +51,9 @@ const PreviewNotFound: FC<PreviewProps> = ({ type }) => {
   }
   if (type === 3) {
     const { navigate } =
-      useNavigation<StackNavigationProp<RootStackParamList>>();
+      useNavigation<StackNavigationProp<BottomTabParamList>>();
 
-    const onPress = () => navigate(BottomTab.TaskSearchNavigation);
+    const onPress = () => navigate(BottomTabName.TaskSearch);
 
     return (
       <View style={styles.wrapperNotFound}>

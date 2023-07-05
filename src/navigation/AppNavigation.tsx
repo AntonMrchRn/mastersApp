@@ -18,9 +18,6 @@ import { EstimateEditScreen } from '@/screens/task/EstimateEditScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { Service } from '@/store/api/tasks/types';
 
-const screenOptions = { headerShown: false };
-const Stack = createStackNavigator<AppStackParamList>();
-
 export enum AppScreenName {
   AppNavigator = 'AppNavigator',
   SignIn = 'SignIn',
@@ -53,7 +50,8 @@ export type AppStackParamList = {
   [AppScreenName.EstimateAddMaterial]: { serviceId: number; taskId: number };
   [AppScreenName.EstimateAddService]: { taskId: number; service: Service };
 };
-
+const screenOptions = { headerShown: false };
+const Stack = createStackNavigator<AppStackParamList>();
 export const AppNavigation = () => {
   const { checkLogin, isAuth } = useCheckLogin();
   const [isLoad, setIsLoad] = useState<boolean>(false);

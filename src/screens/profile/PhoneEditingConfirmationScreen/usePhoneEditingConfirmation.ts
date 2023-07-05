@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
+import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   useEditPhoneMutation,
@@ -19,7 +20,6 @@ import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
 import { CodeValue } from '@/types/form';
 import {
   PhoneEditingConfirmationScreenRoute,
-  ProfileNavigatorScreenName,
   ProfileScreenNavigationProp,
 } from '@/types/navigation';
 import { codeValidationSchema } from '@/utils/formValidation';
@@ -87,7 +87,7 @@ const usePhoneEditingConfirmation = () => {
 
   const onEditPhoneSuccess = async () => {
     try {
-      navigation.navigate(ProfileNavigatorScreenName.Profile);
+      navigation.navigate(ProfileScreenName.Profile);
       const jsonValue = JSON.stringify(null);
       await AsyncStorage.setItem('profilePhoneTimeout', jsonValue);
     } catch (e) {

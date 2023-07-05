@@ -17,6 +17,7 @@ import QuestionIcon from '@/assets/icons/svg/screens/QuestionIcon';
 import Title from '@/components/TabScreens/ProfileScreen/Title';
 import UserInfoBlock from '@/components/TabScreens/ProfileScreen/UserInfoBlock';
 import useConnectionInfo from '@/hooks/useConnectionInfo';
+import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { useAppSelector } from '@/store';
 import {
   useGetEntityTypesQuery,
@@ -25,10 +26,7 @@ import {
 } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
-import {
-  BankDetailsScreenNavigationProp,
-  ProfileNavigatorScreenName,
-} from '@/types/navigation';
+import { BankDetailsScreenNavigationProp } from '@/types/navigation';
 import { UserEntityType } from '@/types/user';
 
 import styles from './style';
@@ -132,7 +130,7 @@ const PaymentTab = () => {
   }, [params?.sberLink]);
 
   const navigateToBankDetails = () => {
-    navigation.navigate(ProfileNavigatorScreenName.BankDetails, {
+    navigation.navigate(ProfileScreenName.BankDetails, {
       bankID: user?.bankID,
       bankName: user?.bankName,
       checkingAccount: user?.checkingAccount,
