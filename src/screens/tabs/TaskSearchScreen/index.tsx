@@ -18,8 +18,9 @@ import TypeSelectionTaskSearch from '@/components/TabScreens/TaskSearch/TypeSele
 import { configApp } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { useGetTableNamesQuery } from '@/store/api/tasks';
 import { Task } from '@/store/api/tasks/types';
+import { useGetUserQuery } from '@/store/api/user';
+import { selectAuth } from '@/store/slices/auth/selectors';
 import {
   getSearchTasks,
   refreshTasks,
@@ -43,14 +44,18 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
     loadingList,
     errorList,
   } = useAppSelector(state => state.taskSearch);
+  const { user: authUser } = useAppSelector(selectAuth);
 
-  const { data: tableNames } = useGetTableNamesQuery();
-
+  // const { data: user } = useGetUserQuery(authUser?.userID, {
+  //   skip: authUser?.userID,
+  // });
+  // console.log('user', user);
   const onItemPress = (id: number) => {
     navigation.navigate(AppScreenName.TaskCard, {
       taskId: id,
     });
   };
+
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
   const renderItem = ({ item }: ListRenderItemInfo<Task>) => (
     <CardTasks {...item} onItemPress={onItemPress} />
@@ -79,10 +84,7 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
         <Text variant="title1" style={styles.textHeader}>
           Поиск задач
         </Text>
-        <TypeSelectionTaskSearch
-          setActiveTab={setSelectedTab}
-          tableNames={tableNames}
-        />
+        <TypeSelectionTaskSearch setActiveTab={setSelectedTab} />
       </View>
       <View
         style={[

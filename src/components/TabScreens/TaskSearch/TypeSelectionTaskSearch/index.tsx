@@ -9,27 +9,12 @@ import { clearList } from '@/store/slices/taskSearch/reducer';
 
 import { styles } from './style';
 
-type TypeSelectionItem = {
-  ID: number;
-  description: string;
-  code?: string;
-  tableName?: string;
-};
-
 type PropsTypeSelection = {
   setActiveTab: (activeTab: number) => void;
-  tableNames: TypeSelectionItem[] | undefined;
 };
 
-const TypeSelectionTaskSearch: FC<PropsTypeSelection> = ({
-  setActiveTab,
-  tableNames = [],
-}) => {
+const TypeSelectionTaskSearch: FC<PropsTypeSelection> = ({ setActiveTab }) => {
   const dispatch = useAppDispatch();
-
-  const descriptions = tableNames.map(
-    (item: TypeSelectionItem) => item.description
-  );
 
   const onChange = (res: number) => {
     dispatch(clearList());
@@ -41,10 +26,7 @@ const TypeSelectionTaskSearch: FC<PropsTypeSelection> = ({
 
   return (
     <View style={styles.wrapper}>
-      <SegmentedControl
-        onChange={onChange}
-        tabs={descriptions.length ? descriptions : ['IT услуги', 'Общие']}
-      />
+      <SegmentedControl onChange={onChange} tabs={['IT услуги', 'Общие']} />
     </View>
   );
 };
