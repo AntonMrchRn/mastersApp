@@ -1,3 +1,4 @@
+import NetInfo from '@react-native-community/netinfo';
 import axios from 'axios';
 
 import { storageMMKV } from '@/mmkv/storage';
@@ -15,7 +16,29 @@ export const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(config => {
   config.headers['M-Token'] = storageMMKV.getString('token');
+
   return config;
+});
+
+// проверка интернета
+axiosInstance.interceptors.request.use(config => {
+  const controller = new AbortController();
+  let status;
+
+  const unsubscribe = NetInfo.addEventListener(networkState => {
+    status = networkState.isConnected;
+  });
+
+  if (status) {
+    controller.abort();
+  }
+
+  unsubscribe();
+
+  return {
+    ...config,
+    signal: controller.signal,
+  };
 });
 
 const { dispatch } = store;

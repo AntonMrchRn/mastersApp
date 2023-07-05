@@ -9,6 +9,7 @@ enum BottomTab {
   TaskSearch = 'TaskSearch',
   MyTasks = 'MyTasks',
   ProfileNavigation = 'ProfileNavigation',
+  TaskSearchNavigation = 'TaskSearchNavigation',
 }
 
 enum ProfileNavigatorScreenName {
@@ -19,6 +20,10 @@ enum ProfileNavigatorScreenName {
   PersonalDataEditing = 'PersonalDataEditing',
   PhoneEditingConfirmation = 'PhoneEditingConfirmation',
 }
+type RootStackParamList = {
+  ProfileNavigation: undefined;
+  TaskSearchNavigation: undefined;
+};
 
 type TabNavigationParamList = {
   [BottomTab.TaskSearch]: undefined;
@@ -116,6 +121,7 @@ type CompositeEditingNavigationProp = CompositeNavigationProp<
 
 export { BottomTab, ProfileNavigatorScreenName };
 export type {
+  RootStackParamList,
   TabNavigationParamList,
   ProfileNavigationParamList,
   EmailEditingScreenRoute,

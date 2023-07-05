@@ -51,15 +51,6 @@ export const tasksAPI = api.injectEndpoints({
         method: 'GET',
       }),
     }),
-    getTableNames: builder.query<GetTaskStatusesResponce, void>({
-      query: () => ({
-        url: `aux?query=?tableName==set?`,
-        method: 'GET',
-      }),
-      transformResponse: (res: GetTaskStatusesResponce) => {
-        return res;
-      },
-    }),
     patchTask: builder.mutation<GetTaskResponce, Task>({
       query: data => ({
         url: `tasks/web`,
@@ -109,7 +100,6 @@ export const {
   useGetTaskQuery,
   useGetTaskHistoryQuery,
   useGetTaskStatusesQuery,
-  useGetTableNamesQuery,
   usePatchTaskMutation,
   usePostTasksFilesMutation,
   useDeleteTasksFilesMutation,
