@@ -1,46 +1,11 @@
-import { useEffect } from 'react';
-
-import { useToast } from 'rn-ui-kit';
-
-import useConnectionInfo from '@/hooks/useConnectionInfo';
-import { useAppSelector } from '@/store';
-import { useGetEntityTypesQuery } from '@/store/api/user';
-import { selectUser } from '@/store/slices/user/selectors';
-import { AxiosQueryErrorResponse } from '@/types/error';
+import { User } from '@/store/api/user/types';
 import { UserEntityType } from '@/types/user';
 
-const useWarning = () => {
-  const isConnected = useConnectionInfo();
-  const { user } = useAppSelector(selectUser);
-  const toast = useToast();
-
-  const {
-    data: entityType,
-    error,
-    isError,
-  } = useGetEntityTypesQuery(undefined, {
-    skip: !isConnected,
-    selectFromResult: ({ data, error, isError }) => ({
-      data: data?.find(entityType => entityType.ID === user?.entityTypeID),
-      error: error,
-      isError: isError,
-    }),
-  });
-
-  useEffect(() => {
-    if (isError) {
-      toast.show({
-        type: 'error',
-        title: (error as AxiosQueryErrorResponse)?.data?.message,
-        contentHeight: 120,
-      });
-    }
-  }, [isError]);
-
+const getWarning = (user?: User) => {
   const entity = !user?.entityTypeID ? '\n  •  Правовая форма' : '';
   const ITIN = !user?.ITIN ? '\n  •  ИНН' : '';
   const RRC =
-    !user?.RRC && entityType?.description !== UserEntityType.self
+    !user?.RRC && user?.entityTypeDescription !== UserEntityType.self
       ? '\n  •  КПП (для ИП и юр. лиц)'
       : '';
   const bankDetails = !(
@@ -87,4 +52,4 @@ const useWarning = () => {
   return '';
 };
 
-export default useWarning;
+export default getWarning;

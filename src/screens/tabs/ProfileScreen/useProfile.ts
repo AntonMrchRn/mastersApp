@@ -5,8 +5,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
 
-import useConnectionInfo from '@/hooks/useConnectionInfo';
-import useWarning from '@/screens/tabs/ProfileScreen/useWarning';
+import getWarning from '@/screens/tabs/ProfileScreen/getWarning';
 import { useAppSelector } from '@/store';
 import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
@@ -26,11 +25,9 @@ const initialTab = {
 };
 
 const useProfile = () => {
-  const warning = useWarning();
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const toast = useToast();
-  const isConnected = useConnectionInfo();
 
   const { user: authUser } = useAppSelector(selectAuth);
   const { isApprovalNotificationShown } = useAppSelector(selectUser);
@@ -41,7 +38,7 @@ const useProfile = () => {
     isError,
     error,
   } = useGetUserQuery(authUser?.userID, {
-    skip: !authUser?.userID || !isConnected,
+    skip: !authUser?.userID,
   });
 
   useEffect(() => {
@@ -55,6 +52,8 @@ const useProfile = () => {
   }, [isError]);
 
   const [activeTab, setActiveTab] = useState<Tab>(initialTab);
+  const [isEntityModalVisible, setIsEntityModalVisible] =
+    useState<boolean>(false);
   const isApprovalNotificationVisible =
     !isApprovalNotificationShown && !!user?.isApproved;
 
@@ -63,6 +62,8 @@ const useProfile = () => {
       dispatch(setIsApprovalNotificationShown(true));
     }
   }, [isFocused, activeTab.id]);
+
+  const warning = getWarning(user);
 
   const switchTab = ({ id, label }: TabItem) => {
     setActiveTab({ id, label: label as ProfileTab });
@@ -74,7 +75,8 @@ const useProfile = () => {
     activeTab,
     switchTab,
     isLoading,
-    isConnected,
+    isEntityModalVisible,
+    setIsEntityModalVisible,
     isApprovalNotificationVisible,
   };
 };

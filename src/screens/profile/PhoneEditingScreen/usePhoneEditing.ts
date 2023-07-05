@@ -7,7 +7,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 
-import useConnectionInfo from '@/hooks/useConnectionInfo';
 import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useSendPhoneConfirmationCodeMutation } from '@/store/api/user';
@@ -25,7 +24,6 @@ import {
 import { phoneValidationSchema } from '@/utils/formValidation';
 
 const usePhoneEditing = () => {
-  useConnectionInfo();
   const navigation =
     useNavigation<PhoneEditingConfirmationScreenNavigationProp>();
   const toast = useToast();

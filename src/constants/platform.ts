@@ -5,6 +5,8 @@ import { DefaultTheme } from '@react-navigation/native';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
+const hitSlop = { top: 10, left: 10, right: 10, bottom: 10 };
+
 const platform = Platform.OS;
 const platformStyle = undefined;
 const isIphoneX =
@@ -72,4 +74,4 @@ const configApp = {
         },
 };
 
-export { MyTheme, configApp, deviceHeight, deviceWidth };
+export { MyTheme, configApp, deviceHeight, deviceWidth, hitSlop };

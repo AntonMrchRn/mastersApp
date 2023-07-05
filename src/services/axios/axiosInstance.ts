@@ -1,3 +1,5 @@
+import { Alert } from 'react-native';
+
 import NetInfo from '@react-native-community/netinfo';
 import axios from 'axios';
 
@@ -6,7 +8,6 @@ import { store } from '@/store';
 import { logOut } from '@/store/slices/auth/actions';
 
 import { host } from './config';
-import { Alert } from 'react-native';
 
 export const axiosInstance = axios.create({
   baseURL: host,
@@ -28,10 +29,10 @@ axiosInstance.interceptors.request.use(config => {
 
   const unsubscribe = NetInfo.addEventListener(networkState => {
     status = networkState.isConnected;
-    Alert.alert('статус сети: ' + networkState.isConnected.toString());
+    // Alert.alert('статус сети: ' + networkState.isConnected.toString());
   });
 
-  if (status) {
+  if (!status) {
     controller.abort();
   }
 

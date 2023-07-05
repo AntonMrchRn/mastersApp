@@ -72,7 +72,7 @@ export const axiosBaseQuery = (): BaseQueryFn<
           data: {
             message: isAxiosQueryError
               ? queryError.response.data.message
-              : `${serializedError.name}: ${serializedError.message}`,
+              : 'Сервис временно недоступен',
             code: isAxiosQueryError
               ? queryError.response.data?.code
               : ErrorCode.NetworkError,

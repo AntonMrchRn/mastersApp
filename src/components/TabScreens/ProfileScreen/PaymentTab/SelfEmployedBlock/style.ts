@@ -1,10 +1,15 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  payerContainer: {
+  selfContainer: {
+    flexDirection: 'row',
+  },
+  tooltipTitle: {
+    marginRight: 8,
+  },
+  sber: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 20,
     alignItems: 'center',
   },
 });

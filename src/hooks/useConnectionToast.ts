@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { useToast } from 'rn-ui-kit';
 
-const useConnectionInfo = () => {
+const useConnectionToast = () => {
   const netInfo = useNetInfo();
   const toast = useToast();
 
@@ -15,13 +15,11 @@ const useConnectionInfo = () => {
         type: 'error',
         duration: 3000,
         title:
-          'Возникли проблемы c подключения к интернету. Пожалуйста, повторите позже.',
+          'Возникли проблемы c подключением к интернету. Пожалуйста, повторите позже.',
         contentHeight: 120,
       });
     }
   }, [isConnected]);
-
-  return !!isConnected;
 };
 
-export default useConnectionInfo;
+export default useConnectionToast;

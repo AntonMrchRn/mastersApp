@@ -10,7 +10,6 @@ import {
 } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 
-import useConnectionInfo from '@/hooks/useConnectionInfo';
 import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { useSendEmailConfirmationCodeMutation } from '@/store/api/user';
@@ -28,7 +27,6 @@ import {
 import { emailValidationSchema } from '@/utils/formValidation';
 
 const useEmailEditing = () => {
-  useConnectionInfo();
   const isFocused = useIsFocused();
   const toast = useToast();
   const route = useRoute<EmailEditingScreenRoute>();

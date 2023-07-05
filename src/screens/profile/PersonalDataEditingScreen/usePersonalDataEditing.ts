@@ -5,7 +5,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 
-import useConnectionInfo from '@/hooks/useConnectionInfo';
 import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { useAppSelector } from '@/store';
 import { useEditUserMutation, useGetUserQuery } from '@/store/api/user';
@@ -15,7 +14,6 @@ import { ProfileScreenNavigationProp } from '@/types/navigation';
 import { personalDataValidationSchema } from '@/utils/formValidation';
 
 const usePersonalDataEditing = () => {
-  useConnectionInfo();
   const toast = useToast();
   const navigation = useNavigation<ProfileScreenNavigationProp>();
 

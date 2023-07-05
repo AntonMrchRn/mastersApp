@@ -1,3 +1,5 @@
+import { UserEntityType } from '@/types/user';
+
 type UserResponse = {
   count: number;
   users: User[];
@@ -23,6 +25,7 @@ type User = {
   bankName: string | null;
   creationTime: string;
   entityTypeID: number;
+  entityTypeDescription: UserEntityType;
   files: File[];
   isApproved: boolean;
   isConfirmed: boolean;
@@ -52,7 +55,7 @@ type File = {
 type EntityType = {
   ID: number;
   code: string;
-  description: string;
+  description: UserEntityType;
 };
 
 type ConfirmationCodeResponse = {
@@ -84,7 +87,22 @@ type UserParamsResponse = {
   regionsCount: number;
 };
 
-type UserEditingParams = PersonalDataEditingParams | BankDetailsEditingParams;
+type isSberPaymentParam = { ID: number; isSberPayment: boolean };
+
+type EntityTypeEditingParams = {
+  ID: number;
+  entityTypeId: number;
+  ITIN: string;
+  RRC?: string;
+  entityName?: string;
+  isNDSPayer?: boolean;
+};
+
+type UserEditingParams =
+  | PersonalDataEditingParams
+  | BankDetailsEditingParams
+  | isSberPaymentParam
+  | EntityTypeEditingParams;
 
 export type {
   User,

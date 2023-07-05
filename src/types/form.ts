@@ -46,12 +46,39 @@ type BankDetailsFormValues = {
   correspondingAccount: string;
 };
 
+type SelfEntityFormValues = {
+  ITIN: string;
+  RRC?: string;
+  entityName?: string;
+  isNDSPayer?: boolean;
+};
+
+type IndividualEntityFormValues = {
+  ITIN: string;
+  entityName: string;
+  isNDSPayer: boolean;
+  RRC?: string;
+};
+
+type CompanyEntityFormValues = {
+  ITIN: string;
+  entityName: string;
+  isNDSPayer: boolean;
+  RRC: string;
+};
+
+type EntityTypeFormValues =
+  | SelfEntityFormValues
+  | IndividualEntityFormValues
+  | CompanyEntityFormValues;
+
 export type {
   CodeValue,
   EmailValue,
   PhoneValue,
   SignInFormValues,
   RecoveryFormValues,
+  EntityTypeFormValues,
   BankDetailsFormValues,
   PersonalDataFormValues,
   SignInWithEmailFormValues,
