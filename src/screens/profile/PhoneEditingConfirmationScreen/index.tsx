@@ -8,7 +8,7 @@ import Header from '@/components/Header';
 import ControlledInputCode from '@/components/inputs/ControlledInputCode';
 import TimerBlockPhoneProfile from '@/components/Timer/TimerBlockPhoneProfile';
 import { DismissKeyboardView } from '@/hocs/DismissKeyboardView';
-import usePhoneEditingConfirmation from '@/screens/tabs/PhoneEditingConfirmationScreen/usePhoneEditingConfirmation';
+import usePhoneEditingConfirmation from '@/screens/profile/PhoneEditingConfirmationScreen/usePhoneEditingConfirmation';
 
 import styles from './style';
 

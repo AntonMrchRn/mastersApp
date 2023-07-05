@@ -2,11 +2,11 @@ import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import BankDetailsScreen from '@/screens/tabs/BankDetailsScreen';
-import EmailEditingScreen from '@/screens/tabs/EmailEditingScreen';
-import PersonalDataEditingScreen from '@/screens/tabs/PersonalDataEditingScreen';
-import PhoneEditingConfirmationScreen from '@/screens/tabs/PhoneEditingConfirmationScreen';
-import PhoneEditingScreen from '@/screens/tabs/PhoneEditingScreen';
+import BankDetailsScreen from '@/screens/profile/BankDetailsScreen';
+import EmailEditingScreen from '@/screens/profile/EmailEditingScreen';
+import PersonalDataEditingScreen from '@/screens/profile/PersonalDataEditingScreen';
+import PhoneEditingConfirmationScreen from '@/screens/profile/PhoneEditingConfirmationScreen';
+import PhoneEditingScreen from '@/screens/profile/PhoneEditingScreen';
 import ProfileScreen from '@/screens/tabs/ProfileScreen';
 import {
   ProfileNavigationParamList,

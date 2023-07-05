@@ -9,7 +9,7 @@ import ControlledInputPhone from '@/components/inputs/ControlledInputPhone';
 import Title from '@/components/TabScreens/ProfileScreen/Title';
 import TimerBlockPhoneProfile from '@/components/Timer/TimerBlockPhoneProfile';
 import { DismissKeyboardView } from '@/hocs/DismissKeyboardView';
-import usePhoneEditing from '@/screens/tabs/PhoneEditingScreen/usePhoneEditing';
+import usePhoneEditing from '@/screens/profile/PhoneEditingScreen/usePhoneEditing';
 
 import styles from './style';
 
