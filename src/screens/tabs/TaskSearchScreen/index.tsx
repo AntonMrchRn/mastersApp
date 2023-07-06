@@ -17,6 +17,7 @@ import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound'
 import TypeSelectionTaskSearch from '@/components/TabScreens/TaskSearch/TypeSelectionTaskSearch';
 import { configApp } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
+import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { Task } from '@/store/api/tasks/types';
 import { useGetUserQuery } from '@/store/api/user';
@@ -25,13 +26,12 @@ import {
   getSearchTasks,
   refreshTasks,
 } from '@/store/slices/taskSearch/asyncActions';
-import { BottomTabName, TabNavigationParamList } from '@/types/navigation';
 import { TaskSearch } from '@/types/task';
 
 import styles from './style';
 
 export type TaskSearchScreenProps = CompositeScreenProps<
-  BottomTabScreenProps<TabNavigationParamList, BottomTabName.TaskSearch>,
+  BottomTabScreenProps<BottomTabParamList, BottomTabName.TaskSearch>,
   StackScreenProps<AppStackParamList>
 >;
 const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {

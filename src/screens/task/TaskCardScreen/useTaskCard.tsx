@@ -47,8 +47,8 @@ export const useTaskCard = ({
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
 
-  // const getTask = useGetTaskQuery('996');
-  const getTask = useGetTaskQuery(taskId);
+  const getTask = useGetTaskQuery('996');
+  // const getTask = useGetTaskQuery(taskId);
 
   useEffect(() => {
     if (
@@ -489,7 +489,6 @@ export const useTaskCard = ({
   return {
     onTabChange,
     tabs,
-    tab,
     getCurrentTab,
     id,
     name,

@@ -18,6 +18,7 @@ import CardTasks from '@/components/TabScreens/TaskSearch/Card';
 import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound';
 import { configApp } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
+import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { Task } from '@/store/api/tasks/types';
 import {
@@ -25,13 +26,12 @@ import {
   refreshMyTasks,
 } from '@/store/slices/myTasks/asyncActions';
 import { clearList } from '@/store/slices/myTasks/reducer';
-import { BottomTabName, TabNavigationParamList } from '@/types/navigation';
 import { TaskSearch } from '@/types/task';
 
 import styles from './style';
 
 export type MyTasksScreenProps = CompositeScreenProps<
-  BottomTabScreenProps<TabNavigationParamList, BottomTabName.TaskSearch>,
+  BottomTabScreenProps<BottomTabParamList, BottomTabName.MyTasks>,
   StackScreenProps<AppStackParamList>
 >;
 const MyTasksScreen: FC<MyTasksScreenProps> = ({ navigation }) => {

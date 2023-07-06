@@ -56,8 +56,9 @@ export const styles = StyleSheet.create({
     elevation: 2,
   },
   bottom: {
-    marginBottom: 12,
-    marginHorizontal: 20,
+    paddingHorizontal: 20,
+    position: 'absolute',
+    width: '100%',
   },
   estimateBottom: {
     gap: 16,
