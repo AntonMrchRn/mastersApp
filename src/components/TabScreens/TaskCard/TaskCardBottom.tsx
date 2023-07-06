@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 import { Banner, Button } from 'rn-ui-kit';
 import { IconTypes, Types } from 'rn-ui-kit/lib/typescript/components/Banner';
@@ -31,24 +32,29 @@ export const TaskCardBottom: FC<TaskCardBottomProps> = ({
     },
   });
   return (
-    <View style={styles.container}>
-      {buttons.map((button, index) => (
-        <Button
-          onPress={button.onPress}
-          key={index}
-          label={button.label}
-          variant={button.variant}
-          disabled={button.disabled}
-        />
-      ))}
-      {banner && (
-        <Banner
-          type={banner.type}
-          icon={banner.icon}
-          text={banner.text}
-          title={banner.title}
-        />
-      )}
-    </View>
+    <LinearGradient
+      colors={['rgba(255, 255, 255, 0.00)', '#FFF']}
+      locations={[0, 0.9]}
+    >
+      <View style={styles.container}>
+        {buttons.map((button, index) => (
+          <Button
+            onPress={button.onPress}
+            key={index}
+            label={button.label}
+            variant={button.variant}
+            disabled={button.disabled}
+          />
+        ))}
+        {banner && (
+          <Banner
+            type={banner.type}
+            icon={banner.icon}
+            text={banner.text}
+            title={banner.title}
+          />
+        )}
+      </View>
+    </LinearGradient>
   );
 };

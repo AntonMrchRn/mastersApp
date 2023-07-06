@@ -1,6 +1,9 @@
 import React, { FC } from 'react';
 import { ScrollView, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 import { StackScreenProps } from '@react-navigation/stack';
 import { Banner, TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
@@ -14,7 +17,6 @@ import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { StatusType, TaskType } from '@/types/task';
 
 import { useTaskCard } from './useTaskCard';
-import { Wrapper } from './wrapper';
 
 import { styles } from './styles';
 
@@ -31,7 +33,6 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
 
   const {
     tabs,
-    tab,
     onTabChange,
     getCurrentTab,
     id,
@@ -59,69 +60,76 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
     cantDeleteBannerVisible,
   } = useTaskCard({ taskId, navigation });
   const theme = useTheme();
-
+  const insets = useSafeAreaInsets();
   return (
-    <SafeAreaView style={styles.container} edges={['bottom']}>
-      <TaskCardBudgetModal
-        isVisible={budgetModalVisible}
-        onCancel={onBudgetModalVisible}
-        onRevoke={onRevokeBudget}
-      />
-      <TaskCardCancelBottomSheet
-        isVisible={cancelModalVisible}
-        onCancel={onCancelModalVisible}
-        onRefuse={onCancelTask}
-      />
-      <Header title={`Задача ID ${id}`} description={publicTime} />
-      <Wrapper isScroll={tab === 'Комментарии'}>
-        <View style={styles.wrapper}>
-          <View>
-            <View style={styles.body}>
-              <View style={styles.badges}>
-                <TaskBadges
-                  isNight={isNight}
-                  isUrgent={isUrgent}
-                  statusID={statusID}
-                />
-              </View>
-              <Text
-                variant="title2"
-                style={styles.title}
-                color={theme.text.basic}
-              >
-                {name}
-              </Text>
-              <Text
-                variant="title3"
-                style={styles.price}
-                color={theme.text.basic}
-              >
-                {budget}
-              </Text>
-              {statusID === StatusType.ACTIVE &&
-                subsetID !== TaskType.COMMON_FIRST_RESPONCE &&
-                budgetEndTime && (
-                  <Tips
-                    type={'warning'}
-                    text={budgetEndTime}
-                    containerStyle={styles.tips}
+    <>
+      <SafeAreaView style={styles.container} edges={['bottom']}>
+        <TaskCardBudgetModal
+          isVisible={budgetModalVisible}
+          onCancel={onBudgetModalVisible}
+          onRevoke={onRevokeBudget}
+        />
+        <TaskCardCancelBottomSheet
+          isVisible={cancelModalVisible}
+          onCancel={onCancelModalVisible}
+          onRefuse={onCancelTask}
+        />
+        <Header title={`Задача ID ${id}`} description={publicTime} />
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={[
+            styles.wrapper,
+            { paddingBottom: getButtons().length * 56 + 24 },
+          ]}
+        >
+          <View style={styles.wrapper}>
+            <View>
+              <View style={styles.body}>
+                <View style={styles.badges}>
+                  <TaskBadges
+                    isNight={isNight}
+                    isUrgent={isUrgent}
+                    statusID={statusID}
                   />
-                )}
+                </View>
+                <Text
+                  variant="title2"
+                  style={styles.title}
+                  color={theme.text.basic}
+                >
+                  {name}
+                </Text>
+                <Text
+                  variant="title3"
+                  style={styles.price}
+                  color={theme.text.basic}
+                >
+                  {budget}
+                </Text>
+                {statusID === StatusType.ACTIVE &&
+                  subsetID !== TaskType.COMMON_FIRST_RESPONCE &&
+                  budgetEndTime && (
+                    <Tips
+                      type={'warning'}
+                      text={budgetEndTime}
+                      containerStyle={styles.tips}
+                    />
+                  )}
+              </View>
+              <TabControl
+                ref={ref}
+                data={tabs}
+                initialId={0}
+                onChange={onTabChange}
+                style={styles.mt16}
+                contentContainerStyle={styles.contentContainerTab}
+              />
             </View>
-            <TabControl
-              ref={ref}
-              data={tabs}
-              initialId={0}
-              onChange={onTabChange}
-              style={styles.mt16}
-              contentContainerStyle={styles.contentContainerTab}
-            />
+            <View style={styles.card}>{getCurrentTab()}</View>
           </View>
-          <View style={styles.card}>{getCurrentTab()}</View>
-        </View>
-      </Wrapper>
-
-      <View style={styles.bottom}>
+        </ScrollView>
+      </SafeAreaView>
+      <View style={[styles.bottom, { bottom: insets.bottom }]}>
         {estimateBannerVisible && (
           <View style={styles.mb16}>
             <Banner
@@ -147,6 +155,6 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
         )}
         <TaskCardBottom banner={getBanner()} buttons={getButtons()} />
       </View>
-    </SafeAreaView>
+    </>
   );
 };
