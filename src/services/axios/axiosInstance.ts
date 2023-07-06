@@ -27,12 +27,14 @@ axiosInstance.interceptors.request.use(config => {
   const controller = new AbortController();
   let status;
 
+  // controller.signal.aborted признак, можно отслеживать controller.abort()
+
   const unsubscribe = NetInfo.addEventListener(networkState => {
+    console.log('networkState', networkState);
     status = networkState.isConnected;
-    // Alert.alert('статус сети: ' + networkState.isConnected.toString());
   });
 
-  if (!status) {
+  if (status === false) {
     controller.abort();
   }
 
