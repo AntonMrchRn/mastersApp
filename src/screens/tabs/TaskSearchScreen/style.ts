@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  wrapperPreview: { height: 320 },
   shadowWrapper: {
     backgroundColor: '#fff',
     borderTopRightRadius: 24,

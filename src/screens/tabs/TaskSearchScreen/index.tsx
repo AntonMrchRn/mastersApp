@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
-  Button,
   FlatList,
   ListRenderItemInfo,
   SafeAreaView,
@@ -22,7 +21,6 @@ import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { Task } from '@/store/api/tasks/types';
 import { useGetUserQuery } from '@/store/api/user';
-import { User } from '@/store/api/user/types';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import {
   getSearchTasks,
@@ -47,14 +45,12 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
     loadingList,
     errorList,
   } = useAppSelector(state => state.taskSearch);
-
+  const useModal = () => setIsVisibleModal(!isVisibleModal);
   const { user: authUser } = useAppSelector(selectAuth);
 
-  const { data: user } = useGetUserQuery(authUser?.userID, {
+  const { data: user, isLoading } = useGetUserQuery(authUser?.userID, {
     skip: !authUser?.userID,
   });
-
-  console.log('user', user?.hasITAccess);
 
   const onItemPress = (id: number) => {
     if (user?.hasITAccess) {
@@ -71,22 +67,24 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
     <CardTasks {...item} onItemPress={onItemPress} />
   );
 
-  const onRefresh = () => dispatch(refreshTasks({ idList: selectedTab }));
+  const onRefresh = () =>
+    dispatch(refreshTasks({ idList: selectedTab, regionID: user?.regionIDs }));
 
   const onEndReached = () => {
-    !loadingList && data.length
+    !loadingList && data.length && user?.regionIDs
       ? dispatch(
           getSearchTasks({
             idList: selectedTab,
             fromTask: data?.length,
+            regionID: user?.regionIDs,
           })
         )
       : null;
   };
 
   useEffect(() => {
-    onRefresh();
-  }, []);
+    if (user?.regionIDs) onRefresh();
+  }, [user?.regionIDs]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -94,7 +92,10 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
         <Text variant="title1" style={styles.textHeader}>
           Поиск задач
         </Text>
-        <TypeSelectionTaskSearch setActiveTab={setSelectedTab} />
+        <TypeSelectionTaskSearch
+          setActiveTab={setSelectedTab}
+          onRefresh={onRefresh}
+        />
       </View>
       <View
         style={[
@@ -130,11 +131,11 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
       </View>
       <BottomSheet
         isVisible={isVisibleModal}
-        onBackdropPress={() => setIsVisibleModal(!isVisibleModal)}
-        onSwipeComplete={() => setIsVisibleModal(!isVisibleModal)}
+        onBackdropPress={useModal}
+        onSwipeComplete={useModal}
       >
-        <View style={{ height: 320 }}>
-          <PreviewNotFound type={2} />
+        <View style={styles.wrapperPreview}>
+          <PreviewNotFound type={2} closeModal={useModal} />
         </View>
       </BottomSheet>
     </SafeAreaView>

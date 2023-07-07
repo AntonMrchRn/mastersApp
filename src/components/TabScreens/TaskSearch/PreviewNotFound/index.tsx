@@ -14,9 +14,10 @@ import styles from './style';
 
 export type PreviewProps = {
   type?: number;
+  closeModal?: () => void;
 };
 
-const PreviewNotFound: FC<PreviewProps> = ({ type }) => {
+const PreviewNotFound: FC<PreviewProps> = ({ type, closeModal }) => {
   if (type === 1) {
     return (
       <View style={styles.wrapperNotFound}>
@@ -32,7 +33,10 @@ const PreviewNotFound: FC<PreviewProps> = ({ type }) => {
     const { navigate } =
       useNavigation<StackNavigationProp<BottomTabParamList>>();
 
-    const onPress = () => navigate(BottomTabName.ProfileNavigation);
+    const onPress = () => {
+      navigate(BottomTabName.ProfileNavigation);
+      closeModal && closeModal();
+    };
 
     return (
       <View style={styles.wrapperNotFound}>
