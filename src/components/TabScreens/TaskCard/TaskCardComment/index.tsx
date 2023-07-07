@@ -113,7 +113,7 @@ export const TaskCardComment: FC<TaskCardCommentProps> = ({
   return (
     <View style={{ flex: 1 }}>
       {/* {renderStatus()} */}
-      <View
+      {/* <View
         style={{
           flex: 1,
           marginBottom: configApp.ios ? 10 : 0,
@@ -128,7 +128,7 @@ export const TaskCardComment: FC<TaskCardCommentProps> = ({
         }}
       >
         <View style={{ height: 50, backgroundColor: 'red' }} />
-      </View>
+      </View> */}
     </View>
   );
 };

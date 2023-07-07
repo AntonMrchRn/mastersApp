@@ -7,18 +7,20 @@ type RequestArgs = {
   idList: number;
   numberOfPosts?: number;
   fromTask?: number;
+  regionID?: number[];
 };
 
 const getSearchTasks = createAsyncThunk(
   '/getSearchTasks',
   async (
-    { idList, numberOfPosts = 30, fromTask = 0 }: RequestArgs,
+    { idList, numberOfPosts = 30, fromTask = 0, regionID }: RequestArgs,
     thunkApi
   ) => {
     try {
-      // TODO изменить квери параметры для оптимизации
       const { data } = await axiosInstance.get(
-        `tasks/web?query=?setID==${idList}?ID,desc,${numberOfPosts},${fromTask}`
+        `tasks/web?query=?object==regionID^^${regionID?.join(
+          ','
+        )}*setID==${idList}?ID,desc,${numberOfPosts},${fromTask}`
       );
 
       return data;
@@ -31,12 +33,14 @@ const getSearchTasks = createAsyncThunk(
 const refreshTasks = createAsyncThunk(
   '/refreshTasks',
   async (
-    { idList, numberOfPosts = 30, fromTask = 0 }: RequestArgs,
+    { idList, numberOfPosts = 30, fromTask = 0, regionID }: RequestArgs,
     thunkApi
   ) => {
     try {
       const { data } = await axiosInstance.get(
-        `tasks/web?query=?setID==${idList}?ID,desc,${numberOfPosts},${fromTask}`
+        `tasks/web?query=?object==regionID^^${regionID?.join(
+          ','
+        )}*setID==${idList}?ID,desc,${numberOfPosts},${fromTask}`
       );
 
       return data;
