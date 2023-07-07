@@ -4,6 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { useToast } from 'rn-ui-kit';
 
 import { configApp } from '@/constants/platform';
 import { storageMMKV } from '@/mmkv/storage';
@@ -37,6 +38,7 @@ const inputNameByErrorCode: Partial<
 };
 
 const useSignIn = () => {
+  const toast = useToast();
   const dispatch = useAppDispatch();
   const navigation = useNavigation<ErrorScreenNavigationProp>();
 
@@ -60,6 +62,13 @@ const useSignIn = () => {
     if (isError) {
       if (error?.code === ErrorCode.Server) {
         return navigation.navigate(AppScreenName.Error);
+      }
+      if (error?.code === ErrorCode.NetworkError) {
+        toast.show({
+          type: 'error',
+          text: error.message,
+          contentHeight: 100,
+        });
       }
 
       const inputName = inputNameByErrorCode[error?.code];
