@@ -25,6 +25,7 @@ const CardTasks: FC<CardTasksProp> = ({
   isNight,
   ID,
   onItemPress,
+  outlayStatusID,
 }) => {
   const address = object?.name || '';
 
@@ -39,6 +40,7 @@ const CardTasks: FC<CardTasksProp> = ({
         <>
           <View style={styles.wrapperBadge}>
             <TaskBadges
+              outlayStatusID={outlayStatusID}
               statusID={statusID}
               isUrgent={isUrgent}
               isNight={isNight}

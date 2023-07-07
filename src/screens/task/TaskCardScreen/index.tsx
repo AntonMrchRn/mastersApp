@@ -58,6 +58,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
     ref,
     onCantDeleteBannerVisible,
     cantDeleteBannerVisible,
+    outlayStatusID,
   } = useTaskCard({ taskId, navigation });
   const theme = useTheme();
   const insets = useSafeAreaInsets();
@@ -87,6 +88,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
               <View style={styles.body}>
                 <View style={styles.badges}>
                   <TaskBadges
+                    outlayStatusID={outlayStatusID}
                     isNight={isNight}
                     isUrgent={isUrgent}
                     statusID={statusID}
