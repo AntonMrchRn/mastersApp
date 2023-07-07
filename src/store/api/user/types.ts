@@ -7,6 +7,7 @@ type UserResponse = {
 
 type User = {
   ID: number;
+  hasITAccess: boolean | null;
   name: string | null;
   sname: string | null;
   pname: string | null;

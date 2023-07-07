@@ -21,6 +21,7 @@ const usePersonalDataEditing = () => {
   const { data: user } = useGetUserQuery(authUser?.userID, {
     skip: !authUser?.userID,
   });
+
   const [editPersonalData, { isSuccess, isLoading, isError }] =
     useEditUserMutation();
 

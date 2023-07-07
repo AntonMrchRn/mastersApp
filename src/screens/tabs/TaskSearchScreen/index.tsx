@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Button,
   FlatList,
   ListRenderItemInfo,
   SafeAreaView,
@@ -10,7 +11,7 @@ import {
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { Text, useTheme } from 'rn-ui-kit';
+import { BottomSheet, Text, useTheme } from 'rn-ui-kit';
 
 import CardTasks from '@/components/TabScreens/TaskSearch/Card';
 import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound';
@@ -21,6 +22,7 @@ import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { Task } from '@/store/api/tasks/types';
 import { useGetUserQuery } from '@/store/api/user';
+import { User } from '@/store/api/user/types';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import {
   getSearchTasks,
@@ -39,21 +41,29 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
   const theme = useTheme();
 
   const [selectedTab, setSelectedTab] = useState(1);
+  const [isVisibleModal, setIsVisibleModal] = useState(false);
   const {
     data = [],
     loadingList,
     errorList,
   } = useAppSelector(state => state.taskSearch);
+
   const { user: authUser } = useAppSelector(selectAuth);
 
-  // const { data: user } = useGetUserQuery(authUser?.userID, {
-  //   skip: authUser?.userID,
-  // });
-  // console.log('user', user);
+  const { data: user } = useGetUserQuery(authUser?.userID, {
+    skip: !authUser?.userID,
+  });
+
+  console.log('user', user?.hasITAccess);
+
   const onItemPress = (id: number) => {
-    navigation.navigate(AppScreenName.TaskCard, {
-      taskId: id,
-    });
+    if (user?.hasITAccess) {
+      navigation.navigate(AppScreenName.TaskCard, {
+        taskId: id,
+      });
+    } else {
+      setIsVisibleModal(!isVisibleModal);
+    }
   };
 
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
@@ -118,6 +128,15 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
           />
         )}
       </View>
+      <BottomSheet
+        isVisible={isVisibleModal}
+        onBackdropPress={() => setIsVisibleModal(!isVisibleModal)}
+        onSwipeComplete={() => setIsVisibleModal(!isVisibleModal)}
+      >
+        <View style={{ height: 320 }}>
+          <PreviewNotFound type={2} />
+        </View>
+      </BottomSheet>
     </SafeAreaView>
   );
 };
