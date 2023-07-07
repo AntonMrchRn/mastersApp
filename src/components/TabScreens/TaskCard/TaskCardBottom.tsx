@@ -6,6 +6,8 @@ import { Banner, Button } from 'rn-ui-kit';
 import { IconTypes, Types } from 'rn-ui-kit/lib/typescript/components/Banner';
 import { Variant } from 'rn-ui-kit/lib/typescript/components/Button';
 
+import { configApp } from '@/constants/platform';
+
 export type TaskCardBottomBanner = {
   title: string;
   type: Types;
@@ -29,6 +31,7 @@ export const TaskCardBottom: FC<TaskCardBottomProps> = ({
   const styles = StyleSheet.create({
     container: {
       gap: 16,
+      marginBottom: configApp.android ? 24 : 0,
     },
   });
   return (
