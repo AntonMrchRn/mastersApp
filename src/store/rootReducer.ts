@@ -1,4 +1,4 @@
-import { AnyAction, combineReducers, Reducer } from '@reduxjs/toolkit';
+import { combineReducers } from '@reduxjs/toolkit';
 
 import { authAPI } from '@/store/api/auth';
 import { userAPI } from '@/store/api/user';
@@ -23,7 +23,7 @@ const combinedReducer = combineReducers({
   [tasksAPI.reducerPath]: tasksAPI.reducer,
 });
 
-const rootReducer: Reducer = (state: RootState, action: AnyAction) => {
+const rootReducer: typeof combinedReducer = (state, action) => {
   if (action.type === 'auth/logOut') {
     state = {} as RootState;
   }
