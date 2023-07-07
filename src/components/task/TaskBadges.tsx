@@ -4,20 +4,33 @@ import { StyleSheet, View } from 'react-native';
 import { Badge } from 'rn-ui-kit';
 
 import { NightIcon } from '@/assets/icons/svg/screens/NightIcon';
+import { OutlayStatusType, StatusType } from '@/types/task';
 
 type TaskBadgesProps = {
   isNight?: boolean;
   isUrgent?: boolean;
-  statusID?: number;
+  statusID?: StatusType;
+  outlayStatusID?: OutlayStatusType;
 };
 export const TaskBadges: FC<TaskBadgesProps> = ({
   isNight,
   isUrgent,
   statusID,
+  outlayStatusID,
 }) => {
   const getBadges = () => {
     switch (statusID) {
-      case 2:
+      case StatusType.PENDING:
+        return (
+          <Badge
+            secondary={true}
+            label={'Подготовка'}
+            icon={false}
+            variant={'basic'}
+            style={styles.badge}
+          />
+        );
+      case StatusType.ACTIVE:
         return (
           <Badge
             secondary={true}
@@ -27,17 +40,37 @@ export const TaskBadges: FC<TaskBadgesProps> = ({
             style={styles.badge}
           />
         );
-      case 11:
-        return (
-          <Badge
-            secondary={true}
-            label={'В работе'}
-            icon={false}
-            variant={'accent'}
-            style={styles.badge}
-          />
-        );
-      case 5:
+      case StatusType.WORK:
+        switch (outlayStatusID) {
+          case OutlayStatusType.READY:
+            return (
+              <Badge variant="success" label="Смета согласована" secondary />
+            );
+          case OutlayStatusType.PENDING:
+            return (
+              <Badge variant="warning" label="Смета не согласована" secondary />
+            );
+          case OutlayStatusType.RETURNED:
+            return (
+              <Badge variant="danger" label="Смета возвращена" secondary />
+            );
+          case OutlayStatusType.MATCHING:
+            return (
+              <Badge variant="accent" label="Смета на согласовании" secondary />
+            );
+          default:
+            return (
+              <Badge
+                secondary={true}
+                label={'В работе'}
+                icon={false}
+                variant={'accent'}
+                style={styles.badge}
+              />
+            );
+        }
+
+      case StatusType.SUMMARIZING:
         return (
           <Badge
             secondary={true}
@@ -47,7 +80,7 @@ export const TaskBadges: FC<TaskBadgesProps> = ({
             style={styles.badge}
           />
         );
-      case 6:
+      case StatusType.COMPLETED:
         return (
           <Badge
             secondary={true}
@@ -57,7 +90,7 @@ export const TaskBadges: FC<TaskBadgesProps> = ({
             style={styles.badge}
           />
         );
-      case 9:
+      case StatusType.PAID:
         return (
           <Badge
             secondary={true}
@@ -67,8 +100,8 @@ export const TaskBadges: FC<TaskBadgesProps> = ({
             style={styles.badge}
           />
         );
-      case 7:
-      case 8:
+      case StatusType.CANCELLED_BY_EXECUTOR:
+      case StatusType.CANCELLED_BY_CUSTOMER:
         return (
           <Badge
             secondary={true}
@@ -78,7 +111,7 @@ export const TaskBadges: FC<TaskBadgesProps> = ({
             style={styles.badge}
           />
         );
-      case 12:
+      case StatusType.CLOSED:
         return (
           <Badge
             secondary={true}

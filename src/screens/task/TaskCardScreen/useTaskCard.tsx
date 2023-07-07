@@ -513,5 +513,6 @@ export const useTaskCard = ({
     ref,
     onCantDeleteBannerVisible,
     cantDeleteBannerVisible,
+    outlayStatusID,
   };
 };
