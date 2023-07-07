@@ -27,7 +27,6 @@ const rootReducer: typeof combinedReducer = (state, action) => {
   if (action.type === 'auth/logOut') {
     state = {} as RootState;
   }
-
   return combinedReducer(state, action);
 };
 
