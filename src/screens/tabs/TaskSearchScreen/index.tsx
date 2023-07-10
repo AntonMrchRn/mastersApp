@@ -35,8 +35,8 @@ export type TaskSearchScreenProps = CompositeScreenProps<
   StackScreenProps<AppStackParamList>
 >;
 const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
-  const dispatch = useAppDispatch();
   const theme = useTheme();
+  const dispatch = useAppDispatch();
 
   const [selectedTab, setSelectedTab] = useState(1);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
@@ -45,13 +45,13 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
     loadingList,
     errorList,
   } = useAppSelector(state => state.taskSearch);
-  const useModal = () => setIsVisibleModal(!isVisibleModal);
-  const { user: authUser } = useAppSelector(selectAuth);
 
-  const { data: user, isLoading } = useGetUserQuery(authUser?.userID, {
+  const { user: authUser } = useAppSelector(selectAuth);
+  const { data: user } = useGetUserQuery(authUser?.userID, {
     skip: !authUser?.userID,
   });
 
+  const useModal = () => setIsVisibleModal(!isVisibleModal);
   const onItemPress = (id: number) => {
     if (user?.hasITAccess) {
       navigation.navigate(AppScreenName.TaskCard, {

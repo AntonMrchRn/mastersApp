@@ -1,5 +1,3 @@
-import { Alert } from 'react-native';
-
 import NetInfo from '@react-native-community/netinfo';
 import axios from 'axios';
 
@@ -15,22 +13,14 @@ export const axiosInstance = axios.create({
     'Content-Type': 'application/json',
   },
 });
+const { dispatch } = store;
 
-axiosInstance.interceptors.request.use(config => {
-  config.headers['M-Token'] = storageMMKV.getString('token');
-
-  return config;
-});
-
-// проверка интернета
+// Проверка интернета
 axiosInstance.interceptors.request.use(config => {
   const controller = new AbortController();
   let status;
 
-  // controller.signal.aborted признак, можно отслеживать controller.abort()
-
   const unsubscribe = NetInfo.addEventListener(networkState => {
-    console.log('networkState', networkState);
     status = networkState.isConnected;
   });
 
@@ -46,8 +36,14 @@ axiosInstance.interceptors.request.use(config => {
   };
 });
 
-const { dispatch } = store;
+// Реквест перехватчик
+axiosInstance.interceptors.request.use(config => {
+  config.headers['M-Token'] = storageMMKV.getString('token');
 
+  return config;
+});
+
+// Респонс перехватчик
 axiosInstance.interceptors.response.use(
   response => {
     return response;
