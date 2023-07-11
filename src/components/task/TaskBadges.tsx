@@ -44,19 +44,39 @@ export const TaskBadges: FC<TaskBadgesProps> = ({
         switch (outlayStatusID) {
           case OutlayStatusType.READY:
             return (
-              <Badge variant="success" label="Смета согласована" secondary />
+              <Badge
+                variant="success"
+                label="Смета согласована"
+                secondary
+                style={styles.badge}
+              />
             );
           case OutlayStatusType.PENDING:
             return (
-              <Badge variant="warning" label="Смета не согласована" secondary />
+              <Badge
+                variant="warning"
+                label="Смета не согласована"
+                secondary
+                style={styles.badge}
+              />
             );
           case OutlayStatusType.RETURNED:
             return (
-              <Badge variant="danger" label="Смета возвращена" secondary />
+              <Badge
+                variant="danger"
+                label="Смета возвращена"
+                secondary
+                style={styles.badge}
+              />
             );
           case OutlayStatusType.MATCHING:
             return (
-              <Badge variant="accent" label="Смета на согласовании" secondary />
+              <Badge
+                variant="accent"
+                label="Смета на согласовании"
+                secondary
+                style={styles.badge}
+              />
             );
           default:
             return (

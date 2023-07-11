@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { ScrollView, View } from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -59,6 +59,8 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
     onCantDeleteBannerVisible,
     cantDeleteBannerVisible,
     outlayStatusID,
+    onRefresh,
+    refreshing,
   } = useTaskCard({ taskId, navigation });
   const theme = useTheme();
   const insets = useSafeAreaInsets();
@@ -82,6 +84,9 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
             styles.wrapper,
             { paddingBottom: getButtons().length * 56 + 24 },
           ]}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         >
           <View style={styles.wrapper}>
             <View>
