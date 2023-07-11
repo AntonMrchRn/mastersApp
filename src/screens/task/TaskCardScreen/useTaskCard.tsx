@@ -50,6 +50,10 @@ export const useTaskCard = ({
   const getTask = useGetTaskQuery('996');
   // const getTask = useGetTaskQuery(taskId);
 
+  const onRefresh = () => {
+    getTask.refetch();
+  };
+  const refreshing = getTask.isLoading;
   useEffect(() => {
     if (
       typeof getTask.error === 'object' &&
@@ -514,5 +518,7 @@ export const useTaskCard = ({
     onCantDeleteBannerVisible,
     cantDeleteBannerVisible,
     outlayStatusID,
+    onRefresh,
+    refreshing,
   };
 };
