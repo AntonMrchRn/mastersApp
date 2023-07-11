@@ -31,8 +31,8 @@ axiosInstance.interceptors.request.use(config => {
   unsubscribe();
 
   return {
-    ...config,
     signal: controller.signal,
+    ...config,
   };
 });
 
