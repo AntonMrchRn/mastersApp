@@ -31,7 +31,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   files,
 }) => {
   const theme = useTheme();
-
+  const applicationFiles = files.filter(file => file.isApplication);
   return (
     <View>
       <Text variant="title3" style={styles.mt36} color={theme.text.basic}>
@@ -91,7 +91,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
       ) : (
         <></>
       )}
-      {files.length ? (
+      {applicationFiles.length ? (
         <>
           <View style={styles.attachments}>
             <Text variant="title3" color={theme.text.basic} style={styles.mr11}>
@@ -99,7 +99,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
             </Text>
             <CaretDownIcon />
           </View>
-          <DownloadManager files={files} />
+          <DownloadManager files={applicationFiles} />
         </>
       ) : (
         <></>

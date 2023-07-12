@@ -92,7 +92,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
               {reportFiles.length ? (
                 <>
                   <UploadManager
-                    files={files}
+                    files={reportFiles}
                     taskId={taskId}
                     statusID={statusID}
                   />
@@ -135,7 +135,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
                 </Text>
                 <View style={styles.mt24}>
                   <UploadManager
-                    files={files}
+                    files={reportFiles}
                     taskId={taskId}
                     statusID={statusID}
                   />
