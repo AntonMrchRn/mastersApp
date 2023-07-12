@@ -1,8 +1,8 @@
-import { GetTaskResponce, Task } from '@/store/api/tasks/types';
+import { GetTaskResponse, Task } from '@/store/api/tasks/types';
 import { Error } from '@/types/error';
 
 type InitialState = {
-  list: GetTaskResponce;
+  list: GetTaskResponse;
   data?: Task[];
   tableNames: [];
   loadingNames: boolean;

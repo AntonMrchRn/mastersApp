@@ -4,11 +4,11 @@ import { ActivityIndicator, View } from 'react-native';
 import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { ServiceItem } from '@/components/task/ServiceItem';
-import { GetServicesResponce, Service } from '@/store/api/tasks/types';
+import { GetServicesResponse, Service } from '@/store/api/tasks/types';
 
 import { styles } from './styles';
 type SearchContainerProps = {
-  data: GetServicesResponce | undefined;
+  data: GetServicesResponse | undefined;
   loader: boolean;
   addService: (service: Service) => void;
 };

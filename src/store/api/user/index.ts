@@ -1,3 +1,4 @@
+import { store } from '@/store';
 import { api } from '@/store/api';
 import {
   ConfirmationCodeResponse,
@@ -8,6 +9,8 @@ import {
   UserParamsResponse,
   UserResponse,
 } from '@/store/api/user/types';
+import { setProgresses } from '@/store/slices/user/actions';
+import { File, FilesParams, Progress } from '@/types/fileManager';
 
 export const userAPI = api
   .enhanceEndpoints({
@@ -63,7 +66,7 @@ export const userAPI = api
         query: data => ({
           url: 'users',
           method: 'PATCH',
-          data: data,
+          data,
         }),
         invalidatesTags: ['user'],
       }),
@@ -72,6 +75,42 @@ export const userAPI = api
           url: 'params',
           method: 'GET',
         }),
+      }),
+      addFiles: builder.mutation<File[], FilesParams>({
+        query: ({ formData, files, date, signal }) => {
+          return {
+            url: `me/files`,
+            method: 'POST',
+            data: formData,
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+            signal,
+            onUploadProgress: progressEvent => {
+              const progress: Progress = {
+                loaded: progressEvent.loaded,
+                total: progressEvent.total,
+                progress: progressEvent.progress,
+                bytes: progressEvent.bytes,
+                rate: progressEvent.rate,
+                estimated: progressEvent.estimated,
+                upload: progressEvent.upload,
+                download: progressEvent.download,
+                files,
+              };
+              const payload = { [date]: progress };
+              store.dispatch(setProgresses(payload));
+            },
+          };
+        },
+        invalidatesTags: ['user'],
+      }),
+      deleteFile: builder.mutation<UserParamsResponse, number>({
+        query: id => ({
+          url: `me/files/${id}`,
+          method: 'DELETE',
+        }),
+        invalidatesTags: ['user'],
       }),
     }),
     overrideExisting: true,
@@ -83,6 +122,8 @@ export const {
   useGetEntityTypesQuery,
   useEditUserMutation,
   useEditPhoneMutation,
+  useAddFilesMutation,
+  useDeleteFileMutation,
   useSendEmailConfirmationCodeMutation,
   useSendPhoneConfirmationCodeMutation,
 } = userAPI;

@@ -19,6 +19,7 @@ import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppSelector } from '@/store';
 import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
+import { AxiosQueryErrorResponse } from '@/types/error';
 import { OutlayStatusType, StatusType, TaskTab, TaskType } from '@/types/task';
 
 export const useTaskCard = ({
@@ -49,39 +50,27 @@ export const useTaskCard = ({
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
 
-  const getTask = useGetTaskQuery('996');
-  // const getTask = useGetTaskQuery(taskId);
+  // const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
+  const { data, isError, error, refetch, isLoading } = useGetTaskQuery('996');
 
   useEffect(() => {
     if (isFocused) {
-      getTask.refetch();
+      refetch();
     }
   }, [isFocused]);
   useEffect(() => {
-    if (
-      typeof getTask.error === 'object' &&
-      getTask.error !== null &&
-      'data' in getTask.error &&
-      typeof getTask.error.data === 'object' &&
-      getTask.error.data !== null &&
-      'message' in getTask.error.data &&
-      typeof getTask.error.data.message === 'string'
-    ) {
+    if (isError) {
       toast.show({
         type: 'error',
-        title: getTask?.error?.data?.message,
+        title: (error as AxiosQueryErrorResponse).data.message,
         contentHeight: 120,
       });
     }
-  }, [getTask?.error]);
+  }, [isError]);
 
   const [patchTask] = usePatchTaskMutation();
 
-  const onRefresh = () => {
-    getTask.refetch();
-  };
-  const refreshing = getTask.isLoading;
-  const task = getTask?.data?.tasks?.[0];
+  const task = data?.tasks?.[0];
   const id = task?.ID || 0;
   const subsetID = task?.subsetID || '';
   const files = task?.files || [];
@@ -148,6 +137,10 @@ export const useTaskCard = ({
     },
   ];
 
+  const onRefresh = () => {
+    refetch();
+  };
+
   const onCantDeleteBannerVisible = () => {
     setCantDeleteBannerVisible(!cantDeleteBannerVisible);
   };
@@ -192,23 +185,13 @@ export const useTaskCard = ({
         executors: [{ ID: user?.userID }],
       }).unwrap();
     } catch (error) {
-      if (
-        typeof error === 'object' &&
-        error !== null &&
-        'data' in error &&
-        typeof error.data === 'object' &&
-        error.data !== null &&
-        'message' in error.data &&
-        typeof error.data.message === 'string'
-      ) {
-        toast.show({
-          type: 'error',
-          title: error.data.message,
-          contentHeight: 120,
-        });
-      }
+      toast.show({
+        type: 'error',
+        title: (error as AxiosQueryErrorResponse).data.message,
+        contentHeight: 120,
+      });
     } finally {
-      getTask.refetch();
+      refetch();
     }
   };
   const onCancelModalVisible = () => {
@@ -226,7 +209,7 @@ export const useTaskCard = ({
       });
     }
 
-    getTask.refetch();
+    refetch();
   };
   const onCancelTask = async (text: string) => {
     //если это общие, то
@@ -239,7 +222,7 @@ export const useTaskCard = ({
       //причина отказа
       refuseReason: text,
     });
-    getTask.refetch();
+    refetch();
     onCancelModalVisible();
   };
   const onSendEstimateForApproval = async () => {
@@ -257,7 +240,7 @@ export const useTaskCard = ({
         outlayStatusID: OutlayStatusType.MATCHING,
       });
     }
-    getTask.refetch();
+    refetch();
   };
   const onRevokeBudget = () => {
     //TODO необходимо сначала получить оффер юзера по этой таске
@@ -369,7 +352,7 @@ export const useTaskCard = ({
   const getButtons = (): TaskCardBottomButton[] => {
     switch (statusID) {
       case StatusType.ACTIVE:
-        if (subsetID === TaskType.COMMON_FIRST_RESPONCE) {
+        if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
           return [
             {
               label: 'Принять задачу',
@@ -526,6 +509,6 @@ export const useTaskCard = ({
     cantDeleteBannerVisible,
     outlayStatusID,
     onRefresh,
-    refreshing,
+    refreshing: isLoading,
   };
 };

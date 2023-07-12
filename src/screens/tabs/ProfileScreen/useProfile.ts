@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDispatch } from 'react-redux';
 
 import { useIsFocused } from '@react-navigation/native';
@@ -28,6 +29,7 @@ const useProfile = () => {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const toast = useToast();
+  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
   const { user: authUser } = useAppSelector(selectAuth);
   const { isApprovalNotificationShown } = useAppSelector(selectUser);
@@ -52,8 +54,6 @@ const useProfile = () => {
   }, [isError]);
 
   const [activeTab, setActiveTab] = useState<Tab>(initialTab);
-  const [isEntityModalVisible, setIsEntityModalVisible] =
-    useState<boolean>(false);
   const isApprovalNotificationVisible =
     !isApprovalNotificationShown && !!user?.isApproved;
 
@@ -69,14 +69,20 @@ const useProfile = () => {
     setActiveTab({ id, label: label as ProfileTab });
   };
 
+  const scrollToEnd = () => {
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd(true);
+    }, 0);
+  };
+
   return {
     user,
     warning,
     activeTab,
     switchTab,
     isLoading,
-    isEntityModalVisible,
-    setIsEntityModalVisible,
+    scrollToEnd,
+    scrollViewRef,
     isApprovalNotificationVisible,
   };
 };

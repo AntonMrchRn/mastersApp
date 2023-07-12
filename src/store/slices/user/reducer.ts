@@ -10,6 +10,7 @@ const initialState: InitialState = {
   isActivePhoneTimer: false,
   isActiveEmailTimer: false,
   isApprovalNotificationShown: false,
+  progresses: {},
 };
 
 const user = createSlice({
@@ -42,6 +43,12 @@ const user = createSlice({
     },
     setProfileEmailTimeout: (state, { payload }) => {
       state.emailTimeout = payload;
+    },
+    setProgresses: (state, { payload }) => {
+      state.progresses = { ...state.progresses, ...payload };
+    },
+    deleteProgress: (state, { payload }) => {
+      delete state.progresses[payload];
     },
   },
 });

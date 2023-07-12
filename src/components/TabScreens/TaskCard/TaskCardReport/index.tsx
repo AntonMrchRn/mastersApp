@@ -6,13 +6,17 @@ import { Banner, Text, useTheme } from 'rn-ui-kit';
 import { DownloadFilesIcon } from '@/assets/icons/svg/screens/DownloadFilesIcon';
 import { NoFilesIcon } from '@/assets/icons/svg/screens/NoFilesIcon';
 import { OtesIcon } from '@/assets/icons/svg/screens/OtesIcon';
+import { UploadBottomSheet } from '@/components/FileManager/UploadBottomSheet';
 import { UploadManager } from '@/components/FileManager/UploadManager';
 import { UploadProgress } from '@/components/FileManager/UploadProgress';
+import { useAppSelector } from '@/store';
 import { usePostTasksFilesMutation } from '@/store/api/tasks';
-import { File } from '@/store/api/tasks/types';
-import { HandleUpload, StatusType } from '@/types/task';
-
-import { TaskCardUploadBottomSheet } from '../TaskCardUploadBottomSheet';
+import { deleteProgress } from '@/store/slices/tasks/actions';
+import { selectTasks } from '@/store/slices/tasks/selectors';
+import { Controllers, File, HandleUpload } from '@/types/fileManager';
+import { StatusType } from '@/types/task';
+import { getFormData } from '@/utils/fileManager/getFormData';
+import { saveOnDevice } from '@/utils/fileManager/saveOnDevice';
 
 import { styles } from './styles';
 
@@ -25,7 +29,7 @@ type TaskCardReportProps = {
   onUploadModalVisible: () => void;
 };
 
-export let controllers: { [x: string]: AbortController } = {};
+export let controllers: Controllers = {};
 export const TaskCardReport: FC<TaskCardReportProps> = ({
   activeBudgetCanceled,
   statusID,
@@ -38,18 +42,28 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
   const [banner, setBanner] = useState(false);
   const onBanner = () => setBanner(!banner);
   const [postTasksFiles] = usePostTasksFilesMutation();
-  const handleUpload = async ({ formData, files, date }: HandleUpload) => {
+  const progressesSelector = useAppSelector(selectTasks).progresses;
+
+  const handleUpload = async ({
+    formData,
+    files,
+    date,
+    names,
+  }: HandleUpload) => {
     const controller = new AbortController();
-    const request = postTasksFiles({
+    controllers = { ...controllers, [date]: controller };
+
+    const request = await postTasksFiles({
       formData,
       files,
       date,
       signal: controller.signal,
-    });
-    controllers = { ...controllers, [date]: controller };
-    await request.unwrap();
+    }).unwrap();
+    const addedFiles = request.filter(file => names.includes(file.name));
+    saveOnDevice(addedFiles);
   };
   const reportFiles = files.filter(file => file.isOffer);
+
   const getContent = () => {
     switch (statusID) {
       case StatusType.ACTIVE:
@@ -96,7 +110,10 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
                     taskId={taskId}
                     statusID={statusID}
                   />
-                  <UploadProgress />
+                  <UploadProgress
+                    controllers={controllers}
+                    progressesSelector={progressesSelector}
+                  />
                   <View style={styles.mt36} />
                   <Text variant="title3" color={theme.text.basic}>
                     Закрывающие документы
@@ -139,7 +156,10 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
                     taskId={taskId}
                     statusID={statusID}
                   />
-                  <UploadProgress />
+                  <UploadProgress
+                    controllers={controllers}
+                    progressesSelector={progressesSelector}
+                  />
                   <View style={styles.mt36} />
                   <Text variant="title3" color={theme.text.basic}>
                     Закрывающие документы
@@ -178,12 +198,13 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
   };
   return (
     <>
-      <TaskCardUploadBottomSheet
-        isVisible={uploadModalVisible}
-        onClose={onUploadModalVisible}
-        taskId={taskId}
-        handleUpload={handleUpload}
+      <UploadBottomSheet
         onBanner={onBanner}
+        handleUpload={handleUpload}
+        isVisible={uploadModalVisible}
+        formData={getFormData(taskId)}
+        onClose={onUploadModalVisible}
+        deleteProgress={deleteProgress}
       />
       {banner && (
         <Banner

@@ -7,7 +7,8 @@ import { Spacer, Text, useTheme } from 'rn-ui-kit';
 import { CaretDownIcon } from '@/assets/icons/svg/screens/CaretDownIcon';
 import { DownloadManager } from '@/components/FileManager/DownloadManager';
 import { TaskAddress } from '@/components/task/TaskAddress';
-import { Contact, File } from '@/store/api/tasks/types';
+import { Contact } from '@/store/api/tasks/types';
+import { File } from '@/types/fileManager';
 
 import { TaskDate } from '../../../task/TaskDate';
 
