@@ -53,7 +53,7 @@ export const UploadItem: FC<UploadItemProps> = ({
       sizeBytes={file.sizeBytes}
       fileType={fileType}
       title={title}
-      fileDisabled
+      fileDisabled={false}
       isLoading={false}
     />
   );
