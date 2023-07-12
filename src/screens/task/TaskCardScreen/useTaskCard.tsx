@@ -50,8 +50,8 @@ export const useTaskCard = ({
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
 
-  // const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
-  const { data, isError, error, refetch, isLoading } = useGetTaskQuery('996');
+  const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
+  // const { data, isError, error, refetch, isLoading } = useGetTaskQuery('996');
 
   useEffect(() => {
     if (isFocused) {
