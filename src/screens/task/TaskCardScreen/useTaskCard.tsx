@@ -358,6 +358,15 @@ export const useTaskCard = ({
   const getButtons = (): TaskCardBottomButton[] => {
     switch (statusID) {
       case StatusType.ACTIVE:
+        if (tab === TaskTab.COMMENTS) {
+          return [
+            {
+              label: 'Перейти в чат',
+              variant: 'accent',
+              onPress: () => console.log('чат'),
+            },
+          ];
+        }
         if (subsetID === TaskType.COMMON_FIRST_RESPONCE) {
           return [
             {
@@ -385,9 +394,28 @@ export const useTaskCard = ({
             },
           ];
         }
+
         return [];
       case StatusType.WORK:
+        if (tab === TaskTab.COMMENTS) {
+          return [
+            {
+              label: 'Перейти в чат',
+              variant: 'accent',
+              onPress: () => console.log('чат'),
+            },
+          ];
+        }
         if (tab === TaskTab.REPORT) {
+          if (TaskTab.COMMENTS) {
+            return [
+              {
+                label: 'Перейти в чат',
+                variant: 'accent',
+                onPress: () => console.log('чат'),
+              },
+            ];
+          }
           if (files.length) {
             return [
               {
@@ -411,6 +439,15 @@ export const useTaskCard = ({
           ];
         }
         if (tab === TaskTab.ESTIMATE) {
+          if (TaskTab.COMMENTS) {
+            return [
+              {
+                label: 'Перейти в чат',
+                variant: 'accent',
+                onPress: () => console.log('чат'),
+              },
+            ];
+          }
           if (estimateBottomVisible) {
             return [
               {
@@ -457,6 +494,15 @@ export const useTaskCard = ({
       case StatusType.SUMMARIZING:
       case StatusType.COMPLETED:
       case StatusType.PAID:
+        if (tab === TaskTab.COMMENTS) {
+          return [
+            {
+              label: 'Перейти в чат',
+              variant: 'accent',
+              onPress: () => console.log('чат'),
+            },
+          ];
+        }
         if (tab === TaskTab.REPORT) {
           return [
             {
@@ -468,6 +514,24 @@ export const useTaskCard = ({
         }
         return [];
       case StatusType.PENDING:
+        if (tab === TaskTab.COMMENTS) {
+          return [
+            {
+              label: 'Перейти в чат',
+              variant: 'accent',
+              onPress: () => console.log('чат'),
+            },
+          ];
+        }
+        if (tab === TaskTab.REPORT) {
+          return [
+            {
+              label: 'Перейти в чат',
+              variant: 'accent',
+              onPress: () => console.log('чат'),
+            },
+          ];
+        }
         return [
           {
             label: 'Сдать работы',

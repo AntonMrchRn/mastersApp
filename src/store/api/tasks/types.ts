@@ -144,6 +144,7 @@ type GetTaskResponce = {
   mobileCounts?: CountMobile[];
   tasks?: Task[];
 };
+
 type GetTaskHistoryResponce = {
   status?: string;
   endpointName?: string;
