@@ -1,34 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { CheckBox, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import PencilIcon from '@/assets/icons/svg/screens/PencilIcon';
+import EntityTypeModal from '@/components/TabScreens/ProfileScreen/EntityTypeModal';
 import NDSPayerTooltip from '@/components/TabScreens/ProfileScreen/NDSPayerTooltip';
+import DocumentsBlock from '@/components/TabScreens/ProfileScreen/PaymentTab/DocumentsBlock';
 import SelfEmployedBlock from '@/components/TabScreens/ProfileScreen/PaymentTab/SelfEmployedBlock';
 import Title from '@/components/TabScreens/ProfileScreen/Title';
 import UserInfoBlock from '@/components/TabScreens/ProfileScreen/UserInfoBlock';
 import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { User } from '@/store/api/user/types';
 import { BankDetailsScreenNavigationProp } from '@/types/navigation';
+import { ProfileTab } from '@/types/tab';
 import { UserEntityType } from '@/types/user';
 
 import styles from './style';
 
 type PaymentTabProps = {
   user: User;
-  onEntityModalOpen: () => void;
+  activeTab: ProfileTab;
   entityType?: UserEntityType;
+  scrollToEnd: () => void;
 };
 
 const PaymentTab = ({
   user,
+  activeTab,
   entityType,
-  onEntityModalOpen,
+  scrollToEnd,
 }: PaymentTabProps) => {
   const theme = useTheme();
   const navigation = useNavigation<BankDetailsScreenNavigationProp>();
+
+  const [isEntityModalVisible, setIsEntityModalVisible] =
+    useState<boolean>(false);
 
   const isSelf = entityType === UserEntityType.self;
   const isIndividual = entityType === UserEntityType.individual;
@@ -46,6 +54,7 @@ const PaymentTab = ({
       (isCompany && user.entityName && user.RRC))
   );
 
+  const onModal = () => setIsEntityModalVisible(!isEntityModalVisible);
   const navigateToBankDetails = () => {
     navigation.navigate(ProfileScreenName.BankDetails, {
       bankID: user.bankID,
@@ -60,7 +69,7 @@ const PaymentTab = ({
       <Title
         withButton={true}
         title="Личные реквизиты"
-        onPress={onEntityModalOpen}
+        onPress={onModal}
         buttonLabel={isUserDetailsExist ? 'Изменить' : 'Добавить'}
         icon={
           isUserDetailsExist ? <PencilIcon fill={theme.icons.basic} /> : true
@@ -123,6 +132,31 @@ const PaymentTab = ({
           Информации о банковских реквизитах пока нет
         </Text>
       )}
+      <Spacer size="xxxl" />
+      <DocumentsBlock
+        scrollToEnd={scrollToEnd}
+        files={user.files}
+        activeTab={activeTab}
+      />
+      <EntityTypeModal
+        typeValues={{
+          ID: user.ID,
+          RRC: user.RRC,
+          ITIN: user.ITIN,
+          entityName: user.entityName,
+          isNDSPayer: user.isNDSPayer,
+        }}
+        isVisible={isEntityModalVisible}
+        onCloseModal={onModal}
+        type={
+          user.ITIN && user.entityTypeID
+            ? {
+                id: user.entityTypeID,
+                description: user.entityTypeDescription,
+              }
+            : undefined
+        }
+      />
     </>
   );
 };

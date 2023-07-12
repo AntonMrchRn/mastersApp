@@ -6,7 +6,7 @@ export enum TaskType {
   /**
    * IT- Первый отклик
    */
-  IT_FIRST_RESPONCE = 2,
+  IT_FIRST_RESPONSE = 2,
   /**
    * IT- Внутренние исполнители
    */
@@ -18,7 +18,7 @@ export enum TaskType {
   /**
    * Общие- Первый отклик
    */
-  COMMON_FIRST_RESPONCE = 5,
+  COMMON_FIRST_RESPONSE = 5,
 }
 export enum StatusType {
   /**
@@ -151,17 +151,10 @@ export enum RoleType {
 type TaskSearch = {
   ID?: number;
 };
-type HandleUpload = {
-  formData: FormData;
-  files: {
-    name: string;
-    size: number;
-  }[];
-  date: string;
-};
+
 type Measure = {
   text: string;
   name: string;
 };
 
-export type { TaskSearch, HandleUpload, Measure };
+export type { TaskSearch, Measure };

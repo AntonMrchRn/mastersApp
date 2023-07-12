@@ -1,18 +1,6 @@
+import { File } from '@/types/fileManager';
 import { OutlayStatusType, RoleType, TaskType } from '@/types/task';
 
-type File = {
-  url: string;
-  name: string;
-  fileID: number;
-  userID: number;
-  isCheck: boolean;
-  isOffer: boolean;
-  mime: string;
-  extension: string;
-  extensionOriginal: string;
-  isApplication: boolean;
-  sizeBytes: number;
-};
 type Material = {
   count: number;
   measure: string;
@@ -130,7 +118,7 @@ type Task = {
     password?: string;
   };
 };
-type GetTaskResponce = {
+type GetTaskResponse = {
   count?: number;
   extraCounts?: {
     canceled: number;
@@ -144,7 +132,7 @@ type GetTaskResponce = {
   mobileCounts?: CountMobile[];
   tasks?: Task[];
 };
-type GetTaskHistoryResponce = {
+type GetTaskHistoryResponse = {
   status?: string;
   endpointName?: string;
   requestId: string;
@@ -167,7 +155,7 @@ type Status = {
   description: string;
   tableName: string;
 };
-type GetTaskStatusesResponce = [
+type GetTaskStatusesResponse = [
   {
     ID: 1;
     code: 'pending';
@@ -247,34 +235,26 @@ type ServicesCategory = {
   isImmutable: boolean;
   name: string;
 };
-type GetServicesCategoriesResponce = {
+type GetServicesCategoriesResponse = {
   categories: ServicesCategory[];
 };
-type PostTasksFilesRequest = {
-  formData: FormData;
-  files: { name: string; size: number }[];
-  date: string;
-  signal?: AbortSignal;
-};
-type GetServicesResponce = {
+type GetServicesResponse = {
   count: number;
   services: Service[];
 };
 
 export type {
-  PostTasksFilesRequest,
-  GetTaskStatusesResponce,
+  GetTaskStatusesResponse,
   Status,
-  GetTaskResponce,
+  GetTaskResponse,
   Task,
   Executor,
   Service,
-  File,
   Contact,
   Curator,
   Material,
-  GetTaskHistoryResponce,
+  GetTaskHistoryResponse,
   ServicesCategory,
-  GetServicesCategoriesResponce,
-  GetServicesResponce,
+  GetServicesCategoriesResponse,
+  GetServicesResponse,
 };

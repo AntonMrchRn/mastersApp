@@ -7,7 +7,6 @@ import { Spacer, TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
 import AccountTab from '@/components/TabScreens/ProfileScreen/AccountTab';
 import ActivityTab from '@/components/TabScreens/ProfileScreen/ActivityTab';
 import CommonTab from '@/components/TabScreens/ProfileScreen/CommonTab';
-import EntityTypeModal from '@/components/TabScreens/ProfileScreen/EntityTypeModal';
 import PaymentTab from '@/components/TabScreens/ProfileScreen/PaymentTab';
 import useProfile from '@/screens/tabs/ProfileScreen/useProfile';
 import { ProfileTab } from '@/types/tab';
@@ -32,14 +31,15 @@ const ProfileScreen = () => {
     activeTab,
     switchTab,
     isLoading,
-    isEntityModalVisible,
+    scrollToEnd,
+    scrollViewRef,
     isApprovalNotificationVisible,
-    setIsEntityModalVisible,
   } = useProfile();
 
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView
+        ref={scrollViewRef}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
@@ -72,34 +72,14 @@ const ProfileScreen = () => {
               {activeTab.label === ProfileTab.Payment && user && (
                 <PaymentTab
                   user={user}
+                  scrollToEnd={scrollToEnd}
+                  activeTab={activeTab.label}
                   entityType={user?.entityTypeDescription}
-                  onEntityModalOpen={() => setIsEntityModalVisible(true)}
                 />
               )}
               {activeTab.label === ProfileTab.Activity && <ActivityTab />}
               {activeTab.label === ProfileTab.Account && <AccountTab />}
             </View>
-          )}
-          {user && (
-            <EntityTypeModal
-              typeValues={{
-                ID: user.ID,
-                RRC: user.RRC,
-                ITIN: user.ITIN,
-                entityName: user.entityName,
-                isNDSPayer: user.isNDSPayer,
-              }}
-              isVisible={isEntityModalVisible}
-              onCloseModal={() => setIsEntityModalVisible(false)}
-              type={
-                user.ITIN && user.entityTypeID
-                  ? {
-                      id: user.entityTypeID,
-                      description: user.entityTypeDescription,
-                    }
-                  : undefined
-              }
-            />
           )}
         </View>
       </KeyboardAwareScrollView>

@@ -1,3 +1,4 @@
+import { File } from '@/types/fileManager';
 import { UserEntityType } from '@/types/user';
 
 type UserResponse = {
@@ -43,14 +44,6 @@ type User = {
   sessionID: number;
   setIDs: number[];
   subcontractorIDs: number[];
-};
-
-type File = {
-  url: string;
-  name: string;
-  fileID: number;
-  userID: number;
-  extension: string;
 };
 
 type EntityType = {

@@ -10,11 +10,11 @@ const tasks = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
-    setProgresses: (state, action) => {
-      state.progresses = { ...state.progresses, ...action.payload };
+    setProgresses: (state, { payload }) => {
+      state.progresses = { ...state.progresses, ...payload };
     },
-    deleteProgress: (state, action) => {
-      delete state.progresses[action.payload];
+    deleteProgress: (state, { payload }) => {
+      delete state.progresses[payload];
     },
   },
 });
