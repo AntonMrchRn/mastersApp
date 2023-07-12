@@ -34,6 +34,7 @@ export type MyTasksScreenProps = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, BottomTabName.MyTasks>,
   StackScreenProps<AppStackParamList>
 >;
+
 const MyTasksScreen: FC<MyTasksScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();

@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import { TouchableOpacity, View } from 'react-native';
 
 import prettyBytes from 'pretty-bytes';
 import { Text, useTheme } from 'rn-ui-kit';
@@ -15,7 +15,9 @@ import { WEBPIcon } from '@/assets/icons/svg/files/WEBPIcon';
 import { XLSIcon } from '@/assets/icons/svg/files/XLSIcon';
 import { ZIPIcon } from '@/assets/icons/svg/files/ZIPIcon';
 
-import { ProgressBar } from './ProgressBar';
+import { ProgressBar } from '../ProgressBar/ProgressBar';
+
+import styles from './style';
 
 type FileItemProps = {
   action: React.JSX.Element | null;
@@ -26,9 +28,9 @@ type FileItemProps = {
   fileDisabled: boolean;
   isLoading: boolean;
   progress?: number;
-  recieved?: number;
+  received?: number;
 };
-export const FileItem: FC<FileItemProps> = ({
+export const FileItem = ({
   action,
   sizeBytes,
   fileOpen,
@@ -37,54 +39,17 @@ export const FileItem: FC<FileItemProps> = ({
   fileDisabled,
   isLoading,
   progress = 0,
-  recieved = 0,
-}) => {
+  received = 0,
+}: FileItemProps) => {
   const theme = useTheme();
-
-  const styles = StyleSheet.create({
-    head: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    iconContainer: {
-      width: 52,
-      height: 52,
-      backgroundColor: theme.background.fieldMain,
-      borderRadius: 8,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    iconTitleSize: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      flexShrink: 1,
-      flexGrow: 1,
-    },
-    titleSize: {
-      marginLeft: 8,
-      flexShrink: 1,
-    },
-    title: {
-      color: theme.text.basic,
-    },
-    size: { marginTop: 4 },
-    regularText: {
-      color: theme.text.neutral,
-    },
-    action: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingLeft: 20,
-      bottom: 5,
-    },
-  });
 
   const getIcon = () => {
     switch (fileType) {
       case 'pdf':
         return <PDFIcon color={theme.icons.accent} />;
       case 'doc':
+        return <DOCIcon color={theme.icons.accent} />;
+      case 'docx':
         return <DOCIcon color={theme.icons.accent} />;
       case 'png':
         return <PNGIcon color={theme.icons.accent} />;
@@ -113,13 +78,27 @@ export const FileItem: FC<FileItemProps> = ({
           onPress={fileOpen}
           disabled={fileDisabled}
         >
-          <View style={styles.iconContainer}>{getIcon()}</View>
+          <View
+            style={[
+              styles.iconContainer,
+              { backgroundColor: theme.background.fieldMain },
+            ]}
+          >
+            {getIcon()}
+          </View>
           <View style={styles.titleSize}>
-            <Text variant={'bodySBold'} style={styles.title} numberOfLines={1}>
+            <Text
+              variant={'bodySBold'}
+              style={{ color: theme.text.basic }}
+              numberOfLines={1}
+            >
               {title}
             </Text>
             <View style={styles.size}>
-              <Text variant={'captionRegular'} style={styles.regularText}>
+              <Text
+                variant={'captionRegular'}
+                style={{ color: theme.text.neutral }}
+              >
                 {prettyBytes(sizeBytes)}
               </Text>
             </View>
@@ -128,7 +107,7 @@ export const FileItem: FC<FileItemProps> = ({
         <View style={styles.action}>{action}</View>
       </View>
       {isLoading && (
-        <ProgressBar progress={progress} loaded={recieved} size={sizeBytes} />
+        <ProgressBar progress={progress} loaded={received} size={sizeBytes} />
       )}
     </View>
   );

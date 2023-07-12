@@ -1,7 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
-import { useSelector } from 'react-redux';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -10,6 +9,7 @@ import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 import ControlledInput from '@/components/inputs/ControlledInput';
 import { ServiceItem } from '@/components/task/ServiceItem';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
+import { useAppSelector } from '@/store';
 import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { OutlayStatusType } from '@/types/task';
@@ -29,7 +29,7 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
   const theme = useTheme();
   const toast = useToast();
 
-  const userRole = useSelector(selectAuth).user?.roleID;
+  const userRole = useAppSelector(selectAuth).user?.roleID;
 
   const taskId = route.params.taskId;
   const service = route.params.service;

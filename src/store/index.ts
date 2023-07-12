@@ -5,7 +5,7 @@ import { persistReducer, persistStore } from 'redux-persist';
 
 import { reduxStorage } from '@/mmkv/storage';
 import { api } from '@/store/api';
-import rootReducer from '@/store/rootReducer';
+import { rootReducer } from '@/store/rootReducer';
 
 const createDebugger = require('redux-flipper').default;
 

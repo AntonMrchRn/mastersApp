@@ -1,11 +1,7 @@
-import { AxiosProgressEvent } from 'axios';
+import { Progresses } from '@/types/fileManager';
 
-type Progress = Omit<AxiosProgressEvent, 'event'> & {
-  files: { name: string; size: number }[];
-};
-type Progresses = { [key: string]: Progress };
 type InitialState = {
   progresses: Progresses;
 };
 
-export type { InitialState, Progress };
+export type { InitialState };

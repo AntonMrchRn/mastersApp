@@ -1,4 +1,3 @@
-import { SerializedError } from '@reduxjs/toolkit';
 import { BaseQueryFn } from '@reduxjs/toolkit/dist/query/react';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import {
@@ -61,7 +60,6 @@ export const axiosBaseQuery = (): BaseQueryFn<
     } catch (error) {
       const isAxiosQueryError =
         typeof error === 'object' && error != null && 'response' in error;
-      const serializedError: SerializedError = error as SerializedError;
       const queryError = error as AxiosQueryError;
 
       return {
