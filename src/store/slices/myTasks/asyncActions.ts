@@ -5,10 +5,13 @@ import { axiosInstance } from '@/services/axios/axiosInstance';
 import { RootState } from '@/store';
 import { GetTaskResponse } from '@/store/api/tasks/types';
 
+import { GetCommentsResponce } from './types';
+
 type RequestArgs = {
-  idList: number;
+  idList?: number;
   numberOfPosts?: number;
   fromTask?: number;
+  idCard?: string;
 };
 
 const getEndpont = ({
@@ -64,7 +67,7 @@ const getMyTasks = createAsyncThunk<
   ) => {
     const userID = thunkApi.getState().auth.user?.userID;
     try {
-      if (userID) {
+      if (userID && idList) {
         const { data } = await axiosInstance.get(
           `tasks/web?query=?${getEndpont({
             idList,
@@ -95,7 +98,7 @@ const refreshMyTasks = createAsyncThunk<
     const userID = thunkApi.getState().auth.user?.userID;
 
     try {
-      if (userID) {
+      if (userID && idList) {
         const { data } = await axiosInstance.get(
           `tasks/web?query=?${getEndpont({
             idList,
@@ -113,4 +116,30 @@ const refreshMyTasks = createAsyncThunk<
   }
 );
 
-export { getMyTasks, refreshMyTasks };
+const getComments = createAsyncThunk<
+  GetCommentsResponce,
+  RequestArgs,
+  { state: RootState }
+>(
+  '/getComments',
+  async (
+    { idCard, numberOfPosts = 30, fromTask = 0 }: RequestArgs,
+    thunkApi
+  ) => {
+    const userID = thunkApi.getState().auth.user?.userID;
+
+    try {
+      if (userID) {
+        const { data } = await axiosInstance.get(
+          `tasks/comments?query=?(userID==${userID}||recipientID==${userID})*taskID==${idCard}*authorTypeID!=3?creationTime,asc,${numberOfPosts},${fromTask}`
+        );
+        return data;
+      }
+      return thunkApi.rejectWithValue('Необходимо авторизоваться');
+    } catch (error) {
+      return thunkApi.rejectWithValue((error as AxiosError).response?.data);
+    }
+  }
+);
+
+export { getMyTasks, refreshMyTasks, getComments };
