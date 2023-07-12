@@ -121,8 +121,7 @@ export const UploadBottomSheet = ({
         error.data !== null &&
         'message' in error.data &&
         typeof error.data.message === 'string' &&
-        (error as AxiosQueryErrorResponse).data.message !==
-          'CanceledError: canceled'
+        (error as AxiosQueryErrorResponse).data.message !== 'canceled'
       ) {
         toast.show({
           type: 'error',

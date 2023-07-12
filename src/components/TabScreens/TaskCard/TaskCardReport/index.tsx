@@ -51,6 +51,8 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
     names,
   }: HandleUpload) => {
     const controller = new AbortController();
+    controllers = { ...controllers, [date]: controller };
+
     const request = await postTasksFiles({
       formData,
       files,
@@ -58,9 +60,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
       signal: controller.signal,
     }).unwrap();
     const addedFiles = request.filter(file => names.includes(file.name));
-
     saveOnDevice(addedFiles);
-    controllers = { ...controllers, [date]: controller };
   };
 
   const getContent = () => {

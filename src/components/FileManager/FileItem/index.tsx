@@ -7,6 +7,7 @@ import { Text, useTheme } from 'rn-ui-kit';
 import { DOCIcon } from '@/assets/icons/svg/files/DOCIcon';
 import { FileIcon } from '@/assets/icons/svg/files/FileIcon';
 import { JPGIcon } from '@/assets/icons/svg/files/JPGIcon';
+import { MOVIcon } from '@/assets/icons/svg/files/MOVIcon';
 import { MP4Icon } from '@/assets/icons/svg/files/MP4Icon';
 import { PDFIcon } from '@/assets/icons/svg/files/PDFIcon';
 import { PNGIcon } from '@/assets/icons/svg/files/PNGIcon';
@@ -48,7 +49,6 @@ export const FileItem = ({
       case 'pdf':
         return <PDFIcon color={theme.icons.accent} />;
       case 'doc':
-        return <DOCIcon color={theme.icons.accent} />;
       case 'docx':
         return <DOCIcon color={theme.icons.accent} />;
       case 'png':
@@ -65,6 +65,8 @@ export const FileItem = ({
         return <WEBPIcon color={theme.icons.accent} />;
       case 'mp4':
         return <MP4Icon color={theme.icons.accent} />;
+      case 'mov':
+        return <MOVIcon color={theme.icons.accent} />;
       default:
         return <FileIcon color={theme.icons.accent} />;
     }

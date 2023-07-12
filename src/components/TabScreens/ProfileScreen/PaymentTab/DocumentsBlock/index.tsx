@@ -78,6 +78,8 @@ const DocumentsBlock = ({
     names,
   }: HandleUpload) => {
     const controller = new AbortController();
+    controllers = { ...controllers, [date]: controller };
+
     const request = await addFiles({
       formData,
       files,
@@ -87,7 +89,6 @@ const DocumentsBlock = ({
     const addedFiles = request.filter(file => names.includes(file.name));
 
     saveOnDevice(addedFiles);
-    controllers = { ...controllers, [date]: controller };
   };
 
   return (

@@ -1,3 +1,4 @@
+import { SerializedError } from '@reduxjs/toolkit';
 import { BaseQueryFn } from '@reduxjs/toolkit/dist/query/react';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import {
@@ -61,6 +62,7 @@ export const axiosBaseQuery = (): BaseQueryFn<
       const isAxiosQueryError =
         typeof error === 'object' && error != null && 'response' in error;
       const queryError = error as AxiosQueryError;
+      const serializedError = error as SerializedError;
 
       return {
         error: {
@@ -70,6 +72,8 @@ export const axiosBaseQuery = (): BaseQueryFn<
           data: {
             message: isAxiosQueryError
               ? queryError.response.data.message
+              : serializedError.message === 'canceled'
+              ? serializedError.message
               : 'Сервис временно недоступен',
             code: isAxiosQueryError
               ? queryError.response.data?.code
