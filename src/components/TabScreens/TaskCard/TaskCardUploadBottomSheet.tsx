@@ -67,8 +67,8 @@ export const TaskCardUploadBottomSheet: FC<TaskCardUploadBottomSheetProps> = ({
   const getFormData = () => {
     const formData = new FormData();
     formData.append('taskID', taskId);
-    formData.append('isApplication', true);
-    formData.append('isOffer', false);
+    formData.append('isApplication', false);
+    formData.append('isOffer', true);
     formData.append('isCheck', false);
     return formData;
   };

@@ -49,6 +49,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
     controllers = { ...controllers, [date]: controller };
     await request.unwrap();
   };
+  const reportFiles = files.filter(file => file.isOffer);
   const getContent = () => {
     switch (statusID) {
       case StatusType.ACTIVE:
@@ -88,7 +89,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
               Загруженные файлы
             </Text>
             <View style={styles.mt24}>
-              {files.length ? (
+              {reportFiles.length ? (
                 <>
                   <UploadManager
                     files={files}
@@ -127,7 +128,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
       default:
         return (
           <>
-            {files.length ? (
+            {reportFiles.length ? (
               <View style={styles.mt36}>
                 <Text variant="title3" color={theme.text.basic}>
                   Загруженные файлы

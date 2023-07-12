@@ -300,7 +300,7 @@ export const useTaskCard = ({
             activeBudgetCanceled={!!getBanner()}
             statusID={statusID}
             files={files}
-            taskId={taskId}
+            taskId={id.toString()}
             uploadModalVisible={uploadModalVisible}
             onUploadModalVisible={onUploadModalVisible}
           />
