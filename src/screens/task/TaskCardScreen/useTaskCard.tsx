@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import { useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import dayjs from 'dayjs';
 import { useToast } from 'rn-ui-kit';
@@ -39,6 +40,7 @@ export const useTaskCard = ({
   const [selectedServiceId, setSelectedServiceId] = useState<number>();
   const [estimateBannerVisible, setEstimateBannerVisible] = useState(false);
   const [cantDeleteBannerVisible, setCantDeleteBannerVisible] = useState(false);
+  const isFocused = useIsFocused();
 
   const ref = useRef<{
     setId: (id: number) => void;
@@ -47,13 +49,14 @@ export const useTaskCard = ({
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
 
-  // const getTask = useGetTaskQuery('996');
-  const getTask = useGetTaskQuery(taskId);
+  const getTask = useGetTaskQuery('996');
+  // const getTask = useGetTaskQuery(taskId);
 
-  const onRefresh = () => {
-    getTask.refetch();
-  };
-  const refreshing = getTask.isLoading;
+  useEffect(() => {
+    if (isFocused) {
+      getTask.refetch();
+    }
+  }, [isFocused]);
   useEffect(() => {
     if (
       typeof getTask.error === 'object' &&
@@ -74,6 +77,10 @@ export const useTaskCard = ({
 
   const [patchTask] = usePatchTaskMutation();
 
+  const onRefresh = () => {
+    getTask.refetch();
+  };
+  const refreshing = getTask.isLoading;
   const task = getTask?.data?.tasks?.[0];
   const id = task?.ID || 0;
   const subsetID = task?.subsetID || '';
