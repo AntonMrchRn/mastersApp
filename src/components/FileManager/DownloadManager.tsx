@@ -1,29 +1,35 @@
 import React, { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { File } from '@/store/api/tasks/types';
+import { File } from '@/types/fileManager';
 
 import { DownloadItem } from './DownloadItem';
 
 type DownloadManagerProps = {
   files: File[];
+  isUserFiles?: boolean;
 };
-export const DownloadManager: FC<DownloadManagerProps> = ({ files }) => {
-  const styles = StyleSheet.create({
-    container: {
-      width: '100%',
-    },
-  });
 
-  return (
-    <View style={styles.container}>
-      {files.map((file, index) => {
-        return (
-          <View style={[index !== 0 && { marginTop: 8 }]} key={file.url}>
-            <DownloadItem file={file} key={file.url} />
-          </View>
-        );
-      })}
-    </View>
-  );
-};
+export const DownloadManager: FC<DownloadManagerProps> = ({
+  files,
+  isUserFiles = false,
+}) => (
+  <View style={styles.container}>
+    {files.map((file, index) => {
+      return (
+        <View style={[index !== 0 && styles.mt8]} key={file.url}>
+          <DownloadItem key={file.url} file={file} isUserFiles={isUserFiles} />
+        </View>
+      );
+    })}
+  </View>
+);
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+  },
+  mt8: {
+    marginTop: 8,
+  },
+});

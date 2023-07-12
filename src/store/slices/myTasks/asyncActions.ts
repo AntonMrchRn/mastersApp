@@ -3,7 +3,7 @@ import { AxiosError } from 'axios';
 
 import { axiosInstance } from '@/services/axios/axiosInstance';
 import { RootState } from '@/store';
-import { GetTaskResponce } from '@/store/api/tasks/types';
+import { GetTaskResponse } from '@/store/api/tasks/types';
 
 import { GetCommentsResponce } from './types';
 
@@ -56,7 +56,7 @@ const getEndpont = ({
 };
 
 const getMyTasks = createAsyncThunk<
-  GetTaskResponce,
+  GetTaskResponse,
   RequestArgs,
   { state: RootState }
 >(
@@ -86,7 +86,7 @@ const getMyTasks = createAsyncThunk<
 );
 
 const refreshMyTasks = createAsyncThunk<
-  GetTaskResponce,
+  GetTaskResponse,
   RequestArgs,
   { state: RootState }
 >(

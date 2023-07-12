@@ -1,4 +1,4 @@
-import { GetTaskResponce, Task } from '@/store/api/tasks/types';
+import { GetTaskResponse, Task } from '@/store/api/tasks/types';
 import { Error } from '@/types/error';
 
 type GetCommentsResponce = {
@@ -19,7 +19,7 @@ type Comment = {
 };
 
 type InitialState = {
-  list: GetTaskResponce;
+  list: GetTaskResponse;
   loadingList: boolean;
   errorList: Error | null;
   data?: Task[];

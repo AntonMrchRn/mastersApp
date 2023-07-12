@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { File } from '@/store/api/tasks/types';
+import { File } from '@/types/fileManager';
 import { StatusType } from '@/types/task';
 
 import { UploadItem } from './UploadItem';
@@ -18,11 +18,6 @@ export const UploadManager: FC<UploadManagerProps> = ({
 }) => {
   const canDelete =
     statusID && [StatusType.SUMMARIZING, StatusType.WORK].includes(statusID);
-  const styles = StyleSheet.create({
-    container: {
-      width: '100%',
-    },
-  });
 
   return (
     <View style={styles.container}>
@@ -36,3 +31,9 @@ export const UploadManager: FC<UploadManagerProps> = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+  },
+});

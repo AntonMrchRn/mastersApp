@@ -1,40 +1,29 @@
-import React, { FC } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import React from 'react';
+import { TouchableOpacity, View } from 'react-native';
 
 import plural from 'plural-ru';
 import prettyBytes from 'pretty-bytes';
 import { Text, useTheme } from 'rn-ui-kit';
 
-import { selectTasks } from '@/store/slices/tasks/selectors';
+import { ProgressBar } from '@/components/FileManager/ProgressBar/ProgressBar';
+import { Controllers, Progresses } from '@/types/fileManager';
 
-import { controllers } from '../TabScreens/TaskCard/TaskCardReport';
-import { ProgressBar } from './ProgressBar';
+import styles from './style';
 
-export const UploadProgress: FC = () => {
+type UploadProgressProps = {
+  controllers: Controllers;
+  progressesSelector: Progresses;
+};
+
+export const UploadProgress = ({
+  controllers,
+  progressesSelector,
+}: UploadProgressProps) => {
   const theme = useTheme();
-  const progressesSelector = useSelector(selectTasks).progresses;
 
   const progresses = Object.values(progressesSelector);
   const dates = Object.keys(progressesSelector);
 
-  const styles = StyleSheet.create({
-    mt24: {
-      marginTop: 24,
-    },
-    mt16: {
-      marginTop: 16,
-    },
-    rowBetween: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    progress: {
-      marginTop: 16,
-      borderLeftWidth: 2,
-      paddingLeft: 12,
-    },
-  });
   return (
     <>
       {progresses.map((progress, index) => {

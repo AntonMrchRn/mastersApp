@@ -6,7 +6,7 @@ import {
   useDeleteTasksFilesMutation,
   useGetTaskQuery,
 } from '@/store/api/tasks';
-import { File } from '@/store/api/tasks/types';
+import { File } from '@/types/fileManager';
 
 import { FileItem } from './FileItem';
 
@@ -32,7 +32,7 @@ export const UploadItem: FC<UploadItemProps> = ({
       await deleteTasksFiles(file.fileID.toString()).unwrap();
       getTask.refetch();
     } catch (err) {
-      console.log('🚀 ~ file: UploadItem.tsx:29 ~ handleDelete ~ err:', err);
+      console.log('🚀 ~ file: UploadItem.tsx:35 ~ handleDelete ~ err:', err);
     }
   };
 

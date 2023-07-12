@@ -20,7 +20,7 @@ const getSearchTasks = createAsyncThunk(
       const { data } = await axiosInstance.get(
         `tasks/web?query=?object==regionID^^${regionID?.join(
           ','
-        )}*setID==${idList}?ID,desc,${numberOfPosts},${fromTask}`
+        )}*setID==${idList}*statusID!=1?ID,desc,${numberOfPosts},${fromTask}`
       );
 
       return data;
@@ -40,7 +40,7 @@ const refreshTasks = createAsyncThunk(
       const { data } = await axiosInstance.get(
         `tasks/web?query=?object==regionID^^${regionID?.join(
           ','
-        )}*setID==${idList}?ID,desc,${numberOfPosts},${fromTask}`
+        )}*setID==${idList}*statusID!=1?ID,desc,${numberOfPosts},${fromTask}`
       );
 
       return data;

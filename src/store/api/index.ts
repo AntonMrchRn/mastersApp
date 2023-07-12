@@ -61,8 +61,8 @@ export const axiosBaseQuery = (): BaseQueryFn<
     } catch (error) {
       const isAxiosQueryError =
         typeof error === 'object' && error != null && 'response' in error;
-      const serializedError: SerializedError = error as SerializedError;
       const queryError = error as AxiosQueryError;
+      const serializedError = error as SerializedError;
 
       return {
         error: {
@@ -72,6 +72,8 @@ export const axiosBaseQuery = (): BaseQueryFn<
           data: {
             message: isAxiosQueryError
               ? queryError.response.data.message
+              : serializedError.message === 'canceled'
+              ? serializedError.message
               : 'Сервис временно недоступен',
             code: isAxiosQueryError
               ? queryError.response.data?.code

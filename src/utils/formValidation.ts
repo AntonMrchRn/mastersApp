@@ -15,16 +15,22 @@ const cancelTaskValidation = {
   cancelTask: Yup.string().required(''),
 };
 const estimateCountValidation = {
-  estimateCount: Yup.string().required('Укажите количество услуги / материала'),
+  estimateCount: Yup.string()
+    .notOneOf(['0'], 'Количество должно быть больше 0')
+    .required('Укажите количество услуги / материала'),
 };
 const estimateAddMaterialValidation = {
   name: Yup.string().required('Укажите название материала'),
-  count: Yup.string().required('Укажите количество материала'),
+  count: Yup.string()
+    .notOneOf(['0'], 'Количество должно быть больше 0')
+    .required('Укажите количество материала'),
   price: Yup.string().required('Укажите цену за одну единицу измерения'),
   measure: Yup.string().required('Выберите единицу измерения'),
 };
 const estimateAddServiceValidation = {
-  count: Yup.string().required('Укажите количество услуги'),
+  count: Yup.string()
+    .notOneOf(['0'], 'Количество должно быть больше 0')
+    .required('Укажите количество услуги'),
 };
 const phoneValidation = {
   phone: Yup.string()
