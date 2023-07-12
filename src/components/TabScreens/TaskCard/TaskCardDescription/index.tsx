@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { View } from 'react-native';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 import { MaskedText } from 'react-native-mask-text';
 
 import { Spacer, Text, useTheme } from 'rn-ui-kit';
@@ -32,7 +33,12 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   files,
 }) => {
   const theme = useTheme();
+
   const applicationFiles = files.filter(file => file.isApplication);
+
+  const onDelete = async ({ filePath }: { filePath?: string }) => {
+    filePath && (await ReactNativeBlobUtil.fs.unlink(filePath));
+  };
   return (
     <View>
       <Text variant="title3" style={styles.mt36} color={theme.text.basic}>
@@ -100,7 +106,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
             </Text>
             <CaretDownIcon />
           </View>
-          <DownloadManager files={applicationFiles} />
+          <DownloadManager files={applicationFiles} onDelete={onDelete} />
         </>
       ) : (
         <></>

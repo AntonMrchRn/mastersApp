@@ -7,18 +7,31 @@ import { DownloadItem } from './DownloadItem';
 
 type DownloadManagerProps = {
   files: File[];
-  isUserFiles?: boolean;
+  onDelete: ({
+    fileID,
+    filePath,
+  }: {
+    fileID?: number;
+    filePath?: string;
+  }) => Promise<void>;
+  canDelete?: boolean;
 };
 
 export const DownloadManager: FC<DownloadManagerProps> = ({
   files,
-  isUserFiles = false,
+  onDelete,
+  canDelete = true,
 }) => (
   <View style={styles.container}>
     {files.map((file, index) => {
       return (
         <View style={[index !== 0 && styles.mt8]} key={file.url}>
-          <DownloadItem key={file.url} file={file} isUserFiles={isUserFiles} />
+          <DownloadItem
+            key={file.url}
+            file={file}
+            onDelete={onDelete}
+            canDelete={canDelete}
+          />
         </View>
       );
     })}
