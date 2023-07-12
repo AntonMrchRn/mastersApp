@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { CompositeScreenProps } from '@react-navigation/native';
+import { CompositeScreenProps, useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { BottomSheet, Text, useTheme } from 'rn-ui-kit';
 
@@ -37,6 +37,7 @@ export type TaskSearchScreenProps = CompositeScreenProps<
 const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const isFocused = useIsFocused();
 
   const [selectedTab, setSelectedTab] = useState(1);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
@@ -83,8 +84,10 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
   };
 
   useEffect(() => {
-    if (user?.regionIDs) onRefresh();
-  }, [user?.regionIDs]);
+    if (user?.regionIDs && isFocused) {
+      onRefresh();
+    }
+  }, [user?.regionIDs, isFocused]);
 
   return (
     <SafeAreaView style={styles.container}>

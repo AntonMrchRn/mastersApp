@@ -11,7 +11,7 @@ import { UploadBottomSheet } from '@/components/FileManager/UploadBottomSheet';
 import { UploadProgress } from '@/components/FileManager/UploadProgress';
 import Title from '@/components/TabScreens/ProfileScreen/Title';
 import { useAppSelector } from '@/store';
-import { useAddFilesMutation } from '@/store/api/user';
+import { useAddFilesMutation, useDeleteFileMutation } from '@/store/api/user';
 import { deleteProgress } from '@/store/slices/user/actions';
 import { selectUser } from '@/store/slices/user/selectors';
 import { Controllers, File, HandleUpload } from '@/types/fileManager';
@@ -36,7 +36,10 @@ const DocumentsBlock = ({
 }: DocumentsBlockProps) => {
   const theme = useTheme();
   const isFocused = useIsFocused();
+
   const [addFiles, { isLoading, isSuccess }] = useAddFilesMutation();
+  const [deleteFile] = useDeleteFileMutation();
+
   const progressesSelector = useAppSelector(selectUser).progresses;
 
   const [isBannerVisible, setIsBannerVisible] = useState<boolean>(false);
@@ -90,7 +93,9 @@ const DocumentsBlock = ({
 
     saveOnDevice(addedFiles);
   };
-
+  const onDelete = async ({ fileID }: { fileID?: number }) => {
+    fileID && (await deleteFile(fileID).unwrap());
+  };
   return (
     <>
       <Title
@@ -103,24 +108,30 @@ const DocumentsBlock = ({
       <Spacer size="xl" />
       {files.length ? (
         <>
-          <DownloadManager files={files} isUserFiles={true} />
+          <DownloadManager files={files} onDelete={onDelete} />
           <UploadProgress
             controllers={controllers}
             progressesSelector={progressesSelector}
           />
         </>
       ) : (
-        <View style={{ flexDirection: 'row' }}>
-          <DownloadFilesIcon />
-          <Text
-            variant="bodySRegular"
-            style={styles.defaultText}
-            color={theme.text.neutral}
-          >
-            При необходимости загрузите файлы для подтверждения учетной записи.
-            Максимальный размер одного файл не более 5 МВ
-          </Text>
-        </View>
+        <>
+          <View style={{ flexDirection: 'row' }}>
+            <DownloadFilesIcon />
+            <Text
+              variant="bodySRegular"
+              style={styles.defaultText}
+              color={theme.text.neutral}
+            >
+              При необходимости загрузите файлы для подтверждения учетной
+              записи. Максимальный размер одного файл не более 5 МВ
+            </Text>
+          </View>
+          <UploadProgress
+            controllers={controllers}
+            progressesSelector={progressesSelector}
+          />
+        </>
       )}
       <UploadBottomSheet
         isUserFile
