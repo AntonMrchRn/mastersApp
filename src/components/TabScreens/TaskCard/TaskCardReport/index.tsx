@@ -6,11 +6,15 @@ import { Banner, Text, useTheme } from 'rn-ui-kit';
 import { DownloadFilesIcon } from '@/assets/icons/svg/screens/DownloadFilesIcon';
 import { NoFilesIcon } from '@/assets/icons/svg/screens/NoFilesIcon';
 import { OtesIcon } from '@/assets/icons/svg/screens/OtesIcon';
+import { DownloadManager } from '@/components/FileManager/DownloadManager';
 import { UploadBottomSheet } from '@/components/FileManager/UploadBottomSheet';
-import { UploadManager } from '@/components/FileManager/UploadManager';
 import { UploadProgress } from '@/components/FileManager/UploadProgress';
 import { useAppSelector } from '@/store';
-import { usePostTasksFilesMutation } from '@/store/api/tasks';
+import {
+  useDeleteTasksFilesMutation,
+  useGetTaskQuery,
+  usePostTasksFilesMutation,
+} from '@/store/api/tasks';
 import { deleteProgress } from '@/store/slices/tasks/actions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
 import { Controllers, File, HandleUpload } from '@/types/fileManager';
@@ -40,10 +44,15 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
 }) => {
   const theme = useTheme();
   const [banner, setBanner] = useState(false);
+  const getTask = useGetTaskQuery(taskId);
+
   const onBanner = () => setBanner(!banner);
   const [postTasksFiles] = usePostTasksFilesMutation();
-  const progressesSelector = useAppSelector(selectTasks).progresses;
+  const [deleteTasksFiles] = useDeleteTasksFilesMutation();
 
+  const progressesSelector = useAppSelector(selectTasks).progresses;
+  const canDelete =
+    statusID && [StatusType.SUMMARIZING, StatusType.WORK].includes(statusID);
   const handleUpload = async ({
     formData,
     files,
@@ -61,6 +70,12 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
     }).unwrap();
     const addedFiles = request.filter(file => names.includes(file.name));
     saveOnDevice(addedFiles);
+  };
+  const reportFiles = files.filter(file => file.isOffer);
+
+  const onDelete = async ({ fileID }: { fileID?: number }) => {
+    fileID && (await deleteTasksFiles(fileID.toString()).unwrap());
+    getTask.refetch();
   };
 
   const getContent = () => {
@@ -102,12 +117,12 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
               Загруженные файлы
             </Text>
             <View style={styles.mt24}>
-              {files.length ? (
+              {reportFiles.length ? (
                 <>
-                  <UploadManager
-                    files={files}
-                    taskId={taskId}
-                    statusID={statusID}
+                  <DownloadManager
+                    files={reportFiles}
+                    onDelete={onDelete}
+                    canDelete={canDelete}
                   />
                   <UploadProgress
                     controllers={controllers}
@@ -126,17 +141,23 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
                   </Text>
                 </>
               ) : (
-                <View style={styles.download}>
-                  <DownloadFilesIcon />
-                  <Text
-                    variant="bodySRegular"
-                    style={styles.desc}
-                    color={theme.text.neutral}
-                  >
-                    Загрузите файлы, подтверждающие выполнение услуг общим
-                    размером не более 250 МВ
-                  </Text>
-                </View>
+                <>
+                  <View style={styles.download}>
+                    <DownloadFilesIcon />
+                    <Text
+                      variant="bodySRegular"
+                      style={styles.desc}
+                      color={theme.text.neutral}
+                    >
+                      Загрузите файлы, подтверждающие выполнение услуг общим
+                      размером не более 250 МВ
+                    </Text>
+                  </View>
+                  <UploadProgress
+                    controllers={controllers}
+                    progressesSelector={progressesSelector}
+                  />
+                </>
               )}
             </View>
           </View>
@@ -144,16 +165,16 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
       default:
         return (
           <>
-            {files.length ? (
+            {reportFiles.length ? (
               <View style={styles.mt36}>
                 <Text variant="title3" color={theme.text.basic}>
                   Загруженные файлы
                 </Text>
                 <View style={styles.mt24}>
-                  <UploadManager
-                    files={files}
-                    taskId={taskId}
-                    statusID={statusID}
+                  <DownloadManager
+                    files={reportFiles}
+                    onDelete={onDelete}
+                    canDelete={canDelete}
                   />
                   <UploadProgress
                     controllers={controllers}

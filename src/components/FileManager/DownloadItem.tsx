@@ -9,19 +9,27 @@ import { CloseFileIcon } from '@/assets/icons/svg/files/CloseFileIcon';
 import { DeleteFileIcon } from '@/assets/icons/svg/files/DeleteFileIcon';
 import { DownloadFileIcon } from '@/assets/icons/svg/files/DownloadFileIcon';
 import { configApp, hitSlop } from '@/constants/platform';
-import { useDeleteFileMutation } from '@/store/api/user';
 import { File } from '@/types/fileManager';
 
 import { FileItem } from './FileItem';
 
 type DownloadItemProps = {
   file: File;
-  isUserFiles: boolean;
+  onDelete: ({
+    fileID,
+    filePath,
+  }: {
+    fileID?: number;
+    filePath?: string;
+  }) => Promise<void>;
+  canDelete: boolean;
 };
 
-export const DownloadItem = ({ file, isUserFiles }: DownloadItemProps) => {
-  const [deleteFile, { isSuccess }] = useDeleteFileMutation();
-
+export const DownloadItem = ({
+  file,
+  onDelete,
+  canDelete,
+}: DownloadItemProps) => {
   const [onDevice, setOnDevice] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
@@ -31,10 +39,10 @@ export const DownloadItem = ({ file, isUserFiles }: DownloadItemProps) => {
     useState<StatefulPromise<FetchBlobResponse>>();
 
   useEffect(() => {
-    if (isSuccess && !onDevice && !canDownload) {
+    if (!onDevice && !canDownload) {
       setIsDeleting(false);
     }
-  }, [isSuccess, onDevice]);
+  }, [onDevice]);
 
   useEffect(() => {
     hasOnDevice();
@@ -84,16 +92,12 @@ export const DownloadItem = ({ file, isUserFiles }: DownloadItemProps) => {
 
   const handleDelete = async () => {
     try {
-      if (isUserFiles) {
-        setIsDeleting(true);
-        await deleteFile(file.fileID).unwrap();
-      }
-      await ReactNativeBlobUtil.fs.unlink(FILE_PATH);
+      setIsDeleting(true);
+      await onDelete({ fileID: file.fileID, filePath: FILE_PATH });
+      setIsDeleting(false);
       await hasOnDevice();
     } catch (err) {
-      if (isUserFiles) {
-        setIsDeleting(false);
-      }
+      setIsDeleting(false);
       console.log('🚀 ~ file: DownloadItem.tsx:97 ~ handleDelete ~ err:', err);
     }
   };
@@ -134,7 +138,7 @@ export const DownloadItem = ({ file, isUserFiles }: DownloadItemProps) => {
     if (isDeleting) {
       return <ActivityIndicator />;
     }
-    if (onDevice) {
+    if (onDevice && canDelete) {
       return (
         <TouchableOpacity onPress={handleDelete} hitSlop={hitSlop}>
           <DeleteFileIcon />

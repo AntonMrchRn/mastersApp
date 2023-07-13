@@ -25,7 +25,10 @@ export const CategoryContainer: FC<CategoryContainerProps> = ({
     .reduce<number[]>((acc, val) => acc.concat(val.ID), [])
     .join(',');
   const services = useGetServicesByCategoriesQuery(serviceIDs);
-
+  const IDs = services?.data?.services?.reduce<number[]>(
+    (acc, val) => acc.concat(val.ID),
+    []
+  );
   return (
     <View>
       <View style={styles.chipses}>

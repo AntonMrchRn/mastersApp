@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import { useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import dayjs from 'dayjs';
 import { useToast } from 'rn-ui-kit';
@@ -40,6 +41,7 @@ export const useTaskCard = ({
   const [selectedServiceId, setSelectedServiceId] = useState<number>();
   const [estimateBannerVisible, setEstimateBannerVisible] = useState(false);
   const [cantDeleteBannerVisible, setCantDeleteBannerVisible] = useState(false);
+  const isFocused = useIsFocused();
 
   const ref = useRef<{
     setId: (id: number) => void;
@@ -48,9 +50,14 @@ export const useTaskCard = ({
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
 
-  // const getTask = useGetTaskQuery('996');
   const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
+  // const { data, isError, error, refetch, isLoading } = useGetTaskQuery('996');
 
+  useEffect(() => {
+    if (isFocused) {
+      refetch();
+    }
+  }, [isFocused]);
   useEffect(() => {
     if (isError) {
       toast.show({
@@ -276,7 +283,7 @@ export const useTaskCard = ({
             activeBudgetCanceled={!!getBanner()}
             statusID={statusID}
             files={files}
-            taskId={taskId}
+            taskId={id.toString()}
             uploadModalVisible={uploadModalVisible}
             onUploadModalVisible={onUploadModalVisible}
           />

@@ -68,7 +68,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
     mode: 'onChange',
   });
   const {
-    formState: { errors },
+    formState: { errors, isValid },
     watch,
   } = methods;
 
@@ -76,6 +76,8 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
   const count = watch('count');
   const price = watch('price');
   const measure = watch('measure');
+
+  const hasName = materialsNames.includes(name);
 
   const onSubmit = async ({
     name,
@@ -90,13 +92,6 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
       return toast.show({
         type: 'error',
         title: 'Не удалось определить роль пользователя',
-        contentHeight: 120,
-      });
-    }
-    if (materialsNames.includes(name)) {
-      return toast.show({
-        type: 'error',
-        title: 'Имя материала не должно совпадать с имеющимся в услуге',
         contentHeight: 120,
       });
     }
@@ -166,8 +161,11 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
             label={name ? 'Наименование' : undefined}
             placeholder={'Наименование'}
             variant={'text'}
-            hint={errors.name?.message}
-            isError={!!errors.name?.message}
+            hint={
+              errors.name?.message ||
+              (hasName ? 'Данный материал уже включен в смету' : undefined)
+            }
+            isError={!!errors.name?.message || hasName}
           />
           <ControlledInput
             name={'count'}
@@ -201,6 +199,8 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
           label={'Добавить'}
           onPress={methods.handleSubmit(onSubmit)}
           style={styles.button}
+          isPending={mutationTask.isLoading}
+          disabled={!isValid || hasName}
         />
       </FormProvider>
     </View>

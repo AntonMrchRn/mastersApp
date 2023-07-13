@@ -11,6 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import {
+  Banner,
   BottomSheetModal,
   Button,
   CheckBox,
@@ -37,25 +38,31 @@ type AddServiceBottomSheetProps = {
   onCancel: () => void;
   ref?: ForwardedRef<BottomSheetModalMethods>;
   addService: (service: Service) => void;
+  serviceIDs: number[];
 };
 export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
-  ({ onCancel, addService }, ref) => {
+  ({ onCancel, addService, serviceIDs }, ref) => {
     const theme = useTheme();
     const insets = useSafeAreaInsets();
 
     const [chipses, setChipses] = useState<ServicesCategory[]>([]);
     const [serviceName, setServiceName] = useState('');
+    const [banner, setBanner] = useState(false);
     const [selectCategories, setSelectCategories] = useState<
       ServicesCategory[]
     >([]);
 
     const categories = useGetServicesCategoriesQuery();
     const [trigger, result] = useLazyGetServicesByNameQuery();
+
     const subtitle =
       !chipses.length && !serviceName.length
         ? 'Воспользуйтесь поиском или выберите подходящую категорию услуги'
         : undefined;
 
+    const onBanner = useCallback(() => {
+      setBanner(!banner);
+    }, [banner]);
     const onChoose = useCallback(() => {
       setSelectCategories([]);
       setChipses(selectCategories);
@@ -71,6 +78,13 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
       }, 1000);
       timeout = timer;
     }, []);
+    const handleAddService = (service: Service) => {
+      if (serviceIDs?.includes(service.ID)) {
+        onBanner();
+      } else {
+        addService(service);
+      }
+    };
     return (
       <>
         <BottomSheetModal
@@ -148,7 +162,7 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
               <CategoryContainer
                 chipses={chipses}
                 setChipses={setChipses}
-                addService={addService}
+                addService={handleAddService}
               />
             ) : (
               <></>
@@ -157,12 +171,23 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
               <SearchContainer
                 data={result.data}
                 loader={result.isLoading || result.isFetching}
-                addService={addService}
+                addService={handleAddService}
               />
             ) : (
               <></>
             )}
           </BottomSheetScrollView>
+          {banner && (
+            <View style={{ position: 'absolute', bottom: 100, width: '100%' }}>
+              <Banner
+                type={'error'}
+                icon={'alert'}
+                title="Добавление невозможно"
+                text="Данная услуга уже включена в смету"
+                onClosePress={onBanner}
+              />
+            </View>
+          )}
         </BottomSheetModal>
       </>
     );

@@ -71,6 +71,10 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     estimateBottomVisible,
   });
   const canSwipe = !estimateBottomVisible && statusID === StatusType.WORK;
+  const serviceIDs = services?.reduce<number[]>(
+    (acc, val) => acc.concat(val.ID),
+    []
+  );
   const addService = (service: Service) => {
     navigation.navigate(AppScreenName.EstimateAddService, {
       service,
@@ -119,6 +123,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           ref={bsRef}
           onCancel={addServiceBottomSheetClose}
           addService={addService}
+          serviceIDs={serviceIDs}
         />
       )}
       <View>
