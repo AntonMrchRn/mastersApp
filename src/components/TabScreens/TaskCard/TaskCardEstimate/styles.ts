@@ -4,6 +4,9 @@ export const styles = StyleSheet.create({
   mb8: {
     marginBottom: 8,
   },
+  mt16: {
+    marginTop: 16,
+  },
   bottom: {
     gap: 8,
     marginTop: 16,
@@ -29,5 +32,12 @@ export const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'center',
+  },
+  candidatRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: 8,
+    alignSelf: 'flex-start',
   },
 });

@@ -1,16 +1,18 @@
 import React, { FC } from 'react';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
 import { useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RadioButton, Spacer, Text, useTheme } from 'rn-ui-kit';
 
+import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
 import { CalculatorLargeIcon } from '@/assets/icons/svg/estimate/CalculatorLargeIcon';
 import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
+import { useGetOffersQuery } from '@/store/api/tasks';
 import { Service } from '@/store/api/tasks/types';
-import { OutlayStatusType, StatusType } from '@/types/task';
+import { OutlayStatusType, StatusType, TaskType } from '@/types/task';
 
 import { AddServiceBottomSheet } from '../AddServiceBottomSheet';
 import { TaskCardAddEstimateBottomSheet } from '../TaskCardAddEstimateBottomSheet';
@@ -35,6 +37,7 @@ type TaskCardEstimateProps = {
     React.SetStateAction<number | undefined>
   >;
   onCantDeleteBannerVisible: () => void;
+  subsetID: TaskType | undefined;
 };
 
 export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
@@ -48,6 +51,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   selectedServiceId,
   setSelectedServiceId,
   onCantDeleteBannerVisible,
+  subsetID,
 }) => {
   const theme = useTheme();
   const isFocused = useIsFocused();
@@ -70,6 +74,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     onEstimateBottomVisible,
     estimateBottomVisible,
   });
+  const offers = useGetOffersQuery(taskId.toString());
   const canSwipe = !estimateBottomVisible && statusID === StatusType.WORK;
   const serviceIDs = services?.reduce<number[]>(
     (acc, val) => acc.concat(val.ID),
@@ -81,6 +86,11 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
       taskId,
     });
     bsRef.current?.close();
+  };
+  const onCompetitorEstimates = () => {
+    navigation.navigate(AppScreenName.CompetitorEstimates, {
+      taskId,
+    });
   };
   if (!services.length) {
     return (
@@ -225,6 +235,25 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             </Text>
           </View>
         </View>
+        {subsetID === TaskType.COMMON_AUCTION_SALE && (
+          <View style={styles.mt16}>
+            {offers.data?.count ? (
+              <TouchableOpacity
+                style={styles.candidatRow}
+                onPress={onCompetitorEstimates}
+              >
+                <CalculatorIcon color={theme.text.basic} />
+                <Text variant="bodySBold" color={theme.text.basic}>
+                  Сметы других кандидатов
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <Text variant="bodySRegular" color={theme.text.neutral}>
+                Предложений других кандидатов пока нет
+              </Text>
+            )}
+          </View>
+        )}
       </View>
     </>
   );

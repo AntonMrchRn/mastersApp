@@ -4,6 +4,7 @@ import { setProgresses } from '@/store/slices/tasks/actions';
 import { File, FilesParams, Progress } from '@/types/fileManager';
 
 import {
+  GetOffersResponse,
   GetServicesCategoriesResponse,
   GetServicesResponse,
   GetTaskHistoryResponse,
@@ -54,6 +55,12 @@ export const tasksAPI = api
       getServicesByName: builder.query<GetServicesResponse, string>({
         query: categoryName => ({
           url: `services?query=??&searchQuery=${categoryName}?`,
+          method: 'GET',
+        }),
+      }),
+      getOffers: builder.query<GetOffersResponse, string>({
+        query: taskID => ({
+          url: `offers?query=?taskID==${taskID}?`,
           method: 'GET',
         }),
       }),
@@ -113,4 +120,5 @@ export const {
   useGetServicesCategoriesQuery,
   useGetServicesByCategoriesQuery,
   useLazyGetServicesByNameQuery,
+  useGetOffersQuery,
 } = tasksAPI;

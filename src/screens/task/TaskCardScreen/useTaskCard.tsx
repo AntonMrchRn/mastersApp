@@ -72,7 +72,10 @@ export const useTaskCard = ({
 
   const task = data?.tasks?.[0];
   const id = task?.ID || 0;
-  const subsetID = task?.subsetID || '';
+  /**
+   * тип задачи
+   */
+  const subsetID = task?.subsetID;
   const files = task?.files || [];
   const services = task?.services || [];
   const startTime = task?.startTime || '';
@@ -248,6 +251,9 @@ export const useTaskCard = ({
     //далее необходимо удалить этот оффер через DELETE offers/id
     setBudgetModalVisible(!budgetModalVisible);
   };
+  const onSubmitAnEstimate = () => {
+    //навигация на подачу сметы
+  };
 
   const getCurrentTab = () => {
     switch (tab) {
@@ -275,6 +281,7 @@ export const useTaskCard = ({
             selectedServiceId={selectedServiceId}
             setSelectedServiceId={setSelectedServiceId}
             onCantDeleteBannerVisible={onCantDeleteBannerVisible}
+            subsetID={subsetID}
           />
         );
       case TaskTab.REPORT:
@@ -370,6 +377,15 @@ export const useTaskCard = ({
             },
           ];
         }
+        if (subsetID === TaskType.COMMON_AUCTION_SALE) {
+          return [
+            {
+              label: 'Подать смету',
+              variant: 'accent',
+              onPress: onSubmitAnEstimate,
+            },
+          ];
+        }
         if (outlayStatusID === OutlayStatusType.MATCHING) {
           return [
             {
@@ -388,7 +404,6 @@ export const useTaskCard = ({
             },
           ];
         }
-
         return [];
       case StatusType.WORK:
         if (tab === TaskTab.COMMENTS) {

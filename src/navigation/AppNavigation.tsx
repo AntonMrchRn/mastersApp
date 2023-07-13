@@ -13,6 +13,7 @@ import PasswordScreen from '@/screens/auth/PasswordScreen';
 import RecoveryConfirmationScreen from '@/screens/auth/RecoveryConfirmationScreen';
 import RecoveryScreen from '@/screens/auth/RecoveryScreen';
 import SignInScreen from '@/screens/auth/SignInScreen';
+import { CompetitorEstimatesScreen } from '@/screens/task/CompetitorEstimatesScreen';
 import { EstimateAddMaterialScreen } from '@/screens/task/EstimateAddMaterialScreen';
 import { EstimateAddServiceScreen } from '@/screens/task/EstimateAddServiceScreen';
 import { EstimateEditScreen } from '@/screens/task/EstimateEditScreen';
@@ -31,6 +32,7 @@ export enum AppScreenName {
   EstimateEdit = 'EstimateEdit',
   EstimateAddMaterial = 'EstimateAddMaterial',
   EstimateAddService = 'EstimateAddService',
+  CompetitorEstimates = 'CompetitorEstimates',
 }
 export type AppStackParamList = {
   [AppScreenName.SignIn]: undefined;
@@ -50,6 +52,7 @@ export type AppStackParamList = {
   };
   [AppScreenName.EstimateAddMaterial]: { serviceId: number; taskId: number };
   [AppScreenName.EstimateAddService]: { taskId: number; service: Service };
+  [AppScreenName.CompetitorEstimates]: { taskId: number };
 };
 const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<AppStackParamList>();
@@ -105,6 +108,16 @@ export const AppNavigation = () => {
             options={{
               headerShown: true,
               header: props => <Header {...props} title={'Новая услуга'} />,
+            }}
+          />
+          <Stack.Screen
+            name={AppScreenName.CompetitorEstimates}
+            component={CompetitorEstimatesScreen}
+            options={{
+              headerShown: true,
+              header: props => (
+                <Header {...props} title={'Сметы других кандидатов'} />
+              ),
             }}
           />
         </>
