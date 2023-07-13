@@ -1,14 +1,14 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
-import { FlatList, Keyboard, KeyboardAvoidingView, View } from 'react-native';
+import React, { FC, useEffect, useState } from 'react';
+import { Animated, FlatList, KeyboardAvoidingView, View } from 'react-native';
+import { useKeyboardAnimation } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { StackScreenProps } from '@react-navigation/stack';
-import { Button, Input, Text, useTheme } from 'rn-ui-kit';
+import { Input } from 'rn-ui-kit';
 
 import ChatMessage from '@/components/TabScreens/TaskCard/TaskCardComment/Chat/ChatMessage';
 import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound';
 import { configApp } from '@/constants/platform';
-import { useKeyboardHeight } from '@/hooks/useKeyboardHeight';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { getComments } from '@/store/slices/myTasks/asyncActions';
@@ -25,20 +25,24 @@ export const CommentsChatScreen: FC<EstimateAddMaterialScreenProps> = ({
     params: { taskId },
   },
 }) => {
-  const theme = useTheme();
   const dispatch = useAppDispatch();
 
   const { comments } = useAppSelector(state => state.myTasks);
-  const { keyboardOffset } = useKeyboardHeight();
-
+  const [isActive, setIsActive] = useState(false);
   useEffect(() => {
     dispatch(getComments({ idCard: taskId, numberOfPosts: 10, sort: 'asc' }));
   }, []);
 
   const renderItem = item => <ChatMessage {...item} />;
 
+  const { height } = useKeyboardAnimation();
+
+  useEffect(() => {
+    console.log('isActive', isActive);
+  }, []);
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <View style={styles.containerChat}>
         <FlatList
           // inverted
@@ -52,16 +56,21 @@ export const CommentsChatScreen: FC<EstimateAddMaterialScreenProps> = ({
           ListEmptyComponent={<PreviewNotFound type={4} />}
         />
       </View>
-      <View
+
+      <Animated.View
         style={{
-          paddingBottom: configApp.android
-            ? keyboardOffset + 20
-            : keyboardOffset - 20,
-          marginHorizontal: 20,
+          transform: [{ translateY: height }],
+          paddingHorizontal: 20,
+          paddingBottom: configApp.android ? 10 : 0,
+          bottom: configApp.ios && isActive ? -20 : 0,
         }}
       >
-        <Input variant="message" placeholder="Сообщение..." />
-      </View>
+        <Input
+          variant="message"
+          placeholder="Сообщение..."
+          ref={ref => ref && setIsActive(ref?.isFocused())}
+        />
+      </Animated.View>
     </SafeAreaView>
   );
 };

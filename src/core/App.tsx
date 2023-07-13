@@ -1,5 +1,6 @@
 import React from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 
@@ -24,11 +25,13 @@ const App = () => {
           <SafeAreaProvider>
             <ThemeProvider>
               <ToastProvider>
-                <NavigationContainer theme={MyTheme}>
-                  <BottomSheetModalProvider>
-                    <AppNavigation />
-                  </BottomSheetModalProvider>
-                </NavigationContainer>
+                <KeyboardProvider>
+                  <NavigationContainer theme={MyTheme}>
+                    <BottomSheetModalProvider>
+                      <AppNavigation />
+                    </BottomSheetModalProvider>
+                  </NavigationContainer>
+                </KeyboardProvider>
               </ToastProvider>
             </ThemeProvider>
           </SafeAreaProvider>

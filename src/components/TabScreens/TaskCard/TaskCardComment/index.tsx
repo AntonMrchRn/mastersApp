@@ -23,19 +23,24 @@ export const TaskCardComment: FC<TaskCardCommentProps> = ({
   const { comments } = useAppSelector(state => state.myTasks);
 
   useEffect(() => {
-    dispatch(getComments({ idCard: taskId, numberOfPosts: 5, sort: 'desc' }));
+    dispatch(getComments({ idCard: taskId, numberOfPosts: 3, sort: 'desc' }));
     return () => {
       dispatch(clearComments());
     };
   }, []);
 
   return (
-    <View style={{ flex: 1, paddingTop: 25 }}>
+    <View
+      style={{
+        flex: 1,
+        paddingTop: 15,
+      }}
+    >
       <Text variant="title3">Последние сообщения</Text>
       <View
         style={{
           flex: 1,
-          paddingTop: 10,
+          paddingVertical: 10,
           justifyContent: 'flex-end',
           bottom: -20,
         }}
