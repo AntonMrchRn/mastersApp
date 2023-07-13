@@ -153,6 +153,9 @@ export const useTaskCard = ({
   const onBudgetModalVisible = () => {
     setBudgetModalVisible(!budgetModalVisible);
   };
+  const navigateToChat = () => {
+    navigation.navigate(AppScreenName.CommentsChat, { taskId: id });
+  };
   const onUploadModalVisible = () => {
     setUploadModalVisible(!uploadModalVisible);
   };
@@ -357,7 +360,7 @@ export const useTaskCard = ({
             {
               label: 'Перейти в чат',
               variant: 'accent',
-              onPress: () => console.log('чат'),
+              onPress: navigateToChat,
             },
           ];
         }
@@ -396,7 +399,7 @@ export const useTaskCard = ({
             {
               label: 'Перейти в чат',
               variant: 'accent',
-              onPress: () => console.log('чат'),
+              onPress: navigateToChat,
             },
           ];
         }
@@ -406,7 +409,7 @@ export const useTaskCard = ({
               {
                 label: 'Перейти в чат',
                 variant: 'accent',
-                onPress: () => console.log('чат'),
+                onPress: navigateToChat,
               },
             ];
           }
@@ -438,7 +441,7 @@ export const useTaskCard = ({
               {
                 label: 'Перейти в чат',
                 variant: 'accent',
-                onPress: () => console.log('чат'),
+                onPress: navigateToChat,
               },
             ];
           }
@@ -493,7 +496,7 @@ export const useTaskCard = ({
             {
               label: 'Перейти в чат',
               variant: 'accent',
-              onPress: () => console.log('чат'),
+              onPress: navigateToChat,
             },
           ];
         }
@@ -513,7 +516,7 @@ export const useTaskCard = ({
             {
               label: 'Перейти в чат',
               variant: 'accent',
-              onPress: () => console.log('чат'),
+              onPress: navigateToChat,
             },
           ];
         }
@@ -522,7 +525,7 @@ export const useTaskCard = ({
             {
               label: 'Перейти в чат',
               variant: 'accent',
-              onPress: () => console.log('чат'),
+              onPress: navigateToChat,
             },
           ];
         }

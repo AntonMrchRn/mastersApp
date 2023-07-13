@@ -10,7 +10,7 @@ import 'dayjs/locale/ru';
 
 type ChatItem = {
   item: {
-    isMine: boolean;
+    isMine?: boolean;
     comment: string;
     creationTime: string;
   };
@@ -92,8 +92,8 @@ const ChatMessage: FC<ChatItem> = ({
           style={isMine ? styles.wrapperMessageMy : styles.wrapperMessageHuman}
         >
           <Text style={isMine ? styles.textMy : styles.textHuman}>
-            ghbdtn ghdbgjksn fgl;kjn sfklgjn sdf
-            {/* {comment} */}
+            {/* ghbdtn ghdbgjksn fgl;kjn sfklgjn sdf */}
+            {comment}
           </Text>
         </View>
         <Text style={isMine ? styles.timeMy : styles.timeHuman}>{time}</Text>

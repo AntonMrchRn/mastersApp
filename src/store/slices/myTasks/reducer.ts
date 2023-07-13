@@ -26,6 +26,9 @@ const taskSearch = createSlice({
       state.data = [];
       state.errorList = null;
     },
+    clearComments: state => {
+      state.comments = {};
+    },
   },
   extraReducers: builder => {
     // получить список задач в поиске
@@ -83,6 +86,6 @@ const taskSearch = createSlice({
   },
 });
 
-export const { clearList } = taskSearch.actions;
+export const { clearList, clearComments } = taskSearch.actions;
 
 export default taskSearch;

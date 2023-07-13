@@ -5,6 +5,7 @@ import { Text } from 'rn-ui-kit';
 
 import { useAppDispatch, useAppSelector } from '@/store';
 import { getComments } from '@/store/slices/myTasks/asyncActions';
+import { clearComments } from '@/store/slices/myTasks/reducer';
 
 import PreviewNotFound from '../../TaskSearch/PreviewNotFound';
 import ChatMessage from './Chat/ChatMessage';
@@ -23,6 +24,9 @@ export const TaskCardComment: FC<TaskCardCommentProps> = ({
 
   useEffect(() => {
     dispatch(getComments({ idCard: taskId, numberOfPosts: 5, sort: 'desc' }));
+    return () => {
+      dispatch(clearComments());
+    };
   }, []);
 
   return (
