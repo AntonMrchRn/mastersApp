@@ -1,13 +1,18 @@
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { StackScreenProps } from '@react-navigation/stack';
 import { Spacer, Text } from 'rn-ui-kit';
 
-import { configApp, deviceWidth } from '@/constants/platform';
+import { EstimateTotal } from '@/components/task/EstimateTotal';
+import { deviceWidth } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useGetOffersQuery } from '@/store/api/tasks';
+import { Material } from '@/store/api/tasks/types';
+
+import { Item } from './Item';
 
 import { styles } from './styles';
 
@@ -20,24 +25,68 @@ export const CompetitorEstimatesScreen: FC<CompetitorEstimatesScreenProps> = ({
 }) => {
   const offers = useGetOffersQuery(route.params.taskId.toString());
   const data = offers.data?.offers || [];
-  console.log('🚀 ~ file: index.tsx:23 ~ data:', data);
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <Text variant="title2" style={styles.title}>
         Текущие предложения
       </Text>
       <Carousel
         loop={false}
+        vertical={false}
         style={styles.carousel}
         width={deviceWidth - 40}
         data={data}
-        renderItem={({ item, index }) => (
-          <View style={styles.item}>
-            <Text variant="title3">Кандидат {index + 1}</Text>
-            <Spacer size={8} />
-          </View>
-        )}
+        renderItem={({ item, index }) => {
+          const allSum = item.services.reduce(
+            (acc, val) =>
+              acc + (val?.sum || (val?.count || 0) * (val?.price || 0)),
+            0
+          );
+          const allMaterials = item.services.reduce<Material[]>(
+            (acc, val) =>
+              acc.concat(
+                typeof val.materials !== 'undefined' ? val.materials : []
+              ),
+            []
+          );
+          const materialsSum = allMaterials.reduce(
+            (acc, val) => acc + (val?.count || 0) * (val?.price || 0),
+            0
+          );
+          return (
+            <View style={styles.item}>
+              <Text variant="title3">Кандидат {index + 1}</Text>
+              <Spacer size={8} />
+              {item.services.map(service => {
+                return (
+                  <>
+                    <Item
+                      key={service.ID}
+                      name={service?.name || ''}
+                      price={service?.price || 0}
+                      count={service?.count || 0}
+                      sum={service?.sum || 0}
+                    />
+                    {service.materials?.map(material => {
+                      return (
+                        <Item
+                          key={material.name}
+                          name={material?.name || ''}
+                          price={material?.price || 0}
+                          count={material?.count || 0}
+                          sum={(material?.count || 0) * (material?.price || 0)}
+                        />
+                      );
+                    })}
+                  </>
+                );
+              })}
+              <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
+            </View>
+          );
+        }}
       />
-    </View>
+    </SafeAreaView>
   );
 };
