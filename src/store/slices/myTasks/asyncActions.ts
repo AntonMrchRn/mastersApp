@@ -12,6 +12,7 @@ type RequestArgs = {
   numberOfPosts?: number;
   fromTask?: number;
   idCard?: string;
+  sort?: 'asc' | 'desc';
 };
 
 const getEndpont = ({
@@ -123,7 +124,7 @@ const getComments = createAsyncThunk<
 >(
   '/getComments',
   async (
-    { idCard, numberOfPosts = 30, fromTask = 0 }: RequestArgs,
+    { idCard, numberOfPosts = 30, fromTask = 0, sort = 'asc' }: RequestArgs,
     thunkApi
   ) => {
     const userID = thunkApi.getState().auth.user?.userID;
@@ -131,7 +132,7 @@ const getComments = createAsyncThunk<
     try {
       if (userID) {
         const { data } = await axiosInstance.get(
-          `tasks/comments?query=?(userID==${userID}||recipientID==${userID})*taskID==${idCard}*authorTypeID!=3?creationTime,asc,${numberOfPosts},${fromTask}`
+          `tasks/comments?query=ID,userID,authorTypeID,comment,creationTime,fullname?(userID==${userID}||recipientID==${userID})*taskID==${idCard}*authorTypeID!=3?creationTime,${sort},${numberOfPosts},${fromTask}`
         );
         return data;
       }

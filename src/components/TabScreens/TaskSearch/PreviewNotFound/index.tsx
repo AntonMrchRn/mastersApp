@@ -70,6 +70,17 @@ const PreviewNotFound: FC<PreviewProps> = ({ type, closeModal }) => {
         <Button label="Найти задачу" onPress={onPress} style={styles.btn} />
       </View>
     );
+  }
+  if (type === 4) {
+    return (
+      <View style={styles.wrapperNotFound}>
+        <InfoIcon />
+        <Text style={styles.title}>Сообщений пока нет</Text>
+        <Text style={styles.text}>
+          Здесь вы можете обсудить детали задачи с координатором
+        </Text>
+      </View>
+    );
   } else return <></>;
 };
 

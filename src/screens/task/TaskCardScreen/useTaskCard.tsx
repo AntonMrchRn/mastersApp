@@ -540,6 +540,7 @@ export const useTaskCard = ({
   return {
     onTabChange,
     tabs,
+    tab,
     getCurrentTab,
     id,
     name,

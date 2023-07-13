@@ -14,7 +14,7 @@ import { TaskCardBudgetModal } from '@/components/TabScreens/TaskCard/TaskCardBu
 import { TaskCardCancelBottomSheet } from '@/components/TabScreens/TaskCard/TaskCardCancelBottomSheet';
 import { TaskBadges } from '@/components/task/TaskBadges';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
-import { StatusType, TaskType } from '@/types/task';
+import { StatusType, TaskTab, TaskType } from '@/types/task';
 
 import { useTaskCard } from './useTaskCard';
 
@@ -32,10 +32,10 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
   const taskId = route.params.taskId.toString();
 
   const {
-    tabs,
     onTabChange,
     getCurrentTab,
     id,
+    tabs,
     publicTime,
     name,
     budget,
@@ -61,9 +61,11 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
     outlayStatusID,
     onRefresh,
     refreshing,
+    tab,
   } = useTaskCard({ taskId, navigation });
   const theme = useTheme();
   const insets = useSafeAreaInsets();
+
   return (
     <>
       <SafeAreaView style={styles.container} edges={['bottom']}>
@@ -87,6 +89,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
+          scrollEnabled={TaskTab.COMMENTS !== tab}
         >
           <View style={styles.wrapper}>
             <View>
