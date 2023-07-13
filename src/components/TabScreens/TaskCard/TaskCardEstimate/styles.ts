@@ -7,15 +7,6 @@ export const styles = StyleSheet.create({
   mt16: {
     marginTop: 16,
   },
-  bottom: {
-    gap: 8,
-    marginTop: 16,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
   itemRow: {
     flexDirection: 'row',
     alignItems: 'center',

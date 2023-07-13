@@ -7,6 +7,7 @@ import { RadioButton, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
 import { CalculatorLargeIcon } from '@/assets/icons/svg/estimate/CalculatorLargeIcon';
+import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
@@ -209,32 +210,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             </View>
           );
         })}
-        <View style={styles.bottom}>
-          <View style={styles.row}>
-            <Text variant="bodySBold" color={theme.text.basic}>
-              Всего по работам
-            </Text>
-            <Text variant="bodySBold" color={theme.text.basic}>
-              {allSum} ₽
-            </Text>
-          </View>
-          <View style={styles.row}>
-            <Text variant="bodySBold" color={theme.text.basic}>
-              Всего по материалам
-            </Text>
-            <Text variant="bodySBold" color={theme.text.basic}>
-              {materialsSum} ₽
-            </Text>
-          </View>
-          <View style={styles.row}>
-            <Text variant="bodySBold" color={theme.text.accent}>
-              ИТОГО
-            </Text>
-            <Text variant="bodySBold" color={theme.text.accent}>
-              {allSum} ₽
-            </Text>
-          </View>
-        </View>
+        <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
         {subsetID === TaskType.COMMON_AUCTION_SALE && (
           <View style={styles.mt16}>
             {offers.data?.count ? (

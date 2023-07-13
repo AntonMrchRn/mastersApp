@@ -29,7 +29,8 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
   navigation,
   route,
 }) => {
-  const taskId = route.params.taskId.toString();
+  // const taskId = route.params.taskId.toString();
+  const taskId = '1169';
 
   const {
     tabs,

@@ -11,5 +11,12 @@ export const styles = StyleSheet.create({
   },
   carousel: {
     marginTop: 24,
+    flex: 1,
+  },
+  item: {
+    borderWidth: 1,
+    paddingTop: 24,
+    paddingHorizontal: 16,
+    borderRadius: 20,
   },
 });
