@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { ScrollView, View } from 'react-native';
-import Carousel from 'react-native-reanimated-carousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { StackScreenProps } from '@react-navigation/stack';
