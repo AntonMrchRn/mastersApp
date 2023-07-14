@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
-import { Animated, FlatList, KeyboardAvoidingView, View } from 'react-native';
+import React, { FC, useEffect, useRef, useState } from 'react';
+import { Animated, FlatList, ListRenderItemInfo } from 'react-native';
 import { useKeyboardAnimation } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -12,6 +12,9 @@ import { configApp } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { getComments } from '@/store/slices/myTasks/asyncActions';
+import { clearComments } from '@/store/slices/myTasks/reducer';
+import { Comment } from '@/store/slices/myTasks/types';
+import { TaskSearch } from '@/types/task';
 
 import { styles } from './style';
 
@@ -26,37 +29,57 @@ export const CommentsChatScreen: FC<EstimateAddMaterialScreenProps> = ({
   },
 }) => {
   const dispatch = useAppDispatch();
-
+  const flatList = useRef<FlatList>(null);
   const { comments } = useAppSelector(state => state.myTasks);
   const [isActive, setIsActive] = useState(false);
+
   useEffect(() => {
-    dispatch(getComments({ idCard: taskId, numberOfPosts: 10, sort: 'asc' }));
+    dispatch(getComments({ idCard: taskId, numberOfPosts: 30, sort: 'desc' }));
+    return () => {
+      dispatch(clearComments());
+    };
   }, []);
 
-  const renderItem = item => <ChatMessage {...item} />;
+  const renderItem = ({ item }: ListRenderItemInfo<Comment>) => (
+    <ChatMessage {...item} />
+  );
+
+  const keyExtractor = (item: TaskSearch) => `${item.ID}`;
 
   const { height } = useKeyboardAnimation();
 
   useEffect(() => {
-    console.log('isActive', isActive);
-  }, []);
+    if (isActive) {
+      flatList?.current?.scrollToIndex({ index: 0 });
+    }
+  }, [isActive]);
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
-      <View style={styles.containerChat}>
-        <FlatList
-          // inverted
-          renderItem={renderItem}
-          contentContainerStyle={{
-            marginHorizontal: 20,
-            justifyContent: 'center',
-            flex: comments?.taskComment?.length ? 0 : 1,
-          }}
-          data={comments?.taskComment}
-          ListEmptyComponent={<PreviewNotFound type={4} />}
-        />
-      </View>
-
+      <Animated.View
+        style={[
+          styles.containerChat,
+          {
+            transform: [{ translateY: height }],
+          },
+        ]}
+      >
+        {comments?.taskComment?.length ? (
+          <FlatList
+            inverted
+            ref={flatList}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+            contentContainerStyle={{
+              marginHorizontal: 20,
+              justifyContent: 'center',
+            }}
+            data={comments?.taskComment}
+          />
+        ) : (
+          <PreviewNotFound type={4} />
+        )}
+      </Animated.View>
       <Animated.View
         style={{
           transform: [{ translateY: height }],

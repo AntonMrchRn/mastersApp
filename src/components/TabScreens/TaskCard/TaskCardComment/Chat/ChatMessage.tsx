@@ -8,15 +8,15 @@ import { fonts } from '@/constants/fonts';
 
 import 'dayjs/locale/ru';
 
-type ChatItem = {
+type ChatItemProps = {
   item: {
     isMine?: boolean;
-    comment: string;
-    creationTime: string;
+    comment?: string;
+    creationTime?: string;
   };
 };
 
-const ChatMessage: FC<ChatItem> = ({
+const ChatMessage: FC<ChatItemProps> = ({
   item: { isMine, comment, creationTime },
 }) => {
   const theme = useTheme();

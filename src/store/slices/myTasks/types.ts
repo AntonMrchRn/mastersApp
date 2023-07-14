@@ -2,20 +2,17 @@ import { GetTaskResponse, Task } from '@/store/api/tasks/types';
 import { Error } from '@/types/error';
 
 type GetCommentsResponce = {
-  count: number;
+  count?: number;
   taskComment?: Comment[];
 };
 
 type Comment = {
   ID: number;
-  authorTypeID: number;
-  comment: string;
-  creationTime: string;
-  fullname: string;
-  recipientID: number;
-  roleID: number;
-  taskID: number;
-  userID: number;
+  authorTypeID?: number;
+  comment?: string;
+  creationTime?: string;
+  isMine?: boolean;
+  userID?: number;
 };
 
 type InitialState = {
@@ -27,8 +24,11 @@ type InitialState = {
   loadingEndReched: boolean;
   errorNames: null | Error;
   comments: GetCommentsResponce;
+  commentsPreview: GetCommentsResponce;
   loadingComments: boolean;
+  loadingCommentsPreview: boolean;
   errorComments: null | Error;
+  errorCommentsPreview: null | Error;
 };
 
-export type { InitialState, GetCommentsResponce };
+export type { InitialState, GetCommentsResponce, Comment };

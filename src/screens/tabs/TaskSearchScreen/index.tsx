@@ -64,6 +64,7 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
   };
 
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
+
   const renderItem = ({ item }: ListRenderItemInfo<Task>) => (
     <CardTasks {...item} onItemPress={onItemPress} />
   );

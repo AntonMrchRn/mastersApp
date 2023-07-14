@@ -4,8 +4,8 @@ import { View } from 'react-native';
 import { Text } from 'rn-ui-kit';
 
 import { useAppDispatch, useAppSelector } from '@/store';
-import { getComments } from '@/store/slices/myTasks/asyncActions';
-import { clearComments } from '@/store/slices/myTasks/reducer';
+import { getCommentsPreview } from '@/store/slices/myTasks/asyncActions';
+import { clearCommentsPreview } from '@/store/slices/myTasks/reducer';
 
 import PreviewNotFound from '../../TaskSearch/PreviewNotFound';
 import ChatMessage from './Chat/ChatMessage';
@@ -15,17 +15,16 @@ type TaskCardCommentProps = {
   statusID?: number;
 };
 
-export const TaskCardComment: FC<TaskCardCommentProps> = ({
-  taskId,
-  statusID,
-}) => {
+export const TaskCardComment: FC<TaskCardCommentProps> = ({ taskId }) => {
   const dispatch = useAppDispatch();
-  const { comments } = useAppSelector(state => state.myTasks);
+  const { commentsPreview } = useAppSelector(state => state.myTasks);
 
   useEffect(() => {
-    dispatch(getComments({ idCard: taskId, numberOfPosts: 3, sort: 'desc' }));
+    dispatch(
+      getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'asc' })
+    );
     return () => {
-      dispatch(clearComments());
+      dispatch(clearCommentsPreview());
     };
   }, []);
 
@@ -33,7 +32,7 @@ export const TaskCardComment: FC<TaskCardCommentProps> = ({
     <View
       style={{
         flex: 1,
-        paddingTop: 15,
+        paddingTop: 36,
       }}
     >
       <Text variant="title3">Последние сообщения</Text>
@@ -45,8 +44,8 @@ export const TaskCardComment: FC<TaskCardCommentProps> = ({
           bottom: -20,
         }}
       >
-        {comments?.taskComment?.length ? (
-          comments?.taskComment.map(item => {
+        {commentsPreview?.taskComment?.length ? (
+          commentsPreview?.taskComment.map(item => {
             return <ChatMessage item={item} key={item.ID} />;
           })
         ) : (

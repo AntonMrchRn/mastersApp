@@ -25,7 +25,7 @@ const Header = ({ title, description }: HeaderProps) => {
   };
 
   return (
-    <SafeAreaView edges={['top']}>
+    <SafeAreaView style={styles.background} edges={['top']}>
       <View style={styles.container}>
         <TouchableOpacity style={styles.btnBack} onPress={goBack}>
           <ArrowBack />

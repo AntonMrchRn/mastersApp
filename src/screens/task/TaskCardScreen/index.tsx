@@ -14,7 +14,7 @@ import { TaskCardBudgetModal } from '@/components/TabScreens/TaskCard/TaskCardBu
 import { TaskCardCancelBottomSheet } from '@/components/TabScreens/TaskCard/TaskCardCancelBottomSheet';
 import { TaskBadges } from '@/components/task/TaskBadges';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
-import { StatusType, TaskTab, TaskType } from '@/types/task';
+import { StatusType, TaskType } from '@/types/task';
 
 import { useTaskCard } from './useTaskCard';
 
@@ -89,7 +89,6 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
-          scrollEnabled={TaskTab.COMMENTS !== tab}
         >
           <View style={styles.wrapper}>
             <View>

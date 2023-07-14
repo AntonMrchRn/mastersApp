@@ -154,7 +154,9 @@ export const useTaskCard = ({
     setBudgetModalVisible(!budgetModalVisible);
   };
   const navigateToChat = () => {
-    navigation.navigate(AppScreenName.CommentsChat, { taskId: id });
+    navigation.navigate(AppScreenName.CommentsChat, {
+      taskId: id,
+    });
   };
   const onUploadModalVisible = () => {
     setUploadModalVisible(!uploadModalVisible);
@@ -543,7 +545,15 @@ export const useTaskCard = ({
         ];
 
       default:
-        return [];
+        if (tab === TaskTab.COMMENTS) {
+          return [
+            {
+              label: 'Перейти в чат',
+              variant: 'accent',
+              onPress: navigateToChat,
+            },
+          ];
+        } else return [];
     }
   };
 
