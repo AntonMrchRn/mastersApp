@@ -28,21 +28,17 @@ export const CompetitorEstimatesScreen: FC<CompetitorEstimatesScreenProps> = ({
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
-      <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={{ flex: 1 }}
-        nestedScrollEnabled
-      >
+      <ScrollView style={{ flex: 1 }} nestedScrollEnabled>
         <Text variant="title2" style={styles.title}>
           Текущие предложения
         </Text>
-        <Carousel
-          loop={false}
-          vertical={false}
-          style={styles.carousel}
-          width={deviceWidth - 40}
-          data={data}
-          renderItem={({ item, index }) => {
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ flex: 1 }}
+          horizontal
+          contentContainerStyle={{ paddingRight: 20 }}
+        >
+          {data.map((item, index) => {
             const allSum = item.services.reduce(
               (acc, val) =>
                 acc + (val?.sum || (val?.count || 0) * (val?.price || 0)),
@@ -60,11 +56,19 @@ export const CompetitorEstimatesScreen: FC<CompetitorEstimatesScreenProps> = ({
               0
             );
             return (
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                style={styles.item}
-                scrollEnabled={false}
-                contentContainerStyle={styles.contentContainerStyle}
+              <View
+                key={item.ID}
+                style={{
+                  flex: 1,
+                  paddingVertical: 24,
+                  paddingHorizontal: 16,
+                  marginLeft: 20,
+                  borderRadius: 20,
+                  width: deviceWidth - 70,
+                  backgroundColor: 'white',
+                  borderWidth: 1.5,
+                  borderColor: '#F1F1F1',
+                }}
               >
                 <Text variant="title3">Кандидат {index + 1}</Text>
                 <Spacer size={8} />
@@ -94,10 +98,10 @@ export const CompetitorEstimatesScreen: FC<CompetitorEstimatesScreenProps> = ({
                   );
                 })}
                 <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
-              </ScrollView>
+              </View>
             );
-          }}
-        />
+          })}
+        </ScrollView>
       </ScrollView>
     </SafeAreaView>
   );

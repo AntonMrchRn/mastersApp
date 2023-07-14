@@ -34,6 +34,7 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
   },
   contentContainerStyle: {
+    flex: 1,
     paddingVertical: 24,
     paddingHorizontal: 16,
     marginLeft: 20,
