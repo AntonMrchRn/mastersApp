@@ -36,11 +36,11 @@ export const Item: FC<ItemProps> = ({ name, price, count, sum }) => {
   return (
     <>
       <Spacer size={16} />
-      <View style={styles.row}>
+      <View style={styles.column}>
         <Text variant="bodySRegular" style={styles.name}>
           {name}
         </Text>
-        <View style={styles.column}>
+        <View style={styles.row}>
           {items.map((item, index) => (
             <View key={index} style={styles.itemRow}>
               {item.icon}
