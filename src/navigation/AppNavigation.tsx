@@ -19,6 +19,7 @@ import { EstimateAddMaterialScreen } from '@/screens/task/EstimateAddMaterialScr
 import { EstimateAddServiceScreen } from '@/screens/task/EstimateAddServiceScreen';
 import { EstimateEditScreen } from '@/screens/task/EstimateEditScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
+import { WebViewScreen } from '@/screens/WebViewScreen';
 import { Service } from '@/store/api/tasks/types';
 
 export enum AppScreenName {
@@ -35,6 +36,7 @@ export enum AppScreenName {
   EstimateAddService = 'EstimateAddService',
   CompetitorEstimates = 'CompetitorEstimates',
   CommentsChat = 'CommentsChatScreen',
+  WebView = 'WebView',
 }
 export type AppStackParamList = {
   [AppScreenName.SignIn]: undefined;
@@ -58,6 +60,7 @@ export type AppStackParamList = {
   [AppScreenName.EstimateAddMaterial]: { serviceId: number; taskId: number };
   [AppScreenName.EstimateAddService]: { taskId: number; service: Service };
   [AppScreenName.CompetitorEstimates]: { taskId: number };
+  [AppScreenName.WebView]: { uri: string };
 };
 const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<AppStackParamList>();
@@ -153,6 +156,14 @@ export const AppNavigation = () => {
         </>
       )}
       <Stack.Screen name={AppScreenName.Error} component={ErrorScreen} />
+      <Stack.Screen
+        name={AppScreenName.WebView}
+        component={WebViewScreen}
+        options={{
+          headerShown: true,
+          header: props => <Header {...props} title={''} />,
+        }}
+      />
     </Stack.Navigator>
   );
 };

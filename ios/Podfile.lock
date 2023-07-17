@@ -353,6 +353,8 @@ PODS:
     - React-Core
   - react-native-splash-screen (3.3.0):
     - React-Core
+  - react-native-webview (13.2.2):
+    - React-Core
   - React-perflogger (0.71.12)
   - React-RCTActionSheet (0.71.12):
     - React-Core/RCTActionSheetHeaders (= 0.71.12)
@@ -536,6 +538,7 @@ DEPENDENCIES:
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
+  - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -637,6 +640,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
+  react-native-webview:
+    :path: "../node_modules/react-native-webview"
   React-perflogger:
     :path: "../node_modules/react-native/ReactCommon/reactperflogger"
   React-RCTActionSheet:
@@ -722,6 +727,7 @@ SPEC CHECKSUMS:
   react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
   react-native-safe-area-context: 9697629f7b2cda43cf52169bb7e0767d330648c2
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
+  react-native-webview: b8ec89966713985111a14d6e4bf98d8b54bced0d
   React-perflogger: 75b0e25075c67565a830985f3c373e2eae5389e0
   React-RCTActionSheet: a0c3e916b327e297d124d9ebe8b0c721840ee04d
   React-RCTAnimation: 3da7025801d7bf0f8cfd94574d6278d5b82a8b88

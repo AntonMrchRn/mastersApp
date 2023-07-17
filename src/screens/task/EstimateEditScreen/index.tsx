@@ -87,14 +87,22 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
       }
       return acc.concat(val);
     }, []);
-    await patchTask({
-      //id таски
-      ID: taskId,
-      //массив услуг
-      services: newServices,
-      //при изменении сметы она снова становится не согласована
-      outlayStatusID: OutlayStatusType.PENDING,
+    //для услуги
+    await patchTaskService({
+      //кинуть только то что меняем
     });
+
+    //для материалов patch materilas
+    // перед прокидыванием материала необходимо прокинуть новую сумму в patchTaskService({sum: }) а уже после этого patch materilas
+
+    // await patchTask({
+    //   //id таски
+    //   ID: taskId,
+    //   //массив услуг
+    //   services: newServices,
+    //   //при изменении сметы она снова становится не согласована
+    //   outlayStatusID: OutlayStatusType.PENDING,
+    // });
     getTask.refetch();
     if (navigation.canGoBack()) {
       navigation.goBack();

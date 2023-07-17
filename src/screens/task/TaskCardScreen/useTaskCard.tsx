@@ -41,6 +41,7 @@ export const useTaskCard = ({
   const [selectedServiceId, setSelectedServiceId] = useState<number>();
   const [estimateBannerVisible, setEstimateBannerVisible] = useState(false);
   const [cantDeleteBannerVisible, setCantDeleteBannerVisible] = useState(false);
+  const [submissionModalVisible, setSubmissionModalVisible] = useState(false);
   const isFocused = useIsFocused();
 
   const ref = useRef<{
@@ -143,6 +144,9 @@ export const useTaskCard = ({
     refetch();
   };
 
+  const onSubmissionModalVisible = () => {
+    setSubmissionModalVisible(!submissionModalVisible);
+  };
   const onCantDeleteBannerVisible = () => {
     setCantDeleteBannerVisible(!cantDeleteBannerVisible);
   };
@@ -199,6 +203,7 @@ export const useTaskCard = ({
       });
     } finally {
       refetch();
+      onSubmissionModalVisible();
     }
   };
   const onCancelModalVisible = () => {
@@ -377,7 +382,7 @@ export const useTaskCard = ({
             {
               label: 'Принять задачу',
               variant: 'accent',
-              onPress: onTaskSubmission,
+              onPress: onSubmissionModalVisible,
             },
           ];
         }
@@ -576,5 +581,8 @@ export const useTaskCard = ({
     outlayStatusID,
     onRefresh,
     refreshing: isLoading,
+    onSubmissionModalVisible,
+    onTaskSubmission,
+    submissionModalVisible,
   };
 };
