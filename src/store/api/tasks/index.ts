@@ -77,6 +77,13 @@ export const tasksAPI = api
           method: 'DELETE',
         }),
       }),
+      patchTaskService: builder.mutation<object, any>({
+        query: data => ({
+          url: 'tasks/services',
+          method: 'PATCH',
+          data,
+        }),
+      }),
       postTasksFiles: builder.mutation<File[], FilesParams>({
         query: ({ formData, files, date, signal }) => {
           return {
@@ -128,4 +135,5 @@ export const {
   useLazyGetServicesByNameQuery,
   useGetOffersQuery,
   useDeleteTaskServiceMutation,
+  usePatchTaskServiceMutation,
 } = tasksAPI;

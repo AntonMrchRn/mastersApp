@@ -10,7 +10,11 @@ import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { PriceIcon } from '@/assets/icons/svg/estimate/PriceIcon';
 import ControlledInput from '@/components/inputs/ControlledInput';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
-import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
+import {
+  useGetTaskQuery,
+  usePatchTaskMutation,
+  usePatchTaskServiceMutation,
+} from '@/store/api/tasks';
 import { Material, Service } from '@/store/api/tasks/types';
 import { OutlayStatusType } from '@/types/task';
 import { estimateCountValidationSchema } from '@/utils/formValidation';
@@ -37,6 +41,8 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
 
   const [patchTask, mutationTask] = usePatchTaskMutation();
 
+  const [patchTaskService, mutationTaskService] = usePatchTaskServiceMutation();
+
   useEffect(() => {
     if (mutationTask.error && 'data' in mutationTask.error) {
       toast.show({
@@ -52,6 +58,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
   const service = services.find(service => {
     return service.ID === serviceId;
   });
+  console.log('🚀 ~ file: index.tsx:60 ~ service ~ service:', service);
   const material = materialName
     ? service?.materials?.find(materia => materia.name === materialName)
     : undefined;
