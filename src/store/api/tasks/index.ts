@@ -91,6 +91,14 @@ export const tasksAPI = api
           data,
         }),
       }),
+      deleteMaterial: builder.mutation<object, { ID: string; taskID: string }>({
+        query: data => ({
+          url: `materials`,
+          params: data,
+          method: 'DELETE',
+          data,
+        }),
+      }),
       postTasksFiles: builder.mutation<File[], FilesParams>({
         query: ({ formData, files, date, signal }) => {
           return {
@@ -144,4 +152,5 @@ export const {
   useDeleteTaskServiceMutation,
   usePatchTaskServiceMutation,
   usePatchMaterialMutation,
+  useDeleteMaterialMutation,
 } = tasksAPI;

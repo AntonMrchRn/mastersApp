@@ -76,6 +76,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     estimateBottomVisible,
   });
   const offers = useGetOffersQuery(taskId.toString());
+
   const canSwipe = !estimateBottomVisible && statusID === StatusType.WORK;
   const serviceIDs = services?.reduce<number[]>(
     (acc, val) => acc.concat(val.ID),
