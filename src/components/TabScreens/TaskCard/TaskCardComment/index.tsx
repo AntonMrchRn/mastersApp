@@ -1,83 +1,56 @@
 import React, { FC, useEffect } from 'react';
-import { StyleSheet, Text as RNText, View } from 'react-native';
+import { View } from 'react-native';
 
-import { Text, useTheme } from 'rn-ui-kit';
+import { Text } from 'rn-ui-kit';
 
-import { CommentIcon } from '@/assets/icons/svg/screens/CommentIcon';
-import { useAppDispatch } from '@/store';
-import { getComments } from '@/store/slices/myTasks/asyncActions';
-import { StatusType } from '@/types/task';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { getCommentsPreview } from '@/store/slices/myTasks/asyncActions';
+import { clearCommentsPreview } from '@/store/slices/myTasks/reducer';
+
+import PreviewNotFound from '../../TaskSearch/PreviewNotFound';
+import ChatMessage from './Chat/ChatMessage';
 
 type TaskCardCommentProps = {
   taskId: string;
   statusID?: number;
 };
 
-export const TaskCardComment: FC<TaskCardCommentProps> = ({
-  taskId,
-  statusID,
-}) => {
-  const theme = useTheme();
+export const TaskCardComment: FC<TaskCardCommentProps> = ({ taskId }) => {
   const dispatch = useAppDispatch();
-  const styles = StyleSheet.create({
-    title: {
-      fontFamily: 'Nunito Sans Bold',
-      fontWeight: '700',
-      fontSize: 22,
-      color: theme.text.basic,
-    },
-    description: {
-      fontFamily: 'Nunito Sans Regular',
-      fontWeight: '400',
-      fontSize: 15,
-      color: theme.text.neutral,
-    },
-  });
+  const { commentsPreview } = useAppSelector(state => state.myTasks);
 
   useEffect(() => {
-    dispatch(getComments({ idCard: taskId }));
+    dispatch(
+      getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'asc' })
+    );
+    return () => {
+      dispatch(clearCommentsPreview());
+    };
   }, []);
 
-  const renderStatus = () => {
-    switch (statusID) {
-      case StatusType.CLOSED:
-        return (
-          <View style={{ alignItems: 'center' }}>
-            <CommentIcon />
-            <RNText style={styles.title}>Комментарии пока закрыты</RNText>
-            <RNText>
-              Отправка сообщений будет доступна в случае назначения вас в
-              качестве исполнителя
-            </RNText>
-          </View>
-        );
-      case StatusType.ACTIVE:
-        return (
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 7,
-            }}
-          >
-            <CommentIcon />
-            <Text style={styles.title}>Комментарии пока закрыты</Text>
-            <Text>
-              Отправка сообщений будет доступна в случае назначения вас в
-              качестве исполнителя
-            </Text>
-          </View>
-        );
-      default:
-        return <></>;
-    }
-  };
-
   return (
-    <View style={{ flex: 1, backgroundColor: '#f0f0f0' }}>
-      {/* {renderStatus()} */}
-      <View>
-        <Text variant="title3">Последние сообщения</Text>
+    <View
+      style={{
+        flex: 1,
+        paddingTop: 36,
+      }}
+    >
+      <Text variant="title3">Последние сообщения</Text>
+      <View
+        style={{
+          flex: 1,
+          paddingVertical: 10,
+          justifyContent: 'flex-end',
+          bottom: -20,
+        }}
+      >
+        {commentsPreview?.taskComment?.length ? (
+          commentsPreview?.taskComment.map(item => {
+            return <ChatMessage item={item} key={item.ID} />;
+          })
+        ) : (
+          <PreviewNotFound type={4} />
+        )}
       </View>
     </View>
   );

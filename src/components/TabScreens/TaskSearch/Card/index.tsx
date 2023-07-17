@@ -46,6 +46,9 @@ const CardTasks: FC<CardTasksProp> = ({
               isNight={isNight}
             />
           </View>
+          <Text variant="bodySRegular" style={styles.wrapperTitle}>
+            Номер задачи: {ID}
+          </Text>
           <Text variant="title3" style={styles.wrapperTitle}>
             {name}
           </Text>

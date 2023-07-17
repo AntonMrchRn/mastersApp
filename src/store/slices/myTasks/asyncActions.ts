@@ -11,7 +11,8 @@ type RequestArgs = {
   idList?: number;
   numberOfPosts?: number;
   fromTask?: number;
-  idCard?: string;
+  idCard?: string | number;
+  sort?: 'asc' | 'desc';
 };
 
 const getEndpont = ({
@@ -116,14 +117,14 @@ const refreshMyTasks = createAsyncThunk<
   }
 );
 
-const getComments = createAsyncThunk<
+const getCommentsPreview = createAsyncThunk<
   GetCommentsResponce,
   RequestArgs,
   { state: RootState }
 >(
-  '/getComments',
+  '/getCommentsPreview',
   async (
-    { idCard, numberOfPosts = 30, fromTask = 0 }: RequestArgs,
+    { idCard, numberOfPosts = 30, fromTask = 0, sort = 'asc' }: RequestArgs,
     thunkApi
   ) => {
     const userID = thunkApi.getState().auth.user?.userID;
@@ -131,7 +132,7 @@ const getComments = createAsyncThunk<
     try {
       if (userID) {
         const { data } = await axiosInstance.get(
-          `tasks/comments?query=?(userID==${userID}||recipientID==${userID})*taskID==${idCard}*authorTypeID!=3?creationTime,asc,${numberOfPosts},${fromTask}`
+          `tasks/comments?query=ID,userID,authorTypeID,comment,creationTime,fullname?(userID==${userID}||recipientID==${userID})*taskID==${idCard}*authorTypeID!=3?creationTime,${sort},${numberOfPosts},${fromTask}`
         );
         return data;
       }
@@ -142,4 +143,30 @@ const getComments = createAsyncThunk<
   }
 );
 
-export { getMyTasks, refreshMyTasks, getComments };
+const getComments = createAsyncThunk<
+  GetCommentsResponce,
+  RequestArgs,
+  { state: RootState }
+>(
+  '/getComments',
+  async (
+    { idCard, numberOfPosts = 30, fromTask = 0, sort = 'asc' }: RequestArgs,
+    thunkApi
+  ) => {
+    const userID = thunkApi.getState().auth.user?.userID;
+
+    try {
+      if (userID) {
+        const { data } = await axiosInstance.get(
+          `tasks/comments?query=ID,userID,authorTypeID,comment,creationTime,fullname?(userID==${userID}||recipientID==${userID})*taskID==${idCard}*authorTypeID!=3?creationTime,${sort},${numberOfPosts},${fromTask}`
+        );
+        return data;
+      }
+      return thunkApi.rejectWithValue('Необходимо авторизоваться');
+    } catch (error) {
+      return thunkApi.rejectWithValue((error as AxiosError).response?.data);
+    }
+  }
+);
+
+export { getMyTasks, refreshMyTasks, getComments, getCommentsPreview };

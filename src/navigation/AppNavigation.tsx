@@ -13,6 +13,7 @@ import PasswordScreen from '@/screens/auth/PasswordScreen';
 import RecoveryConfirmationScreen from '@/screens/auth/RecoveryConfirmationScreen';
 import RecoveryScreen from '@/screens/auth/RecoveryScreen';
 import SignInScreen from '@/screens/auth/SignInScreen';
+import { CommentsChatScreen } from '@/screens/task/CommentsChatScreen';
 import { CompetitorEstimatesScreen } from '@/screens/task/CompetitorEstimatesScreen';
 import { EstimateAddMaterialScreen } from '@/screens/task/EstimateAddMaterialScreen';
 import { EstimateAddServiceScreen } from '@/screens/task/EstimateAddServiceScreen';
@@ -33,6 +34,7 @@ export enum AppScreenName {
   EstimateAddMaterial = 'EstimateAddMaterial',
   EstimateAddService = 'EstimateAddService',
   CompetitorEstimates = 'CompetitorEstimates',
+  CommentsChat = 'CommentsChatScreen',
 }
 export type AppStackParamList = {
   [AppScreenName.SignIn]: undefined;
@@ -40,6 +42,9 @@ export type AppStackParamList = {
   [AppScreenName.Email]: undefined;
   [AppScreenName.Recovery]: undefined;
   [AppScreenName.Password]: undefined;
+  [AppScreenName.CommentsChat]: {
+    taskId: number;
+  };
   [AppScreenName.RecoveryConfirmation]: {
     phone: string;
   };
@@ -83,6 +88,14 @@ export const AppNavigation = () => {
           <Stack.Screen
             name={AppScreenName.TaskCard}
             component={TaskCardScreen}
+          />
+          <Stack.Screen
+            name={AppScreenName.CommentsChat}
+            component={CommentsChatScreen}
+            options={{
+              headerShown: true,
+              header: props => <Header {...props} title={'Чат'} />,
+            }}
           />
           <Stack.Screen
             name={AppScreenName.EstimateEdit}

@@ -156,6 +156,11 @@ export const useTaskCard = ({
   const onBudgetModalVisible = () => {
     setBudgetModalVisible(!budgetModalVisible);
   };
+  const navigateToChat = () => {
+    navigation.navigate(AppScreenName.CommentsChat, {
+      taskId: id,
+    });
+  };
   const onUploadModalVisible = () => {
     setUploadModalVisible(!uploadModalVisible);
   };
@@ -364,7 +369,7 @@ export const useTaskCard = ({
             {
               label: 'Перейти в чат',
               variant: 'accent',
-              onPress: () => console.log('чат'),
+              onPress: navigateToChat,
             },
           ];
         }
@@ -411,7 +416,7 @@ export const useTaskCard = ({
             {
               label: 'Перейти в чат',
               variant: 'accent',
-              onPress: () => console.log('чат'),
+              onPress: navigateToChat,
             },
           ];
         }
@@ -421,7 +426,7 @@ export const useTaskCard = ({
               {
                 label: 'Перейти в чат',
                 variant: 'accent',
-                onPress: () => console.log('чат'),
+                onPress: navigateToChat,
               },
             ];
           }
@@ -453,7 +458,7 @@ export const useTaskCard = ({
               {
                 label: 'Перейти в чат',
                 variant: 'accent',
-                onPress: () => console.log('чат'),
+                onPress: navigateToChat,
               },
             ];
           }
@@ -508,7 +513,7 @@ export const useTaskCard = ({
             {
               label: 'Перейти в чат',
               variant: 'accent',
-              onPress: () => console.log('чат'),
+              onPress: navigateToChat,
             },
           ];
         }
@@ -528,7 +533,7 @@ export const useTaskCard = ({
             {
               label: 'Перейти в чат',
               variant: 'accent',
-              onPress: () => console.log('чат'),
+              onPress: navigateToChat,
             },
           ];
         }
@@ -537,7 +542,7 @@ export const useTaskCard = ({
             {
               label: 'Перейти в чат',
               variant: 'accent',
-              onPress: () => console.log('чат'),
+              onPress: navigateToChat,
             },
           ];
         }
@@ -555,13 +560,22 @@ export const useTaskCard = ({
         ];
 
       default:
-        return [];
+        if (tab === TaskTab.COMMENTS) {
+          return [
+            {
+              label: 'Перейти в чат',
+              variant: 'accent',
+              onPress: navigateToChat,
+            },
+          ];
+        } else return [];
     }
   };
 
   return {
     onTabChange,
     tabs,
+    tab,
     getCurrentTab,
     id,
     name,

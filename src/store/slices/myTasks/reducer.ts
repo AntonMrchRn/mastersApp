@@ -2,7 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { Error } from '@/types/error';
 
-import { getComments, getMyTasks, refreshMyTasks } from './asyncActions';
+import {
+  getComments,
+  getCommentsPreview,
+  getMyTasks,
+  refreshMyTasks,
+} from './asyncActions';
 import { InitialState } from './types';
 
 const initialState: InitialState = {
@@ -10,12 +15,15 @@ const initialState: InitialState = {
   data: [],
   tableNames: [],
   comments: {},
+  commentsPreview: {},
+  loadingCommentsPreview: false,
   loadingComments: false,
   loadingList: false,
   loadingEndReched: false,
   errorList: null,
   errorNames: null,
   errorComments: null,
+  errorCommentsPreview: null,
 };
 
 const taskSearch = createSlice({
@@ -25,6 +33,12 @@ const taskSearch = createSlice({
     clearList: state => {
       state.data = [];
       state.errorList = null;
+    },
+    clearCommentsPreview: state => {
+      state.commentsPreview = {};
+    },
+    clearComments: state => {
+      state.comments = {};
     },
   },
   extraReducers: builder => {
@@ -80,9 +94,25 @@ const taskSearch = createSlice({
       state.errorComments = payload as Error;
       state.loadingComments = false;
     });
+    // получить превью комментарии
+    builder.addCase(getCommentsPreview.pending, state => {
+      state.loadingCommentsPreview = true;
+    });
+    builder.addCase(
+      getCommentsPreview.fulfilled,
+      (state, { payload }: PayloadAction<InitialState['comments']>) => {
+        state.commentsPreview = payload;
+        state.loadingCommentsPreview = false;
+      }
+    );
+    builder.addCase(getCommentsPreview.rejected, (state, { payload }) => {
+      state.errorCommentsPreview = payload as Error;
+      state.loadingCommentsPreview = false;
+    });
   },
 });
 
-export const { clearList } = taskSearch.actions;
+export const { clearList, clearCommentsPreview, clearComments } =
+  taskSearch.actions;
 
 export default taskSearch;

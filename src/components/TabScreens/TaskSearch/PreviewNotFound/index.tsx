@@ -6,6 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Button } from 'rn-ui-kit';
 
 import { InfoIcon } from '@/assets/icons/svg/screens/InfoIcon';
+import { NoMessagesIcon } from '@/assets/icons/svg/screens/NoMessagesIcon';
 import { NotFoundIcon } from '@/assets/icons/svg/screens/NotFoundIcon';
 import TaskSearchClear from '@/assets/icons/svg/screens/TaskSearchClear';
 import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
@@ -68,6 +69,17 @@ const PreviewNotFound: FC<PreviewProps> = ({ type, closeModal }) => {
           смету. Найдите свою первую задачу с помощью поиска
         </Text>
         <Button label="Найти задачу" onPress={onPress} style={styles.btn} />
+      </View>
+    );
+  }
+  if (type === 4) {
+    return (
+      <View style={styles.wrapperNotFound}>
+        <NoMessagesIcon />
+        <Text style={styles.title}>Сообщений пока нет</Text>
+        <Text style={styles.text}>
+          Здесь вы можете обсудить детали задачи с координатором
+        </Text>
       </View>
     );
   } else return <></>;

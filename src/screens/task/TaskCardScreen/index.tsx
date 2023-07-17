@@ -33,10 +33,10 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
   const taskId = '1085';
 
   const {
-    tabs,
     onTabChange,
     getCurrentTab,
     id,
+    tabs,
     publicTime,
     name,
     budget,
@@ -62,9 +62,11 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
     outlayStatusID,
     onRefresh,
     refreshing,
+    tab,
   } = useTaskCard({ taskId, navigation });
   const theme = useTheme();
   const insets = useSafeAreaInsets();
+
   return (
     <>
       <SafeAreaView style={styles.container} edges={['bottom']}>
