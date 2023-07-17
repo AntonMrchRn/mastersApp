@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 
-import { Text } from 'rn-ui-kit';
+import { Text, useTheme } from 'rn-ui-kit';
 
 import { useAppDispatch, useAppSelector } from '@/store';
 import { getCommentsPreview } from '@/store/slices/myTasks/asyncActions';
@@ -10,6 +10,8 @@ import { clearCommentsPreview } from '@/store/slices/myTasks/reducer';
 import PreviewNotFound from '../../TaskSearch/PreviewNotFound';
 import ChatMessage from './Chat/ChatMessage';
 
+import { styles } from './styles';
+
 type TaskCardCommentProps = {
   taskId: string;
   statusID?: number;
@@ -17,7 +19,11 @@ type TaskCardCommentProps = {
 
 export const TaskCardComment: FC<TaskCardCommentProps> = ({ taskId }) => {
   const dispatch = useAppDispatch();
-  const { commentsPreview } = useAppSelector(state => state.myTasks);
+  const theme = useTheme();
+
+  const { commentsPreview, loadingCommentsPreview } = useAppSelector(
+    state => state.myTasks
+  );
 
   useEffect(() => {
     dispatch(
@@ -29,27 +35,19 @@ export const TaskCardComment: FC<TaskCardCommentProps> = ({ taskId }) => {
   }, []);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        paddingTop: 36,
-      }}
-    >
+    <View style={styles.container}>
       <Text variant="title3">Последние сообщения</Text>
-      <View
-        style={{
-          flex: 1,
-          paddingVertical: 10,
-          justifyContent: 'flex-end',
-          bottom: -20,
-        }}
-      >
+      <View style={styles.containerList}>
         {commentsPreview?.taskComment?.length ? (
           commentsPreview?.taskComment.map(item => {
             return <ChatMessage item={item} key={item.ID} />;
           })
-        ) : (
+        ) : !loadingCommentsPreview ? (
           <PreviewNotFound type={4} />
+        ) : (
+          <View style={styles.wrapperLoader}>
+            <ActivityIndicator color={theme.background.accent} size={'large'} />
+          </View>
         )}
       </View>
     </View>
