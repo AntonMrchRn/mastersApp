@@ -19,6 +19,7 @@ type ChatItemProps = {
 const ChatMessage: FC<ChatItemProps> = ({
   item: { isMine, comment, creationTime },
 }) => {
+  console.log('isMine', isMine, comment);
   const theme = useTheme();
   const styles = StyleSheet.create({
     container: {

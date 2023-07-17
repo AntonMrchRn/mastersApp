@@ -14,4 +14,33 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginBottom: configApp.ios ? 10 : 0,
   },
+  wrapperChat: {
+    marginHorizontal: 20,
+    justifyContent: 'center',
+  },
+  risingBlock: {
+    paddingHorizontal: 20,
+    paddingBottom: configApp.android ? 10 : 0,
+    flexDirection: 'row',
+  },
+  w80: {
+    width: '100%',
+    marginRight: -56,
+  },
+  w100: {
+    width: '100%',
+  },
+  btn: {
+    height: 48,
+    width: 48,
+    marginLeft: 8,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  wrapperLoader: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
