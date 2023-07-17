@@ -14,10 +14,12 @@ import RecoveryConfirmationScreen from '@/screens/auth/RecoveryConfirmationScree
 import RecoveryScreen from '@/screens/auth/RecoveryScreen';
 import SignInScreen from '@/screens/auth/SignInScreen';
 import { CommentsChatScreen } from '@/screens/task/CommentsChatScreen';
+import { CompetitorEstimatesScreen } from '@/screens/task/CompetitorEstimatesScreen';
 import { EstimateAddMaterialScreen } from '@/screens/task/EstimateAddMaterialScreen';
 import { EstimateAddServiceScreen } from '@/screens/task/EstimateAddServiceScreen';
 import { EstimateEditScreen } from '@/screens/task/EstimateEditScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
+import { WebViewScreen } from '@/screens/WebViewScreen';
 import { Service } from '@/store/api/tasks/types';
 
 export enum AppScreenName {
@@ -32,7 +34,9 @@ export enum AppScreenName {
   EstimateEdit = 'EstimateEdit',
   EstimateAddMaterial = 'EstimateAddMaterial',
   EstimateAddService = 'EstimateAddService',
+  CompetitorEstimates = 'CompetitorEstimates',
   CommentsChat = 'CommentsChatScreen',
+  WebView = 'WebView',
 }
 export type AppStackParamList = {
   [AppScreenName.SignIn]: undefined;
@@ -55,6 +59,8 @@ export type AppStackParamList = {
   };
   [AppScreenName.EstimateAddMaterial]: { serviceId: number; taskId: number };
   [AppScreenName.EstimateAddService]: { taskId: number; service: Service };
+  [AppScreenName.CompetitorEstimates]: { taskId: number };
+  [AppScreenName.WebView]: { uri: string };
 };
 const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<AppStackParamList>();
@@ -120,6 +126,16 @@ export const AppNavigation = () => {
               header: props => <Header {...props} title={'Новая услуга'} />,
             }}
           />
+          <Stack.Screen
+            name={AppScreenName.CompetitorEstimates}
+            component={CompetitorEstimatesScreen}
+            options={{
+              headerShown: true,
+              header: props => (
+                <Header {...props} title={'Сметы других кандидатов'} />
+              ),
+            }}
+          />
         </>
       ) : (
         <>
@@ -140,6 +156,14 @@ export const AppNavigation = () => {
         </>
       )}
       <Stack.Screen name={AppScreenName.Error} component={ErrorScreen} />
+      <Stack.Screen
+        name={AppScreenName.WebView}
+        component={WebViewScreen}
+        options={{
+          headerShown: true,
+          header: props => <Header {...props} title={''} />,
+        }}
+      />
     </Stack.Navigator>
   );
 };

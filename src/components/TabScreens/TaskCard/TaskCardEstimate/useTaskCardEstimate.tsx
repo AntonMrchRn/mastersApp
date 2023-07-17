@@ -5,9 +5,13 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useToast } from 'rn-ui-kit';
 
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
-import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
+import {
+  useDeleteMaterialMutation,
+  useDeleteTaskServiceMutation,
+  useGetTaskQuery,
+  usePatchTaskServiceMutation,
+} from '@/store/api/tasks';
 import { Material, Service } from '@/store/api/tasks/types';
-import { OutlayStatusType } from '@/types/task';
 
 export const useTaskCardEstimate = ({
   services,
@@ -32,7 +36,10 @@ export const useTaskCardEstimate = ({
 
   const getTask = useGetTaskQuery(taskId.toString());
 
-  const [patchTask, mutationTask] = usePatchTaskMutation();
+  const [deleteTaskService, mutationDeleteTaskService] =
+    useDeleteTaskServiceMutation();
+  const [patchTaskService, mutationTaskService] = usePatchTaskServiceMutation();
+  const [deleteMaterial, mutationDeleteMateria] = useDeleteMaterialMutation();
 
   const [estimateSheetVisible, setEstimateSheetVisible] = useState(false);
 
@@ -72,47 +79,56 @@ export const useTaskCardEstimate = ({
     });
   };
   const onDeleteService = async (serviceId: number) => {
-    const newServices = services.filter(servic => servic.ID !== serviceId);
-    await patchTask({
-      //id таски
-      ID: taskId,
-      //массив услуг
-      services: newServices,
-      //при удалении сметы она снова становится не согласована
-      outlayStatusID: OutlayStatusType.PENDING,
+    await deleteTaskService({
+      serviceId,
     });
     getTask.refetch();
   };
   const onDeleteMaterial = async (service: Service, material: Material) => {
-    const newMaterials = service.materials?.filter(
-      materia => materia !== material
-    );
-    const newService = { ...service, materials: newMaterials };
-    const newServices = services.reduce<Service[]>((acc, val) => {
-      if (val.ID === newService.ID) {
-        return acc.concat(newService);
-      }
-      return acc.concat(val);
-    }, []);
-    await patchTask({
-      //id таски
-      ID: taskId,
-      //массив услуг
-      services: newServices,
-      //при удалении сметы она снова становится не согласована
-      outlayStatusID: OutlayStatusType.PENDING,
+    await patchTaskService({
+      ID: service.ID,
+      taskID: taskId,
+      materials: [],
+      sum:
+        (service?.sum || 0) - (material?.price || 0) * (material?.count || 0),
+    });
+    await deleteMaterial({
+      ID: material.ID.toString(),
+      taskID: taskId.toString(),
     });
     getTask.refetch();
   };
+
   useEffect(() => {
-    if (mutationTask.error && 'data' in mutationTask.error) {
+    if (
+      mutationDeleteTaskService.error &&
+      'data' in mutationDeleteTaskService.error
+    ) {
       toast.show({
         type: 'error',
-        title: mutationTask?.error?.data?.message,
+        title: mutationDeleteTaskService?.error?.data?.message,
         contentHeight: 120,
       });
     }
-  }, [mutationTask.error]);
+  }, [mutationDeleteTaskService.error]);
+  useEffect(() => {
+    if (mutationTaskService.error && 'data' in mutationTaskService.error) {
+      toast.show({
+        type: 'error',
+        title: mutationTaskService?.error?.data?.message,
+        contentHeight: 120,
+      });
+    }
+  }, [mutationTaskService.error]);
+  useEffect(() => {
+    if (mutationDeleteMateria.error && 'data' in mutationDeleteMateria.error) {
+      toast.show({
+        type: 'error',
+        title: mutationDeleteMateria?.error?.data?.message,
+        contentHeight: 120,
+      });
+    }
+  }, [mutationDeleteMateria.error]);
 
   return {
     estimateSheetVisible,

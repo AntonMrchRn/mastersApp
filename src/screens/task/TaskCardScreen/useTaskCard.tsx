@@ -41,6 +41,7 @@ export const useTaskCard = ({
   const [selectedServiceId, setSelectedServiceId] = useState<number>();
   const [estimateBannerVisible, setEstimateBannerVisible] = useState(false);
   const [cantDeleteBannerVisible, setCantDeleteBannerVisible] = useState(false);
+  const [submissionModalVisible, setSubmissionModalVisible] = useState(false);
   const isFocused = useIsFocused();
 
   const ref = useRef<{
@@ -51,7 +52,6 @@ export const useTaskCard = ({
   const { user } = useAppSelector(selectAuth);
 
   const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
-  // const { data, isError, error, refetch, isLoading } = useGetTaskQuery('996');
 
   useEffect(() => {
     if (isFocused) {
@@ -72,7 +72,10 @@ export const useTaskCard = ({
 
   const task = data?.tasks?.[0];
   const id = task?.ID || 0;
-  const subsetID = task?.subsetID || '';
+  /**
+   * тип задачи
+   */
+  const subsetID = task?.subsetID;
   const files = task?.files || [];
   const services = task?.services || [];
   const startTime = task?.startTime || '';
@@ -141,6 +144,9 @@ export const useTaskCard = ({
     refetch();
   };
 
+  const onSubmissionModalVisible = () => {
+    setSubmissionModalVisible(!submissionModalVisible);
+  };
   const onCantDeleteBannerVisible = () => {
     setCantDeleteBannerVisible(!cantDeleteBannerVisible);
   };
@@ -197,6 +203,7 @@ export const useTaskCard = ({
       });
     } finally {
       refetch();
+      onSubmissionModalVisible();
     }
   };
   const onCancelModalVisible = () => {
@@ -253,6 +260,9 @@ export const useTaskCard = ({
     //далее необходимо удалить этот оффер через DELETE offers/id
     setBudgetModalVisible(!budgetModalVisible);
   };
+  const onSubmitAnEstimate = () => {
+    //навигация на подачу сметы
+  };
 
   const getCurrentTab = () => {
     switch (tab) {
@@ -280,6 +290,7 @@ export const useTaskCard = ({
             selectedServiceId={selectedServiceId}
             setSelectedServiceId={setSelectedServiceId}
             onCantDeleteBannerVisible={onCantDeleteBannerVisible}
+            subsetID={subsetID}
           />
         );
       case TaskTab.REPORT:
@@ -371,7 +382,16 @@ export const useTaskCard = ({
             {
               label: 'Принять задачу',
               variant: 'accent',
-              onPress: onTaskSubmission,
+              onPress: onSubmissionModalVisible,
+            },
+          ];
+        }
+        if (subsetID === TaskType.COMMON_AUCTION_SALE) {
+          return [
+            {
+              label: 'Подать смету',
+              variant: 'accent',
+              onPress: onSubmitAnEstimate,
             },
           ];
         }
@@ -393,7 +413,6 @@ export const useTaskCard = ({
             },
           ];
         }
-
         return [];
       case StatusType.WORK:
         if (tab === TaskTab.COMMENTS) {
@@ -406,15 +425,6 @@ export const useTaskCard = ({
           ];
         }
         if (tab === TaskTab.REPORT) {
-          if (TaskTab.COMMENTS) {
-            return [
-              {
-                label: 'Перейти в чат',
-                variant: 'accent',
-                onPress: navigateToChat,
-              },
-            ];
-          }
           if (files.length) {
             return [
               {
@@ -438,15 +448,6 @@ export const useTaskCard = ({
           ];
         }
         if (tab === TaskTab.ESTIMATE) {
-          if (TaskTab.COMMENTS) {
-            return [
-              {
-                label: 'Перейти в чат',
-                variant: 'accent',
-                onPress: navigateToChat,
-              },
-            ];
-          }
           if (estimateBottomVisible) {
             return [
               {
@@ -522,15 +523,6 @@ export const useTaskCard = ({
             },
           ];
         }
-        if (tab === TaskTab.REPORT) {
-          return [
-            {
-              label: 'Перейти в чат',
-              variant: 'accent',
-              onPress: navigateToChat,
-            },
-          ];
-        }
         return [
           {
             label: 'Сдать работы',
@@ -553,7 +545,8 @@ export const useTaskCard = ({
               onPress: navigateToChat,
             },
           ];
-        } else return [];
+        }
+        return [];
     }
   };
 
@@ -588,5 +581,8 @@ export const useTaskCard = ({
     outlayStatusID,
     onRefresh,
     refreshing: isLoading,
+    onSubmissionModalVisible,
+    onTaskSubmission,
+    submissionModalVisible,
   };
 };

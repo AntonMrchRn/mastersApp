@@ -4,6 +4,7 @@ import { setProgresses } from '@/store/slices/tasks/actions';
 import { File, FilesParams, Progress } from '@/types/fileManager';
 
 import {
+  GetOffersResponse,
   GetServicesCategoriesResponse,
   GetServicesResponse,
   GetTaskHistoryResponse,
@@ -57,10 +58,44 @@ export const tasksAPI = api
           method: 'GET',
         }),
       }),
+      getOffers: builder.query<GetOffersResponse, string>({
+        query: taskID => ({
+          url: `offers?query=?taskID==${taskID}?`,
+          method: 'GET',
+        }),
+      }),
       patchTask: builder.mutation<GetTaskResponse, Task>({
         query: data => ({
           url: `tasks/web`,
           method: 'PATCH',
+          data,
+        }),
+      }),
+      deleteTaskService: builder.mutation<object, { serviceId: number }>({
+        query: ({ serviceId }) => ({
+          url: `tasks/services/${serviceId}`,
+          method: 'DELETE',
+        }),
+      }),
+      patchTaskService: builder.mutation<object, unknown>({
+        query: data => ({
+          url: 'tasks/services',
+          method: 'PATCH',
+          data,
+        }),
+      }),
+      patchMaterial: builder.mutation<object, unknown>({
+        query: data => ({
+          url: 'materials',
+          method: 'PATCH',
+          data,
+        }),
+      }),
+      deleteMaterial: builder.mutation<object, { ID: string; taskID: string }>({
+        query: data => ({
+          url: `materials`,
+          params: data,
+          method: 'DELETE',
           data,
         }),
       }),
@@ -113,4 +148,9 @@ export const {
   useGetServicesCategoriesQuery,
   useGetServicesByCategoriesQuery,
   useLazyGetServicesByNameQuery,
+  useGetOffersQuery,
+  useDeleteTaskServiceMutation,
+  usePatchTaskServiceMutation,
+  usePatchMaterialMutation,
+  useDeleteMaterialMutation,
 } = tasksAPI;
