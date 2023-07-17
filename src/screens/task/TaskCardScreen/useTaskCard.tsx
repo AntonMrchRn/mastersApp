@@ -51,7 +51,6 @@ export const useTaskCard = ({
   const { user } = useAppSelector(selectAuth);
 
   const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
-  // const { data, isError, error, refetch, isLoading } = useGetTaskQuery('996');
 
   useEffect(() => {
     if (isFocused) {
@@ -421,15 +420,6 @@ export const useTaskCard = ({
           ];
         }
         if (tab === TaskTab.REPORT) {
-          if (TaskTab.COMMENTS) {
-            return [
-              {
-                label: 'Перейти в чат',
-                variant: 'accent',
-                onPress: navigateToChat,
-              },
-            ];
-          }
           if (files.length) {
             return [
               {
@@ -453,15 +443,6 @@ export const useTaskCard = ({
           ];
         }
         if (tab === TaskTab.ESTIMATE) {
-          if (TaskTab.COMMENTS) {
-            return [
-              {
-                label: 'Перейти в чат',
-                variant: 'accent',
-                onPress: navigateToChat,
-              },
-            ];
-          }
           if (estimateBottomVisible) {
             return [
               {
@@ -537,15 +518,6 @@ export const useTaskCard = ({
             },
           ];
         }
-        if (tab === TaskTab.REPORT) {
-          return [
-            {
-              label: 'Перейти в чат',
-              variant: 'accent',
-              onPress: navigateToChat,
-            },
-          ];
-        }
         return [
           {
             label: 'Сдать работы',
@@ -568,7 +540,8 @@ export const useTaskCard = ({
               onPress: navigateToChat,
             },
           ];
-        } else return [];
+        }
+        return [];
     }
   };
 

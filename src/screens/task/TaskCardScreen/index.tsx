@@ -30,7 +30,8 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
   route,
 }) => {
   // const taskId = route.params.taskId.toString();
-  const taskId = '1085';
+  // const taskId = '1085';
+  const taskId = '996';
 
   const {
     onTabChange,

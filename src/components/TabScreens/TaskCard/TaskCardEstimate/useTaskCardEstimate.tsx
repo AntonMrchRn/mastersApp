@@ -5,7 +5,11 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useToast } from 'rn-ui-kit';
 
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
-import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
+import {
+  useDeleteTaskServiceMutation,
+  useGetTaskQuery,
+  usePatchTaskMutation,
+} from '@/store/api/tasks';
 import { Material, Service } from '@/store/api/tasks/types';
 import { OutlayStatusType } from '@/types/task';
 
@@ -33,6 +37,8 @@ export const useTaskCardEstimate = ({
   const getTask = useGetTaskQuery(taskId.toString());
 
   const [patchTask, mutationTask] = usePatchTaskMutation();
+  const [deleteTaskService, mutationDeleteTaskService] =
+    useDeleteTaskServiceMutation();
 
   const [estimateSheetVisible, setEstimateSheetVisible] = useState(false);
 
@@ -72,14 +78,8 @@ export const useTaskCardEstimate = ({
     });
   };
   const onDeleteService = async (serviceId: number) => {
-    const newServices = services.filter(servic => servic.ID !== serviceId);
-    await patchTask({
-      //id таски
-      ID: taskId,
-      //массив услуг
-      services: newServices,
-      //при удалении сметы она снова становится не согласована
-      outlayStatusID: OutlayStatusType.PENDING,
+    await deleteTaskService({
+      serviceId,
     });
     getTask.refetch();
   };
@@ -113,6 +113,19 @@ export const useTaskCardEstimate = ({
       });
     }
   }, [mutationTask.error]);
+
+  useEffect(() => {
+    if (
+      mutationDeleteTaskService.error &&
+      'data' in mutationDeleteTaskService.error
+    ) {
+      toast.show({
+        type: 'error',
+        title: mutationDeleteTaskService?.error?.data?.message,
+        contentHeight: 120,
+      });
+    }
+  }, [mutationDeleteTaskService.error]);
 
   return {
     estimateSheetVisible,
