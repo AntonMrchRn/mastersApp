@@ -13,46 +13,66 @@ type RequestArgs = {
   fromTask?: number;
   idCard?: string | number;
   sort?: 'asc' | 'desc';
+  regionID: number[];
 };
 
 const getEndpont = ({
   idList,
-  userID,
   numberOfPosts,
   fromTask,
+  regionID,
 }: {
   idList: number;
   userID: number;
   numberOfPosts: number;
   fromTask: number;
+  regionID: number[];
 }) => {
   switch (idList) {
     //Все ( Мои )
     case 1:
-      return `(creatorID==${userID}||coordinator==ID^^${userID})*setID==1,2?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
+      return `(object==regionID^^${regionID?.join(
+        ','
+      )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //Новые
     case 2:
-      return `(creatorID==${userID}||coordinator==ID^^${userID})*setID==1,2*statusID==1,2?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
+      return `(statusID==1,2*object==regionID^^${regionID?.join(
+        ','
+      )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //В работе
     case 3:
-      return `(creatorID==${userID}||coordinator==ID^^${userID})*statusID==11*outlayStatusID==1,3,5*setID==1,2?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
+      return `(statusID==11*outlayStatusID==1,3,5*object==regionID^^${regionID?.join(
+        ','
+      )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //Согласованные сметы
     case 4:
-      return `(creatorID==${userID}||coordinator==ID^^${userID})*statusID==11*outlayStatusID==2*setID==1,2?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
+      return `(statusID==11*outlayStatusID==2*object==regionID^^${regionID?.join(
+        ','
+      )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //Сдача работ
     case 5:
-      return `(creatorID==${userID}||coordinator==ID^^${userID})*setID==1,2*statusID==5?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
+      return `(statusID==5*object==regionID^^${regionID?.join(
+        ','
+      )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //Выполненные
     case 6:
-      return `(creatorID==${userID}||coordinator==ID^^${userID})*(statusID==6,12||statusID==9*toClose==false)*setID==1,2?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
+      return `(statusID==6,12||statusID==9*toClose==false)*(object==regionID^^${regionID?.join(
+        ','
+      )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //Отмененные
     case 7:
-      return `(creatorID==${userID}||coordinator==ID^^${userID})*setID==1,2*statusID==7,8?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
+      return `(statusID==7,8*object==regionID^^${regionID?.join(
+        ','
+      )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //К закрытию
     case 8:
-      return `(creatorID==${userID}||coordinator==ID^^${userID})*setID==1,2*toClose==true?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
+      return `(toClose==true*object==regionID^^${regionID?.join(
+        ','
+      )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     default:
-      return `(creatorID==${userID}||coordinator==ID^^${userID})*setID==1,2?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
+      return `(object==regionID^^${regionID?.join(
+        ','
+      )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
   }
 };
 
@@ -63,7 +83,7 @@ const getMyTasks = createAsyncThunk<
 >(
   '/getMyTasks',
   async (
-    { idList, numberOfPosts = 30, fromTask = 0 }: RequestArgs,
+    { idList, numberOfPosts = 30, fromTask = 0, regionID }: RequestArgs,
     thunkApi
   ) => {
     const userID = thunkApi.getState().auth.user?.userID;
@@ -75,6 +95,7 @@ const getMyTasks = createAsyncThunk<
             userID,
             numberOfPosts,
             fromTask,
+            regionID,
           })}`
         );
         return data;
@@ -93,7 +114,7 @@ const refreshMyTasks = createAsyncThunk<
 >(
   '/refreshMyTasks',
   async (
-    { idList, numberOfPosts = 30, fromTask = 0 }: RequestArgs,
+    { idList, numberOfPosts = 30, fromTask = 0, regionID }: RequestArgs,
     thunkApi
   ) => {
     const userID = thunkApi.getState().auth.user?.userID;
@@ -106,6 +127,7 @@ const refreshMyTasks = createAsyncThunk<
             userID,
             numberOfPosts,
             fromTask,
+            regionID,
           })}`
         );
         return data;

@@ -21,6 +21,8 @@ import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { Task } from '@/store/api/tasks/types';
+import { useGetUserQuery } from '@/store/api/user';
+import { selectAuth } from '@/store/slices/auth/selectors';
 import {
   getMyTasks,
   refreshMyTasks,
@@ -47,6 +49,11 @@ const MyTasksScreen: FC<MyTasksScreenProps> = ({ navigation }) => {
     list: { mobileCounts = [] },
   } = useAppSelector(state => state.myTasks);
 
+  const { user: authUser } = useAppSelector(selectAuth);
+  const { data: user } = useGetUserQuery(authUser?.userID, {
+    skip: !authUser?.userID,
+  });
+  const regionID = user?.regionIDs || [];
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
   const onItemPress = (id: number) => {
     navigation.navigate(AppScreenName.TaskCard, {
@@ -57,7 +64,8 @@ const MyTasksScreen: FC<MyTasksScreenProps> = ({ navigation }) => {
     <CardTasks {...item} onItemPress={onItemPress} />
   );
 
-  const onRefresh = () => dispatch(refreshMyTasks({ idList: selectedTab }));
+  const onRefresh = () =>
+    dispatch(refreshMyTasks({ idList: selectedTab, regionID }));
 
   const cachedOnEndReached = useCallback(() => {
     !loadingList && data.length && data.length > 4
@@ -65,6 +73,7 @@ const MyTasksScreen: FC<MyTasksScreenProps> = ({ navigation }) => {
           getMyTasks({
             idList: selectedTab,
             fromTask: data?.length,
+            regionID,
           })
         )
       : null;
@@ -77,6 +86,7 @@ const MyTasksScreen: FC<MyTasksScreenProps> = ({ navigation }) => {
         refreshMyTasks({
           idList: item.id,
           fromTask: 0,
+          regionID,
         })
       );
       setSelectedTab(item.id);
