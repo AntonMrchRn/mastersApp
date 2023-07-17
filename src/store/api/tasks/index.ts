@@ -77,9 +77,16 @@ export const tasksAPI = api
           method: 'DELETE',
         }),
       }),
-      patchTaskService: builder.mutation<object, any>({
+      patchTaskService: builder.mutation<object, unknown>({
         query: data => ({
           url: 'tasks/services',
+          method: 'PATCH',
+          data,
+        }),
+      }),
+      patchMaterial: builder.mutation<object, unknown>({
+        query: data => ({
+          url: 'materials',
           method: 'PATCH',
           data,
         }),
@@ -136,4 +143,5 @@ export const {
   useGetOffersQuery,
   useDeleteTaskServiceMutation,
   usePatchTaskServiceMutation,
+  usePatchMaterialMutation,
 } = tasksAPI;

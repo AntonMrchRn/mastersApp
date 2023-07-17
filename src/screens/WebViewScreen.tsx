@@ -9,9 +9,6 @@ type WebViewScreenProps = StackScreenProps<
   AppStackParamList,
   AppScreenName.WebView
 >;
-export const WebViewScreen: FC<WebViewScreenProps> = ({
-  navigation,
-  route,
-}) => {
+export const WebViewScreen: FC<WebViewScreenProps> = ({ route }) => {
   return <WebView source={{ uri: route.params.uri }} style={{ flex: 1 }} />;
 };

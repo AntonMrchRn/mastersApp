@@ -184,7 +184,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                 />
               </View>
               <Spacer size={0} separator="bottom" />
-              {service?.materials?.map((material, inde) => {
+              {service?.materials?.map(material => {
                 const firstActionMaterial = () => {
                   onEdit(service.ID, material.name);
                 };
@@ -192,7 +192,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                   onDeleteMaterial(service, material);
                 };
                 return (
-                  <View key={material.measure + material.name + inde}>
+                  <View key={material.ID}>
                     <TaskEstimateItem
                       firstAction={firstActionMaterial}
                       secondAction={secondActionMaterial}

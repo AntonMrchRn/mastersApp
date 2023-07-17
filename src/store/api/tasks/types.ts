@@ -2,6 +2,7 @@ import { File } from '@/types/fileManager';
 import { OutlayStatusType, RoleType, TaskType } from '@/types/task';
 
 type Material = {
+  ID: number;
   count: number;
   measure: string;
   name: string;
