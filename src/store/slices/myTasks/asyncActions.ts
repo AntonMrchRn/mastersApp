@@ -36,24 +36,24 @@ const getEndpont = ({
       )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //Новые
     case 2:
-      return `(statusID==1,2*object==regionID^^${regionID?.join(
+      return `(object==regionID^^${regionID?.join(
         ','
-      )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
+      )}*statusID==1,2*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //В работе
     case 3:
-      return `(statusID==11*outlayStatusID==1,3,5*object==regionID^^${regionID?.join(
+      return `(object==regionID^^${regionID?.join(
         ','
-      )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
+      )}*statusID==11*outlayStatusID==1,3,5*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //Согласованные сметы
     case 4:
-      return `(statusID==11*outlayStatusID==2*object==regionID^^${regionID?.join(
+      return `(object==regionID^^${regionID?.join(
         ','
-      )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
+      )}*statusID==11*outlayStatusID==2*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //Сдача работ
     case 5:
-      return `(statusID==5*object==regionID^^${regionID?.join(
+      return `(object==regionID^^${regionID?.join(
         ','
-      )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
+      )}*statusID==5*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //Выполненные
     case 6:
       return `(statusID==6,12||statusID==9*toClose==false)*(object==regionID^^${regionID?.join(
@@ -61,14 +61,14 @@ const getEndpont = ({
       )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //Отмененные
     case 7:
-      return `(statusID==7,8*object==regionID^^${regionID?.join(
+      return `(object==regionID^^${regionID?.join(
         ','
-      )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
+      )}*statusID==7,8*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //К закрытию
     case 8:
-      return `(toClose==true*object==regionID^^${regionID?.join(
+      return `(object==regionID^^${regionID?.join(
         ','
-      )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
+      )}*toClose==true*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     default:
       return `(object==regionID^^${regionID?.join(
         ','

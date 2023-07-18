@@ -84,10 +84,24 @@ export const tasksAPI = api
           data,
         }),
       }),
+      postTaskService: builder.mutation<object, unknown>({
+        query: data => ({
+          url: 'tasks/services',
+          method: 'POST',
+          data,
+        }),
+      }),
       patchMaterial: builder.mutation<object, unknown>({
         query: data => ({
           url: 'materials',
           method: 'PATCH',
+          data,
+        }),
+      }),
+      postMaterial: builder.mutation<object, unknown>({
+        query: data => ({
+          url: 'materials',
+          method: 'POST',
           data,
         }),
       }),
@@ -153,4 +167,6 @@ export const {
   usePatchTaskServiceMutation,
   usePatchMaterialMutation,
   useDeleteMaterialMutation,
+  usePostMaterialMutation,
+  usePostTaskServiceMutation,
 } = tasksAPI;

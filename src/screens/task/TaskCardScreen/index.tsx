@@ -30,9 +30,9 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
   navigation,
   route,
 }) => {
-  // const taskId = route.params.taskId.toString();
+  const taskId = route.params.taskId.toString();
   // const taskId = '1085';
-  const taskId = '996';
+  // const taskId = '996';
 
   const {
     onTabChange,
@@ -45,7 +45,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
     isNight,
     isUrgent,
     budgetEndTime,
-    getBanner,
+    banner,
     getButtons,
     budgetModalVisible,
     onBudgetModalVisible,
@@ -172,7 +172,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
             />
           </View>
         )}
-        <TaskCardBottom banner={getBanner()} buttons={getButtons()} />
+        <TaskCardBottom banner={banner} buttons={getButtons()} />
       </View>
     </>
   );
