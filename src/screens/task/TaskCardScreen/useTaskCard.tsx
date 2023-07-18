@@ -191,25 +191,34 @@ export const useTaskCard = ({
     }
   };
   const onTaskSubmission = async () => {
-    try {
-      await patchTask({
-        //id таски
-        ID: id,
-        //статус для принятия в работу
-        statusID: 11,
-        //id профиля
-        executors: [{ ID: user?.userID }],
-      }).unwrap();
-    } catch (error) {
-      toast.show({
-        type: 'error',
-        title: (error as AxiosQueryErrorResponse).data.message,
-        contentHeight: 120,
-      });
-    } finally {
-      refetch();
-      onSubmissionModalVisible();
+    //принимаем таску в работу, если первый отклик
+    if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
+      try {
+        await patchTask({
+          //id таски
+          ID: id,
+          //статус для принятия в работу
+          statusID: 11,
+          //id профиля
+          executors: [{ ID: user?.userID }],
+        }).unwrap();
+      } catch (error) {
+        toast.show({
+          type: 'error',
+          title: (error as AxiosQueryErrorResponse).data.message,
+          contentHeight: 120,
+        });
+      } finally {
+        refetch();
+      }
     }
+    //навигация на скрин подачи сметы, если ЛОТЫ
+    if (subsetID === TaskType.COMMON_AUCTION_SALE) {
+      navigation.navigate(AppScreenName.EstimateSubmission, {
+        taskId: +taskId,
+      });
+    }
+    onSubmissionModalVisible();
   };
   const onCancelModalVisible = () => {
     setCancelModalVisible(!cancelModalVisible);
@@ -266,7 +275,8 @@ export const useTaskCard = ({
     setBudgetModalVisible(!budgetModalVisible);
   };
   const onSubmitAnEstimate = () => {
-    //навигация на подачу сметы
+    //показываем модалку с условиями
+    onSubmissionModalVisible();
   };
 
   const getCurrentTab = () => {
