@@ -10,9 +10,8 @@ import ControlledInput from '@/components/inputs/ControlledInput';
 import { ServiceItem } from '@/components/task/ServiceItem';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppSelector } from '@/store';
-import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
+import { useGetTaskQuery, usePostTaskServiceMutation } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import { OutlayStatusType } from '@/types/task';
 import { estimateAddServiceValidationSchema } from '@/utils/formValidation';
 
 import { styles } from './styles';
@@ -36,7 +35,7 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
 
   const getTask = useGetTaskQuery(taskId.toString());
 
-  const [patchTask, mutationTask] = usePatchTaskMutation();
+  const [postTask, mutationTask] = usePostTaskServiceMutation();
 
   useEffect(() => {
     if (mutationTask.error && 'data' in mutationTask.error) {
@@ -48,8 +47,6 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
     }
   }, [mutationTask.error]);
 
-  const task = getTask?.data && getTask?.data?.tasks && getTask?.data?.tasks[0];
-  const services = task?.services || [];
   const methods = useForm({
     defaultValues: {
       count: '',
@@ -78,19 +75,21 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
         contentHeight: 120,
       });
     }
-    const newServices = services.concat({
-      ...service,
+    await postTask({
+      categoryID: service.categoryID,
+      categoryName: service.categoryName,
+      description: service.description,
+      measureID: service.measureID,
+      measureName: service.measureName,
+      name: service.name,
+      price: service.price,
+      setID: service.setID,
+      serviceID: service.ID,
       count: +count,
       sum: +count * service.price,
       roleID: userRole,
-    });
-    await patchTask({
-      //id таски
-      ID: taskId,
-      //массив услуг
-      services: newServices,
-      //при изменении сметы она снова становится не согласована
-      outlayStatusID: OutlayStatusType.PENDING,
+      taskID: taskId,
+      materials: [],
     });
     getTask.refetch();
     goBack();
