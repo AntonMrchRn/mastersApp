@@ -6,10 +6,7 @@ import dayjs from 'dayjs';
 import { useToast } from 'rn-ui-kit';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
 
-import {
-  TaskCardBottomBanner,
-  TaskCardBottomButton,
-} from '@/components/TabScreens/TaskCard/TaskCardBottom';
+import { TaskCardBottomButton } from '@/components/TabScreens/TaskCard/TaskCardBottom';
 import { TaskCardComment } from '@/components/TabScreens/TaskCard/TaskCardComment';
 import { TaskCardDescription } from '@/components/TabScreens/TaskCard/TaskCardDescription';
 import { TaskCardEstimate } from '@/components/TabScreens/TaskCard/TaskCardEstimate';
@@ -21,6 +18,8 @@ import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import { OutlayStatusType, StatusType, TaskTab, TaskType } from '@/types/task';
+
+import { getBanner } from './getBanner';
 
 export const useTaskCard = ({
   taskId,
@@ -139,6 +138,12 @@ export const useTaskCard = ({
       icon: false,
     },
   ];
+
+  const banner = getBanner({
+    tab,
+    statusID,
+    outlayStatusID,
+  });
 
   const onRefresh = () => {
     refetch();
@@ -296,7 +301,7 @@ export const useTaskCard = ({
       case TaskTab.REPORT:
         return (
           <TaskCardReport
-            activeBudgetCanceled={!!getBanner()}
+            activeBudgetCanceled={!!banner}
             statusID={statusID}
             files={files}
             taskId={id.toString()}
@@ -314,55 +319,6 @@ export const useTaskCard = ({
   };
   const onTabChange = (item: TabItem) => {
     setTab(item.label as TaskTab);
-  };
-
-  const getBanner = (): TaskCardBottomBanner => {
-    if (tab === TaskTab.DESCRIPTION) {
-      switch (statusID) {
-        case StatusType.ACTIVE:
-          if (outlayStatusID === 4) {
-            return {
-              title: 'Ваша смета отклонена координатором',
-              type: 'error',
-              icon: 'alert',
-              text: 'К сожалению, теперь вы не можете стать исполнителем этой задачи',
-            };
-          }
-          return null;
-        case StatusType.SUMMARIZING:
-          return {
-            title: 'Задача на проверке',
-            type: 'info',
-            icon: 'info',
-            text: 'Координатор проверяет выполненные услуги. После успешной проверки задача будет передана на оплату',
-          };
-        case StatusType.COMPLETED:
-          return {
-            title: 'Выполненные услуги приняты',
-            type: 'success',
-            icon: 'success',
-            text: 'В ближайшее время оплата поступит на вашу банковскую карту/счет',
-          };
-        case StatusType.PAID:
-          return {
-            title: 'Оплата произведена',
-            type: 'success',
-            icon: 'success',
-            text: 'Денежные средства переведены вам на указанные в профиле реквизиты',
-          };
-        case StatusType.CANCELLED_BY_CUSTOMER:
-        case StatusType.CANCELLED_BY_EXECUTOR:
-          return {
-            title: 'Задача отменена',
-            type: 'error',
-            icon: 'alert',
-            text: 'По инициативе координатора выполнение задачи прекращено',
-          };
-        default:
-          return null;
-      }
-    }
-    return null;
   };
 
   const getButtons = (): TaskCardBottomButton[] => {
@@ -535,7 +491,6 @@ export const useTaskCard = ({
             onPress: onCancelModalVisible,
           },
         ];
-
       default:
         if (tab === TaskTab.COMMENTS) {
           return [
@@ -562,7 +517,7 @@ export const useTaskCard = ({
     publicTime,
     isUrgent,
     budgetEndTime,
-    getBanner,
+    banner,
     getButtons,
     budgetModalVisible,
     onBudgetModalVisible,
