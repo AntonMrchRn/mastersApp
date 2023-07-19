@@ -4,18 +4,16 @@ import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
 import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
 import { CheckMarkIcon } from '@/assets/icons/svg/screens/CheckMarkIcon';
-import {
-  ModalStep,
-  Type,
-} from '@/components/TabScreens/ProfileScreen/EntityTypeModal/index';
-import styles from '@/components/TabScreens/ProfileScreen/EntityTypeModal/style';
+import { ModalStep } from '@/components/TabScreens/ProfileScreen/PaymentTab/EntityTypeModal/index';
+import styles from '@/components/TabScreens/ProfileScreen/PaymentTab/EntityTypeModal/style';
 import { useGetEntityTypesQuery } from '@/store/api/user';
+import { EntityType } from '@/store/api/user/types';
 import { AxiosQueryErrorResponse } from '@/types/error';
 
 type TypeSelectionStepProps = {
-  selectedType?: Type;
   setModalStep: (step: ModalStep) => void;
-  setSelectedType: (type: Type) => void;
+  setSelectedType: (type: EntityType) => void;
+  selectedType?: EntityType;
 };
 
 const TypeSelectionStep = ({
@@ -37,14 +35,14 @@ const TypeSelectionStep = ({
     if (isError) {
       toast.show({
         type: 'error',
-        title: (error as AxiosQueryErrorResponse)?.data?.message,
+        title: (error as AxiosQueryErrorResponse).data.message,
         contentHeight: 120,
       });
     }
   }, [isError]);
 
   const onSelect = () => setModalStep(ModalStep.DataEditing);
-  const onTypeSelect = (type: Type) => setSelectedType(type);
+  const onTypeSelect = (type: EntityType) => setSelectedType(type);
 
   return (
     <>
@@ -59,7 +57,7 @@ const TypeSelectionStep = ({
             key={type.ID}
             onPress={() =>
               onTypeSelect({
-                id: type.ID,
+                ID: type.ID,
                 description: type.description,
               })
             }
@@ -78,13 +76,7 @@ const TypeSelectionStep = ({
         ))
       )}
       <Spacer size="xl" />
-      <Button
-        label="Выбрать"
-        onPress={onSelect}
-        isPending={false}
-        disabled={!selectedType}
-      />
-      <Spacer />
+      <Button label="Выбрать" onPress={onSelect} disabled={!selectedType} />
     </>
   );
 };

@@ -4,14 +4,13 @@ import {
   FlatList,
   ListRenderItemInfo,
   SafeAreaView,
-  Text,
   View,
 } from 'react-native';
 
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { TabControl, useTheme } from 'rn-ui-kit';
+import { TabControl, Text, useTheme } from 'rn-ui-kit';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
 
 import CardTasks from '@/components/TabScreens/TaskSearch/Card';
@@ -100,7 +99,9 @@ const MyTasksScreen: FC<MyTasksScreenProps> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapperTop}>
-        <Text style={styles.textHeader}>Мои задачи</Text>
+        <Text variant="title1" style={styles.textHeader}>
+          Мои задачи
+        </Text>
       </View>
       <TabControl
         contentContainerStyle={styles.wrapperTab}

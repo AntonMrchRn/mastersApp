@@ -14,6 +14,9 @@ const styles = StyleSheet.create({
   arrow: {
     marginLeft: 'auto',
   },
+  textContainer: {
+    flex: 1,
+  },
 });
 
 export default styles;

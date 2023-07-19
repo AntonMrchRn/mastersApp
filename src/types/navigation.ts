@@ -26,6 +26,10 @@ type PhoneEditingConfirmationScreenRoute = RouteProp<
   ProfileStackParamList,
   ProfileScreenName.PhoneEditingConfirmation
 >;
+type PersonalDataScreenRoute = RouteProp<
+  ProfileStackParamList,
+  ProfileScreenName.PersonalDataEditing
+>;
 type BankDetailsScreenRoute = RouteProp<
   ProfileStackParamList,
   ProfileScreenName.BankDetails
@@ -77,6 +81,7 @@ export type {
   EmailEditingScreenRoute,
   PhoneEditingScreenRoute,
   BankDetailsScreenRoute,
+  PersonalDataScreenRoute,
   RecoveryConfirmationScreenRoute,
   PhoneEditingConfirmationScreenRoute,
   ErrorScreenNavigationProp,

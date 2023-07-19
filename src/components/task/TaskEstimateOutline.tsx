@@ -51,7 +51,7 @@ export const TaskEstimateOutline: FC<TaskEstimateOutlineProps> = ({
     <View style={styles.container}>
       {getBadge()}
       <TouchableOpacity style={styles.button} onPress={onPress}>
-        <PlusIcon />
+        <PlusIcon fill={theme.icons.basic} />
         <Text variant="bodySBold" color={theme.text.basic} style={styles.text}>
           Добавить
         </Text>

@@ -20,10 +20,11 @@ export enum ProfileScreenName {
 export type ProfileStackParamList = {
   [ProfileScreenName.Profile]: undefined;
   [ProfileScreenName.BankDetails]: {
-    bankID?: string | null;
-    bankName?: string | null;
-    checkingAccount?: string | null;
-    correspondingAccount?: string | null;
+    isCompany: boolean;
+    bankID: string | null;
+    bankName: string | null;
+    checkingAccount: string | null;
+    correspondingAccount: string | null;
   };
   [ProfileScreenName.EmailEditing]: {
     email: string | null;
@@ -34,7 +35,11 @@ export type ProfileStackParamList = {
   [ProfileScreenName.PhoneEditingConfirmation]: {
     phone: string;
   };
-  [ProfileScreenName.PersonalDataEditing]: undefined;
+  [ProfileScreenName.PersonalDataEditing]: {
+    name: string | null;
+    sname: string | null;
+    pname: string | null;
+  };
 };
 const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<ProfileStackParamList>();

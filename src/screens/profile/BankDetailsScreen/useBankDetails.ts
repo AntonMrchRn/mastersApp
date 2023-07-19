@@ -10,6 +10,7 @@ import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { useAppSelector } from '@/store';
 import { useEditUserMutation } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
+import { AxiosQueryErrorResponse } from '@/types/error';
 import { BankDetailsFormValues } from '@/types/form';
 import {
   BankDetailsScreenRoute,
@@ -24,7 +25,7 @@ const useBankDetails = () => {
 
   const { user: authUser } = useAppSelector(selectAuth);
 
-  const [editBankDetails, { isLoading, isSuccess, isError }] =
+  const [editBankDetails, { isLoading, isSuccess, isError, error }] =
     useEditUserMutation();
 
   const methods = useForm({
@@ -34,7 +35,7 @@ const useBankDetails = () => {
       checkingAccount: params.checkingAccount || '',
       correspondingAccount: params.correspondingAccount || '',
     },
-    resolver: yupResolver(bankDetailsValidationSchema),
+    resolver: yupResolver(bankDetailsValidationSchema(params.isCompany)),
     mode: 'onBlur',
   });
   const {
@@ -62,7 +63,7 @@ const useBankDetails = () => {
     if (isError) {
       toast.show({
         type: 'error',
-        title: 'Изменение данных невозможно',
+        title: (error as AxiosQueryErrorResponse).data.message,
         contentHeight: 100,
       });
     }

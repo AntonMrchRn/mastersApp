@@ -14,7 +14,6 @@ import {
 import QuestionIcon from '@/assets/icons/svg/screens/QuestionIcon';
 import { hitSlop } from '@/constants/platform';
 import { useEditUserMutation, useGetUserParamsQuery } from '@/store/api/user';
-import { User } from '@/store/api/user/types';
 import { AxiosQueryErrorResponse } from '@/types/error';
 
 import styles from './style';
@@ -22,11 +21,18 @@ import styles from './style';
 const selfTooltipCoords = { x: -151, y: 85 };
 
 type SelfEmployedBlockProps = {
-  id: User['ID'];
-  isSberPayment: User['isSberPayment'];
+  id: number;
+  isApproved: boolean;
+  isSberPayment: boolean;
+  onBlockingModal: () => void;
 };
 
-const SelfEmployedBlock = ({ id, isSberPayment }: SelfEmployedBlockProps) => {
+const SelfEmployedBlock = ({
+  id,
+  isApproved,
+  isSberPayment,
+  onBlockingModal,
+}: SelfEmployedBlockProps) => {
   const theme = useTheme();
   const toast = useToast();
 
@@ -36,7 +42,8 @@ const SelfEmployedBlock = ({ id, isSberPayment }: SelfEmployedBlockProps) => {
     error: paramsError,
   } = useGetUserParamsQuery();
 
-  const [editIsSberPayment, { isError: isSberError }] = useEditUserMutation();
+  const [editIsSberPayment, { isError: isSberError, error: sberError }] =
+    useEditUserMutation();
   const [isSelfTooltipVisible, setIsSelfTooltipVisible] =
     useState<boolean>(false);
 
@@ -44,9 +51,8 @@ const SelfEmployedBlock = ({ id, isSberPayment }: SelfEmployedBlockProps) => {
     if (isParamsError || isSberError) {
       toast.show({
         type: 'error',
-        title: isSberError
-          ? 'Изменение данных невозможно'
-          : (paramsError as AxiosQueryErrorResponse)?.data?.message,
+        title: ((sberError || paramsError) as AxiosQueryErrorResponse).data
+          .message,
         contentHeight: 120,
       });
     }
@@ -55,6 +61,10 @@ const SelfEmployedBlock = ({ id, isSberPayment }: SelfEmployedBlockProps) => {
   const onSelfTooltipOpen = () => setIsSelfTooltipVisible(true);
   const onSelfTooltipClose = () => setIsSelfTooltipVisible(false);
   const editIsSber = async (isSberPayment: boolean) => {
+    if (isApproved) {
+      return onBlockingModal();
+    }
+
     await editIsSberPayment({ ID: id, isSberPayment });
   };
 

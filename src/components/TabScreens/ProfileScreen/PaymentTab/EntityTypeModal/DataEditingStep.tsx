@@ -1,19 +1,25 @@
 import React, { useEffect } from 'react';
-import { FormProvider, useController, useForm } from 'react-hook-form';
+import {
+  FormProvider,
+  Resolver,
+  useController,
+  useForm,
+} from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, CheckBox, Spacer, useToast } from 'rn-ui-kit';
 
 import ControlledInput from '@/components/inputs/ControlledInput';
-import { Type } from '@/components/TabScreens/ProfileScreen/EntityTypeModal/index';
 import NDSPayerTooltip from '@/components/TabScreens/ProfileScreen/NDSPayerTooltip';
 import { useEditUserMutation } from '@/store/api/user';
-import { User } from '@/store/api/user/types';
+import { EntityType, User } from '@/store/api/user/types';
+import { AxiosQueryErrorResponse } from '@/types/error';
 import { EntityTypeFormValues } from '@/types/form';
 import { UserEntityType } from '@/types/user';
 import {
   companyEntityValidationSchema,
+  entityNameValidationSchema,
   individualEntityValidationSchema,
   selfEmployedEntityValidationSchema,
 } from '@/utils/formValidation';
@@ -21,25 +27,27 @@ import {
 import styles from './style';
 
 type TypeSelectionStepProps = {
-  selectedType: Type;
+  isApproved: boolean;
+  selectedType: EntityType;
   onCloseModal: () => void;
   typeValues: Pick<User, 'ID' | 'ITIN' | 'RRC' | 'entityName' | 'isNDSPayer'>;
 };
 
 const DataEditingStep = ({
+  isApproved,
   selectedType,
   typeValues,
   onCloseModal,
 }: TypeSelectionStepProps) => {
   const toast = useToast();
-  const [editEntityType, { isError, isLoading, isSuccess }] =
+  const [editEntityType, { isError, error, isLoading, isSuccess }] =
     useEditUserMutation();
 
   useEffect(() => {
     if (isError) {
       toast.show({
         type: 'error',
-        title: 'Изменение данных невозможно',
+        title: (error as AxiosQueryErrorResponse).data.message,
         contentHeight: 100,
       });
     }
@@ -51,7 +59,7 @@ const DataEditingStep = ({
     }
   }, [isSuccess]);
 
-  const { id, description } = selectedType;
+  const { ID, description } = selectedType;
   const isCompany = description === UserEntityType.company;
   const isIndividual = description === UserEntityType.individual;
   const defaultRRC = { RRC: typeValues.RRC || '' };
@@ -84,16 +92,23 @@ const DataEditingStep = ({
   };
 
   const methods = useForm<EntityTypeFormValues>({
-    defaultValues: formProps[description].defaultValues,
-    resolver: yupResolver(formProps[description].validationSchema),
+    defaultValues: isApproved
+      ? defaultEntityName
+      : formProps[description].defaultValues,
+    resolver: (isApproved
+      ? yupResolver(entityNameValidationSchema)
+      : yupResolver(
+          formProps[description].validationSchema
+        )) as Resolver<EntityTypeFormValues>,
     mode: 'onBlur',
   });
+
   const {
     watch,
     control,
     setFocus,
     handleSubmit,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, isValid },
   } = methods;
   const RRC = watch('RRC');
   const ITIN = watch('ITIN');
@@ -103,13 +118,13 @@ const DataEditingStep = ({
   });
 
   useEffect(() => {
-    if (isCompany && ITIN.length === 12 && isDirty) {
+    if (isCompany && ITIN?.length === 12 && isDirty) {
       setFocus('RRC');
     }
   }, [ITIN]);
 
   useEffect(() => {
-    if (isCompany && RRC && RRC.length === 9 && isDirty) {
+    if (isCompany && RRC && RRC?.length === 9 && isDirty) {
       Keyboard.dismiss();
     }
   }, [RRC]);
@@ -139,8 +154,9 @@ const DataEditingStep = ({
 
     await editEntityType({
       ID: typeValues.ID,
-      entityTypeId: id,
-      ...params[description],
+      ...(isApproved && { entityName }),
+      ...(!isApproved && { entityTypeId: ID }),
+      ...(!isApproved && { ...params[description] }),
     });
   };
 
@@ -165,20 +181,22 @@ const DataEditingStep = ({
             <Spacer size="l" />
           </>
         )}
-        <ControlledInput
-          name="ITIN"
-          label="ИНН"
-          variant="text"
-          maxLength={12}
-          isAnimatedLabel
-          autoCapitalize="none"
-          style={styles.input}
-          keyboardType="number-pad"
-          hint={errors.ITIN?.message}
-          isError={!!errors.ITIN?.message}
-          onSubmitEditing={isCompany ? () => setFocus('RRC') : undefined}
-        />
-        {isCompany && (
+        {!isApproved && (
+          <ControlledInput
+            name="ITIN"
+            label="ИНН"
+            variant="text"
+            maxLength={12}
+            isAnimatedLabel
+            autoCapitalize="none"
+            style={styles.input}
+            keyboardType="number-pad"
+            hint={errors.ITIN?.message}
+            isError={!!errors.ITIN?.message}
+            onSubmitEditing={isCompany ? () => setFocus('RRC') : undefined}
+          />
+        )}
+        {isCompany && !isApproved && (
           <>
             <Spacer size="l" />
             <ControlledInput
@@ -195,7 +213,7 @@ const DataEditingStep = ({
             />
           </>
         )}
-        {(isIndividual || isCompany) && (
+        {(isIndividual || isCompany) && !isApproved && (
           <View style={styles.payerContainer}>
             <NDSPayerTooltip />
             <CheckBox
@@ -204,7 +222,7 @@ const DataEditingStep = ({
             />
           </View>
         )}
-        <Spacer size="xl" />
+        {!isApproved && <Spacer size="xl" />}
         <Button
           label="Сохранить"
           isPending={isLoading}

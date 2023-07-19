@@ -7,6 +7,7 @@ const emailRegExp =
   /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 const correspondingAccountRegExp = /^(301[0-9]*)$/i;
 const checkingAccountRegExp = /^((405|406|407)[0-9]*)$/i;
+const checkingSelfAccountRegExp = /^(408[0-9]*)$/i;
 
 const authPhoneValidation = {
   phone: Yup.string().length(10, '').required(''),
@@ -77,16 +78,17 @@ const personalDataValidation = {
   sname: Yup.string().required('Укажите фамилию'),
   pname: Yup.string().required('Укажите отчество'),
 };
-const bankDetailsValidation = {
+const bankDetailsValidation = (isCompany: boolean) => ({
   bankID: Yup.string()
     .required('Укажите 9-значный номер БИК банка в цифровом формате')
     .length(9, 'Укажите 9-значный номер БИК банка в цифровом формате'),
   bankName: Yup.string().required('Укажите полное наименование банка'),
   checkingAccount: Yup.string()
     .required('Укажите 20-значный номер счета в цифровом формате')
-    .matches(checkingAccountRegExp, {
-      message:
-        'Расчетный счет должен начинаться с 405 или 406 или 407 и быть длиной в 20 цифр',
+    .matches(isCompany ? checkingAccountRegExp : checkingSelfAccountRegExp, {
+      message: `Расчетный счет должен начинаться с ${
+        isCompany ? '405, 406 или 407' : '408'
+      } и быть длиной в 20 цифр`,
     })
     .length(20, 'Укажите 20-значный номер счета в цифровом формате'),
   correspondingAccount: Yup.string()
@@ -95,7 +97,7 @@ const bankDetailsValidation = {
       message: 'Корр. счет должен начинаться с 301 и быть длиной в 20 цифр',
     })
     .length(20, 'Укажите 20-значный номер счета в цифровом формате'),
-};
+});
 const itinValidation = {
   ITIN: Yup.string()
     .required('Укажите 12-значный номер ИНН в цифровом формате')
@@ -143,7 +145,8 @@ const recoveryConfirmationValidationSchema = Yup.object().shape(
 );
 
 const personalDataValidationSchema = Yup.object().shape(personalDataValidation);
-const bankDetailsValidationSchema = Yup.object().shape(bankDetailsValidation);
+const bankDetailsValidationSchema = (isCompany: boolean) =>
+  Yup.object().shape(bankDetailsValidation(isCompany));
 const selfEmployedEntityValidationSchema = Yup.object().shape(itinValidation);
 const individualEntityValidationSchema = Yup.object().shape({
   ...itinValidation,
@@ -154,6 +157,7 @@ const companyEntityValidationSchema = Yup.object().shape({
   ...entityNameValidation,
   ...rrcValidation,
 });
+const entityNameValidationSchema = Yup.object().shape(entityNameValidation);
 
 export {
   emailErrorMessage,
@@ -174,4 +178,5 @@ export {
   selfEmployedEntityValidationSchema,
   individualEntityValidationSchema,
   companyEntityValidationSchema,
+  entityNameValidationSchema,
 };

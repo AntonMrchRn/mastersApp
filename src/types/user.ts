@@ -1,7 +1,16 @@
 enum UserEntityType {
-  'self' = 'Самозанятый',
-  'company' = 'Юридическое лицо',
-  'individual' = 'Индивидуальный предприниматель',
+  self = 'Самозанятый',
+  company = 'Юридическое лицо',
+  individual = 'Индивидуальный предприниматель',
 }
 
-export { UserEntityType };
+enum UserRole {
+  internalExecutor = 'Внутренний исполнитель',
+  externalExecutor = 'Внешний исполнитель',
+  supervisor = 'Руководитель',
+  aggregator = 'Агрегатор',
+  coordinator = 'Координатор',
+  client = 'Заказчик',
+}
+
+export { UserEntityType, UserRole };
