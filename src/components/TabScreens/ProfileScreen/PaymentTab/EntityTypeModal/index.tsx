@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 import { BottomSheet, Spacer } from 'rn-ui-kit';
 
-import DataEditingStep from '@/components/TabScreens/ProfileScreen/EntityTypeModal/DataEditingStep';
-import TypeSelectionStep from '@/components/TabScreens/ProfileScreen/EntityTypeModal/TypeSelectionStep';
+import DataEditingStep from '@/components/TabScreens/ProfileScreen/PaymentTab/EntityTypeModal/DataEditingStep';
+import TypeSelectionStep from '@/components/TabScreens/ProfileScreen/PaymentTab/EntityTypeModal/TypeSelectionStep';
 import { configApp } from '@/constants/platform';
 import { useKeyboard } from '@/hooks/useKeyboard';
-import { User } from '@/store/api/user/types';
-import { UserEntityType } from '@/types/user';
+import { EntityType, User } from '@/store/api/user/types';
 
 import styles from './style';
 
@@ -16,34 +15,37 @@ export enum ModalStep {
   DataEditing = 'DataEditing',
 }
 
-export type Type = {
-  id: number;
-  description: UserEntityType;
-};
-
 type EntityTypeModalProps = {
   isVisible: boolean;
+  isApproved: boolean;
   onCloseModal: () => void;
   typeValues: Pick<User, 'ID' | 'ITIN' | 'RRC' | 'entityName' | 'isNDSPayer'>;
-  type?: Type;
+  type?: EntityType;
 };
 
 const EntityTypeModal = ({
   type,
   isVisible,
+  isApproved,
   typeValues,
   onCloseModal,
 }: EntityTypeModalProps) => {
   const isKeyboardVisible = useKeyboard();
 
-  const [modalStep, setModalStep] = useState<ModalStep | undefined>(
-    ModalStep.TypeSelection
+  const [modalStep, setModalStep] = useState<ModalStep | undefined>();
+  const [selectedType, setSelectedType] = useState<EntityType | undefined>(
+    type
   );
-  const [selectedType, setSelectedType] = useState<Type | undefined>(type);
+
+  useEffect(() => {
+    setSelectedType(type);
+  }, [type?.description]);
 
   useEffect(() => {
     if (isVisible) {
-      setModalStep(ModalStep.TypeSelection);
+      setModalStep(
+        isApproved ? ModalStep.DataEditing : ModalStep.TypeSelection
+      );
     }
 
     if (!isVisible) {
@@ -65,6 +67,7 @@ const EntityTypeModal = ({
     ),
     [ModalStep.DataEditing]: selectedType && (
       <DataEditingStep
+        isApproved={isApproved}
         selectedType={selectedType}
         typeValues={typeValues}
         onCloseModal={onCloseModal}

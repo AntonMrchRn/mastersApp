@@ -48,8 +48,18 @@ type User = {
 
 type EntityType = {
   ID: number;
-  code: string;
   description: UserEntityType;
+};
+
+type Activity = {
+  ID: number;
+  code: string;
+  description: string;
+};
+
+type Region = {
+  ID: number;
+  name: string;
 };
 
 type ConfirmationCodeResponse = {
@@ -85,21 +95,41 @@ type isSberPaymentParam = { ID: number; isSberPayment: boolean };
 
 type EntityTypeEditingParams = {
   ID: number;
-  entityTypeId: number;
-  ITIN: string;
+  entityTypeId?: number;
+  ITIN?: string;
   RRC?: string;
   entityName?: string;
   isNDSPayer?: boolean;
 };
 
+type ActivitiesEditingParams = {
+  ID: number;
+  setIDs: number[];
+};
+
+type RegionsEditingParams = {
+  ID: number;
+  regionIDs: number[];
+};
+
+type SpecialityEditingParams = {
+  ID: number;
+  specialty: string;
+};
+
 type UserEditingParams =
-  | PersonalDataEditingParams
-  | BankDetailsEditingParams
   | isSberPaymentParam
-  | EntityTypeEditingParams;
+  | RegionsEditingParams
+  | EntityTypeEditingParams
+  | ActivitiesEditingParams
+  | SpecialityEditingParams
+  | BankDetailsEditingParams
+  | PersonalDataEditingParams;
 
 export type {
   User,
+  Region,
+  Activity,
   EntityType,
   UserResponse,
   UserParamsResponse,

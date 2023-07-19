@@ -67,10 +67,20 @@ type CompanyEntityFormValues = {
   RRC: string;
 };
 
+type EntityNameFormValues = {
+  entityName: string;
+  ITIN?: string;
+  isNDSPayer?: boolean;
+  RRC?: string;
+};
+
 type EntityTypeFormValues =
-  | SelfEntityFormValues
   | IndividualEntityFormValues
-  | CompanyEntityFormValues;
+  | CompanyEntityFormValues
+  | SelfEntityFormValues
+  | EntityNameFormValues;
+
+type SpecialityFormValue = { speciality: string };
 
 export type {
   CodeValue,
@@ -78,6 +88,7 @@ export type {
   PhoneValue,
   SignInFormValues,
   RecoveryFormValues,
+  SpecialityFormValue,
   EntityTypeFormValues,
   BankDetailsFormValues,
   PersonalDataFormValues,

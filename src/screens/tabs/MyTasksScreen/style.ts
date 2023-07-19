@@ -37,8 +37,9 @@ const styles = StyleSheet.create({
   wrapperTop: {
     width: '100%',
     paddingHorizontal: 20,
-    paddingVertical: 5,
     backgroundColor: '#fff',
+    paddingTop: 24,
+    paddingBottom: 5,
   },
   textHeader: {
     fontWeight: '700',

@@ -33,8 +33,8 @@ const PersonalDataEditingScreen = () => {
               isAnimatedLabel
               style={styles.input}
               autoCapitalize="none"
-              isError={!!errors.sname?.message}
               hint={errors.sname?.message}
+              isError={!!errors.sname?.message}
               onSubmitEditing={() => methods.setFocus('name')}
             />
             <Spacer size="l" />

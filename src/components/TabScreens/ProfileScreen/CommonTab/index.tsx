@@ -22,10 +22,15 @@ import styles from './style';
 
 type CommonTabProps = {
   user: User;
+  onBlockingModal: () => void;
   isApprovalNotificationVisible: boolean;
 };
 
-const CommonTab = ({ user, isApprovalNotificationVisible }: CommonTabProps) => {
+const CommonTab = ({
+  user,
+  onBlockingModal,
+  isApprovalNotificationVisible,
+}: CommonTabProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const navigation = useNavigation<CompositeEditingNavigationProp>();
@@ -59,8 +64,16 @@ const CommonTab = ({ user, isApprovalNotificationVisible }: CommonTabProps) => {
     });
   };
 
-  const navigateToPersonalData = () => {
-    navigation.navigate(ProfileScreenName.PersonalDataEditing);
+  const onEdit = () => {
+    if (user.isApproved) {
+      return onBlockingModal();
+    }
+
+    navigation.navigate(ProfileScreenName.PersonalDataEditing, {
+      name: user.name,
+      sname: user.sname,
+      pname: user.pname,
+    });
   };
 
   return (
@@ -69,7 +82,7 @@ const CommonTab = ({ user, isApprovalNotificationVisible }: CommonTabProps) => {
         withButton={true}
         buttonLabel="Изменить"
         title="Персональные данные"
-        onPress={navigateToPersonalData}
+        onPress={onEdit}
         icon={<PencilIcon fill={theme.icons.basic} />}
       />
       <Spacer />
