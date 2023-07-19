@@ -20,6 +20,7 @@ import { EstimateAddServiceScreen } from '@/screens/task/EstimateAddServiceScree
 import { EstimateEditScreen } from '@/screens/task/EstimateEditScreen';
 import { EstimateSubmissionScreen } from '@/screens/task/EstimateSubmissionScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
+import { TradingResultsScreen } from '@/screens/task/TradingResultsScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
 import { Service } from '@/store/api/tasks/types';
 
@@ -39,6 +40,7 @@ export enum AppScreenName {
   CommentsChat = 'CommentsChatScreen',
   WebView = 'WebView',
   EstimateSubmission = 'EstimateSubmission',
+  TradingResults = 'TradingResults',
 }
 export type AppStackParamList = {
   [AppScreenName.SignIn]: undefined;
@@ -62,6 +64,7 @@ export type AppStackParamList = {
   [AppScreenName.EstimateAddMaterial]: { serviceId: number; taskId: number };
   [AppScreenName.EstimateAddService]: { taskId: number; service: Service };
   [AppScreenName.CompetitorEstimates]: { taskId: number };
+  [AppScreenName.TradingResults]: { taskId: number };
   [AppScreenName.WebView]: { uri: string };
   [AppScreenName.EstimateSubmission]: { taskId: number };
 };
@@ -139,6 +142,24 @@ export const AppNavigation = () => {
               ),
             }}
           />
+          <Stack.Screen
+            name={AppScreenName.TradingResults}
+            component={TradingResultsScreen}
+            options={{
+              headerShown: true,
+              header: props => (
+                <Header {...props} title={'Сметы других кандидатов'} />
+              ),
+            }}
+          />
+          <Stack.Screen
+            name={AppScreenName.EstimateSubmission}
+            component={EstimateSubmissionScreen}
+            options={{
+              headerShown: true,
+              header: props => <Header {...props} title={'Подача сметы'} />,
+            }}
+          />
         </>
       ) : (
         <>
@@ -165,14 +186,6 @@ export const AppNavigation = () => {
         options={{
           headerShown: true,
           header: props => <Header {...props} title={''} />,
-        }}
-      />
-      <Stack.Screen
-        name={AppScreenName.EstimateSubmission}
-        component={EstimateSubmissionScreen}
-        options={{
-          headerShown: true,
-          header: props => <Header {...props} title={'Подача сметы'} />,
         }}
       />
     </Stack.Navigator>

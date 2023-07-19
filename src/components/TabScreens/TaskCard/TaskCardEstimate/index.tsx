@@ -7,6 +7,7 @@ import { RadioButton, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
 import { CalculatorLargeIcon } from '@/assets/icons/svg/estimate/CalculatorLargeIcon';
+import { GavelIcon } from '@/assets/icons/svg/estimate/GavelIcon';
 import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
@@ -91,6 +92,11 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   };
   const onCompetitorEstimates = () => {
     navigation.navigate(AppScreenName.CompetitorEstimates, {
+      taskId,
+    });
+  };
+  const onTradingResults = () => {
+    navigation.navigate(AppScreenName.TradingResults, {
       taskId,
     });
   };
@@ -229,6 +235,15 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                 Предложений других кандидатов пока нет
               </Text>
             )}
+            <TouchableOpacity
+              style={styles.candidatRow}
+              onPress={onTradingResults}
+            >
+              <GavelIcon />
+              <Text variant="bodySBold" color={theme.text.basic}>
+                Посмотреть результаты торгов
+              </Text>
+            </TouchableOpacity>
           </View>
         )}
       </View>

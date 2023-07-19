@@ -10,6 +10,17 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 24,
   },
+  candidat: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  winner: {
+    gap: 2,
+    flexDirection: 'row',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
   item: {
     flex: 1,
   },
