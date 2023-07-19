@@ -52,7 +52,7 @@
     "react-native-splash-screen": "^3.3.0",
     "react-native-svg": "^13.10.0",
     "react-native-switch": "^1.5.1",
-    "react-native-webview": "^13.2.2",
+    "react-native-webview": "^13.2.3",
     "react-redux": "^8.1.1",
     "redux-flipper": "^2.0.2",
     "redux-persist": "^6.0.0",
