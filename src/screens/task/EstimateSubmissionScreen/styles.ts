@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
   itemTitle: {
     marginTop: 8,
     marginBottom: 4,
+    width: '90%',
   },
   char: {
     marginTop: 8,
@@ -25,4 +26,5 @@ export const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     paddingVertical: 8,
   },
+  trash: { position: 'absolute', top: 20, right: 0 },
 });

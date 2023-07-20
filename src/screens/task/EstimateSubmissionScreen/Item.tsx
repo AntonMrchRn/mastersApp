@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
 import { Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
 import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
+import { TrashIcon } from '@/assets/icons/svg/estimate/TrashIcon';
 import ControlledInput from '@/components/inputs/ControlledInput';
 
 import { styles } from './styles';
@@ -14,11 +15,23 @@ type ItemProps = {
   description: string;
   count: number;
   sum: number;
+  canDelete?: boolean;
 };
-export const Item: FC<ItemProps> = ({ title, description, count, sum }) => {
+export const Item: FC<ItemProps> = ({
+  title,
+  description,
+  count,
+  sum,
+  canDelete,
+}) => {
   const theme = useTheme();
   return (
     <View>
+      {canDelete && (
+        <TouchableOpacity style={styles.trash}>
+          <TrashIcon />
+        </TouchableOpacity>
+      )}
       <Spacer size={20} />
       <Text variant="captionRegular" color={theme.text.neutral}>
         Категория услуг
