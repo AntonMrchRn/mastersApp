@@ -2,34 +2,35 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 
 import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { useAppSelector } from '@/store';
-import { useEditUserMutation, useGetUserQuery } from '@/store/api/user';
+import { useEditUserMutation } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
+import { AxiosQueryErrorResponse } from '@/types/error';
 import { PersonalDataFormValues } from '@/types/form';
-import { ProfileScreenNavigationProp } from '@/types/navigation';
+import {
+  PersonalDataScreenRoute,
+  ProfileScreenNavigationProp,
+} from '@/types/navigation';
 import { personalDataValidationSchema } from '@/utils/formValidation';
 
 const usePersonalDataEditing = () => {
   const toast = useToast();
+  const { params } = useRoute<PersonalDataScreenRoute>();
   const navigation = useNavigation<ProfileScreenNavigationProp>();
-
   const { user: authUser } = useAppSelector(selectAuth);
-  const { data: user } = useGetUserQuery(authUser?.userID, {
-    skip: !authUser?.userID,
-  });
 
-  const [editPersonalData, { isSuccess, isLoading, isError }] =
+  const [editPersonalData, { isSuccess, isLoading, isError, error }] =
     useEditUserMutation();
 
   const methods = useForm({
     defaultValues: {
-      name: user?.name || '',
-      sname: user?.sname || '',
-      pname: user?.pname || '',
+      name: params.name || '',
+      sname: params.sname || '',
+      pname: params.pname || '',
     },
     resolver: yupResolver(personalDataValidationSchema),
     mode: 'onBlur',
@@ -38,7 +39,7 @@ const usePersonalDataEditing = () => {
     handleSubmit,
     formState: { errors, isDirty },
   } = methods;
-  const isDataExist = !!user?.name && !!user?.sname && !!user?.pname;
+  const isDataExist = !!params.name && !!params.sname && !!params.pname;
 
   useEffect(() => {
     if (isSuccess) {
@@ -50,16 +51,16 @@ const usePersonalDataEditing = () => {
     if (isError) {
       toast.show({
         type: 'error',
-        title: 'Изменение данных невозможно',
+        title: (error as AxiosQueryErrorResponse).data.message,
         contentHeight: 100,
       });
     }
   }, [isError]);
 
   const editData = ({ name, sname, pname }: PersonalDataFormValues) => {
-    if (user?.ID) {
+    if (authUser?.userID) {
       editPersonalData({
-        ID: user?.ID,
+        ID: authUser?.userID,
         name,
         sname,
         pname,

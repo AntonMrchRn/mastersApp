@@ -5,9 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import { CheckBox, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import PencilIcon from '@/assets/icons/svg/screens/PencilIcon';
-import EntityTypeModal from '@/components/TabScreens/ProfileScreen/EntityTypeModal';
 import NDSPayerTooltip from '@/components/TabScreens/ProfileScreen/NDSPayerTooltip';
 import DocumentsBlock from '@/components/TabScreens/ProfileScreen/PaymentTab/DocumentsBlock';
+import EntityTypeModal from '@/components/TabScreens/ProfileScreen/PaymentTab/EntityTypeModal';
 import SelfEmployedBlock from '@/components/TabScreens/ProfileScreen/PaymentTab/SelfEmployedBlock';
 import Title from '@/components/TabScreens/ProfileScreen/Title';
 import UserInfoBlock from '@/components/TabScreens/ProfileScreen/UserInfoBlock';
@@ -22,8 +22,9 @@ import styles from './style';
 type PaymentTabProps = {
   user: User;
   activeTab: ProfileTab;
-  entityType?: UserEntityType;
   scrollToEnd: () => void;
+  onBlockingModal: () => void;
+  entityType?: UserEntityType;
 };
 
 const PaymentTab = ({
@@ -31,6 +32,7 @@ const PaymentTab = ({
   activeTab,
   entityType,
   scrollToEnd,
+  onBlockingModal,
 }: PaymentTabProps) => {
   const theme = useTheme();
   const navigation = useNavigation<BankDetailsScreenNavigationProp>();
@@ -55,8 +57,20 @@ const PaymentTab = ({
   );
 
   const onModal = () => setIsEntityModalVisible(!isEntityModalVisible);
-  const navigateToBankDetails = () => {
+  const editPersonalDetails = () => {
+    if (user.isApproved && isSelf) {
+      return onBlockingModal();
+    }
+
+    onModal();
+  };
+  const editBankDetails = () => {
+    if (user.isApproved) {
+      return onBlockingModal();
+    }
+
     navigation.navigate(ProfileScreenName.BankDetails, {
+      isCompany,
       bankID: user.bankID,
       bankName: user.bankName,
       checkingAccount: user.checkingAccount,
@@ -69,7 +83,7 @@ const PaymentTab = ({
       <Title
         withButton={true}
         title="Личные реквизиты"
-        onPress={onModal}
+        onPress={editPersonalDetails}
         buttonLabel={isUserDetailsExist ? 'Изменить' : 'Добавить'}
         icon={
           isUserDetailsExist ? <PencilIcon fill={theme.icons.basic} /> : true
@@ -106,13 +120,18 @@ const PaymentTab = ({
         </Text>
       )}
       {user.ITIN && isSelf && (
-        <SelfEmployedBlock id={user.ID} isSberPayment={user.isSberPayment} />
+        <SelfEmployedBlock
+          id={user.ID}
+          isApproved={user.isApproved}
+          onBlockingModal={onBlockingModal}
+          isSberPayment={user.isSberPayment}
+        />
       )}
       <Spacer size="xxxl" />
       <Title
         title="Банк"
         withButton={true}
-        onPress={navigateToBankDetails}
+        onPress={editBankDetails}
         buttonLabel={isBankDetailsExist ? 'Изменить' : 'Добавить'}
         icon={
           isBankDetailsExist ? <PencilIcon fill={theme.icons.basic} /> : true
@@ -139,6 +158,7 @@ const PaymentTab = ({
         activeTab={activeTab}
       />
       <EntityTypeModal
+        isApproved={user.isApproved}
         typeValues={{
           ID: user.ID,
           RRC: user.RRC,
@@ -151,7 +171,7 @@ const PaymentTab = ({
         type={
           user.ITIN && user.entityTypeID
             ? {
-                id: user.entityTypeID,
+                ID: user.entityTypeID,
                 description: user.entityTypeDescription,
               }
             : undefined

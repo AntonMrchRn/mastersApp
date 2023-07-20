@@ -12,6 +12,7 @@ import Header from '@/components/Header';
 import { TaskCardBottom } from '@/components/TabScreens/TaskCard/TaskCardBottom';
 import { TaskCardBudgetModal } from '@/components/TabScreens/TaskCard/TaskCardBudgetModal';
 import { TaskCardCancelBottomSheet } from '@/components/TabScreens/TaskCard/TaskCardCancelBottomSheet';
+import { TaskCardSubmissionBottomSheet } from '@/components/TabScreens/TaskCard/TaskCardSubmissionBottomSheet';
 import { TaskBadges } from '@/components/task/TaskBadges';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { StatusType, TaskType } from '@/types/task';
@@ -30,6 +31,8 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
   route,
 }) => {
   const taskId = route.params.taskId.toString();
+  // const taskId = '1085';
+  // const taskId = '996';
 
   const {
     onTabChange,
@@ -42,7 +45,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
     isNight,
     isUrgent,
     budgetEndTime,
-    getBanner,
+    banner,
     getButtons,
     budgetModalVisible,
     onBudgetModalVisible,
@@ -61,6 +64,9 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
     outlayStatusID,
     onRefresh,
     refreshing,
+    onSubmissionModalVisible,
+    onTaskSubmission,
+    submissionModalVisible,
   } = useTaskCard({ taskId, navigation });
   const theme = useTheme();
   const insets = useSafeAreaInsets();
@@ -68,6 +74,11 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
   return (
     <>
       <SafeAreaView style={styles.container} edges={['bottom']}>
+        <TaskCardSubmissionBottomSheet
+          isVisible={submissionModalVisible}
+          onCancel={onSubmissionModalVisible}
+          onSubmit={onTaskSubmission}
+        />
         <TaskCardBudgetModal
           isVisible={budgetModalVisible}
           onCancel={onBudgetModalVisible}
@@ -161,7 +172,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
             />
           </View>
         )}
-        <TaskCardBottom banner={getBanner()} buttons={getButtons()} />
+        <TaskCardBottom banner={banner} buttons={getButtons()} />
       </View>
     </>
   );

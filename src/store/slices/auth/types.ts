@@ -1,3 +1,5 @@
+import { UserRole } from '@/types/user';
+
 type InitialState = {
   user: null | UserAuthResponse;
   isAuth: boolean;
@@ -32,6 +34,7 @@ type UserAuthResponse = {
   token: string;
   userID: number;
   isMobile: boolean;
+  roleDescription: UserRole;
 };
 
 type RecoveryCodeResponse = {

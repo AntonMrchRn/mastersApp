@@ -14,11 +14,15 @@ import RecoveryConfirmationScreen from '@/screens/auth/RecoveryConfirmationScree
 import RecoveryScreen from '@/screens/auth/RecoveryScreen';
 import SignInScreen from '@/screens/auth/SignInScreen';
 import { CommentsChatScreen } from '@/screens/task/CommentsChatScreen';
+import { CompetitorEstimatesScreen } from '@/screens/task/CompetitorEstimatesScreen';
 import { EstimateAddMaterialScreen } from '@/screens/task/EstimateAddMaterialScreen';
 import { EstimateAddServiceScreen } from '@/screens/task/EstimateAddServiceScreen';
 import { EstimateEditScreen } from '@/screens/task/EstimateEditScreen';
+import { EstimateSubmissionScreen } from '@/screens/task/EstimateSubmissionScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { Executor, Service } from '@/store/api/tasks/types';
+import { TradingResultsScreen } from '@/screens/task/TradingResultsScreen';
+import { WebViewScreen } from '@/screens/WebViewScreen';
 
 export enum AppScreenName {
   AppNavigator = 'AppNavigator',
@@ -32,7 +36,11 @@ export enum AppScreenName {
   EstimateEdit = 'EstimateEdit',
   EstimateAddMaterial = 'EstimateAddMaterial',
   EstimateAddService = 'EstimateAddService',
+  CompetitorEstimates = 'CompetitorEstimates',
   CommentsChat = 'CommentsChatScreen',
+  WebView = 'WebView',
+  EstimateSubmission = 'EstimateSubmission',
+  TradingResults = 'TradingResults',
 }
 export type AppStackParamList = {
   [AppScreenName.SignIn]: undefined;
@@ -56,6 +64,10 @@ export type AppStackParamList = {
   };
   [AppScreenName.EstimateAddMaterial]: { serviceId: number; taskId: number };
   [AppScreenName.EstimateAddService]: { taskId: number; service: Service };
+  [AppScreenName.CompetitorEstimates]: { taskId: number };
+  [AppScreenName.TradingResults]: { taskId: number };
+  [AppScreenName.WebView]: { uri: string };
+  [AppScreenName.EstimateSubmission]: { taskId: number };
 };
 const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<AppStackParamList>();
@@ -121,6 +133,34 @@ export const AppNavigation = () => {
               header: props => <Header {...props} title={'Новая услуга'} />,
             }}
           />
+          <Stack.Screen
+            name={AppScreenName.CompetitorEstimates}
+            component={CompetitorEstimatesScreen}
+            options={{
+              headerShown: true,
+              header: props => (
+                <Header {...props} title={'Сметы других кандидатов'} />
+              ),
+            }}
+          />
+          <Stack.Screen
+            name={AppScreenName.TradingResults}
+            component={TradingResultsScreen}
+            options={{
+              headerShown: true,
+              header: props => (
+                <Header {...props} title={'Сметы других кандидатов'} />
+              ),
+            }}
+          />
+          <Stack.Screen
+            name={AppScreenName.EstimateSubmission}
+            component={EstimateSubmissionScreen}
+            options={{
+              headerShown: true,
+              header: props => <Header {...props} title={'Подача сметы'} />,
+            }}
+          />
         </>
       ) : (
         <>
@@ -141,6 +181,14 @@ export const AppNavigation = () => {
         </>
       )}
       <Stack.Screen name={AppScreenName.Error} component={ErrorScreen} />
+      <Stack.Screen
+        name={AppScreenName.WebView}
+        component={WebViewScreen}
+        options={{
+          headerShown: true,
+          header: props => <Header {...props} title={''} />,
+        }}
+      />
     </Stack.Navigator>
   );
 };

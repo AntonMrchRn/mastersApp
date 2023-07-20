@@ -1,9 +1,11 @@
 import { store } from '@/store';
 import { api } from '@/store/api';
 import {
+  Activity,
   ConfirmationCodeResponse,
   EntityType,
   PhoneEditingResponse,
+  Region,
   User,
   UserEditingParams,
   UserParamsResponse,
@@ -29,6 +31,18 @@ export const userAPI = api
       getEntityTypes: builder.query<EntityType[], void>({
         query: () => ({
           url: 'aux?query=?tableName==user_entity_type?',
+          method: 'GET',
+        }),
+      }),
+      getActivities: builder.query<Activity[], void>({
+        query: () => ({
+          url: 'aux?query=?tableName==set?',
+          method: 'GET',
+        }),
+      }),
+      getRegions: builder.query<Region[], void>({
+        query: () => ({
+          url: 'regions?query=??name,asc,,',
           method: 'GET',
         }),
       }),
@@ -118,6 +132,8 @@ export const userAPI = api
 
 export const {
   useGetUserQuery,
+  useGetRegionsQuery,
+  useGetActivitiesQuery,
   useGetUserParamsQuery,
   useGetEntityTypesQuery,
   useEditUserMutation,

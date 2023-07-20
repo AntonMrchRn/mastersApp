@@ -10,9 +10,12 @@ import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { PriceIcon } from '@/assets/icons/svg/estimate/PriceIcon';
 import ControlledInput from '@/components/inputs/ControlledInput';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
-import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
-import { Material, Service } from '@/store/api/tasks/types';
-import { OutlayStatusType } from '@/types/task';
+import {
+  useGetTaskQuery,
+  usePatchMaterialMutation,
+  usePatchTaskServiceMutation,
+} from '@/store/api/tasks';
+import { AxiosQueryErrorResponse } from '@/types/error';
 import { estimateCountValidationSchema } from '@/utils/formValidation';
 
 import { styles } from './styles';
@@ -29,29 +32,38 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
   const theme = useTheme();
   const toast = useToast();
 
-  const serviceId = route.params.serviceId;
-  const materialName = route.params.materialName;
-  const taskId = route.params.taskId;
+  const { taskId, serviceId, materialName } = route.params;
 
   const getTask = useGetTaskQuery(taskId.toString());
 
-  const [patchTask, mutationTask] = usePatchTaskMutation();
+  const [patchTaskService, mutationTaskService] = usePatchTaskServiceMutation();
+  const [patchMaterial, mutationMaterial] = usePatchMaterialMutation();
 
   useEffect(() => {
-    if (mutationTask.error && 'data' in mutationTask.error) {
+    if (mutationTaskService.error && 'data' in mutationTaskService.error) {
       toast.show({
         type: 'error',
-        title: mutationTask?.error?.data?.message,
+        title: mutationTaskService?.error?.data?.message,
         contentHeight: 120,
       });
     }
-  }, [mutationTask.error]);
+  }, [mutationTaskService.error]);
+  useEffect(() => {
+    if (mutationMaterial.error && 'data' in mutationMaterial.error) {
+      toast.show({
+        type: 'error',
+        title: mutationMaterial?.error?.data?.message,
+        contentHeight: 120,
+      });
+    }
+  }, [mutationMaterial.error]);
 
-  const task = getTask?.data && getTask?.data?.tasks && getTask?.data?.tasks[0];
+  const task = getTask?.data?.tasks?.[0];
   const services = task?.services || [];
   const service = services.find(service => {
     return service.ID === serviceId;
   });
+
   const material = materialName
     ? service?.materials?.find(materia => materia.name === materialName)
     : undefined;
@@ -65,29 +77,43 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
     formState: { errors },
   } = methods;
   const onSubmit = async ({ estimateCount }: { estimateCount: string }) => {
-    const newServices = services.reduce<Service[]>((acc, val) => {
-      if (val.ID === serviceId) {
-        if (materialName) {
-          const newMaterial = val.materials?.reduce<Material[]>((ac, va) => {
-            if (va.name === materialName) {
-              return ac.concat({ ...va, count: +estimateCount });
-            }
-            return ac.concat(va);
-          }, []);
-          return acc.concat({ ...val, materials: newMaterial });
-        }
-        return acc.concat({ ...val, count: +estimateCount });
+    if (!materialName) {
+      //для услуги
+      //кинуть только то что меняем
+      await patchTaskService({
+        ID: serviceId,
+        count: +estimateCount,
+        taskID: taskId,
+        materials: [],
+      });
+    } else {
+      //для материалов patch materials
+      // перед прокидыванием материала необходимо прокинуть новую сумму в patchTaskService({sum: }) а уже после этого patch materials
+      const newSum =
+        (service?.sum || 0) -
+        (material?.count || 0) * (material?.price || 0) +
+        +estimateCount * (material?.price || 0);
+      try {
+        await patchTaskService({
+          ID: serviceId,
+          taskID: taskId,
+          materials: [],
+          sum: newSum,
+        }).unwrap();
+        await patchMaterial({
+          ID: material?.ID,
+          taskID: taskId,
+          count: +estimateCount,
+        });
+      } catch (error) {
+        toast.show({
+          type: 'error',
+          title: (error as AxiosQueryErrorResponse).data.message,
+          contentHeight: 120,
+        });
       }
-      return acc.concat(val);
-    }, []);
-    await patchTask({
-      //id таски
-      ID: taskId,
-      //массив услуг
-      services: newServices,
-      //при изменении сметы она снова становится не согласована
-      outlayStatusID: OutlayStatusType.PENDING,
-    });
+    }
+
     getTask.refetch();
     if (navigation.canGoBack()) {
       navigation.goBack();

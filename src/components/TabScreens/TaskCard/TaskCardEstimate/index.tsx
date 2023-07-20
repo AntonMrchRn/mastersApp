@@ -1,16 +1,20 @@
 import React, { FC } from 'react';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
 import { useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RadioButton, Spacer, Text, useTheme } from 'rn-ui-kit';
 
+import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
 import { CalculatorLargeIcon } from '@/assets/icons/svg/estimate/CalculatorLargeIcon';
+import { GavelIcon } from '@/assets/icons/svg/estimate/GavelIcon';
+import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
+import { useGetOffersQuery } from '@/store/api/tasks';
 import { Service } from '@/store/api/tasks/types';
-import { OutlayStatusType, StatusType } from '@/types/task';
+import { OutlayStatusType, StatusType, TaskType } from '@/types/task';
 
 import { AddServiceBottomSheet } from '../AddServiceBottomSheet';
 import { TaskCardAddEstimateBottomSheet } from '../TaskCardAddEstimateBottomSheet';
@@ -35,6 +39,7 @@ type TaskCardEstimateProps = {
     React.SetStateAction<number | undefined>
   >;
   onCantDeleteBannerVisible: () => void;
+  subsetID: TaskType | undefined;
 };
 
 export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
@@ -48,6 +53,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   selectedServiceId,
   setSelectedServiceId,
   onCantDeleteBannerVisible,
+  subsetID,
 }) => {
   const theme = useTheme();
   const isFocused = useIsFocused();
@@ -70,6 +76,8 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     onEstimateBottomVisible,
     estimateBottomVisible,
   });
+  const offers = useGetOffersQuery(taskId.toString());
+
   const canSwipe = !estimateBottomVisible && statusID === StatusType.WORK;
   const serviceIDs = services?.reduce<number[]>(
     (acc, val) => acc.concat(val.ID),
@@ -81,6 +89,16 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
       taskId,
     });
     bsRef.current?.close();
+  };
+  const onCompetitorEstimates = () => {
+    navigation.navigate(AppScreenName.CompetitorEstimates, {
+      taskId,
+    });
+  };
+  const onTradingResults = () => {
+    navigation.navigate(AppScreenName.TradingResults, {
+      taskId,
+    });
   };
   if (!services.length) {
     return (
@@ -173,7 +191,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                 />
               </View>
               <Spacer size={0} separator="bottom" />
-              {service?.materials?.map((material, inde) => {
+              {service?.materials?.map(material => {
                 const firstActionMaterial = () => {
                   onEdit(service.ID, material.name);
                 };
@@ -181,7 +199,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                   onDeleteMaterial(service, material);
                 };
                 return (
-                  <View key={material.measure + material.name + inde}>
+                  <View key={material.ID}>
                     <TaskEstimateItem
                       firstAction={firstActionMaterial}
                       secondAction={secondActionMaterial}
@@ -199,32 +217,35 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             </View>
           );
         })}
-        <View style={styles.bottom}>
-          <View style={styles.row}>
-            <Text variant="bodySBold" color={theme.text.basic}>
-              Всего по работам
-            </Text>
-            <Text variant="bodySBold" color={theme.text.basic}>
-              {allSum} ₽
-            </Text>
+        <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
+        {subsetID === TaskType.COMMON_AUCTION_SALE && (
+          <View style={styles.mt16}>
+            {offers.data?.count ? (
+              <TouchableOpacity
+                style={styles.candidatRow}
+                onPress={onCompetitorEstimates}
+              >
+                <CalculatorIcon color={theme.text.basic} />
+                <Text variant="bodySBold" color={theme.text.basic}>
+                  Сметы других кандидатов
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <Text variant="bodySRegular" color={theme.text.neutral}>
+                Предложений других кандидатов пока нет
+              </Text>
+            )}
+            <TouchableOpacity
+              style={styles.candidatRow}
+              onPress={onTradingResults}
+            >
+              <GavelIcon />
+              <Text variant="bodySBold" color={theme.text.basic}>
+                Посмотреть результаты торгов
+              </Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.row}>
-            <Text variant="bodySBold" color={theme.text.basic}>
-              Всего по материалам
-            </Text>
-            <Text variant="bodySBold" color={theme.text.basic}>
-              {materialsSum} ₽
-            </Text>
-          </View>
-          <View style={styles.row}>
-            <Text variant="bodySBold" color={theme.text.accent}>
-              ИТОГО
-            </Text>
-            <Text variant="bodySBold" color={theme.text.accent}>
-              {allSum} ₽
-            </Text>
-          </View>
-        </View>
+        )}
       </View>
     </>
   );

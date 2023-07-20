@@ -10,10 +10,14 @@ import ControlledInput from '@/components/inputs/ControlledInput';
 import { MeasureItem } from '@/components/TabScreens/EstimateAddMaterialScreen/MeasureItem';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppSelector } from '@/store';
-import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
-import { Service } from '@/store/api/tasks/types';
+import {
+  useGetTaskQuery,
+  usePatchTaskServiceMutation,
+  usePostMaterialMutation,
+} from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import { Measure, OutlayStatusType } from '@/types/task';
+import { AxiosQueryErrorResponse } from '@/types/error';
+import { Measure } from '@/types/task';
 import { estimateAddMaterialValidationSchema } from '@/utils/formValidation';
 
 import { styles } from './styles';
@@ -37,22 +41,23 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
 
   const getTask = useGetTaskQuery(taskId.toString());
 
-  const [patchTask, mutationTask] = usePatchTaskMutation();
+  const [postMaterial, mutationMaterial] = usePostMaterialMutation();
+  const [patchTaskService] = usePatchTaskServiceMutation();
 
   useEffect(() => {
-    if (mutationTask.error && 'data' in mutationTask.error) {
+    if (mutationMaterial.error && 'data' in mutationMaterial.error) {
       toast.show({
         type: 'error',
-        title: mutationTask?.error?.data?.message,
+        title: mutationMaterial?.error?.data?.message,
         contentHeight: 120,
       });
     }
-  }, [mutationTask.error]);
+  }, [mutationMaterial.error]);
 
   const task = getTask?.data && getTask?.data?.tasks && getTask?.data?.tasks[0];
   const services = task?.services || [];
-  const materials =
-    services.find(serv => serv.ID === serviceId)?.materials || [];
+  const service = services.find(serv => serv.ID === serviceId);
+  const materials = service?.materials || [];
   const materialsNames = materials.reduce<string[]>(
     (acc, val) => acc.concat(val?.name || []),
     []
@@ -83,10 +88,12 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
     name,
     count,
     price,
+    measure,
   }: {
     name: string;
     count: string;
     price: string;
+    measure: string;
   }) => {
     if (!userRole) {
       return toast.show({
@@ -94,29 +101,31 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
         title: 'Не удалось определить роль пользователя',
         contentHeight: 120,
       });
-    }
-    const newServices = services.reduce<Service[]>((acc, val) => {
-      if (val.ID === serviceId) {
-        const materials = val?.materials || [];
-        const newMaterials = materials.concat({
+    } else {
+      try {
+        await patchTaskService({
+          ID: service?.ID,
+          taskID: taskId,
+          materials: [],
+          sum: (service?.sum || 0) + +price * +count,
+        }).unwrap();
+        await postMaterial({
+          serviceID: service?.ID,
+          taskID: taskId,
           count: +count,
-          measure: 'string',
-          name: name,
+          measure: measures.find(m => m.text === measure)?.text,
+          name,
           price: +price,
           roleID: userRole,
         });
-        return acc.concat({ ...val, materials: newMaterials });
+      } catch (error) {
+        toast.show({
+          type: 'error',
+          title: (error as AxiosQueryErrorResponse).data.message,
+          contentHeight: 120,
+        });
       }
-      return acc.concat(val);
-    }, []);
-    await patchTask({
-      //id таски
-      ID: taskId,
-      //массив услуг
-      services: newServices,
-      //при изменении сметы она снова становится не согласована
-      outlayStatusID: OutlayStatusType.PENDING,
-    });
+    }
     getTask.refetch();
     if (navigation.canGoBack()) {
       navigation.goBack();
@@ -199,7 +208,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
           label={'Добавить'}
           onPress={methods.handleSubmit(onSubmit)}
           style={styles.button}
-          isPending={mutationTask.isLoading}
+          isPending={mutationMaterial.isLoading}
           disabled={!isValid || hasName}
         />
       </FormProvider>

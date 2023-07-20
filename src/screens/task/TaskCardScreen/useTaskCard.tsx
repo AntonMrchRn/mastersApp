@@ -6,10 +6,7 @@ import dayjs from 'dayjs';
 import { useToast } from 'rn-ui-kit';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
 
-import {
-  TaskCardBottomBanner,
-  TaskCardBottomButton,
-} from '@/components/TabScreens/TaskCard/TaskCardBottom';
+import { TaskCardBottomButton } from '@/components/TabScreens/TaskCard/TaskCardBottom';
 import { TaskCardComment } from '@/components/TabScreens/TaskCard/TaskCardComment';
 import { TaskCardDescription } from '@/components/TabScreens/TaskCard/TaskCardDescription';
 import { TaskCardEstimate } from '@/components/TabScreens/TaskCard/TaskCardEstimate';
@@ -21,6 +18,8 @@ import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import { OutlayStatusType, StatusType, TaskTab, TaskType } from '@/types/task';
+
+import { getBanner } from './getBanner';
 
 export const useTaskCard = ({
   taskId,
@@ -41,6 +40,7 @@ export const useTaskCard = ({
   const [selectedServiceId, setSelectedServiceId] = useState<number>();
   const [estimateBannerVisible, setEstimateBannerVisible] = useState(false);
   const [cantDeleteBannerVisible, setCantDeleteBannerVisible] = useState(false);
+  const [submissionModalVisible, setSubmissionModalVisible] = useState(false);
   const isFocused = useIsFocused();
 
   const ref = useRef<{
@@ -51,7 +51,6 @@ export const useTaskCard = ({
   const { user } = useAppSelector(selectAuth);
 
   const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
-  // const { data, isError, error, refetch, isLoading } = useGetTaskQuery('996');
 
   useEffect(() => {
     if (isFocused) {
@@ -72,7 +71,10 @@ export const useTaskCard = ({
   const task = data?.tasks?.[0];
   const executors = task?.executors;
   const id = task?.ID || 0;
-  const subsetID = task?.subsetID || '';
+  /**
+   * тип задачи
+   */
+  const subsetID = task?.subsetID;
   const files = task?.files || [];
   const services = task?.services || [];
   const startTime = task?.startTime || '';
@@ -137,10 +139,19 @@ export const useTaskCard = ({
     },
   ];
 
+  const banner = getBanner({
+    tab,
+    statusID,
+    outlayStatusID,
+  });
+
   const onRefresh = () => {
     refetch();
   };
 
+  const onSubmissionModalVisible = () => {
+    setSubmissionModalVisible(!submissionModalVisible);
+  };
   const onCantDeleteBannerVisible = () => {
     setCantDeleteBannerVisible(!cantDeleteBannerVisible);
   };
@@ -181,24 +192,34 @@ export const useTaskCard = ({
     }
   };
   const onTaskSubmission = async () => {
-    try {
-      await patchTask({
-        //id таски
-        ID: id,
-        //статус для принятия в работу
-        statusID: 11,
-        //id профиля
-        executors: [{ ID: user?.userID }],
-      }).unwrap();
-    } catch (error) {
-      toast.show({
-        type: 'error',
-        title: (error as AxiosQueryErrorResponse).data.message,
-        contentHeight: 120,
-      });
-    } finally {
-      refetch();
+    //принимаем таску в работу, если первый отклик
+    if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
+      try {
+        await patchTask({
+          //id таски
+          ID: id,
+          //статус для принятия в работу
+          statusID: 11,
+          //id профиля
+          executors: [{ ID: user?.userID }],
+        }).unwrap();
+      } catch (error) {
+        toast.show({
+          type: 'error',
+          title: (error as AxiosQueryErrorResponse).data.message,
+          contentHeight: 120,
+        });
+      } finally {
+        refetch();
+      }
     }
+    //навигация на скрин подачи сметы, если ЛОТЫ
+    if (subsetID === TaskType.COMMON_AUCTION_SALE) {
+      navigation.navigate(AppScreenName.EstimateSubmission, {
+        taskId: +taskId,
+      });
+    }
+    onSubmissionModalVisible();
   };
   const onCancelModalVisible = () => {
     setCancelModalVisible(!cancelModalVisible);
@@ -254,6 +275,10 @@ export const useTaskCard = ({
     //далее необходимо удалить этот оффер через DELETE offers/id
     setBudgetModalVisible(!budgetModalVisible);
   };
+  const onSubmitAnEstimate = () => {
+    //показываем модалку с условиями
+    onSubmissionModalVisible();
+  };
 
   const getCurrentTab = () => {
     switch (tab) {
@@ -281,12 +306,13 @@ export const useTaskCard = ({
             selectedServiceId={selectedServiceId}
             setSelectedServiceId={setSelectedServiceId}
             onCantDeleteBannerVisible={onCantDeleteBannerVisible}
+            subsetID={subsetID}
           />
         );
       case TaskTab.REPORT:
         return (
           <TaskCardReport
-            activeBudgetCanceled={!!getBanner()}
+            activeBudgetCanceled={!!banner}
             statusID={statusID}
             files={files}
             taskId={id.toString()}
@@ -306,55 +332,6 @@ export const useTaskCard = ({
     setTab(item.label as TaskTab);
   };
 
-  const getBanner = (): TaskCardBottomBanner => {
-    if (tab === TaskTab.DESCRIPTION) {
-      switch (statusID) {
-        case StatusType.ACTIVE:
-          if (outlayStatusID === 4) {
-            return {
-              title: 'Ваша смета отклонена координатором',
-              type: 'error',
-              icon: 'alert',
-              text: 'К сожалению, теперь вы не можете стать исполнителем этой задачи',
-            };
-          }
-          return null;
-        case StatusType.SUMMARIZING:
-          return {
-            title: 'Задача на проверке',
-            type: 'info',
-            icon: 'info',
-            text: 'Координатор проверяет выполненные услуги. После успешной проверки задача будет передана на оплату',
-          };
-        case StatusType.COMPLETED:
-          return {
-            title: 'Выполненные услуги приняты',
-            type: 'success',
-            icon: 'success',
-            text: 'В ближайшее время оплата поступит на вашу банковскую карту/счет',
-          };
-        case StatusType.PAID:
-          return {
-            title: 'Оплата произведена',
-            type: 'success',
-            icon: 'success',
-            text: 'Денежные средства переведены вам на указанные в профиле реквизиты',
-          };
-        case StatusType.CANCELLED_BY_CUSTOMER:
-        case StatusType.CANCELLED_BY_EXECUTOR:
-          return {
-            title: 'Задача отменена',
-            type: 'error',
-            icon: 'alert',
-            text: 'По инициативе координатора выполнение задачи прекращено',
-          };
-        default:
-          return null;
-      }
-    }
-    return null;
-  };
-
   const getButtons = (): TaskCardBottomButton[] => {
     switch (statusID) {
       case StatusType.ACTIVE:
@@ -372,7 +349,16 @@ export const useTaskCard = ({
             {
               label: 'Принять задачу',
               variant: 'accent',
-              onPress: onTaskSubmission,
+              onPress: onSubmissionModalVisible,
+            },
+          ];
+        }
+        if (subsetID === TaskType.COMMON_AUCTION_SALE) {
+          return [
+            {
+              label: 'Подать смету',
+              variant: 'accent',
+              onPress: onSubmitAnEstimate,
             },
           ];
         }
@@ -394,7 +380,6 @@ export const useTaskCard = ({
             },
           ];
         }
-
         return [];
       case StatusType.WORK:
         if (tab === TaskTab.COMMENTS) {
@@ -407,15 +392,6 @@ export const useTaskCard = ({
           ];
         }
         if (tab === TaskTab.REPORT) {
-          if (TaskTab.COMMENTS) {
-            return [
-              {
-                label: 'Перейти в чат',
-                variant: 'accent',
-                onPress: navigateToChat,
-              },
-            ];
-          }
           if (files.length) {
             return [
               {
@@ -439,15 +415,6 @@ export const useTaskCard = ({
           ];
         }
         if (tab === TaskTab.ESTIMATE) {
-          if (TaskTab.COMMENTS) {
-            return [
-              {
-                label: 'Перейти в чат',
-                variant: 'accent',
-                onPress: navigateToChat,
-              },
-            ];
-          }
           if (estimateBottomVisible) {
             return [
               {
@@ -523,15 +490,6 @@ export const useTaskCard = ({
             },
           ];
         }
-        if (tab === TaskTab.REPORT) {
-          return [
-            {
-              label: 'Перейти в чат',
-              variant: 'accent',
-              onPress: navigateToChat,
-            },
-          ];
-        }
         return [
           {
             label: 'Сдать работы',
@@ -544,7 +502,6 @@ export const useTaskCard = ({
             onPress: onCancelModalVisible,
           },
         ];
-
       default:
         if (tab === TaskTab.COMMENTS) {
           return [
@@ -554,7 +511,8 @@ export const useTaskCard = ({
               onPress: navigateToChat,
             },
           ];
-        } else return [];
+        }
+        return [];
     }
   };
 
@@ -570,7 +528,7 @@ export const useTaskCard = ({
     publicTime,
     isUrgent,
     budgetEndTime,
-    getBanner,
+    banner,
     getButtons,
     budgetModalVisible,
     onBudgetModalVisible,
@@ -590,5 +548,8 @@ export const useTaskCard = ({
     onRefresh,
     refreshing: isLoading,
     executors,
+    onSubmissionModalVisible,
+    onTaskSubmission,
+    submissionModalVisible,
   };
 };

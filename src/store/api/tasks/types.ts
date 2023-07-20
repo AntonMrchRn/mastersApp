@@ -2,6 +2,7 @@ import { File } from '@/types/fileManager';
 import { OutlayStatusType, RoleType, TaskType } from '@/types/task';
 
 type Material = {
+  ID: number;
   count: number;
   measure: string;
   name: string;
@@ -118,6 +119,19 @@ type Task = {
     password?: string;
   };
 };
+type Offer = {
+  ID: number;
+  comment: string;
+  executor: Curator;
+  files: File[];
+  isCurator: boolean;
+  isLots: boolean;
+  outlayStatusID: number;
+  services: Service[];
+  taskID: number;
+  updateTime: string;
+  userID: number;
+};
 type GetTaskResponse = {
   count?: number;
   extraCounts?: {
@@ -132,7 +146,10 @@ type GetTaskResponse = {
   mobileCounts?: CountMobile[];
   tasks?: Task[];
 };
-
+type GetOffersResponse = {
+  count: number;
+  offers: Offer[];
+};
 type GetTaskHistoryResponse = {
   status?: string;
   endpointName?: string;
@@ -258,4 +275,5 @@ export type {
   ServicesCategory,
   GetServicesCategoriesResponse,
   GetServicesResponse,
+  GetOffersResponse,
 };
