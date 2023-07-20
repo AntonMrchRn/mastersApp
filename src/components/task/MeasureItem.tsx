@@ -8,7 +8,7 @@ import { CaretRightIcon } from '@/assets/icons/svg/estimate/CaretRightIcon';
 import { CubeLargeIcon } from '@/assets/icons/svg/estimate/CubeLargeIcon';
 import { Measure } from '@/types/task';
 
-import { EstimateMeasureBottomSheet } from './EstimateMeasureBottomSheet';
+import { EstimateMeasureBottomSheet } from '../TabScreens/EstimateAddMaterialScreen/EstimateMeasureBottomSheet';
 
 type MeasureItemProps = {
   measure: string;
