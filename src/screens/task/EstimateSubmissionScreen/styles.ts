@@ -7,23 +7,16 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   title: {
-    marginVertical: 24,
+    marginTop: 24,
+    marginBottom: 8,
   },
-  name: {
+  itemTitle: {
     marginTop: 8,
+    marginBottom: 4,
   },
-  description: {
-    marginTop: 4,
-  },
-  row: {
+  char: {
     marginTop: 8,
     flexDirection: 'row',
-    alignItems: 'center',
-  },
-  rowText: {
-    marginLeft: 4,
-  },
-  button: {
-    borderRadius: 12,
+    gap: 4,
   },
 });
