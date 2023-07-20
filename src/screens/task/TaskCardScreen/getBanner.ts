@@ -1,4 +1,4 @@
-import { TaskCardBottomBanner } from '@/components/TabScreens/TaskCard/TaskCardBottom';
+import { TaskCardBottomBanner } from '@/components/task/TaskCard/TaskCardBottom';
 import { OutlayStatusType, StatusType, TaskTab } from '@/types/task';
 
 export const getBanner = ({

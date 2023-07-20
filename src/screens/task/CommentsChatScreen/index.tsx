@@ -14,7 +14,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { Input, useTheme } from 'rn-ui-kit';
 
 import SendButton from '@/assets/icons/svg/screens/SendButton';
-import ChatMessage from '@/components/TabScreens/TaskCard/TaskCardComment/Chat/ChatMessage';
+import ChatMessage from '@/components/task/TaskCard/TaskCardComment/Chat/ChatMessage';
 import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound';
 import { configApp } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';

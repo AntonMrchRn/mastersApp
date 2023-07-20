@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '@/store';
 import { getCommentsPreview } from '@/store/slices/myTasks/asyncActions';
 import { clearCommentsPreview } from '@/store/slices/myTasks/reducer';
 
-import PreviewNotFound from '../../TaskSearch/PreviewNotFound';
+import PreviewNotFound from '../../../TabScreens/TaskSearch/PreviewNotFound';
 import ChatMessage from './Chat/ChatMessage';
 
 import { styles } from './styles';
