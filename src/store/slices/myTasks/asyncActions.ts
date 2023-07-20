@@ -13,7 +13,7 @@ type RequestArgs = {
   fromTask?: number;
   idCard?: string | number;
   sort?: 'asc' | 'desc';
-  regionID: number[];
+  regionID?: number[];
 };
 
 type RequestSendArgs = {
@@ -94,7 +94,7 @@ const getMyTasks = createAsyncThunk<
   ) => {
     const userID = thunkApi.getState().auth.user?.userID;
     try {
-      if (userID && idList) {
+      if (userID && idList && regionID) {
         const { data } = await axiosInstance.get(
           `tasks/web?query=?${getEndpont({
             idList,
@@ -126,7 +126,7 @@ const refreshMyTasks = createAsyncThunk<
     const userID = thunkApi.getState().auth.user?.userID;
 
     try {
-      if (userID && idList) {
+      if (userID && idList && regionID) {
         const { data } = await axiosInstance.get(
           `tasks/web?query=?${getEndpont({
             idList,

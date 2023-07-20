@@ -20,9 +20,9 @@ import { EstimateAddServiceScreen } from '@/screens/task/EstimateAddServiceScree
 import { EstimateEditScreen } from '@/screens/task/EstimateEditScreen';
 import { EstimateSubmissionScreen } from '@/screens/task/EstimateSubmissionScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
-import { Executor, Service } from '@/store/api/tasks/types';
 import { TradingResultsScreen } from '@/screens/task/TradingResultsScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
+import { Executor, Service } from '@/store/api/tasks/types';
 
 export enum AppScreenName {
   AppNavigator = 'AppNavigator',
