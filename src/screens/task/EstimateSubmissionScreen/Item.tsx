@@ -53,7 +53,7 @@ export const Item: FC<ItemProps> = ({ title, description, count, sum }) => {
         placeholder={'Стоимость'}
         hint={'Указывается в рублях за весь объем услуги'}
       />
-      <Spacer size={20} />
+      <Spacer size={20} separator="bottom" />
     </View>
   );
 };

@@ -19,4 +19,10 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 4,
   },
+  add: {
+    flexDirection: 'row',
+    gap: 8,
+    alignSelf: 'flex-start',
+    paddingVertical: 8,
+  },
 });
