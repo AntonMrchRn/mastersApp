@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { StackScreenProps } from '@react-navigation/stack';
@@ -30,6 +30,13 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
 
   const getService = useGetTaskServiceQuery({ taskID: route.params.taskId });
 
+  const [services, setServices] = useState(getService?.data?.services || []);
+
+  useEffect(() => {
+    if (getService?.data?.services) {
+      setServices(getService?.data?.services);
+    }
+  }, [getService?.data?.services]);
   useEffect(() => {
     if (getService.isError) {
       toast.show({
@@ -64,17 +71,38 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
         }}
       />
       <SafeAreaView style={styles.container} edges={['bottom']}>
-        <ScrollView>
-          <Text variant="title3" color={theme.text.basic} style={styles.title}>
-            Ваше ценовое предложение
-          </Text>
-          <FormProvider {...methods}>
-            <Item
-              title={'title'}
-              description={'description'}
-              count={10}
-              sum={10000}
-            />
+        <FormProvider {...methods}>
+          <ScrollView style={styles.ph20}>
+            <Text
+              variant="title3"
+              color={theme.text.basic}
+              style={styles.title}
+            >
+              Ваше ценовое предложение
+            </Text>
+            {services.map(service => {
+              return (
+                <View key={service.name}>
+                  <Item
+                    title={service.name}
+                    description={service.description}
+                    count={service?.count || 0}
+                    sum={service.sum || 0}
+                  />
+                  {service.materials?.map(material => {
+                    return (
+                      <Item
+                        key={material.name}
+                        title={material.name}
+                        description={''}
+                        count={material.count}
+                        sum={material.count * material.price}
+                      />
+                    );
+                  })}
+                </View>
+              );
+            })}
             <EstimateTotal allSum={0} materialsSum={0} />
             <Spacer size={20} />
             <TouchableOpacity style={styles.add} onPress={onVisible}>
@@ -89,9 +117,12 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
               variant={'textarea'}
               label={'Комментарии к ценовому предложению'}
             />
-          </FormProvider>
-        </ScrollView>
-        <Button label="Подать смету" disabled={true} />
+            <Spacer size={40} />
+          </ScrollView>
+          <View style={styles.ph20}>
+            <Button label="Подать смету" disabled={true} />
+          </View>
+        </FormProvider>
       </SafeAreaView>
     </>
   );

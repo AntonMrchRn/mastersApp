@@ -78,7 +78,10 @@ export const tasksAPI = api
           method: 'DELETE',
         }),
       }),
-      getTaskService: builder.query<Service, { taskID: number }>({
+      getTaskService: builder.query<
+        { count: number; services: Service[] },
+        { taskID: number }
+      >({
         query: ({ taskID }) => ({
           url: `tasks/services?query=?taskID==${taskID}?`,
           method: 'GET',

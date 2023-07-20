@@ -4,6 +4,8 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  ph20: {
     paddingHorizontal: 20,
   },
   title: {
