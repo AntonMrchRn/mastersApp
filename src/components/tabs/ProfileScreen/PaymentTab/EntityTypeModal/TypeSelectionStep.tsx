@@ -4,8 +4,8 @@ import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
 import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
 import { CheckMarkIcon } from '@/assets/icons/svg/screens/CheckMarkIcon';
-import { ModalStep } from '@/components/TabScreens/ProfileScreen/PaymentTab/EntityTypeModal/index';
-import styles from '@/components/TabScreens/ProfileScreen/PaymentTab/EntityTypeModal/style';
+import { ModalStep } from '@/components/tabs/ProfileScreen/PaymentTab/EntityTypeModal/index';
+import styles from '@/components/tabs/ProfileScreen/PaymentTab/EntityTypeModal/style';
 import { useGetEntityTypesQuery } from '@/store/api/user';
 import { EntityType } from '@/store/api/user/types';
 import { AxiosQueryErrorResponse } from '@/types/error';

@@ -5,11 +5,11 @@ import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/typ
 import { Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
 import MegaphoneIcon from '@/assets/icons/svg/screens/MegaphoneIcon';
-import ActivitiesModal from '@/components/TabScreens/ProfileScreen/ActivityTab/Modals/ActivitiesModal';
-import RegionsModal from '@/components/TabScreens/ProfileScreen/ActivityTab/Modals/RegionsModal';
-import SpecialityModal from '@/components/TabScreens/ProfileScreen/ActivityTab/Modals/SpecialityModal';
-import Title from '@/components/TabScreens/ProfileScreen/Title';
-import UserInfoBlock from '@/components/TabScreens/ProfileScreen/UserInfoBlock';
+import ActivitiesModal from '@/components/tabs/ProfileScreen/ActivityTab/Modals/ActivitiesModal';
+import RegionsModal from '@/components/tabs/ProfileScreen/ActivityTab/Modals/RegionsModal';
+import SpecialityModal from '@/components/tabs/ProfileScreen/ActivityTab/Modals/SpecialityModal';
+import Title from '@/components/tabs/ProfileScreen/Title';
+import UserInfoBlock from '@/components/tabs/ProfileScreen/UserInfoBlock';
 import { useGetActivitiesQuery, useGetRegionsQuery } from '@/store/api/user';
 import { User } from '@/store/api/user/types';
 import { AxiosQueryErrorResponse } from '@/types/error';

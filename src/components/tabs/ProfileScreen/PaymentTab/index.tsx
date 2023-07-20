@@ -5,12 +5,12 @@ import { useNavigation } from '@react-navigation/native';
 import { CheckBox, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import PencilIcon from '@/assets/icons/svg/screens/PencilIcon';
-import NDSPayerTooltip from '@/components/TabScreens/ProfileScreen/NDSPayerTooltip';
-import DocumentsBlock from '@/components/TabScreens/ProfileScreen/PaymentTab/DocumentsBlock';
-import EntityTypeModal from '@/components/TabScreens/ProfileScreen/PaymentTab/EntityTypeModal';
-import SelfEmployedBlock from '@/components/TabScreens/ProfileScreen/PaymentTab/SelfEmployedBlock';
-import Title from '@/components/TabScreens/ProfileScreen/Title';
-import UserInfoBlock from '@/components/TabScreens/ProfileScreen/UserInfoBlock';
+import NDSPayerTooltip from '@/components/tabs/ProfileScreen/NDSPayerTooltip';
+import DocumentsBlock from '@/components/tabs/ProfileScreen/PaymentTab/DocumentsBlock';
+import EntityTypeModal from '@/components/tabs/ProfileScreen/PaymentTab/EntityTypeModal';
+import SelfEmployedBlock from '@/components/tabs/ProfileScreen/PaymentTab/SelfEmployedBlock';
+import Title from '@/components/tabs/ProfileScreen/Title';
+import UserInfoBlock from '@/components/tabs/ProfileScreen/UserInfoBlock';
 import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { User } from '@/store/api/user/types';
 import { BankDetailsScreenNavigationProp } from '@/types/navigation';

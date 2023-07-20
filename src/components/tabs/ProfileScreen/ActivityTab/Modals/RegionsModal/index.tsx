@@ -21,8 +21,8 @@ import {
 } from 'rn-ui-kit';
 
 import { SearchIcon } from '@/assets/icons/svg/estimate/SearchIcon';
-import SelectableModalItem from '@/components/TabScreens/ProfileScreen/ActivityTab/Modals/SelectableModalItem';
-import useModal from '@/components/TabScreens/ProfileScreen/ActivityTab/Modals/useModal';
+import SelectableModalItem from '@/components/tabs/ProfileScreen/ActivityTab/Modals/SelectableModalItem';
+import useModal from '@/components/tabs/ProfileScreen/ActivityTab/Modals/useModal';
 import { configApp } from '@/constants/platform';
 import useDebounce from '@/hooks/useDebounce';
 import { useEditUserMutation } from '@/store/api/user';
