@@ -7,8 +7,9 @@ import {
   getCommentsPreview,
   getMyTasks,
   refreshMyTasks,
+  sendMessage,
 } from './asyncActions';
-import { InitialState } from './types';
+import { GetSendResponse, InitialState } from './types';
 
 const initialState: InitialState = {
   list: {},
@@ -16,6 +17,7 @@ const initialState: InitialState = {
   tableNames: [],
   comments: {},
   commentsPreview: {},
+  loadingSend: false,
   loadingCommentsPreview: false,
   loadingComments: false,
   loadingList: false,
@@ -108,6 +110,22 @@ const taskSearch = createSlice({
     builder.addCase(getCommentsPreview.rejected, (state, { payload }) => {
       state.errorCommentsPreview = payload as Error;
       state.loadingCommentsPreview = false;
+    });
+    // отправка сообщения
+    builder.addCase(sendMessage.pending, state => {
+      state.loadingSend = true;
+    });
+    builder.addCase(
+      sendMessage.fulfilled,
+      (state, { payload }: PayloadAction<GetSendResponse>) => {
+        state.comments.taskComment &&
+          state.comments.taskComment.unshift(payload);
+        state.loadingSend = false;
+      }
+    );
+    builder.addCase(sendMessage.rejected, (state, { payload }) => {
+      state.errorComments = payload as Error;
+      state.loadingSend = false;
     });
   },
 });

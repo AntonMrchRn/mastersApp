@@ -4,12 +4,10 @@ import { configApp } from '@/constants/platform';
 
 export const styles = StyleSheet.create({
   container: {
-    zIndex: 10,
     flex: 1,
     backgroundColor: '#fff',
   },
   containerChat: {
-    zIndex: 10,
     flex: 1,
     backgroundColor: '#fff',
     marginBottom: configApp.ios ? 10 : 0,
@@ -24,11 +22,13 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   w80: {
-    width: '100%',
     marginRight: -56,
+    width: '100%',
+    flex: 0,
   },
   w100: {
     width: '100%',
+    flex: 0,
   },
   btn: {
     height: 48,

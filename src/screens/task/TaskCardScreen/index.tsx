@@ -61,7 +61,6 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
     outlayStatusID,
     onRefresh,
     refreshing,
-    tab,
   } = useTaskCard({ taskId, navigation });
   const theme = useTheme();
   const insets = useSafeAreaInsets();

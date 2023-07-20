@@ -19,7 +19,7 @@ import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound'
 import { configApp } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { getComments } from '@/store/slices/myTasks/asyncActions';
+import { getComments, sendMessage } from '@/store/slices/myTasks/asyncActions';
 import { clearComments } from '@/store/slices/myTasks/reducer';
 import { Comment } from '@/store/slices/myTasks/types';
 import { TaskSearch } from '@/types/task';
@@ -33,20 +33,32 @@ type EstimateAddMaterialScreenProps = StackScreenProps<
 
 export const CommentsChatScreen: FC<EstimateAddMaterialScreenProps> = ({
   route: {
-    params: { taskId },
+    params: { taskId, executors },
   },
 }) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const flatList = useRef<FlatList>(null);
   const [isActive, setIsActive] = useState(false);
+  const [valueText, setValueText] = useState('');
 
-  const { comments, loadingComments } = useAppSelector(state => state.myTasks);
+  const { comments, loadingComments, loadingSend } = useAppSelector(
+    state => state.myTasks
+  );
+  const { height } = useKeyboardAnimation();
 
   useEffect(() => {
     dispatch(getComments({ idCard: taskId, numberOfPosts: 30, sort: 'desc' }));
+    const timeout = setInterval(
+      () =>
+        dispatch(
+          getComments({ idCard: taskId, numberOfPosts: 999, sort: 'desc' })
+        ),
+      4000
+    );
     return () => {
       dispatch(clearComments());
+      clearInterval(timeout);
     };
   }, []);
 
@@ -56,13 +68,17 @@ export const CommentsChatScreen: FC<EstimateAddMaterialScreenProps> = ({
     }
   }, [isActive]);
 
+  const onPressSend = () => {
+    dispatch(sendMessage({ taskId, comment: valueText, executors })).then(r => {
+      if (!r?.error) setValueText('');
+    });
+  };
+
   const renderItem = ({ item }: ListRenderItemInfo<Comment>) => (
     <ChatMessage item={item} />
   );
 
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
-
-  const { height } = useKeyboardAnimation();
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
@@ -101,6 +117,8 @@ export const CommentsChatScreen: FC<EstimateAddMaterialScreenProps> = ({
         ]}
       >
         <Input
+          value={!loadingSend ? valueText : ''}
+          onChangeText={!loadingSend ? setValueText : undefined}
           variant="message"
           placeholder="Сообщение..."
           ref={ref => ref && setIsActive(ref?.isFocused())}
@@ -109,6 +127,7 @@ export const CommentsChatScreen: FC<EstimateAddMaterialScreenProps> = ({
         {isActive && (
           <TouchableOpacity
             style={[styles.btn, { backgroundColor: theme.background.accent }]}
+            onPress={onPressSend}
           >
             <SendButton />
           </TouchableOpacity>

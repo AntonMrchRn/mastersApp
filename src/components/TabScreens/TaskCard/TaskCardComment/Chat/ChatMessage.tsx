@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import dayjs from 'dayjs';
@@ -19,7 +19,6 @@ type ChatItemProps = {
 const ChatMessage: FC<ChatItemProps> = ({
   item: { isMine, comment, creationTime },
 }) => {
-  console.log('isMine', isMine, comment);
   const theme = useTheme();
   const styles = StyleSheet.create({
     container: {
@@ -84,7 +83,7 @@ const ChatMessage: FC<ChatItemProps> = ({
     },
   });
 
-  const time = dayjs(creationTime).locale('ru').format('HH:mm:ss, DD MMMM');
+  const time = dayjs(creationTime).locale('ru').format('DD MMMM, HH:mm');
 
   return (
     <>
@@ -93,7 +92,6 @@ const ChatMessage: FC<ChatItemProps> = ({
           style={isMine ? styles.wrapperMessageMy : styles.wrapperMessageHuman}
         >
           <Text style={isMine ? styles.textMy : styles.textHuman}>
-            {/* ghbdtn ghdbgjksn fgl;kjn sfklgjn sdf */}
             {comment}
           </Text>
         </View>
@@ -103,4 +101,4 @@ const ChatMessage: FC<ChatItemProps> = ({
   );
 };
 
-export default ChatMessage;
+export default memo(ChatMessage);

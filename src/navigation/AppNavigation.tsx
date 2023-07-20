@@ -18,7 +18,7 @@ import { EstimateAddMaterialScreen } from '@/screens/task/EstimateAddMaterialScr
 import { EstimateAddServiceScreen } from '@/screens/task/EstimateAddServiceScreen';
 import { EstimateEditScreen } from '@/screens/task/EstimateEditScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
-import { Service } from '@/store/api/tasks/types';
+import { Executor, Service } from '@/store/api/tasks/types';
 
 export enum AppScreenName {
   AppNavigator = 'AppNavigator',
@@ -42,6 +42,7 @@ export type AppStackParamList = {
   [AppScreenName.Password]: undefined;
   [AppScreenName.CommentsChat]: {
     taskId: number;
+    executors?: Executor[];
   };
   [AppScreenName.RecoveryConfirmation]: {
     phone: string;

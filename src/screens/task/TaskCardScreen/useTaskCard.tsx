@@ -69,8 +69,8 @@ export const useTaskCard = ({
   }, [isError]);
 
   const [patchTask] = usePatchTaskMutation();
-
   const task = data?.tasks?.[0];
+  const executors = task?.executors;
   const id = task?.ID || 0;
   const subsetID = task?.subsetID || '';
   const files = task?.files || [];
@@ -156,6 +156,7 @@ export const useTaskCard = ({
   const navigateToChat = () => {
     navigation.navigate(AppScreenName.CommentsChat, {
       taskId: id,
+      executors,
     });
   };
   const onUploadModalVisible = () => {
@@ -588,5 +589,6 @@ export const useTaskCard = ({
     outlayStatusID,
     onRefresh,
     refreshing: isLoading,
+    executors,
   };
 };
