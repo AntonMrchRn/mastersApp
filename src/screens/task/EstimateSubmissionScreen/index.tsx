@@ -94,7 +94,6 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                       <Item
                         key={material.name}
                         title={material.name}
-                        description={''}
                         count={material.count}
                         sum={material.count * material.price}
                       />

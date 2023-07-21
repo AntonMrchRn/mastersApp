@@ -12,7 +12,7 @@ import { styles } from './styles';
 
 type ItemProps = {
   title: string;
-  description: string;
+  description?: string;
   count: number;
   sum: number;
   canDelete?: boolean;
@@ -43,9 +43,11 @@ export const Item: FC<ItemProps> = ({
       >
         {title}
       </Text>
-      <Text variant="bodySRegular" color={theme.text.basic}>
-        {description}
-      </Text>
+      {description && (
+        <Text variant="bodySRegular" color={theme.text.basic}>
+          {description}
+        </Text>
+      )}
       <View style={styles.char}>
         <CubeIcon />
         <Text variant="bodySRegular" color={theme.text.neutral}>
