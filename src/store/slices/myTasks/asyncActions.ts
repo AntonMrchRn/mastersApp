@@ -3,9 +3,9 @@ import { AxiosError } from 'axios';
 
 import { axiosInstance } from '@/services/axios/axiosInstance';
 import { RootState } from '@/store';
-import { GetTaskResponse } from '@/store/api/tasks/types';
+import { Executor, GetTaskResponse } from '@/store/api/tasks/types';
 
-import { GetCommentsResponce } from './types';
+import { GetCommentsResponce, GetSendResponse } from './types';
 
 type RequestArgs = {
   idList?: number;
@@ -13,7 +13,13 @@ type RequestArgs = {
   fromTask?: number;
   idCard?: string | number;
   sort?: 'asc' | 'desc';
-  regionID: number[];
+  regionID?: number[];
+};
+
+type RequestSendArgs = {
+  taskId?: number | string;
+  comment?: string;
+  executors?: Executor[];
 };
 
 const getEndpont = ({
@@ -88,7 +94,7 @@ const getMyTasks = createAsyncThunk<
   ) => {
     const userID = thunkApi.getState().auth.user?.userID;
     try {
-      if (userID && idList) {
+      if (userID && idList && regionID) {
         const { data } = await axiosInstance.get(
           `tasks/web?query=?${getEndpont({
             idList,
@@ -120,7 +126,7 @@ const refreshMyTasks = createAsyncThunk<
     const userID = thunkApi.getState().auth.user?.userID;
 
     try {
-      if (userID && idList) {
+      if (userID && idList && regionID) {
         const { data } = await axiosInstance.get(
           `tasks/web?query=?${getEndpont({
             idList,
@@ -191,4 +197,34 @@ const getComments = createAsyncThunk<
   }
 );
 
-export { getMyTasks, refreshMyTasks, getComments, getCommentsPreview };
+const sendMessage = createAsyncThunk<
+  GetSendResponse,
+  RequestSendArgs,
+  { state: RootState }
+>(
+  '/sendMessage',
+  async ({ taskId, comment, executors }: RequestSendArgs, thunkApi) => {
+    try {
+      const recIDs = executors?.map(item => {
+        return item.ID;
+      });
+      const { data } = await axiosInstance.post('tasks/comments', {
+        taskId: taskId,
+        comment: comment,
+        recipientID: 81,
+      });
+
+      return data;
+    } catch (error) {
+      return thunkApi.rejectWithValue((error as AxiosError).response?.data);
+    }
+  }
+);
+
+export {
+  getMyTasks,
+  refreshMyTasks,
+  getComments,
+  getCommentsPreview,
+  sendMessage,
+};

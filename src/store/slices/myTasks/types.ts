@@ -1,6 +1,18 @@
 import { GetTaskResponse, Task } from '@/store/api/tasks/types';
 import { Error } from '@/types/error';
 
+type GetSendResponse = {
+  ID: number;
+  authorTypeID?: number;
+  comment?: string;
+  creationTime?: string;
+  fullname?: string;
+  recipientID?: number;
+  roleID?: number;
+  taskID?: number;
+  userID?: number;
+};
+
 type GetCommentsResponce = {
   count?: number;
   taskComment?: Comment[];
@@ -26,9 +38,10 @@ type InitialState = {
   comments: GetCommentsResponce;
   commentsPreview: GetCommentsResponce;
   loadingComments: boolean;
+  loadingSend: boolean;
   loadingCommentsPreview: boolean;
   errorComments: null | Error;
   errorCommentsPreview: null | Error;
 };
 
-export type { InitialState, GetCommentsResponce, Comment };
+export type { InitialState, GetCommentsResponce, Comment, GetSendResponse };
