@@ -27,7 +27,7 @@ const tasks = createSlice({
       state.loading = true;
     });
     builder.addCase(getTaskServices.fulfilled, (state, { payload }) => {
-      state.offerServices = payload.serices;
+      state.offerServices = payload.services;
       state.currentTaskID = payload.taskId;
       state.loading = false;
     });

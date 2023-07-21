@@ -1,6 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { StackScreenProps } from '@react-navigation/stack';
@@ -11,8 +16,9 @@ import ControlledInput from '@/components/inputs/ControlledInput';
 import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { TaskCardAddEstimateBottomSheet } from '@/components/task/TaskCard/TaskCardAddEstimateBottomSheet';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
-import { useGetTaskServiceQuery } from '@/store/api/tasks';
-import { AxiosQueryErrorResponse } from '@/types/error';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { getTaskServices } from '@/store/slices/tasks/asyncActions';
+import { selectTasks } from '@/store/slices/tasks/selectors';
 
 import { Item } from './Item';
 
@@ -27,25 +33,22 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
 }) => {
   const theme = useTheme();
   const toast = useToast();
-
-  const getService = useGetTaskServiceQuery({ taskID: route.params.taskId });
-
-  const [services, setServices] = useState(getService?.data?.services || []);
+  const dispatch = useAppDispatch();
+  const { offerServices, error, loading } = useAppSelector(selectTasks);
+  const services = offerServices || [];
 
   useEffect(() => {
-    if (getService?.data?.services) {
-      setServices(getService?.data?.services);
-    }
-  }, [getService?.data?.services]);
+    dispatch(getTaskServices({ taskId: route.params.taskId }));
+  }, []);
   useEffect(() => {
-    if (getService.isError) {
+    if (error) {
       toast.show({
         type: 'error',
-        title: (getService.error as AxiosQueryErrorResponse).data.message,
+        title: error.message,
         contentHeight: 120,
       });
     }
-  }, [getService.isError]);
+  }, [error]);
 
   const [visible, setVisible] = useState(false);
 
@@ -58,6 +61,20 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     mode: 'onChange',
   });
 
+  if (loading) {
+    return (
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          flex: 1,
+          backgroundColor: 'white',
+        }}
+      >
+        <ActivityIndicator size={'large'} />
+      </View>
+    );
+  }
   return (
     <>
       <TaskCardAddEstimateBottomSheet

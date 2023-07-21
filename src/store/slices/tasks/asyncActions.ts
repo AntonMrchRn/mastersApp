@@ -6,12 +6,12 @@ import { RootState } from '@/store';
 import { Service } from '@/store/api/tasks/types';
 
 export const getTaskServices = createAsyncThunk<
-  { count: number; serices: Service[]; taskId: number },
+  { count: number; services: Service[]; taskId: number },
   { taskId: number },
   { state: RootState }
 >('/getSearchTasks', async ({ taskId }: { taskId: number }, thunkApi) => {
   const { currentTaskID } = thunkApi.getState().tasks;
-  if (!taskId || currentTaskID !== taskId) {
+  if (currentTaskID !== taskId) {
     try {
       const { data } = await axiosInstance.get(
         `tasks/services?query=?taskID==${taskId}?`
@@ -21,4 +21,5 @@ export const getTaskServices = createAsyncThunk<
       return thunkApi.rejectWithValue((error as AxiosError).response?.data);
     }
   }
+  return thunkApi.abort();
 });
