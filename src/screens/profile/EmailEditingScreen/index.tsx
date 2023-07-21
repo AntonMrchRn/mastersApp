@@ -6,7 +6,7 @@ import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import Header from '@/components/Header';
 import ControlledInput from '@/components/inputs/ControlledInput';
-import Title from '@/components/TabScreens/ProfileScreen/Title';
+import Title from '@/components/tabs/ProfileScreen/Title';
 import TimerBlockEmailProfile from '@/components/Timer/TimerBlockEmailProfile';
 import { DismissKeyboardView } from '@/hocs/DismissKeyboardView';
 import useEmailEditing from '@/screens/profile/EmailEditingScreen/useEmailEditing';

@@ -11,7 +11,7 @@ import { TaskAddress } from '@/components/task/TaskAddress';
 import { Contact } from '@/store/api/tasks/types';
 import { File } from '@/types/fileManager';
 
-import { TaskDate } from '../../../task/TaskDate';
+import { TaskDate } from '../../TaskDate';
 
 import { styles } from './styles';
 

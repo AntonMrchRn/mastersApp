@@ -4,26 +4,30 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  ph20: {
     paddingHorizontal: 20,
   },
   title: {
-    marginVertical: 24,
+    marginTop: 24,
+    marginBottom: 8,
   },
-  name: {
+  itemTitle: {
     marginTop: 8,
+    marginBottom: 4,
+    width: '90%',
   },
-  description: {
-    marginTop: 4,
-  },
-  row: {
+  char: {
     marginTop: 8,
     flexDirection: 'row',
-    alignItems: 'center',
+    gap: 4,
+    flexWrap: 'wrap',
   },
-  rowText: {
-    marginLeft: 4,
+  add: {
+    flexDirection: 'row',
+    gap: 8,
+    alignSelf: 'flex-start',
+    paddingVertical: 8,
   },
-  button: {
-    borderRadius: 12,
-  },
+  trash: { position: 'absolute', top: 20, right: 0 },
 });

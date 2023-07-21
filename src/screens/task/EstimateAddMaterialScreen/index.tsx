@@ -7,7 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
 import ControlledInput from '@/components/inputs/ControlledInput';
-import { MeasureItem } from '@/components/TabScreens/EstimateAddMaterialScreen/MeasureItem';
+import { MeasureItem } from '@/components/task/MeasureItem';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppSelector } from '@/store';
 import {

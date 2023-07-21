@@ -6,7 +6,7 @@ import { Button, Spacer } from 'rn-ui-kit';
 
 import Header from '@/components/Header';
 import ControlledInput from '@/components/inputs/ControlledInput';
-import Title from '@/components/TabScreens/ProfileScreen/Title';
+import Title from '@/components/tabs/ProfileScreen/Title';
 import { DismissKeyboardView } from '@/hocs/DismissKeyboardView';
 import usePersonalDataEditing from '@/screens/profile/PersonalDataEditingScreen/usePersonalDataEditing';
 

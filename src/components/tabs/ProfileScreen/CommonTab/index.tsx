@@ -5,8 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { Banner, Button, Spacer, useTheme } from 'rn-ui-kit';
 
 import PencilIcon from '@/assets/icons/svg/screens/PencilIcon';
-import Title from '@/components/TabScreens/ProfileScreen/Title';
-import UserInfoBlock from '@/components/TabScreens/ProfileScreen/UserInfoBlock';
+import Title from '@/components/tabs/ProfileScreen/Title';
+import UserInfoBlock from '@/components/tabs/ProfileScreen/UserInfoBlock';
 import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { useAppDispatch } from '@/store';
 import { User } from '@/store/api/user/types';

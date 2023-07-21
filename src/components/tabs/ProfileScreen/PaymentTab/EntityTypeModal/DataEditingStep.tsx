@@ -11,7 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, CheckBox, Spacer, useToast } from 'rn-ui-kit';
 
 import ControlledInput from '@/components/inputs/ControlledInput';
-import NDSPayerTooltip from '@/components/TabScreens/ProfileScreen/NDSPayerTooltip';
+import NDSPayerTooltip from '@/components/tabs/ProfileScreen/NDSPayerTooltip';
 import { useEditUserMutation } from '@/store/api/user';
 import { EntityType, User } from '@/store/api/user/types';
 import { AxiosQueryErrorResponse } from '@/types/error';

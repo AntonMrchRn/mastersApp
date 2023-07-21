@@ -12,9 +12,9 @@ import { CompositeScreenProps, useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { BottomSheet, Text, useTheme } from 'rn-ui-kit';
 
-import CardTasks from '@/components/TabScreens/TaskSearch/Card';
-import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound';
-import TypeSelectionTaskSearch from '@/components/TabScreens/TaskSearch/TypeSelectionTaskSearch';
+import CardTasks from '@/components/tabs/TaskSearch/Card';
+import PreviewNotFound from '@/components/tabs/TaskSearch/PreviewNotFound';
+import TypeSelectionTaskSearch from '@/components/tabs/TaskSearch/TypeSelectionTaskSearch';
 import { configApp } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';

@@ -6,12 +6,12 @@ import dayjs from 'dayjs';
 import { useToast } from 'rn-ui-kit';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
 
-import { TaskCardBottomButton } from '@/components/TabScreens/TaskCard/TaskCardBottom';
-import { TaskCardComment } from '@/components/TabScreens/TaskCard/TaskCardComment';
-import { TaskCardDescription } from '@/components/TabScreens/TaskCard/TaskCardDescription';
-import { TaskCardEstimate } from '@/components/TabScreens/TaskCard/TaskCardEstimate';
-import { TaskCardHisory } from '@/components/TabScreens/TaskCard/TaskCardHistory';
-import { TaskCardReport } from '@/components/TabScreens/TaskCard/TaskCardReport';
+import { TaskCardBottomButton } from '@/components/task/TaskCard/TaskCardBottom';
+import { TaskCardComment } from '@/components/task/TaskCard/TaskCardComment';
+import { TaskCardDescription } from '@/components/task/TaskCard/TaskCardDescription';
+import { TaskCardEstimate } from '@/components/task/TaskCard/TaskCardEstimate';
+import { TaskCardHisory } from '@/components/task/TaskCard/TaskCardHistory';
+import { TaskCardReport } from '@/components/task/TaskCard/TaskCardReport';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppSelector } from '@/store';
 import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
