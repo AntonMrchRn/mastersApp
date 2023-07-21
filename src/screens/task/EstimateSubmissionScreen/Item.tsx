@@ -15,7 +15,9 @@ type ItemProps = {
   description?: string;
   count: number;
   sum: number;
+  name: string;
   canDelete?: boolean;
+  error: string;
 };
 export const Item: FC<ItemProps> = ({
   title,
@@ -23,6 +25,8 @@ export const Item: FC<ItemProps> = ({
   count,
   sum,
   canDelete,
+  name,
+  error,
 }) => {
   const theme = useTheme();
   return (
@@ -62,11 +66,12 @@ export const Item: FC<ItemProps> = ({
       </View>
       <Spacer size={16} />
       <ControlledInput
-        name={'123'}
+        name={name}
         variant={'text'}
         label={'Стоимость'}
         placeholder={'Стоимость'}
-        hint={'Указывается в рублях за весь объем услуги'}
+        hint={error || 'Указывается в рублях за весь объем услуги'}
+        isError={!!error}
       />
       <Spacer size={20} separator="bottom" />
     </View>

@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FieldValues, FormProvider, Resolver, useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
   ScrollView,
@@ -17,6 +17,7 @@ import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { TaskCardAddEstimateBottomSheet } from '@/components/task/TaskCard/TaskCardAddEstimateBottomSheet';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
+import { Material } from '@/store/api/tasks/types';
 import { getTaskServices } from '@/store/slices/tasks/asyncActions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
 
@@ -34,8 +35,29 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   const theme = useTheme();
   const toast = useToast();
   const dispatch = useAppDispatch();
+
   const { offerServices, error, loading } = useAppSelector(selectTasks);
+
   const services = offerServices || [];
+  const allSum = services.reduce((acc, val) => {
+    if (val.sum) {
+      return acc + val.sum;
+    }
+    return acc;
+  }, 0);
+  const materials = services.reduce<Material[]>((acc, val) => {
+    if (val.materials) {
+      return acc.concat(val.materials);
+    }
+    return acc;
+  }, []);
+  const materialsSum = materials.reduce((acc, val) => {
+    if (val.price && val.count) {
+      const sum = val.price * val.count;
+      return acc + sum;
+    }
+    return acc;
+  }, 0);
 
   useEffect(() => {
     dispatch(getTaskServices({ taskId: route.params.taskId }));
@@ -56,10 +78,44 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     setVisible(!visible);
   };
 
+  const resolver: Resolver<{
+    [key: string]: string | undefined;
+  }> = async values => {
+    const errors = Object.keys(values).reduce((acc, val) => {
+      if (!values[val] && val !== 'comment') {
+        return {
+          ...acc,
+          [val]: {
+            type: 'required',
+            message: 'Для подачи сметы необходимо заполнить все поля',
+          },
+        };
+      }
+      return acc;
+    }, {});
+    return {
+      values,
+      errors,
+    };
+  };
+
   const methods = useForm({
-    defaultValues: { 123: '' },
     mode: 'onChange',
+    resolver,
   });
+
+  const {
+    handleSubmit,
+    formState: { errors, isValid },
+  } = methods;
+  console.log('🚀 ~ file: index.tsx:89 ~ errors:', errors);
+
+  const onSubmit = (fieldValues: FieldValues) => {
+    console.log(
+      '🚀 ~ file: index.tsx:70 ~ onSubmit ~ fieldValues:',
+      fieldValues
+    );
+  };
 
   if (loading) {
     return (
@@ -101,15 +157,19 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
               return (
                 <View key={service.name}>
                   <Item
+                    name={service.ID.toString()}
                     title={service.name}
                     description={service.description}
                     count={service?.count || 0}
                     sum={service.sum || 0}
+                    error={errors?.[service.ID]?.message as string}
                   />
                   {service.materials?.map(material => {
                     return (
                       <Item
                         key={material.name}
+                        error={errors?.[material.ID]?.message as string}
+                        name={material.ID.toString()}
                         title={material.name}
                         count={material.count}
                         sum={material.count * material.price}
@@ -119,7 +179,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                 </View>
               );
             })}
-            <EstimateTotal allSum={0} materialsSum={0} />
+            <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
             <Spacer size={20} />
             <TouchableOpacity style={styles.add} onPress={onVisible}>
               <PlusIcon fill={theme.icons.basic} />
@@ -136,7 +196,11 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
             <Spacer size={40} />
           </ScrollView>
           <View style={styles.ph20}>
-            <Button label="Подать смету" disabled={true} />
+            <Button
+              label="Подать смету"
+              disabled={!isValid}
+              onPress={handleSubmit(onSubmit)}
+            />
           </View>
         </FormProvider>
       </SafeAreaView>
