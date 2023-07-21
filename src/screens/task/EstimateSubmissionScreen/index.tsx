@@ -30,6 +30,7 @@ type EstimateSubmissionScreenProps = StackScreenProps<
   AppScreenName.EstimateSubmission
 >;
 export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
+  navigation,
   route,
 }) => {
   const theme = useTheme();
@@ -38,6 +39,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
 
   const { offerServices, error, loading } = useAppSelector(selectTasks);
 
+  const { taskId } = route.params;
   const services = offerServices || [];
   const allSum = services.reduce((acc, val) => {
     if (val.sum) {
@@ -60,7 +62,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   }, 0);
 
   useEffect(() => {
-    dispatch(getTaskServices({ taskId: route.params.taskId }));
+    dispatch(getTaskServices({ taskId }));
   }, []);
   useEffect(() => {
     if (error) {
@@ -76,6 +78,10 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
 
   const onVisible = () => {
     setVisible(!visible);
+  };
+  const pressMaterial = () => {
+    onVisible();
+    navigation.navigate(AppScreenName.NewMaterial);
   };
 
   const resolver: Resolver<{
@@ -136,9 +142,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
       <TaskCardAddEstimateBottomSheet
         isVisible={visible}
         onCancel={onVisible}
-        pressMaterial={function (): void {
-          throw new Error('Function not implemented.');
-        }}
+        pressMaterial={pressMaterial}
         pressService={function (): void {
           throw new Error('Function not implemented.');
         }}
