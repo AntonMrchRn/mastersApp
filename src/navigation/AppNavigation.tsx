@@ -72,6 +72,7 @@ export type AppStackParamList = {
   [AppScreenName.EstimateAddService]: {
     taskId: number;
     service: Service;
+    fromEstimateSubmission?: boolean;
   };
   [AppScreenName.CompetitorEstimates]: { taskId: number };
   [AppScreenName.TradingResults]: { taskId: number };
