@@ -24,6 +24,7 @@ import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { TradingResultsScreen } from '@/screens/task/TradingResultsScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
 import { Executor, Service } from '@/store/api/tasks/types';
+import { StatusType } from '@/types/task';
 
 export enum AppScreenName {
   AppNavigator = 'AppNavigator',
@@ -53,6 +54,7 @@ export type AppStackParamList = {
   [AppScreenName.CommentsChat]: {
     taskId: number;
     executors?: Executor[];
+    statusID?: StatusType;
   };
   [AppScreenName.RecoveryConfirmation]: {
     phone: string;

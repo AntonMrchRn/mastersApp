@@ -160,7 +160,7 @@ const getCommentsPreview = createAsyncThunk<
     try {
       if (userID) {
         const { data } = await axiosInstance.get(
-          `tasks/comments?query=ID,userID,authorTypeID,comment,creationTime,fullname?(userID==${userID}||recipientID==${userID})*taskID==${idCard}*authorTypeID!=3?creationTime,${sort},${numberOfPosts},${fromTask}`
+          `tasks/comments?query=ID,userID,authorTypeID,comment,creationTime,fullname?(taskID==${idCard}*authorTypeID!=3)?creationTime,${sort},${numberOfPosts},${fromTask}`
         );
         return data;
       }
@@ -186,7 +186,7 @@ const getComments = createAsyncThunk<
     try {
       if (userID) {
         const { data } = await axiosInstance.get(
-          `tasks/comments?query=ID,userID,authorTypeID,comment,creationTime,fullname?(userID==${userID}||recipientID==${userID})*taskID==${idCard}*authorTypeID!=3?creationTime,${sort},${numberOfPosts},${fromTask}`
+          `tasks/comments?query=ID,userID,authorTypeID,comment,creationTime,fullname?(taskID==${idCard}*authorTypeID!=3)?creationTime,${sort},${numberOfPosts},${fromTask}`
         );
         return data;
       }
@@ -208,10 +208,11 @@ const sendMessage = createAsyncThunk<
       const recIDs = executors?.map(item => {
         return item.ID;
       });
+
       const { data } = await axiosInstance.post('tasks/comments', {
         taskId: taskId,
         comment: comment,
-        recipientID: 81,
+        recipientIDs: recIDs,
       });
 
       return data;

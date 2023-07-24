@@ -103,7 +103,7 @@ const taskSearch = createSlice({
     builder.addCase(
       getCommentsPreview.fulfilled,
       (state, { payload }: PayloadAction<InitialState['comments']>) => {
-        state.commentsPreview = payload;
+        state.commentsPreview.taskComment = payload.taskComment?.reverse();
         state.loadingCommentsPreview = false;
       }
     );

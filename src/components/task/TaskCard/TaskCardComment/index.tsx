@@ -1,6 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 
+import { useIsFocused } from '@react-navigation/native';
 import { Text, useTheme } from 'rn-ui-kit';
 
 import { useAppDispatch, useAppSelector } from '@/store';
@@ -19,6 +20,7 @@ type TaskCardCommentProps = {
 
 export const TaskCardComment: FC<TaskCardCommentProps> = ({ taskId }) => {
   const dispatch = useAppDispatch();
+  const isFocused = useIsFocused();
   const theme = useTheme();
 
   const { commentsPreview, loadingCommentsPreview } = useAppSelector(
@@ -26,13 +28,16 @@ export const TaskCardComment: FC<TaskCardCommentProps> = ({ taskId }) => {
   );
 
   useEffect(() => {
-    dispatch(
-      getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'asc' })
-    );
+    if (isFocused) {
+      dispatch(
+        getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'desc' })
+      );
+    }
+
     return () => {
       dispatch(clearCommentsPreview());
     };
-  }, []);
+  }, [isFocused]);
 
   return (
     <View style={styles.container}>
