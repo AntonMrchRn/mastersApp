@@ -16,17 +16,15 @@ type NewMaterialScreenProps = StackScreenProps<
   AppStackParamList,
   AppScreenName.NewMaterial
 >;
-export const NewMaterialScreen: FC<NewMaterialScreenProps> = () => {
+export const NewMaterialScreen: FC<NewMaterialScreenProps> = ({
+  navigation,
+  route,
+}) => {
   const theme = useTheme();
 
-  const { offerServices } = useAppSelector(selectTasks);
+  const { taskId } = route.params;
 
-  const serviceNames = offerServices.reduce<string[]>((acc, val) => {
-    if (val.name) {
-      return acc.concat(val.name);
-    }
-    return acc;
-  }, []);
+  const { offerServices } = useAppSelector(selectTasks);
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
@@ -34,14 +32,21 @@ export const NewMaterialScreen: FC<NewMaterialScreenProps> = () => {
         <Text variant="title3" style={styles.title} color={theme.text.basic}>
           Добавить к услуге
         </Text>
-        {serviceNames.map(name => {
+        {offerServices.map(offerService => {
+          const onPress = () => {
+            navigation.navigate(AppScreenName.EstimateAddMaterial, {
+              serviceId: offerService.ID,
+              taskId: taskId,
+              fromEstimateSubmission: true,
+            });
+          };
           return (
-            <View key={name}>
-              <TouchableOpacity>
+            <View key={offerService.ID}>
+              <TouchableOpacity onPress={onPress}>
                 <Spacer size={20} />
                 <View style={styles.row}>
                   <Text variant="bodyMRegular" color={theme.text.basic}>
-                    {name}
+                    {offerService.name}
                   </Text>
                   <CaretRightIcon />
                 </View>

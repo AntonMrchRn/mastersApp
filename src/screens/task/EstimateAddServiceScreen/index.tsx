@@ -9,10 +9,13 @@ import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 import ControlledInput from '@/components/inputs/ControlledInput';
 import { ServiceItem } from '@/components/task/ServiceItem';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
-import { useAppSelector } from '@/store';
+import { useAppDispatch, useAppSelector } from '@/store';
 import { useGetTaskQuery, usePostTaskServiceMutation } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
+import { addOfferService } from '@/store/slices/tasks/actions';
+import { selectTasks } from '@/store/slices/tasks/selectors';
 import { estimateAddServiceValidationSchema } from '@/utils/formValidation';
+import { getRandomUniqNumber } from '@/utils/getRandomUniqNumber';
 
 import { styles } from './styles';
 
@@ -27,11 +30,20 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
 }) => {
   const theme = useTheme();
   const toast = useToast();
+  const dispatch = useAppDispatch();
 
   const userRole = useAppSelector(selectAuth).user?.roleID;
+  const { offerServices } = useAppSelector(selectTasks);
 
-  const taskId = route.params.taskId;
-  const service = route.params.service;
+  const { taskId, service, fromEstimateSubmission } = route.params;
+
+  const ids = offerServices.reduce<number[]>((acc, val) => {
+    if (val?.ID) {
+      return acc.concat(val.ID);
+    }
+    return acc;
+  }, []);
+  const ID = service?.ID || getRandomUniqNumber(ids);
 
   const getTask = useGetTaskQuery(taskId.toString());
 
@@ -75,23 +87,38 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
         contentHeight: 120,
       });
     }
-    await postTask({
-      categoryID: service.categoryID,
-      categoryName: service.categoryName,
-      description: service.description,
-      measureID: service.measureID,
-      measureName: service.measureName,
-      name: service.name,
-      price: service.price,
-      setID: service.setID,
-      serviceID: service.ID,
-      count: +count,
-      sum: +count * service.price,
-      roleID: userRole,
-      taskID: taskId,
-      materials: [],
-    });
-    getTask.refetch();
+    if (fromEstimateSubmission) {
+      console.log('123');
+      dispatch(
+        addOfferService({
+          ...service,
+          ID,
+          count: +count,
+          sum: +count * service.price,
+          roleID: userRole,
+          materials: [],
+          canDelete: true,
+        })
+      );
+    } else {
+      await postTask({
+        categoryID: service.categoryID,
+        categoryName: service.categoryName,
+        description: service.description,
+        measureID: service.measureID,
+        measureName: service.measureName,
+        name: service.name,
+        price: service.price,
+        setID: service.setID,
+        serviceID: service.ID,
+        count: +count,
+        sum: +count * service.price,
+        roleID: userRole,
+        taskID: taskId,
+        materials: [],
+      });
+      getTask.refetch();
+    }
     goBack();
   };
   return (
