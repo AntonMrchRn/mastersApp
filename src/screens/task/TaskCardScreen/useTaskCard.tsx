@@ -168,6 +168,7 @@ export const useTaskCard = ({
     navigation.navigate(AppScreenName.CommentsChat, {
       taskId: id,
       executors,
+      statusID,
     });
   };
   const onUploadModalVisible = () => {

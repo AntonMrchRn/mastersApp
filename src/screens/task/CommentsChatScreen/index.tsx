@@ -33,18 +33,22 @@ type EstimateAddMaterialScreenProps = StackScreenProps<
 
 export const CommentsChatScreen: FC<EstimateAddMaterialScreenProps> = ({
   route: {
-    params: { taskId, executors },
+    params: { taskId, executors, statusID },
   },
 }) => {
+  console.log('statusID', statusID);
   const theme = useTheme();
   const dispatch = useAppDispatch();
+
   const flatList = useRef<FlatList>(null);
+
   const [isActive, setIsActive] = useState(false);
   const [valueText, setValueText] = useState('');
 
   const { comments, loadingComments, loadingSend } = useAppSelector(
     state => state.myTasks
   );
+
   const { height } = useKeyboardAnimation();
 
   useEffect(() => {
@@ -68,17 +72,17 @@ export const CommentsChatScreen: FC<EstimateAddMaterialScreenProps> = ({
     }
   }, [isActive]);
 
-  const onPressSend = () => {
-    dispatch(sendMessage({ taskId, comment: valueText, executors })).then(r => {
-      if (!r?.error) setValueText('');
-    });
-  };
-
   const renderItem = ({ item }: ListRenderItemInfo<Comment>) => (
     <ChatMessage item={item} />
   );
 
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
+
+  const onPressSend = () => {
+    dispatch(sendMessage({ taskId, comment: valueText, executors }))
+      .unwrap()
+      .then(() => setValueText(''));
+  };
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
