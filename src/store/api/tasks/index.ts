@@ -10,6 +10,7 @@ import {
   GetTaskHistoryResponse,
   GetTaskResponse,
   GetTaskStatusesResponse,
+  Service,
   Task,
 } from './types';
 
@@ -75,6 +76,15 @@ export const tasksAPI = api
         query: ({ serviceId }) => ({
           url: `tasks/services/${serviceId}`,
           method: 'DELETE',
+        }),
+      }),
+      getTaskService: builder.query<
+        { count: number; services: Service[] },
+        { taskID: number }
+      >({
+        query: ({ taskID }) => ({
+          url: `tasks/services?query=?taskID==${taskID}?`,
+          method: 'GET',
         }),
       }),
       patchTaskService: builder.mutation<object, unknown>({
@@ -169,4 +179,5 @@ export const {
   useDeleteMaterialMutation,
   usePostMaterialMutation,
   usePostTaskServiceMutation,
+  useGetTaskServiceQuery,
 } = tasksAPI;

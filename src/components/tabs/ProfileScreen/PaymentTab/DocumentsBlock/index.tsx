@@ -9,7 +9,7 @@ import { DownloadFilesIcon } from '@/assets/icons/svg/screens/DownloadFilesIcon'
 import { DownloadManager } from '@/components/FileManager/DownloadManager';
 import { UploadBottomSheet } from '@/components/FileManager/UploadBottomSheet';
 import { UploadProgress } from '@/components/FileManager/UploadProgress';
-import Title from '@/components/TabScreens/ProfileScreen/Title';
+import Title from '@/components/tabs/ProfileScreen/Title';
 import { useAppSelector } from '@/store';
 import { useAddFilesMutation, useDeleteFileMutation } from '@/store/api/user';
 import { deleteProgress } from '@/store/slices/user/actions';

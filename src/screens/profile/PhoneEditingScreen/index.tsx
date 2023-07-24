@@ -6,7 +6,7 @@ import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import Header from '@/components/Header';
 import ControlledInputPhone from '@/components/inputs/ControlledInputPhone';
-import Title from '@/components/TabScreens/ProfileScreen/Title';
+import Title from '@/components/tabs/ProfileScreen/Title';
 import TimerBlockPhoneProfile from '@/components/Timer/TimerBlockPhoneProfile';
 import { DismissKeyboardView } from '@/hocs/DismissKeyboardView';
 import usePhoneEditing from '@/screens/profile/PhoneEditingScreen/usePhoneEditing';

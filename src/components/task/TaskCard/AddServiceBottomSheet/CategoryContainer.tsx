@@ -6,7 +6,7 @@ import { Button, Chips, Spacer, useTheme } from 'rn-ui-kit';
 import { useGetServicesByCategoriesQuery } from '@/store/api/tasks';
 import { Service, ServicesCategory } from '@/store/api/tasks/types';
 
-import { ServiceItem } from '../../../task/ServiceItem';
+import { ServiceItem } from '../../ServiceItem';
 
 import { styles } from './styles';
 

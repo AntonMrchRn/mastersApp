@@ -9,11 +9,11 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { Banner, TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
 
 import Header from '@/components/Header';
-import { TaskCardBottom } from '@/components/TabScreens/TaskCard/TaskCardBottom';
-import { TaskCardBudgetModal } from '@/components/TabScreens/TaskCard/TaskCardBudgetModal';
-import { TaskCardCancelBottomSheet } from '@/components/TabScreens/TaskCard/TaskCardCancelBottomSheet';
-import { TaskCardSubmissionBottomSheet } from '@/components/TabScreens/TaskCard/TaskCardSubmissionBottomSheet';
 import { TaskBadges } from '@/components/task/TaskBadges';
+import { TaskCardBottom } from '@/components/task/TaskCard/TaskCardBottom';
+import { TaskCardBudgetModal } from '@/components/task/TaskCard/TaskCardBudgetModal';
+import { TaskCardCancelBottomSheet } from '@/components/task/TaskCard/TaskCardCancelBottomSheet';
+import { TaskCardSubmissionBottomSheet } from '@/components/task/TaskCard/TaskCardSubmissionBottomSheet';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { StatusType, TaskType } from '@/types/task';
 

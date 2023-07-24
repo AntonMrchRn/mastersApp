@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import { BottomSheet, Button, Spacer, useToast } from 'rn-ui-kit';
 
-import SelectableModalItem from '@/components/TabScreens/ProfileScreen/ActivityTab/Modals/SelectableModalItem';
-import useModal from '@/components/TabScreens/ProfileScreen/ActivityTab/Modals/useModal';
+import SelectableModalItem from '@/components/tabs/ProfileScreen/ActivityTab/Modals/SelectableModalItem';
+import useModal from '@/components/tabs/ProfileScreen/ActivityTab/Modals/useModal';
 import { useEditUserMutation } from '@/store/api/user';
 import { Activity } from '@/store/api/user/types';
 import { AxiosQueryErrorResponse } from '@/types/error';

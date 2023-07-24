@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import { BottomSheet, Spacer } from 'rn-ui-kit';
 
-import DataEditingStep from '@/components/TabScreens/ProfileScreen/PaymentTab/EntityTypeModal/DataEditingStep';
-import TypeSelectionStep from '@/components/TabScreens/ProfileScreen/PaymentTab/EntityTypeModal/TypeSelectionStep';
+import DataEditingStep from '@/components/tabs/ProfileScreen/PaymentTab/EntityTypeModal/DataEditingStep';
+import TypeSelectionStep from '@/components/tabs/ProfileScreen/PaymentTab/EntityTypeModal/TypeSelectionStep';
 import { configApp } from '@/constants/platform';
 import { useKeyboard } from '@/hooks/useKeyboard';
 import { EntityType, User } from '@/store/api/user/types';

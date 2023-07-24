@@ -12,10 +12,10 @@ import {
   useTheme,
 } from 'rn-ui-kit';
 
-import AccountTab from '@/components/TabScreens/ProfileScreen/AccountTab';
-import ActivityTab from '@/components/TabScreens/ProfileScreen/ActivityTab';
-import CommonTab from '@/components/TabScreens/ProfileScreen/CommonTab';
-import PaymentTab from '@/components/TabScreens/ProfileScreen/PaymentTab';
+import AccountTab from '@/components/tabs/ProfileScreen/AccountTab';
+import ActivityTab from '@/components/tabs/ProfileScreen/ActivityTab';
+import CommonTab from '@/components/tabs/ProfileScreen/CommonTab';
+import PaymentTab from '@/components/tabs/ProfileScreen/PaymentTab';
 import useProfile from '@/screens/tabs/ProfileScreen/useProfile';
 import { ProfileTab } from '@/types/tab';
 

@@ -13,8 +13,8 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { TabControl, Text, useTheme } from 'rn-ui-kit';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
 
-import CardTasks from '@/components/TabScreens/TaskSearch/Card';
-import PreviewNotFound from '@/components/TabScreens/TaskSearch/PreviewNotFound';
+import CardTasks from '@/components/tabs/TaskSearch/Card';
+import PreviewNotFound from '@/components/tabs/TaskSearch/PreviewNotFound';
 import { configApp } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
