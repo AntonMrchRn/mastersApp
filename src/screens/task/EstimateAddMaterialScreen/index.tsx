@@ -9,16 +9,20 @@ import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 import ControlledInput from '@/components/inputs/ControlledInput';
 import { MeasureItem } from '@/components/task/MeasureItem';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
-import { useAppSelector } from '@/store';
+import { useAppDispatch, useAppSelector } from '@/store';
 import {
   useGetTaskQuery,
   usePatchTaskServiceMutation,
   usePostMaterialMutation,
 } from '@/store/api/tasks';
+import { Material, Service } from '@/store/api/tasks/types';
 import { selectAuth } from '@/store/slices/auth/selectors';
+import { setNewOfferServices } from '@/store/slices/tasks/actions';
+import { selectTasks } from '@/store/slices/tasks/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import { Measure } from '@/types/task';
 import { estimateAddMaterialValidationSchema } from '@/utils/formValidation';
+import { getRandomUniqNumber } from '@/utils/getRandomUniqNumber';
 
 import { styles } from './styles';
 
@@ -33,11 +37,12 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
 }) => {
   const theme = useTheme();
   const toast = useToast();
+  const dispatch = useAppDispatch();
 
-  const serviceId = route.params.serviceId;
-  const taskId = route.params.taskId;
+  const { serviceId, taskId, fromEstimateSubmission } = route.params;
 
   const userRole = useAppSelector(selectAuth).user?.roleID;
+  const { offerServices } = useAppSelector(selectTasks);
 
   const getTask = useGetTaskQuery(taskId.toString());
 
@@ -55,7 +60,9 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
   }, [mutationMaterial.error]);
 
   const task = getTask?.data && getTask?.data?.tasks && getTask?.data?.tasks[0];
-  const services = task?.services || [];
+  const services = fromEstimateSubmission
+    ? offerServices
+    : task?.services || [];
   const service = services.find(serv => serv.ID === serviceId);
   const materials = service?.materials || [];
   const materialsNames = materials.reduce<string[]>(
@@ -83,7 +90,6 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
   const measure = watch('measure');
 
   const hasName = materialsNames.includes(name);
-
   const onSubmit = async ({
     name,
     count,
@@ -101,6 +107,31 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
         title: 'Не удалось определить роль пользователя',
         contentHeight: 120,
       });
+    }
+    if (fromEstimateSubmission) {
+      const ids = materials.reduce<number[]>((acc, val) => {
+        if (val?.ID) {
+          return acc.concat(val.ID);
+        }
+        return acc;
+      }, []);
+      const newMaterial: Material = {
+        ID: getRandomUniqNumber(ids),
+        count: +count,
+        measure: measures.find(m => m.text === measure)?.text || '',
+        name,
+        price: +price,
+        roleID: userRole,
+      };
+      const newMaterials = materials.concat(newMaterial);
+      const newServices = offerServices.reduce<Service[]>((acc, val) => {
+        if (val.ID === serviceId) {
+          return acc.concat({ ...val, materials: newMaterials });
+        }
+        return acc.concat(val);
+      }, []);
+      dispatch(setNewOfferServices(newServices));
+      navigation.navigate(AppScreenName.EstimateSubmission, { taskId });
     } else {
       try {
         await patchTaskService({
@@ -125,10 +156,10 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
           contentHeight: 120,
         });
       }
-    }
-    getTask.refetch();
-    if (navigation.canGoBack()) {
-      navigation.goBack();
+      getTask.refetch();
+      if (navigation.canGoBack()) {
+        navigation.goBack();
+      }
     }
   };
   const measures: Measure[] = [

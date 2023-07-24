@@ -21,6 +21,9 @@ const tasks = createSlice({
     deleteProgress: (state, { payload }) => {
       delete state.progresses[payload];
     },
+    setNewOfferServices: (state, { payload }) => {
+      state.offerServices = payload;
+    },
   },
   extraReducers: builder => {
     builder.addCase(getTaskServices.pending, state => {

@@ -86,7 +86,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   };
   const pressMaterial = () => {
     onVisible();
-    navigation.navigate(AppScreenName.NewMaterial);
+    navigation.navigate(AppScreenName.NewMaterial, { taskId });
   };
 
   const resolver: Resolver<{
@@ -153,12 +153,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
       />
       <SafeAreaView style={styles.container} edges={['bottom']}>
         <FormProvider {...methods}>
-          <ScrollView
-            style={styles.ph20}
-            refreshControl={
-              <RefreshControl refreshing={loading} onRefresh={getTasks} />
-            }
-          >
+          <ScrollView style={styles.ph20}>
             <Text
               variant="title3"
               color={theme.text.basic}

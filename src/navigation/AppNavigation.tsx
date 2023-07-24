@@ -64,13 +64,20 @@ export type AppStackParamList = {
     serviceId: number;
     materialName?: string;
   };
-  [AppScreenName.EstimateAddMaterial]: { serviceId: number; taskId: number };
-  [AppScreenName.EstimateAddService]: { taskId: number; service: Service };
+  [AppScreenName.EstimateAddMaterial]: {
+    serviceId: number;
+    taskId: number;
+    fromEstimateSubmission?: boolean;
+  };
+  [AppScreenName.EstimateAddService]: {
+    taskId: number;
+    service: Service;
+  };
   [AppScreenName.CompetitorEstimates]: { taskId: number };
   [AppScreenName.TradingResults]: { taskId: number };
   [AppScreenName.WebView]: { uri: string };
   [AppScreenName.EstimateSubmission]: { taskId: number };
-  [AppScreenName.NewMaterial]: undefined;
+  [AppScreenName.NewMaterial]: { taskId: number };
 };
 const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<AppStackParamList>();
