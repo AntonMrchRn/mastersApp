@@ -1,24 +1,26 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { FieldValues, FormProvider, Resolver, useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
-  RefreshControl,
   ScrollView,
   TouchableOpacity,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
 import { PlusIcon } from '@/assets/icons/svg/estimate/PlusIcon';
 import ControlledInput from '@/components/inputs/ControlledInput';
 import { EstimateTotal } from '@/components/task/EstimateTotal';
+import { AddServiceBottomSheet } from '@/components/task/TaskCard/AddServiceBottomSheet';
 import { TaskCardAddEstimateBottomSheet } from '@/components/task/TaskCard/TaskCardAddEstimateBottomSheet';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { Material } from '@/store/api/tasks/types';
+import { Material, Service } from '@/store/api/tasks/types';
 import { getTaskServices } from '@/store/slices/tasks/asyncActions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
 
@@ -37,17 +39,34 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   const theme = useTheme();
   const toast = useToast();
   const dispatch = useAppDispatch();
+  const isFocused = useIsFocused();
+
+  const bsRef = useRef<BottomSheetModal>(null);
 
   const [estimateModalVisible, setEstimateModalVisible] = useState(false);
 
   const onEstimateModalVisible = () => {
     setEstimateModalVisible(!estimateModalVisible);
   };
+  const addServiceBottomSheetClose = () => {
+    bsRef.current?.close();
+  };
+  const addService = (service: Service) => {
+    navigation.navigate(AppScreenName.EstimateAddService, {
+      service,
+      taskId,
+    });
+    bsRef.current?.close();
+  };
 
   const { offerServices, error, loading } = useAppSelector(selectTasks);
 
   const { taskId } = route.params;
   const services = offerServices || [];
+  const serviceIDs = services?.reduce<number[]>(
+    (acc, val) => acc.concat(val.ID),
+    []
+  );
   const allSum = services.reduce((acc, val) => {
     if (val.sum) {
       return acc + val.sum;
@@ -148,6 +167,14 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   }
   return (
     <>
+      {isFocused && (
+        <AddServiceBottomSheet
+          ref={bsRef}
+          onCancel={addServiceBottomSheetClose}
+          addService={addService}
+          serviceIDs={serviceIDs}
+        />
+      )}
       <TaskCardAddEstimateBottomSheet
         isVisible={estimateModalVisible}
         onCancel={onEstimateModalVisible}
