@@ -18,6 +18,7 @@ type ItemProps = {
   name: string;
   canDelete?: boolean;
   error: string;
+  onDelete: () => void;
 };
 export const Item: FC<ItemProps> = ({
   title,
@@ -27,12 +28,22 @@ export const Item: FC<ItemProps> = ({
   canDelete,
   name,
   error,
+  onDelete,
 }) => {
   const theme = useTheme();
   return (
     <View>
       {canDelete && (
-        <TouchableOpacity style={styles.trash}>
+        <TouchableOpacity
+          style={styles.trash}
+          onPress={onDelete}
+          hitSlop={{
+            bottom: 20,
+            left: 20,
+            right: 20,
+            top: 20,
+          }}
+        >
           <TrashIcon />
         </TouchableOpacity>
       )}
