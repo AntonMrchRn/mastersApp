@@ -25,11 +25,13 @@ const tasks = createSlice({
   extraReducers: builder => {
     builder.addCase(getTaskServices.pending, state => {
       state.loading = true;
+      state.error = undefined;
     });
     builder.addCase(getTaskServices.fulfilled, (state, { payload }) => {
       state.offerServices = payload.services;
       state.currentTaskID = payload.taskId;
       state.loading = false;
+      state.error = undefined;
     });
     builder.addCase(getTaskServices.rejected, (state, { payload }) => {
       state.error = payload as Error;

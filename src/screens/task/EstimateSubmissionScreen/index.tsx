@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { FieldValues, FormProvider, Resolver, useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
+  RefreshControl,
   ScrollView,
   TouchableOpacity,
   View,
@@ -61,8 +62,12 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     return acc;
   }, 0);
 
-  useEffect(() => {
+  const getTasks = () => {
     dispatch(getTaskServices({ taskId }));
+  };
+
+  useEffect(() => {
+    getTasks();
   }, []);
   useEffect(() => {
     if (error) {
@@ -114,7 +119,6 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     handleSubmit,
     formState: { errors, isValid },
   } = methods;
-  console.log('🚀 ~ file: index.tsx:89 ~ errors:', errors);
 
   const onSubmit = (fieldValues: FieldValues) => {
     console.log(
@@ -149,7 +153,12 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
       />
       <SafeAreaView style={styles.container} edges={['bottom']}>
         <FormProvider {...methods}>
-          <ScrollView style={styles.ph20}>
+          <ScrollView
+            style={styles.ph20}
+            refreshControl={
+              <RefreshControl refreshing={loading} onRefresh={getTasks} />
+            }
+          >
             <Text
               variant="title3"
               color={theme.text.basic}
