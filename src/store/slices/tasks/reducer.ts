@@ -24,6 +24,9 @@ const tasks = createSlice({
     setNewOfferServices: (state, { payload }) => {
       state.offerServices = payload;
     },
+    addOfferService: (state, { payload }) => {
+      state.offerServices = state.offerServices.concat(payload);
+    },
   },
   extraReducers: builder => {
     builder.addCase(getTaskServices.pending, state => {

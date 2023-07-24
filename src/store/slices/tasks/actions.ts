@@ -1,4 +1,8 @@
 import tasks from './reducer';
 
-export const { setProgresses, deleteProgress, setNewOfferServices } =
-  tasks.actions;
+export const {
+  setProgresses,
+  deleteProgress,
+  setNewOfferServices,
+  addOfferService,
+} = tasks.actions;

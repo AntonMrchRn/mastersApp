@@ -55,6 +55,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     navigation.navigate(AppScreenName.EstimateAddService, {
       service,
       taskId,
+      fromEstimateSubmission: true,
     });
     bsRef.current?.close();
   };
@@ -110,7 +111,9 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   };
   const pressService = () => {
     onEstimateModalVisible();
-    navigation.navigate(AppScreenName.NewMaterial, { taskId });
+    setTimeout(() => {
+      bsRef.current?.present();
+    }, 500);
   };
 
   const resolver: Resolver<{
