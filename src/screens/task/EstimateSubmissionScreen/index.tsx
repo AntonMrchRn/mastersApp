@@ -38,6 +38,12 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   const toast = useToast();
   const dispatch = useAppDispatch();
 
+  const [estimateModalVisible, setEstimateModalVisible] = useState(false);
+
+  const onEstimateModalVisible = () => {
+    setEstimateModalVisible(!estimateModalVisible);
+  };
+
   const { offerServices, error, loading } = useAppSelector(selectTasks);
 
   const { taskId } = route.params;
@@ -79,13 +85,12 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     }
   }, [error]);
 
-  const [visible, setVisible] = useState(false);
-
-  const onVisible = () => {
-    setVisible(!visible);
-  };
   const pressMaterial = () => {
-    onVisible();
+    onEstimateModalVisible();
+    navigation.navigate(AppScreenName.NewMaterial, { taskId });
+  };
+  const pressService = () => {
+    onEstimateModalVisible();
     navigation.navigate(AppScreenName.NewMaterial, { taskId });
   };
 
@@ -144,12 +149,10 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   return (
     <>
       <TaskCardAddEstimateBottomSheet
-        isVisible={visible}
-        onCancel={onVisible}
+        isVisible={estimateModalVisible}
+        onCancel={onEstimateModalVisible}
         pressMaterial={pressMaterial}
-        pressService={function (): void {
-          throw new Error('Function not implemented.');
-        }}
+        pressService={pressService}
       />
       <SafeAreaView style={styles.container} edges={['bottom']}>
         <FormProvider {...methods}>
@@ -189,7 +192,10 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
             })}
             <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
             <Spacer size={20} />
-            <TouchableOpacity style={styles.add} onPress={onVisible}>
+            <TouchableOpacity
+              style={styles.add}
+              onPress={onEstimateModalVisible}
+            >
               <PlusIcon fill={theme.icons.basic} />
               <Text variant="bodySBold" color={theme.text.basic}>
                 Добавить услугу или материал
