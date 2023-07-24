@@ -36,10 +36,6 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
   const { offerServices } = useAppSelector(selectTasks);
 
   const { taskId, service, fromEstimateSubmission } = route.params;
-  console.log(
-    '🚀 ~ file: index.tsx:39 ~ fromEstimateSubmission:',
-    fromEstimateSubmission
-  );
 
   const ids = offerServices.reduce<number[]>((acc, val) => {
     if (val?.ID) {
@@ -47,6 +43,7 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
     }
     return acc;
   }, []);
+  const ID = service?.ID || getRandomUniqNumber(ids);
 
   const getTask = useGetTaskQuery(taskId.toString());
 
@@ -95,6 +92,7 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
       dispatch(
         addOfferService({
           ...service,
+          ID,
           count: +count,
           sum: +count * service.price,
           roleID: userRole,

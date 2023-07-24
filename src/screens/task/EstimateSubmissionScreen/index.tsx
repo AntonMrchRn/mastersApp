@@ -15,12 +15,14 @@ import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
 import { PlusIcon } from '@/assets/icons/svg/estimate/PlusIcon';
 import ControlledInput from '@/components/inputs/ControlledInput';
+import { DeleteEstimateModal } from '@/components/task/DeleteEstimateModal';
 import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { AddServiceBottomSheet } from '@/components/task/TaskCard/AddServiceBottomSheet';
 import { TaskCardAddEstimateBottomSheet } from '@/components/task/TaskCard/TaskCardAddEstimateBottomSheet';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { Material, Service } from '@/store/api/tasks/types';
+import { setNewOfferServices } from '@/store/slices/tasks/actions';
 import { getTaskServices } from '@/store/slices/tasks/asyncActions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
 
@@ -43,10 +45,20 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
 
   const bsRef = useRef<BottomSheetModal>(null);
 
+  const [serviceForDelete, setServiceForDelete] = useState<Service>();
   const [estimateModalVisible, setEstimateModalVisible] = useState(false);
+  const [deleteEstimateModalVisible, setDeleteEstimateModalVisible] =
+    useState(false);
 
   const onEstimateModalVisible = () => {
     setEstimateModalVisible(!estimateModalVisible);
+  };
+  const onDeleteEstimateModalVisible = () => {
+    setDeleteEstimateModalVisible(!deleteEstimateModalVisible);
+  };
+  const onCancelDeleteService = () => {
+    setServiceForDelete(undefined);
+    setDeleteEstimateModalVisible(!deleteEstimateModalVisible);
   };
   const addServiceBottomSheetClose = () => {
     bsRef.current?.close();
@@ -63,6 +75,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   const { offerServices, error, loading } = useAppSelector(selectTasks);
 
   const { taskId } = route.params;
+
   const services = offerServices || [];
   const serviceIDs = services?.reduce<number[]>(
     (acc, val) => acc.concat(val.ID),
@@ -153,7 +166,21 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
       fieldValues
     );
   };
-
+  const onDeleteService = () => {
+    const newServices = services.filter(ser => ser !== serviceForDelete);
+    dispatch(setNewOfferServices(newServices));
+    onDeleteEstimateModalVisible();
+  };
+  const onDeleteMaterial = (service: Service, material: Material) => {
+    const newMaterials = service?.materials?.filter(m => m !== material) || [];
+    const newServices = services.reduce<Service[]>((acc, val) => {
+      if (val === service) {
+        return acc.concat({ ...service, materials: newMaterials });
+      }
+      return acc.concat(val);
+    }, []);
+    dispatch(setNewOfferServices(newServices));
+  };
   if (loading) {
     return (
       <View
@@ -170,6 +197,11 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   }
   return (
     <>
+      <DeleteEstimateModal
+        isVisible={deleteEstimateModalVisible}
+        onCancel={onCancelDeleteService}
+        onDelete={onDeleteService}
+      />
       {isFocused && (
         <AddServiceBottomSheet
           ref={bsRef}
@@ -195,6 +227,10 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
               Ваше ценовое предложение
             </Text>
             {services.map(service => {
+              const onDelete = () => {
+                setServiceForDelete(service);
+                onDeleteEstimateModalVisible();
+              };
               return (
                 <View key={service.name}>
                   <Item
@@ -205,11 +241,16 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                     sum={service.sum || 0}
                     error={errors?.[service.ID]?.message as string}
                     canDelete={service.canDelete}
+                    onDelete={onDelete}
                   />
                   {service.materials?.map(material => {
+                    const onDelete = () => {
+                      onDeleteMaterial(service, material);
+                    };
                     return (
                       <Item
                         key={material.name}
+                        onDelete={onDelete}
                         error={errors?.[material.ID]?.message as string}
                         name={material.ID.toString()}
                         title={material.name}
