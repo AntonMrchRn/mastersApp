@@ -51,6 +51,7 @@ export const styles = StyleSheet.create({
   },
   itemInfo: {
     flexShrink: 1,
+    marginLeft: 8,
   },
   description: {
     marginTop: 12,

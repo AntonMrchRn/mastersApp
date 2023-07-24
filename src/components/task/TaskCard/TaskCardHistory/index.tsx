@@ -50,7 +50,7 @@ export const TaskCardHisory: FC<TaskCardHistoryProps> = ({ taskId }) => {
           <View style={styles.wrapperLoading}>
             <ActivityIndicator size={'large'} color={theme.background.accent} />
           </View>
-        ) : history?.data?.taskComment !== undefined ? (
+        ) : history?.taskComment ? (
           <ContentHistory history={history} />
         ) : (
           NotFoundHistory()

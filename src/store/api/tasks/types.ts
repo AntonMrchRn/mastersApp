@@ -163,9 +163,7 @@ type GetTaskHistoryResponse = {
   isError: boolean;
   currentData: Task[];
   work: number;
-  data?: {
-    taskComment: Task[];
-  };
+  taskComment: Task[];
 };
 type Status = {
   ID: number;
