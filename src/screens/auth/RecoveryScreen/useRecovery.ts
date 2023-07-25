@@ -10,7 +10,7 @@ import { configApp } from '@/constants/platform';
 import { AppScreenName } from '@/navigation/AppNavigation';
 import useRecoveryForm from '@/screens/auth/RecoveryScreen/useRecoveryForm';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { useSendPasswordRecoveryCodeMutation } from '@/store/api/auth';
+import { useChangePasswordMutation } from '@/store/api/auth';
 import {
   setAuthEmailTimeout,
   setAuthPhoneTimeout,
@@ -45,7 +45,7 @@ const useRecovery = () => {
   const [
     sendRecoveryCode,
     { data: timeout, isLoading, isSuccess, isError, error: recoveryError },
-  ] = useSendPasswordRecoveryCodeMutation();
+  ] = useChangePasswordMutation();
 
   const [activeTab, setActiveTab] = useState<AuthTab>(AuthTab.Phone);
   const isPhoneAuth = activeTab === AuthTab.Phone;
@@ -106,10 +106,10 @@ const useRecovery = () => {
 
   const sendCode = async (values: RecoveryFormValues) => {
     await sendRecoveryCode({
-      phoneNumber: '7' + (values as PhoneValue).phone,
-      email: (values as EmailValue).email,
+      ...(isPhoneAuth
+        ? { phone: Number('7' + (values as PhoneValue).phone) }
+        : { email: (values as EmailValue).email }),
       password,
-      isPhoneAuth,
     });
   };
 

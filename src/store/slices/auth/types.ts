@@ -16,17 +16,32 @@ type UserAuthParams = {
   password: string;
 };
 
-type RecoveryCodeParams = {
-  phoneNumber: string;
-  email: string;
-  password: string;
-  isPhoneAuth: boolean;
-};
+type RecoveryCodeParams =
+  | (
+      | {
+          phone: number;
+        }
+      | {
+          email: string;
+        }
+    ) & {
+      password: string;
+    };
 
 type PasswordRecoveryParams = {
   code: string;
   password: string;
 };
+
+type PasswordEditingParams = {
+  password: string;
+  newPassword: string;
+};
+
+type ChangePasswordParams =
+  | RecoveryCodeParams
+  | PasswordRecoveryParams
+  | PasswordEditingParams;
 
 type UserAuthResponse = {
   auth: boolean;
@@ -45,12 +60,12 @@ type PasswordRecoveryResponse = {
   data: null;
 };
 
+type ChangePasswordResponse = RecoveryCodeResponse | PasswordRecoveryResponse;
+
 export type {
   InitialState,
   UserAuthParams,
-  RecoveryCodeParams,
-  PasswordRecoveryParams,
+  ChangePasswordParams,
   UserAuthResponse,
-  RecoveryCodeResponse,
-  PasswordRecoveryResponse,
+  ChangePasswordResponse,
 };

@@ -37,7 +37,6 @@ const useProfile = () => {
 
   const { user: authUser } = useAppSelector(selectAuth);
   const { isApprovalNotificationShown } = useAppSelector(selectUser);
-
   const {
     data: user,
     isLoading,
@@ -46,6 +45,11 @@ const useProfile = () => {
   } = useGetUserQuery(authUser?.userID, {
     skip: !authUser?.userID,
   });
+
+  const [activeTab, setActiveTab] = useState<Tab>(initialTab);
+  const [isBlockingModalVisible, setIsBlockingModalVisible] =
+    useState<boolean>(false);
+  const [isBannerVisible, setIsBannerVisible] = useState<boolean>(false);
 
   useEffect(() => {
     if (isError) {
@@ -57,32 +61,30 @@ const useProfile = () => {
     }
   }, [isError]);
 
-  const [activeTab, setActiveTab] = useState<Tab>(initialTab);
-  const [isBlockingModalVisible, setIsBlockingModalVisible] =
-    useState<boolean>(false);
+  useEffect(() => {
+    if (isApprovalNotificationVisible) {
+      dispatch(setIsApprovalNotificationShown(true));
+    }
+
+    setIsBannerVisible(false);
+  }, [isFocused, activeTab.id]);
+
+  const warning = getWarning(user);
   const isApprovalNotificationVisible =
     !isApprovalNotificationShown && !!user?.isApproved;
-  const isContractorsVisible =
+  const isTeamVisible =
     authUser?.roleDescription !== UserRole.internalExecutor &&
     authUser?.roleDescription !== UserRole.coordinator;
-
   const tabs = [
     { id: 0, label: ProfileTab.Common },
-    ...(isContractorsVisible ? [{ id: 1, label: ProfileTab.Payment }] : []),
+    ...(isTeamVisible ? [{ id: 1, label: ProfileTab.Payment }] : []),
     { id: 2, label: ProfileTab.Activity },
     { id: 3, label: ProfileTab.Account },
   ];
 
   const onBlockingModal = () =>
     setIsBlockingModalVisible(!isBlockingModalVisible);
-
-  useEffect(() => {
-    if (isApprovalNotificationVisible) {
-      dispatch(setIsApprovalNotificationShown(true));
-    }
-  }, [isFocused, activeTab.id]);
-
-  const warning = getWarning(user);
+  const onBanner = () => setIsBannerVisible(!isBannerVisible);
 
   const switchTab = ({ id, label }: TabItem) => {
     setActiveTab({ id, label: label as ProfileTab });
@@ -96,7 +98,6 @@ const useProfile = () => {
 
   const copyEmail = () => {
     Clipboard.setString('info@mastera-service.ru');
-    onBlockingModal();
     toast.show({
       type: 'success',
       titleStyle: styles.toastTitle,
@@ -105,20 +106,32 @@ const useProfile = () => {
     });
   };
 
+  const onCopyEmail = () => {
+    onBlockingModal();
+    copyEmail();
+  };
+
   return {
     user,
     tabs,
     warning,
+    onBanner,
     activeTab,
     switchTab,
     isLoading,
     copyEmail,
+    onCopyEmail,
     scrollToEnd,
+    isTeamVisible,
     scrollViewRef,
     onBlockingModal,
-    isContractorsVisible,
     isBlockingModalVisible,
     isApprovalNotificationVisible,
+    hasActiveTasks: !!user?.hasActiveTasks,
+    isBannerVisible:
+      isBannerVisible &&
+      (authUser?.roleDescription === UserRole.internalExecutor ||
+        authUser?.roleDescription === UserRole.externalExecutor),
   };
 };
 

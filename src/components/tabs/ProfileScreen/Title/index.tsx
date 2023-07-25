@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { View } from 'react-native';
+import { TextStyle, View } from 'react-native';
 
 import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
@@ -12,6 +12,7 @@ type TitleProps = {
   withButton?: boolean;
   buttonLabel?: string;
   onPress?: () => void;
+  titleStyle?: TextStyle;
   icon?: ReactElement | boolean;
 };
 
@@ -20,6 +21,7 @@ const Title = ({
   icon,
   onPress,
   buttonLabel,
+  titleStyle,
   withButton = false,
 }: TitleProps) => {
   const theme = useTheme();
@@ -28,9 +30,7 @@ const Title = ({
     <View style={styles.container}>
       <Text
         variant="title3"
-        style={{
-          fontSize: scaleFontSize(20),
-        }}
+        style={[{ fontSize: scaleFontSize(20) }, titleStyle]}
       >
         {title}
       </Text>
