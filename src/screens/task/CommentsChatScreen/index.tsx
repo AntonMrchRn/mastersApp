@@ -103,12 +103,17 @@ export const CommentsChatScreen: FC<EstimateAddMaterialScreenProps> = ({
             contentContainerStyle={styles.wrapperChat}
             data={comments?.taskComment}
           />
-        ) : !loadingComments ? (
+        ) : !loadingComments || comments?.taskComment ? (
           <PreviewNotFound type={4} />
         ) : (
-          <View style={styles.wrapperLoader}>
-            <ActivityIndicator color={theme.background.accent} size={'large'} />
-          </View>
+          !comments?.taskComment && (
+            <View style={styles.wrapperLoader}>
+              <ActivityIndicator
+                color={theme.background.accent}
+                size={'large'}
+              />
+            </View>
+          )
         )}
       </Animated.View>
       <Animated.View
