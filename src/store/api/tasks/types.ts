@@ -9,6 +9,7 @@ type Material = {
   price: number;
   roleID: RoleType;
   canDelete?: boolean;
+  localPrice?: string;
 };
 type Service = {
   ID: number;
@@ -19,6 +20,7 @@ type Service = {
   measureID: number;
   name: string;
   price: number;
+  localPrice?: string;
   roleID: RoleType;
   setID: number;
   sum?: number;

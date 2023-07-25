@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { Material, Service } from '@/store/api/tasks/types';
+
 import { getTaskServices } from './asyncActions';
 import { InitialState } from './types';
 
@@ -26,6 +28,40 @@ const tasks = createSlice({
     },
     addOfferService: (state, { payload }) => {
       state.offerServices = state.offerServices.concat(payload);
+    },
+    addServiceLocalPrice: (state, { payload }) => {
+      state.offerServices = state.offerServices.reduce<Service[]>(
+        (acc, val) => {
+          if (val.ID === payload.serviceID) {
+            return acc.concat({ ...val, localPrice: payload.localPrice });
+          }
+          return acc.concat(val);
+        },
+        []
+      );
+    },
+    addMaterialLocalPrice: (state, { payload }) => {
+      state.offerServices = state.offerServices.reduce<Service[]>(
+        (acc, val) => {
+          if (val.ID === payload.serviceID) {
+            const newMaterials = val.materials?.reduce<Material[]>(
+              (matAcc, matVal) => {
+                if (matVal.ID === payload.materialID) {
+                  return matAcc.concat({
+                    ...matVal,
+                    localPrice: payload.localPrice,
+                  });
+                }
+                return matAcc.concat(matVal);
+              },
+              []
+            );
+            return acc.concat({ ...val, materials: newMaterials });
+          }
+          return acc.concat(val);
+        },
+        []
+      );
     },
   },
   extraReducers: builder => {

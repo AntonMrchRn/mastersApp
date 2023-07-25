@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { FieldValues, FormProvider, Resolver, useForm } from 'react-hook-form';
+import { FieldValues, Resolver, useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
   ScrollView,
@@ -11,10 +11,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
+import { Button, Input, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
 import { PlusIcon } from '@/assets/icons/svg/estimate/PlusIcon';
-import ControlledInput from '@/components/inputs/ControlledInput';
 import { DeleteEstimateModal } from '@/components/task/DeleteEstimateModal';
 import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { AddServiceBottomSheet } from '@/components/task/TaskCard/AddServiceBottomSheet';
@@ -22,7 +21,11 @@ import { TaskCardAddEstimateBottomSheet } from '@/components/task/TaskCard/TaskC
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { Material, Service } from '@/store/api/tasks/types';
-import { setNewOfferServices } from '@/store/slices/tasks/actions';
+import {
+  addMaterialLocalPrice,
+  addServiceLocalPrice,
+  setNewOfferServices,
+} from '@/store/slices/tasks/actions';
 import { getTaskServices } from '@/store/slices/tasks/asyncActions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
 
@@ -46,6 +49,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   const bsRef = useRef<BottomSheetModal>(null);
 
   const [serviceForDelete, setServiceForDelete] = useState<Service>();
+  const [comment, setComment] = useState('');
   const [estimateModalVisible, setEstimateModalVisible] = useState(false);
   const [deleteEstimateModalVisible, setDeleteEstimateModalVisible] =
     useState(false);
@@ -82,8 +86,9 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     []
   );
   const allSum = services.reduce((acc, val) => {
-    if (val.sum) {
-      return acc + val.sum;
+    if (val.localPrice && val.count) {
+      const sum = +val.localPrice * val.count;
+      return acc + sum;
     }
     return acc;
   }, 0);
@@ -94,8 +99,8 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     return acc;
   }, []);
   const materialsSum = materials.reduce((acc, val) => {
-    if (val.price && val.count) {
-      const sum = val.price * val.count;
+    if (val.localPrice && val.count) {
+      const sum = +val.localPrice * val.count;
       return acc + sum;
     }
     return acc;
@@ -157,7 +162,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
 
   const {
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
   } = methods;
 
   const onSubmit = (fieldValues: FieldValues) => {
@@ -217,82 +222,93 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
         pressService={pressService}
       />
       <SafeAreaView style={styles.container} edges={['bottom']}>
-        <FormProvider {...methods}>
-          <ScrollView style={styles.ph20}>
-            <Text
-              variant="title3"
-              color={theme.text.basic}
-              style={styles.title}
-            >
-              Ваше ценовое предложение
-            </Text>
-            {services.map(service => {
-              const onDelete = () => {
-                setServiceForDelete(service);
-                onDeleteEstimateModalVisible();
-              };
-              return (
-                <View key={service.name}>
-                  <Item
-                    name={service.ID.toString()}
-                    title={service.name}
-                    description={service.description}
-                    count={service?.count || 0}
-                    sum={service.sum || 0}
-                    error={errors?.[service.ID]?.message as string}
-                    canDelete={service.canDelete}
-                    onDelete={onDelete}
-                  />
-                  {service.materials?.map(material => {
-                    const onDelete = () => {
-                      onDeleteMaterial(service, material);
-                    };
-                    return (
-                      <Item
-                        key={material.name}
-                        onDelete={onDelete}
-                        error={errors?.[material.ID]?.message as string}
-                        name={material.ID.toString()}
-                        title={material.name}
-                        count={material.count}
-                        sum={material.count * material.price}
-                        canDelete={material.canDelete}
-                      />
-                    );
-                  })}
-                </View>
+        <ScrollView style={styles.ph20}>
+          <Text variant="title3" color={theme.text.basic} style={styles.title}>
+            Ваше ценовое предложение
+          </Text>
+          {services.map(service => {
+            const onDelete = () => {
+              setServiceForDelete(service);
+              onDeleteEstimateModalVisible();
+            };
+            const onChangeText = (text: string) => {
+              dispatch(
+                addServiceLocalPrice({
+                  serviceID: service.ID,
+                  localPrice: text,
+                })
               );
-            })}
-            <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
-            <Spacer size={20} />
-            <TouchableOpacity
-              style={styles.add}
-              onPress={onEstimateModalVisible}
-            >
-              <PlusIcon fill={theme.icons.basic} />
-              <Text variant="bodySBold" color={theme.text.basic}>
-                Добавить услугу или материал
-              </Text>
-            </TouchableOpacity>
-            <Spacer size={16} />
-            <ControlledInput
-              name={'comment'}
-              variant={'textarea'}
-              label={'Комментарии к ценовому предложению'}
-            />
-            <Spacer size={40} />
-          </ScrollView>
-          <View style={styles.ph20}>
-            <Button
-              label="Подать смету"
-              // disabled={!isValid}
-              onPress={() =>
-                navigation.navigate(AppScreenName.EstimateSubmissionSuccess)
-              }
-              // onPress={handleSubmit(onSubmit)}
-            />
-          </View>
-        </FormProvider>
+            };
+            return (
+              <View key={service.name}>
+                <Item
+                  onChangeText={onChangeText}
+                  title={service.name}
+                  description={service.description}
+                  count={service?.count || 0}
+                  sum={service.sum || 0}
+                  value={service?.localPrice}
+                  error={errors?.[service.ID]?.message as string}
+                  canDelete={service.canDelete}
+                  onDelete={onDelete}
+                />
+                {service.materials?.map(material => {
+                  const onDelete = () => {
+                    onDeleteMaterial(service, material);
+                  };
+                  const onChangeText = (text: string) => {
+                    dispatch(
+                      addMaterialLocalPrice({
+                        serviceID: service.ID,
+                        materialID: material.ID,
+                        localPrice: text,
+                      })
+                    );
+                  };
+                  return (
+                    <Item
+                      onChangeText={onChangeText}
+                      value={material?.localPrice}
+                      key={material.name}
+                      onDelete={onDelete}
+                      error={errors?.[material.ID]?.message as string}
+                      title={material.name}
+                      count={material.count}
+                      sum={material.count * material.price}
+                      canDelete={material.canDelete}
+                    />
+                  );
+                })}
+              </View>
+            );
+          })}
+          <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
+          <Spacer size={20} />
+          <TouchableOpacity style={styles.add} onPress={onEstimateModalVisible}>
+            <PlusIcon fill={theme.icons.basic} />
+            <Text variant="bodySBold" color={theme.text.basic}>
+              Добавить услугу или материал
+            </Text>
+          </TouchableOpacity>
+          <Spacer size={16} />
+          <Input
+            variant={'textarea'}
+            label={'Комментарии к ценовому предложению'}
+            value={comment}
+            onChangeText={setComment}
+          />
+          <Spacer size={40} />
+        </ScrollView>
+        <View style={styles.ph20}>
+          <Button
+            label="Подать смету"
+            // disabled={!isValid}
+            onPress={() =>
+              navigation.navigate(AppScreenName.EstimateSubmissionSuccess)
+            }
+            // onPress={handleSubmit(onSubmit)}
+          />
+        </View>
       </SafeAreaView>
     </>
   );
