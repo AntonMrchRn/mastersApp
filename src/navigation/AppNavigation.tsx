@@ -19,6 +19,7 @@ import { EstimateAddMaterialScreen } from '@/screens/task/EstimateAddMaterialScr
 import { EstimateAddServiceScreen } from '@/screens/task/EstimateAddServiceScreen';
 import { EstimateEditScreen } from '@/screens/task/EstimateEditScreen';
 import { EstimateSubmissionScreen } from '@/screens/task/EstimateSubmissionScreen';
+import { EstimateSubmissionSuccessScreen } from '@/screens/task/EstimateSubmissionSuccessScreen';
 import { NewMaterialScreen } from '@/screens/task/NewMaterialScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { TradingResultsScreen } from '@/screens/task/TradingResultsScreen';
@@ -44,6 +45,7 @@ export enum AppScreenName {
   EstimateSubmission = 'EstimateSubmission',
   TradingResults = 'TradingResults',
   NewMaterial = 'NewMaterial',
+  EstimateSubmissionSuccess = 'EstimateSubmissionSuccess',
 }
 export type AppStackParamList = {
   [AppScreenName.SignIn]: undefined;
@@ -81,6 +83,7 @@ export type AppStackParamList = {
   [AppScreenName.WebView]: { uri: string };
   [AppScreenName.EstimateSubmission]: { taskId: number };
   [AppScreenName.NewMaterial]: { taskId: number };
+  [AppScreenName.EstimateSubmissionSuccess]: undefined;
 };
 const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<AppStackParamList>();
@@ -181,6 +184,10 @@ export const AppNavigation = () => {
               headerShown: true,
               header: props => <Header {...props} title={'Новый материал'} />,
             }}
+          />
+          <Stack.Screen
+            name={AppScreenName.EstimateSubmissionSuccess}
+            component={EstimateSubmissionSuccessScreen}
           />
         </>
       ) : (

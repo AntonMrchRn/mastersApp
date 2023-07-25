@@ -285,8 +285,11 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
           <View style={styles.ph20}>
             <Button
               label="Подать смету"
-              disabled={!isValid}
-              onPress={handleSubmit(onSubmit)}
+              // disabled={!isValid}
+              onPress={() =>
+                navigation.navigate(AppScreenName.EstimateSubmissionSuccess)
+              }
+              // onPress={handleSubmit(onSubmit)}
             />
           </View>
         </FormProvider>
