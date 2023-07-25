@@ -2,12 +2,21 @@ import * as Yup from 'yup';
 
 const emailErrorMessage =
   'Укажите адрес электронной почты в формате example@gmail.com';
+const passwordErrorMessage =
+  'Пароль должен состоять из не менее 6 символов: латинских букв и цифр';
 
 const emailRegExp =
   /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+const passwordRegExp = /(?=.*[0-9])((?=.*[a-z])|(?=.*[A-Z]))[0-9a-zA-Z]{6,}/;
 const correspondingAccountRegExp = /^(301[0-9]*)$/i;
 const checkingAccountRegExp = /^((405|406|407)[0-9]*)$/i;
 const checkingSelfAccountRegExp = /^(408[0-9]*)$/i;
+
+const changePasswordPasswordValidation = Yup.string()
+  .matches(passwordRegExp, {
+    message: passwordErrorMessage,
+  })
+  .required('');
 
 const authPhoneValidation = {
   phone: Yup.string().length(10, '').required(''),
@@ -113,6 +122,11 @@ const rrcValidation = {
     .required('Укажите 9-значный номер КПП в цифровом формате')
     .length(9, 'Укажите 9-значный номер КПП в цифровом формате'),
 };
+const changePasswordValidation = {
+  currentPassword: changePasswordPasswordValidation,
+  newPassword: changePasswordPasswordValidation,
+  repeatedNewPassword: changePasswordPasswordValidation,
+};
 
 const cancelTaskValidationSchema = Yup.object().shape(cancelTaskValidation);
 const estimateCountValidationSchema = Yup.object().shape(
@@ -158,6 +172,9 @@ const companyEntityValidationSchema = Yup.object().shape({
   ...rrcValidation,
 });
 const entityNameValidationSchema = Yup.object().shape(entityNameValidation);
+const changePasswordValidationSchema = Yup.object().shape(
+  changePasswordValidation
+);
 
 export {
   emailErrorMessage,
@@ -179,4 +196,5 @@ export {
   individualEntityValidationSchema,
   companyEntityValidationSchema,
   entityNameValidationSchema,
+  changePasswordValidationSchema,
 };

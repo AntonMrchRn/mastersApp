@@ -32,6 +32,7 @@ type TimerComponentProps = {
   timeMilliSeconds: number;
   timerOffset: number | null;
   setTimeMilliSeconds: (timeMilliSeconds: number) => void;
+  message?: string;
 };
 
 const TimerComponent = ({
@@ -40,7 +41,12 @@ const TimerComponent = ({
   closeBlock,
   timeMilliSeconds,
   setTimeMilliSeconds,
+  message = 'Отправить код повторно',
 }: TimerComponentProps) => {
+  useEffect(() => {
+    setTimeMilliSeconds(Date.now());
+  }, []);
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       setTimeMilliSeconds(Date.now());
@@ -64,7 +70,7 @@ const TimerComponent = ({
     >
       {!!timerOffset && (
         <Text style={styles.timer}>
-          {`Отправить код повторно (${timeFormat(
+          {`${message} (${timeFormat(
             timerOffset + expiredTimer - timeMilliSeconds
           )})`}
         </Text>

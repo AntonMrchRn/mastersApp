@@ -1,11 +1,13 @@
 import { store } from '@/store';
 import { api } from '@/store/api';
 import {
+  AccountDeletionParams,
   Activity,
   ConfirmationCodeResponse,
   EntityType,
   PhoneEditingResponse,
   Region,
+  TeamMemberDeletionParams,
   User,
   UserEditingParams,
   UserParamsResponse,
@@ -20,13 +22,20 @@ export const userAPI = api
   })
   .injectEndpoints({
     endpoints: builder => ({
-      getUser: builder.query<User | undefined, number | undefined>({
+      getUser: builder.query<User | undefined, number | undefined | null>({
         query: (id: number) => ({
           url: `users?query=?ID==${id}?`,
           method: 'GET',
         }),
         providesTags: ['user'],
         transformResponse: (response: UserResponse) => response.users[0],
+      }),
+      getUsers: builder.query<User[], number[]>({
+        query: (IDs: number[]) => ({
+          url: `users?query=?ID==${IDs.join()}?`,
+          method: 'GET',
+        }),
+        transformResponse: (response: UserResponse) => response.users,
       }),
       getEntityTypes: builder.query<EntityType[], void>({
         query: () => ({
@@ -43,6 +52,24 @@ export const userAPI = api
       getRegions: builder.query<Region[], void>({
         query: () => ({
           url: 'regions?query=??name,asc,,',
+          method: 'GET',
+        }),
+      }),
+      getInvitationLink: builder.query<string, void>({
+        query: () => ({
+          url: 'users/invite',
+          method: 'GET',
+        }),
+      }),
+      getUserParams: builder.query<UserParamsResponse, void>({
+        query: () => ({
+          url: 'params',
+          method: 'GET',
+        }),
+      }),
+      enableBotNotifications: builder.query<undefined, void>({
+        query: () => ({
+          url: 'telegram/status?isActive=true',
           method: 'GET',
         }),
       }),
@@ -84,12 +111,6 @@ export const userAPI = api
         }),
         invalidatesTags: ['user'],
       }),
-      getUserParams: builder.query<UserParamsResponse, void>({
-        query: () => ({
-          url: 'params',
-          method: 'GET',
-        }),
-      }),
       addFiles: builder.mutation<File[], FilesParams>({
         query: ({ formData, files, date, signal }) => {
           return {
@@ -119,6 +140,21 @@ export const userAPI = api
         },
         invalidatesTags: ['user'],
       }),
+      deleteTeamMember: builder.mutation<void, TeamMemberDeletionParams>({
+        query: data => ({
+          url: 'me/team',
+          method: 'PATCH',
+          data,
+        }),
+        invalidatesTags: ['user'],
+      }),
+      deleteAccount: builder.mutation<void, AccountDeletionParams>({
+        query: data => ({
+          url: 'users/activity?operation=deactivation',
+          method: 'POST',
+          data,
+        }),
+      }),
       deleteFile: builder.mutation<UserParamsResponse, number>({
         query: id => ({
           url: `me/files/${id}`,
@@ -132,14 +168,19 @@ export const userAPI = api
 
 export const {
   useGetUserQuery,
+  useGetUsersQuery,
   useGetRegionsQuery,
   useGetActivitiesQuery,
   useGetUserParamsQuery,
   useGetEntityTypesQuery,
+  useLazyEnableBotNotificationsQuery,
+  useLazyGetInvitationLinkQuery,
   useEditUserMutation,
   useEditPhoneMutation,
   useAddFilesMutation,
   useDeleteFileMutation,
+  useDeleteAccountMutation,
+  useDeleteTeamMemberMutation,
   useSendEmailConfirmationCodeMutation,
   useSendPhoneConfirmationCodeMutation,
 } = userAPI;

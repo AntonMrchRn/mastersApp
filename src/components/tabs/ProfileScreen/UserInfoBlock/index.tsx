@@ -39,7 +39,7 @@ const UserInfoBlock = ({
         style={[
           styles.container,
           isPressable && styles.pressableContainer,
-          isLoading && { justifyContent: 'center' },
+          isLoading && styles.loading,
         ]}
       >
         {isLoading ? (

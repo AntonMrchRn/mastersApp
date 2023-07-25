@@ -3,10 +3,14 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import BankDetailsScreen from '@/screens/profile/BankDetailsScreen';
+import ChangePasswordScreen from '@/screens/profile/ChangePasswordScreen';
+import ContractorsInvitationScreen from '@/screens/profile/ContractorsInvitationScreen';
 import EmailEditingScreen from '@/screens/profile/EmailEditingScreen';
 import PersonalDataEditingScreen from '@/screens/profile/PersonalDataEditingScreen';
 import PhoneEditingConfirmationScreen from '@/screens/profile/PhoneEditingConfirmationScreen';
 import PhoneEditingScreen from '@/screens/profile/PhoneEditingScreen';
+import TeamMemberDetailsScreen from '@/screens/profile/TeamMemberDetailsScreen';
+import TelegramBotScreen from '@/screens/profile/TelegramBotScreen';
 import ProfileScreen from '@/screens/tabs/ProfileScreen';
 
 export enum ProfileScreenName {
@@ -14,7 +18,11 @@ export enum ProfileScreenName {
   BankDetails = 'BankDetails',
   EmailEditing = 'EmailEditing',
   PhoneEditing = 'PhoneEditing',
+  ChangePassword = 'ChangePassword',
+  TelegramBot = 'TelegramBot',
+  TeamMemberDetails = 'TeamMemberDetails',
   PersonalDataEditing = 'PersonalDataEditing',
+  ContractorsInvitation = 'ContractorsInvitation',
   PhoneEditingConfirmation = 'PhoneEditingConfirmation',
 }
 export type ProfileStackParamList = {
@@ -40,9 +48,18 @@ export type ProfileStackParamList = {
     sname: string | null;
     pname: string | null;
   };
+  [ProfileScreenName.ContractorsInvitation]: undefined;
+  [ProfileScreenName.TeamMemberDetails]: {
+    contractorIDs: number[];
+    teamMemberId: number;
+    isContractor: boolean;
+  };
+  [ProfileScreenName.ChangePassword]: undefined;
+  [ProfileScreenName.TelegramBot]: undefined;
 };
 const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<ProfileStackParamList>();
+
 export const ProfileNavigation = () => (
   <Stack.Navigator screenOptions={screenOptions}>
     <Stack.Screen name={ProfileScreenName.Profile} component={ProfileScreen} />
@@ -65,6 +82,22 @@ export const ProfileNavigation = () => (
     <Stack.Screen
       name={ProfileScreenName.BankDetails}
       component={BankDetailsScreen}
+    />
+    <Stack.Screen
+      name={ProfileScreenName.ContractorsInvitation}
+      component={ContractorsInvitationScreen}
+    />
+    <Stack.Screen
+      name={ProfileScreenName.TeamMemberDetails}
+      component={TeamMemberDetailsScreen}
+    />
+    <Stack.Screen
+      name={ProfileScreenName.ChangePassword}
+      component={ChangePasswordScreen}
+    />
+    <Stack.Screen
+      name={ProfileScreenName.TelegramBot}
+      component={TelegramBotScreen}
     />
   </Stack.Navigator>
 );

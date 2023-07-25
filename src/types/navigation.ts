@@ -34,6 +34,10 @@ type BankDetailsScreenRoute = RouteProp<
   ProfileStackParamList,
   ProfileScreenName.BankDetails
 >;
+type TeamMemberDetailsScreenRoute = RouteProp<
+  ProfileStackParamList,
+  ProfileScreenName.TeamMemberDetails
+>;
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<
   AppStackParamList,
@@ -67,6 +71,15 @@ type PhoneEditingConfirmationScreenNavigationProp = NativeStackNavigationProp<
   ProfileStackParamList,
   ProfileScreenName.PhoneEditingConfirmation
 >;
+type ContractorsInvitationScreenNavigationProp = NativeStackNavigationProp<
+  ProfileStackParamList,
+  ProfileScreenName.ContractorsInvitation
+>;
+type ChangePasswordScreenNavigationProp = NativeStackNavigationProp<
+  ProfileStackParamList,
+  ProfileScreenName.ChangePassword
+>;
+
 type CompositeRecoveryConfirmationAndEmailNavigationProp =
   CompositeNavigationProp<
     StackNavigationProp<AppStackParamList, AppScreenName.RecoveryConfirmation>,
@@ -82,6 +95,7 @@ export type {
   PhoneEditingScreenRoute,
   BankDetailsScreenRoute,
   PersonalDataScreenRoute,
+  TeamMemberDetailsScreenRoute,
   RecoveryConfirmationScreenRoute,
   PhoneEditingConfirmationScreenRoute,
   ErrorScreenNavigationProp,
@@ -90,8 +104,10 @@ export type {
   PasswordScreenNavigationProp,
   RecoveryScreenNavigationProp,
   TaskCardScreenNavigationProp,
-  BankDetailsScreenNavigationProp,
-  PhoneEditingConfirmationScreenNavigationProp,
   CompositeEditingNavigationProp,
+  BankDetailsScreenNavigationProp,
+  ChangePasswordScreenNavigationProp,
+  ContractorsInvitationScreenNavigationProp,
+  PhoneEditingConfirmationScreenNavigationProp,
   CompositeRecoveryConfirmationAndEmailNavigationProp,
 };

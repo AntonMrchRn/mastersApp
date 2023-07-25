@@ -9,10 +9,7 @@ import { configApp } from '@/constants/platform';
 import { AppScreenName } from '@/navigation/AppNavigation';
 import useRecoveryConfirmationForm from '@/screens/auth/RecoveryConfirmationScreen/useRecoveryConfirmationForm';
 import { useAppDispatch, useAppSelector } from '@/store';
-import {
-  useRestorePasswordMutation,
-  useSendPasswordRecoveryCodeMutation,
-} from '@/store/api/auth';
+import { useChangePasswordMutation } from '@/store/api/auth';
 import {
   setAuthPhoneTimeout,
   setIsRecoveryByPhone,
@@ -26,9 +23,7 @@ import {
 } from '@/types/navigation';
 
 const OFFSET = 0;
-const email = '';
 const password = '';
-const isPhoneAuth = true;
 const inputNameByErrorCode: Partial<
   Record<ErrorCode, FieldPath<RecoveryConfirmationFormValues>>
 > = {
@@ -45,7 +40,7 @@ const useRecoveryConfirmation = () => {
   const { phoneTimeout } = useAppSelector(selectAuth);
 
   const [sendRecoveryCode, { data: timeout, isSuccess: isCodeSuccess }] =
-    useSendPasswordRecoveryCodeMutation();
+    useChangePasswordMutation();
   const [
     restoreUserPassword,
     {
@@ -55,11 +50,10 @@ const useRecoveryConfirmation = () => {
       isSuccess: isPasswordSuccess,
       error: recoveryPasswordError,
     },
-  ] = useRestorePasswordMutation();
+  ] = useChangePasswordMutation();
 
   const { errors, methods, isDisabled } = useRecoveryConfirmationForm();
 
-  const phone = route.params.phone;
   const error = (recoveryPasswordError as AxiosQueryErrorResponse)?.data;
 
   useEffect(() => {
@@ -115,10 +109,8 @@ const useRecoveryConfirmation = () => {
 
   const sendCode = async () => {
     await sendRecoveryCode({
-      phoneNumber: '7' + phone,
-      email,
+      phone: Number('7' + route.params.phone),
       password,
-      isPhoneAuth,
     });
   };
 

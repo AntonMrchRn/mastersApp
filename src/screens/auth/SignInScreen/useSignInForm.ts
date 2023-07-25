@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import * as Keychain from 'react-native-keychain';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useIsFocused } from '@react-navigation/native';
@@ -34,7 +35,7 @@ const useSignInForm = (isPhoneAuth: boolean) => {
     reset,
     setFocus,
     clearErrors,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitSuccessful },
   } = methods;
   const email = watch('email');
   const phone = watch('phone');
@@ -51,12 +52,22 @@ const useSignInForm = (isPhoneAuth: boolean) => {
   }, [phone, email]);
 
   useEffect(() => {
+    if (isSubmitSuccessful) {
+      saveCredentials((isPhoneAuth ? '7' + phone : email) as string, password);
+    }
+  }, [isSubmitSuccessful]);
+
+  useEffect(() => {
     reset({ phone: '', email: '', password, isAgreeWithTerms });
   }, [isPhoneAuth]);
 
   useEffect(() => {
     reset({ phone, email, password, isAgreeWithTerms });
   }, [isFocused]);
+
+  const saveCredentials = async (login: string, password: string) => {
+    await Keychain.setGenericPassword(login, password);
+  };
 
   return {
     errors,
