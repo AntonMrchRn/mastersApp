@@ -32,7 +32,7 @@ import { useGetTaskQuery, usePatchTaskLotMutation } from '@/store/api/tasks';
 import { Material, Service } from '@/store/api/tasks/types';
 import {
   addMaterialLocalSum,
-  addServiceLocalPrice,
+  addServiceLocalSum,
   setNewOfferServices,
 } from '@/store/slices/tasks/actions';
 import { getTaskServices } from '@/store/slices/tasks/asyncActions';
@@ -111,8 +111,8 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     []
   );
   const allSum = services.reduce((acc, val) => {
-    if (val.localPrice && val.count) {
-      const sum = +val.localPrice * val.count;
+    if (val.localSum) {
+      const sum = +val.localSum;
       return acc + sum;
     }
     return acc;
@@ -160,8 +160,12 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   };
 
   const fields = services.reduce((acc, val) => {
-    return { ...acc, [val.ID]: !val.localPrice };
+    const ex = val?.materials?.reduce((mAcc, mVal) => {
+      return { ...mAcc, [mVal.ID]: !mVal.localSum };
+    }, {});
+    return { ...acc, [val.ID]: !val.localSum, ...ex };
   }, {});
+
   const isError = Object.values(fields).some(field => field === true);
 
   const onSubmit = async () => {
@@ -270,9 +274,9 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                 delete errors[service.ID];
               }
               dispatch(
-                addServiceLocalPrice({
+                addServiceLocalSum({
                   serviceID: service.ID,
-                  localPrice: text,
+                  localSum: text,
                 })
               );
             };
@@ -284,7 +288,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                   description={service.description}
                   count={service?.count || 0}
                   sum={service.sum || 0}
-                  value={service?.localPrice}
+                  value={service?.localSum}
                   error={errors?.[service.ID]}
                   canDelete={service.canDelete}
                   onDelete={onDelete}

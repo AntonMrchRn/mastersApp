@@ -29,11 +29,11 @@ const tasks = createSlice({
     addOfferService: (state, { payload }) => {
       state.offerServices = state.offerServices.concat(payload);
     },
-    addServiceLocalPrice: (state, { payload }) => {
+    addServiceLocalSum: (state, { payload }) => {
       state.offerServices = state.offerServices.reduce<Service[]>(
         (acc, val) => {
           if (val.ID === payload.serviceID) {
-            return acc.concat({ ...val, localPrice: payload.localPrice });
+            return acc.concat({ ...val, localSum: payload.localSum });
           }
           return acc.concat(val);
         },

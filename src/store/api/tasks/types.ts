@@ -20,13 +20,13 @@ type Service = {
   measureID: number;
   name: string;
   price: number;
-  localPrice?: string;
   roleID: RoleType;
   setID: number;
   sum?: number;
   materials?: Material[];
   measureName?: string;
   canDelete?: boolean;
+  localSum?: string;
 };
 type Executor = {
   ID?: number;
