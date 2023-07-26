@@ -113,7 +113,6 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
       toast.show({
         type: 'error',
         title: error.message,
-        contentHeight: 120,
       });
     }
   }, [error]);

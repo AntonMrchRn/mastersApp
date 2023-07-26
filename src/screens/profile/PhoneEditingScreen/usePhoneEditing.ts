@@ -71,7 +71,6 @@ const usePhoneEditing = () => {
       toast.show({
         type: 'error',
         title: error.message,
-        contentHeight: 120,
       });
     }
   }, [isError]);

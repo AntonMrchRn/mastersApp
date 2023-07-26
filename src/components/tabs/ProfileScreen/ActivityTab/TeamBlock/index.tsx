@@ -54,7 +54,6 @@ const TeamBlock = ({ subcontractorIDs, curatorId }: TeamBlockProps) => {
         type: 'error',
         title: ((contractorsError || curatorError) as AxiosQueryErrorResponse)
           .data.message,
-        contentHeight: 120,
       });
     }
   }, [isContractorsError, isCuratorError]);

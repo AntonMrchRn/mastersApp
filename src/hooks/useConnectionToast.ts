@@ -16,7 +16,6 @@ const useConnectionToast = () => {
         duration: 3000,
         title:
           'Возникли проблемы c подключением к интернету. Пожалуйста, повторите позже.',
-        contentHeight: 120,
       });
     }
   }, [isConnected]);

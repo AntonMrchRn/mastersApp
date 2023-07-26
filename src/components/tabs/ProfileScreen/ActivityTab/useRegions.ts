@@ -23,7 +23,6 @@ const useRegions = (regionIDs: number[] | undefined, isContractor = false) => {
       toast.show({
         type: 'error',
         title: (error as AxiosQueryErrorResponse).data.message,
-        contentHeight: 120,
       });
     }
   }, [isError]);

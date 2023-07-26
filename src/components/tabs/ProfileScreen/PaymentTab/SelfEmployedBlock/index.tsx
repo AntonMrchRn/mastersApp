@@ -53,7 +53,6 @@ const SelfEmployedBlock = ({
         type: 'error',
         title: ((sberError || paramsError) as AxiosQueryErrorResponse).data
           .message,
-        contentHeight: 120,
       });
     }
   }, [isParamsError, isSberError]);
@@ -79,7 +78,6 @@ const SelfEmployedBlock = ({
           type: 'error',
           title:
             'Не удалось перейти в «Свое дело». Пожалуйста, повторите позже',
-          contentHeight: 120,
         });
       }
     }

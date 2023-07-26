@@ -75,7 +75,6 @@ const RegionsModal = forwardRef(
         toast.show({
           type: 'error',
           title: (error as AxiosQueryErrorResponse).data.message,
-          contentHeight: 100,
         });
       }
     }, [isError]);
@@ -129,16 +128,16 @@ const RegionsModal = forwardRef(
                 close={true}
                 key={region.ID}
                 label={region.name}
-                labelStyle={{
-                  color: theme.text.contrast,
-                }}
-                closeIconPress={() => onSelectValue(region)}
-                containerStyle={[
-                  styles.chips,
+                labelStyle={[
+                  styles.chipsLabel,
                   {
-                    backgroundColor: theme.background.accent,
+                    color: theme.text.contrast,
                   },
                 ]}
+                closeIconPress={() => onSelectValue(region)}
+                containerStyle={{
+                  backgroundColor: theme.background.accent,
+                }}
               />
             ))}
           </View>

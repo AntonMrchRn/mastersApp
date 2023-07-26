@@ -67,7 +67,6 @@ const useSignIn = () => {
         toast.show({
           type: 'error',
           text: error.message,
-          contentHeight: 100,
         });
       }
 

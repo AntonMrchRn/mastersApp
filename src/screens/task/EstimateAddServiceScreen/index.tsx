@@ -54,7 +54,6 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
       toast.show({
         type: 'error',
         title: mutationTask?.error?.data?.message,
-        contentHeight: 120,
       });
     }
   }, [mutationTask.error]);
@@ -84,7 +83,6 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
       return toast.show({
         type: 'error',
         title: 'Не удалось определить роль пользователя',
-        contentHeight: 120,
       });
     }
     if (fromEstimateSubmission) {

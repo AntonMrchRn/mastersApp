@@ -1,6 +1,6 @@
 import { Platform, StyleSheet } from 'react-native';
 
-import { configApp } from '@/constants/platform';
+import { configApp, deviceWidth } from '@/constants/platform';
 
 const styles = StyleSheet.create({
   modalTitle: {
@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
     height: 48,
     marginTop: 24,
   },
-  chips: {
-    maxWidth: '90%',
+  chipsLabel: {
+    maxWidth: deviceWidth * 0.78,
   },
 });
 

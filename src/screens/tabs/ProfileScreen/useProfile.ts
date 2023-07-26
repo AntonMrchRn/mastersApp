@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -35,6 +36,7 @@ const initialTab = {
 
 const useProfile = () => {
   const isFocused = useIsFocused();
+  const insets = useSafeAreaInsets();
   const dispatch = useDispatch();
   const toast = useToast();
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
@@ -60,7 +62,6 @@ const useProfile = () => {
       toast.show({
         type: 'error',
         title: (error as AxiosQueryErrorResponse).data.message,
-        contentHeight: 120,
       });
     }
   }, [isError]);
@@ -110,7 +111,7 @@ const useProfile = () => {
       type: 'success',
       titleStyle: styles.toastTitle,
       title: 'Адрес почты скопирован',
-      containerStyle: styles.toastContainer,
+      containerStyle: { height: 60 + insets.top },
     });
   };
 

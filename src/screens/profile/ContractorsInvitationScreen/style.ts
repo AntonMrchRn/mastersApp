@@ -23,9 +23,6 @@ const styles = StyleSheet.create({
   toastTitle: {
     fontSize: 17,
   },
-  toastContainer: {
-    height: 105,
-  },
   btn: {
     height: 48,
   },

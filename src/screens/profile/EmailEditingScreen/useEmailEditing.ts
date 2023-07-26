@@ -80,7 +80,6 @@ const useEmailEditing = () => {
       toast.show({
         type: 'error',
         title: 'Изменение данных невозможно',
-        contentHeight: 100,
       });
     }
   }, [isError]);
