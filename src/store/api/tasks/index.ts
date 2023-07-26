@@ -10,6 +10,7 @@ import {
   GetTaskHistoryResponse,
   GetTaskResponse,
   GetTaskStatusesResponse,
+  PostOffersRequest,
   Service,
   Task,
 } from './types';
@@ -130,6 +131,13 @@ export const tasksAPI = api
         query: data => ({
           url: `tasks/lot`,
           method: 'PATCH',
+          data,
+        }),
+      }),
+      postOffers: builder.mutation<object, PostOffersRequest>({
+        query: data => ({
+          url: `offers`,
+          method: 'POST',
           data,
         }),
       }),

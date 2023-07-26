@@ -6,5 +6,5 @@ export const {
   setNewOfferServices,
   addOfferService,
   addServiceLocalPrice,
-  addMaterialLocalPrice,
+  addMaterialLocalSum,
 } = tasks.actions;

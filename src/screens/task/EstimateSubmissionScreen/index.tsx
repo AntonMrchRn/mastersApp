@@ -31,7 +31,7 @@ import { useAppDispatch, useAppSelector } from '@/store';
 import { useGetTaskQuery, usePatchTaskLotMutation } from '@/store/api/tasks';
 import { Material, Service } from '@/store/api/tasks/types';
 import {
-  addMaterialLocalPrice,
+  addMaterialLocalSum,
   addServiceLocalPrice,
   setNewOfferServices,
 } from '@/store/slices/tasks/actions';
@@ -125,9 +125,8 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     return acc;
   }, []);
   const materialsSum = materials.reduce((acc, val) => {
-    if (val.localPrice && val.count) {
-      const sum = +val.localPrice * val.count;
-      return acc + sum;
+    if (val.localSum) {
+      return acc + +val.localSum;
     }
     return acc;
   }, 0);
@@ -300,17 +299,17 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                       delete errors[material.ID];
                     }
                     dispatch(
-                      addMaterialLocalPrice({
+                      addMaterialLocalSum({
                         serviceID: service.ID,
                         materialID: material.ID,
-                        localPrice: text,
+                        localSum: text,
                       })
                     );
                   };
                   return (
                     <Item
                       onChangeText={onChangeText}
-                      value={material?.localPrice}
+                      value={material?.localSum}
                       key={material.name}
                       onDelete={onDelete}
                       error={error}

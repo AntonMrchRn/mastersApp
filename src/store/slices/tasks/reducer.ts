@@ -40,7 +40,7 @@ const tasks = createSlice({
         []
       );
     },
-    addMaterialLocalPrice: (state, { payload }) => {
+    addMaterialLocalSum: (state, { payload }) => {
       state.offerServices = state.offerServices.reduce<Service[]>(
         (acc, val) => {
           if (val.ID === payload.serviceID) {
@@ -49,7 +49,7 @@ const tasks = createSlice({
                 if (matVal.ID === payload.materialID) {
                   return matAcc.concat({
                     ...matVal,
-                    localPrice: payload.localPrice,
+                    localSum: payload.localSum,
                   });
                 }
                 return matAcc.concat(matVal);

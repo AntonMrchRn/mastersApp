@@ -9,7 +9,7 @@ type Material = {
   price: number;
   roleID: RoleType;
   canDelete?: boolean;
-  localPrice?: string;
+  localSum?: string;
 };
 type Service = {
   ID: number;
@@ -275,7 +275,35 @@ type GetServicesResponse = {
   count: number;
   services: Service[];
 };
-
+type PostOffersRequest = {
+  ID: 1;
+  taskID: 1;
+  comment: 'Полная предоплата';
+  clientComment: 'Неполная предоплата';
+  services: Service[];
+  outlayStatusID: OutlayStatusType;
+  refuseReason: 'Не хочу';
+  executor: {
+    ID: 0;
+    name: 'string';
+    sname: 'string';
+    pname: 'string';
+    phone: 0;
+    isNDSPayer: true;
+    entityTypeID: 1;
+  };
+  curator: {
+    ID: 0;
+    name: 'string';
+    sname: 'string';
+    pname: 'string';
+    phone: 0;
+    isNDSPayer: true;
+    entityTypeID: 1;
+  };
+  isCurator: true;
+  updateTime: '2023-07-26T11:56:14.005Z';
+};
 export type {
   GetTaskStatusesResponse,
   Status,
@@ -291,4 +319,5 @@ export type {
   GetServicesCategoriesResponse,
   GetServicesResponse,
   GetOffersResponse,
+  PostOffersRequest,
 };
