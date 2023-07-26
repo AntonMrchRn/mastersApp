@@ -111,11 +111,13 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     []
   );
   const allSum = services.reduce((acc, val) => {
-    if (val.localSum) {
-      const sum = +val.localSum;
-      return acc + sum;
-    }
-    return acc;
+    const mSums =
+      val?.materials?.reduce((mAcc, mVal) => {
+        const mSum = +(mVal.localSum || 0);
+        return mAcc + mSum;
+      }, 0) || 0;
+    const sum = +(val.localSum || 0) + mSums;
+    return acc + sum;
   }, 0);
 
   const materials = services.reduce<Material[]>((acc, val) => {
@@ -160,10 +162,10 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   };
 
   const fields = services.reduce((acc, val) => {
-    const ex = val?.materials?.reduce((mAcc, mVal) => {
+    const mFields = val?.materials?.reduce((mAcc, mVal) => {
       return { ...mAcc, [mVal.ID]: !mVal.localSum };
     }, {});
-    return { ...acc, [val.ID]: !val.localSum, ...ex };
+    return { ...acc, [val.ID]: !val.localSum, ...mFields };
   }, {});
 
   const isError = Object.values(fields).some(field => field === true);
