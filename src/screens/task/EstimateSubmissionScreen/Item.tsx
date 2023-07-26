@@ -15,7 +15,7 @@ type ItemProps = {
   count: number;
   sum: number;
   canDelete?: boolean;
-  error: string;
+  error: boolean | undefined;
   onDelete: () => void;
   value?: string;
   onChangeText: (text: string) => void;
@@ -85,7 +85,11 @@ export const Item: FC<ItemProps> = ({
         keyboardType="numeric"
         label={'Стоимость'}
         placeholder={'Стоимость'}
-        hint={error || 'Указывается в рублях за весь объем услуги'}
+        hint={
+          error
+            ? 'Для подачи сметы необходимо заполнить все поля'
+            : 'Указывается в рублях за весь объем услуги'
+        }
         isError={!!error}
         value={value}
         onChangeText={onChangeText}

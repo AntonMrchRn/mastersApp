@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { FieldValues, Resolver, useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
   ScrollView,
@@ -49,6 +48,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   const bsRef = useRef<BottomSheetModal>(null);
 
   const [serviceForDelete, setServiceForDelete] = useState<Service>();
+  const [errors, setErrors] = useState<{ [key: string]: boolean }>({});
   const [comment, setComment] = useState('');
   const [estimateModalVisible, setEstimateModalVisible] = useState(false);
   const [deleteEstimateModalVisible, setDeleteEstimateModalVisible] =
@@ -134,42 +134,19 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     }, 500);
   };
 
-  const resolver: Resolver<{
-    [key: string]: string | undefined;
-  }> = async values => {
-    const errors = Object.keys(values).reduce((acc, val) => {
-      if (!values[val] && val !== 'comment') {
-        return {
-          ...acc,
-          [val]: {
-            type: 'required',
-            message: 'Для подачи сметы необходимо заполнить все поля',
-          },
-        };
-      }
-      return acc;
-    }, {});
-    return {
-      values,
-      errors,
-    };
-  };
+  const fields = services.reduce((acc, val) => {
+    return { ...acc, [val.ID]: !val.localPrice };
+  }, {});
+  const isError = Object.values(fields).some(field => field === true);
 
-  const methods = useForm({
-    mode: 'onChange',
-    resolver,
-  });
-
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = methods;
-
-  const onSubmit = (fieldValues: FieldValues) => {
-    console.log(
-      '🚀 ~ file: index.tsx:70 ~ onSubmit ~ fieldValues:',
-      fieldValues
-    );
+  const onSubmit = () => {
+    if (isError) {
+      setErrors(fields);
+    } else {
+      console.log('🚀 ~ file: index.tsx:143 ~ onSubmit ~ isError:', isError);
+      console.log('🚀 ~ file: index.tsx:163 ~ fields ~ fields:', fields);
+      // navigation.navigate(AppScreenName.EstimateSubmissionSuccess)
+    }
   };
   const onDeleteService = () => {
     const newServices = services.filter(ser => ser !== serviceForDelete);
@@ -227,11 +204,15 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
             Ваше ценовое предложение
           </Text>
           {services.map(service => {
+            const error = errors?.[service.ID];
             const onDelete = () => {
               setServiceForDelete(service);
               onDeleteEstimateModalVisible();
             };
             const onChangeText = (text: string) => {
+              if (text && error) {
+                delete errors[service.ID];
+              }
               dispatch(
                 addServiceLocalPrice({
                   serviceID: service.ID,
@@ -248,15 +229,19 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                   count={service?.count || 0}
                   sum={service.sum || 0}
                   value={service?.localPrice}
-                  error={errors?.[service.ID]?.message as string}
+                  error={errors?.[service.ID]}
                   canDelete={service.canDelete}
                   onDelete={onDelete}
                 />
                 {service.materials?.map(material => {
+                  const error = errors?.[material.ID];
                   const onDelete = () => {
                     onDeleteMaterial(service, material);
                   };
                   const onChangeText = (text: string) => {
+                    if (text && error) {
+                      delete errors[material.ID];
+                    }
                     dispatch(
                       addMaterialLocalPrice({
                         serviceID: service.ID,
@@ -271,7 +256,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                       value={material?.localPrice}
                       key={material.name}
                       onDelete={onDelete}
-                      error={errors?.[material.ID]?.message as string}
+                      error={error}
                       title={material.name}
                       count={material.count}
                       sum={material.count * material.price}
@@ -300,14 +285,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
           <Spacer size={40} />
         </ScrollView>
         <View style={styles.ph20}>
-          <Button
-            label="Подать смету"
-            // disabled={!isValid}
-            onPress={() =>
-              navigation.navigate(AppScreenName.EstimateSubmissionSuccess)
-            }
-            // onPress={handleSubmit(onSubmit)}
-          />
+          <Button label="Подать смету" disabled={isError} onPress={onSubmit} />
         </View>
       </SafeAreaView>
     </>
