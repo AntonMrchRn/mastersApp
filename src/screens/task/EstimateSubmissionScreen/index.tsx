@@ -10,15 +10,25 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { Button, Input, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
+import {
+  Banner,
+  Button,
+  Input,
+  Spacer,
+  Text,
+  useTheme,
+  useToast,
+} from 'rn-ui-kit';
 
 import { PlusIcon } from '@/assets/icons/svg/estimate/PlusIcon';
 import { DeleteEstimateModal } from '@/components/task/DeleteEstimateModal';
 import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { AddServiceBottomSheet } from '@/components/task/TaskCard/AddServiceBottomSheet';
 import { TaskCardAddEstimateBottomSheet } from '@/components/task/TaskCard/TaskCardAddEstimateBottomSheet';
+import { deviceWidth } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
+import { useGetTaskQuery } from '@/store/api/tasks';
 import { Material, Service } from '@/store/api/tasks/types';
 import {
   addMaterialLocalPrice,
@@ -44,10 +54,20 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   const toast = useToast();
   const dispatch = useAppDispatch();
   const isFocused = useIsFocused();
+  const { taskId } = route.params;
 
   const bsRef = useRef<BottomSheetModal>(null);
 
+  const getTaskQuery = useGetTaskQuery(taskId.toString());
+  const task = getTaskQuery?.data?.tasks?.[0];
+
+  const allowCostIncrease = task?.allowCostIncrease;
+  const currentSum = task?.currentSum;
+
+  const costStep = task?.costStep;
+
   const [serviceForDelete, setServiceForDelete] = useState<Service>();
+  const [banner, setBanner] = useState<{ title: string; text: string }>();
   const [errors, setErrors] = useState<{ [key: string]: boolean }>({});
   const [comment, setComment] = useState('');
   const [estimateModalVisible, setEstimateModalVisible] = useState(false);
@@ -56,6 +76,9 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
 
   const onEstimateModalVisible = () => {
     setEstimateModalVisible(!estimateModalVisible);
+  };
+  const onClosePress = () => {
+    setBanner(undefined);
   };
   const onDeleteEstimateModalVisible = () => {
     setDeleteEstimateModalVisible(!deleteEstimateModalVisible);
@@ -78,8 +101,6 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
 
   const { offerServices, error, loading } = useAppSelector(selectTasks);
 
-  const { taskId } = route.params;
-
   const services = offerServices || [];
   const serviceIDs = services?.reduce<number[]>(
     (acc, val) => acc.concat(val.ID),
@@ -92,6 +113,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     }
     return acc;
   }, 0);
+
   const materials = services.reduce<Material[]>((acc, val) => {
     if (val.materials) {
       return acc.concat(val.materials);
@@ -140,13 +162,32 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   const isError = Object.values(fields).some(field => field === true);
 
   const onSubmit = () => {
+    //если есть ошибка валидации
     if (isError) {
-      setErrors(fields);
-    } else {
-      console.log('🚀 ~ file: index.tsx:143 ~ onSubmit ~ isError:', isError);
-      console.log('🚀 ~ file: index.tsx:163 ~ fields ~ fields:', fields);
-      // navigation.navigate(AppScreenName.EstimateSubmissionSuccess)
+      return setErrors(fields);
     }
+    //если нельзя подать смету ценой выше поданной ранее
+    if (allowCostIncrease && currentSum && allSum > currentSum) {
+      //ошибка
+      return setBanner({
+        title: 'Скорректируйте смету',
+        text: `Ваше предложение превышает текущую минимальную цену торгов — ${currentSum} ₽. Для участия необходимо понизить смету как минимум на ${costStep} ₽ (шаг торгов)`,
+      });
+    }
+    //если сумма предложения не более или менее шага цены от текущей суммы сметы
+    if (
+      currentSum &&
+      costStep &&
+      !(allSum >= currentSum + costStep) &&
+      !(allSum <= currentSum - costStep)
+    ) {
+      //ошибка
+      return setBanner({
+        title: 'Недостаточный шаг цены',
+        text: `Измените свое предложения как минимум на ${costStep} ₽`,
+      });
+    }
+    // navigation.navigate(AppScreenName.EstimateSubmissionSuccess)
   };
   const onDeleteService = () => {
     const newServices = services.filter(ser => ser !== serviceForDelete);
@@ -285,6 +326,24 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
           <Spacer size={40} />
         </ScrollView>
         <View style={styles.ph20}>
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 60,
+              width: deviceWidth - 40,
+              alignSelf: 'center',
+            }}
+          >
+            {banner && (
+              <Banner
+                type={'warning'}
+                icon={'alert'}
+                title={banner?.title}
+                text={banner?.text}
+                onClosePress={onClosePress}
+              />
+            )}
+          </View>
           <Button label="Подать смету" disabled={isError} onPress={onSubmit} />
         </View>
       </SafeAreaView>

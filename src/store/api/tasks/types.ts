@@ -122,6 +122,19 @@ type Task = {
     login?: string;
     password?: string;
   };
+  /**
+   * Подача смет ценой выше поданной ранее
+   * Если false, то можно подавать и ценой выше, главное соблюдать "Шаг цены сметы"
+   */
+  allowCostIncrease?: boolean;
+  /**
+   * Текущая стоимость сметы
+   */
+  currentSum?: number;
+  /**
+   * Шаг цены сметы
+   */
+  costStep?: number;
 };
 type Offer = {
   ID: number;
