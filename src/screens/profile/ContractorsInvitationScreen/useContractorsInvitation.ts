@@ -50,10 +50,6 @@ const useContractorsInvitation = () => {
   }, [isSuccess, data]);
 
   useEffect(() => {
-    getData();
-  }, []);
-
-  useEffect(() => {
     if (isError) {
       toast.show({
         type: 'error',
@@ -62,15 +58,6 @@ const useContractorsInvitation = () => {
       });
     }
   }, [isError]);
-
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('linkTimeout');
-      jsonValue && dispatch(setLinkTimeout(JSON.parse(jsonValue)));
-    } catch (e) {
-      console.log(`getData value reading error: ${e}`);
-    }
-  };
 
   const onSuccess = async () => {
     try {

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDispatch } from 'react-redux';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Clipboard from '@react-native-community/clipboard';
 import { useIsFocused } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
@@ -11,7 +12,10 @@ import getWarning from '@/screens/tabs/ProfileScreen/getWarning';
 import { useAppSelector } from '@/store';
 import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import { setIsApprovalNotificationShown } from '@/store/slices/user/actions';
+import {
+  setIsApprovalNotificationShown,
+  setLinkTimeout,
+} from '@/store/slices/user/actions';
 import { selectUser } from '@/store/slices/user/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import { ProfileTab } from '@/types/tab';
@@ -69,6 +73,10 @@ const useProfile = () => {
     setIsBannerVisible(false);
   }, [isFocused, activeTab.id]);
 
+  useEffect(() => {
+    getData();
+  }, []);
+
   const warning = getWarning(user);
   const isApprovalNotificationVisible =
     !isApprovalNotificationShown && !!user?.isApproved;
@@ -109,6 +117,15 @@ const useProfile = () => {
   const onCopyEmail = () => {
     onBlockingModal();
     copyEmail();
+  };
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('linkTimeout');
+      jsonValue && dispatch(setLinkTimeout(JSON.parse(jsonValue)));
+    } catch (e) {
+      console.log(`getData value reading error: ${e}`);
+    }
   };
 
   return {
