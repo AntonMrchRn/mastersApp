@@ -26,7 +26,9 @@ const styles = StyleSheet.create({
     width: '15%',
     height: '100%',
   },
-  background: { backgroundColor: '#fff' },
+  background: {
+    backgroundColor: '#fff',
+  },
 });
 
 export default styles;

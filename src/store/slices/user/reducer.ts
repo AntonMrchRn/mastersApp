@@ -3,10 +3,13 @@ import { createSlice } from '@reduxjs/toolkit';
 import { InitialState } from './types';
 
 const initialState: InitialState = {
+  linkTimeout: null,
   phoneTimeout: null,
   emailTimeout: null,
   isPhoneEditing: false,
   isEmailEditing: false,
+  isLinkGenerating: false,
+  isActiveLinkTimer: false,
   isActivePhoneTimer: false,
   isActiveEmailTimer: false,
   isApprovalNotificationShown: false,
@@ -26,6 +29,9 @@ const user = createSlice({
     setIsEmailEditing: (state, { payload }) => {
       state.isEmailEditing = payload;
     },
+    setIsLinkGenerating: (state, { payload }) => {
+      state.isLinkGenerating = payload;
+    },
     timerOnProfilePhone: state => {
       state.isActivePhoneTimer = true;
     },
@@ -37,6 +43,15 @@ const user = createSlice({
     },
     timerOffProfileEmail: state => {
       state.isActiveEmailTimer = false;
+    },
+    timerOnLink: state => {
+      state.isActiveLinkTimer = true;
+    },
+    timerOffLink: state => {
+      state.isActiveLinkTimer = false;
+    },
+    setLinkTimeout: (state, { payload }) => {
+      state.linkTimeout = payload;
     },
     setProfilePhoneTimeout: (state, { payload }) => {
       state.phoneTimeout = payload;

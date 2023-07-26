@@ -9,6 +9,7 @@ type UserResponse = {
 type User = {
   ID: number;
   hasITAccess: boolean | null;
+  hasActiveTasks: boolean | null;
   name: string | null;
   sname: string | null;
   pname: string | null;
@@ -126,6 +127,27 @@ type UserEditingParams =
   | BankDetailsEditingParams
   | PersonalDataEditingParams;
 
+type AccountDeletionParams = {
+  login: string;
+  password: string;
+};
+
+type ContractorDeletionParams =
+  | {
+      kickSubs: boolean;
+    }
+  | {
+      subcontractorIDs: number[];
+    };
+
+type CuratorDeletionParams = {
+  kickCurator: boolean;
+};
+
+type TeamMemberDeletionParams =
+  | ContractorDeletionParams
+  | CuratorDeletionParams;
+
 export type {
   User,
   Region,
@@ -136,4 +158,6 @@ export type {
   PhoneEditingResponse,
   ConfirmationCodeResponse,
   UserEditingParams,
+  AccountDeletionParams,
+  TeamMemberDeletionParams,
 };

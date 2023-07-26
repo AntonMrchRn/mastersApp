@@ -13,11 +13,12 @@ type ChatItemProps = {
     isMine?: boolean;
     comment?: string;
     creationTime?: string;
+    ID?: number;
   };
 };
 
 const ChatMessage: FC<ChatItemProps> = ({
-  item: { isMine, comment, creationTime },
+  item: { isMine, comment, creationTime, ID },
 }) => {
   const theme = useTheme();
   const styles = StyleSheet.create({

@@ -63,14 +63,19 @@ const ActivitiesModal = ({
     });
   };
 
+  const onCloseHandler = () => {
+    onClose();
+    setSelectedActivities(initialSelectedActivities);
+  };
+
   return (
     <BottomSheet
       closeIcon
       title="Направление"
       isVisible={isVisible}
-      closeIconPress={onClose}
-      onBackdropPress={onClose}
-      onSwipeComplete={onClose}
+      closeIconPress={onCloseHandler}
+      onBackdropPress={onCloseHandler}
+      onSwipeComplete={onCloseHandler}
       titleStyle={styles.modalTitle}
       backdropTransitionOutTiming={0}
       closeIconContainerStyle={styles.closeIcon}

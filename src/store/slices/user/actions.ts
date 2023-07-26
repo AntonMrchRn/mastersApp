@@ -1,14 +1,18 @@
 import user from './reducer';
 
 export const {
-  deleteProgress,
+  timerOffLink,
+  timerOnLink,
   setProgresses,
+  deleteProgress,
+  setLinkTimeout,
   setIsPhoneEditing,
   setIsEmailEditing,
   timerOnProfileEmail,
   timerOffProfileEmail,
   timerOnProfilePhone,
   timerOffProfilePhone,
+  setIsLinkGenerating,
   setProfileEmailTimeout,
   setProfilePhoneTimeout,
   setIsApprovalNotificationShown,

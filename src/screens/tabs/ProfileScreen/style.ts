@@ -7,6 +7,23 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  bannerIcon: {
+    marginRight: 3,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  bannerTitle: {
+    fontSize: 13,
+  },
+  banner: {
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderWidth: 0,
+    borderRadius: 8,
+  },
   closeIcon: {
     position: 'absolute',
     top: 20,
@@ -26,6 +43,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'left',
+    marginRight: 10,
   },
   loader: {
     flex: 1,

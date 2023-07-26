@@ -3,6 +3,7 @@ import { ActivityIndicator, SafeAreaView, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import {
+  Banner,
   BottomSheet,
   Button,
   Spacer,
@@ -33,11 +34,15 @@ const ProfileScreen = () => {
     activeTab,
     switchTab,
     isLoading,
+    onBanner,
     copyEmail,
+    onCopyEmail,
     scrollToEnd,
+    isTeamVisible,
     scrollViewRef,
+    hasActiveTasks,
+    isBannerVisible,
     onBlockingModal,
-    isContractorsVisible,
     isBlockingModalVisible,
     isApprovalNotificationVisible,
   } = useProfile();
@@ -60,9 +65,16 @@ const ProfileScreen = () => {
       />
     ),
     [ProfileTab.Activity]: user && (
-      <ActivityTab user={user} isContractorsVisible={isContractorsVisible} />
+      <ActivityTab user={user} isTeamVisible={isTeamVisible} />
     ),
-    [ProfileTab.Account]: <AccountTab />,
+    [ProfileTab.Account]: (
+      <AccountTab
+        onBanner={onBanner}
+        copyEmail={copyEmail}
+        hasActiveTasks={hasActiveTasks}
+        isBannerVisible={isBannerVisible}
+      />
+    ),
   };
 
   return (
@@ -76,9 +88,23 @@ const ProfileScreen = () => {
         }
       >
         <View style={styles.wrapper}>
-          <Text variant="title1" style={styles.title}>
-            Профиль
-          </Text>
+          <View style={styles.titleContainer}>
+            <Text variant="title1" style={styles.title}>
+              Профиль
+            </Text>
+            {user?.isApproved && (
+              <Banner
+                closeIcon={<></>}
+                type="success"
+                icon="success"
+                iconSize={16}
+                text="Подтвержден"
+                iconStyle={styles.bannerIcon}
+                titleStyle={styles.bannerTitle}
+                containerStyle={styles.banner}
+              />
+            )}
+          </View>
           <>
             {((user && !user?.isApproved) || !!warning) && !isLoading && (
               <Spacer size="xl" />
@@ -121,7 +147,7 @@ const ProfileScreen = () => {
             <Button
               variant="outlineAccent"
               label="Скопировать адрес почты"
-              onPress={copyEmail}
+              onPress={onCopyEmail}
             />
             <Spacer size="l" />
             <Button

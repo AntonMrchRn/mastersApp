@@ -93,6 +93,7 @@ const taskSearch = createSlice({
       }
     );
     builder.addCase(getComments.rejected, (state, { payload }) => {
+      state.comments.taskComment = [];
       state.errorComments = payload as Error;
       state.loadingComments = false;
     });

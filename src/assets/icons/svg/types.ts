@@ -1,5 +1,5 @@
 type IconProps = {
-  fill: string;
+  fill?: string;
   size?: number;
 };
 

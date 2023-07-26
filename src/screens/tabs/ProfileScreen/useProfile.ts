@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDispatch } from 'react-redux';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Clipboard from '@react-native-community/clipboard';
 import { useIsFocused } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
@@ -11,7 +12,10 @@ import getWarning from '@/screens/tabs/ProfileScreen/getWarning';
 import { useAppSelector } from '@/store';
 import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import { setIsApprovalNotificationShown } from '@/store/slices/user/actions';
+import {
+  setIsApprovalNotificationShown,
+  setLinkTimeout,
+} from '@/store/slices/user/actions';
 import { selectUser } from '@/store/slices/user/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import { ProfileTab } from '@/types/tab';
@@ -37,7 +41,6 @@ const useProfile = () => {
 
   const { user: authUser } = useAppSelector(selectAuth);
   const { isApprovalNotificationShown } = useAppSelector(selectUser);
-
   const {
     data: user,
     isLoading,
@@ -46,6 +49,11 @@ const useProfile = () => {
   } = useGetUserQuery(authUser?.userID, {
     skip: !authUser?.userID,
   });
+
+  const [activeTab, setActiveTab] = useState<Tab>(initialTab);
+  const [isBlockingModalVisible, setIsBlockingModalVisible] =
+    useState<boolean>(false);
+  const [isBannerVisible, setIsBannerVisible] = useState<boolean>(false);
 
   useEffect(() => {
     if (isError) {
@@ -57,32 +65,34 @@ const useProfile = () => {
     }
   }, [isError]);
 
-  const [activeTab, setActiveTab] = useState<Tab>(initialTab);
-  const [isBlockingModalVisible, setIsBlockingModalVisible] =
-    useState<boolean>(false);
+  useEffect(() => {
+    if (isApprovalNotificationVisible) {
+      dispatch(setIsApprovalNotificationShown(true));
+    }
+
+    setIsBannerVisible(false);
+  }, [isFocused, activeTab.id]);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const warning = getWarning(user);
   const isApprovalNotificationVisible =
     !isApprovalNotificationShown && !!user?.isApproved;
-  const isContractorsVisible =
+  const isTeamVisible =
     authUser?.roleDescription !== UserRole.internalExecutor &&
     authUser?.roleDescription !== UserRole.coordinator;
-
   const tabs = [
     { id: 0, label: ProfileTab.Common },
-    ...(isContractorsVisible ? [{ id: 1, label: ProfileTab.Payment }] : []),
+    ...(isTeamVisible ? [{ id: 1, label: ProfileTab.Payment }] : []),
     { id: 2, label: ProfileTab.Activity },
     { id: 3, label: ProfileTab.Account },
   ];
 
   const onBlockingModal = () =>
     setIsBlockingModalVisible(!isBlockingModalVisible);
-
-  useEffect(() => {
-    if (isApprovalNotificationVisible) {
-      dispatch(setIsApprovalNotificationShown(true));
-    }
-  }, [isFocused, activeTab.id]);
-
-  const warning = getWarning(user);
+  const onBanner = () => setIsBannerVisible(!isBannerVisible);
 
   const switchTab = ({ id, label }: TabItem) => {
     setActiveTab({ id, label: label as ProfileTab });
@@ -96,7 +106,6 @@ const useProfile = () => {
 
   const copyEmail = () => {
     Clipboard.setString('info@mastera-service.ru');
-    onBlockingModal();
     toast.show({
       type: 'success',
       titleStyle: styles.toastTitle,
@@ -105,20 +114,41 @@ const useProfile = () => {
     });
   };
 
+  const onCopyEmail = () => {
+    onBlockingModal();
+    copyEmail();
+  };
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('linkTimeout');
+      jsonValue && dispatch(setLinkTimeout(JSON.parse(jsonValue)));
+    } catch (e) {
+      console.log(`getData value reading error: ${e}`);
+    }
+  };
+
   return {
     user,
     tabs,
     warning,
+    onBanner,
     activeTab,
     switchTab,
     isLoading,
     copyEmail,
+    onCopyEmail,
     scrollToEnd,
+    isTeamVisible,
     scrollViewRef,
     onBlockingModal,
-    isContractorsVisible,
     isBlockingModalVisible,
     isApprovalNotificationVisible,
+    hasActiveTasks: !!user?.hasActiveTasks,
+    isBannerVisible:
+      isBannerVisible &&
+      (authUser?.roleDescription === UserRole.internalExecutor ||
+        authUser?.roleDescription === UserRole.externalExecutor),
   };
 };
 

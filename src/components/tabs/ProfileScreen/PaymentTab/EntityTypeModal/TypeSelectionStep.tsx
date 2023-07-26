@@ -3,12 +3,13 @@ import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
 
 import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
-import { CheckMarkIcon } from '@/assets/icons/svg/screens/CheckMarkIcon';
+import { CheckMeasureIcon } from '@/assets/icons/svg/estimate/CheckMeasureIcon';
 import { ModalStep } from '@/components/tabs/ProfileScreen/PaymentTab/EntityTypeModal/index';
-import styles from '@/components/tabs/ProfileScreen/PaymentTab/EntityTypeModal/style';
 import { useGetEntityTypesQuery } from '@/store/api/user';
 import { EntityType } from '@/store/api/user/types';
 import { AxiosQueryErrorResponse } from '@/types/error';
+
+import styles from './style';
 
 type TypeSelectionStepProps = {
   setModalStep: (step: ModalStep) => void;
@@ -65,7 +66,7 @@ const TypeSelectionStep = ({
             <View style={styles.entityType}>
               <Text variant="bodyMRegular">{type.description}</Text>
               {selectedType?.description === type.description && (
-                <CheckMarkIcon fill={theme.icons.accent} />
+                <CheckMeasureIcon fill={theme.icons.accent} />
               )}
             </View>
             <Spacer

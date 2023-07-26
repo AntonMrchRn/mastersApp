@@ -1,9 +1,7 @@
 import { api } from '@/store/api';
 import {
-  PasswordRecoveryParams,
-  PasswordRecoveryResponse,
-  RecoveryCodeParams,
-  RecoveryCodeResponse,
+  ChangePasswordParams,
+  ChangePasswordResponse,
   UserAuthParams,
   UserAuthResponse,
 } from '@/store/slices/auth/types';
@@ -20,38 +18,18 @@ export const authAPI = api.injectEndpoints({
         },
       }),
     }),
-    sendPasswordRecoveryCode: builder.mutation<
-      RecoveryCodeResponse,
-      RecoveryCodeParams
+    changePassword: builder.mutation<
+      ChangePasswordResponse,
+      ChangePasswordParams
     >({
-      query: ({ email, password, phoneNumber, isPhoneAuth }) => ({
+      query: data => ({
         url: 'me/password',
         method: 'PATCH',
-        data: {
-          ...(isPhoneAuth ? { phone: Number(phoneNumber) } : { email }),
-          password,
-        },
-      }),
-    }),
-    restorePassword: builder.mutation<
-      PasswordRecoveryResponse,
-      PasswordRecoveryParams
-    >({
-      query: ({ code, password }) => ({
-        url: 'me/password',
-        method: 'PATCH',
-        data: {
-          code,
-          password,
-        },
+        data,
       }),
     }),
   }),
   overrideExisting: true,
 });
 
-export const {
-  useGetUserAuthMutation,
-  useRestorePasswordMutation,
-  useSendPasswordRecoveryCodeMutation,
-} = authAPI;
+export const { useGetUserAuthMutation, useChangePasswordMutation } = authAPI;

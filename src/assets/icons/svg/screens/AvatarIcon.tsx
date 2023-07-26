@@ -1,9 +1,11 @@
 import React from 'react';
 import SVG, { ClipPath, Defs, G, Path, Rect } from 'react-native-svg';
 
-export const AvatarIcon = () => {
+import { IconProps } from '@/assets/icons/svg/types';
+
+export const AvatarIcon = ({ size = 76 }: IconProps) => {
   return (
-    <SVG width="76" height="76" viewBox="0 0 76 76" fill="none">
+    <SVG width={size} height={size} viewBox="0 0 76 76" fill="none">
       <G clip-path="url(#clip0_464_6033)">
         <Rect width="76" height="76" rx="10" fill="#ECF2FF" />
         <G opacity="0.35">

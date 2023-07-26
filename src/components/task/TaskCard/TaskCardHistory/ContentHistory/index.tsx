@@ -70,7 +70,7 @@ export const ContentHistory: FC<TaskCardProps> = ({
 
   return taskComment?.map((item: ItemHistory) => {
     return (
-      <View style={styles.wrapperItem} key={item.recipientID}>
+      <View style={styles.wrapperItem} key={item.ID}>
         <View style={styles.itemIcon}>{getIcon(item.systemEventID)}</View>
         <View style={styles.itemInfo}>
           <Text

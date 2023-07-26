@@ -33,7 +33,6 @@ const usePhoneEditing = () => {
   const userPhone = route.params.phone;
   const { phoneTimeout, isActivePhoneTimer: isActiveTimer } =
     useAppSelector(selectUser);
-
   const [
     sendConfirmationCode,
     { data: timeout, isLoading, isSuccess, isError, error: codeError },
@@ -64,15 +63,15 @@ const usePhoneEditing = () => {
   useEffect(() => {
     if (error?.code === ErrorCode.PhoneAlreadyRegistered) {
       return setError('phone', {
-        message: error?.message,
+        message: error.message,
       });
     }
 
     if (isError) {
       toast.show({
         type: 'error',
-        title: 'Изменение данных невозможно',
-        contentHeight: 100,
+        title: error.message,
+        contentHeight: 120,
       });
     }
   }, [isError]);
