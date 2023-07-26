@@ -57,7 +57,6 @@ const AccountTab = ({
       toast.show({
         type: 'error',
         title: (error as AxiosQueryErrorResponse).data.message,
-        contentHeight: 100,
       });
     }
   }, [isError]);
@@ -93,7 +92,6 @@ const AccountTab = ({
       toast.show({
         type: 'error',
         title: 'Не удалось удалить аккаунт. Повторите, пожалуйста, позже',
-        contentHeight: 120,
       });
     }
   };

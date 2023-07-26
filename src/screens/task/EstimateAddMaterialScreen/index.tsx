@@ -54,7 +54,6 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
       toast.show({
         type: 'error',
         title: mutationMaterial?.error?.data?.message,
-        contentHeight: 120,
       });
     }
   }, [mutationMaterial.error]);
@@ -105,7 +104,6 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
       return toast.show({
         type: 'error',
         title: 'Не удалось определить роль пользователя',
-        contentHeight: 120,
       });
     }
     if (fromEstimateSubmission) {
@@ -154,7 +152,6 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
         toast.show({
           type: 'error',
           title: (error as AxiosQueryErrorResponse).data.message,
-          contentHeight: 120,
         });
       }
       getTask.refetch();

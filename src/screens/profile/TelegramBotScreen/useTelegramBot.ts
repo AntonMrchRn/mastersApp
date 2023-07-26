@@ -52,7 +52,6 @@ const useTelegramBot = () => {
         title: (
           (paramsError || userError || botError) as AxiosQueryErrorResponse
         ).data.message,
-        contentHeight: 120,
       });
     }
   }, [isParamsError, isUserError, isBotError]);
@@ -68,7 +67,6 @@ const useTelegramBot = () => {
         toast.show({
           type: 'error',
           title: 'Не удалось открыть Telegram. Пожалуйста, повторите позже',
-          contentHeight: 120,
         });
       }
     },

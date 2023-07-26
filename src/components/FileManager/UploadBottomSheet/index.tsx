@@ -80,7 +80,6 @@ export const UploadBottomSheet = ({
         return toast.show({
           type: 'error',
           title: 'Камера недоступна',
-          contentHeight: 100,
         });
       }
 
@@ -126,7 +125,6 @@ export const UploadBottomSheet = ({
         toast.show({
           type: 'error',
           title: (error as AxiosQueryErrorResponse).data.message,
-          contentHeight: 120,
         });
       }
     } finally {

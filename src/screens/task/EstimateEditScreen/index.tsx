@@ -44,7 +44,6 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
       toast.show({
         type: 'error',
         title: mutationTaskService?.error?.data?.message,
-        contentHeight: 120,
       });
     }
   }, [mutationTaskService.error]);
@@ -53,7 +52,6 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
       toast.show({
         type: 'error',
         title: mutationMaterial?.error?.data?.message,
-        contentHeight: 120,
       });
     }
   }, [mutationMaterial.error]);
@@ -109,7 +107,6 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
         toast.show({
           type: 'error',
           title: (error as AxiosQueryErrorResponse).data.message,
-          contentHeight: 120,
         });
       }
     }

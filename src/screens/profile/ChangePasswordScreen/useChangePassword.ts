@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import Keychain from 'react-native-keychain';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useToast } from 'rn-ui-kit';
@@ -31,6 +32,7 @@ const useChangePassword = (navigation: ChangePasswordScreenNavigationProp) => {
   const {
     watch,
     setError,
+    handleSubmit,
     formState: { isDirty, errors },
   } = methods;
   const error = (passwordError as AxiosQueryErrorResponse)?.data;
@@ -49,16 +51,29 @@ const useChangePassword = (navigation: ChangePasswordScreenNavigationProp) => {
       toast.show({
         type: 'error',
         title: error.message,
-        contentHeight: 120,
       });
     }
   }, [isError]);
 
   useEffect(() => {
     if (isSuccess) {
-      navigation.navigate(ProfileScreenName.Profile);
+      onSuccess();
     }
   }, [isSuccess]);
+
+  const onSuccess = async () => {
+    try {
+      const credentials = await Keychain.getGenericPassword();
+      if (credentials) {
+        await Keychain.setGenericPassword(credentials.username, newPassword);
+        navigation.navigate(ProfileScreenName.Profile);
+      } else {
+        throw new Error('no credentials');
+      }
+    } catch (e) {
+      console.log('onSuccess setGenericPassword error: ', e);
+    }
+  };
 
   const onChangePassword = async () => {
     if (password === newPassword) {
@@ -84,7 +99,7 @@ const useChangePassword = (navigation: ChangePasswordScreenNavigationProp) => {
     methods,
     isDirty,
     isLoading,
-    onChangePassword,
+    onChangePassword: handleSubmit(onChangePassword),
   };
 };
 
