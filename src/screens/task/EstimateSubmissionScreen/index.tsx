@@ -28,7 +28,7 @@ import { TaskCardAddEstimateBottomSheet } from '@/components/task/TaskCard/TaskC
 import { deviceWidth } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { useGetTaskQuery } from '@/store/api/tasks';
+import { useGetTaskQuery, usePatchTaskLotMutation } from '@/store/api/tasks';
 import { Material, Service } from '@/store/api/tasks/types';
 import {
   addMaterialLocalPrice,
@@ -37,6 +37,7 @@ import {
 } from '@/store/slices/tasks/actions';
 import { getTaskServices } from '@/store/slices/tasks/asyncActions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
+import { AxiosQueryErrorResponse } from '@/types/error';
 
 import { Item } from './Item';
 
@@ -58,7 +59,10 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
 
   const bsRef = useRef<BottomSheetModal>(null);
 
+  const [patchTaskLot] = usePatchTaskLotMutation();
+
   const getTaskQuery = useGetTaskQuery(taskId.toString());
+
   const task = getTaskQuery?.data?.tasks?.[0];
 
   const allowCostIncrease = task?.allowCostIncrease;
@@ -161,7 +165,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   }, {});
   const isError = Object.values(fields).some(field => field === true);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     //если есть ошибка валидации
     if (isError) {
       return setErrors(fields);
@@ -185,6 +189,18 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
       return setBanner({
         title: 'Недостаточный шаг цены',
         text: `Измените свое предложения как минимум на ${costStep} ₽`,
+      });
+    }
+    try {
+      await patchTaskLot({
+        taskID: taskId,
+        sum: allSum,
+      }).unwrap();
+    } catch (err) {
+      toast.show({
+        type: 'error',
+        title: (err as AxiosQueryErrorResponse).data.message,
+        contentHeight: 100,
       });
     }
     // navigation.navigate(AppScreenName.EstimateSubmissionSuccess)

@@ -123,6 +123,16 @@ export const tasksAPI = api
           data,
         }),
       }),
+      patchTaskLot: builder.mutation<
+        object,
+        { taskID: number; offerID?: number; sum: number }
+      >({
+        query: data => ({
+          url: `tasks/lot`,
+          method: 'PATCH',
+          data,
+        }),
+      }),
       postTasksFiles: builder.mutation<File[], FilesParams>({
         query: ({ formData, files, date, signal }) => {
           return {
@@ -180,4 +190,5 @@ export const {
   usePostMaterialMutation,
   usePostTaskServiceMutation,
   useGetTaskServiceQuery,
+  usePatchTaskLotMutation,
 } = tasksAPI;
