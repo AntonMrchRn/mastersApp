@@ -2,7 +2,7 @@ import { File } from '@/types/fileManager';
 import { OutlayStatusType, RoleType, TaskType } from '@/types/task';
 
 type Material = {
-  ID: number;
+  ID?: number;
   count: number;
   measure: string;
   name: string;
@@ -12,7 +12,7 @@ type Material = {
   localSum?: string;
 };
 type Service = {
-  ID: number;
+  ID?: number;
   categoryID: number;
   categoryName?: string;
   count?: number;
@@ -27,6 +27,8 @@ type Service = {
   measureName?: string;
   canDelete?: boolean;
   localSum?: string;
+  serviceID?: number;
+  taskID?: number;
 };
 type Executor = {
   ID?: number;
@@ -276,33 +278,9 @@ type GetServicesResponse = {
   services: Service[];
 };
 type PostOffersRequest = {
-  ID: 1;
-  taskID: 1;
-  comment: 'Полная предоплата';
-  clientComment: 'Неполная предоплата';
+  taskID: number;
+  comment?: string;
   services: Service[];
-  outlayStatusID: OutlayStatusType;
-  refuseReason: 'Не хочу';
-  executor: {
-    ID: 0;
-    name: 'string';
-    sname: 'string';
-    pname: 'string';
-    phone: 0;
-    isNDSPayer: true;
-    entityTypeID: 1;
-  };
-  curator: {
-    ID: 0;
-    name: 'string';
-    sname: 'string';
-    pname: 'string';
-    phone: 0;
-    isNDSPayer: true;
-    entityTypeID: 1;
-  };
-  isCurator: true;
-  updateTime: '2023-07-26T11:56:14.005Z';
 };
 export type {
   GetTaskStatusesResponse,

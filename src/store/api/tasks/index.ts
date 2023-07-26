@@ -199,4 +199,5 @@ export const {
   usePostTaskServiceMutation,
   useGetTaskServiceQuery,
   usePatchTaskLotMutation,
+  usePostOffersMutation,
 } = tasksAPI;

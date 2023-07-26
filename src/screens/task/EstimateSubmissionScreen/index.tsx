@@ -28,8 +28,13 @@ import { TaskCardAddEstimateBottomSheet } from '@/components/task/TaskCard/TaskC
 import { deviceWidth } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { useGetTaskQuery, usePatchTaskLotMutation } from '@/store/api/tasks';
+import {
+  useGetTaskQuery,
+  usePatchTaskLotMutation,
+  usePostOffersMutation,
+} from '@/store/api/tasks';
 import { Material, Service } from '@/store/api/tasks/types';
+import { selectAuth } from '@/store/slices/auth/selectors';
 import {
   addMaterialLocalSum,
   addServiceLocalSum,
@@ -60,6 +65,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   const bsRef = useRef<BottomSheetModal>(null);
 
   const [patchTaskLot] = usePatchTaskLotMutation();
+  const [postOffers] = usePostOffersMutation();
 
   const getTaskQuery = useGetTaskQuery(taskId.toString());
 
@@ -104,12 +110,15 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   };
 
   const { offerServices, error, loading } = useAppSelector(selectTasks);
-
+  const userRole = useAppSelector(selectAuth).user?.roleID;
   const services = offerServices || [];
-  const serviceIDs = services?.reduce<number[]>(
-    (acc, val) => acc.concat(val.ID),
-    []
-  );
+  console.log('🚀 ~ file: index.tsx:115 ~ services:', services);
+  const serviceIDs = services?.reduce<number[]>((acc, val) => {
+    if (val.ID) {
+      acc.concat(val.ID);
+    }
+    return acc;
+  }, []);
   const allSum = services.reduce((acc, val) => {
     const mSums =
       val?.materials?.reduce((mAcc, mVal) => {
@@ -163,9 +172,9 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
 
   const fields = services.reduce((acc, val) => {
     const mFields = val?.materials?.reduce((mAcc, mVal) => {
-      return { ...mAcc, [mVal.ID]: !mVal.localSum };
+      return { ...mAcc, [mVal.ID as number]: !mVal.localSum };
     }, {});
-    return { ...acc, [val.ID]: !val.localSum, ...mFields };
+    return { ...acc, [val.ID as number]: !val.localSum, ...mFields };
   }, {});
 
   const isError = Object.values(fields).some(field => field === true);
@@ -196,11 +205,60 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
         text: `Измените свое предложения как минимум на ${costStep} ₽`,
       });
     }
+    if (!userRole) {
+      return toast.show({
+        type: 'error',
+        title: 'Не удалось определить роль пользователя',
+        contentHeight: 120,
+      });
+    }
     try {
       await patchTaskLot({
         taskID: taskId,
         sum: allSum,
       }).unwrap();
+      const postServices: Service[] = services.map(service => {
+        const postMaterials =
+          service.materials?.map(material => {
+            return {
+              count: material.count,
+              measure: material.measure,
+              name: material.name,
+              price: +(material.localSum || 0) / material.count,
+              roleID: userRole,
+            };
+          }) || [];
+        const matSums =
+          service?.materials?.reduce((acc, val) => {
+            if (val.localSum) {
+              return acc + +val.localSum;
+            }
+            return acc;
+          }, 0) || 0;
+        const res: Service = {
+          categoryID: service.categoryID,
+          categoryName: service.categoryName,
+          description: service.description,
+          measureID: service.measureID,
+          measureName: service.measureName,
+          name: service.name,
+          price: service.price,
+          setID: service.setID,
+          serviceID: service.serviceID || service.ID,
+          count: service.count,
+          sum: (service.count || 0) * service.price + matSums,
+          roleID: userRole,
+          taskID: taskId,
+          materials: postMaterials,
+        };
+        return res;
+      });
+      await postOffers({
+        taskID: taskId,
+        comment,
+        services: postServices,
+      }).unwrap();
+      navigation.navigate(AppScreenName.EstimateSubmissionSuccess);
     } catch (err) {
       toast.show({
         type: 'error',
@@ -208,7 +266,6 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
         contentHeight: 100,
       });
     }
-    // navigation.navigate(AppScreenName.EstimateSubmissionSuccess)
   };
   const onDeleteService = () => {
     const newServices = services.filter(ser => ser !== serviceForDelete);
@@ -266,14 +323,14 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
             Ваше ценовое предложение
           </Text>
           {services.map(service => {
-            const error = errors?.[service.ID];
+            const error = errors?.[service.ID as number];
             const onDelete = () => {
               setServiceForDelete(service);
               onDeleteEstimateModalVisible();
             };
             const onChangeText = (text: string) => {
               if (text && error) {
-                delete errors[service.ID];
+                delete errors[service.ID as number];
               }
               dispatch(
                 addServiceLocalSum({
@@ -291,18 +348,18 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                   count={service?.count || 0}
                   sum={service.sum || 0}
                   value={service?.localSum}
-                  error={errors?.[service.ID]}
+                  error={errors?.[service.ID as number]}
                   canDelete={service.canDelete}
                   onDelete={onDelete}
                 />
                 {service.materials?.map(material => {
-                  const error = errors?.[material.ID];
+                  const error = errors?.[material.ID as number];
                   const onDelete = () => {
                     onDeleteMaterial(service, material);
                   };
                   const onChangeText = (text: string) => {
                     if (text && error) {
-                      delete errors[material.ID];
+                      delete errors[material.ID as number];
                     }
                     dispatch(
                       addMaterialLocalSum({
