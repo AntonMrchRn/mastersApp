@@ -420,15 +420,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
               />
             )}
           </View>
-          <Button
-            label="Подать смету"
-            // disabled={isError}
-            onPress={() =>
-              navigation.navigate(AppScreenName.EstimateSubmissionSuccess, {
-                taskId,
-              })
-            }
-          />
+          <Button label="Подать смету" disabled={isError} onPress={onSubmit} />
         </View>
       </SafeAreaView>
     </>
