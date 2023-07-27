@@ -83,7 +83,7 @@ export type AppStackParamList = {
   [AppScreenName.WebView]: { uri: string };
   [AppScreenName.EstimateSubmission]: { taskId: number };
   [AppScreenName.NewMaterial]: { taskId: number };
-  [AppScreenName.EstimateSubmissionSuccess]: undefined;
+  [AppScreenName.EstimateSubmissionSuccess]: { taskId: number };
 };
 const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<AppStackParamList>();

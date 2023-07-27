@@ -24,4 +24,10 @@ export const styles = StyleSheet.create({
     marginTop: 12,
     textAlign: 'center',
   },
+  arrow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginVertical: 8,
+    alignSelf: 'flex-start',
+  },
 });

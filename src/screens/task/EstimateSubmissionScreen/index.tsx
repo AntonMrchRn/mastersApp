@@ -112,7 +112,6 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   const { offerServices, error, loading } = useAppSelector(selectTasks);
   const userRole = useAppSelector(selectAuth).user?.roleID;
   const services = offerServices || [];
-  console.log('🚀 ~ file: index.tsx:115 ~ services:', services);
   const serviceIDs = services?.reduce<number[]>((acc, val) => {
     if (val.ID) {
       acc.concat(val.ID);
@@ -257,7 +256,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
         comment,
         services: postServices,
       }).unwrap();
-      navigation.navigate(AppScreenName.EstimateSubmissionSuccess);
+      navigation.navigate(AppScreenName.EstimateSubmissionSuccess, { taskId });
     } catch (err) {
       toast.show({
         type: 'error',
@@ -421,7 +420,15 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
               />
             )}
           </View>
-          <Button label="Подать смету" disabled={isError} onPress={onSubmit} />
+          <Button
+            label="Подать смету"
+            // disabled={isError}
+            onPress={() =>
+              navigation.navigate(AppScreenName.EstimateSubmissionSuccess, {
+                taskId,
+              })
+            }
+          />
         </View>
       </SafeAreaView>
     </>

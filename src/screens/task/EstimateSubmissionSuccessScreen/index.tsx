@@ -1,26 +1,43 @@
 import React, { FC } from 'react';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { CompositeScreenProps } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Button, Text, useTheme } from 'rn-ui-kit';
 
+import ArrowBack from '@/assets/icons/svg/auth/ArrowBack';
 import { CheckmarkIcon } from '@/assets/icons/svg/estimate/CheckmarkIcon';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
+import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 
 import { styles } from './styles';
 
-type EstimateSubmissionSuccessScreenProps = StackScreenProps<
-  AppStackParamList,
-  AppScreenName.EstimateSubmissionSuccess
+export type EstimateSubmissionSuccessScreenProps = CompositeScreenProps<
+  StackScreenProps<AppStackParamList, AppScreenName.EstimateSubmissionSuccess>,
+  BottomTabScreenProps<BottomTabParamList>
 >;
 export const EstimateSubmissionSuccessScreen: FC<
   EstimateSubmissionSuccessScreenProps
-> = () => {
+> = ({ navigation, route }) => {
   const theme = useTheme();
+
+  const { taskId } = route.params;
+
+  const navigateMyTasks = () => {
+    navigation.navigate(BottomTabName.MyTasks);
+  };
+  const navigateTask = () => {
+    navigation.navigate(AppScreenName.TaskCard, { taskId });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <View />
+      <TouchableOpacity style={styles.arrow} onPress={navigateTask}>
+        <ArrowBack />
+        <Text variant="bodyMRegular">К задаче</Text>
+      </TouchableOpacity>
       <View style={styles.body}>
         <View
           style={[
@@ -42,7 +59,7 @@ export const EstimateSubmissionSuccessScreen: FC<
           во вкладке Мои задачи
         </Text>
       </View>
-      <Button label="Перейти в Мои задачи" />
+      <Button label="Перейти в Мои задачи" onPress={navigateMyTasks} />
     </SafeAreaView>
   );
 };
