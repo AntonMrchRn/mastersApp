@@ -14,7 +14,11 @@ import { TaskCardHisory } from '@/components/task/TaskCard/TaskCardHistory';
 import { TaskCardReport } from '@/components/task/TaskCard/TaskCardReport';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppSelector } from '@/store';
-import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
+import {
+  useGetTaskQuery,
+  useGetUserOffersQuery,
+  usePatchTaskMutation,
+} from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import {
@@ -60,6 +64,13 @@ export const useTaskCard = ({
   const { user } = useAppSelector(selectAuth);
 
   const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
+  const getUserOffersQuery = useGetUserOffersQuery(
+    {
+      taskID: +taskId,
+      userID: user?.userID as number,
+    },
+    { skip: !user?.userID }
+  );
 
   useEffect(() => {
     if (isFocused) {
@@ -81,6 +92,7 @@ export const useTaskCard = ({
     EstimateTab.TASK_ESTIMATE,
     EstimateTab.MY_SUGGESTION,
   ];
+  const isEstimateTabs = tab === TaskTab.ESTIMATE;
   const task = data?.tasks?.[0];
   const executors = task?.executors;
   const id = task?.ID || 0;
@@ -323,6 +335,7 @@ export const useTaskCard = ({
             setSelectedServiceId={setSelectedServiceId}
             onCantDeleteBannerVisible={onCantDeleteBannerVisible}
             subsetID={subsetID}
+            currentEstimateTab={currentEstimateTab}
           />
         );
       case TaskTab.REPORT:
@@ -535,7 +548,6 @@ export const useTaskCard = ({
   return {
     onTabChange,
     tabs,
-    tab,
     getCurrentTab,
     id,
     name,
@@ -569,5 +581,6 @@ export const useTaskCard = ({
     submissionModalVisible,
     estimateTabsArray,
     onSwitchEstimateTab,
+    isEstimateTabs,
   };
 };

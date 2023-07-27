@@ -77,6 +77,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
     submissionModalVisible,
     estimateTabsArray,
     onSwitchEstimateTab,
+    isEstimateTabs,
   } = useTaskCard({ taskId, navigation });
   const theme = useTheme();
   const insets = useSafeAreaInsets();
@@ -153,18 +154,16 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
                 style={styles.mt16}
                 contentContainerStyle={styles.contentContainerTab}
               />
-              <View
-                style={{
-                  paddingHorizontal: 20,
-                  marginTop: 24,
-                }}
-              >
-                <SegmentedControl
-                  tabs={estimateTabsArray}
-                  onChange={onSwitchEstimateTab}
-                  width={deviceWidth - 40}
-                />
-              </View>
+
+              {isEstimateTabs && (
+                <View style={styles.segment}>
+                  <SegmentedControl
+                    tabs={estimateTabsArray}
+                    onChange={onSwitchEstimateTab}
+                    width={deviceWidth - 40}
+                  />
+                </View>
+              )}
             </View>
             <View style={styles.card}>{getCurrentTab()}</View>
           </View>
