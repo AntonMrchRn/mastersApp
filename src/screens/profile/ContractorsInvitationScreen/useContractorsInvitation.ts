@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Clipboard from '@react-native-community/clipboard';
@@ -17,6 +18,7 @@ import { selectUser } from '@/store/slices/user/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
 
 const useContractorsInvitation = () => {
+  const insets = useSafeAreaInsets();
   const toast = useToast();
   const link = storageMMKV.getString('invitationLink');
   const dispatch = useAppDispatch();
@@ -54,7 +56,6 @@ const useContractorsInvitation = () => {
       toast.show({
         type: 'error',
         title: (error as AxiosQueryErrorResponse).data.message,
-        contentHeight: 100,
       });
     }
   }, [isError]);
@@ -84,7 +85,7 @@ const useContractorsInvitation = () => {
       type: 'success',
       titleStyle: styles.toastTitle,
       title: 'Ссылка-приглашение скопирована',
-      containerStyle: styles.toastContainer,
+      containerStyle: { height: 60 + insets.top },
     });
   };
 

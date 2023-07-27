@@ -54,9 +54,6 @@ const styles = StyleSheet.create({
   toastTitle: {
     fontSize: 17,
   },
-  toastContainer: {
-    height: 105,
-  },
   btn: {
     marginBottom: configApp.android ? 30 : 12,
   },

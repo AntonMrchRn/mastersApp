@@ -51,7 +51,6 @@ const ActivitiesModal = ({
       toast.show({
         type: 'error',
         title: (error as AxiosQueryErrorResponse).data.message,
-        contentHeight: 100,
       });
     }
   }, [isError]);

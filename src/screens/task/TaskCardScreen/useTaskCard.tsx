@@ -62,7 +62,6 @@ export const useTaskCard = ({
       toast.show({
         type: 'error',
         title: (error as AxiosQueryErrorResponse).data.message,
-        contentHeight: 120,
       });
     }
   }, [isError]);
@@ -208,7 +207,6 @@ export const useTaskCard = ({
         toast.show({
           type: 'error',
           title: (error as AxiosQueryErrorResponse).data.message,
-          contentHeight: 120,
         });
       } finally {
         refetch();
@@ -258,7 +256,6 @@ export const useTaskCard = ({
       toast.show({
         type: 'info',
         title: 'Смета уже отправлена на согласование',
-        contentHeight: 120,
       });
     } else {
       await patchTask({

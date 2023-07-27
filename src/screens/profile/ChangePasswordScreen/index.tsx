@@ -58,11 +58,11 @@ const ChangePasswordScreen = ({
           />
           <Spacer size="xl" />
           <Button
-            label="Обновить пароль"
-            isPending={isLoading}
             style={styles.btn}
-            onPress={methods.handleSubmit(onChangePassword)}
             disabled={!isDirty}
+            isPending={isLoading}
+            label="Обновить пароль"
+            onPress={onChangePassword}
           />
         </FormProvider>
       </View>

@@ -37,7 +37,6 @@ const TypeSelectionStep = ({
       toast.show({
         type: 'error',
         title: (error as AxiosQueryErrorResponse).data.message,
-        contentHeight: 120,
       });
     }
   }, [isError]);

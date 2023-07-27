@@ -107,7 +107,6 @@ export const useTaskCardEstimate = ({
       toast.show({
         type: 'error',
         title: mutationDeleteTaskService?.error?.data?.message,
-        contentHeight: 120,
       });
     }
   }, [mutationDeleteTaskService.error]);
@@ -116,7 +115,6 @@ export const useTaskCardEstimate = ({
       toast.show({
         type: 'error',
         title: mutationTaskService?.error?.data?.message,
-        contentHeight: 120,
       });
     }
   }, [mutationTaskService.error]);
@@ -125,7 +123,6 @@ export const useTaskCardEstimate = ({
       toast.show({
         type: 'error',
         title: mutationDeleteMateria?.error?.data?.message,
-        contentHeight: 120,
       });
     }
   }, [mutationDeleteMateria.error]);
