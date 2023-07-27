@@ -19,6 +19,7 @@ import {
   useGetUserOffersQuery,
   usePatchTaskMutation,
 } from '@/store/api/tasks';
+import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import {
@@ -62,14 +63,18 @@ export const useTaskCard = ({
 
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
-
+  console.log('🚀 ~ file: useTaskCard.tsx:65 ~ user:', user);
+  const getUserQuery = useGetUserQuery(user?.userID);
+  const entityTypeID = getUserQuery.data?.entityTypeID;
+  const isSelfEmployed = entityTypeID === 1;
   const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
-  const getUserOffersQuery = useGetUserOffersQuery(
-    {
-      taskID: +taskId,
-      userID: user?.userID as number,
-    },
-    { skip: !user?.userID }
+  const getUserOffersQuery = useGetUserOffersQuery({
+    taskID: +taskId,
+    userID: user?.userID as number,
+  });
+  console.log(
+    '🚀 ~ file: useTaskCard.tsx:74 ~ getUserOffersQuery:',
+    getUserOffersQuery.data
   );
 
   useEffect(() => {
@@ -92,7 +97,7 @@ export const useTaskCard = ({
     EstimateTab.TASK_ESTIMATE,
     EstimateTab.MY_SUGGESTION,
   ];
-  const isEstimateTabs = tab === TaskTab.ESTIMATE;
+  const isEstimateTabs = tab === TaskTab.ESTIMATE && !!getUserOffersQuery.data;
   const task = data?.tasks?.[0];
   const executors = task?.executors;
   const id = task?.ID || 0;
@@ -304,8 +309,12 @@ export const useTaskCard = ({
     setBudgetModalVisible(!budgetModalVisible);
   };
   const onSubmitAnEstimate = () => {
-    //показываем модалку с условиями
-    onSubmissionModalVisible();
+    //показываем модалку с условиями если самозанятый
+    if (isSelfEmployed) {
+      onSubmissionModalVisible();
+    } else {
+      onTaskSubmission();
+    }
   };
 
   const getCurrentTab = () => {
