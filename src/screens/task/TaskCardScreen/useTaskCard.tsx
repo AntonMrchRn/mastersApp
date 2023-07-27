@@ -14,10 +14,21 @@ import { TaskCardHisory } from '@/components/task/TaskCard/TaskCardHistory';
 import { TaskCardReport } from '@/components/task/TaskCard/TaskCardReport';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppSelector } from '@/store';
-import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
+import {
+  useGetTaskQuery,
+  useGetUserOffersQuery,
+  usePatchTaskMutation,
+} from '@/store/api/tasks';
+import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
-import { OutlayStatusType, StatusType, TaskTab, TaskType } from '@/types/task';
+import {
+  EstimateTab,
+  OutlayStatusType,
+  StatusType,
+  TaskTab,
+  TaskType,
+} from '@/types/task';
 
 import { getBanner } from './getBanner';
 
@@ -41,6 +52,9 @@ export const useTaskCard = ({
   const [estimateBannerVisible, setEstimateBannerVisible] = useState(false);
   const [cantDeleteBannerVisible, setCantDeleteBannerVisible] = useState(false);
   const [submissionModalVisible, setSubmissionModalVisible] = useState(false);
+  const [currentEstimateTab, setCurrentEstimateTab] = useState<EstimateTab>(
+    EstimateTab.TASK_ESTIMATE
+  );
   const isFocused = useIsFocused();
 
   const ref = useRef<{
@@ -49,8 +63,19 @@ export const useTaskCard = ({
 
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
-
+  console.log('🚀 ~ file: useTaskCard.tsx:65 ~ user:', user);
+  const getUserQuery = useGetUserQuery(user?.userID);
+  const entityTypeID = getUserQuery.data?.entityTypeID;
+  const isSelfEmployed = entityTypeID === 1;
   const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
+  const getUserOffersQuery = useGetUserOffersQuery({
+    taskID: +taskId,
+    userID: user?.userID as number,
+  });
+  console.log(
+    '🚀 ~ file: useTaskCard.tsx:74 ~ getUserOffersQuery:',
+    getUserOffersQuery.data
+  );
 
   useEffect(() => {
     if (isFocused) {
@@ -67,6 +92,12 @@ export const useTaskCard = ({
   }, [isError]);
 
   const [patchTask] = usePatchTaskMutation();
+
+  const estimateTabsArray = [
+    EstimateTab.TASK_ESTIMATE,
+    EstimateTab.MY_SUGGESTION,
+  ];
+  const isEstimateTabs = tab === TaskTab.ESTIMATE && !!getUserOffersQuery.data;
   const task = data?.tasks?.[0];
   const executors = task?.executors;
   const id = task?.ID || 0;
@@ -181,6 +212,10 @@ export const useTaskCard = ({
   const onBudgetSubmission = () => {
     //
   };
+  const onSwitchEstimateTab = (index: number) => {
+    const newTab = estimateTabsArray[index];
+    newTab && setCurrentEstimateTab(newTab);
+  };
   const onAddEstimateMaterial = () => {
     if (selectedServiceId) {
       navigation.navigate(AppScreenName.EstimateAddMaterial, {
@@ -274,8 +309,12 @@ export const useTaskCard = ({
     setBudgetModalVisible(!budgetModalVisible);
   };
   const onSubmitAnEstimate = () => {
-    //показываем модалку с условиями
-    onSubmissionModalVisible();
+    //показываем модалку с условиями если самозанятый
+    if (isSelfEmployed) {
+      onSubmissionModalVisible();
+    } else {
+      onTaskSubmission();
+    }
   };
 
   const getCurrentTab = () => {
@@ -305,6 +344,7 @@ export const useTaskCard = ({
             setSelectedServiceId={setSelectedServiceId}
             onCantDeleteBannerVisible={onCantDeleteBannerVisible}
             subsetID={subsetID}
+            currentEstimateTab={currentEstimateTab}
           />
         );
       case TaskTab.REPORT:
@@ -517,7 +557,6 @@ export const useTaskCard = ({
   return {
     onTabChange,
     tabs,
-    tab,
     getCurrentTab,
     id,
     name,
@@ -549,5 +588,8 @@ export const useTaskCard = ({
     onSubmissionModalVisible,
     onTaskSubmission,
     submissionModalVisible,
+    estimateTabsArray,
+    onSwitchEstimateTab,
+    isEstimateTabs,
   };
 };

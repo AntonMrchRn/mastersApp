@@ -5,4 +5,6 @@ export const {
   deleteProgress,
   setNewOfferServices,
   addOfferService,
+  addServiceLocalSum,
+  addMaterialLocalSum,
 } = tasks.actions;

@@ -14,7 +14,12 @@ import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useGetOffersQuery } from '@/store/api/tasks';
 import { Service } from '@/store/api/tasks/types';
-import { OutlayStatusType, StatusType, TaskType } from '@/types/task';
+import {
+  EstimateTab,
+  OutlayStatusType,
+  StatusType,
+  TaskType,
+} from '@/types/task';
 
 import { AddServiceBottomSheet } from '../AddServiceBottomSheet';
 import { TaskCardAddEstimateBottomSheet } from '../TaskCardAddEstimateBottomSheet';
@@ -40,6 +45,7 @@ type TaskCardEstimateProps = {
   >;
   onCantDeleteBannerVisible: () => void;
   subsetID: TaskType | undefined;
+  currentEstimateTab: EstimateTab;
 };
 
 export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
@@ -80,7 +86,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
 
   const canSwipe = !estimateBottomVisible && statusID === StatusType.WORK;
   const serviceIDs = services?.reduce<number[]>(
-    (acc, val) => acc.concat(val.ID),
+    (acc, val) => acc.concat(val.ID as number),
     []
   );
   const addService = (service: Service) => {
@@ -157,11 +163,11 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
         </Text>
         {services.map(service => {
           const firstActionService = () => {
-            onEdit(service.ID);
+            onEdit(service.ID as number);
           };
           const secondActionService = () => {
             if (services.length > 1) {
-              onDeleteService(service.ID);
+              onDeleteService(service.ID as number);
             } else {
               onCantDeleteBannerVisible();
             }
@@ -193,7 +199,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
               <Spacer size={0} separator="bottom" />
               {service?.materials?.map(material => {
                 const firstActionMaterial = () => {
-                  onEdit(service.ID, material.name);
+                  onEdit(service.ID as number, material.name);
                 };
                 const secondActionMaterial = () => {
                   onDeleteMaterial(service, material);

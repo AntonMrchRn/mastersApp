@@ -66,4 +66,8 @@ export const styles = StyleSheet.create({
     width: deviceWidth - 40,
     backgroundColor: 'white',
   },
+  segment: {
+    paddingHorizontal: 20,
+    marginTop: 24,
+  },
 });

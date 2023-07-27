@@ -2,16 +2,17 @@ import { File } from '@/types/fileManager';
 import { OutlayStatusType, RoleType, TaskType } from '@/types/task';
 
 type Material = {
-  ID: number;
+  ID?: number;
   count: number;
   measure: string;
   name: string;
   price: number;
   roleID: RoleType;
   canDelete?: boolean;
+  localSum?: string;
 };
 type Service = {
-  ID: number;
+  ID?: number;
   categoryID: number;
   categoryName?: string;
   count?: number;
@@ -25,6 +26,9 @@ type Service = {
   materials?: Material[];
   measureName?: string;
   canDelete?: boolean;
+  localSum?: string;
+  serviceID?: number;
+  taskID?: number;
 };
 type Executor = {
   ID?: number;
@@ -120,6 +124,19 @@ type Task = {
     login?: string;
     password?: string;
   };
+  /**
+   * Подача смет ценой выше поданной ранее
+   * Если false, то можно подавать и ценой выше, главное соблюдать "Шаг цены сметы"
+   */
+  allowCostIncrease?: boolean;
+  /**
+   * Текущая стоимость сметы
+   */
+  currentSum?: number;
+  /**
+   * Шаг цены сметы
+   */
+  costStep?: number;
 };
 type Offer = {
   ID: number;
@@ -260,7 +277,11 @@ type GetServicesResponse = {
   count: number;
   services: Service[];
 };
-
+type PostOffersRequest = {
+  taskID: number;
+  comment?: string;
+  services: Service[];
+};
 export type {
   GetTaskStatusesResponse,
   Status,
@@ -276,4 +297,5 @@ export type {
   GetServicesCategoriesResponse,
   GetServicesResponse,
   GetOffersResponse,
+  PostOffersRequest,
 };

@@ -42,31 +42,33 @@ export const TaskCardSubmissionBottomSheet: FC<
 
   return (
     <BottomSheet onSwipeComplete={onCancel} isVisible={isVisible}>
-      <Text variant="bodySRegular" color={theme.text.basic}>
-        Участвуя в задаче, вы принимаете{' '}
-        <Text
-          variant="bodySRegular"
-          color={theme.text.accent}
-          onPress={onPress}
-        >
-          Соглашение об использовании простой электронной подписи.
+      <View style={{ marginTop: 28 }}>
+        <Text variant="bodySRegular" color={theme.text.basic}>
+          Участвуя в задаче, вы принимаете{' '}
+          <Text
+            variant="bodySRegular"
+            color={theme.text.accent}
+            onPress={onPress}
+          >
+            Соглашение об использовании простой электронной подписи.
+          </Text>
+          При оплате задачи мы формируем акт оказанияуслуг, подписанный ПЭП
+          исполнителя
         </Text>
-        При оплате задачи мы формируем акт оказанияуслуг, подписанный ПЭП
-        исполнителя
-      </Text>
-      <View style={styles.buttons}>
-        <Button
-          size="M"
-          variant="outlineAccent"
-          label="Отмена"
-          onPress={onCancel}
-        />
-        <Button
-          size="M"
-          variant="accent"
-          label="С условиями согласен"
-          onPress={onSubmit}
-        />
+        <View style={styles.buttons}>
+          <Button
+            size="M"
+            variant="outlineAccent"
+            label="Отмена"
+            onPress={onCancel}
+          />
+          <Button
+            size="M"
+            variant="accent"
+            label="С условиями согласен"
+            onPress={onSubmit}
+          />
+        </View>
       </View>
     </BottomSheet>
   );

@@ -10,6 +10,7 @@ import {
   GetTaskHistoryResponse,
   GetTaskResponse,
   GetTaskStatusesResponse,
+  PostOffersRequest,
   Service,
   Task,
 } from './types';
@@ -123,6 +124,38 @@ export const tasksAPI = api
           data,
         }),
       }),
+      patchTaskLot: builder.mutation<
+        object,
+        { taskID: number; offerID?: number; sum: number }
+      >({
+        query: data => ({
+          url: `tasks/lot`,
+          method: 'PATCH',
+          data,
+        }),
+      }),
+      postOffers: builder.mutation<object, PostOffersRequest>({
+        query: data => ({
+          url: `offers`,
+          method: 'POST',
+          data,
+        }),
+      }),
+      getUserOffers: builder.query<object, { taskID: number; userID: number }>({
+        query: data => ({
+          url: `offers?query=?taskID==${data.taskID}*userID==${data.userID}?`,
+          method: 'GET',
+        }),
+      }),
+      getAnotherOffers: builder.query<
+        object,
+        { taskID: number; userID: number }
+      >({
+        query: data => ({
+          url: `offers?query=?taskID==${data.taskID}*userID!=${data.userID}?`,
+          method: 'GET',
+        }),
+      }),
       postTasksFiles: builder.mutation<File[], FilesParams>({
         query: ({ formData, files, date, signal }) => {
           return {
@@ -180,4 +213,8 @@ export const {
   usePostMaterialMutation,
   usePostTaskServiceMutation,
   useGetTaskServiceQuery,
+  usePatchTaskLotMutation,
+  usePostOffersMutation,
+  useGetUserOffersQuery,
+  useGetAnotherOffersQuery,
 } = tasksAPI;

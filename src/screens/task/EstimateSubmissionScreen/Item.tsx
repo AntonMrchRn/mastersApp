@@ -1,12 +1,11 @@
 import React, { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
-import { Spacer, Text, useTheme } from 'rn-ui-kit';
+import { Input, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
 import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { TrashIcon } from '@/assets/icons/svg/estimate/TrashIcon';
-import ControlledInput from '@/components/inputs/ControlledInput';
 
 import { styles } from './styles';
 
@@ -15,10 +14,11 @@ type ItemProps = {
   description?: string;
   count: number;
   sum: number;
-  name: string;
   canDelete?: boolean;
-  error: string;
+  error: boolean | undefined;
   onDelete: () => void;
+  value?: string;
+  onChangeText: (text: string) => void;
 };
 export const Item: FC<ItemProps> = ({
   title,
@@ -26,11 +26,15 @@ export const Item: FC<ItemProps> = ({
   count,
   sum,
   canDelete,
-  name,
   error,
+  value,
   onDelete,
+  onChangeText,
 }) => {
   const theme = useTheme();
+  const onClear = () => {
+    onChangeText('');
+  };
   return (
     <View>
       {canDelete && (
@@ -76,13 +80,20 @@ export const Item: FC<ItemProps> = ({
         </Text>
       </View>
       <Spacer size={16} />
-      <ControlledInput
-        name={name}
+      <Input
         variant={'text'}
+        keyboardType="numeric"
         label={'Стоимость'}
         placeholder={'Стоимость'}
-        hint={error || 'Указывается в рублях за весь объем услуги'}
+        hint={
+          error
+            ? 'Для подачи сметы необходимо заполнить все поля'
+            : 'Указывается в рублях за весь объем услуги'
+        }
         isError={!!error}
+        value={value}
+        onChangeText={onChangeText}
+        onClear={onClear}
       />
       <Spacer size={20} separator="bottom" />
     </View>
