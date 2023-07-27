@@ -6,7 +6,14 @@ import {
 } from 'react-native-safe-area-context';
 
 import { StackScreenProps } from '@react-navigation/stack';
-import { Banner, TabControl, Text, Tips, useTheme } from 'rn-ui-kit';
+import {
+  Banner,
+  SegmentedControl,
+  TabControl,
+  Text,
+  Tips,
+  useTheme,
+} from 'rn-ui-kit';
 
 import Header from '@/components/Header';
 import { TaskBadges } from '@/components/task/TaskBadges';
@@ -14,6 +21,7 @@ import { TaskCardBottom } from '@/components/task/TaskCard/TaskCardBottom';
 import { TaskCardBudgetModal } from '@/components/task/TaskCard/TaskCardBudgetModal';
 import { TaskCardCancelBottomSheet } from '@/components/task/TaskCard/TaskCardCancelBottomSheet';
 import { TaskCardSubmissionBottomSheet } from '@/components/task/TaskCard/TaskCardSubmissionBottomSheet';
+import { deviceWidth } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { StatusType, TaskType } from '@/types/task';
 
@@ -67,6 +75,8 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
     onSubmissionModalVisible,
     onTaskSubmission,
     submissionModalVisible,
+    estimateTabsArray,
+    onSwitchEstimateTab,
   } = useTaskCard({ taskId, navigation });
   const theme = useTheme();
   const insets = useSafeAreaInsets();
@@ -143,6 +153,18 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
                 style={styles.mt16}
                 contentContainerStyle={styles.contentContainerTab}
               />
+              <View
+                style={{
+                  paddingHorizontal: 20,
+                  marginTop: 24,
+                }}
+              >
+                <SegmentedControl
+                  tabs={estimateTabsArray}
+                  onChange={onSwitchEstimateTab}
+                  width={deviceWidth - 40}
+                />
+              </View>
             </View>
             <View style={styles.card}>{getCurrentTab()}</View>
           </View>

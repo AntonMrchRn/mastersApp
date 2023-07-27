@@ -17,7 +17,13 @@ import { useAppSelector } from '@/store';
 import { useGetTaskQuery, usePatchTaskMutation } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
-import { OutlayStatusType, StatusType, TaskTab, TaskType } from '@/types/task';
+import {
+  EstimateTab,
+  OutlayStatusType,
+  StatusType,
+  TaskTab,
+  TaskType,
+} from '@/types/task';
 
 import { getBanner } from './getBanner';
 
@@ -41,6 +47,9 @@ export const useTaskCard = ({
   const [estimateBannerVisible, setEstimateBannerVisible] = useState(false);
   const [cantDeleteBannerVisible, setCantDeleteBannerVisible] = useState(false);
   const [submissionModalVisible, setSubmissionModalVisible] = useState(false);
+  const [currentEstimateTab, setCurrentEstimateTab] = useState<EstimateTab>(
+    EstimateTab.TASK_ESTIMATE
+  );
   const isFocused = useIsFocused();
 
   const ref = useRef<{
@@ -67,6 +76,11 @@ export const useTaskCard = ({
   }, [isError]);
 
   const [patchTask] = usePatchTaskMutation();
+
+  const estimateTabsArray = [
+    EstimateTab.TASK_ESTIMATE,
+    EstimateTab.MY_SUGGESTION,
+  ];
   const task = data?.tasks?.[0];
   const executors = task?.executors;
   const id = task?.ID || 0;
@@ -180,6 +194,10 @@ export const useTaskCard = ({
   };
   const onBudgetSubmission = () => {
     //
+  };
+  const onSwitchEstimateTab = (index: number) => {
+    const newTab = estimateTabsArray[index];
+    newTab && setCurrentEstimateTab(newTab);
   };
   const onAddEstimateMaterial = () => {
     if (selectedServiceId) {
@@ -549,5 +567,7 @@ export const useTaskCard = ({
     onSubmissionModalVisible,
     onTaskSubmission,
     submissionModalVisible,
+    estimateTabsArray,
+    onSwitchEstimateTab,
   };
 };

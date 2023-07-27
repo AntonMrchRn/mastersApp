@@ -148,6 +148,10 @@ export enum RoleType {
    */
   CLIENT = 6,
 }
+export enum EstimateTab {
+  TASK_ESTIMATE = 'Смета задачи',
+  MY_SUGGESTION = 'Мое предложение',
+}
 type TaskSearch = {
   ID?: number;
 };
