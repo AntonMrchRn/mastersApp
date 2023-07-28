@@ -63,7 +63,6 @@ export const useTaskCard = ({
 
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
-  console.log('🚀 ~ file: useTaskCard.tsx:65 ~ user:', user);
   const getUserQuery = useGetUserQuery(user?.userID);
   const entityTypeID = getUserQuery.data?.entityTypeID;
   const isSelfEmployed = entityTypeID === 1;
@@ -72,10 +71,6 @@ export const useTaskCard = ({
     taskID: +taskId,
     userID: user?.userID as number,
   });
-  console.log(
-    '🚀 ~ file: useTaskCard.tsx:74 ~ getUserOffersQuery:',
-    getUserOffersQuery.data
-  );
 
   useEffect(() => {
     if (isFocused) {

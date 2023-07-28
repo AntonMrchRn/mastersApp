@@ -5,13 +5,18 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useToast } from 'rn-ui-kit';
 
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
+import { useAppSelector } from '@/store';
 import {
   useDeleteMaterialMutation,
   useDeleteTaskServiceMutation,
+  useGetAnotherOffersQuery,
   useGetTaskQuery,
+  useGetUserOffersQuery,
   usePatchTaskServiceMutation,
 } from '@/store/api/tasks';
 import { Material, Service } from '@/store/api/tasks/types';
+import { selectAuth } from '@/store/slices/auth/selectors';
+import { EstimateTab } from '@/types/task';
 
 export const useTaskCardEstimate = ({
   services,
@@ -19,6 +24,7 @@ export const useTaskCardEstimate = ({
   navigation,
   onEstimateBottomVisible,
   estimateBottomVisible,
+  currentEstimateTab,
 }: {
   services: Service[];
   taskId: number;
@@ -29,12 +35,30 @@ export const useTaskCardEstimate = ({
   >;
   onEstimateBottomVisible: () => void;
   estimateBottomVisible: boolean;
+  currentEstimateTab: EstimateTab;
 }) => {
   const toast = useToast();
 
   const bsRef = useRef<BottomSheetModal>(null);
 
+  const { user } = useAppSelector(selectAuth);
+
+  const userID = user?.userID;
+
   const getTask = useGetTaskQuery(taskId.toString());
+  const getAnotherOffers = useGetAnotherOffersQuery({
+    taskID: +taskId,
+    userID: userID as number,
+  });
+  const getUserOffersQuery = useGetUserOffersQuery({
+    taskID: +taskId,
+    userID: userID as number,
+  });
+  const userOffer = getUserOffersQuery.data?.offers?.[0];
+  const userServices = userOffer?.services || [];
+
+  const currentServices =
+    currentEstimateTab === EstimateTab.TASK_ESTIMATE ? services : userServices;
 
   const [deleteTaskService, mutationDeleteTaskService] =
     useDeleteTaskServiceMutation();
@@ -43,8 +67,10 @@ export const useTaskCardEstimate = ({
 
   const [estimateSheetVisible, setEstimateSheetVisible] = useState(false);
 
-  const allSum = services.reduce((acc, val) => acc + (val?.sum || 0), 0);
-  const allMaterials = services.reduce<Material[]>(
+  const isAnotherOffers = !!getAnotherOffers.data;
+
+  const allSum = currentServices.reduce((acc, val) => acc + (val?.sum || 0), 0);
+  const allMaterials = currentServices.reduce<Material[]>(
     (acc, val) =>
       acc.concat(typeof val.materials !== 'undefined' ? val.materials : []),
     []
@@ -85,18 +111,20 @@ export const useTaskCardEstimate = ({
     getTask.refetch();
   };
   const onDeleteMaterial = async (service: Service, material: Material) => {
-    await patchTaskService({
-      ID: service.ID,
-      taskID: taskId,
-      materials: [],
-      sum:
-        (service?.sum || 0) - (material?.price || 0) * (material?.count || 0),
-    });
-    await deleteMaterial({
-      ID: material.ID.toString(),
-      taskID: taskId.toString(),
-    });
-    getTask.refetch();
+    if (material.ID) {
+      await patchTaskService({
+        ID: service.ID,
+        taskID: taskId,
+        materials: [],
+        sum:
+          (service?.sum || 0) - (material?.price || 0) * (material?.count || 0),
+      });
+      await deleteMaterial({
+        ID: material.ID.toString(),
+        taskID: taskId.toString(),
+      });
+      getTask.refetch();
+    }
   };
 
   useEffect(() => {
@@ -139,5 +167,8 @@ export const useTaskCardEstimate = ({
     onPressService,
     bsRef,
     addServiceBottomSheetClose,
+    isAnotherOffers,
+    currentServices,
+    userID,
   };
 };

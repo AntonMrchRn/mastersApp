@@ -12,7 +12,6 @@ import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
-import { useGetOffersQuery } from '@/store/api/tasks';
 import { Service } from '@/store/api/tasks/types';
 import {
   EstimateTab,
@@ -60,6 +59,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   setSelectedServiceId,
   onCantDeleteBannerVisible,
   subsetID,
+  currentEstimateTab,
 }) => {
   const theme = useTheme();
   const isFocused = useIsFocused();
@@ -74,15 +74,18 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     onPressMaterial,
     onPressService,
     bsRef,
+    isAnotherOffers,
     addServiceBottomSheetClose,
+    userID,
+    currentServices,
   } = useTaskCardEstimate({
     services,
     taskId,
     navigation,
     onEstimateBottomVisible,
     estimateBottomVisible,
+    currentEstimateTab,
   });
-  const offers = useGetOffersQuery(taskId.toString());
 
   const canSwipe = !estimateBottomVisible && statusID === StatusType.WORK;
   const serviceIDs = services?.reduce<number[]>(
@@ -97,9 +100,12 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     bsRef.current?.close();
   };
   const onCompetitorEstimates = () => {
-    navigation.navigate(AppScreenName.CompetitorEstimates, {
-      taskId,
-    });
+    if (userID) {
+      navigation.navigate(AppScreenName.CompetitorEstimates, {
+        taskId,
+        userID,
+      });
+    }
   };
   const onTradingResults = () => {
     navigation.navigate(AppScreenName.TradingResults, {
@@ -161,7 +167,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
         <Text variant={'title3'} color={theme.text.basic} style={styles.mb8}>
           Перечень услуг и материалов
         </Text>
-        {services.map(service => {
+        {currentServices.map(service => {
           const firstActionService = () => {
             onEdit(service.ID as number);
           };
@@ -226,7 +232,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
         <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
         {subsetID === TaskType.COMMON_AUCTION_SALE && (
           <View style={styles.mt16}>
-            {offers.data?.count ? (
+            {isAnotherOffers ? (
               <TouchableOpacity
                 style={styles.candidatRow}
                 onPress={onCompetitorEstimates}

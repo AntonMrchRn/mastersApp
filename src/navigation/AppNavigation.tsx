@@ -78,7 +78,7 @@ export type AppStackParamList = {
     service: Service;
     fromEstimateSubmission?: boolean;
   };
-  [AppScreenName.CompetitorEstimates]: { taskId: number };
+  [AppScreenName.CompetitorEstimates]: { taskId: number; userID: number };
   [AppScreenName.TradingResults]: { taskId: number };
   [AppScreenName.WebView]: { uri: string };
   [AppScreenName.EstimateSubmission]: { taskId: number };

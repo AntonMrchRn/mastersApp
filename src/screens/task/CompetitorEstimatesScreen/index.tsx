@@ -8,7 +8,7 @@ import { Spacer, Text } from 'rn-ui-kit';
 import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { deviceWidth } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
-import { useGetOffersQuery } from '@/store/api/tasks';
+import { useGetAnotherOffersQuery } from '@/store/api/tasks';
 import { Material } from '@/store/api/tasks/types';
 
 import { Item } from './Item';
@@ -22,7 +22,8 @@ type CompetitorEstimatesScreenProps = StackScreenProps<
 export const CompetitorEstimatesScreen: FC<CompetitorEstimatesScreenProps> = ({
   route,
 }) => {
-  const offers = useGetOffersQuery(route.params.taskId.toString());
+  const { taskId, userID } = route.params;
+  const offers = useGetAnotherOffersQuery({ taskID: taskId, userID });
   const data = offers.data?.offers || [];
 
   return (
