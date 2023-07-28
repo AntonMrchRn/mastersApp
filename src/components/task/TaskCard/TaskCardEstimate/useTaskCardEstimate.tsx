@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { StackNavigationProp } from '@react-navigation/stack';
+import dayjs from 'dayjs';
 import { useToast } from 'rn-ui-kit';
 
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
@@ -55,6 +56,12 @@ export const useTaskCardEstimate = ({
     userID: userID as number,
   });
   const userOffer = getUserOffersQuery.data?.offers?.[0];
+  const task = getTask.data?.tasks?.[0];
+  const isOffersPublic = task?.isOffersPublic;
+  const offersDeadline = task?.offersDeadline;
+  const isOffersDeadlineOver =
+    offersDeadline && dayjs().isAfter(offersDeadline);
+
   const userServices = userOffer?.services || [];
   const isTaskEctimateTab = currentEstimateTab === EstimateTab.TASK_ESTIMATE;
   const userComment = userOffer?.comment;
@@ -173,5 +180,7 @@ export const useTaskCardEstimate = ({
     userID,
     userComment,
     isTaskEctimateTab,
+    isOffersPublic,
+    isOffersDeadlineOver,
   };
 };

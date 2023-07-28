@@ -23,9 +23,11 @@ type TradingResultsScreenProps = StackScreenProps<
 export const TradingResultsScreen: FC<TradingResultsScreenProps> = ({
   route,
 }) => {
+  const { taskId, winnerOffer } = route.params;
+
   const theme = useTheme();
 
-  const offers = useGetOffersQuery(route.params.taskId.toString());
+  const offers = useGetOffersQuery(taskId.toString());
   const data = offers.data?.offers || [];
 
   return (
@@ -74,17 +76,19 @@ export const TradingResultsScreen: FC<TradingResultsScreenProps> = ({
               >
                 <View style={styles.candidat}>
                   <Text variant="title3">Кандидат {index + 1}</Text>
-                  <View
-                    style={[
-                      styles.winner,
-                      { backgroundColor: theme.background.fieldSuccess },
-                    ]}
-                  >
-                    <StarIcon />
-                    <Text variant="captionRegular" color={theme.text.success}>
-                      Победитель
-                    </Text>
-                  </View>
+                  {winnerOffer?.ID === item.ID && (
+                    <View
+                      style={[
+                        styles.winner,
+                        { backgroundColor: theme.background.fieldSuccess },
+                      ]}
+                    >
+                      <StarIcon />
+                      <Text variant="captionRegular" color={theme.text.success}>
+                        Победитель
+                      </Text>
+                    </View>
+                  )}
                 </View>
                 <Spacer size={8} />
                 {item.services.map(service => {

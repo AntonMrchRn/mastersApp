@@ -13,7 +13,7 @@ import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
-import { Service } from '@/store/api/tasks/types';
+import { Offer, Service } from '@/store/api/tasks/types';
 import {
   EstimateTab,
   OutlayStatusType,
@@ -46,6 +46,8 @@ type TaskCardEstimateProps = {
   onCantDeleteBannerVisible: () => void;
   subsetID: TaskType | undefined;
   currentEstimateTab: EstimateTab;
+  winnerOffer: Offer | undefined;
+  isUserOfferWin: boolean | undefined;
 };
 
 export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
@@ -61,6 +63,8 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   onCantDeleteBannerVisible,
   subsetID,
   currentEstimateTab,
+  winnerOffer,
+  isUserOfferWin,
 }) => {
   const theme = useTheme();
   const isFocused = useIsFocused();
@@ -80,7 +84,9 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     userID,
     isTaskEctimateTab,
     currentServices,
+    isOffersPublic,
     userComment,
+    isOffersDeadlineOver,
   } = useTaskCardEstimate({
     services,
     taskId,
@@ -113,6 +119,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   const onTradingResults = () => {
     navigation.navigate(AppScreenName.TradingResults, {
       taskId,
+      winnerOffer,
     });
   };
   if (!services.length) {
@@ -161,12 +168,14 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
       )}
       <View>
         <Spacer size={'xxxl'} />
-        {outlayStatusID && statusID === StatusType.WORK && (
-          <TaskEstimateOutline
-            outlayStatusID={outlayStatusID}
-            onPress={onEstimateSheetVisible}
-          />
-        )}
+        {outlayStatusID &&
+          statusID === StatusType.WORK &&
+          subsetID === TaskType.COMMON_FIRST_RESPONSE && (
+            <TaskEstimateOutline
+              outlayStatusID={outlayStatusID}
+              onPress={onEstimateSheetVisible}
+            />
+          )}
         <Text variant={'title3'} color={theme.text.basic} style={styles.mb8}>
           Перечень услуг и материалов
         </Text>
@@ -237,39 +246,53 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           <View style={styles.mt16}>
             {isTaskEctimateTab ? (
               <>
-                {isAnotherOffers ? (
-                  <TouchableOpacity
-                    style={styles.candidatRow}
-                    onPress={onCompetitorEstimates}
-                  >
-                    <CalculatorIcon color={theme.text.basic} />
-                    <Text variant="bodySBold" color={theme.text.basic}>
-                      Сметы других кандидатов
-                    </Text>
-                  </TouchableOpacity>
-                ) : (
-                  <Text variant="bodySRegular" color={theme.text.neutral}>
-                    Предложений других кандидатов пока нет
-                  </Text>
+                {isOffersPublic && (
+                  <>
+                    {!isOffersDeadlineOver && !winnerOffer ? (
+                      <>
+                        {isAnotherOffers ? (
+                          <TouchableOpacity
+                            style={styles.candidatRow}
+                            onPress={onCompetitorEstimates}
+                          >
+                            <CalculatorIcon color={theme.text.basic} />
+                            <Text variant="bodySBold" color={theme.text.basic}>
+                              Сметы других кандидатов
+                            </Text>
+                          </TouchableOpacity>
+                        ) : (
+                          <Text
+                            variant="bodySRegular"
+                            color={theme.text.neutral}
+                          >
+                            Предложений других кандидатов пока нет
+                          </Text>
+                        )}
+                      </>
+                    ) : (
+                      <TouchableOpacity
+                        style={styles.candidatRow}
+                        onPress={onTradingResults}
+                      >
+                        <GavelIcon />
+                        <Text variant="bodySBold" color={theme.text.basic}>
+                          Посмотреть результаты торгов
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                  </>
                 )}
-                <TouchableOpacity
-                  style={styles.candidatRow}
-                  onPress={onTradingResults}
-                >
-                  <GavelIcon />
-                  <Text variant="bodySBold" color={theme.text.basic}>
-                    Посмотреть результаты торгов
-                  </Text>
-                </TouchableOpacity>
               </>
             ) : (
               <>
-                <View style={styles.edit}>
-                  <EditIcon />
-                  <Text variant="bodySBold" color={theme.text.basic}>
-                    Редактировать смету
-                  </Text>
-                </View>
+                {!isOffersDeadlineOver && !winnerOffer && (
+                  <TouchableOpacity style={styles.edit}>
+                    <EditIcon />
+                    <Text variant="bodySBold" color={theme.text.basic}>
+                      Редактировать смету
+                    </Text>
+                  </TouchableOpacity>
+                )}
                 {userComment && (
                   <>
                     <Spacer size={20} />

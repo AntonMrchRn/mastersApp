@@ -107,6 +107,17 @@ export const useTaskCard = ({
   const endTimePlan = task?.endTimePlan || '';
   const address = task?.object?.name || '';
   const description = task?.description || '';
+  const offersDeadline = task?.offersDeadline;
+  const winnerOffer = task?.winnerOffer;
+  const isUserOfferWin = getUserOffersQuery.data?.offers.some(
+    offer => offer.ID === winnerOffer?.ID
+  );
+  /**
+   * Закончился ли дедлайн подачи сметы
+   */
+  const isOffersDeadlineOver = !!(
+    offersDeadline && dayjs().isAfter(offersDeadline)
+  );
   /**
    * Статус задачи
    */
@@ -340,6 +351,8 @@ export const useTaskCard = ({
             onCantDeleteBannerVisible={onCantDeleteBannerVisible}
             subsetID={subsetID}
             currentEstimateTab={currentEstimateTab}
+            winnerOffer={winnerOffer}
+            isUserOfferWin={isUserOfferWin}
           />
         );
       case TaskTab.REPORT:
@@ -387,6 +400,9 @@ export const useTaskCard = ({
           ];
         }
         if (subsetID === TaskType.COMMON_AUCTION_SALE) {
+          if (isOffersDeadlineOver) {
+            return [];
+          }
           return [
             {
               label: 'Подать смету',
@@ -462,6 +478,18 @@ export const useTaskCard = ({
                 onPress: onEstimateBottomVisible,
               },
             ];
+          }
+          if (subsetID === TaskType.COMMON_AUCTION_SALE) {
+            if (isUserOfferWin) {
+              return [
+                {
+                  label: 'Отказаться от задачи',
+                  variant: 'outlineDanger',
+                  onPress: onCancelModalVisible,
+                },
+              ];
+            }
+            return [];
           }
           if (outlayStatusID !== OutlayStatusType.READY) {
             return [
