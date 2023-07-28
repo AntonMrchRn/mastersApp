@@ -85,6 +85,10 @@ type Task = {
     pname?: string;
     sname?: string;
   };
+  /**
+   * Оффер выбранный заказчиком
+   */
+  winnerOffer?: Offer;
   count?: number;
   createdTime?: string;
   curators?: Curator[];
@@ -105,6 +109,10 @@ type Task = {
     regionID?: number;
   };
   offerIDs?: number[];
+  /**
+   * Дата окончания подачи сметы
+   */
+  offersDeadline?: string;
   outlayStatusID?: OutlayStatusType;
   publicTime?: string;
   services?: Service[];
@@ -287,6 +295,7 @@ export type {
   Status,
   GetTaskResponse,
   Task,
+  Offer,
   Executor,
   Service,
   Contact,

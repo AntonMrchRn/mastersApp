@@ -141,14 +141,17 @@ export const tasksAPI = api
           data,
         }),
       }),
-      getUserOffers: builder.query<object, { taskID: number; userID: number }>({
+      getUserOffers: builder.query<
+        GetOffersResponse,
+        { taskID: number; userID: number }
+      >({
         query: data => ({
           url: `offers?query=?taskID==${data.taskID}*userID==${data.userID}?`,
           method: 'GET',
         }),
       }),
       getAnotherOffers: builder.query<
-        object,
+        GetOffersResponse,
         { taskID: number; userID: number }
       >({
         query: data => ({

@@ -24,7 +24,7 @@ import { NewMaterialScreen } from '@/screens/task/NewMaterialScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { TradingResultsScreen } from '@/screens/task/TradingResultsScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
-import { Executor, Service } from '@/store/api/tasks/types';
+import { Executor, Offer, Service } from '@/store/api/tasks/types';
 import { StatusType } from '@/types/task';
 
 export enum AppScreenName {
@@ -78,8 +78,11 @@ export type AppStackParamList = {
     service: Service;
     fromEstimateSubmission?: boolean;
   };
-  [AppScreenName.CompetitorEstimates]: { taskId: number };
-  [AppScreenName.TradingResults]: { taskId: number };
+  [AppScreenName.CompetitorEstimates]: { taskId: number; userID: number };
+  [AppScreenName.TradingResults]: {
+    taskId: number;
+    winnerOffer: Offer | undefined;
+  };
   [AppScreenName.WebView]: { uri: string };
   [AppScreenName.EstimateSubmission]: { taskId: number };
   [AppScreenName.NewMaterial]: { taskId: number };
