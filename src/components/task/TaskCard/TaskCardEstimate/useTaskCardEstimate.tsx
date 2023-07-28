@@ -56,7 +56,8 @@ export const useTaskCardEstimate = ({
   });
   const userOffer = getUserOffersQuery.data?.offers?.[0];
   const userServices = userOffer?.services || [];
-
+  const isTaskEctimateTab = currentEstimateTab === EstimateTab.TASK_ESTIMATE;
+  const userComment = userOffer?.comment;
   const currentServices =
     currentEstimateTab === EstimateTab.TASK_ESTIMATE ? services : userServices;
 
@@ -170,5 +171,7 @@ export const useTaskCardEstimate = ({
     isAnotherOffers,
     currentServices,
     userID,
+    userComment,
+    isTaskEctimateTab,
   };
 };

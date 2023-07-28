@@ -8,6 +8,7 @@ import { RadioButton, Spacer, Text, useTheme } from 'rn-ui-kit';
 import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
 import { CalculatorLargeIcon } from '@/assets/icons/svg/estimate/CalculatorLargeIcon';
 import { GavelIcon } from '@/assets/icons/svg/estimate/GavelIcon';
+import { EditIcon } from '@/assets/icons/svg/screens/EditIcon';
 import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
@@ -77,7 +78,9 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     isAnotherOffers,
     addServiceBottomSheetClose,
     userID,
+    isTaskEctimateTab,
     currentServices,
+    userComment,
   } = useTaskCardEstimate({
     services,
     taskId,
@@ -232,30 +235,57 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
         <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
         {subsetID === TaskType.COMMON_AUCTION_SALE && (
           <View style={styles.mt16}>
-            {isAnotherOffers ? (
-              <TouchableOpacity
-                style={styles.candidatRow}
-                onPress={onCompetitorEstimates}
-              >
-                <CalculatorIcon color={theme.text.basic} />
-                <Text variant="bodySBold" color={theme.text.basic}>
-                  Сметы других кандидатов
-                </Text>
-              </TouchableOpacity>
+            {isTaskEctimateTab ? (
+              <>
+                {isAnotherOffers ? (
+                  <TouchableOpacity
+                    style={styles.candidatRow}
+                    onPress={onCompetitorEstimates}
+                  >
+                    <CalculatorIcon color={theme.text.basic} />
+                    <Text variant="bodySBold" color={theme.text.basic}>
+                      Сметы других кандидатов
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <Text variant="bodySRegular" color={theme.text.neutral}>
+                    Предложений других кандидатов пока нет
+                  </Text>
+                )}
+                <TouchableOpacity
+                  style={styles.candidatRow}
+                  onPress={onTradingResults}
+                >
+                  <GavelIcon />
+                  <Text variant="bodySBold" color={theme.text.basic}>
+                    Посмотреть результаты торгов
+                  </Text>
+                </TouchableOpacity>
+              </>
             ) : (
-              <Text variant="bodySRegular" color={theme.text.neutral}>
-                Предложений других кандидатов пока нет
-              </Text>
+              <>
+                <View style={styles.edit}>
+                  <EditIcon />
+                  <Text variant="bodySBold" color={theme.text.basic}>
+                    Редактировать смету
+                  </Text>
+                </View>
+                {userComment && (
+                  <>
+                    <Spacer size={20} />
+                    <View style={styles.comment}>
+                      <Text variant="captionRegular" color={theme.text.neutral}>
+                        Ваш комментарий к ценовому предложению
+                      </Text>
+                      <Text variant="bodyMRegular" color={theme.text.basic}>
+                        {userComment}
+                      </Text>
+                    </View>
+                    <Spacer size={20} separator="bottom" />
+                  </>
+                )}
+              </>
             )}
-            <TouchableOpacity
-              style={styles.candidatRow}
-              onPress={onTradingResults}
-            >
-              <GavelIcon />
-              <Text variant="bodySBold" color={theme.text.basic}>
-                Посмотреть результаты торгов
-              </Text>
-            </TouchableOpacity>
           </View>
         )}
       </View>

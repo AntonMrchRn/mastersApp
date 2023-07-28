@@ -31,4 +31,14 @@ export const styles = StyleSheet.create({
     paddingVertical: 8,
     alignSelf: 'flex-start',
   },
+  edit: {
+    gap: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    marginVertical: 8,
+  },
+  comment: {
+    gap: 4,
+  },
 });
