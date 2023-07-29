@@ -3,9 +3,9 @@ import { AxiosError } from 'axios';
 
 import { axiosInstance } from '@/services/axios/axiosInstance';
 import { RootState } from '@/store';
-import { Executor, GetTaskResponse } from '@/store/api/tasks/types';
+import { GetTaskResponse } from '@/store/api/tasks/types';
 
-import { GetCommentsResponce, GetSendResponse } from './types';
+import { GetCommentsResponse, GetSendResponse } from './types';
 
 type RequestArgs = {
   idList?: number;
@@ -17,12 +17,12 @@ type RequestArgs = {
 };
 
 type RequestSendArgs = {
-  taskId?: number | string;
-  comment?: string;
-  executors?: Executor[];
+  taskId: number | string;
+  comment: string;
+  recipientIDs: number[];
 };
 
-const getEndpont = ({
+const getEndpoint = ({
   idList,
   numberOfPosts,
   fromTask,
@@ -96,7 +96,7 @@ const getMyTasks = createAsyncThunk<
     try {
       if (userID && idList && regionID) {
         const { data } = await axiosInstance.get(
-          `tasks/web?query=?${getEndpont({
+          `tasks/web?query=?${getEndpoint({
             idList,
             userID,
             numberOfPosts,
@@ -128,7 +128,7 @@ const refreshMyTasks = createAsyncThunk<
     try {
       if (userID && idList && regionID) {
         const { data } = await axiosInstance.get(
-          `tasks/web?query=?${getEndpont({
+          `tasks/web?query=?${getEndpoint({
             idList,
             userID,
             numberOfPosts,
@@ -146,7 +146,7 @@ const refreshMyTasks = createAsyncThunk<
 );
 
 const getCommentsPreview = createAsyncThunk<
-  GetCommentsResponce,
+  GetCommentsResponse,
   RequestArgs,
   { state: RootState }
 >(
@@ -172,7 +172,7 @@ const getCommentsPreview = createAsyncThunk<
 );
 
 const getComments = createAsyncThunk<
-  GetCommentsResponce,
+  GetCommentsResponse,
   RequestArgs,
   { state: RootState }
 >(
@@ -203,16 +203,12 @@ const sendMessage = createAsyncThunk<
   { state: RootState }
 >(
   '/sendMessage',
-  async ({ taskId, comment, executors }: RequestSendArgs, thunkApi) => {
+  async ({ taskId, comment, recipientIDs }: RequestSendArgs, thunkApi) => {
     try {
-      const recIDs = executors?.map(item => {
-        return item.ID;
-      });
-
       const { data } = await axiosInstance.post('tasks/comments', {
         taskId: taskId,
         comment: comment,
-        recipientIDs: recIDs,
+        recipientIDs,
       });
 
       return data;

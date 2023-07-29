@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -10,11 +10,12 @@ import {
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { BottomSheet, Text, useTheme } from 'rn-ui-kit';
+import { BottomSheet, SegmentedControl, Text, useTheme } from 'rn-ui-kit';
 
 import CardTasks from '@/components/tabs/TaskSearch/Card';
-import PreviewNotFound from '@/components/tabs/TaskSearch/PreviewNotFound';
-import TypeSelectionTaskSearch from '@/components/tabs/TaskSearch/TypeSelectionTaskSearch';
+import PreviewNotFound, {
+  PreviewNotFoundType,
+} from '@/components/tabs/TaskSearch/PreviewNotFound';
 import { configApp } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
@@ -26,21 +27,31 @@ import {
   getSearchTasks,
   refreshTasks,
 } from '@/store/slices/taskSearch/asyncActions';
-import { TaskSearch } from '@/types/task';
+import { clearList } from '@/store/slices/taskSearch/reducer';
+import { ErrorCode } from '@/types/error';
+import { TaskSearch, TaskSetType } from '@/types/task';
 
 import styles from './style';
 
-export type TaskSearchScreenProps = CompositeScreenProps<
+const setTypeByTabIndex: Record<0 | 1, TaskSetType> = {
+  0: TaskSetType.ITServices,
+  1: TaskSetType.Common,
+};
+
+type TaskSearchScreenProps = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, BottomTabName.TaskSearch>,
   StackScreenProps<AppStackParamList>
 >;
-const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
-  const theme = useTheme();
-  const dispatch = useAppDispatch();
-  const isFocused = useIsFocused();
 
-  const [selectedTab, setSelectedTab] = useState(1);
-  const [isVisibleModal, setIsVisibleModal] = useState(false);
+const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
+  const theme = useTheme();
+  const isFocused = useIsFocused();
+  const dispatch = useAppDispatch();
+
+  const [selectedTabId, setSelectedTabId] = useState<TaskSetType>(
+    TaskSetType.ITServices
+  );
+  const [isVisibleModal, setIsVisibleModal] = useState<boolean>(false);
   const {
     data = [],
     loadingList,
@@ -52,7 +63,21 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
     skip: !authUser?.userID,
   });
 
-  const useModal = () => setIsVisibleModal(!isVisibleModal);
+  useEffect(() => {
+    if (user?.regionIDs && isFocused) {
+      onRefresh();
+    }
+  }, [user?.regionIDs, isFocused]);
+
+  useEffect(() => {
+    onRefresh();
+  }, [selectedTabId]);
+
+  const switchTab = (tabIndex: number) => {
+    dispatch(clearList());
+    setSelectedTabId(setTypeByTabIndex[tabIndex as 0 | 1]);
+  };
+
   const onItemPress = (id: number) => {
     if (user?.hasITAccess) {
       navigation.navigate(AppScreenName.TaskCard, {
@@ -63,6 +88,7 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
     }
   };
 
+  const onModal = () => setIsVisibleModal(!isVisibleModal);
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
 
   const renderItem = ({ item }: ListRenderItemInfo<Task>) => (
@@ -70,13 +96,15 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
   );
 
   const onRefresh = () =>
-    dispatch(refreshTasks({ idList: selectedTab, regionID: user?.regionIDs }));
+    dispatch(
+      refreshTasks({ idList: selectedTabId, regionID: user?.regionIDs })
+    );
 
   const onEndReached = () => {
     !loadingList && data.length && user?.regionIDs
       ? dispatch(
           getSearchTasks({
-            idList: selectedTab,
+            idList: selectedTabId,
             fromTask: data?.length,
             regionID: user?.regionIDs,
           })
@@ -84,21 +112,16 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
       : null;
   };
 
-  useEffect(() => {
-    if (user?.regionIDs && isFocused) {
-      onRefresh();
-    }
-  }, [user?.regionIDs, isFocused]);
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapperTop}>
         <Text variant="title1" style={styles.textHeader}>
           Поиск задач
         </Text>
-        <TypeSelectionTaskSearch
-          setActiveTab={setSelectedTab}
-          onRefresh={onRefresh}
+        <SegmentedControl
+          style={styles.tabs}
+          onChange={switchTab}
+          tabs={['IT услуги', 'Общие']}
         />
       </View>
       <View
@@ -107,10 +130,10 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
           !!data?.length && { ...configApp.shadow },
         ]}
       >
-        {errorList?.code === 20007 ? (
-          <PreviewNotFound type={2} />
+        {errorList?.code === ErrorCode.NoAccess ? (
+          <PreviewNotFound type={PreviewNotFoundType.TasksNotAvailable} />
         ) : loadingList && !data.length ? (
-          <ActivityIndicator size={'large'} color={theme.background.accent} />
+          <ActivityIndicator size="large" color={theme.background.accent} />
         ) : (
           <FlatList
             scrollsToTop
@@ -126,7 +149,9 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
             ]}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-            ListEmptyComponent={<PreviewNotFound type={1} />}
+            ListEmptyComponent={
+              <PreviewNotFound type={PreviewNotFoundType.TasksNotFound} />
+            }
             initialNumToRender={4}
             onEndReachedThreshold={7}
             onEndReached={onEndReached}
@@ -135,11 +160,14 @@ const TaskSearchScreen: FC<TaskSearchScreenProps> = ({ navigation }) => {
       </View>
       <BottomSheet
         isVisible={isVisibleModal}
-        onBackdropPress={useModal}
-        onSwipeComplete={useModal}
+        onBackdropPress={onModal}
+        onSwipeComplete={onModal}
       >
         <View style={styles.wrapperPreview}>
-          <PreviewNotFound type={2} closeModal={useModal} />
+          <PreviewNotFound
+            type={PreviewNotFoundType.TasksNotAvailable}
+            closeModal={onModal}
+          />
         </View>
       </BottomSheet>
     </SafeAreaView>

@@ -24,8 +24,7 @@ import { NewMaterialScreen } from '@/screens/task/NewMaterialScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { TradingResultsScreen } from '@/screens/task/TradingResultsScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
-import { Executor, Offer, Service } from '@/store/api/tasks/types';
-import { StatusType } from '@/types/task';
+import { Offer, Service } from '@/store/api/tasks/types';
 
 export enum AppScreenName {
   AppNavigator = 'AppNavigator',
@@ -55,8 +54,8 @@ export type AppStackParamList = {
   [AppScreenName.Password]: undefined;
   [AppScreenName.CommentsChat]: {
     taskId: number;
-    executors?: Executor[];
-    statusID?: StatusType;
+    isITServices: boolean;
+    recipientIDs: number[];
   };
   [AppScreenName.RecoveryConfirmation]: {
     phone: string;

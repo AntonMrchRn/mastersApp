@@ -66,7 +66,11 @@ const useSignInForm = (isPhoneAuth: boolean) => {
   }, [isFocused]);
 
   const saveCredentials = async (login: string, password: string) => {
-    await Keychain.setGenericPassword(login, password);
+    try {
+      await Keychain.setGenericPassword(login, password);
+    } catch (e) {
+      console.log('saveCredentials setGenericPassword error: ', e);
+    }
   };
 
   return {

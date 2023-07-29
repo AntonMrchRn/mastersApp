@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { Text, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
@@ -13,14 +13,30 @@ import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 
 import styles from './style';
 
-export type PreviewProps = {
-  type?: number;
+export enum PreviewNotFoundType {
+  TasksNotFound = 'TasksNotFound',
+  TasksNotAvailable = 'TasksNotAvailable',
+  NoTasks = 'NoTasks',
+  NoMessages = 'NoMessages',
+}
+
+type PreviewProps = {
+  type: PreviewNotFoundType;
   closeModal?: () => void;
 };
 
-const PreviewNotFound: FC<PreviewProps> = ({ type, closeModal }) => {
-  if (type === 1) {
-    return (
+const PreviewNotFound = ({ type, closeModal }: PreviewProps) => {
+  const { navigate } = useNavigation<StackNavigationProp<BottomTabParamList>>();
+
+  const navigateToProfile = () => {
+    navigate(BottomTabName.ProfileNavigation);
+    closeModal && closeModal();
+  };
+
+  const navigateToTaskSearch = () => navigate(BottomTabName.TaskSearch);
+
+  const previews = {
+    [PreviewNotFoundType.TasksNotFound]: (
       <View style={styles.wrapperNotFound}>
         <TaskSearchClear />
         <Text style={styles.title}>Задачи не найдены</Text>
@@ -28,18 +44,8 @@ const PreviewNotFound: FC<PreviewProps> = ({ type, closeModal }) => {
           В вашем регионе задач сейчас нет. Попробуйте продолжить поиск позже
         </Text>
       </View>
-    );
-  }
-  if (type === 2) {
-    const { navigate } =
-      useNavigation<StackNavigationProp<BottomTabParamList>>();
-
-    const onPress = () => {
-      navigate(BottomTabName.ProfileNavigation);
-      closeModal && closeModal();
-    };
-
-    return (
+    ),
+    [PreviewNotFoundType.TasksNotAvailable]: (
       <View style={styles.wrapperNotFound}>
         <NotFoundIcon />
         <Text style={styles.title}>Задачи не доступны</Text>
@@ -48,19 +54,12 @@ const PreviewNotFound: FC<PreviewProps> = ({ type, closeModal }) => {
         </Text>
         <Button
           label="Перейти в профиль"
-          onPress={onPress}
+          onPress={navigateToProfile}
           style={styles.btn}
         />
       </View>
-    );
-  }
-  if (type === 3) {
-    const { navigate } =
-      useNavigation<StackNavigationProp<BottomTabParamList>>();
-
-    const onPress = () => navigate(BottomTabName.TaskSearch);
-
-    return (
+    ),
+    [PreviewNotFoundType.NoTasks]: (
       <View style={styles.wrapperNotFound}>
         <InfoIcon />
         <Text style={styles.title}>Задач пока нет</Text>
@@ -68,12 +67,14 @@ const PreviewNotFound: FC<PreviewProps> = ({ type, closeModal }) => {
           Здесь будут отображаться задачи, в которых вы участвуете или подали
           смету. Найдите свою первую задачу с помощью поиска
         </Text>
-        <Button label="Найти задачу" onPress={onPress} style={styles.btn} />
+        <Button
+          label="Найти задачу"
+          onPress={navigateToTaskSearch}
+          style={styles.btn}
+        />
       </View>
-    );
-  }
-  if (type === 4) {
-    return (
+    ),
+    [PreviewNotFoundType.NoMessages]: (
       <View style={styles.wrapperNotFound}>
         <NoMessagesIcon />
         <Text style={styles.title}>Сообщений пока нет</Text>
@@ -81,8 +82,10 @@ const PreviewNotFound: FC<PreviewProps> = ({ type, closeModal }) => {
           Здесь вы можете обсудить детали задачи с координатором
         </Text>
       </View>
-    );
-  } else return <></>;
+    ),
+  };
+
+  return previews[type];
 };
 
 export default PreviewNotFound;

@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import React, { memo } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
 import { Card, Spacer, Text } from 'rn-ui-kit';
@@ -14,7 +14,7 @@ type CardTasksProp = Task & {
   onItemPress: (id: number) => void;
 };
 
-const CardTasks: FC<CardTasksProp> = ({
+const CardTasks = ({
   object,
   startTime = '',
   endTimePlan = '',
@@ -26,7 +26,7 @@ const CardTasks: FC<CardTasksProp> = ({
   ID,
   onItemPress,
   outlayStatusID,
-}) => {
+}: CardTasksProp) => {
   const address = object?.name || '';
 
   const onPress = () => {

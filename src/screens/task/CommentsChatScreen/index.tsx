@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
@@ -14,8 +14,10 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { Input, useTheme } from 'rn-ui-kit';
 
 import SendButton from '@/assets/icons/svg/screens/SendButton';
-import PreviewNotFound from '@/components/tabs/TaskSearch/PreviewNotFound';
-import ChatMessage from '@/components/task/TaskCard/TaskCardComment/Chat/ChatMessage';
+import PreviewNotFound, {
+  PreviewNotFoundType,
+} from '@/components/tabs/TaskSearch/PreviewNotFound';
+import ChatMessage from '@/components/task/TaskCard/TaskCardComment/Chat';
 import { configApp } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
@@ -26,19 +28,19 @@ import { TaskSearch } from '@/types/task';
 
 import { styles } from './style';
 
-type EstimateAddMaterialScreenProps = StackScreenProps<
+type CommentsChatScreenProps = StackScreenProps<
   AppStackParamList,
   AppScreenName.CommentsChat
 >;
 
-export const CommentsChatScreen: FC<EstimateAddMaterialScreenProps> = ({
+export const CommentsChatScreen = ({
   route: {
-    params: { taskId, executors, statusID },
+    params: { taskId, recipientIDs, isITServices },
   },
-}) => {
-  console.log('statusID', statusID);
+}: CommentsChatScreenProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const { height } = useKeyboardAnimation();
 
   const flatList = useRef<FlatList>(null);
 
@@ -49,8 +51,6 @@ export const CommentsChatScreen: FC<EstimateAddMaterialScreenProps> = ({
     state => state.myTasks
   );
 
-  const { height } = useKeyboardAnimation();
-
   useEffect(() => {
     dispatch(getComments({ idCard: taskId, numberOfPosts: 30, sort: 'desc' }));
     const timeout = setInterval(
@@ -60,6 +60,7 @@ export const CommentsChatScreen: FC<EstimateAddMaterialScreenProps> = ({
         ),
       4000
     );
+
     return () => {
       dispatch(clearComments());
       clearInterval(timeout);
@@ -72,16 +73,19 @@ export const CommentsChatScreen: FC<EstimateAddMaterialScreenProps> = ({
     }
   }, [isActive]);
 
-  const renderItem = ({ item }: ListRenderItemInfo<Comment>) => (
-    <ChatMessage item={item} />
+  const renderItem = ({ item: message }: ListRenderItemInfo<Comment>) => (
+    <ChatMessage message={message} isITServices={isITServices} />
   );
 
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
 
-  const onPressSend = () => {
-    dispatch(sendMessage({ taskId, comment: valueText, executors }))
-      .unwrap()
-      .then(() => setValueText(''));
+  const onPressSend = async () => {
+    try {
+      await dispatch(sendMessage({ taskId, comment: valueText, recipientIDs }));
+      setValueText('');
+    } catch (e) {
+      console.log('onPressSend error: ', e);
+    }
   };
 
   return (
@@ -104,7 +108,7 @@ export const CommentsChatScreen: FC<EstimateAddMaterialScreenProps> = ({
             data={comments?.taskComment}
           />
         ) : !loadingComments || comments?.taskComment ? (
-          <PreviewNotFound type={4} />
+          <PreviewNotFound type={PreviewNotFoundType.NoMessages} />
         ) : (
           !comments?.taskComment && (
             <View style={styles.wrapperLoader}>

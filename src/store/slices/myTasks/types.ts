@@ -6,20 +6,21 @@ type GetSendResponse = {
   authorTypeID?: number;
   comment?: string;
   creationTime?: string;
-  fullname?: string;
+  fullname: string;
   recipientID?: number;
   roleID?: number;
   taskID?: number;
   userID?: number;
 };
 
-type GetCommentsResponce = {
+type GetCommentsResponse = {
   count?: number;
   taskComment?: Comment[];
 };
 
 type Comment = {
   ID: number;
+  fullname: string;
   authorTypeID?: number;
   comment?: string;
   creationTime?: string;
@@ -33,10 +34,10 @@ type InitialState = {
   errorList: Error | null;
   data?: Task[];
   tableNames: [];
-  loadingEndReched: boolean;
+  loadingEndReached: boolean;
   errorNames: null | Error;
-  comments: GetCommentsResponce;
-  commentsPreview: GetCommentsResponce;
+  comments: GetCommentsResponse;
+  commentsPreview: GetCommentsResponse;
   loadingComments: boolean;
   loadingSend: boolean;
   loadingCommentsPreview: boolean;
@@ -44,4 +45,4 @@ type InitialState = {
   errorCommentsPreview: null | Error;
 };
 
-export type { InitialState, GetCommentsResponce, Comment, GetSendResponse };
+export type { InitialState, GetCommentsResponse, Comment, GetSendResponse };

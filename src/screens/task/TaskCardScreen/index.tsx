@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
 import {
   SafeAreaView,
@@ -34,10 +34,9 @@ type TaskCardScreenProps = StackScreenProps<
   AppScreenName.TaskCard
 >;
 
-export const TaskCardScreen: FC<TaskCardScreenProps> = ({
-  navigation,
-  route,
-}) => {
+export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
+  const theme = useTheme();
+  const insets = useSafeAreaInsets();
   const taskId = route.params.taskId.toString();
   // const taskId = '1223';
 
@@ -78,8 +77,6 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
     onSwitchEstimateTab,
     isEstimateTabs,
   } = useTaskCard({ taskId, navigation });
-  const theme = useTheme();
-  const insets = useSafeAreaInsets();
 
   return (
     <>
@@ -106,6 +103,7 @@ export const TaskCardScreen: FC<TaskCardScreenProps> = ({
             styles.wrapper,
             { paddingBottom: getButtons().length * 56 + 24 },
           ]}
+          showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }

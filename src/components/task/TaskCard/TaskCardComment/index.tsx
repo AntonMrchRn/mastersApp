@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 
 import { useIsFocused } from '@react-navigation/native';
@@ -8,17 +8,23 @@ import { useAppDispatch, useAppSelector } from '@/store';
 import { getCommentsPreview } from '@/store/slices/myTasks/asyncActions';
 import { clearCommentsPreview } from '@/store/slices/myTasks/reducer';
 
-import PreviewNotFound from '../../../tabs/TaskSearch/PreviewNotFound';
-import ChatMessage from './Chat/ChatMessage';
+import PreviewNotFound, {
+  PreviewNotFoundType,
+} from '../../../tabs/TaskSearch/PreviewNotFound';
+import ChatMessage from './Chat';
 
 import { styles } from './styles';
 
 type TaskCardCommentProps = {
   taskId: string;
+  isITServices: boolean;
   statusID?: number;
 };
 
-export const TaskCardComment: FC<TaskCardCommentProps> = ({ taskId }) => {
+export const TaskCardComment = ({
+  taskId,
+  isITServices,
+}: TaskCardCommentProps) => {
   const dispatch = useAppDispatch();
   const isFocused = useIsFocused();
   const theme = useTheme();
@@ -44,11 +50,15 @@ export const TaskCardComment: FC<TaskCardCommentProps> = ({ taskId }) => {
       <Text variant="title3">Последние сообщения</Text>
       <View style={styles.containerList}>
         {commentsPreview?.taskComment?.length ? (
-          commentsPreview?.taskComment.map(item => {
-            return <ChatMessage item={item} key={item.ID} />;
-          })
+          commentsPreview?.taskComment.map(message => (
+            <ChatMessage
+              key={message.ID}
+              message={message}
+              isITServices={isITServices}
+            />
+          ))
         ) : !loadingCommentsPreview ? (
-          <PreviewNotFound type={4} />
+          <PreviewNotFound type={PreviewNotFoundType.NoMessages} />
         ) : (
           <View style={styles.wrapperLoader}>
             <ActivityIndicator color={theme.background.accent} size={'large'} />
