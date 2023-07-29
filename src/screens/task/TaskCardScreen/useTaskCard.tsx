@@ -25,7 +25,9 @@ import { AxiosQueryErrorResponse } from '@/types/error';
 import {
   EstimateTab,
   OutlayStatusType,
+  RoleType,
   StatusType,
+  TaskSetType,
   TaskTab,
   TaskType,
 } from '@/types/task';
@@ -66,6 +68,7 @@ export const useTaskCard = ({
   const getUserQuery = useGetUserQuery(user?.userID);
   const entityTypeID = getUserQuery.data?.entityTypeID;
   const isSelfEmployed = entityTypeID === 1;
+  const [patchTask] = usePatchTaskMutation();
   const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
   const getUserOffersQuery = useGetUserOffersQuery({
     taskID: +taskId,
@@ -86,19 +89,24 @@ export const useTaskCard = ({
     }
   }, [isError]);
 
-  const [patchTask] = usePatchTaskMutation();
-
   const estimateTabsArray = [
     EstimateTab.TASK_ESTIMATE,
     EstimateTab.MY_SUGGESTION,
   ];
   const isEstimateTabs = tab === TaskTab.ESTIMATE && !!getUserOffersQuery.data;
+
   const task = data?.tasks?.[0];
-  const executors = task?.executors;
   const id = task?.ID || 0;
+  /**
+   * участники задачи
+   */
+  const executors = task?.executors || [];
+  const curators = task?.curators || [];
+  const coordinator = task?.coordinator;
   /**
    * тип задачи
    */
+  const setId = task?.setID;
   const subsetID = task?.subsetID;
   const files = task?.files || [];
   const services = task?.services || [];
@@ -146,70 +154,76 @@ export const useTaskCard = ({
         'DD MMMM в HH:mm'
       )}`
     : '';
-
-  const tabs: TabItem[] = [
-    {
-      id: 0,
-      label: TaskTab.DESCRIPTION,
-      icon: false,
-    },
-    {
-      id: 1,
-      label: TaskTab.ESTIMATE,
-      icon: false,
-    },
-    {
-      id: 2,
-      label: TaskTab.COMMENTS,
-      icon: false,
-    },
-    {
-      id: 3,
-      label: TaskTab.REPORT,
-      icon: false,
-    },
-    {
-      id: 4,
-      label: TaskTab.HISTORY,
-      icon: false,
-    },
-  ];
-
   const banner = getBanner({
     tab,
     statusID,
     outlayStatusID,
   });
 
-  const onRefresh = () => {
-    refetch();
-  };
+  const isITServices = setId === TaskSetType.ITServices;
+  const isCurator = curators.some(curator => curator.ID === user?.userID);
+  const isExecutor = executors.some(executor => executor.ID === user?.userID);
+  const isCoordinator = coordinator?.ID === user?.userID;
+  const isSupervisor = user?.roleID === RoleType.SUPERVISOR;
 
-  const onSubmissionModalVisible = () => {
+  const isCommentsAvailable =
+    isSupervisor || isExecutor || isCurator || isCoordinator;
+
+  const tabs: TabItem[] = [
+    {
+      id: 0,
+      label: TaskTab.DESCRIPTION,
+    },
+    {
+      id: 1,
+      label: TaskTab.ESTIMATE,
+    },
+    ...(isCommentsAvailable
+      ? [
+          {
+            id: 2,
+            label: TaskTab.COMMENTS,
+          },
+        ]
+      : []),
+    {
+      id: 3,
+      label: TaskTab.REPORT,
+    },
+    {
+      id: 4,
+      label: TaskTab.HISTORY,
+    },
+  ];
+
+  const onRefresh = () => refetch();
+
+  const onSubmissionModalVisible = () =>
     setSubmissionModalVisible(!submissionModalVisible);
-  };
-  const onCantDeleteBannerVisible = () => {
+  const onCantDeleteBannerVisible = () =>
     setCantDeleteBannerVisible(!cantDeleteBannerVisible);
-  };
-  const onEstimateBannerVisible = () => {
+
+  const onEstimateBannerVisible = () =>
     setEstimateBannerVisible(!estimateBannerVisible);
-  };
-  const onEstimateBottomVisible = () => {
+
+  const onEstimateBottomVisible = () =>
     setEstimateBottomVisible(!estimateBottomVisible);
-  };
-  const onBudgetModalVisible = () => {
-    setBudgetModalVisible(!budgetModalVisible);
-  };
+
+  const onBudgetModalVisible = () => setBudgetModalVisible(!budgetModalVisible);
+  const onUploadModalVisible = () => setUploadModalVisible(!uploadModalVisible);
+
   const navigateToChat = () => {
+    const recipientIDs = executors
+      .concat(curators)
+      .map(recipient => recipient.ID);
+
     navigation.navigate(AppScreenName.CommentsChat, {
       taskId: id,
-      executors,
-      statusID,
+      recipientIDs,
+      isITServices,
     });
   };
-  const onUploadModalVisible = () => {
-    setUploadModalVisible(!uploadModalVisible);
-  };
+
   const onEstimateBannerPress = () => {
     onEstimateBannerVisible();
     ref.current?.setId(1);
@@ -236,14 +250,16 @@ export const useTaskCard = ({
     //принимаем таску в работу, если первый отклик
     if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
       try {
-        await patchTask({
-          //id таски
-          ID: id,
-          //статус для принятия в работу
-          statusID: 11,
-          //id профиля
-          executors: [{ ID: user?.userID }],
-        }).unwrap();
+        if (user?.userID) {
+          await patchTask({
+            //id таски
+            ID: id,
+            //статус для принятия в работу
+            statusID: 11,
+            //id профиля
+            executors: [{ ID: user?.userID }],
+          }).unwrap();
+        }
       } catch (error) {
         toast.show({
           type: 'error',
@@ -369,7 +385,13 @@ export const useTaskCard = ({
       case TaskTab.HISTORY:
         return <TaskCardHisory taskId={taskId} />;
       case TaskTab.COMMENTS:
-        return <TaskCardComment taskId={taskId} statusID={statusID} />;
+        return (
+          <TaskCardComment
+            taskId={taskId}
+            statusID={statusID}
+            isITServices={isITServices}
+          />
+        );
       default:
         return <></>;
     }
@@ -608,6 +630,7 @@ export const useTaskCard = ({
     onRefresh,
     refreshing: isLoading,
     executors,
+    isITServices,
     onSubmissionModalVisible,
     onTaskSubmission,
     submissionModalVisible,

@@ -76,23 +76,29 @@ const AccountTab = ({
   };
 
   const onDelete = async () => {
-    if (!hasActiveTasks) {
+    if (hasActiveTasks) {
       onDeletionModal();
       onBanner();
       return;
     }
 
-    const credentials = await Keychain.getGenericPassword();
-    if (credentials) {
-      await deleteAccount({
-        login: credentials.username,
-        password: credentials.password,
-      });
-    } else {
-      toast.show({
-        type: 'error',
-        title: 'Не удалось удалить аккаунт. Повторите, пожалуйста, позже',
-      });
+    try {
+      const credentials = await Keychain.getGenericPassword();
+
+      if (credentials) {
+        await deleteAccount({
+          login: credentials.username,
+          password: credentials.password,
+        });
+      } else {
+        toast.show({
+          type: 'error',
+          title: 'Не удалось удалить аккаунт. Повторите, пожалуйста, позже',
+        });
+        throw new Error('no credentials');
+      }
+    } catch (e) {
+      console.log('onDelete getGenericPassword error: ', e);
     }
   };
 
