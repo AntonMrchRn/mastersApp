@@ -34,14 +34,10 @@ const ProfileScreen = () => {
     activeTab,
     switchTab,
     isLoading,
-    onBanner,
-    copyEmail,
     onCopyEmail,
     scrollToEnd,
     isTeamVisible,
     scrollViewRef,
-    hasActiveTasks,
-    isBannerVisible,
     onBlockingModal,
     isBlockingModalVisible,
     isApprovalNotificationVisible,
@@ -68,12 +64,7 @@ const ProfileScreen = () => {
       <ActivityTab user={user} isTeamVisible={isTeamVisible} />
     ),
     [ProfileTab.Account]: (
-      <AccountTab
-        onBanner={onBanner}
-        copyEmail={copyEmail}
-        hasActiveTasks={hasActiveTasks}
-        isBannerVisible={isBannerVisible}
-      />
+      <AccountTab hasActiveTasks={!!user?.hasActiveTasks} />
     ),
   };
 

@@ -11,7 +11,6 @@ import useActivities from '@/components/tabs/ProfileScreen/ActivityTab/useActivi
 import useRegions from '@/components/tabs/ProfileScreen/ActivityTab/useRegions';
 import Title from '@/components/tabs/ProfileScreen/Title';
 import UserInfoBlock from '@/components/tabs/ProfileScreen/UserInfoBlock';
-import { useAppDispatch } from '@/store';
 import { User } from '@/store/api/user/types';
 
 type ActivityTabProps = {

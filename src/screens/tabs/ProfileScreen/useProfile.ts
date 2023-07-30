@@ -55,7 +55,6 @@ const useProfile = () => {
   const [activeTab, setActiveTab] = useState<Tab>(initialTab);
   const [isBlockingModalVisible, setIsBlockingModalVisible] =
     useState<boolean>(false);
-  const [isBannerVisible, setIsBannerVisible] = useState<boolean>(false);
 
   useEffect(() => {
     if (isError) {
@@ -70,8 +69,6 @@ const useProfile = () => {
     if (isApprovalNotificationVisible) {
       dispatch(setIsApprovalNotificationShown(true));
     }
-
-    setIsBannerVisible(false);
   }, [isFocused, activeTab.id]);
 
   useEffect(() => {
@@ -93,7 +90,6 @@ const useProfile = () => {
 
   const onBlockingModal = () =>
     setIsBlockingModalVisible(!isBlockingModalVisible);
-  const onBanner = () => setIsBannerVisible(!isBannerVisible);
 
   const switchTab = ({ id, label }: TabItem) => {
     setActiveTab({ id, label: label as ProfileTab });
@@ -105,7 +101,8 @@ const useProfile = () => {
     }, 0);
   };
 
-  const copyEmail = () => {
+  const onCopyEmail = () => {
+    onBlockingModal();
     Clipboard.setString('info@mastera-service.ru');
     toast.show({
       type: 'success',
@@ -113,11 +110,6 @@ const useProfile = () => {
       title: 'Адрес почты скопирован',
       containerStyle: { height: 60 + insets.top },
     });
-  };
-
-  const onCopyEmail = () => {
-    onBlockingModal();
-    copyEmail();
   };
 
   const getData = async () => {
@@ -133,11 +125,9 @@ const useProfile = () => {
     user,
     tabs,
     warning,
-    onBanner,
     activeTab,
     switchTab,
     isLoading,
-    copyEmail,
     onCopyEmail,
     scrollToEnd,
     isTeamVisible,
@@ -145,11 +135,6 @@ const useProfile = () => {
     onBlockingModal,
     isBlockingModalVisible,
     isApprovalNotificationVisible,
-    hasActiveTasks: !!user?.hasActiveTasks,
-    isBannerVisible:
-      isBannerVisible &&
-      (authUser?.roleDescription === UserRole.internalExecutor ||
-        authUser?.roleDescription === UserRole.externalExecutor),
   };
 };
 

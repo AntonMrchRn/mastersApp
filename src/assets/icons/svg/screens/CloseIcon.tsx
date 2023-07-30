@@ -1,7 +1,7 @@
 import React from 'react';
 import SVG, { Path } from 'react-native-svg';
 
-export const ModalCloseIcon = () => {
+export const CloseIcon = () => {
   return (
     <SVG width="24" height="24" viewBox="0 0 24 24" fill="none">
       <Path
