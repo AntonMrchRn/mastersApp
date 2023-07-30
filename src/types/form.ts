@@ -36,7 +36,7 @@ type RecoveryConfirmationFormValues = {
 type PersonalDataFormValues = {
   name: string;
   sname: string;
-  pname: string;
+  pname?: string;
 };
 
 type BankDetailsFormValues = {

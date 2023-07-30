@@ -7,21 +7,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  bannerIcon: {
-    marginRight: 3,
-  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  bannerTitle: {
-    fontSize: 13,
+  bannerText: {
+    marginLeft: 2,
   },
   banner: {
-    alignItems: 'center',
+    flexDirection: 'row',
     paddingHorizontal: 12,
     paddingVertical: 4,
-    borderWidth: 0,
     borderRadius: 8,
   },
   closeIcon: {

@@ -75,15 +75,17 @@ const useProfile = () => {
     getData();
   }, []);
 
-  const warning = getWarning(user);
   const isApprovalNotificationVisible =
     !isApprovalNotificationShown && !!user?.isApproved;
-  const isTeamVisible =
-    authUser?.roleDescription !== UserRole.internalExecutor &&
-    authUser?.roleDescription !== UserRole.coordinator;
+  const isInternalExecutor =
+    authUser?.roleDescription === UserRole.internalExecutor ||
+    authUser?.roleDescription === UserRole.coordinator;
+
+  const warning = getWarning(isInternalExecutor, user);
+
   const tabs = [
     { id: 0, label: ProfileTab.Common },
-    ...(isTeamVisible ? [{ id: 1, label: ProfileTab.Payment }] : []),
+    ...(!isInternalExecutor ? [{ id: 1, label: ProfileTab.Payment }] : []),
     { id: 2, label: ProfileTab.Activity },
     { id: 3, label: ProfileTab.Account },
   ];
@@ -130,9 +132,9 @@ const useProfile = () => {
     isLoading,
     onCopyEmail,
     scrollToEnd,
-    isTeamVisible,
     scrollViewRef,
     onBlockingModal,
+    isInternalExecutor,
     isBlockingModalVisible,
     isApprovalNotificationVisible,
   };
