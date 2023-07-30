@@ -85,7 +85,7 @@ const recoveryConfirmationValidation = {
 const personalDataValidation = {
   name: Yup.string().required('Укажите имя'),
   sname: Yup.string().required('Укажите фамилию'),
-  pname: Yup.string().required('Укажите отчество'),
+  pname: Yup.string().optional(),
 };
 const bankDetailsValidation = (isCompany: boolean) => ({
   bankID: Yup.string()

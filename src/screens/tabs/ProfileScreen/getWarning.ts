@@ -1,7 +1,7 @@
 import { User } from '@/store/api/user/types';
 import { UserEntityType } from '@/types/user';
 
-const getWarning = (user?: User) => {
+const getWarning = (isInternalExecutor: boolean, user?: User) => {
   const entity = !user?.entityTypeID ? '\n  •  Правовая форма' : '';
   const ITIN = !user?.ITIN ? '\n  •  ИНН' : '';
   const RRC =
@@ -26,7 +26,7 @@ const getWarning = (user?: User) => {
       ? '\n  •  Во вкладке Общее укажите свои персональные данные'
       : '';
   const paymentWarning =
-    entity || ITIN || RRC || bankDetails
+    (entity || ITIN || RRC || bankDetails) && !isInternalExecutor
       ? '\n  •  Во вкладке Оплата укажите правовую форму, ИНН, КПП (для ИП и юр. лиц) и банковские реквизиты'
       : '';
   const activityWarning =
@@ -34,10 +34,11 @@ const getWarning = (user?: User) => {
       ? '\n  •  Во вкладке Деятельность выберите направление услуг и регион'
       : '';
 
-  const isGenericWarning =
+  const isGenericWarning = !!(
     (commonWarning && paymentWarning) ||
     (commonWarning && activityWarning) ||
-    (paymentWarning && activityWarning);
+    (paymentWarning && activityWarning)
+  );
 
   const genericWarning = `Для выполнения задач заполните следующие данные: ${commonWarning} ${paymentWarning} ${activityWarning}`;
   const singleWarning =
