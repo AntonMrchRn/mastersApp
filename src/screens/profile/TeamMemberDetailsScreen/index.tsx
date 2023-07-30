@@ -6,7 +6,7 @@ import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 import { AvatarIcon } from '@/assets/icons/svg/screens/AvatarIcon';
 import Header from '@/components/Header';
 import UserInfoBlock from '@/components/tabs/ProfileScreen/UserInfoBlock';
-import TeamMemberDeletionModal from '@/components/TabScreens/TeamMemberDetailsScreen/TeamMemberDeletingModal';
+import TeamMemberDeletionModal from '@/components/TabScreens/TeamMemberDetailsScreen/TeamMemberDeletionModal';
 import useTeamMemberDetails from '@/screens/profile/TeamMemberDetailsScreen/useTeamMemberDetails';
 import { convertPhone } from '@/utils/convertPhone';
 

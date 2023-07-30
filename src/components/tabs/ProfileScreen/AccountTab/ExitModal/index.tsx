@@ -1,23 +1,27 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
 import { BottomSheet, Button, Spacer, useTheme } from 'rn-ui-kit';
 
+import { storageMMKV } from '@/mmkv/storage';
+import { logOut } from '@/store/slices/auth/actions';
+
 import styles from './style';
 
-type AccountModalProps = {
+type ExitModalProps = {
   isVisible: boolean;
   onClose: () => void;
-  onPress: () => void;
-  modalType: 'exit' | 'deletion';
 };
 
-const AccountModal = ({
-  isVisible,
-  onPress,
-  onClose,
-  modalType,
-}: AccountModalProps) => {
+const ExitModal = ({ isVisible, onClose }: ExitModalProps) => {
   const theme = useTheme();
+  const dispatch = useDispatch();
+
+  const onExit = () => {
+    onClose();
+    storageMMKV.clearAll();
+    dispatch(logOut());
+  };
 
   return (
     <BottomSheet
@@ -26,21 +30,12 @@ const AccountModal = ({
       onSwipeComplete={onClose}
       titleStyle={styles.modalTitle}
       backdropTransitionOutTiming={0}
-      subtitle={
-        modalType === 'deletion'
-          ? 'Потом это действие нельзя будет отменить'
-          : undefined
-      }
-      title={
-        modalType === 'exit'
-          ? 'Вы уверены, что хотите выйти из профиля?'
-          : 'Вы точно хотите удалить аккаунт?'
-      }
+      title="Вы уверены, что хотите выйти из профиля?"
     >
       <Spacer size="xxl" />
       <Button
-        label={modalType === 'exit' ? 'Выйти' : 'Удалить аккаунт'}
-        onPress={onPress}
+        label="Выйти"
+        onPress={onExit}
         style={{ backgroundColor: theme.background.danger }}
       />
       <Spacer size="l" />
@@ -61,4 +56,4 @@ const AccountModal = ({
   );
 };
 
-export default AccountModal;
+export default ExitModal;

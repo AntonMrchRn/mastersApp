@@ -38,6 +38,10 @@ type TeamMemberDetailsScreenRoute = RouteProp<
   ProfileStackParamList,
   ProfileScreenName.TeamMemberDetails
 >;
+type AccountDeletionScreenRoute = RouteProp<
+  ProfileStackParamList,
+  ProfileScreenName.AccountDeletion
+>;
 
 type SignInScreenNavigationProp = NativeStackNavigationProp<
   AppStackParamList,
@@ -79,6 +83,10 @@ type ChangePasswordScreenNavigationProp = NativeStackNavigationProp<
   ProfileStackParamList,
   ProfileScreenName.ChangePassword
 >;
+type AccountDeletionScreenNavigationProp = NativeStackNavigationProp<
+  ProfileStackParamList,
+  ProfileScreenName.AccountDeletion
+>;
 
 type CompositeRecoveryConfirmationAndEmailNavigationProp =
   CompositeNavigationProp<
@@ -95,6 +103,7 @@ export type {
   PhoneEditingScreenRoute,
   BankDetailsScreenRoute,
   PersonalDataScreenRoute,
+  AccountDeletionScreenRoute,
   TeamMemberDetailsScreenRoute,
   RecoveryConfirmationScreenRoute,
   PhoneEditingConfirmationScreenRoute,
@@ -107,6 +116,7 @@ export type {
   CompositeEditingNavigationProp,
   BankDetailsScreenNavigationProp,
   ChangePasswordScreenNavigationProp,
+  AccountDeletionScreenNavigationProp,
   ContractorsInvitationScreenNavigationProp,
   PhoneEditingConfirmationScreenNavigationProp,
   CompositeRecoveryConfirmationAndEmailNavigationProp,

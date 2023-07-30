@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { JSX } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -12,9 +12,10 @@ import styles from './style';
 type HeaderProps = {
   title?: string;
   description?: string;
+  icon?: JSX.Element;
 };
 
-const Header = ({ title, description }: HeaderProps) => {
+const Header = ({ title, description, icon = <ArrowBack /> }: HeaderProps) => {
   const theme = useTheme();
   const navigation = useNavigation();
 
@@ -28,7 +29,7 @@ const Header = ({ title, description }: HeaderProps) => {
     <SafeAreaView style={styles.background} edges={['top']}>
       <View style={styles.container}>
         <TouchableOpacity style={styles.btnBack} onPress={goBack}>
-          <ArrowBack />
+          {icon}
         </TouchableOpacity>
         <View style={styles.wrapper}>
           {title && (
