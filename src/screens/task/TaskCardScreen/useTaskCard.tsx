@@ -366,7 +366,6 @@ export const useTaskCard = ({
             subsetID={subsetID}
             currentEstimateTab={currentEstimateTab}
             winnerOffer={winnerOffer}
-            isUserOfferWin={isUserOfferWin}
           />
         );
       case TaskTab.REPORT:

@@ -15,9 +15,9 @@ import {
   useGetUserOffersQuery,
   usePatchTaskServiceMutation,
 } from '@/store/api/tasks';
-import { Material, Service } from '@/store/api/tasks/types';
+import { Material, Offer, Service } from '@/store/api/tasks/types';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import { EstimateTab } from '@/types/task';
+import { EstimateTab, StatusType } from '@/types/task';
 
 export const useTaskCardEstimate = ({
   services,
@@ -26,6 +26,8 @@ export const useTaskCardEstimate = ({
   onEstimateBottomVisible,
   estimateBottomVisible,
   currentEstimateTab,
+  statusID,
+  winnerOffer,
 }: {
   services: Service[];
   taskId: number;
@@ -37,6 +39,8 @@ export const useTaskCardEstimate = ({
   onEstimateBottomVisible: () => void;
   estimateBottomVisible: boolean;
   currentEstimateTab: EstimateTab;
+  statusID: StatusType | undefined;
+  winnerOffer: Offer | undefined;
 }) => {
   const toast = useToast();
 
@@ -67,6 +71,7 @@ export const useTaskCardEstimate = ({
   const userComment = userOffer?.comment;
   const currentServices =
     currentEstimateTab === EstimateTab.TASK_ESTIMATE ? services : userServices;
+  const canSwipe = !estimateBottomVisible && statusID === StatusType.WORK;
 
   const [deleteTaskService, mutationDeleteTaskService] =
     useDeleteTaskServiceMutation();
@@ -86,6 +91,10 @@ export const useTaskCardEstimate = ({
   const materialsSum = allMaterials.reduce(
     (acc, val) => acc + (val?.count || 0) * (val?.price || 0),
     0
+  );
+  const serviceIDs = services?.reduce<number[]>(
+    (acc, val) => acc.concat(val.ID as number),
+    []
   );
 
   const onEstimateSheetVisible = () => {
@@ -133,6 +142,27 @@ export const useTaskCardEstimate = ({
       });
       getTask.refetch();
     }
+  };
+  const addService = (service: Service) => {
+    navigation.navigate(AppScreenName.EstimateAddService, {
+      service,
+      taskId,
+    });
+    bsRef.current?.close();
+  };
+  const onCompetitorEstimates = () => {
+    if (userID) {
+      navigation.navigate(AppScreenName.CompetitorEstimates, {
+        taskId,
+        userID,
+      });
+    }
+  };
+  const onTradingResults = () => {
+    navigation.navigate(AppScreenName.TradingResults, {
+      taskId,
+      winnerOffer,
+    });
   };
 
   useEffect(() => {
@@ -182,5 +212,10 @@ export const useTaskCardEstimate = ({
     isTaskEctimateTab,
     isOffersPublic,
     isOffersDeadlineOver,
+    canSwipe,
+    serviceIDs,
+    addService,
+    onCompetitorEstimates,
+    onTradingResults,
   };
 };
