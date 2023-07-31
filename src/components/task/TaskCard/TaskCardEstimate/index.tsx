@@ -89,6 +89,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     addService,
     onCompetitorEstimates,
     onTradingResults,
+    onEditEstimate,
   } = useTaskCardEstimate({
     services,
     taskId,
@@ -264,7 +265,10 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             ) : (
               <>
                 {!isOffersDeadlineOver && !winnerOffer && (
-                  <TouchableOpacity style={styles.edit}>
+                  <TouchableOpacity
+                    style={styles.edit}
+                    onPress={onEditEstimate}
+                  >
                     <EditIcon />
                     <Text variant="bodySBold" color={theme.text.basic}>
                       Редактировать смету

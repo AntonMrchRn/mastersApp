@@ -11,26 +11,27 @@ import {
   usePatchTaskLotMutation,
   usePostOffersMutation,
 } from '@/store/api/tasks';
-import { Material, Service } from '@/store/api/tasks/types';
+import { Material, Offer, Service } from '@/store/api/tasks/types';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import {
   setNewOfferServices,
   setOfferComment,
 } from '@/store/slices/tasks/actions';
-import { getTaskServices } from '@/store/slices/tasks/asyncActions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
 
-export const useEstimateSubmission = ({
+export const useUserEstimateEdit = ({
   navigation,
   taskId,
+  offer,
 }: {
   navigation: StackNavigationProp<
     AppStackParamList,
-    AppScreenName.EstimateSubmission,
+    AppScreenName.UserEstimateEdit,
     undefined
   >;
   taskId: number;
+  offer: Offer | undefined;
 }) => {
   const dispatch = useAppDispatch();
   const toast = useToast();
@@ -52,18 +53,6 @@ export const useEstimateSubmission = ({
   const { offerServices, error, loading, offerComment } =
     useAppSelector(selectTasks);
   const userRole = useAppSelector(selectAuth).user?.roleID;
-
-  useEffect(() => {
-    getTasks();
-  }, []);
-  useEffect(() => {
-    if (error) {
-      toast.show({
-        type: 'error',
-        title: error.message,
-      });
-    }
-  }, [error]);
 
   const services = offerServices || [];
   const serviceIDs = services?.reduce<number[]>((acc, val) => {
@@ -130,7 +119,24 @@ export const useEstimateSubmission = ({
     bsRef.current?.close();
   };
   const getTasks = () => {
-    dispatch(getTaskServices({ taskId }));
+    if (offer) {
+      const initServices: Service[] = offer.services.map(serv => {
+        const initMaterials: Material[] =
+          serv.materials?.map(mat => {
+            return {
+              ...mat,
+              localSum: (mat.count * mat.price).toString(),
+            };
+          }) || [];
+        return {
+          ...serv,
+          localSum: serv.sum?.toString(),
+          materials: initMaterials,
+        };
+      });
+      dispatch(setNewOfferServices(initServices));
+      offer?.comment && setComment(offer.comment);
+    }
   };
   const onDeleteService = () => {
     const newServices = services.filter(ser => ser !== serviceForDelete);
@@ -239,7 +245,6 @@ export const useEstimateSubmission = ({
         comment: offerComment,
         services: postServices,
       }).unwrap();
-      dispatch(setNewOfferServices([]));
       navigation.navigate(AppScreenName.EstimateSubmissionSuccess, { taskId });
     } catch (err) {
       toast.show({
@@ -249,6 +254,19 @@ export const useEstimateSubmission = ({
       });
     }
   };
+
+  useEffect(() => {
+    getTasks();
+  }, []);
+  useEffect(() => {
+    if (error) {
+      toast.show({
+        type: 'error',
+        title: error.message,
+      });
+    }
+  }, [error]);
+
   return {
     bsRef,
     onEstimateModalVisible,

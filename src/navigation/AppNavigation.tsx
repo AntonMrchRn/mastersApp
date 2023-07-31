@@ -23,6 +23,7 @@ import { EstimateSubmissionSuccessScreen } from '@/screens/task/EstimateSubmissi
 import { NewMaterialScreen } from '@/screens/task/NewMaterialScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { TradingResultsScreen } from '@/screens/task/TradingResultsScreen';
+import { UserEstimateEditScreen } from '@/screens/task/UserEstimateEditScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
 import { Offer, Service } from '@/store/api/tasks/types';
 
@@ -42,6 +43,7 @@ export enum AppScreenName {
   CommentsChat = 'CommentsChatScreen',
   WebView = 'WebView',
   EstimateSubmission = 'EstimateSubmission',
+  UserEstimateEdit = 'UserEstimateEdit',
   TradingResults = 'TradingResults',
   NewMaterial = 'NewMaterial',
   EstimateSubmissionSuccess = 'EstimateSubmissionSuccess',
@@ -84,6 +86,7 @@ export type AppStackParamList = {
   };
   [AppScreenName.WebView]: { uri: string };
   [AppScreenName.EstimateSubmission]: { taskId: number };
+  [AppScreenName.UserEstimateEdit]: { taskId: number; offer?: Offer };
   [AppScreenName.NewMaterial]: { taskId: number };
   [AppScreenName.EstimateSubmissionSuccess]: { taskId: number };
 };
@@ -177,6 +180,16 @@ export const AppNavigation = () => {
             options={{
               headerShown: true,
               header: props => <Header {...props} title={'Подача сметы'} />,
+            }}
+          />
+          <Stack.Screen
+            name={AppScreenName.UserEstimateEdit}
+            component={UserEstimateEditScreen}
+            options={{
+              headerShown: true,
+              header: props => (
+                <Header {...props} title={'Редактирование сметы'} />
+              ),
             }}
           />
           <Stack.Screen

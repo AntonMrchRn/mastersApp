@@ -164,6 +164,14 @@ export const useTaskCardEstimate = ({
       winnerOffer,
     });
   };
+  const onEditEstimate = () => {
+    if (userOffer) {
+      navigation.navigate(AppScreenName.UserEstimateEdit, {
+        taskId,
+        offer: userOffer,
+      });
+    }
+  };
 
   useEffect(() => {
     if (
@@ -217,5 +225,6 @@ export const useTaskCardEstimate = ({
     addService,
     onCompetitorEstimates,
     onTradingResults,
+    onEditEstimate,
   };
 };
