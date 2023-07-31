@@ -25,19 +25,19 @@ import {
 } from '@/store/slices/tasks/actions';
 
 import { Item } from './Item';
-import { useEstimateSubmission } from './useEstimateSubmission';
+import { useUserEstimateEdit } from './useUserEstimateEdit';
 
 import { styles } from './styles';
 
-type EstimateSubmissionScreenProps = StackScreenProps<
+type UserEstimateEditScreenProps = StackScreenProps<
   AppStackParamList,
-  AppScreenName.EstimateSubmission
+  AppScreenName.UserEstimateEdit
 >;
-export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
+export const UserEstimateEditScreen: FC<UserEstimateEditScreenProps> = ({
   navigation,
   route,
 }) => {
-  const { taskId } = route.params;
+  const { taskId, offer } = route.params;
 
   const {
     bsRef,
@@ -65,7 +65,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     materialsSum,
     isError,
     onSubmit,
-  } = useEstimateSubmission({ navigation, taskId });
+  } = useUserEstimateEdit({ navigation, taskId, offer });
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -213,7 +213,11 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
               />
             )}
           </View>
-          <Button label="Подать смету" disabled={isError} onPress={onSubmit} />
+          <Button
+            label="Редактировать смету"
+            disabled={isError}
+            onPress={onSubmit}
+          />
         </View>
       </SafeAreaView>
     </>

@@ -10,6 +10,8 @@ import {
   GetTaskHistoryResponse,
   GetTaskResponse,
   GetTaskStatusesResponse,
+  Offer,
+  PatchOffersRequest,
   PostOffersRequest,
   Service,
   Task,
@@ -141,6 +143,13 @@ export const tasksAPI = api
           data,
         }),
       }),
+      patchOffers: builder.mutation<object, PatchOffersRequest>({
+        query: data => ({
+          url: `offers`,
+          method: 'PATCH',
+          data,
+        }),
+      }),
       getUserOffers: builder.query<
         GetOffersResponse,
         { taskID: number; userID: number }
@@ -220,4 +229,5 @@ export const {
   usePostOffersMutation,
   useGetUserOffersQuery,
   useGetAnotherOffersQuery,
+  usePatchOffersMutation,
 } = tasksAPI;

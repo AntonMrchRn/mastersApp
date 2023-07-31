@@ -5,6 +5,7 @@ type InitialState = {
   progresses: Progresses;
   currentTaskID?: number;
   offerServices: Service[];
+  offerComment: string;
   loading: boolean;
   error?: Error;
 };

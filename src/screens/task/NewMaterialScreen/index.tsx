@@ -22,7 +22,7 @@ export const NewMaterialScreen: FC<NewMaterialScreenProps> = ({
 }) => {
   const theme = useTheme();
 
-  const { taskId } = route.params;
+  const { taskId, isEdit } = route.params;
 
   const { offerServices } = useAppSelector(selectTasks);
 
@@ -35,9 +35,10 @@ export const NewMaterialScreen: FC<NewMaterialScreenProps> = ({
         {offerServices.map(offerService => {
           const onPress = () => {
             navigation.navigate(AppScreenName.EstimateAddMaterial, {
-              serviceId: offerService.ID,
+              serviceId: offerService.ID as number,
               taskId: taskId,
               fromEstimateSubmission: true,
+              isEdit,
             });
           };
           return (

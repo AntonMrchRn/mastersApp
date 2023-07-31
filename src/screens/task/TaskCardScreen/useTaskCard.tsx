@@ -130,7 +130,6 @@ export const useTaskCard = ({
    * Статус задачи
    */
   const statusID: StatusType | undefined = task?.statusID;
-  // const statusID: StatusType | undefined = 11;
   /**
    * Статус сметы
    */
@@ -149,10 +148,8 @@ export const useTaskCard = ({
   const publicTime = task?.publicTime
     ? `Опубликовано ${dayjs(task?.publicTime).format('DD MMMM в HH:mm')}`
     : '';
-  const budgetEndTime = task?.endTimePlan
-    ? `Срок подачи сметы до ${dayjs(task?.endTimePlan).format(
-        'DD MMMM в HH:mm'
-      )}`
+  const budgetEndTime = offersDeadline
+    ? `Срок подачи сметы до ${dayjs(offersDeadline).format('DD MMMM в HH:mm')}`
     : '';
   const banner = getBanner({
     tab,
@@ -346,6 +343,7 @@ export const useTaskCard = ({
             endTimePlan={endTimePlan}
             contacts={contacts}
             files={files}
+            statusID={statusID}
           />
         );
       case TaskTab.ESTIMATE:
@@ -364,7 +362,6 @@ export const useTaskCard = ({
             subsetID={subsetID}
             currentEstimateTab={currentEstimateTab}
             winnerOffer={winnerOffer}
-            isUserOfferWin={isUserOfferWin}
           />
         );
       case TaskTab.REPORT:
@@ -418,7 +415,7 @@ export const useTaskCard = ({
           ];
         }
         if (subsetID === TaskType.COMMON_AUCTION_SALE) {
-          if (isOffersDeadlineOver) {
+          if (isOffersDeadlineOver || getUserOffersQuery.data) {
             return [];
           }
           return [
