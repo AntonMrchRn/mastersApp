@@ -60,7 +60,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
           <TaskDate from={startTime} to={endTimePlan} />
         </View>
       )}
-      {contacts.length && statusID !== StatusType.PENDING ? (
+      {contacts.length && statusID !== StatusType.ACTIVE ? (
         <>
           <View style={styles.contacts}>
             <Text variant="title3" color={theme.text.basic} style={styles.mr11}>

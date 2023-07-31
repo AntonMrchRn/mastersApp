@@ -148,10 +148,8 @@ export const useTaskCard = ({
   const publicTime = task?.publicTime
     ? `Опубликовано ${dayjs(task?.publicTime).format('DD MMMM в HH:mm')}`
     : '';
-  const budgetEndTime = task?.endTimePlan
-    ? `Срок подачи сметы до ${dayjs(task?.endTimePlan).format(
-        'DD MMMM в HH:mm'
-      )}`
+  const budgetEndTime = offersDeadline
+    ? `Срок подачи сметы до ${dayjs(offersDeadline).format('DD MMMM в HH:mm')}`
     : '';
   const banner = getBanner({
     tab,
