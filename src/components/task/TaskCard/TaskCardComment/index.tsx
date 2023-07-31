@@ -18,12 +18,13 @@ import { styles } from './styles';
 type TaskCardCommentProps = {
   taskId: string;
   isITServices: boolean;
-  statusID?: number;
+  isCommentsAvailable: boolean;
 };
 
 export const TaskCardComment = ({
   taskId,
   isITServices,
+  isCommentsAvailable,
 }: TaskCardCommentProps) => {
   const dispatch = useAppDispatch();
   const isFocused = useIsFocused();
@@ -45,26 +46,38 @@ export const TaskCardComment = ({
     };
   }, [isFocused]);
 
+  const renderContent = () => {
+    if (!isCommentsAvailable) {
+      return (
+        <PreviewNotFound type={PreviewNotFoundType.MessagesNotAvailable} />
+      );
+    }
+
+    if (loadingCommentsPreview) {
+      return (
+        <View style={styles.wrapperLoader}>
+          <ActivityIndicator color={theme.background.accent} size={'large'} />
+        </View>
+      );
+    }
+
+    if (commentsPreview?.taskComment?.length) {
+      return commentsPreview?.taskComment.map(message => (
+        <ChatMessage
+          key={message.ID}
+          message={message}
+          isITServices={isITServices}
+        />
+      ));
+    }
+
+    return <PreviewNotFound type={PreviewNotFoundType.NoMessages} />;
+  };
+
   return (
     <View style={styles.container}>
-      <Text variant="title3">Последние сообщения</Text>
-      <View style={styles.containerList}>
-        {commentsPreview?.taskComment?.length ? (
-          commentsPreview?.taskComment.map(message => (
-            <ChatMessage
-              key={message.ID}
-              message={message}
-              isITServices={isITServices}
-            />
-          ))
-        ) : !loadingCommentsPreview ? (
-          <PreviewNotFound type={PreviewNotFoundType.NoMessages} />
-        ) : (
-          <View style={styles.wrapperLoader}>
-            <ActivityIndicator color={theme.background.accent} size={'large'} />
-          </View>
-        )}
-      </View>
+      {isCommentsAvailable && <Text variant="title3">Последние сообщения</Text>}
+      <View style={[styles.containerList]}>{renderContent()}</View>
     </View>
   );
 };
