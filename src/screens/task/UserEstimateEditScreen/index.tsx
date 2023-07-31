@@ -213,7 +213,11 @@ export const UserEstimateEditScreen: FC<UserEstimateEditScreenProps> = ({
               />
             )}
           </View>
-          <Button label="Подать смету" disabled={isError} onPress={onSubmit} />
+          <Button
+            label="Редактировать смету"
+            disabled={isError}
+            onPress={onSubmit}
+          />
         </View>
       </SafeAreaView>
     </>

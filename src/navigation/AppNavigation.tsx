@@ -73,6 +73,7 @@ export type AppStackParamList = {
     serviceId: number;
     taskId: number;
     fromEstimateSubmission?: boolean;
+    isEdit?: boolean;
   };
   [AppScreenName.EstimateAddService]: {
     taskId: number;
@@ -87,7 +88,7 @@ export type AppStackParamList = {
   [AppScreenName.WebView]: { uri: string };
   [AppScreenName.EstimateSubmission]: { taskId: number };
   [AppScreenName.UserEstimateEdit]: { taskId: number; offer?: Offer };
-  [AppScreenName.NewMaterial]: { taskId: number };
+  [AppScreenName.NewMaterial]: { taskId: number; isEdit?: boolean };
   [AppScreenName.EstimateSubmissionSuccess]: { taskId: number };
 };
 const screenOptions = { headerShown: false };

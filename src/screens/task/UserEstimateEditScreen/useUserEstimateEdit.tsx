@@ -145,7 +145,7 @@ export const useUserEstimateEdit = ({
   };
   const pressMaterial = () => {
     onEstimateModalVisible();
-    navigation.navigate(AppScreenName.NewMaterial, { taskId });
+    navigation.navigate(AppScreenName.NewMaterial, { taskId, isEdit: true });
   };
   const pressService = () => {
     onEstimateModalVisible();
