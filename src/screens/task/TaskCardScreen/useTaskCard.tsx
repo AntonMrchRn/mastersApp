@@ -420,7 +420,7 @@ export const useTaskCard = ({
           ];
         }
         if (subsetID === TaskType.COMMON_AUCTION_SALE) {
-          if (isOffersDeadlineOver) {
+          if (isOffersDeadlineOver || getUserOffersQuery.data) {
             return [];
           }
           return [
