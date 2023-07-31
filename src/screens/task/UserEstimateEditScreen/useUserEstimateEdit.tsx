@@ -8,6 +8,7 @@ import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   useGetTaskQuery,
+  usePatchOffersMutation,
   usePatchTaskLotMutation,
   usePostOffersMutation,
 } from '@/store/api/tasks';
@@ -41,7 +42,7 @@ export const useUserEstimateEdit = ({
   const getTaskQuery = useGetTaskQuery(taskId.toString());
 
   const [patchTaskLot] = usePatchTaskLotMutation();
-  const [postOffers] = usePostOffersMutation();
+  const [patchOffers] = usePatchOffersMutation();
 
   const [serviceForDelete, setServiceForDelete] = useState<Service>();
   const [banner, setBanner] = useState<{ title: string; text: string }>();
@@ -199,59 +200,69 @@ export const useUserEstimateEdit = ({
         contentHeight: 120,
       });
     }
-    try {
-      await patchTaskLot({
-        taskID: taskId,
-        sum: allSum,
-      }).unwrap();
-      const postServices: Service[] = services.map(service => {
-        const postMaterials =
-          service.materials?.map(material => {
-            return {
-              count: material.count,
-              measure: material.measure,
-              name: material.name,
-              price: +(material.localSum || 0) / material.count,
-              roleID: userRole,
-            };
-          }) || [];
-        const matSums =
-          service?.materials?.reduce((acc, val) => {
-            if (val.localSum) {
-              return acc + +val.localSum;
-            }
-            return acc;
-          }, 0) || 0;
-        const res: Service = {
-          categoryID: service.categoryID,
-          categoryName: service.categoryName,
-          description: service.description,
-          measureID: service.measureID,
-          measureName: service.measureName,
-          name: service.name,
-          price: +(service.localSum || 0) / (service.count || 0),
-          setID: service.setID,
-          serviceID: service.serviceID || service.ID,
-          count: service.count,
-          sum: +(service.localSum || 0) + matSums,
-          roleID: userRole,
+    if (offer) {
+      try {
+        await patchTaskLot({
           taskID: taskId,
-          materials: postMaterials,
-        };
-        return res;
-      });
-      await postOffers({
-        taskID: taskId,
-        comment: offerComment,
-        services: postServices,
-      }).unwrap();
-      navigation.navigate(AppScreenName.EstimateSubmissionSuccess, { taskId });
-    } catch (err) {
-      toast.show({
-        type: 'error',
-        title: (err as AxiosQueryErrorResponse).data.message,
-        contentHeight: 100,
-      });
+          sum: allSum,
+          offerID: offer?.ID,
+        }).unwrap();
+        const postServices: Service[] = services.map(service => {
+          const postMaterials =
+            service.materials?.map(material => {
+              return {
+                count: material.count,
+                measure: material.measure,
+                name: material.name,
+                price: +(material.localSum || 0) / material.count,
+                roleID: userRole,
+              };
+            }) || [];
+          const matSums =
+            service?.materials?.reduce((acc, val) => {
+              if (val.localSum) {
+                return acc + +val.localSum;
+              }
+              return acc;
+            }, 0) || 0;
+          const res: Service = {
+            categoryID: service.categoryID,
+            categoryName: service.categoryName,
+            description: service.description,
+            measureID: service.measureID,
+            measureName: service.measureName,
+            name: service.name,
+            price: +(service.localSum || 0) / (service.count || 0),
+            setID: service.setID,
+            serviceID: service.serviceID || service.ID,
+            count: service.count,
+            sum: +(service.localSum || 0) + matSums,
+            roleID: userRole,
+            taskID: taskId,
+            materials: postMaterials,
+          };
+          return res;
+        });
+        await patchOffers({
+          taskID: taskId,
+          ID: offer?.ID,
+          comment: offerComment,
+          services: postServices,
+        }).unwrap();
+        toast.show({
+          type: 'success',
+          title: 'Ценовое предложение изменено',
+        });
+        getTaskQuery.refetch();
+        navigation.navigate(AppScreenName.TaskCard, {
+          taskId,
+        });
+      } catch (err) {
+        toast.show({
+          type: 'error',
+          title: (err as AxiosQueryErrorResponse).data.message,
+        });
+      }
     }
   };
 

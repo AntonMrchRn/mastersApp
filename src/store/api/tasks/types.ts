@@ -295,6 +295,12 @@ type PostOffersRequest = {
   comment?: string;
   services: Service[];
 };
+type PatchOffersRequest = {
+  taskID: number;
+  ID: number;
+  comment?: string;
+  services: Service[];
+};
 export type {
   GetTaskStatusesResponse,
   Status,
@@ -312,4 +318,5 @@ export type {
   GetServicesResponse,
   GetOffersResponse,
   PostOffersRequest,
+  PatchOffersRequest,
 };
