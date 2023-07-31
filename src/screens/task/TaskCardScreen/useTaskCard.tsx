@@ -130,7 +130,6 @@ export const useTaskCard = ({
    * Статус задачи
    */
   const statusID: StatusType | undefined = task?.statusID;
-  // const statusID: StatusType | undefined = 11;
   /**
    * Статус сметы
    */
@@ -350,6 +349,7 @@ export const useTaskCard = ({
             endTimePlan={endTimePlan}
             contacts={contacts}
             files={files}
+            statusID={statusID}
           />
         );
       case TaskTab.ESTIMATE:
