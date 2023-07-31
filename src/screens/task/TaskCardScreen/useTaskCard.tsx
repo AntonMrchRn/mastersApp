@@ -178,14 +178,10 @@ export const useTaskCard = ({
       id: 1,
       label: TaskTab.ESTIMATE,
     },
-    ...(isCommentsAvailable
-      ? [
-          {
-            id: 2,
-            label: TaskTab.COMMENTS,
-          },
-        ]
-      : []),
+    {
+      id: 2,
+      label: TaskTab.COMMENTS,
+    },
     {
       id: 3,
       label: TaskTab.REPORT,
@@ -388,8 +384,8 @@ export const useTaskCard = ({
         return (
           <TaskCardComment
             taskId={taskId}
-            statusID={statusID}
             isITServices={isITServices}
+            isCommentsAvailable={isCommentsAvailable}
           />
         );
       default:
@@ -403,7 +399,7 @@ export const useTaskCard = ({
   const getButtons = (): TaskCardBottomButton[] => {
     switch (statusID) {
       case StatusType.ACTIVE:
-        if (tab === TaskTab.COMMENTS) {
+        if (tab === TaskTab.COMMENTS && isCommentsAvailable) {
           return [
             {
               label: 'Перейти в чат',
@@ -453,7 +449,7 @@ export const useTaskCard = ({
         }
         return [];
       case StatusType.WORK:
-        if (tab === TaskTab.COMMENTS) {
+        if (tab === TaskTab.COMMENTS && isCommentsAvailable) {
           return [
             {
               label: 'Перейти в чат',
@@ -544,7 +540,7 @@ export const useTaskCard = ({
       case StatusType.SUMMARIZING:
       case StatusType.COMPLETED:
       case StatusType.PAID:
-        if (tab === TaskTab.COMMENTS) {
+        if (tab === TaskTab.COMMENTS && isCommentsAvailable) {
           return [
             {
               label: 'Перейти в чат',
@@ -564,7 +560,7 @@ export const useTaskCard = ({
         }
         return [];
       case StatusType.PENDING:
-        if (tab === TaskTab.COMMENTS) {
+        if (tab === TaskTab.COMMENTS && isCommentsAvailable) {
           return [
             {
               label: 'Перейти в чат',
@@ -586,7 +582,7 @@ export const useTaskCard = ({
           },
         ];
       default:
-        if (tab === TaskTab.COMMENTS) {
+        if (tab === TaskTab.COMMENTS && isCommentsAvailable) {
           return [
             {
               label: 'Перейти в чат',
@@ -630,7 +626,6 @@ export const useTaskCard = ({
     onRefresh,
     refreshing: isLoading,
     executors,
-    isITServices,
     onSubmissionModalVisible,
     onTaskSubmission,
     submissionModalVisible,
