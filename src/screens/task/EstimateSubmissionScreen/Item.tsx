@@ -19,6 +19,7 @@ type ItemProps = {
   onDelete: () => void;
   value?: string;
   onChangeText: (text: string) => void;
+  measure: string;
 };
 export const Item: FC<ItemProps> = ({
   title,
@@ -30,6 +31,7 @@ export const Item: FC<ItemProps> = ({
   value,
   onDelete,
   onChangeText,
+  measure,
 }) => {
   const theme = useTheme();
   const onClear = () => {
@@ -70,7 +72,7 @@ export const Item: FC<ItemProps> = ({
       <View style={styles.char}>
         <CubeIcon />
         <Text variant="bodySRegular" color={theme.text.neutral}>
-          {count} шт.
+          {count} {measure.toLowerCase()}
         </Text>
       </View>
       <View style={styles.char}>
