@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -14,7 +14,9 @@ import { TabControl, Text, useTheme } from 'rn-ui-kit';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
 
 import CardTasks from '@/components/tabs/TaskSearch/Card';
-import PreviewNotFound from '@/components/tabs/TaskSearch/PreviewNotFound';
+import PreviewNotFound, {
+  PreviewNotFoundType,
+} from '@/components/tabs/TaskSearch/PreviewNotFound';
 import { configApp } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
@@ -27,16 +29,17 @@ import {
   refreshMyTasks,
 } from '@/store/slices/myTasks/asyncActions';
 import { clearList } from '@/store/slices/myTasks/reducer';
+import { ErrorCode } from '@/types/error';
 import { TaskSearch } from '@/types/task';
 
 import styles from './style';
 
-export type MyTasksScreenProps = CompositeScreenProps<
+type MyTasksScreenProps = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, BottomTabName.MyTasks>,
   StackScreenProps<AppStackParamList>
 >;
 
-const MyTasksScreen: FC<MyTasksScreenProps> = ({ navigation }) => {
+const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
@@ -115,8 +118,8 @@ const MyTasksScreen: FC<MyTasksScreenProps> = ({ navigation }) => {
           !!data?.length && { ...configApp.shadow },
         ]}
       >
-        {errorList?.code === 20007 ? (
-          <PreviewNotFound type={3} />
+        {errorList?.code === ErrorCode.NoAccess ? (
+          <PreviewNotFound type={PreviewNotFoundType.NoTasks} />
         ) : loadingList && !data.length ? (
           <ActivityIndicator size={'large'} color={theme.background.accent} />
         ) : (
@@ -134,7 +137,9 @@ const MyTasksScreen: FC<MyTasksScreenProps> = ({ navigation }) => {
             ]}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-            ListEmptyComponent={<PreviewNotFound type={1} />}
+            ListEmptyComponent={
+              <PreviewNotFound type={PreviewNotFoundType.TasksNotFound} />
+            }
             initialNumToRender={4}
             onEndReachedThreshold={0.5}
             onEndReached={cachedOnEndReached}

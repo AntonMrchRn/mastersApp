@@ -23,9 +23,9 @@ import { EstimateSubmissionSuccessScreen } from '@/screens/task/EstimateSubmissi
 import { NewMaterialScreen } from '@/screens/task/NewMaterialScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { TradingResultsScreen } from '@/screens/task/TradingResultsScreen';
+import { UserEstimateEditScreen } from '@/screens/task/UserEstimateEditScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
-import { Executor, Offer, Service } from '@/store/api/tasks/types';
-import { StatusType } from '@/types/task';
+import { Offer, Service } from '@/store/api/tasks/types';
 
 export enum AppScreenName {
   AppNavigator = 'AppNavigator',
@@ -43,6 +43,7 @@ export enum AppScreenName {
   CommentsChat = 'CommentsChatScreen',
   WebView = 'WebView',
   EstimateSubmission = 'EstimateSubmission',
+  UserEstimateEdit = 'UserEstimateEdit',
   TradingResults = 'TradingResults',
   NewMaterial = 'NewMaterial',
   EstimateSubmissionSuccess = 'EstimateSubmissionSuccess',
@@ -55,8 +56,8 @@ export type AppStackParamList = {
   [AppScreenName.Password]: undefined;
   [AppScreenName.CommentsChat]: {
     taskId: number;
-    executors?: Executor[];
-    statusID?: StatusType;
+    isITServices: boolean;
+    recipientIDs: number[];
   };
   [AppScreenName.RecoveryConfirmation]: {
     phone: string;
@@ -72,6 +73,7 @@ export type AppStackParamList = {
     serviceId: number;
     taskId: number;
     fromEstimateSubmission?: boolean;
+    isEdit?: boolean;
   };
   [AppScreenName.EstimateAddService]: {
     taskId: number;
@@ -85,7 +87,8 @@ export type AppStackParamList = {
   };
   [AppScreenName.WebView]: { uri: string };
   [AppScreenName.EstimateSubmission]: { taskId: number };
-  [AppScreenName.NewMaterial]: { taskId: number };
+  [AppScreenName.UserEstimateEdit]: { taskId: number; offer?: Offer };
+  [AppScreenName.NewMaterial]: { taskId: number; isEdit?: boolean };
   [AppScreenName.EstimateSubmissionSuccess]: { taskId: number };
 };
 const screenOptions = { headerShown: false };
@@ -178,6 +181,16 @@ export const AppNavigation = () => {
             options={{
               headerShown: true,
               header: props => <Header {...props} title={'Подача сметы'} />,
+            }}
+          />
+          <Stack.Screen
+            name={AppScreenName.UserEstimateEdit}
+            component={UserEstimateEditScreen}
+            options={{
+              headerShown: true,
+              header: props => (
+                <Header {...props} title={'Редактирование сметы'} />
+              ),
             }}
           />
           <Stack.Screen

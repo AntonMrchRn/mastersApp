@@ -2,6 +2,7 @@ import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
+import AccountDeletionScreen from '@/screens/profile/AccountDeletionScreen';
 import BankDetailsScreen from '@/screens/profile/BankDetailsScreen';
 import ChangePasswordScreen from '@/screens/profile/ChangePasswordScreen';
 import ContractorsInvitationScreen from '@/screens/profile/ContractorsInvitationScreen';
@@ -16,10 +17,11 @@ import ProfileScreen from '@/screens/tabs/ProfileScreen';
 export enum ProfileScreenName {
   Profile = 'Profile',
   BankDetails = 'BankDetails',
+  TelegramBot = 'TelegramBot',
   EmailEditing = 'EmailEditing',
   PhoneEditing = 'PhoneEditing',
   ChangePassword = 'ChangePassword',
-  TelegramBot = 'TelegramBot',
+  AccountDeletion = 'AccountDeletion',
   TeamMemberDetails = 'TeamMemberDetails',
   PersonalDataEditing = 'PersonalDataEditing',
   ContractorsInvitation = 'ContractorsInvitation',
@@ -56,6 +58,9 @@ export type ProfileStackParamList = {
   };
   [ProfileScreenName.ChangePassword]: undefined;
   [ProfileScreenName.TelegramBot]: undefined;
+  [ProfileScreenName.AccountDeletion]: {
+    hasActiveTasks: boolean;
+  };
 };
 const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<ProfileStackParamList>();
@@ -98,6 +103,10 @@ export const ProfileNavigation = () => (
     <Stack.Screen
       name={ProfileScreenName.TelegramBot}
       component={TelegramBotScreen}
+    />
+    <Stack.Screen
+      name={ProfileScreenName.AccountDeletion}
+      component={AccountDeletionScreen}
     />
   </Stack.Navigator>
 );

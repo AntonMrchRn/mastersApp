@@ -10,6 +10,7 @@ import { DownloadManager } from '@/components/FileManager/DownloadManager';
 import { TaskAddress } from '@/components/task/TaskAddress';
 import { Contact } from '@/store/api/tasks/types';
 import { File } from '@/types/fileManager';
+import { StatusType } from '@/types/task';
 
 import { TaskDate } from '../../TaskDate';
 
@@ -22,6 +23,7 @@ type TaskCardDescriptionProps = {
   endTimePlan: string;
   contacts: Contact[];
   files: File[];
+  statusID: StatusType | undefined;
 };
 
 export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
@@ -31,6 +33,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   endTimePlan,
   contacts,
   files,
+  statusID,
 }) => {
   const theme = useTheme();
 
@@ -57,7 +60,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
           <TaskDate from={startTime} to={endTimePlan} />
         </View>
       )}
-      {contacts.length ? (
+      {contacts.length && statusID !== StatusType.ACTIVE ? (
         <>
           <View style={styles.contacts}>
             <Text variant="title3" color={theme.text.basic} style={styles.mr11}>

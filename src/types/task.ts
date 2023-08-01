@@ -1,4 +1,4 @@
-export enum TaskType {
+enum TaskType {
   /**
    * IT- ЛОТЫ
    */
@@ -20,7 +20,7 @@ export enum TaskType {
    */
   COMMON_FIRST_RESPONSE = 5,
 }
-export enum StatusType {
+enum StatusType {
   /**
    * Подготовка
    */
@@ -70,7 +70,7 @@ export enum StatusType {
    */
   CLOSED = 12,
 }
-export enum OutlayStatusType {
+enum OutlayStatusType {
   /**
    * Подготовка (смета не согласована)
    */
@@ -100,7 +100,7 @@ export enum OutlayStatusType {
    */
   PAID = 7,
 }
-export enum TaskTab {
+enum TaskTab {
   /**
    * Описание
    */
@@ -122,7 +122,7 @@ export enum TaskTab {
    */
   HISTORY = 'История',
 }
-export enum RoleType {
+enum RoleType {
   /**
    * Внутренний исполнитель
    */
@@ -148,10 +148,17 @@ export enum RoleType {
    */
   CLIENT = 6,
 }
-export enum EstimateTab {
+
+enum EstimateTab {
   TASK_ESTIMATE = 'Смета задачи',
   MY_SUGGESTION = 'Мое предложение',
 }
+
+enum TaskSetType {
+  ITServices = 1,
+  Common = 2,
+}
+
 type TaskSearch = {
   ID?: number;
 };
@@ -161,4 +168,13 @@ type Measure = {
   name: string;
 };
 
+export {
+  TaskTab,
+  RoleType,
+  TaskType,
+  StatusType,
+  TaskSetType,
+  EstimateTab,
+  OutlayStatusType,
+};
 export type { TaskSearch, Measure };

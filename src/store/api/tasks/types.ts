@@ -1,5 +1,10 @@
 import { File } from '@/types/fileManager';
-import { OutlayStatusType, RoleType, TaskType } from '@/types/task';
+import {
+  OutlayStatusType,
+  RoleType,
+  TaskSetType,
+  TaskType,
+} from '@/types/task';
 
 type Material = {
   ID?: number;
@@ -21,7 +26,7 @@ type Service = {
   name: string;
   price: number;
   roleID: RoleType;
-  setID: number;
+  setID: TaskSetType;
   sum?: number;
   materials?: Material[];
   measureName?: string;
@@ -31,7 +36,7 @@ type Service = {
   taskID?: number;
 };
 type Executor = {
-  ID?: number;
+  ID: number;
   email?: string;
   entityTypeID?: number;
   isAccept?: boolean;
@@ -290,6 +295,12 @@ type PostOffersRequest = {
   comment?: string;
   services: Service[];
 };
+type PatchOffersRequest = {
+  taskID: number;
+  ID: number;
+  comment?: string;
+  services: Service[];
+};
 export type {
   GetTaskStatusesResponse,
   Status,
@@ -307,4 +318,5 @@ export type {
   GetServicesResponse,
   GetOffersResponse,
   PostOffersRequest,
+  PatchOffersRequest,
 };

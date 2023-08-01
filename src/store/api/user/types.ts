@@ -75,7 +75,7 @@ type PersonalDataEditingParams = {
   ID: number;
   name: string;
   sname: string;
-  pname: string;
+  pname?: string;
 };
 
 type BankDetailsEditingParams = {

@@ -4,13 +4,10 @@ const styles = StyleSheet.create({
   btn: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,
-    paddingVertical: 16,
+    paddingTop: 16,
   },
   btnLabel: {
     fontWeight: '400',
-  },
-  line: {
-    height: 1,
   },
 });
 

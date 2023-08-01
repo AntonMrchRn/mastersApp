@@ -12,7 +12,7 @@ const correspondingAccountRegExp = /^(301[0-9]*)$/i;
 const checkingAccountRegExp = /^((405|406|407)[0-9]*)$/i;
 const checkingSelfAccountRegExp = /^(408[0-9]*)$/i;
 
-const changePasswordPasswordValidation = Yup.string()
+const regExpPasswordValidation = Yup.string()
   .matches(passwordRegExp, {
     message: passwordErrorMessage,
   })
@@ -85,7 +85,7 @@ const recoveryConfirmationValidation = {
 const personalDataValidation = {
   name: Yup.string().required('Укажите имя'),
   sname: Yup.string().required('Укажите фамилию'),
-  pname: Yup.string().required('Укажите отчество'),
+  pname: Yup.string().optional(),
 };
 const bankDetailsValidation = (isCompany: boolean) => ({
   bankID: Yup.string()
@@ -123,9 +123,14 @@ const rrcValidation = {
     .length(9, 'Укажите 9-значный номер КПП в цифровом формате'),
 };
 const changePasswordValidation = {
-  currentPassword: changePasswordPasswordValidation,
-  newPassword: changePasswordPasswordValidation,
-  repeatedNewPassword: changePasswordPasswordValidation,
+  currentPassword: regExpPasswordValidation,
+  newPassword: regExpPasswordValidation,
+  repeatedNewPassword: regExpPasswordValidation,
+};
+const accountDeletionPasswordValidation = {
+  password: Yup.string()
+    .required('Введите пароль')
+    .matches(passwordRegExp, { message: passwordErrorMessage }),
 };
 
 const cancelTaskValidationSchema = Yup.object().shape(cancelTaskValidation);
@@ -175,26 +180,30 @@ const entityNameValidationSchema = Yup.object().shape(entityNameValidation);
 const changePasswordValidationSchema = Yup.object().shape(
   changePasswordValidation
 );
+const accountDeletionPasswordValidationSchema = Yup.object().shape(
+  accountDeletionPasswordValidation
+);
 
 export {
   emailErrorMessage,
   codeValidationSchema,
   emailValidationSchema,
   phoneValidationSchema,
+  entityNameValidationSchema,
   cancelTaskValidationSchema,
   bankDetailsValidationSchema,
   personalDataValidationSchema,
   recoveryPhoneValidationSchema,
   recoveryEmailValidationSchema,
+  estimateCountValidationSchema,
+  companyEntityValidationSchema,
+  changePasswordValidationSchema,
   signInWithPhoneValidationSchema,
   signInWithEmailValidationSchema,
-  recoveryConfirmationValidationSchema,
-  estimateCountValidationSchema,
-  estimateAddMaterialValidationSchema,
+  individualEntityValidationSchema,
   estimateAddServiceValidationSchema,
   selfEmployedEntityValidationSchema,
-  individualEntityValidationSchema,
-  companyEntityValidationSchema,
-  entityNameValidationSchema,
-  changePasswordValidationSchema,
+  estimateAddMaterialValidationSchema,
+  recoveryConfirmationValidationSchema,
+  accountDeletionPasswordValidationSchema,
 };

@@ -47,7 +47,6 @@ type TaskCardEstimateProps = {
   subsetID: TaskType | undefined;
   currentEstimateTab: EstimateTab;
   winnerOffer: Offer | undefined;
-  isUserOfferWin: boolean | undefined;
 };
 
 export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
@@ -64,7 +63,6 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   subsetID,
   currentEstimateTab,
   winnerOffer,
-  isUserOfferWin,
 }) => {
   const theme = useTheme();
   const isFocused = useIsFocused();
@@ -81,12 +79,17 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     bsRef,
     isAnotherOffers,
     addServiceBottomSheetClose,
-    userID,
     isTaskEctimateTab,
     currentServices,
     isOffersPublic,
     userComment,
     isOffersDeadlineOver,
+    canSwipe,
+    serviceIDs,
+    addService,
+    onCompetitorEstimates,
+    onTradingResults,
+    onEditEstimate,
   } = useTaskCardEstimate({
     services,
     taskId,
@@ -94,34 +97,10 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     onEstimateBottomVisible,
     estimateBottomVisible,
     currentEstimateTab,
+    statusID,
+    winnerOffer,
   });
 
-  const canSwipe = !estimateBottomVisible && statusID === StatusType.WORK;
-  const serviceIDs = services?.reduce<number[]>(
-    (acc, val) => acc.concat(val.ID as number),
-    []
-  );
-  const addService = (service: Service) => {
-    navigation.navigate(AppScreenName.EstimateAddService, {
-      service,
-      taskId,
-    });
-    bsRef.current?.close();
-  };
-  const onCompetitorEstimates = () => {
-    if (userID) {
-      navigation.navigate(AppScreenName.CompetitorEstimates, {
-        taskId,
-        userID,
-      });
-    }
-  };
-  const onTradingResults = () => {
-    navigation.navigate(AppScreenName.TradingResults, {
-      taskId,
-      winnerOffer,
-    });
-  };
   if (!services.length) {
     return (
       <View style={styles.container}>
@@ -286,7 +265,10 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             ) : (
               <>
                 {!isOffersDeadlineOver && !winnerOffer && (
-                  <TouchableOpacity style={styles.edit}>
+                  <TouchableOpacity
+                    style={styles.edit}
+                    onPress={onEditEstimate}
+                  >
                     <EditIcon />
                     <Text variant="bodySBold" color={theme.text.basic}>
                       Редактировать смету

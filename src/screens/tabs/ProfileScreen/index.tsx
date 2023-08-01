@@ -3,7 +3,6 @@ import { ActivityIndicator, SafeAreaView, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import {
-  Banner,
   BottomSheet,
   Button,
   Spacer,
@@ -13,6 +12,7 @@ import {
   useTheme,
 } from 'rn-ui-kit';
 
+import CheckCircleIcon from '@/assets/icons/svg/screens/CheckCircleIcon';
 import AccountTab from '@/components/tabs/ProfileScreen/AccountTab';
 import ActivityTab from '@/components/tabs/ProfileScreen/ActivityTab';
 import CommonTab from '@/components/tabs/ProfileScreen/CommonTab';
@@ -34,15 +34,11 @@ const ProfileScreen = () => {
     activeTab,
     switchTab,
     isLoading,
-    onBanner,
-    copyEmail,
     onCopyEmail,
     scrollToEnd,
-    isTeamVisible,
     scrollViewRef,
-    hasActiveTasks,
-    isBannerVisible,
     onBlockingModal,
+    isInternalExecutor,
     isBlockingModalVisible,
     isApprovalNotificationVisible,
   } = useProfile();
@@ -65,15 +61,10 @@ const ProfileScreen = () => {
       />
     ),
     [ProfileTab.Activity]: user && (
-      <ActivityTab user={user} isTeamVisible={isTeamVisible} />
+      <ActivityTab user={user} isTeamVisible={!isInternalExecutor} />
     ),
     [ProfileTab.Account]: (
-      <AccountTab
-        onBanner={onBanner}
-        copyEmail={copyEmail}
-        hasActiveTasks={hasActiveTasks}
-        isBannerVisible={isBannerVisible}
-      />
+      <AccountTab hasActiveTasks={!!user?.hasActiveTasks} />
     ),
   };
 
@@ -93,16 +84,21 @@ const ProfileScreen = () => {
               Профиль
             </Text>
             {user?.isApproved && (
-              <Banner
-                closeIcon={<></>}
-                type="success"
-                icon="success"
-                iconSize={16}
-                text="Подтвержден"
-                iconStyle={styles.bannerIcon}
-                titleStyle={styles.bannerTitle}
-                containerStyle={styles.banner}
-              />
+              <View
+                style={[
+                  styles.banner,
+                  { backgroundColor: theme.background.fieldSuccess },
+                ]}
+              >
+                <CheckCircleIcon />
+                <Text
+                  variant="captionRegular"
+                  color={theme.text.success}
+                  style={styles.bannerText}
+                >
+                  Подтвержден
+                </Text>
+              </View>
             )}
           </View>
           <>

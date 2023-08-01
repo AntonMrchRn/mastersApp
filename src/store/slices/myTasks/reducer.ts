@@ -21,7 +21,7 @@ const initialState: InitialState = {
   loadingCommentsPreview: false,
   loadingComments: false,
   loadingList: false,
-  loadingEndReched: false,
+  loadingEndReached: false,
   errorList: null,
   errorNames: null,
   errorComments: null,
@@ -46,7 +46,7 @@ const taskSearch = createSlice({
   extraReducers: builder => {
     // получить список задач в поиске
     builder.addCase(getMyTasks.pending, state => {
-      state.loadingEndReched = true;
+      state.loadingEndReached = true;
     });
     builder.addCase(
       getMyTasks.fulfilled,
@@ -56,12 +56,12 @@ const taskSearch = createSlice({
           ? state.data?.concat(<[]>payload.tasks)
           : state.data;
 
-        state.loadingEndReched = false;
+        state.loadingEndReached = false;
       }
     );
     builder.addCase(getMyTasks.rejected, (state, { payload }) => {
       state.errorList = payload as Error;
-      state.loadingEndReched = false;
+      state.loadingEndReached = false;
     });
 
     // обновить задачи

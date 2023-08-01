@@ -79,10 +79,10 @@ const CommonTab = ({
   return (
     <>
       <Title
+        onPress={onEdit}
         withButton={true}
         buttonLabel="Изменить"
         title="Персональные данные"
-        onPress={onEdit}
         icon={<PencilIcon fill={theme.icons.basic} />}
       />
       <Spacer />

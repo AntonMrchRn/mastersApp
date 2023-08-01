@@ -55,7 +55,6 @@ const useProfile = () => {
   const [activeTab, setActiveTab] = useState<Tab>(initialTab);
   const [isBlockingModalVisible, setIsBlockingModalVisible] =
     useState<boolean>(false);
-  const [isBannerVisible, setIsBannerVisible] = useState<boolean>(false);
 
   useEffect(() => {
     if (isError) {
@@ -70,30 +69,29 @@ const useProfile = () => {
     if (isApprovalNotificationVisible) {
       dispatch(setIsApprovalNotificationShown(true));
     }
-
-    setIsBannerVisible(false);
   }, [isFocused, activeTab.id]);
 
   useEffect(() => {
     getData();
   }, []);
 
-  const warning = getWarning(user);
   const isApprovalNotificationVisible =
     !isApprovalNotificationShown && !!user?.isApproved;
-  const isTeamVisible =
-    authUser?.roleDescription !== UserRole.internalExecutor &&
-    authUser?.roleDescription !== UserRole.coordinator;
+  const isInternalExecutor =
+    authUser?.roleDescription === UserRole.internalExecutor ||
+    authUser?.roleDescription === UserRole.coordinator;
+
+  const warning = getWarning(isInternalExecutor, user);
+
   const tabs = [
     { id: 0, label: ProfileTab.Common },
-    ...(isTeamVisible ? [{ id: 1, label: ProfileTab.Payment }] : []),
+    ...(!isInternalExecutor ? [{ id: 1, label: ProfileTab.Payment }] : []),
     { id: 2, label: ProfileTab.Activity },
     { id: 3, label: ProfileTab.Account },
   ];
 
   const onBlockingModal = () =>
     setIsBlockingModalVisible(!isBlockingModalVisible);
-  const onBanner = () => setIsBannerVisible(!isBannerVisible);
 
   const switchTab = ({ id, label }: TabItem) => {
     setActiveTab({ id, label: label as ProfileTab });
@@ -105,7 +103,8 @@ const useProfile = () => {
     }, 0);
   };
 
-  const copyEmail = () => {
+  const onCopyEmail = () => {
+    onBlockingModal();
     Clipboard.setString('info@mastera-service.ru');
     toast.show({
       type: 'success',
@@ -113,11 +112,6 @@ const useProfile = () => {
       title: 'Адрес почты скопирован',
       containerStyle: { height: 60 + insets.top },
     });
-  };
-
-  const onCopyEmail = () => {
-    onBlockingModal();
-    copyEmail();
   };
 
   const getData = async () => {
@@ -133,23 +127,16 @@ const useProfile = () => {
     user,
     tabs,
     warning,
-    onBanner,
     activeTab,
     switchTab,
     isLoading,
-    copyEmail,
     onCopyEmail,
     scrollToEnd,
-    isTeamVisible,
     scrollViewRef,
     onBlockingModal,
+    isInternalExecutor,
     isBlockingModalVisible,
     isApprovalNotificationVisible,
-    hasActiveTasks: !!user?.hasActiveTasks,
-    isBannerVisible:
-      isBannerVisible &&
-      (authUser?.roleDescription === UserRole.internalExecutor ||
-        authUser?.roleDescription === UserRole.externalExecutor),
   };
 };
 

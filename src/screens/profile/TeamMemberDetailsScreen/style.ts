@@ -20,6 +20,9 @@ const styles = StyleSheet.create({
   deleteBtn: {
     borderWidth: 0,
   },
+  input: {
+    paddingRight: 8,
+  },
 });
 
 export default styles;

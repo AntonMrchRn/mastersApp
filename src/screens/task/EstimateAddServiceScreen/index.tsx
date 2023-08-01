@@ -86,7 +86,6 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
       });
     }
     if (fromEstimateSubmission) {
-      console.log('123');
       dispatch(
         addOfferService({
           ...service,

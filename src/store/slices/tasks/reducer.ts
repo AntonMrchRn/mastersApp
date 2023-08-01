@@ -9,6 +9,7 @@ const initialState: InitialState = {
   progresses: {},
   currentTaskID: undefined,
   offerServices: [],
+  offerComment: '',
   loading: false,
   error: undefined,
 };
@@ -62,6 +63,9 @@ const tasks = createSlice({
         },
         []
       );
+    },
+    setOfferComment: (state, { payload }) => {
+      state.offerComment = payload;
     },
   },
   extraReducers: builder => {

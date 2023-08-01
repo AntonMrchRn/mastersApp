@@ -39,7 +39,7 @@ const usePersonalDataEditing = () => {
     handleSubmit,
     formState: { errors, isDirty },
   } = methods;
-  const isDataExist = !!params.name && !!params.sname && !!params.pname;
+  const isDataExist = !!params.name && !!params.sname;
 
   useEffect(() => {
     if (isSuccess) {
@@ -62,7 +62,7 @@ const usePersonalDataEditing = () => {
         ID: authUser?.userID,
         name,
         sname,
-        pname,
+        ...(pname && { pname }),
       });
     }
   };
