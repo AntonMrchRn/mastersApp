@@ -77,7 +77,7 @@ export const useTaskCard = ({
     taskID: +taskId,
     userID: user?.userID as number,
   });
-
+  const userOffersData = getUserOffersQuery.data;
   useEffect(() => {
     if (isFocused) {
       refetch();
@@ -423,7 +423,7 @@ export const useTaskCard = ({
           ];
         }
         if (subsetID === TaskType.COMMON_AUCTION_SALE) {
-          if (isOffersDeadlineOver || getUserOffersQuery.data) {
+          if (isOffersDeadlineOver || userOffersData) {
             return [];
           }
           return [
