@@ -137,7 +137,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
                   subsetID !== TaskType.COMMON_FIRST_RESPONSE &&
                   budgetEndTime && (
                     <Tips
-                      type={'warning'}
+                      type={'info'}
                       text={budgetEndTime}
                       containerStyle={styles.tips}
                     />
