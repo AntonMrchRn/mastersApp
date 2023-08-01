@@ -13,7 +13,7 @@ import { TaskCardEstimate } from '@/components/task/TaskCard/TaskCardEstimate';
 import { TaskCardHisory } from '@/components/task/TaskCard/TaskCardHistory';
 import { TaskCardReport } from '@/components/task/TaskCard/TaskCardReport';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
-import { useAppSelector } from '@/store';
+import { useAppDispatch, useAppSelector } from '@/store';
 import {
   useGetTaskQuery,
   useGetUserOffersQuery,
@@ -21,6 +21,7 @@ import {
 } from '@/store/api/tasks';
 import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
+import { getCommentsPreview } from '@/store/slices/myTasks/asyncActions';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import {
   EstimateTab,
@@ -57,6 +58,8 @@ export const useTaskCard = ({
   const [currentEstimateTab, setCurrentEstimateTab] = useState<EstimateTab>(
     EstimateTab.TASK_ESTIMATE
   );
+
+  const dispatch = useAppDispatch();
   const isFocused = useIsFocused();
 
   const ref = useRef<{
@@ -189,7 +192,12 @@ export const useTaskCard = ({
     },
   ];
 
-  const onRefresh = () => refetch();
+  const onRefresh = () => {
+    refetch();
+    dispatch(
+      getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'desc' })
+    );
+  };
 
   const onSubmissionModalVisible = () =>
     setSubmissionModalVisible(!submissionModalVisible);
