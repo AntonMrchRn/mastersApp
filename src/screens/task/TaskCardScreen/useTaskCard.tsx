@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import { useToast } from 'rn-ui-kit';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
 
-import { TaskCardBottomButton } from '@/components/task/TaskCard/TaskCardBottom';
 import { TaskCardComment } from '@/components/task/TaskCard/TaskCardComment';
 import { TaskCardDescription } from '@/components/task/TaskCard/TaskCardDescription';
 import { TaskCardEstimate } from '@/components/task/TaskCard/TaskCardEstimate';
@@ -34,6 +33,7 @@ import {
 } from '@/types/task';
 
 import { getBanner } from './getBanner';
+import { getButtons } from './getButtons';
 
 export const useTaskCard = ({
   taskId,
@@ -401,204 +401,28 @@ export const useTaskCard = ({
     setTab(item.label as TaskTab);
   };
 
-  const getButtons = (): TaskCardBottomButton[] => {
-    switch (statusID) {
-      case StatusType.ACTIVE:
-        if (tab === TaskTab.COMMENTS && isCommentsAvailable) {
-          return [
-            {
-              label: 'Перейти в чат',
-              variant: 'accent',
-              onPress: navigateToChat,
-            },
-          ];
-        }
-        if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
-          return [
-            {
-              label: 'Принять задачу',
-              variant: 'accent',
-              onPress: onSubmissionModalVisible,
-            },
-          ];
-        }
-        if (subsetID === TaskType.COMMON_AUCTION_SALE) {
-          if (isOffersDeadlineOver || userOffersData) {
-            return [];
-          }
-          return [
-            {
-              label: 'Подать смету',
-              variant: 'accent',
-              onPress: onSubmitAnEstimate,
-            },
-          ];
-        }
-        if (outlayStatusID === OutlayStatusType.MATCHING) {
-          return [
-            {
-              label: 'Отозвать смету',
-              variant: 'outlineDanger',
-              onPress: onBudgetModalVisible,
-            },
-          ];
-        }
-        if (outlayStatusID === OutlayStatusType.PENDING) {
-          return [
-            {
-              label: 'Подать смету',
-              variant: 'accent',
-              onPress: onBudgetSubmission,
-            },
-          ];
-        }
-        return [];
-      case StatusType.WORK:
-        if (tab === TaskTab.COMMENTS && isCommentsAvailable) {
-          return [
-            {
-              label: 'Перейти в чат',
-              variant: 'accent',
-              onPress: navigateToChat,
-            },
-          ];
-        }
-        if (tab === TaskTab.REPORT) {
-          if (files.length) {
-            return [
-              {
-                label: 'Сдать работы',
-                variant: 'accent',
-                onPress: onWorkDelivery,
-              },
-              {
-                label: 'Загрузить еще файлы',
-                variant: 'outlineAccent',
-                onPress: onUploadModalVisible,
-              },
-            ];
-          }
-          return [
-            {
-              label: 'Загрузить файлы',
-              variant: 'accent',
-              onPress: onUploadModalVisible,
-            },
-          ];
-        }
-        if (tab === TaskTab.ESTIMATE) {
-          if (estimateBottomVisible) {
-            return [
-              {
-                label: 'Выбрать',
-                variant: 'accent',
-                onPress: onAddEstimateMaterial,
-                disabled: !selectedServiceId,
-              },
-              {
-                label: 'Отменить',
-                variant: 'outlineAccent',
-                onPress: onEstimateBottomVisible,
-              },
-            ];
-          }
-          if (subsetID === TaskType.COMMON_AUCTION_SALE) {
-            if (isUserOfferWin) {
-              return [
-                {
-                  label: 'Отказаться от задачи',
-                  variant: 'outlineDanger',
-                  onPress: onCancelModalVisible,
-                },
-              ];
-            }
-            return [];
-          }
-          if (outlayStatusID !== OutlayStatusType.READY) {
-            return [
-              {
-                label: 'Отправить смету на согласование',
-                variant: 'accent',
-                onPress: onSendEstimateForApproval,
-                disabled: outlayStatusID === OutlayStatusType.MATCHING,
-              },
-              {
-                label: 'Отказаться от задачи',
-                variant: 'outlineDanger',
-                onPress: onCancelModalVisible,
-              },
-            ];
-          }
-        }
-        return [
-          {
-            label: 'Сдать работы',
-            variant: 'accent',
-            onPress: onWorkDelivery,
-          },
-          {
-            label: 'Отказаться от задачи',
-            variant: 'outlineDanger',
-            onPress: onCancelModalVisible,
-          },
-        ];
-      case StatusType.SUMMARIZING:
-      case StatusType.COMPLETED:
-      case StatusType.PAID:
-        if (tab === TaskTab.COMMENTS && isCommentsAvailable) {
-          return [
-            {
-              label: 'Перейти в чат',
-              variant: 'accent',
-              onPress: navigateToChat,
-            },
-          ];
-        }
-        if (tab === TaskTab.REPORT) {
-          return [
-            {
-              label: 'Загрузить еще файлы',
-              variant: 'accent',
-              onPress: onUploadModalVisible,
-            },
-          ];
-        }
-        return [];
-      case StatusType.PENDING:
-        if (tab === TaskTab.COMMENTS && isCommentsAvailable) {
-          return [
-            {
-              label: 'Перейти в чат',
-              variant: 'accent',
-              onPress: navigateToChat,
-            },
-          ];
-        }
-        return [
-          {
-            label: 'Сдать работы',
-            variant: 'accent',
-            onPress: onWorkDelivery,
-          },
-          {
-            label: 'Отказаться от задачи',
-            variant: 'outlineDanger',
-            onPress: onCancelModalVisible,
-          },
-        ];
-      default:
-        if (tab === TaskTab.COMMENTS && isCommentsAvailable) {
-          return [
-            {
-              label: 'Перейти в чат',
-              variant: 'accent',
-              onPress: navigateToChat,
-            },
-          ];
-        }
-        return [];
-    }
-  };
+  const buttons = getButtons({
+    subsetID,
+    statusID,
+    tab,
+    isCommentsAvailable,
+    navigateToChat,
+    onSubmissionModalVisible,
+    userOffersData,
+    isOffersDeadlineOver,
+    onSubmitAnEstimate,
+    onWorkDelivery,
+    onCancelModalVisible,
+    estimateBottomVisible,
+    onAddEstimateMaterial,
+    selectedServiceId,
+    onEstimateBottomVisible,
+    files,
+    onUploadModalVisible,
+    outlayStatusID,
+    onSendEstimateForApproval,
+    onBudgetModalVisible,
+  });
 
   return {
     onTabChange,
@@ -612,7 +436,7 @@ export const useTaskCard = ({
     isUrgent,
     budgetEndTime,
     banner,
-    getButtons,
+    buttons,
     budgetModalVisible,
     onBudgetModalVisible,
     onRevokeBudget,
