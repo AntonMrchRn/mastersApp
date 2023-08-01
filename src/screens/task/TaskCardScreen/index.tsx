@@ -52,7 +52,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
     isUrgent,
     budgetEndTime,
     banner,
-    getButtons,
+    buttons,
     budgetModalVisible,
     onBudgetModalVisible,
     onRevokeBudget,
@@ -101,7 +101,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
           style={styles.scrollView}
           contentContainerStyle={[
             styles.wrapper,
-            { paddingBottom: getButtons().length * 56 + 24 },
+            { paddingBottom: buttons.length * 56 + 24 },
           ]}
           showsVerticalScrollIndicator={false}
           refreshControl={
@@ -190,7 +190,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
             />
           </View>
         )}
-        <TaskCardBottom banner={banner} buttons={getButtons()} />
+        <TaskCardBottom banner={banner} buttons={buttons} />
       </View>
     </>
   );

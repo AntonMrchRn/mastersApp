@@ -123,7 +123,13 @@ type Task = {
   services?: Service[];
   setID?: number;
   stage?: string;
+  /**
+   * Статус задачи
+   */
   statusID?: number;
+  /**
+   * Тип задачи
+   */
   subsetID?: TaskType;
   startTime?: string;
   endTime?: string;
