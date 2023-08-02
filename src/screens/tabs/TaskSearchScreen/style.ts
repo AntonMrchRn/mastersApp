@@ -56,11 +56,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   textHeader: {
-    fontWeight: '700',
-    fontSize: 32,
-    fontFamily: fonts.main_700_o,
     paddingBottom: 24,
-    color: 'black',
   },
 });
 
