@@ -10,6 +10,9 @@ export const styles = StyleSheet.create({
   mr16: {
     marginRight: 16,
   },
+  wrapperGrid: {
+    gap: 10,
+  },
   ml10: {
     marginLeft: 10,
   },

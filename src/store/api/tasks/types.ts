@@ -77,6 +77,19 @@ type CountMobile = {
   count: number;
   label: string;
 };
+type WebData = {
+  ID?: number;
+  IPadress?: string;
+  IPgateway?: string;
+  IPmask?: string;
+  connectionStage?: number;
+  connectionStageName?: string;
+  description?: string;
+  login?: string;
+  password?: string;
+  objectID?: number;
+};
+
 type Task = {
   ID?: number;
   refuseReason?: string;
@@ -134,15 +147,7 @@ type Task = {
   startTime?: string;
   endTime?: string;
   endTimePlan?: string;
-  webdata?: {
-    IPadress?: string;
-    IPgateway?: string;
-    IPmask?: string;
-    connectionStageName?: string;
-    description?: string;
-    login?: string;
-    password?: string;
-  };
+  webdata?: WebData;
   /**
    * Подача смет ценой выше поданной ранее
    * Если false, то можно подавать и ценой выше, главное соблюдать "Шаг цены сметы"
@@ -308,6 +313,7 @@ type PatchOffersRequest = {
   services: Service[];
 };
 export type {
+  WebData,
   GetTaskStatusesResponse,
   Status,
   GetTaskResponse,

@@ -122,6 +122,7 @@ export const useTaskCard = ({
   const services = task?.services || [];
   const startTime = task?.startTime || '';
   const contacts = task?.contacts || [];
+  const webdata = task?.webdata;
   const endTimePlan = task?.endTimePlan || '';
   const address = task?.object?.name || '';
   const description = task?.description || '';
@@ -359,6 +360,7 @@ export const useTaskCard = ({
             contacts={contacts}
             files={files}
             statusID={statusID}
+            webdata={webdata}
           />
         );
       case TaskTab.ESTIMATE:
