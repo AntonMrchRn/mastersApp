@@ -99,6 +99,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     currentEstimateTab,
     statusID,
     winnerOffer,
+    subsetID,
   });
 
   if (!services.length) {

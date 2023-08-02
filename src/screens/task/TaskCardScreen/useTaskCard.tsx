@@ -73,10 +73,17 @@ export const useTaskCard = ({
   const isSelfEmployed = entityTypeID === 1;
   const [patchTask] = usePatchTaskMutation();
   const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
-  const getUserOffersQuery = useGetUserOffersQuery({
-    taskID: +taskId,
-    userID: user?.userID as number,
-  });
+  const task = data?.tasks?.[0];
+
+  const getUserOffersQuery = useGetUserOffersQuery(
+    {
+      taskID: +taskId,
+      userID: user?.userID as number,
+    },
+    {
+      skip: task?.subsetID !== TaskType.COMMON_AUCTION_SALE,
+    }
+  );
   const userOffersData = getUserOffersQuery.data;
   useEffect(() => {
     if (isFocused) {
@@ -98,7 +105,6 @@ export const useTaskCard = ({
   ];
   const isEstimateTabs = tab === TaskTab.ESTIMATE && !!getUserOffersQuery.data;
 
-  const task = data?.tasks?.[0];
   const id = task?.ID || 0;
   /**
    * участники задачи
@@ -106,10 +112,11 @@ export const useTaskCard = ({
   const executors = task?.executors || [];
   const curators = task?.curators || [];
   const coordinator = task?.coordinator;
+
+  const setId = task?.setID;
   /**
    * тип задачи
    */
-  const setId = task?.setID;
   const subsetID = task?.subsetID;
   const files = task?.files || [];
   const services = task?.services || [];
