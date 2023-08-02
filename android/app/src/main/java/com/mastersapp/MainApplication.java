@@ -5,6 +5,7 @@ import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
+import com.facebook.react.views.text.ReactFontManager;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
@@ -57,5 +58,8 @@ public class MainApplication extends Application implements ReactApplication {
       DefaultNewArchitectureEntryPoint.load();
     }
     ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+
+    ReactFontManager.getInstance().addCustomFont(this, "Nunito Sans", R.font.nunitosans);
+    ReactFontManager.getInstance().addCustomFont(this, "Open Sans", R.font.opensans);
   }
 }
