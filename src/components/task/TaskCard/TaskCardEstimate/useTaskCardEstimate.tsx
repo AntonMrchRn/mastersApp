@@ -80,7 +80,7 @@ export const useTaskCardEstimate = ({
         if (statusID === StatusType.WORK) {
           return winnerOffer?.services || [];
         }
-        if (EstimateTab.MY_SUGGESTION) {
+        if (currentEstimateTab === EstimateTab.MY_SUGGESTION) {
           return userServices;
         }
         return services;

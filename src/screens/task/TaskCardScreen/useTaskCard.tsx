@@ -17,6 +17,7 @@ import {
   useDeleteOffersMutation,
   useGetTaskQuery,
   useGetUserOffersQuery,
+  usePatchOffersMutation,
   usePatchTaskMutation,
 } from '@/store/api/tasks';
 import { useGetUserQuery } from '@/store/api/user';
@@ -73,6 +74,7 @@ export const useTaskCard = ({
   const entityTypeID = getUserQuery.data?.entityTypeID;
   const isSelfEmployed = entityTypeID === 1;
   const [patchTask] = usePatchTaskMutation();
+  const [patchOffers] = usePatchOffersMutation();
   const [deleteOffer, deleteOffersMutation] = useDeleteOffersMutation();
   const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
   const task = data?.tasks?.[0];
@@ -121,7 +123,6 @@ export const useTaskCard = ({
     EstimateTab.TASK_ESTIMATE,
     EstimateTab.MY_SUGGESTION,
   ];
-  const isEstimateTabs = tab === TaskTab.ESTIMATE && !!getUserOffersQuery.data;
 
   const id = task?.ID || 0;
   /**
@@ -188,7 +189,10 @@ export const useTaskCard = ({
   const isExecutor = executors.some(executor => executor.ID === user?.userID);
   const isCoordinator = coordinator?.ID === user?.userID;
   const isSupervisor = user?.roleID === RoleType.SUPERVISOR;
-
+  const isEstimateTabs =
+    tab === TaskTab.ESTIMATE &&
+    statusID === StatusType.ACTIVE &&
+    !!userOffersData.length;
   const isCommentsAvailable =
     isSupervisor || isExecutor || isCurator || isCoordinator;
 
@@ -303,7 +307,10 @@ export const useTaskCard = ({
     setCancelModalVisible(!cancelModalVisible);
   };
   const onWorkDelivery = async () => {
-    if (outlayStatusID !== OutlayStatusType.READY) {
+    if (
+      subsetID === TaskType.COMMON_FIRST_RESPONSE &&
+      outlayStatusID !== OutlayStatusType.READY
+    ) {
       !estimateBannerVisible && onEstimateBannerVisible();
     } else {
       await patchTask({
@@ -319,14 +326,27 @@ export const useTaskCard = ({
   const onCancelTask = async (text: string) => {
     //если это общие, то
     //первый отклик - патч задания, refuseReason, id задания
-    //если лоты то - патч оффера, id оффера, taskID, refuseReason
+    if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
+      await patchTask({
+        //id таски
+        ID: id,
+        //причина отказа
+        refuseReason: text,
+      });
+    }
+    //если общие лоты то - патч оффера, id оффера, taskID, refuseReason
+    if (subsetID === TaskType.COMMON_AUCTION_SALE && winnerOffer) {
+      await patchOffers({
+        //id таски
+        taskID: id,
+        //id выигрышного офера (юзер уже должен его выиграть)
+        ID: winnerOffer.ID,
+        //причина отказа
+        refuseReason: text,
+      });
+    }
     //в ИТ там все иначе 🙂
-    await patchTask({
-      //id таски
-      ID: id,
-      //причина отказа
-      refuseReason: text,
-    });
+
     refetch();
     onCancelModalVisible();
   };

@@ -11,12 +11,14 @@ type TaskBadgesProps = {
   isUrgent?: boolean;
   statusID?: StatusType;
   outlayStatusID?: OutlayStatusType;
+  useOutlayStatus?: boolean;
 };
 export const TaskBadges: FC<TaskBadgesProps> = ({
   isNight,
   isUrgent,
   statusID,
   outlayStatusID,
+  useOutlayStatus,
 }) => {
   const getBadges = () => {
     switch (statusID) {
@@ -41,55 +43,65 @@ export const TaskBadges: FC<TaskBadgesProps> = ({
           />
         );
       case StatusType.WORK:
-        switch (outlayStatusID) {
-          case OutlayStatusType.READY:
-            return (
-              <Badge
-                variant="success"
-                label="Смета согласована"
-                secondary
-                style={styles.badge}
-              />
-            );
-          case OutlayStatusType.PENDING:
-            return (
-              <Badge
-                variant="warning"
-                label="Смета не согласована"
-                secondary
-                style={styles.badge}
-              />
-            );
-          case OutlayStatusType.RETURNED:
-            return (
-              <Badge
-                variant="danger"
-                label="Смета возвращена"
-                secondary
-                style={styles.badge}
-              />
-            );
-          case OutlayStatusType.MATCHING:
-            return (
-              <Badge
-                variant="accent"
-                label="Смета на согласовании"
-                secondary
-                style={styles.badge}
-              />
-            );
-          default:
-            return (
-              <Badge
-                secondary={true}
-                label={'В работе'}
-                icon={false}
-                variant={'accent'}
-                style={styles.badge}
-              />
-            );
+        if (useOutlayStatus) {
+          switch (outlayStatusID) {
+            case OutlayStatusType.READY:
+              return (
+                <Badge
+                  variant="success"
+                  label="Смета согласована"
+                  secondary
+                  style={styles.badge}
+                />
+              );
+            case OutlayStatusType.PENDING:
+              return (
+                <Badge
+                  variant="warning"
+                  label="Смета не согласована"
+                  secondary
+                  style={styles.badge}
+                />
+              );
+            case OutlayStatusType.RETURNED:
+              return (
+                <Badge
+                  variant="danger"
+                  label="Смета возвращена"
+                  secondary
+                  style={styles.badge}
+                />
+              );
+            case OutlayStatusType.MATCHING:
+              return (
+                <Badge
+                  variant="accent"
+                  label="Смета на согласовании"
+                  secondary
+                  style={styles.badge}
+                />
+              );
+            default:
+              return (
+                <Badge
+                  secondary={true}
+                  label={'В работе'}
+                  icon={false}
+                  variant={'accent'}
+                  style={styles.badge}
+                />
+              );
+          }
         }
-
+        return (
+          <Badge
+            secondary={true}
+            label={'В работе'}
+            icon={false}
+            variant={'accent'}
+            style={styles.badge}
+          />
+        );
       case StatusType.SUMMARIZING:
         return (
           <Badge
