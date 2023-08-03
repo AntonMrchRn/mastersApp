@@ -135,7 +135,17 @@ export const useTaskCard = ({
    */
   const outlayStatusID: OutlayStatusType | undefined = task?.outlayStatusID;
   const name = task?.name || '';
-  const budget = `${task?.budget} ₽` || '';
+
+  const isContractor = executors.some(
+    executor => executor.ID === user?.userID && executor.hasCurator
+  );
+
+  const budget =
+    (subsetID === TaskType.IT_FIRST_RESPONSE && isContractor) ||
+    (setId === TaskSetType.ITServices &&
+      user?.roleID === RoleType.INTERNAL_EXECUTOR)
+      ? ''
+      : `${task?.budget} ₽` || '';
 
   /**
    * Ночные работы
@@ -362,6 +372,7 @@ export const useTaskCard = ({
             subsetID={subsetID}
             currentEstimateTab={currentEstimateTab}
             winnerOffer={winnerOffer}
+            isContractor={isContractor}
           />
         );
       case TaskTab.REPORT:

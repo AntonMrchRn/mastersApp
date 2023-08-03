@@ -10,7 +10,6 @@ import {
   GetTaskHistoryResponse,
   GetTaskResponse,
   GetTaskStatusesResponse,
-  Offer,
   PatchOffersRequest,
   PostOffersRequest,
   Service,

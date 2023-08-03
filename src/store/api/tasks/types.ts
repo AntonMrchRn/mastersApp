@@ -48,6 +48,7 @@ type Executor = {
   name?: string;
   pname?: string;
   sname?: string;
+  hasCurator?: boolean;
 };
 type Curator = {
   ID: number;

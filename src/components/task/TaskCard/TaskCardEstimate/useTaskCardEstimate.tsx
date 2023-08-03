@@ -48,6 +48,8 @@ export const useTaskCardEstimate = ({
 
   const { user } = useAppSelector(selectAuth);
 
+  const userRoleID = user?.roleID;
+
   const userID = user?.userID;
 
   const getTask = useGetTaskQuery(taskId.toString());
@@ -61,6 +63,7 @@ export const useTaskCardEstimate = ({
   });
   const userOffer = getUserOffersQuery.data?.offers?.[0];
   const task = getTask.data?.tasks?.[0];
+  const setId = task?.setID;
   const isOffersPublic = task?.isOffersPublic;
   const offersDeadline = task?.offersDeadline;
   const isOffersDeadlineOver =
@@ -226,5 +229,7 @@ export const useTaskCardEstimate = ({
     onCompetitorEstimates,
     onTradingResults,
     onEditEstimate,
+    userRoleID,
+    setId,
   };
 };
