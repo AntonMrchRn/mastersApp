@@ -299,6 +299,7 @@ export const useTaskCard = ({
     if (subsetID === TaskType.COMMON_AUCTION_SALE) {
       navigation.navigate(AppScreenName.EstimateSubmission, {
         taskId: +taskId,
+        services: services,
       });
     }
     onSubmissionModalVisible();
