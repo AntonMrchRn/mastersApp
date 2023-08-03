@@ -10,7 +10,6 @@ import {
   GetTaskHistoryResponse,
   GetTaskResponse,
   GetTaskStatusesResponse,
-  Offer,
   PatchOffersRequest,
   PostOffersRequest,
   Service,
@@ -143,6 +142,12 @@ export const tasksAPI = api
           data,
         }),
       }),
+      deleteOffers: builder.mutation<object, string>({
+        query: id => ({
+          url: `offers/${id}`,
+          method: 'DELETE',
+        }),
+      }),
       patchOffers: builder.mutation<object, PatchOffersRequest>({
         query: data => ({
           url: `offers`,
@@ -230,4 +235,5 @@ export const {
   useGetUserOffersQuery,
   useGetAnotherOffersQuery,
   usePatchOffersMutation,
+  useDeleteOffersMutation,
 } = tasksAPI;

@@ -71,8 +71,25 @@ export const useTaskCardEstimate = ({
   const userServices = userOffer?.services || [];
   const isTaskEctimateTab = currentEstimateTab === EstimateTab.TASK_ESTIMATE;
   const userComment = userOffer?.comment;
-  const currentServices =
-    currentEstimateTab === EstimateTab.TASK_ESTIMATE ? services : userServices;
+
+  const getCurrentServices = () => {
+    switch (subsetID) {
+      case TaskType.COMMON_FIRST_RESPONSE:
+        return services;
+      case TaskType.COMMON_AUCTION_SALE:
+        if (statusID === StatusType.WORK) {
+          return winnerOffer?.services || [];
+        }
+        if (EstimateTab.MY_SUGGESTION) {
+          return userServices;
+        }
+        return services;
+      default:
+        return services;
+    }
+  };
+
+  const currentServices = getCurrentServices();
   const canSwipe =
     !estimateBottomVisible &&
     statusID === StatusType.WORK &&
