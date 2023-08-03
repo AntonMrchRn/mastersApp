@@ -17,7 +17,7 @@ import {
 } from '@/store/api/tasks';
 import { Material, Offer, Service } from '@/store/api/tasks/types';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import { EstimateTab, StatusType } from '@/types/task';
+import { EstimateTab, StatusType, TaskType } from '@/types/task';
 
 export const useTaskCardEstimate = ({
   services,
@@ -28,6 +28,7 @@ export const useTaskCardEstimate = ({
   currentEstimateTab,
   statusID,
   winnerOffer,
+  subsetID,
 }: {
   services: Service[];
   taskId: number;
@@ -41,6 +42,7 @@ export const useTaskCardEstimate = ({
   currentEstimateTab: EstimateTab;
   statusID: StatusType | undefined;
   winnerOffer: Offer | undefined;
+  subsetID: TaskType | undefined;
 }) => {
   const toast = useToast();
 
@@ -72,9 +74,29 @@ export const useTaskCardEstimate = ({
   const userServices = userOffer?.services || [];
   const isTaskEctimateTab = currentEstimateTab === EstimateTab.TASK_ESTIMATE;
   const userComment = userOffer?.comment;
-  const currentServices =
-    currentEstimateTab === EstimateTab.TASK_ESTIMATE ? services : userServices;
-  const canSwipe = !estimateBottomVisible && statusID === StatusType.WORK;
+
+  const getCurrentServices = () => {
+    switch (subsetID) {
+      case TaskType.COMMON_FIRST_RESPONSE:
+        return services;
+      case TaskType.COMMON_AUCTION_SALE:
+        if (statusID === StatusType.WORK) {
+          return winnerOffer?.services || [];
+        }
+        if (currentEstimateTab === EstimateTab.MY_SUGGESTION) {
+          return userServices;
+        }
+        return services;
+      default:
+        return services;
+    }
+  };
+
+  const currentServices = getCurrentServices();
+  const canSwipe =
+    !estimateBottomVisible &&
+    statusID === StatusType.WORK &&
+    subsetID !== TaskType.COMMON_AUCTION_SALE;
 
   const [deleteTaskService, mutationDeleteTaskService] =
     useDeleteTaskServiceMutation();

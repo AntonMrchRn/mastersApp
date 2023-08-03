@@ -17,13 +17,13 @@ import {
   setNewOfferServices,
   setOfferComment,
 } from '@/store/slices/tasks/actions';
-import { getTaskServices } from '@/store/slices/tasks/asyncActions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
 
 export const useEstimateSubmission = ({
   navigation,
   taskId,
+  taskServices,
 }: {
   navigation: StackNavigationProp<
     AppStackParamList,
@@ -31,6 +31,7 @@ export const useEstimateSubmission = ({
     undefined
   >;
   taskId: number;
+  taskServices: Service[] | undefined;
 }) => {
   const dispatch = useAppDispatch();
   const toast = useToast();
@@ -130,7 +131,9 @@ export const useEstimateSubmission = ({
     bsRef.current?.close();
   };
   const getTasks = () => {
-    dispatch(getTaskServices({ taskId }));
+    if (taskServices) {
+      dispatch(setNewOfferServices(taskServices));
+    }
   };
   const onDeleteService = () => {
     const newServices = services.filter(ser => ser !== serviceForDelete);

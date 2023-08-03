@@ -10,6 +10,7 @@ enum ErrorCode {
   PhoneAlreadyRegistered = 8025,
   EmailAlreadyRegistered = 8021,
   NetworkError = 30001,
+  NoDataFound = 8003,
 }
 
 type AxiosQueryError = {

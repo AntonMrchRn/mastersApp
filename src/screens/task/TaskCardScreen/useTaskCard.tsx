@@ -6,21 +6,23 @@ import dayjs from 'dayjs';
 import { useToast } from 'rn-ui-kit';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
 
-import { TaskCardBottomButton } from '@/components/task/TaskCard/TaskCardBottom';
 import { TaskCardComment } from '@/components/task/TaskCard/TaskCardComment';
 import { TaskCardDescription } from '@/components/task/TaskCard/TaskCardDescription';
 import { TaskCardEstimate } from '@/components/task/TaskCard/TaskCardEstimate';
 import { TaskCardHisory } from '@/components/task/TaskCard/TaskCardHistory';
 import { TaskCardReport } from '@/components/task/TaskCard/TaskCardReport';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
-import { useAppSelector } from '@/store';
+import { useAppDispatch, useAppSelector } from '@/store';
 import {
+  useDeleteOffersMutation,
   useGetTaskQuery,
   useGetUserOffersQuery,
+  usePatchOffersMutation,
   usePatchTaskMutation,
 } from '@/store/api/tasks';
 import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
+import { getCommentsPreview } from '@/store/slices/myTasks/asyncActions';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import {
   EstimateTab,
@@ -33,6 +35,7 @@ import {
 } from '@/types/task';
 
 import { getBanner } from './getBanner';
+import { getButtons } from './getButtons';
 
 export const useTaskCard = ({
   taskId,
@@ -57,6 +60,8 @@ export const useTaskCard = ({
   const [currentEstimateTab, setCurrentEstimateTab] = useState<EstimateTab>(
     EstimateTab.TASK_ESTIMATE
   );
+
+  const dispatch = useAppDispatch();
   const isFocused = useIsFocused();
 
   const ref = useRef<{
@@ -69,11 +74,27 @@ export const useTaskCard = ({
   const entityTypeID = getUserQuery.data?.entityTypeID;
   const isSelfEmployed = entityTypeID === 1;
   const [patchTask] = usePatchTaskMutation();
+  const [patchOffers] = usePatchOffersMutation();
+  const [deleteOffer, deleteOffersMutation] = useDeleteOffersMutation();
   const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
-  const getUserOffersQuery = useGetUserOffersQuery({
-    taskID: +taskId,
-    userID: user?.userID as number,
-  });
+  const task = data?.tasks?.[0];
+
+  const getUserOffersQuery = useGetUserOffersQuery(
+    {
+      taskID: +taskId,
+      userID: user?.userID as number,
+    },
+    {
+      selectFromResult: ({ data, error }) => ({
+        data:
+          (error as AxiosQueryErrorResponse)?.data?.code === 8003
+            ? { count: 0, offers: [] }
+            : data,
+      }),
+      skip: task?.subsetID !== TaskType.COMMON_AUCTION_SALE,
+    }
+  );
+  const userOffersData = getUserOffersQuery.data?.offers || [];
 
   useEffect(() => {
     if (isFocused) {
@@ -88,14 +109,21 @@ export const useTaskCard = ({
       });
     }
   }, [isError]);
+  useEffect(() => {
+    if (deleteOffersMutation.isError) {
+      toast.show({
+        type: 'error',
+        title: (deleteOffersMutation.error as AxiosQueryErrorResponse).data
+          .message,
+      });
+    }
+  }, [deleteOffersMutation.isError]);
 
   const estimateTabsArray = [
     EstimateTab.TASK_ESTIMATE,
     EstimateTab.MY_SUGGESTION,
   ];
-  const isEstimateTabs = tab === TaskTab.ESTIMATE && !!getUserOffersQuery.data;
 
-  const task = data?.tasks?.[0];
   const id = task?.ID || 0;
   /**
    * участники задачи
@@ -103,23 +131,22 @@ export const useTaskCard = ({
   const executors = task?.executors || [];
   const curators = task?.curators || [];
   const coordinator = task?.coordinator;
+
+  const setId = task?.setID;
   /**
    * тип задачи
    */
-  const setId = task?.setID;
   const subsetID = task?.subsetID;
   const files = task?.files || [];
   const services = task?.services || [];
   const startTime = task?.startTime || '';
   const contacts = task?.contacts || [];
+  const webdata = task?.webdata;
   const endTimePlan = task?.endTimePlan || '';
   const address = task?.object?.name || '';
   const description = task?.description || '';
   const offersDeadline = task?.offersDeadline;
   const winnerOffer = task?.winnerOffer;
-  const isUserOfferWin = getUserOffersQuery.data?.offers.some(
-    offer => offer.ID === winnerOffer?.ID
-  );
   /**
    * Закончился ли дедлайн подачи сметы
    */
@@ -172,7 +199,10 @@ export const useTaskCard = ({
   const isExecutor = executors.some(executor => executor.ID === user?.userID);
   const isCoordinator = coordinator?.ID === user?.userID;
   const isSupervisor = user?.roleID === RoleType.SUPERVISOR;
-
+  const isEstimateTabs =
+    tab === TaskTab.ESTIMATE &&
+    statusID === StatusType.ACTIVE &&
+    !!userOffersData.length;
   const isCommentsAvailable =
     isSupervisor || isExecutor || isCurator || isCoordinator;
 
@@ -199,7 +229,12 @@ export const useTaskCard = ({
     },
   ];
 
-  const onRefresh = () => refetch();
+  const onRefresh = () => {
+    refetch();
+    dispatch(
+      getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'desc' })
+    );
+  };
 
   const onSubmissionModalVisible = () =>
     setSubmissionModalVisible(!submissionModalVisible);
@@ -232,9 +267,7 @@ export const useTaskCard = ({
     ref.current?.setId(1);
     setTab(TaskTab.ESTIMATE);
   };
-  const onBudgetSubmission = () => {
-    //
-  };
+
   const onSwitchEstimateTab = (index: number) => {
     const newTab = estimateTabsArray[index];
     newTab && setCurrentEstimateTab(newTab);
@@ -276,6 +309,7 @@ export const useTaskCard = ({
     if (subsetID === TaskType.COMMON_AUCTION_SALE) {
       navigation.navigate(AppScreenName.EstimateSubmission, {
         taskId: +taskId,
+        services: services,
       });
     }
     onSubmissionModalVisible();
@@ -284,7 +318,10 @@ export const useTaskCard = ({
     setCancelModalVisible(!cancelModalVisible);
   };
   const onWorkDelivery = async () => {
-    if (outlayStatusID !== OutlayStatusType.READY) {
+    if (
+      subsetID === TaskType.COMMON_FIRST_RESPONSE &&
+      outlayStatusID !== OutlayStatusType.READY
+    ) {
       !estimateBannerVisible && onEstimateBannerVisible();
     } else {
       await patchTask({
@@ -300,14 +337,27 @@ export const useTaskCard = ({
   const onCancelTask = async (text: string) => {
     //если это общие, то
     //первый отклик - патч задания, refuseReason, id задания
-    //если лоты то - патч оффера, id оффера, taskID, refuseReason
+    if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
+      await patchTask({
+        //id таски
+        ID: id,
+        //причина отказа
+        refuseReason: text,
+      });
+    }
+    //если общие лоты то - патч оффера, id оффера, taskID, refuseReason
+    if (subsetID === TaskType.COMMON_AUCTION_SALE && winnerOffer) {
+      await patchOffers({
+        //id таски
+        taskID: id,
+        //id выигрышного офера (юзер уже должен его выиграть)
+        ID: winnerOffer.ID,
+        //причина отказа
+        refuseReason: text,
+      });
+    }
     //в ИТ там все иначе 🙂
-    await patchTask({
-      //id таски
-      ID: id,
-      //причина отказа
-      refuseReason: text,
-    });
+
     refetch();
     onCancelModalVisible();
   };
@@ -327,12 +377,19 @@ export const useTaskCard = ({
     }
     refetch();
   };
-  const onRevokeBudget = () => {
-    //TODO необходимо сначала получить оффер юзера по этой таске
-    //https://sandbox8.apteka-april.ru/api/offers?query=?taskID==977*userID==81?
-    //далее необходимо удалить этот оффер через DELETE offers/id
+
+  const onRevokeBudget = async () => {
     setBudgetModalVisible(!budgetModalVisible);
+    if (userOffersData) {
+      const offerID = userOffersData?.[0]?.ID;
+      if (offerID) {
+        await deleteOffer(offerID.toString());
+        getUserOffersQuery.refetch();
+        refetch();
+      }
+    }
   };
+
   const onSubmitAnEstimate = () => {
     //показываем модалку с условиями если самозанятый
     if (isSelfEmployed) {
@@ -354,6 +411,7 @@ export const useTaskCard = ({
             contacts={contacts}
             files={files}
             statusID={statusID}
+            webdata={webdata}
           />
         );
       case TaskTab.ESTIMATE:
@@ -404,204 +462,28 @@ export const useTaskCard = ({
     setTab(item.label as TaskTab);
   };
 
-  const getButtons = (): TaskCardBottomButton[] => {
-    switch (statusID) {
-      case StatusType.ACTIVE:
-        if (tab === TaskTab.COMMENTS && isCommentsAvailable) {
-          return [
-            {
-              label: 'Перейти в чат',
-              variant: 'accent',
-              onPress: navigateToChat,
-            },
-          ];
-        }
-        if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
-          return [
-            {
-              label: 'Принять задачу',
-              variant: 'accent',
-              onPress: onSubmissionModalVisible,
-            },
-          ];
-        }
-        if (subsetID === TaskType.COMMON_AUCTION_SALE) {
-          if (isOffersDeadlineOver || getUserOffersQuery.data) {
-            return [];
-          }
-          return [
-            {
-              label: 'Подать смету',
-              variant: 'accent',
-              onPress: onSubmitAnEstimate,
-            },
-          ];
-        }
-        if (outlayStatusID === OutlayStatusType.MATCHING) {
-          return [
-            {
-              label: 'Отозвать смету',
-              variant: 'outlineDanger',
-              onPress: onBudgetModalVisible,
-            },
-          ];
-        }
-        if (outlayStatusID === OutlayStatusType.PENDING) {
-          return [
-            {
-              label: 'Подать смету',
-              variant: 'accent',
-              onPress: onBudgetSubmission,
-            },
-          ];
-        }
-        return [];
-      case StatusType.WORK:
-        if (tab === TaskTab.COMMENTS && isCommentsAvailable) {
-          return [
-            {
-              label: 'Перейти в чат',
-              variant: 'accent',
-              onPress: navigateToChat,
-            },
-          ];
-        }
-        if (tab === TaskTab.REPORT) {
-          if (files.length) {
-            return [
-              {
-                label: 'Сдать работы',
-                variant: 'accent',
-                onPress: onWorkDelivery,
-              },
-              {
-                label: 'Загрузить еще файлы',
-                variant: 'outlineAccent',
-                onPress: onUploadModalVisible,
-              },
-            ];
-          }
-          return [
-            {
-              label: 'Загрузить файлы',
-              variant: 'accent',
-              onPress: onUploadModalVisible,
-            },
-          ];
-        }
-        if (tab === TaskTab.ESTIMATE) {
-          if (estimateBottomVisible) {
-            return [
-              {
-                label: 'Выбрать',
-                variant: 'accent',
-                onPress: onAddEstimateMaterial,
-                disabled: !selectedServiceId,
-              },
-              {
-                label: 'Отменить',
-                variant: 'outlineAccent',
-                onPress: onEstimateBottomVisible,
-              },
-            ];
-          }
-          if (subsetID === TaskType.COMMON_AUCTION_SALE) {
-            if (isUserOfferWin) {
-              return [
-                {
-                  label: 'Отказаться от задачи',
-                  variant: 'outlineDanger',
-                  onPress: onCancelModalVisible,
-                },
-              ];
-            }
-            return [];
-          }
-          if (outlayStatusID !== OutlayStatusType.READY) {
-            return [
-              {
-                label: 'Отправить смету на согласование',
-                variant: 'accent',
-                onPress: onSendEstimateForApproval,
-                disabled: outlayStatusID === OutlayStatusType.MATCHING,
-              },
-              {
-                label: 'Отказаться от задачи',
-                variant: 'outlineDanger',
-                onPress: onCancelModalVisible,
-              },
-            ];
-          }
-        }
-        return [
-          {
-            label: 'Сдать работы',
-            variant: 'accent',
-            onPress: onWorkDelivery,
-          },
-          {
-            label: 'Отказаться от задачи',
-            variant: 'outlineDanger',
-            onPress: onCancelModalVisible,
-          },
-        ];
-      case StatusType.SUMMARIZING:
-      case StatusType.COMPLETED:
-      case StatusType.PAID:
-        if (tab === TaskTab.COMMENTS && isCommentsAvailable) {
-          return [
-            {
-              label: 'Перейти в чат',
-              variant: 'accent',
-              onPress: navigateToChat,
-            },
-          ];
-        }
-        if (tab === TaskTab.REPORT) {
-          return [
-            {
-              label: 'Загрузить еще файлы',
-              variant: 'accent',
-              onPress: onUploadModalVisible,
-            },
-          ];
-        }
-        return [];
-      case StatusType.PENDING:
-        if (tab === TaskTab.COMMENTS && isCommentsAvailable) {
-          return [
-            {
-              label: 'Перейти в чат',
-              variant: 'accent',
-              onPress: navigateToChat,
-            },
-          ];
-        }
-        return [
-          {
-            label: 'Сдать работы',
-            variant: 'accent',
-            onPress: onWorkDelivery,
-          },
-          {
-            label: 'Отказаться от задачи',
-            variant: 'outlineDanger',
-            onPress: onCancelModalVisible,
-          },
-        ];
-      default:
-        if (tab === TaskTab.COMMENTS && isCommentsAvailable) {
-          return [
-            {
-              label: 'Перейти в чат',
-              variant: 'accent',
-              onPress: navigateToChat,
-            },
-          ];
-        }
-        return [];
-    }
-  };
+  const buttons = getButtons({
+    subsetID,
+    statusID,
+    tab,
+    isCommentsAvailable,
+    navigateToChat,
+    onSubmissionModalVisible,
+    userOffersData,
+    isOffersDeadlineOver,
+    onSubmitAnEstimate,
+    onWorkDelivery,
+    onCancelModalVisible,
+    estimateBottomVisible,
+    onAddEstimateMaterial,
+    selectedServiceId,
+    onEstimateBottomVisible,
+    files,
+    onUploadModalVisible,
+    outlayStatusID,
+    onSendEstimateForApproval,
+    onBudgetModalVisible,
+  });
 
   return {
     onTabChange,
@@ -615,7 +497,7 @@ export const useTaskCard = ({
     isUrgent,
     budgetEndTime,
     banner,
-    getButtons,
+    buttons,
     budgetModalVisible,
     onBudgetModalVisible,
     onRevokeBudget,
