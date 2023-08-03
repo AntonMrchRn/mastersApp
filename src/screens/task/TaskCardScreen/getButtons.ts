@@ -1,5 +1,5 @@
 import { TaskCardBottomButton } from '@/components/task/TaskCard/TaskCardBottom';
-import { GetOffersResponse } from '@/store/api/tasks/types';
+import { GetOffersResponse, Offer } from '@/store/api/tasks/types';
 import { File } from '@/types/fileManager';
 import { OutlayStatusType, StatusType, TaskTab, TaskType } from '@/types/task';
 
@@ -41,7 +41,7 @@ export const getButtons = ({
   navigateToChat: () => void;
   onSubmissionModalVisible: () => void;
   isOffersDeadlineOver: boolean;
-  userOffersData: GetOffersResponse | undefined;
+  userOffersData: Offer[];
   onSubmitAnEstimate: () => void;
   onWorkDelivery: () => Promise<void>;
   onCancelModalVisible: () => void;
@@ -274,10 +274,10 @@ export const getButtons = ({
             case TaskTab.REPORT:
             case TaskTab.HISTORY:
             case TaskTab.COMMENTS:
-              if (isOffersDeadlineOver || userOffersData) {
+              if (isOffersDeadlineOver) {
                 return [];
               }
-              if (outlayStatusID === OutlayStatusType.MATCHING) {
+              if (userOffersData.length) {
                 return [
                   {
                     label: 'Отозвать смету',
@@ -369,21 +369,6 @@ export const getButtons = ({
                     label: 'Отменить',
                     variant: 'outlineAccent',
                     onPress: onEstimateBottomVisible,
-                  },
-                ];
-              }
-              if (outlayStatusID !== OutlayStatusType.READY) {
-                return [
-                  {
-                    label: 'Отправить смету на согласование',
-                    variant: 'accent',
-                    onPress: onSendEstimateForApproval,
-                    disabled: outlayStatusID === OutlayStatusType.MATCHING,
-                  },
-                  {
-                    label: 'Отказаться от задачи',
-                    variant: 'outlineDanger',
-                    onPress: onCancelModalVisible,
                   },
                 ];
               }

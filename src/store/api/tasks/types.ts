@@ -310,7 +310,8 @@ type PatchOffersRequest = {
   taskID: number;
   ID: number;
   comment?: string;
-  services: Service[];
+  services?: Service[];
+  refuseReason?: string;
 };
 export type {
   WebData,

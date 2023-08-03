@@ -14,8 +14,10 @@ import { TaskCardReport } from '@/components/task/TaskCard/TaskCardReport';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
+  useDeleteOffersMutation,
   useGetTaskQuery,
   useGetUserOffersQuery,
+  usePatchOffersMutation,
   usePatchTaskMutation,
 } from '@/store/api/tasks';
 import { useGetUserQuery } from '@/store/api/user';
@@ -72,6 +74,8 @@ export const useTaskCard = ({
   const entityTypeID = getUserQuery.data?.entityTypeID;
   const isSelfEmployed = entityTypeID === 1;
   const [patchTask] = usePatchTaskMutation();
+  const [patchOffers] = usePatchOffersMutation();
+  const [deleteOffer, deleteOffersMutation] = useDeleteOffersMutation();
   const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
   const task = data?.tasks?.[0];
 
@@ -81,10 +85,17 @@ export const useTaskCard = ({
       userID: user?.userID as number,
     },
     {
+      selectFromResult: ({ data, error }) => ({
+        data:
+          (error as AxiosQueryErrorResponse)?.data?.code === 8003
+            ? { count: 0, offers: [] }
+            : data,
+      }),
       skip: task?.subsetID !== TaskType.COMMON_AUCTION_SALE,
     }
   );
-  const userOffersData = getUserOffersQuery.data;
+  const userOffersData = getUserOffersQuery.data?.offers || [];
+
   useEffect(() => {
     if (isFocused) {
       refetch();
@@ -98,12 +109,20 @@ export const useTaskCard = ({
       });
     }
   }, [isError]);
+  useEffect(() => {
+    if (deleteOffersMutation.isError) {
+      toast.show({
+        type: 'error',
+        title: (deleteOffersMutation.error as AxiosQueryErrorResponse).data
+          .message,
+      });
+    }
+  }, [deleteOffersMutation.isError]);
 
   const estimateTabsArray = [
     EstimateTab.TASK_ESTIMATE,
     EstimateTab.MY_SUGGESTION,
   ];
-  const isEstimateTabs = tab === TaskTab.ESTIMATE && !!getUserOffersQuery.data;
 
   const id = task?.ID || 0;
   /**
@@ -128,9 +147,6 @@ export const useTaskCard = ({
   const description = task?.description || '';
   const offersDeadline = task?.offersDeadline;
   const winnerOffer = task?.winnerOffer;
-  const isUserOfferWin = getUserOffersQuery.data?.offers.some(
-    offer => offer.ID === winnerOffer?.ID
-  );
   /**
    * Закончился ли дедлайн подачи сметы
    */
@@ -173,7 +189,10 @@ export const useTaskCard = ({
   const isExecutor = executors.some(executor => executor.ID === user?.userID);
   const isCoordinator = coordinator?.ID === user?.userID;
   const isSupervisor = user?.roleID === RoleType.SUPERVISOR;
-
+  const isEstimateTabs =
+    tab === TaskTab.ESTIMATE &&
+    statusID === StatusType.ACTIVE &&
+    !!userOffersData.length;
   const isCommentsAvailable =
     isSupervisor || isExecutor || isCurator || isCoordinator;
 
@@ -238,9 +257,7 @@ export const useTaskCard = ({
     ref.current?.setId(1);
     setTab(TaskTab.ESTIMATE);
   };
-  const onBudgetSubmission = () => {
-    //
-  };
+
   const onSwitchEstimateTab = (index: number) => {
     const newTab = estimateTabsArray[index];
     newTab && setCurrentEstimateTab(newTab);
@@ -282,6 +299,7 @@ export const useTaskCard = ({
     if (subsetID === TaskType.COMMON_AUCTION_SALE) {
       navigation.navigate(AppScreenName.EstimateSubmission, {
         taskId: +taskId,
+        services: services,
       });
     }
     onSubmissionModalVisible();
@@ -290,7 +308,10 @@ export const useTaskCard = ({
     setCancelModalVisible(!cancelModalVisible);
   };
   const onWorkDelivery = async () => {
-    if (outlayStatusID !== OutlayStatusType.READY) {
+    if (
+      subsetID === TaskType.COMMON_FIRST_RESPONSE &&
+      outlayStatusID !== OutlayStatusType.READY
+    ) {
       !estimateBannerVisible && onEstimateBannerVisible();
     } else {
       await patchTask({
@@ -306,14 +327,27 @@ export const useTaskCard = ({
   const onCancelTask = async (text: string) => {
     //если это общие, то
     //первый отклик - патч задания, refuseReason, id задания
-    //если лоты то - патч оффера, id оффера, taskID, refuseReason
+    if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
+      await patchTask({
+        //id таски
+        ID: id,
+        //причина отказа
+        refuseReason: text,
+      });
+    }
+    //если общие лоты то - патч оффера, id оффера, taskID, refuseReason
+    if (subsetID === TaskType.COMMON_AUCTION_SALE && winnerOffer) {
+      await patchOffers({
+        //id таски
+        taskID: id,
+        //id выигрышного офера (юзер уже должен его выиграть)
+        ID: winnerOffer.ID,
+        //причина отказа
+        refuseReason: text,
+      });
+    }
     //в ИТ там все иначе 🙂
-    await patchTask({
-      //id таски
-      ID: id,
-      //причина отказа
-      refuseReason: text,
-    });
+
     refetch();
     onCancelModalVisible();
   };
@@ -333,12 +367,19 @@ export const useTaskCard = ({
     }
     refetch();
   };
-  const onRevokeBudget = () => {
-    //TODO необходимо сначала получить оффер юзера по этой таске
-    //https://sandbox8.apteka-april.ru/api/offers?query=?taskID==977*userID==81?
-    //далее необходимо удалить этот оффер через DELETE offers/id
+
+  const onRevokeBudget = async () => {
     setBudgetModalVisible(!budgetModalVisible);
+    if (userOffersData) {
+      const offerID = userOffersData?.[0]?.ID;
+      if (offerID) {
+        await deleteOffer(offerID.toString());
+        getUserOffersQuery.refetch();
+        refetch();
+      }
+    }
   };
+
   const onSubmitAnEstimate = () => {
     //показываем модалку с условиями если самозанятый
     if (isSelfEmployed) {

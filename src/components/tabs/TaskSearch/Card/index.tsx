@@ -44,6 +44,7 @@ const CardTasks = ({
               statusID={statusID}
               isUrgent={isUrgent}
               isNight={isNight}
+              useOutlayStatus
             />
           </View>
           <Text variant="bodySRegular" style={styles.wrapperTitle}>
