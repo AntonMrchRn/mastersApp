@@ -20,6 +20,7 @@ enum TaskType {
    */
   COMMON_FIRST_RESPONSE = 5,
 }
+
 enum StatusType {
   /**
    * Подготовка

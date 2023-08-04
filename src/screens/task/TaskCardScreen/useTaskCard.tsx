@@ -1,6 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { useIsFocused } from '@react-navigation/native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import {
+  CompositeNavigationProp,
+  useIsFocused,
+} from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import dayjs from 'dayjs';
 import { useToast } from 'rn-ui-kit';
@@ -12,6 +16,7 @@ import { TaskCardEstimate } from '@/components/task/TaskCard/TaskCardEstimate';
 import { TaskCardHisory } from '@/components/task/TaskCard/TaskCardHistory';
 import { TaskCardReport } from '@/components/task/TaskCard/TaskCardReport';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
+import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   useDeleteOffersMutation,
@@ -42,10 +47,13 @@ export const useTaskCard = ({
   navigation,
 }: {
   taskId: string;
-  navigation: StackNavigationProp<
-    AppStackParamList,
-    AppScreenName.TaskCard,
-    undefined
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<AppStackParamList, AppScreenName.TaskCard, undefined>,
+    BottomTabNavigationProp<
+      BottomTabParamList,
+      keyof BottomTabParamList,
+      undefined
+    >
   >;
 }) => {
   const [tab, setTab] = useState<TaskTab>(TaskTab.DESCRIPTION);
@@ -56,6 +64,8 @@ export const useTaskCard = ({
   const [selectedServiceId, setSelectedServiceId] = useState<number>();
   const [estimateBannerVisible, setEstimateBannerVisible] = useState(false);
   const [cantDeleteBannerVisible, setCantDeleteBannerVisible] = useState(false);
+  const [noAccessToTaskBannerVisible, setNoAccessToTaskBannerVisible] =
+    useState(false);
   const [submissionModalVisible, setSubmissionModalVisible] = useState(false);
   const [currentEstimateTab, setCurrentEstimateTab] = useState<EstimateTab>(
     EstimateTab.TASK_ESTIMATE
@@ -71,7 +81,10 @@ export const useTaskCard = ({
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
   const getUserQuery = useGetUserQuery(user?.userID);
-  const entityTypeID = getUserQuery.data?.entityTypeID;
+  const userData = getUserQuery.data;
+
+  const entityTypeID = userData?.entityTypeID;
+
   const isSelfEmployed = entityTypeID === 1;
   const [patchTask] = usePatchTaskMutation();
   const [patchOffers] = usePatchOffersMutation();
@@ -199,6 +212,8 @@ export const useTaskCard = ({
   const isExecutor = executors.some(executor => executor.ID === user?.userID);
   const isCoordinator = coordinator?.ID === user?.userID;
   const isSupervisor = user?.roleID === RoleType.SUPERVISOR;
+  const hasAccessToTask =
+    userData?.isApproved && setId && userData?.setIDs?.includes(setId);
   const isEstimateTabs =
     tab === TaskTab.ESTIMATE &&
     statusID === StatusType.ACTIVE &&
@@ -236,10 +251,19 @@ export const useTaskCard = ({
     );
   };
 
-  const onSubmissionModalVisible = () =>
-    setSubmissionModalVisible(!submissionModalVisible);
+  const onSubmissionModalVisible = () => {
+    if (hasAccessToTask) {
+      setSubmissionModalVisible(!submissionModalVisible);
+    } else {
+      onNoAccessToTaskBannerVisible();
+    }
+  };
+
   const onCantDeleteBannerVisible = () =>
     setCantDeleteBannerVisible(!cantDeleteBannerVisible);
+
+  const onNoAccessToTaskBannerVisible = () =>
+    setNoAccessToTaskBannerVisible(!noAccessToTaskBannerVisible);
 
   const onEstimateBannerVisible = () =>
     setEstimateBannerVisible(!estimateBannerVisible);
@@ -317,6 +341,10 @@ export const useTaskCard = ({
   const onCancelModalVisible = () => {
     setCancelModalVisible(!cancelModalVisible);
   };
+  const noAccessButtonPress = () => {
+    onNoAccessToTaskBannerVisible();
+    navigation.navigate(BottomTabName.ProfileNavigation);
+  };
   const onWorkDelivery = async () => {
     if (
       subsetID === TaskType.COMMON_FIRST_RESPONSE &&
@@ -391,11 +419,15 @@ export const useTaskCard = ({
   };
 
   const onSubmitAnEstimate = () => {
-    //показываем модалку с условиями если самозанятый
-    if (isSelfEmployed) {
-      onSubmissionModalVisible();
+    if (hasAccessToTask) {
+      //показываем модалку с условиями если самозанятый
+      if (isSelfEmployed) {
+        onSubmissionModalVisible();
+      } else {
+        onTaskSubmission();
+      }
     } else {
-      onTaskSubmission();
+      onNoAccessToTaskBannerVisible();
     }
   };
 
@@ -412,6 +444,7 @@ export const useTaskCard = ({
             files={files}
             statusID={statusID}
             webdata={webdata}
+            executors={executors}
           />
         );
       case TaskTab.ESTIMATE:
@@ -522,5 +555,8 @@ export const useTaskCard = ({
     estimateTabsArray,
     onSwitchEstimateTab,
     isEstimateTabs,
+    onNoAccessToTaskBannerVisible,
+    noAccessToTaskBannerVisible,
+    noAccessButtonPress,
   };
 };

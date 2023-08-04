@@ -1,5 +1,5 @@
 import { TaskCardBottomButton } from '@/components/task/TaskCard/TaskCardBottom';
-import { GetOffersResponse, Offer } from '@/store/api/tasks/types';
+import { Offer } from '@/store/api/tasks/types';
 import { File } from '@/types/fileManager';
 import { OutlayStatusType, StatusType, TaskTab, TaskType } from '@/types/task';
 

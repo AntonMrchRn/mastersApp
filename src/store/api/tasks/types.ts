@@ -38,6 +38,7 @@ type Service = {
 type Executor = {
   ID: number;
   email?: string;
+  phone?: string;
   entityTypeID?: number;
   isAccept?: boolean;
   isApproved?: boolean;
