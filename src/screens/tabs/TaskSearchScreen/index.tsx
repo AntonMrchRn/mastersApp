@@ -10,7 +10,7 @@ import {
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { BottomSheet, SegmentedControl, Text, useTheme } from 'rn-ui-kit';
+import { SegmentedControl, Text, useTheme } from 'rn-ui-kit';
 
 import CardTasks from '@/components/tabs/TaskSearch/Card';
 import PreviewNotFound, {
@@ -51,7 +51,6 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
   const [selectedTabId, setSelectedTabId] = useState<TaskSetType>(
     TaskSetType.ITServices
   );
-  const [isVisibleModal, setIsVisibleModal] = useState<boolean>(false);
   const {
     data = [],
     loadingList,
@@ -79,16 +78,11 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
   };
 
   const onItemPress = (id: number) => {
-    if (user?.hasITAccess) {
-      navigation.navigate(AppScreenName.TaskCard, {
-        taskId: id,
-      });
-    } else {
-      setIsVisibleModal(!isVisibleModal);
-    }
+    navigation.navigate(AppScreenName.TaskCard, {
+      taskId: id,
+    });
   };
 
-  const onModal = () => setIsVisibleModal(!isVisibleModal);
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
 
   const renderItem = ({ item }: ListRenderItemInfo<Task>) => (
@@ -158,18 +152,6 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
           />
         )}
       </View>
-      <BottomSheet
-        isVisible={isVisibleModal}
-        onBackdropPress={onModal}
-        onSwipeComplete={onModal}
-      >
-        <View style={styles.wrapperPreview}>
-          <PreviewNotFound
-            type={PreviewNotFoundType.TasksNotAvailable}
-            closeModal={onModal}
-          />
-        </View>
-      </BottomSheet>
     </SafeAreaView>
   );
 };
