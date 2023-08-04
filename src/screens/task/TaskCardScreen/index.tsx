@@ -5,6 +5,8 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { CompositeScreenProps } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import {
   Banner,
@@ -23,17 +25,17 @@ import { TaskCardCancelBottomSheet } from '@/components/task/TaskCard/TaskCardCa
 import { TaskCardSubmissionBottomSheet } from '@/components/task/TaskCard/TaskCardSubmissionBottomSheet';
 import { deviceWidth } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
+import { BottomTabParamList } from '@/navigation/TabNavigation';
 import { StatusType, TaskType } from '@/types/task';
 
 import { useTaskCard } from './useTaskCard';
 
 import { styles } from './styles';
 
-type TaskCardScreenProps = StackScreenProps<
-  AppStackParamList,
-  AppScreenName.TaskCard
+type TaskCardScreenProps = CompositeScreenProps<
+  StackScreenProps<AppStackParamList, AppScreenName.TaskCard>,
+  BottomTabScreenProps<BottomTabParamList>
 >;
-
 export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
@@ -76,6 +78,9 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
     estimateTabsArray,
     onSwitchEstimateTab,
     isEstimateTabs,
+    onNoAccessToTaskBannerVisible,
+    noAccessToTaskBannerVisible,
+    noAccessButtonPress,
   } = useTaskCard({ taskId, navigation });
 
   return (
@@ -187,6 +192,19 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
               icon={'alert'}
               text="Нельзя полностью удалить все услуги из сметы"
               onClosePress={onCantDeleteBannerVisible}
+            />
+          </View>
+        )}
+        {noAccessToTaskBannerVisible && (
+          <View style={styles.mb16}>
+            <Banner
+              type={'error'}
+              title="Аккаунт не подтвержден"
+              icon={'alert'}
+              text="Для выполнения задач необходимо заполнить данные учетной записи"
+              onClosePress={onNoAccessToTaskBannerVisible}
+              buttonText="Перейти в Профиль"
+              onButtonPress={noAccessButtonPress}
             />
           </View>
         )}

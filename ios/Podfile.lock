@@ -1,6 +1,6 @@
 PODS:
   - boost (1.76.0)
-  - BVLinearGradient (2.7.3):
+  - BVLinearGradient (2.8.1):
     - React-Core
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -687,7 +687,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: a7c83b31436843459a1961bfd74b96033dc77234
-  BVLinearGradient: fbe308a1d19a8133f69e033abc85d8008644f5e3
+  BVLinearGradient: 421743791a59d259aec53f4c58793aad031da2ca
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: 4eb7ee83e8d0ad7e20a829485295ff48823c4e4c
