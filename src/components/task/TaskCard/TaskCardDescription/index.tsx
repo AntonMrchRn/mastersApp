@@ -8,7 +8,7 @@ import { Spacer, Text, useTheme } from 'rn-ui-kit';
 import { CaretDownIcon } from '@/assets/icons/svg/screens/CaretDownIcon';
 import { DownloadManager } from '@/components/FileManager/DownloadManager';
 import { TaskAddress } from '@/components/task/TaskAddress';
-import { Contact, Task, WebData } from '@/store/api/tasks/types';
+import { Contact, Executor, WebData } from '@/store/api/tasks/types';
 import { File } from '@/types/fileManager';
 import { StatusType } from '@/types/task';
 
@@ -25,6 +25,7 @@ type TaskCardDescriptionProps = {
   files: File[];
   statusID: StatusType | undefined;
   webdata: WebData | undefined;
+  executors: Executor[] | [];
 };
 
 export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
@@ -36,6 +37,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   files,
   statusID,
   webdata,
+  executors,
 }) => {
   const theme = useTheme();
 
@@ -44,9 +46,43 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   const onDelete = async ({ filePath }: { filePath?: string }) => {
     filePath && (await ReactNativeBlobUtil.fs.unlink(filePath));
   };
-  console.log('webdata', webdata);
+  console.log('executors', executors);
   return (
     <View>
+      {/* Выбор подрядчиков  */}
+      {executors.length ? (
+        <>
+          <Text variant="title3" style={styles.mt36} color={theme.text.basic}>
+            Выбранные подрядчики
+          </Text>
+          {executors.map((executor, index) => {
+            return (
+              <View key={index} style={styles.mt16}>
+                <Text variant="captionRegular" color={theme.text.neutral}>
+                  ID {executor.ID}
+                </Text>
+                <Text variant="bodyMRegular">
+                  {executor.name} {executor.pname} {executor.sname}
+                </Text>
+                {executor.phone ? (
+                  <MaskedText
+                    mask="+ 9 (999) 999-99-99"
+                    style={[styles.phoneText, { color: theme.text.basic }]}
+                  >
+                    {executor?.phone?.toString()}
+                  </MaskedText>
+                ) : (
+                  executor.email || ''
+                )}
+                <Spacer size={'m'} separator="bottom" />
+              </View>
+            );
+          })}
+        </>
+      ) : (
+        <></>
+      )}
+
       <Text variant="title3" style={styles.mt36} color={theme.text.basic}>
         О задаче
       </Text>
@@ -63,6 +99,8 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
           <TaskDate from={startTime} to={endTimePlan} />
         </View>
       )}
+
+      {/* Контакты в задаче */}
       {contacts.length && statusID !== StatusType.ACTIVE ? (
         <>
           <View style={styles.contacts}>
@@ -104,6 +142,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
         <></>
       )}
 
+      {/* Интернет данные */}
       {webdata && statusID !== StatusType.ACTIVE ? (
         <>
           <View style={styles.contacts}>
@@ -201,6 +240,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
         <></>
       )}
 
+      {/* Прикрепленные файлы */}
       {applicationFiles.length ? (
         <>
           <View style={styles.attachments}>

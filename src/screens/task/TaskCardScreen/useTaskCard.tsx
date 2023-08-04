@@ -434,6 +434,7 @@ export const useTaskCard = ({
             files={files}
             statusID={statusID}
             webdata={webdata}
+            executors={executors}
           />
         );
       case TaskTab.ESTIMATE:
