@@ -37,8 +37,7 @@ type TaskCardScreenProps = StackScreenProps<
 export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
-  // const taskId = route.params.taskId.toString();
-  const taskId = '1251';
+  const taskId = route.params.taskId.toString();
 
   const {
     onTabChange,
