@@ -50,6 +50,7 @@ type Executor = {
   pname?: string;
   sname?: string;
   hasCurator?: boolean;
+  isRefuse?: boolean;
 };
 type Curator = {
   ID: number;

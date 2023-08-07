@@ -131,13 +131,15 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
                 >
                   {name}
                 </Text>
-                <Text
-                  variant="title3"
-                  style={styles.price}
-                  color={theme.text.basic}
-                >
-                  {budget}
-                </Text>
+                {!!budget && (
+                  <Text
+                    variant="title3"
+                    style={styles.price}
+                    color={theme.text.basic}
+                  >
+                    {budget}
+                  </Text>
+                )}
                 {statusID === StatusType.ACTIVE &&
                   subsetID !== TaskType.COMMON_FIRST_RESPONSE &&
                   budgetEndTime && (
