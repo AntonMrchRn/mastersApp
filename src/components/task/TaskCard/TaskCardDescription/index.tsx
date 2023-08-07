@@ -72,7 +72,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
                     {executor?.phone?.toString()}
                   </MaskedText>
                 ) : (
-                  executor.email || ''
+                  <Text variant="bodyMRegular">{executor.email}</Text>
                 )}
                 <Spacer size={'m'} separator="bottom" />
               </View>
