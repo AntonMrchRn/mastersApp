@@ -213,9 +213,9 @@ export const useTaskCard = ({
 
   const isITServices = setId === TaskSetType.ITServices;
   const isCurator = curators.some(curator => curator.ID === user?.userID);
-  const isExecutor =
-    executors.some(executor => executor.ID === user?.userID) &&
-    !isRefusedContractor;
+
+  const isExecutor = !!executorMember && !isRefusedContractor;
+
   const isCoordinator = coordinator?.ID === user?.userID;
   const isSupervisor = user?.roleID === RoleType.SUPERVISOR;
   const hasAccessToTask =
