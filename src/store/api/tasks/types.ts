@@ -49,6 +49,8 @@ type Executor = {
   name?: string;
   pname?: string;
   sname?: string;
+  hasCurator?: boolean;
+  isRefuse?: boolean;
 };
 type Curator = {
   ID: number;
