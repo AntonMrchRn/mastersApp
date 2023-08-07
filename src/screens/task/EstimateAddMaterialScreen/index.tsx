@@ -3,6 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
@@ -38,6 +39,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
   const theme = useTheme();
   const toast = useToast();
   const dispatch = useAppDispatch();
+  const isFocused = useIsFocused();
 
   const { serviceId, taskId, fromEstimateSubmission, isEdit } = route.params;
 
@@ -57,6 +59,11 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
       });
     }
   }, [mutationMaterial.error]);
+  useEffect(() => {
+    if (isFocused) {
+      getTask.refetch();
+    }
+  }, [isFocused]);
 
   const task = getTask?.data && getTask?.data?.tasks && getTask?.data?.tasks[0];
   const services = fromEstimateSubmission

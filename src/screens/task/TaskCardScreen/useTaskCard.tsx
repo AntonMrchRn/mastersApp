@@ -111,7 +111,7 @@ export const useTaskCard = ({
 
   useEffect(() => {
     if (isFocused) {
-      refetch();
+      onRefresh();
     }
   }, [isFocused]);
   useEffect(() => {
@@ -266,7 +266,7 @@ export const useTaskCard = ({
 
   const navigateToChat = () => {
     const recipientIDs = executors
-      .concat(curators)
+      .concat(curators as { ID: number }[])
       .map(recipient => recipient.ID);
 
     navigation.navigate(AppScreenName.CommentsChat, {

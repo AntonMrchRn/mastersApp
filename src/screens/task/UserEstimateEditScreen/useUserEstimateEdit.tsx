@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useToast } from 'rn-ui-kit';
 
@@ -10,7 +11,6 @@ import {
   useGetTaskQuery,
   usePatchOffersMutation,
   usePatchTaskLotMutation,
-  usePostOffersMutation,
 } from '@/store/api/tasks';
 import { Material, Offer, Service } from '@/store/api/tasks/types';
 import { selectAuth } from '@/store/slices/auth/selectors';
@@ -36,6 +36,7 @@ export const useUserEstimateEdit = ({
 }) => {
   const dispatch = useAppDispatch();
   const toast = useToast();
+  const isFocused = useIsFocused();
 
   const bsRef = useRef<BottomSheetModal>(null);
 
@@ -277,7 +278,11 @@ export const useUserEstimateEdit = ({
       });
     }
   }, [error]);
-
+  useEffect(() => {
+    if (isFocused) {
+      getTaskQuery.refetch();
+    }
+  }, [isFocused]);
   return {
     bsRef,
     onEstimateModalVisible,

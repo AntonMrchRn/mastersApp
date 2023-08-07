@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useToast } from 'rn-ui-kit';
 
@@ -35,6 +36,7 @@ export const useEstimateSubmission = ({
 }) => {
   const dispatch = useAppDispatch();
   const toast = useToast();
+  const isFocused = useIsFocused();
 
   const bsRef = useRef<BottomSheetModal>(null);
 
@@ -54,6 +56,11 @@ export const useEstimateSubmission = ({
     useAppSelector(selectTasks);
   const userRole = useAppSelector(selectAuth).user?.roleID;
 
+  useEffect(() => {
+    if (isFocused) {
+      getTaskQuery.refetch();
+    }
+  }, [isFocused]);
   useEffect(() => {
     getTasks();
   }, []);

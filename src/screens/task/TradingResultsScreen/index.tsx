@@ -1,7 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Spacer, Text, useTheme } from 'rn-ui-kit';
 
@@ -25,10 +26,17 @@ export const TradingResultsScreen: FC<TradingResultsScreenProps> = ({
 }) => {
   const { taskId, winnerOffer } = route.params;
 
+  const isFocused = useIsFocused();
   const theme = useTheme();
 
   const offers = useGetOffersQuery(taskId.toString());
   const data = offers.data?.offers || [];
+
+  useEffect(() => {
+    if (isFocused) {
+      offers.refetch();
+    }
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
