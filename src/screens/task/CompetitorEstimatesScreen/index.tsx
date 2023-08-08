@@ -1,7 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Spacer, Text } from 'rn-ui-kit';
 
@@ -23,8 +24,18 @@ export const CompetitorEstimatesScreen: FC<CompetitorEstimatesScreenProps> = ({
   route,
 }) => {
   const { taskId, userID } = route.params;
+
+  const isFocused = useIsFocused();
+
   const offers = useGetAnotherOffersQuery({ taskID: taskId, userID });
+
   const data = offers.data?.offers || [];
+
+  useEffect(() => {
+    if (isFocused) {
+      offers.refetch();
+    }
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>

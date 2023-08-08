@@ -28,6 +28,7 @@ import {
 import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { getCommentsPreview } from '@/store/slices/myTasks/asyncActions';
+import { setNewOfferServices } from '@/store/slices/tasks/actions';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import {
   EstimateTab,
@@ -98,12 +99,6 @@ export const useTaskCard = ({
       userID: user?.userID as number,
     },
     {
-      selectFromResult: ({ data, error }) => ({
-        data:
-          (error as AxiosQueryErrorResponse)?.data?.code === 8003
-            ? { count: 0, offers: [] }
-            : data,
-      }),
       skip: task?.subsetID !== TaskType.COMMON_AUCTION_SALE,
     }
   );
@@ -111,7 +106,7 @@ export const useTaskCard = ({
 
   useEffect(() => {
     if (isFocused) {
-      refetch();
+      onRefresh();
     }
   }, [isFocused]);
   useEffect(() => {
@@ -282,7 +277,7 @@ export const useTaskCard = ({
 
   const navigateToChat = () => {
     const recipientIDs = executors
-      .concat(curators)
+      .concat(curators as { ID: number }[])
       .map(recipient => recipient.ID);
 
     navigation.navigate(AppScreenName.CommentsChat, {
@@ -337,9 +332,9 @@ export const useTaskCard = ({
     }
     //навигация на скрин подачи сметы, если ЛОТЫ
     if (subsetID === TaskType.COMMON_AUCTION_SALE) {
+      dispatch(setNewOfferServices(services));
       navigation.navigate(AppScreenName.EstimateSubmission, {
         taskId: +taskId,
-        services: services,
       });
     }
     onSubmissionModalVisible();
@@ -414,7 +409,7 @@ export const useTaskCard = ({
 
   const onRevokeBudget = async () => {
     setBudgetModalVisible(!budgetModalVisible);
-    if (userOffersData) {
+    if (userOffersData.length) {
       const offerID = userOffersData?.[0]?.ID;
       if (offerID) {
         await deleteOffer(offerID.toString());

@@ -86,8 +86,8 @@ export type AppStackParamList = {
     winnerOffer: Offer | undefined;
   };
   [AppScreenName.WebView]: { uri: string };
-  [AppScreenName.EstimateSubmission]: { taskId: number; services?: Service[] };
-  [AppScreenName.UserEstimateEdit]: { taskId: number; offer?: Offer };
+  [AppScreenName.EstimateSubmission]: { taskId: number };
+  [AppScreenName.UserEstimateEdit]: { taskId: number };
   [AppScreenName.NewMaterial]: { taskId: number; isEdit?: boolean };
   [AppScreenName.EstimateSubmissionSuccess]: { taskId: number };
 };

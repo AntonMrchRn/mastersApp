@@ -48,6 +48,7 @@ const useProfile = () => {
     isLoading,
     isError,
     error,
+    refetch,
   } = useGetUserQuery(authUser?.userID, {
     skip: !authUser?.userID,
   });
@@ -72,8 +73,11 @@ const useProfile = () => {
   }, [isFocused, activeTab.id]);
 
   useEffect(() => {
-    getData();
-  }, []);
+    if (isFocused) {
+      refetch();
+      getData();
+    }
+  }, [isFocused]);
 
   const isApprovalNotificationVisible =
     !isApprovalNotificationShown && !!user?.isApproved;

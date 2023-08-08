@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { Linking } from 'react-native';
 
+import { useIsFocused } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 
 import { useAppSelector } from '@/store';
@@ -15,6 +16,7 @@ import { AxiosQueryErrorResponse } from '@/types/error';
 const useTelegramBot = () => {
   const toast = useToast();
   const { user: authUser } = useAppSelector(selectAuth);
+  const isFocused = useIsFocused();
   const {
     data: user,
     error: userError,
@@ -37,8 +39,15 @@ const useTelegramBot = () => {
     data: params,
     isError: isParamsError,
     error: paramsError,
+    refetch: refetchParams,
   } = useGetUserParamsQuery();
 
+  useEffect(() => {
+    if (isFocused) {
+      refetch();
+      refetchParams();
+    }
+  }, [isFocused]);
   useEffect(() => {
     if (isSuccess) {
       refetch();

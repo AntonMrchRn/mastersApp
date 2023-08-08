@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useToast } from 'rn-ui-kit';
 
@@ -10,13 +11,13 @@ import {
   useGetTaskQuery,
   usePatchOffersMutation,
   usePatchTaskLotMutation,
-  usePostOffersMutation,
 } from '@/store/api/tasks';
-import { Material, Offer, Service } from '@/store/api/tasks/types';
+import { Material, Service } from '@/store/api/tasks/types';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import {
   setNewOfferServices,
   setOfferComment,
+  setOfferID,
 } from '@/store/slices/tasks/actions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
@@ -24,7 +25,6 @@ import { AxiosQueryErrorResponse } from '@/types/error';
 export const useUserEstimateEdit = ({
   navigation,
   taskId,
-  offer,
 }: {
   navigation: StackNavigationProp<
     AppStackParamList,
@@ -32,10 +32,10 @@ export const useUserEstimateEdit = ({
     undefined
   >;
   taskId: number;
-  offer: Offer | undefined;
 }) => {
   const dispatch = useAppDispatch();
   const toast = useToast();
+  const isFocused = useIsFocused();
 
   const bsRef = useRef<BottomSheetModal>(null);
 
@@ -51,7 +51,7 @@ export const useUserEstimateEdit = ({
   const [deleteEstimateModalVisible, setDeleteEstimateModalVisible] =
     useState(false);
 
-  const { offerServices, error, loading, offerComment } =
+  const { offerServices, error, loading, offerComment, offerID } =
     useAppSelector(selectTasks);
   const userRole = useAppSelector(selectAuth).user?.roleID;
 
@@ -119,26 +119,7 @@ export const useUserEstimateEdit = ({
     });
     bsRef.current?.close();
   };
-  const getTasks = () => {
-    if (offer) {
-      const initServices: Service[] = offer.services.map(serv => {
-        const initMaterials: Material[] =
-          serv.materials?.map(mat => {
-            return {
-              ...mat,
-              localSum: (mat.count * mat.price).toString(),
-            };
-          }) || [];
-        return {
-          ...serv,
-          localSum: serv.sum?.toString(),
-          materials: initMaterials,
-        };
-      });
-      dispatch(setNewOfferServices(initServices));
-      offer?.comment && setComment(offer.comment);
-    }
-  };
+
   const onDeleteService = () => {
     const newServices = services.filter(ser => ser !== serviceForDelete);
     dispatch(setNewOfferServices(newServices));
@@ -200,12 +181,12 @@ export const useUserEstimateEdit = ({
         contentHeight: 120,
       });
     }
-    if (offer) {
+    if (offerID) {
       try {
         await patchTaskLot({
           taskID: taskId,
           sum: allSum,
-          offerID: offer?.ID,
+          offerID: offerID,
         }).unwrap();
         const postServices: Service[] = services.map(service => {
           const postMaterials =
@@ -245,7 +226,7 @@ export const useUserEstimateEdit = ({
         });
         await patchOffers({
           taskID: taskId,
-          ID: offer?.ID,
+          ID: offerID,
           comment: offerComment,
           services: postServices,
         }).unwrap();
@@ -254,6 +235,9 @@ export const useUserEstimateEdit = ({
           title: 'Ценовое предложение изменено',
         });
         getTaskQuery.refetch();
+        dispatch(setNewOfferServices([]));
+        dispatch(setOfferComment(''));
+        dispatch(setOfferID(undefined));
         navigation.navigate(AppScreenName.TaskCard, {
           taskId,
         });
@@ -267,9 +251,6 @@ export const useUserEstimateEdit = ({
   };
 
   useEffect(() => {
-    getTasks();
-  }, []);
-  useEffect(() => {
     if (error) {
       toast.show({
         type: 'error',
@@ -277,7 +258,11 @@ export const useUserEstimateEdit = ({
       });
     }
   }, [error]);
-
+  useEffect(() => {
+    if (isFocused) {
+      getTaskQuery.refetch();
+    }
+  }, [isFocused]);
   return {
     bsRef,
     onEstimateModalVisible,

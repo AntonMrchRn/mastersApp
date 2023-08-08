@@ -58,13 +58,14 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
   } = useAppSelector(state => state.taskSearch);
 
   const { user: authUser } = useAppSelector(selectAuth);
-  const { data: user } = useGetUserQuery(authUser?.userID, {
+  const { data: user, refetch } = useGetUserQuery(authUser?.userID, {
     skip: !authUser?.userID,
   });
 
   useEffect(() => {
     if (user?.regionIDs && isFocused) {
       onRefresh();
+      refetch();
     }
   }, [user?.regionIDs, isFocused]);
 

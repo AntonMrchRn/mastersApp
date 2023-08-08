@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { CompositeScreenProps } from '@react-navigation/native';
+import { CompositeScreenProps, useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { TabControl, Text, useTheme } from 'rn-ui-kit';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
@@ -42,6 +42,7 @@ type MyTasksScreenProps = CompositeScreenProps<
 const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
+  const isFocused = useIsFocused();
 
   const [selectedTab, setSelectedTab] = useState(1);
   const {
@@ -96,8 +97,10 @@ const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
   };
 
   useEffect(() => {
-    onRefresh();
-  }, []);
+    if (isFocused) {
+      onRefresh();
+    }
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={styles.container}>
