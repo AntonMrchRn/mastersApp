@@ -28,6 +28,7 @@ import {
 import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { getCommentsPreview } from '@/store/slices/myTasks/asyncActions';
+import { setNewOfferServices } from '@/store/slices/tasks/actions';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import {
   EstimateTab,
@@ -337,9 +338,9 @@ export const useTaskCard = ({
     }
     //навигация на скрин подачи сметы, если ЛОТЫ
     if (subsetID === TaskType.COMMON_AUCTION_SALE) {
+      dispatch(setNewOfferServices(services));
       navigation.navigate(AppScreenName.EstimateSubmission, {
         taskId: +taskId,
-        services: services,
       });
     }
     onSubmissionModalVisible();

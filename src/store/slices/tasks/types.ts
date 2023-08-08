@@ -6,6 +6,7 @@ type InitialState = {
   currentTaskID?: number;
   offerServices: Service[];
   offerComment: string;
+  offerID: number | undefined;
   loading: boolean;
   error?: Error;
 };

@@ -24,7 +24,6 @@ import { AxiosQueryErrorResponse } from '@/types/error';
 export const useEstimateSubmission = ({
   navigation,
   taskId,
-  taskServices,
 }: {
   navigation: StackNavigationProp<
     AppStackParamList,
@@ -32,7 +31,6 @@ export const useEstimateSubmission = ({
     undefined
   >;
   taskId: number;
-  taskServices: Service[] | undefined;
 }) => {
   const dispatch = useAppDispatch();
   const toast = useToast();
@@ -61,9 +59,7 @@ export const useEstimateSubmission = ({
       getTaskQuery.refetch();
     }
   }, [isFocused]);
-  useEffect(() => {
-    getTasks();
-  }, []);
+
   useEffect(() => {
     if (error) {
       toast.show({
@@ -136,11 +132,6 @@ export const useEstimateSubmission = ({
       fromEstimateSubmission: true,
     });
     bsRef.current?.close();
-  };
-  const getTasks = () => {
-    if (taskServices) {
-      dispatch(setNewOfferServices(taskServices));
-    }
   };
   const onDeleteService = () => {
     const newServices = services.filter(ser => ser !== serviceForDelete);
@@ -250,6 +241,7 @@ export const useEstimateSubmission = ({
         services: postServices,
       }).unwrap();
       dispatch(setNewOfferServices([]));
+      dispatch(setOfferComment(''));
       navigation.navigate(AppScreenName.EstimateSubmissionSuccess, { taskId });
     } catch (err) {
       toast.show({
