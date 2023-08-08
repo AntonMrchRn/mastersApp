@@ -110,7 +110,7 @@ export const useTaskCardEstimate = ({
 
   const [estimateSheetVisible, setEstimateSheetVisible] = useState(false);
 
-  const isAnotherOffers = !!getAnotherOffers.data;
+  const isAnotherOffers = !!getAnotherOffers?.data?.count;
 
   const allSum = currentServices.reduce((acc, val) => acc + (val?.sum || 0), 0);
   const allMaterials = currentServices.reduce<Material[]>(

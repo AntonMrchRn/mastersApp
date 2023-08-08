@@ -99,12 +99,6 @@ export const useTaskCard = ({
       userID: user?.userID as number,
     },
     {
-      selectFromResult: ({ data, error }) => ({
-        data:
-          (error as AxiosQueryErrorResponse)?.data?.code === 8003
-            ? { count: 0, offers: [] }
-            : data,
-      }),
       skip: task?.subsetID !== TaskType.COMMON_AUCTION_SALE,
     }
   );
@@ -415,7 +409,7 @@ export const useTaskCard = ({
 
   const onRevokeBudget = async () => {
     setBudgetModalVisible(!budgetModalVisible);
-    if (userOffersData) {
+    if (userOffersData.length) {
       const offerID = userOffersData?.[0]?.ID;
       if (offerID) {
         await deleteOffer(offerID.toString());
