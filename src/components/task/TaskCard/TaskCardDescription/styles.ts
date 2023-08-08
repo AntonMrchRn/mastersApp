@@ -7,6 +7,9 @@ export const styles = StyleSheet.create({
   mr11: {
     marginRight: 11,
   },
+  mt5: {
+    marginTop: 5,
+  },
   mr16: {
     marginRight: 16,
   },

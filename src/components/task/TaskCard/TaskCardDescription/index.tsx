@@ -10,7 +10,7 @@ import { DownloadManager } from '@/components/FileManager/DownloadManager';
 import { TaskAddress } from '@/components/task/TaskAddress';
 import { Contact, Executor, WebData } from '@/store/api/tasks/types';
 import { File } from '@/types/fileManager';
-import { StatusType } from '@/types/task';
+import { StatusType, TaskType } from '@/types/task';
 
 import { TaskDate } from '../../TaskDate';
 
@@ -26,6 +26,7 @@ type TaskCardDescriptionProps = {
   statusID: StatusType | undefined;
   webdata: WebData | undefined;
   executors: Executor[] | [];
+  subsetID: TaskType;
 };
 
 export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
@@ -38,6 +39,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   statusID,
   webdata,
   executors,
+  subsetID,
 }) => {
   const theme = useTheme();
 
@@ -49,7 +51,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   return (
     <View>
       {/* Выбор подрядчиков  */}
-      {executors.length ? (
+      {executors.length && subsetID !== 4 && subsetID !== 5 ? (
         <>
           <Text variant="title3" style={styles.mt36} color={theme.text.basic}>
             Выбранные подрядчики
@@ -78,12 +80,17 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
                     <Text
                       variant="captionRegular"
                       color={theme.background.danger}
+                      style={styles.mt5}
                     >
                       Отказался от задачи
                     </Text>
                   )}
                   {!executor.isRefuse && !executor.isConfirm && (
-                    <Text variant="captionRegular" color={theme.text.warning}>
+                    <Text
+                      variant="captionRegular"
+                      color={theme.text.warning}
+                      style={styles.mt5}
+                    >
                       Пока не принял задачу
                     </Text>
                   )}

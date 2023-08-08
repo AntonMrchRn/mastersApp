@@ -67,6 +67,7 @@ type Curator = {
   phone: number;
   pname: string;
   sname: string;
+  isRefuse?: boolean;
 };
 type Contact = {
   name: string;
