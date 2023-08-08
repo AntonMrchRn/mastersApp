@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import { useToast } from 'rn-ui-kit';
 
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
-import { useAppSelector } from '@/store';
+import { useAppDispatch, useAppSelector } from '@/store';
 import {
   useDeleteMaterialMutation,
   useDeleteTaskServiceMutation,
@@ -17,6 +17,11 @@ import {
 } from '@/store/api/tasks';
 import { Material, Offer, Service } from '@/store/api/tasks/types';
 import { selectAuth } from '@/store/slices/auth/selectors';
+import {
+  setNewOfferServices,
+  setOfferComment,
+  setOfferID,
+} from '@/store/slices/tasks/actions';
 import { EstimateTab, StatusType, TaskType } from '@/types/task';
 
 export const useTaskCardEstimate = ({
@@ -45,7 +50,7 @@ export const useTaskCardEstimate = ({
   subsetID: TaskType | undefined;
 }) => {
   const toast = useToast();
-
+  const dispatch = useAppDispatch();
   const bsRef = useRef<BottomSheetModal>(null);
 
   const { user } = useAppSelector(selectAuth);
@@ -105,7 +110,7 @@ export const useTaskCardEstimate = ({
 
   const [estimateSheetVisible, setEstimateSheetVisible] = useState(false);
 
-  const isAnotherOffers = !!getAnotherOffers.data;
+  const isAnotherOffers = !!getAnotherOffers?.data?.count;
 
   const allSum = currentServices.reduce((acc, val) => acc + (val?.sum || 0), 0);
   const allMaterials = currentServices.reduce<Material[]>(
@@ -191,9 +196,25 @@ export const useTaskCardEstimate = ({
   };
   const onEditEstimate = () => {
     if (userOffer) {
+      const initServices: Service[] = userOffer.services.map(serv => {
+        const initMaterials: Material[] =
+          serv.materials?.map(mat => {
+            return {
+              ...mat,
+              localSum: (mat.count * mat.price).toString(),
+            };
+          }) || [];
+        return {
+          ...serv,
+          localSum: serv.sum?.toString(),
+          materials: initMaterials,
+        };
+      });
+      dispatch(setNewOfferServices(initServices));
+      dispatch(setOfferComment(userOffer.comment));
+      dispatch(setOfferID(userOffer.ID));
       navigation.navigate(AppScreenName.UserEstimateEdit, {
         taskId,
-        offer: userOffer,
       });
     }
   };

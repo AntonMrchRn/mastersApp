@@ -10,6 +10,7 @@ const initialState: InitialState = {
   offerComment: '',
   loading: false,
   error: undefined,
+  offerID: undefined,
 };
 
 const tasks = createSlice({
@@ -64,6 +65,9 @@ const tasks = createSlice({
     },
     setOfferComment: (state, { payload }) => {
       state.offerComment = payload;
+    },
+    setOfferID: (state, { payload }) => {
+      state.offerID = payload;
     },
   },
 });

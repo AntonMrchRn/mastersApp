@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useToast } from 'rn-ui-kit';
 
@@ -23,7 +24,6 @@ import { AxiosQueryErrorResponse } from '@/types/error';
 export const useEstimateSubmission = ({
   navigation,
   taskId,
-  taskServices,
 }: {
   navigation: StackNavigationProp<
     AppStackParamList,
@@ -31,10 +31,10 @@ export const useEstimateSubmission = ({
     undefined
   >;
   taskId: number;
-  taskServices: Service[] | undefined;
 }) => {
   const dispatch = useAppDispatch();
   const toast = useToast();
+  const isFocused = useIsFocused();
 
   const bsRef = useRef<BottomSheetModal>(null);
 
@@ -55,8 +55,11 @@ export const useEstimateSubmission = ({
   const userRole = useAppSelector(selectAuth).user?.roleID;
 
   useEffect(() => {
-    getTasks();
-  }, []);
+    if (isFocused) {
+      getTaskQuery.refetch();
+    }
+  }, [isFocused]);
+
   useEffect(() => {
     if (error) {
       toast.show({
@@ -129,11 +132,6 @@ export const useEstimateSubmission = ({
       fromEstimateSubmission: true,
     });
     bsRef.current?.close();
-  };
-  const getTasks = () => {
-    if (taskServices) {
-      dispatch(setNewOfferServices(taskServices));
-    }
   };
   const onDeleteService = () => {
     const newServices = services.filter(ser => ser !== serviceForDelete);
@@ -243,6 +241,7 @@ export const useEstimateSubmission = ({
         services: postServices,
       }).unwrap();
       dispatch(setNewOfferServices([]));
+      dispatch(setOfferComment(''));
       navigation.navigate(AppScreenName.EstimateSubmissionSuccess, { taskId });
     } catch (err) {
       toast.show({
