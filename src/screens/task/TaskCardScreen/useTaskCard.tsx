@@ -145,6 +145,12 @@ export const useTaskCard = ({
   const curators = task?.curators || [];
   const coordinator = task?.coordinator;
 
+  const executorMember = executors.find(
+    executor => executor.ID === user?.userID
+  );
+
+  const isRefusedContractor = !!executorMember?.isRefuse;
+
   const setId = task?.setID;
   /**
    * тип задачи
@@ -175,7 +181,15 @@ export const useTaskCard = ({
    */
   const outlayStatusID: OutlayStatusType | undefined = task?.outlayStatusID;
   const name = task?.name || '';
-  const budget = `${task?.budget} ₽` || '';
+
+  const isContractor = !!executorMember?.hasCurator && !isRefusedContractor;
+
+  const budget =
+    (subsetID === TaskType.IT_FIRST_RESPONSE && isContractor) ||
+    (setId === TaskSetType.ITServices &&
+      user?.roleID === RoleType.INTERNAL_EXECUTOR)
+      ? ''
+      : `${task?.budget} ₽` || '';
 
   /**
    * Ночные работы
@@ -199,7 +213,9 @@ export const useTaskCard = ({
 
   const isITServices = setId === TaskSetType.ITServices;
   const isCurator = curators.some(curator => curator.ID === user?.userID);
-  const isExecutor = executors.some(executor => executor.ID === user?.userID);
+
+  const isExecutor = !!executorMember && !isRefusedContractor;
+
   const isCoordinator = coordinator?.ID === user?.userID;
   const isSupervisor = user?.roleID === RoleType.SUPERVISOR;
   const hasAccessToTask =
@@ -453,6 +469,7 @@ export const useTaskCard = ({
             subsetID={subsetID}
             currentEstimateTab={currentEstimateTab}
             winnerOffer={winnerOffer}
+            isContractor={isContractor}
           />
         );
       case TaskTab.REPORT:

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import { MaskedText } from 'react-native-mask-text';
 
@@ -46,7 +46,6 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   const onDelete = async ({ filePath }: { filePath?: string }) => {
     filePath && (await ReactNativeBlobUtil.fs.unlink(filePath));
   };
-  console.log('executors', executors);
   return (
     <View>
       {/* Выбор подрядчиков  */}
@@ -55,27 +54,53 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
           <Text variant="title3" style={styles.mt36} color={theme.text.basic}>
             Выбранные подрядчики
           </Text>
-          {executors.map((executor, index) => {
+          {executors.map(executor => {
             return (
-              <View key={index} style={styles.mt16}>
-                <Text variant="captionRegular" color={theme.text.neutral}>
-                  ID {executor.ID}
-                </Text>
-                <Text variant="bodyMRegular">
-                  {executor.name} {executor.pname} {executor.sname}
-                </Text>
-                {executor.phone ? (
-                  <MaskedText
-                    mask="+ 9 (999) 999-99-99"
-                    style={[styles.phoneText, { color: theme.text.basic }]}
+              <>
+                <View key={executor.ID} style={styles.mt16}>
+                  <Text variant="captionRegular" color={theme.text.neutral}>
+                    ID {executor.ID}
+                  </Text>
+                  <Text variant="bodyMRegular">
+                    {executor.name} {executor.pname} {executor.sname}
+                  </Text>
+                  {executor.phone ? (
+                    <MaskedText
+                      mask="+ 9 (999) 999-99-99"
+                      style={[styles.phoneText, { color: theme.text.basic }]}
+                    >
+                      {executor?.phone?.toString()}
+                    </MaskedText>
+                  ) : (
+                    <Text variant="bodyMRegular">{executor.email}</Text>
+                  )}
+                  {executor.isRefuse && (
+                    <Text
+                      variant="captionRegular"
+                      color={theme.background.danger}
+                    >
+                      Отказался от задачи
+                    </Text>
+                  )}
+                  {!executor.isRefuse && !executor.isConfirm && (
+                    <Text variant="captionRegular" color={theme.text.warning}>
+                      Пока не принял задачу
+                    </Text>
+                  )}
+                  <Spacer size={'m'} separator="bottom" />
+                </View>
+                <TouchableOpacity
+                  onPress={() => console.log('Переход на выбор подрядчиков')}
+                >
+                  <Text
+                    variant="bodySBold"
+                    style={styles.mt16}
+                    color={theme.text.basic}
                   >
-                    {executor?.phone?.toString()}
-                  </MaskedText>
-                ) : (
-                  executor.email || ''
-                )}
-                <Spacer size={'m'} separator="bottom" />
-              </View>
+                    Изменить выбор
+                  </Text>
+                </TouchableOpacity>
+              </>
             );
           })}
         </>

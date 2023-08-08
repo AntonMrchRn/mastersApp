@@ -17,7 +17,9 @@ import { Offer, Service } from '@/store/api/tasks/types';
 import {
   EstimateTab,
   OutlayStatusType,
+  RoleType,
   StatusType,
+  TaskSetType,
   TaskType,
 } from '@/types/task';
 
@@ -47,6 +49,7 @@ type TaskCardEstimateProps = {
   subsetID: TaskType | undefined;
   currentEstimateTab: EstimateTab;
   winnerOffer: Offer | undefined;
+  isContractor: boolean;
 };
 
 export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
@@ -63,6 +66,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   subsetID,
   currentEstimateTab,
   winnerOffer,
+  isContractor,
 }) => {
   const theme = useTheme();
   const isFocused = useIsFocused();
@@ -90,6 +94,8 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     onCompetitorEstimates,
     onTradingResults,
     onEditEstimate,
+    userRoleID,
+    setId,
   } = useTaskCardEstimate({
     services,
     taskId,
@@ -191,7 +197,11 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                   count={service?.count}
                   sum={service?.sum}
                   roleID={service?.roleID}
-                  canSwipe={canSwipe}
+                  canSwipe={
+                    subsetID === TaskType.IT_FIRST_RESPONSE && isContractor
+                      ? false
+                      : canSwipe
+                  }
                 />
               </View>
               <Spacer size={0} separator="bottom" />
@@ -212,7 +222,11 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                       count={material?.count}
                       sum={(material?.count || 0) * (material?.price || 0)}
                       roleID={material?.roleID}
-                      canSwipe={canSwipe}
+                      canSwipe={
+                        subsetID === TaskType.IT_FIRST_RESPONSE && isContractor
+                          ? false
+                          : canSwipe
+                      }
                     />
                     <Spacer size={0} separator="bottom" />
                   </View>
@@ -221,7 +235,11 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             </View>
           );
         })}
-        <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
+        {(subsetID === TaskType.IT_FIRST_RESPONSE && isContractor) ||
+        (setId === TaskSetType.ITServices &&
+          userRoleID === RoleType.INTERNAL_EXECUTOR) ? null : (
+          <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
+        )}
         {subsetID === TaskType.COMMON_AUCTION_SALE && (
           <View style={styles.mt16}>
             {isTaskEctimateTab ? (
