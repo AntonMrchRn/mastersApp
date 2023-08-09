@@ -181,11 +181,14 @@ export const useTaskCard = ({
    */
   const outlayStatusID: OutlayStatusType | undefined = task?.outlayStatusID;
   const name = task?.name || '';
-
+  /**
+   * Является ли пользователь подрядчиком в задаче
+   */
   const isContractor = !!executorMember?.hasCurator && !isRefusedContractor;
 
   const budget =
     (subsetID === TaskType.IT_FIRST_RESPONSE && isContractor) ||
+    (subsetID === TaskType.IT_AUCTION_SALE && isContractor) ||
     (setId === TaskSetType.ITServices &&
       user?.roleID === RoleType.INTERNAL_EXECUTOR)
       ? ''
@@ -202,9 +205,14 @@ export const useTaskCard = ({
   const publicTime = task?.publicTime
     ? `Опубликовано ${dayjs(task?.publicTime).format('DD MMMM в HH:mm')}`
     : '';
-  const budgetEndTime = offersDeadline
-    ? `Срок подачи сметы до ${dayjs(offersDeadline).format('DD MMMM в HH:mm')}`
-    : '';
+  const budgetEndTime =
+    subsetID === TaskType.IT_AUCTION_SALE && isContractor
+      ? ''
+      : offersDeadline
+      ? `Срок подачи сметы до ${dayjs(offersDeadline).format(
+          'DD MMMM в HH:mm'
+        )}`
+      : '';
   const banner = getBanner({
     tab,
     statusID,

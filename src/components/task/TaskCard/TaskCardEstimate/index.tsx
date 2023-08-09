@@ -198,7 +198,8 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                   sum={service?.sum}
                   roleID={service?.roleID}
                   canSwipe={
-                    subsetID === TaskType.IT_FIRST_RESPONSE && isContractor
+                    (subsetID === TaskType.IT_FIRST_RESPONSE && isContractor) ||
+                    (subsetID === TaskType.IT_AUCTION_SALE && isContractor)
                       ? false
                       : canSwipe
                   }
@@ -223,7 +224,9 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                       sum={(material?.count || 0) * (material?.price || 0)}
                       roleID={material?.roleID}
                       canSwipe={
-                        subsetID === TaskType.IT_FIRST_RESPONSE && isContractor
+                        (subsetID === TaskType.IT_FIRST_RESPONSE &&
+                          isContractor) ||
+                        (subsetID === TaskType.IT_AUCTION_SALE && isContractor)
                           ? false
                           : canSwipe
                       }
@@ -236,11 +239,13 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           );
         })}
         {(subsetID === TaskType.IT_FIRST_RESPONSE && isContractor) ||
+        (subsetID === TaskType.IT_AUCTION_SALE && isContractor) ||
         (setId === TaskSetType.ITServices &&
           userRoleID === RoleType.INTERNAL_EXECUTOR) ? null : (
           <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
         )}
-        {subsetID === TaskType.COMMON_AUCTION_SALE && (
+        {(subsetID === TaskType.COMMON_AUCTION_SALE ||
+          subsetID === TaskType.IT_AUCTION_SALE) && (
           <View style={styles.mt16}>
             {isTaskEctimateTab ? (
               <>
