@@ -1,12 +1,11 @@
 import { StyleSheet } from 'react-native';
 
-import { fonts } from '@/constants/fonts';
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
   },
+  mh20: { marginHorizontal: 20 },
   wrapperPreview: { height: 320 },
   shadowWrapper: {
     backgroundColor: '#fff',

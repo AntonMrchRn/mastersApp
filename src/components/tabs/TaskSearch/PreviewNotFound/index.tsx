@@ -6,10 +6,16 @@ import { Button } from 'rn-ui-kit';
 
 import { InfoIcon } from '@/assets/icons/svg/screens/InfoIcon';
 import { NoMessagesIcon } from '@/assets/icons/svg/screens/NoMessagesIcon';
+import { NoRegionIcon } from '@/assets/icons/svg/screens/NoRegionIcon';
 import { NotFoundIcon } from '@/assets/icons/svg/screens/NotFoundIcon';
 import TaskSearchClear from '@/assets/icons/svg/screens/TaskSearchClear';
 import Preview from '@/components/tabs/TaskSearch/PreviewNotFound/Preview';
+import {
+  ProfileScreenName,
+  ProfileStackParamList,
+} from '@/navigation/ProfileNavigation';
 import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
+import { ProfileTab } from '@/types/tab';
 
 export enum PreviewNotFoundType {
   TasksNotFound = 'TasksNotFound',
@@ -17,6 +23,7 @@ export enum PreviewNotFoundType {
   NoTasks = 'NoTasks',
   NoMessages = 'NoMessages',
   MessagesNotAvailable = 'MessagesNotAvailable',
+  RegionNotChanged = 'RegionNotChanged',
 }
 
 type PreviewNotFoundProps = {
@@ -25,11 +32,19 @@ type PreviewNotFoundProps = {
 };
 
 const PreviewNotFound = ({ type, closeModal }: PreviewNotFoundProps) => {
-  const { navigate } = useNavigation<StackNavigationProp<BottomTabParamList>>();
+  const { navigate } =
+    useNavigation<
+      StackNavigationProp<BottomTabParamList & ProfileStackParamList>
+    >();
 
   const navigateToProfile = () => {
     navigate(BottomTabName.ProfileNavigation);
     closeModal && closeModal();
+  };
+  const navigateToProfileOnActivity = () => {
+    navigate(ProfileScreenName.Profile, {
+      tab: { id: 2, label: ProfileTab.Activity },
+    });
   };
   const navigateToTaskSearch = () => navigate(BottomTabName.TaskSearch);
 
@@ -63,6 +78,17 @@ const PreviewNotFound = ({ type, closeModal }: PreviewNotFoundProps) => {
       title: 'Комментарии пока закрыты',
       text: 'Отправка сообщений будет доступна в случае назначения вас в качестве исполнителя',
       button: undefined,
+    },
+    [PreviewNotFoundType.RegionNotChanged]: {
+      icon: <NoRegionIcon />,
+      title: 'Регион не выбран',
+      text: 'Для поиска задач необходимо в Профиле выбрать подходящий регион',
+      button: (
+        <Button
+          label="Перейти в профиль"
+          onPress={navigateToProfileOnActivity}
+        />
+      ),
     },
   };
 

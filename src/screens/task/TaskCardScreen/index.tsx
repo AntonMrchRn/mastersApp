@@ -65,7 +65,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
     estimateBannerVisible,
     onEstimateBannerVisible,
     onEstimateBannerPress,
-    ref,
+    tab,
     onCantDeleteBannerVisible,
     cantDeleteBannerVisible,
     outlayStatusID,
@@ -150,9 +150,8 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
                   )}
               </View>
               <TabControl
-                ref={ref}
                 data={tabs}
-                initialId={0}
+                currentTabId={tab.id}
                 onChange={onTabChange}
                 style={styles.mt16}
                 contentContainerStyle={styles.contentContainerTab}

@@ -44,13 +44,15 @@ const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
   const theme = useTheme();
   const isFocused = useIsFocused();
 
-  const [selectedTab, setSelectedTab] = useState(1);
   const {
     data = [],
     loadingList,
     errorList,
     list: { mobileCounts = [] },
   } = useAppSelector(state => state.myTasks);
+  const [selectedTabID, setSelectedTabID] = useState(
+    mobileCounts?.[0]?.id || 1
+  );
 
   const { user: authUser } = useAppSelector(selectAuth);
   const { data: user } = useGetUserQuery(authUser?.userID, {
@@ -68,13 +70,13 @@ const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
   );
 
   const onRefresh = () =>
-    dispatch(refreshMyTasks({ idList: selectedTab, regionID }));
+    dispatch(refreshMyTasks({ idList: selectedTabID, regionID }));
 
   const cachedOnEndReached = useCallback(() => {
     !loadingList && data.length && data.length > 4
       ? dispatch(
           getMyTasks({
-            idList: selectedTab,
+            idList: selectedTabID,
             fromTask: data?.length,
             regionID,
           })
@@ -83,7 +85,7 @@ const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
   }, [data]);
 
   const onChangeTab = (item: TabItem) => {
-    if (item.id !== selectedTab) {
+    if (item.id !== selectedTabID) {
       dispatch(clearList());
       dispatch(
         refreshMyTasks({
@@ -92,7 +94,7 @@ const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
           regionID,
         })
       );
-      setSelectedTab(item.id);
+      setSelectedTabID(item.id);
     }
   };
 
@@ -111,9 +113,9 @@ const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
       </View>
       <TabControl
         contentContainerStyle={styles.wrapperTab}
-        initialId={1}
         data={mobileCounts}
         onChange={onChangeTab}
+        currentTabId={selectedTabID}
       />
       <View
         style={[
