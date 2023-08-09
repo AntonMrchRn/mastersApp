@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import { MaskedText } from 'react-native-mask-text';
 
-import { Spacer, Text, useTheme } from 'rn-ui-kit';
+import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { CaretDownIcon } from '@/assets/icons/svg/screens/CaretDownIcon';
 import { DownloadManager } from '@/components/FileManager/DownloadManager';
@@ -56,10 +56,10 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
           <Text variant="title3" style={styles.mt36} color={theme.text.basic}>
             Выбранные подрядчики
           </Text>
-          {executors.map(executor => {
+          {executors.map((executor, index) => {
             return (
               <>
-                <View key={executor.ID} style={styles.mt16}>
+                <View key={index} style={styles.mt16}>
                   <Text variant="captionRegular" color={theme.text.neutral}>
                     ID {executor.ID}
                   </Text>
@@ -96,20 +96,15 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
                   )}
                   <Spacer size={'m'} separator="bottom" />
                 </View>
-                <TouchableOpacity
-                  onPress={() => console.log('Переход на выбор подрядчиков')}
-                >
-                  <Text
-                    variant="bodySBold"
-                    style={styles.mt16}
-                    color={theme.text.basic}
-                  >
-                    Изменить выбор
-                  </Text>
-                </TouchableOpacity>
               </>
             );
           })}
+          <Button
+            label="Изменить выбор"
+            size="S"
+            style={styles.mt16}
+            onPress={() => console.log('Переход на выбор подрядчика')}
+          />
         </>
       ) : (
         <></>

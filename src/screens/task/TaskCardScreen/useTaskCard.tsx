@@ -240,8 +240,11 @@ export const useTaskCard = ({
     outlayStatusID,
   });
 
+  const curator = curators.find(curator => curator.ID === user?.userID);
+
   const isITServices = setId === TaskSetType.ITServices;
-  const isCurator = curators.some(curator => curator.ID === user?.userID);
+  const isCurator =
+    curators.some(curator => curator.ID === user?.userID) && !curator?.isRefuse;
 
   const isExecutor = !!executorMember && !isRefusedContractor;
 
