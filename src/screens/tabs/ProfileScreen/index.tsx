@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { ActivityIndicator, SafeAreaView, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+import { StackScreenProps } from '@react-navigation/stack';
 import {
   BottomSheet,
   Button,
@@ -17,6 +18,10 @@ import AccountTab from '@/components/tabs/ProfileScreen/AccountTab';
 import ActivityTab from '@/components/tabs/ProfileScreen/ActivityTab';
 import CommonTab from '@/components/tabs/ProfileScreen/CommonTab';
 import PaymentTab from '@/components/tabs/ProfileScreen/PaymentTab';
+import {
+  ProfileScreenName,
+  ProfileStackParamList,
+} from '@/navigation/ProfileNavigation';
 import useProfile from '@/screens/tabs/ProfileScreen/useProfile';
 import { ProfileTab } from '@/types/tab';
 
@@ -25,7 +30,12 @@ import styles from './style';
 const confirmationPendingMessage =
   'Ваша учетная запись в ожидании подтверждения. Проверка обычно длится один рабочий день. Пожалуйста, для выполнения задач дождитесь окончания проверки';
 
-const ProfileScreen = () => {
+type ProfileScreenProps = StackScreenProps<
+  ProfileStackParamList,
+  ProfileScreenName.Profile
+>;
+const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
+  const { tab } = route.params;
   const theme = useTheme();
   const {
     user,
@@ -41,7 +51,7 @@ const ProfileScreen = () => {
     isInternalExecutor,
     isBlockingModalVisible,
     isApprovalNotificationVisible,
-  } = useProfile();
+  } = useProfile({ tab });
 
   const tabComponents = {
     [ProfileTab.Common]: user && (
@@ -110,7 +120,11 @@ const ProfileScreen = () => {
             )}
             {!!warning && <Tips type="warning" text={warning} />}
             <Spacer size="xxl" />
-            <TabControl data={tabs} onChange={switchTab} initialId={0} />
+            <TabControl
+              data={tabs}
+              onChange={switchTab}
+              currentTabId={activeTab.id}
+            />
             <Spacer size="l" />
             {(isLoading || !user) && activeTab.label !== ProfileTab.Account ? (
               <ActivityIndicator

@@ -127,40 +127,36 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
           !!data?.length && { ...configApp.shadow },
         ]}
       >
-        {!regionIDs?.length ? (
+        {errorList?.code === ErrorCode.NoAccess ? (
+          <PreviewNotFound type={PreviewNotFoundType.TasksNotAvailable} />
+        ) : !regionIDs?.length ? (
           <View style={[styles.mh20, styles.container]}>
             <PreviewNotFound type={PreviewNotFoundType.RegionNotChanged} />
           </View>
+        ) : loadingList && !data.length ? (
+          <ActivityIndicator size="large" color={theme.background.accent} />
         ) : (
-          <>
-            {errorList?.code === ErrorCode.NoAccess ? (
-              <PreviewNotFound type={PreviewNotFoundType.TasksNotAvailable} />
-            ) : loadingList && !data.length ? (
-              <ActivityIndicator size="large" color={theme.background.accent} />
-            ) : (
-              <FlatList
-                scrollsToTop
-                data={data}
-                renderItem={renderItem}
-                keyExtractor={keyExtractor}
-                style={styles.list}
-                onRefresh={onRefresh}
-                refreshing={loadingList}
-                contentContainerStyle={[
-                  styles.listContainer,
-                  !data?.length && styles.container,
-                ]}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                ListEmptyComponent={
-                  <PreviewNotFound type={PreviewNotFoundType.TasksNotFound} />
-                }
-                initialNumToRender={4}
-                onEndReachedThreshold={7}
-                onEndReached={onEndReached}
-              />
-            )}
-          </>
+          <FlatList
+            scrollsToTop
+            data={data}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            style={styles.list}
+            onRefresh={onRefresh}
+            refreshing={loadingList}
+            contentContainerStyle={[
+              styles.listContainer,
+              !data?.length && styles.container,
+            ]}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            ListEmptyComponent={
+              <PreviewNotFound type={PreviewNotFoundType.TasksNotFound} />
+            }
+            initialNumToRender={4}
+            onEndReachedThreshold={7}
+            onEndReached={onEndReached}
+          />
         )}
       </View>
     </SafeAreaView>

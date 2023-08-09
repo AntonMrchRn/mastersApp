@@ -26,7 +26,7 @@ type TaskCardDescriptionProps = {
   statusID: StatusType | undefined;
   webdata: WebData | undefined;
   executors: Executor[] | [];
-  subsetID: TaskType;
+  subsetID: TaskType | undefined;
 };
 
 export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({

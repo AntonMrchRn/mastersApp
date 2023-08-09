@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import {
@@ -57,7 +57,37 @@ export const useTaskCard = ({
     >
   >;
 }) => {
-  const [tab, setTab] = useState<TaskTab>(TaskTab.DESCRIPTION);
+  const tabs: TabItem[] = [
+    {
+      id: 0,
+      label: TaskTab.DESCRIPTION,
+    },
+    {
+      id: 1,
+      label: TaskTab.ESTIMATE,
+    },
+    {
+      id: 2,
+      label: TaskTab.COMMENTS,
+    },
+    {
+      id: 3,
+      label: TaskTab.REPORT,
+    },
+    {
+      id: 4,
+      label: TaskTab.HISTORY,
+    },
+  ];
+  const [tab, setTab] = useState<{
+    id: number;
+    label: TaskTab;
+  }>(
+    tabs[0] as {
+      id: number;
+      label: TaskTab;
+    }
+  );
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
@@ -74,10 +104,6 @@ export const useTaskCard = ({
 
   const dispatch = useAppDispatch();
   const isFocused = useIsFocused();
-
-  const ref = useRef<{
-    setId: (id: number) => void;
-  }>(null);
 
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
@@ -201,7 +227,7 @@ export const useTaskCard = ({
     ? `Срок подачи сметы до ${dayjs(offersDeadline).format('DD MMMM в HH:mm')}`
     : '';
   const banner = getBanner({
-    tab,
+    tab: tab.label,
     statusID,
     outlayStatusID,
   });
@@ -216,34 +242,11 @@ export const useTaskCard = ({
   const hasAccessToTask =
     userData?.isApproved && setId && userData?.setIDs?.includes(setId);
   const isEstimateTabs =
-    tab === TaskTab.ESTIMATE &&
+    tab.label === TaskTab.ESTIMATE &&
     statusID === StatusType.ACTIVE &&
     !!userOffersData.length;
   const isCommentsAvailable =
     isSupervisor || isExecutor || isCurator || isCoordinator;
-
-  const tabs: TabItem[] = [
-    {
-      id: 0,
-      label: TaskTab.DESCRIPTION,
-    },
-    {
-      id: 1,
-      label: TaskTab.ESTIMATE,
-    },
-    {
-      id: 2,
-      label: TaskTab.COMMENTS,
-    },
-    {
-      id: 3,
-      label: TaskTab.REPORT,
-    },
-    {
-      id: 4,
-      label: TaskTab.HISTORY,
-    },
-  ];
 
   const onRefresh = () => {
     refetch();
@@ -289,8 +292,10 @@ export const useTaskCard = ({
 
   const onEstimateBannerPress = () => {
     onEstimateBannerVisible();
-    ref.current?.setId(1);
-    setTab(TaskTab.ESTIMATE);
+    setTab({
+      id: 1,
+      label: TaskTab.ESTIMATE,
+    });
   };
 
   const onSwitchEstimateTab = (index: number) => {
@@ -433,7 +438,7 @@ export const useTaskCard = ({
   };
 
   const getCurrentTab = () => {
-    switch (tab) {
+    switch (tab.label) {
       case TaskTab.DESCRIPTION:
         return (
           <TaskCardDescription
@@ -494,13 +499,13 @@ export const useTaskCard = ({
     }
   };
   const onTabChange = (item: TabItem) => {
-    setTab(item.label as TaskTab);
+    setTab({ id: item.id, label: item.label as TaskTab });
   };
 
   const buttons = getButtons({
     subsetID,
     statusID,
-    tab,
+    tab: tab.label,
     isCommentsAvailable,
     navigateToChat,
     onSubmissionModalVisible,
@@ -544,7 +549,6 @@ export const useTaskCard = ({
     estimateBannerVisible,
     onEstimateBannerVisible,
     onEstimateBannerPress,
-    ref,
     onCantDeleteBannerVisible,
     cantDeleteBannerVisible,
     outlayStatusID,
@@ -560,5 +564,6 @@ export const useTaskCard = ({
     onNoAccessToTaskBannerVisible,
     noAccessToTaskBannerVisible,
     noAccessButtonPress,
+    tab,
   };
 };
