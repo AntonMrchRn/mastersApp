@@ -35,7 +35,7 @@ type ProfileScreenProps = StackScreenProps<
   ProfileScreenName.Profile
 >;
 const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
-  const { tab } = route.params;
+  const tab = route?.params?.tab;
   const theme = useTheme();
   const {
     user,
