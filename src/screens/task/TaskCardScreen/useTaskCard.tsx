@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import {
@@ -28,6 +28,7 @@ import {
 import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { getCommentsPreview } from '@/store/slices/myTasks/asyncActions';
+import { setNewOfferServices } from '@/store/slices/tasks/actions';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import {
   EstimateTab,
@@ -56,7 +57,37 @@ export const useTaskCard = ({
     >
   >;
 }) => {
-  const [tab, setTab] = useState<TaskTab>(TaskTab.DESCRIPTION);
+  const tabs: TabItem[] = [
+    {
+      id: 0,
+      label: TaskTab.DESCRIPTION,
+    },
+    {
+      id: 1,
+      label: TaskTab.ESTIMATE,
+    },
+    {
+      id: 2,
+      label: TaskTab.COMMENTS,
+    },
+    {
+      id: 3,
+      label: TaskTab.REPORT,
+    },
+    {
+      id: 4,
+      label: TaskTab.HISTORY,
+    },
+  ];
+  const [tab, setTab] = useState<{
+    id: number;
+    label: TaskTab;
+  }>(
+    tabs[0] as {
+      id: number;
+      label: TaskTab;
+    }
+  );
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
@@ -73,10 +104,6 @@ export const useTaskCard = ({
 
   const dispatch = useAppDispatch();
   const isFocused = useIsFocused();
-
-  const ref = useRef<{
-    setId: (id: number) => void;
-  }>(null);
 
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
@@ -98,12 +125,6 @@ export const useTaskCard = ({
       userID: user?.userID as number,
     },
     {
-      selectFromResult: ({ data, error }) => ({
-        data:
-          (error as AxiosQueryErrorResponse)?.data?.code === 8003
-            ? { count: 0, offers: [] }
-            : data,
-      }),
       skip: task?.subsetID !== TaskType.COMMON_AUCTION_SALE,
     }
   );
@@ -111,7 +132,7 @@ export const useTaskCard = ({
 
   useEffect(() => {
     if (isFocused) {
-      refetch();
+      onRefresh();
     }
   }, [isFocused]);
   useEffect(() => {
@@ -214,7 +235,7 @@ export const useTaskCard = ({
         )}`
       : '';
   const banner = getBanner({
-    tab,
+    tab: tab.label,
     statusID,
     outlayStatusID,
   });
@@ -229,34 +250,11 @@ export const useTaskCard = ({
   const hasAccessToTask =
     userData?.isApproved && setId && userData?.setIDs?.includes(setId);
   const isEstimateTabs =
-    tab === TaskTab.ESTIMATE &&
+    tab.label === TaskTab.ESTIMATE &&
     statusID === StatusType.ACTIVE &&
     !!userOffersData.length;
   const isCommentsAvailable =
     isSupervisor || isExecutor || isCurator || isCoordinator;
-
-  const tabs: TabItem[] = [
-    {
-      id: 0,
-      label: TaskTab.DESCRIPTION,
-    },
-    {
-      id: 1,
-      label: TaskTab.ESTIMATE,
-    },
-    {
-      id: 2,
-      label: TaskTab.COMMENTS,
-    },
-    {
-      id: 3,
-      label: TaskTab.REPORT,
-    },
-    {
-      id: 4,
-      label: TaskTab.HISTORY,
-    },
-  ];
 
   const onRefresh = () => {
     refetch();
@@ -290,7 +288,7 @@ export const useTaskCard = ({
 
   const navigateToChat = () => {
     const recipientIDs = executors
-      .concat(curators)
+      .concat(curators as { ID: number }[])
       .map(recipient => recipient.ID);
 
     navigation.navigate(AppScreenName.CommentsChat, {
@@ -302,8 +300,10 @@ export const useTaskCard = ({
 
   const onEstimateBannerPress = () => {
     onEstimateBannerVisible();
-    ref.current?.setId(1);
-    setTab(TaskTab.ESTIMATE);
+    setTab({
+      id: 1,
+      label: TaskTab.ESTIMATE,
+    });
   };
 
   const onSwitchEstimateTab = (index: number) => {
@@ -345,9 +345,9 @@ export const useTaskCard = ({
     }
     //навигация на скрин подачи сметы, если ЛОТЫ
     if (subsetID === TaskType.COMMON_AUCTION_SALE) {
+      dispatch(setNewOfferServices(services));
       navigation.navigate(AppScreenName.EstimateSubmission, {
         taskId: +taskId,
-        services: services,
       });
     }
     onSubmissionModalVisible();
@@ -419,10 +419,10 @@ export const useTaskCard = ({
     }
     refetch();
   };
-
+  console.log('subsetID', subsetID);
   const onRevokeBudget = async () => {
     setBudgetModalVisible(!budgetModalVisible);
-    if (userOffersData) {
+    if (userOffersData.length) {
       const offerID = userOffersData?.[0]?.ID;
       if (offerID) {
         await deleteOffer(offerID.toString());
@@ -446,7 +446,7 @@ export const useTaskCard = ({
   };
 
   const getCurrentTab = () => {
-    switch (tab) {
+    switch (tab.label) {
       case TaskTab.DESCRIPTION:
         return (
           <TaskCardDescription
@@ -459,6 +459,7 @@ export const useTaskCard = ({
             statusID={statusID}
             webdata={webdata}
             executors={executors}
+            subsetID={subsetID}
           />
         );
       case TaskTab.ESTIMATE:
@@ -506,13 +507,13 @@ export const useTaskCard = ({
     }
   };
   const onTabChange = (item: TabItem) => {
-    setTab(item.label as TaskTab);
+    setTab({ id: item.id, label: item.label as TaskTab });
   };
 
   const buttons = getButtons({
     subsetID,
     statusID,
-    tab,
+    tab: tab.label,
     isCommentsAvailable,
     navigateToChat,
     onSubmissionModalVisible,
@@ -556,7 +557,6 @@ export const useTaskCard = ({
     estimateBannerVisible,
     onEstimateBannerVisible,
     onEstimateBannerPress,
-    ref,
     onCantDeleteBannerVisible,
     cantDeleteBannerVisible,
     outlayStatusID,
@@ -572,5 +572,6 @@ export const useTaskCard = ({
     onNoAccessToTaskBannerVisible,
     noAccessToTaskBannerVisible,
     noAccessButtonPress,
+    tab,
   };
 };

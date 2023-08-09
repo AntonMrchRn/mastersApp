@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { useRoute } from '@react-navigation/native';
+import { useIsFocused, useRoute } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 
 import useActivities from '@/components/tabs/ProfileScreen/ActivityTab/useActivities';
@@ -11,6 +11,8 @@ import { TeamMemberDetailsScreenRoute } from '@/types/navigation';
 
 const useTeamMemberDetails = () => {
   const toast = useToast();
+  const isFocused = useIsFocused();
+
   const { params } = useRoute<TeamMemberDetailsScreenRoute>();
 
   const {
@@ -18,6 +20,7 @@ const useTeamMemberDetails = () => {
     isError,
     isLoading,
     error,
+    refetch,
   } = useGetUserQuery(params.teamMemberId, {
     skip: !params.teamMemberId,
   });
@@ -35,6 +38,11 @@ const useTeamMemberDetails = () => {
       });
     }
   }, [isError]);
+  useEffect(() => {
+    if (isFocused) {
+      refetch();
+    }
+  }, [isFocused]);
 
   const onModal = () => setIsModalVisible(!isModalVisible);
 

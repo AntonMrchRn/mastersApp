@@ -58,15 +58,17 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
   } = useAppSelector(state => state.taskSearch);
 
   const { user: authUser } = useAppSelector(selectAuth);
-  const { data: user } = useGetUserQuery(authUser?.userID, {
+  const { data: user, refetch } = useGetUserQuery(authUser?.userID, {
     skip: !authUser?.userID,
   });
+  const regionIDs = user?.regionIDs;
 
   useEffect(() => {
-    if (user?.regionIDs && isFocused) {
+    if (regionIDs?.length && isFocused) {
       onRefresh();
+      refetch();
     }
-  }, [user?.regionIDs, isFocused]);
+  }, [regionIDs?.length, isFocused]);
 
   useEffect(() => {
     onRefresh();
@@ -89,21 +91,22 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
     <CardTasks {...item} onItemPress={onItemPress} />
   );
 
-  const onRefresh = () =>
-    dispatch(
-      refreshTasks({ idList: selectedTabId, regionID: user?.regionIDs })
-    );
+  const onRefresh = () => {
+    if (regionIDs && regionIDs?.length) {
+      dispatch(refreshTasks({ idList: selectedTabId, regionID: regionIDs }));
+    }
+  };
 
   const onEndReached = () => {
-    !loadingList && data.length && user?.regionIDs
-      ? dispatch(
-          getSearchTasks({
-            idList: selectedTabId,
-            fromTask: data?.length,
-            regionID: user?.regionIDs,
-          })
-        )
-      : null;
+    if (!loadingList && data.length && regionIDs && regionIDs?.length) {
+      dispatch(
+        getSearchTasks({
+          idList: selectedTabId,
+          fromTask: data?.length,
+          regionID: regionIDs,
+        })
+      );
+    }
   };
 
   return (
@@ -126,6 +129,10 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
       >
         {errorList?.code === ErrorCode.NoAccess ? (
           <PreviewNotFound type={PreviewNotFoundType.TasksNotAvailable} />
+        ) : !regionIDs?.length ? (
+          <View style={[styles.mh20, styles.container]}>
+            <PreviewNotFound type={PreviewNotFoundType.RegionNotChanged} />
+          </View>
         ) : loadingList && !data.length ? (
           <ActivityIndicator size="large" color={theme.background.accent} />
         ) : (

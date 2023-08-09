@@ -3,6 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
@@ -31,6 +32,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
 }) => {
   const theme = useTheme();
   const toast = useToast();
+  const isFocused = useIsFocused();
 
   const { taskId, serviceId, materialName } = route.params;
 
@@ -39,6 +41,11 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
   const [patchTaskService, mutationTaskService] = usePatchTaskServiceMutation();
   const [patchMaterial, mutationMaterial] = usePatchMaterialMutation();
 
+  useEffect(() => {
+    if (isFocused) {
+      getTask.refetch();
+    }
+  }, [isFocused]);
   useEffect(() => {
     if (mutationTaskService.error && 'data' in mutationTaskService.error) {
       toast.show({

@@ -37,7 +37,7 @@ export const UserEstimateEditScreen: FC<UserEstimateEditScreenProps> = ({
   navigation,
   route,
 }) => {
-  const { taskId, offer } = route.params;
+  const { taskId } = route.params;
 
   const {
     bsRef,
@@ -65,7 +65,7 @@ export const UserEstimateEditScreen: FC<UserEstimateEditScreenProps> = ({
     materialsSum,
     isError,
     onSubmit,
-  } = useUserEstimateEdit({ navigation, taskId, offer });
+  } = useUserEstimateEdit({ navigation, taskId });
 
   const dispatch = useAppDispatch();
   const theme = useTheme();

@@ -24,7 +24,7 @@ import { UserRole } from '@/types/user';
 
 import styles from './style';
 
-type Tab = {
+export type TabProf = {
   id: number;
   label: ProfileTab;
 };
@@ -34,7 +34,7 @@ const initialTab = {
   label: ProfileTab.Common,
 };
 
-const useProfile = () => {
+const useProfile = ({ tab }: { tab: TabProf | undefined }) => {
   const isFocused = useIsFocused();
   const insets = useSafeAreaInsets();
   const dispatch = useDispatch();
@@ -48,11 +48,12 @@ const useProfile = () => {
     isLoading,
     isError,
     error,
+    refetch,
   } = useGetUserQuery(authUser?.userID, {
     skip: !authUser?.userID,
   });
 
-  const [activeTab, setActiveTab] = useState<Tab>(initialTab);
+  const [activeTab, setActiveTab] = useState<TabProf>(initialTab);
   const [isBlockingModalVisible, setIsBlockingModalVisible] =
     useState<boolean>(false);
 
@@ -64,6 +65,11 @@ const useProfile = () => {
       });
     }
   }, [isError]);
+  useEffect(() => {
+    if (tab && tab !== activeTab) {
+      setActiveTab(tab);
+    }
+  }, [tab]);
 
   useEffect(() => {
     if (isApprovalNotificationVisible) {
@@ -72,8 +78,11 @@ const useProfile = () => {
   }, [isFocused, activeTab.id]);
 
   useEffect(() => {
-    getData();
-  }, []);
+    if (isFocused) {
+      refetch();
+      getData();
+    }
+  }, [isFocused]);
 
   const isApprovalNotificationVisible =
     !isApprovalNotificationShown && !!user?.isApproved;

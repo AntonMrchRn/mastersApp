@@ -3,6 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
@@ -31,6 +32,7 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
   const theme = useTheme();
   const toast = useToast();
   const dispatch = useAppDispatch();
+  const isFocused = useIsFocused();
 
   const userRole = useAppSelector(selectAuth).user?.roleID;
   const { offerServices } = useAppSelector(selectTasks);
@@ -57,6 +59,11 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
       });
     }
   }, [mutationTask.error]);
+  useEffect(() => {
+    if (isFocused) {
+      getTask.refetch();
+    }
+  }, [isFocused]);
 
   const methods = useForm({
     defaultValues: {

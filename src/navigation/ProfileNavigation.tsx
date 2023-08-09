@@ -13,6 +13,7 @@ import PhoneEditingScreen from '@/screens/profile/PhoneEditingScreen';
 import TeamMemberDetailsScreen from '@/screens/profile/TeamMemberDetailsScreen';
 import TelegramBotScreen from '@/screens/profile/TelegramBotScreen';
 import ProfileScreen from '@/screens/tabs/ProfileScreen';
+import { TabProf } from '@/screens/tabs/ProfileScreen/useProfile';
 
 export enum ProfileScreenName {
   Profile = 'Profile',
@@ -28,7 +29,7 @@ export enum ProfileScreenName {
   PhoneEditingConfirmation = 'PhoneEditingConfirmation',
 }
 export type ProfileStackParamList = {
-  [ProfileScreenName.Profile]: undefined;
+  [ProfileScreenName.Profile]: { tab?: TabProf };
   [ProfileScreenName.BankDetails]: {
     isCompany: boolean;
     bankID: string | null;
