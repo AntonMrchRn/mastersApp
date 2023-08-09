@@ -6,6 +6,7 @@ import { Button } from 'rn-ui-kit';
 
 import { InfoIcon } from '@/assets/icons/svg/screens/InfoIcon';
 import { NoMessagesIcon } from '@/assets/icons/svg/screens/NoMessagesIcon';
+import { NoRegionIcon } from '@/assets/icons/svg/screens/NoRegionIcon';
 import { NotFoundIcon } from '@/assets/icons/svg/screens/NotFoundIcon';
 import TaskSearchClear from '@/assets/icons/svg/screens/TaskSearchClear';
 import Preview from '@/components/tabs/TaskSearch/PreviewNotFound/Preview';
@@ -17,6 +18,7 @@ export enum PreviewNotFoundType {
   NoTasks = 'NoTasks',
   NoMessages = 'NoMessages',
   MessagesNotAvailable = 'MessagesNotAvailable',
+  RegionNotChanged = 'RegionNotChanged',
 }
 
 type PreviewNotFoundProps = {
@@ -63,6 +65,12 @@ const PreviewNotFound = ({ type, closeModal }: PreviewNotFoundProps) => {
       title: 'Комментарии пока закрыты',
       text: 'Отправка сообщений будет доступна в случае назначения вас в качестве исполнителя',
       button: undefined,
+    },
+    [PreviewNotFoundType.RegionNotChanged]: {
+      icon: <NoRegionIcon />,
+      title: 'Регион не выбран',
+      text: 'Для поиска задач необходимо в Профиле выбрать подходящий регион',
+      button: <Button label="Перейти в профиль" onPress={navigateToProfile} />,
     },
   };
 
