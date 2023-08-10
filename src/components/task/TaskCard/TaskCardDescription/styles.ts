@@ -34,6 +34,22 @@ export const styles = StyleSheet.create({
   date: {
     marginTop: 8,
   },
+  wrapStatus: {
+    width: '50%',
+    alignItems: 'flex-start',
+  },
+  wrapBottom: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  wrapInvitation: {
+    width: '50%',
+    alignItems: 'flex-end',
+  },
+  ph2: {
+    paddingHorizontal: 2,
+  },
   attachments: {
     marginTop: 36,
     marginBottom: 24,

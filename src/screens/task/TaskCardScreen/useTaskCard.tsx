@@ -463,6 +463,7 @@ export const useTaskCard = ({
             webdata={webdata}
             executors={executors}
             subsetID={subsetID}
+            isCurator={isCurator}
           />
         );
       case TaskTab.ESTIMATE:
