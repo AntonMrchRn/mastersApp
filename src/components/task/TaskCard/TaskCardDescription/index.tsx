@@ -65,7 +65,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
           {executors.map((executor, index) => {
             return (
               <View key={index}>
-                <View key={index} style={styles.mt16}>
+                <View style={styles.mt16}>
                   <Text variant="captionRegular" color={theme.text.neutral}>
                     ID {executor.ID}
                   </Text>
@@ -82,7 +82,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
                   ) : (
                     <Text variant="bodyMRegular">{executor.email}</Text>
                   )}
-                  <View key={index} style={styles.wrapBottom}>
+                  <View style={styles.wrapBottom}>
                     <View style={styles.wrapStatus}>
                       {executor.isRefuse && (
                         <Text
