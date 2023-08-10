@@ -1,14 +1,16 @@
-import React, { FC } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import { MaskedText } from 'react-native-mask-text';
 
-import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
+import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
 import { CaretDownIcon } from '@/assets/icons/svg/screens/CaretDownIcon';
 import { DownloadManager } from '@/components/FileManager/DownloadManager';
 import { TaskAddress } from '@/components/task/TaskAddress';
+import { useDeleteInvitationMutation } from '@/store/api/tasks';
 import { Contact, Executor, WebData } from '@/store/api/tasks/types';
+import { AxiosQueryErrorResponse } from '@/types/error';
 import { File } from '@/types/fileManager';
 import { StatusType, TaskType } from '@/types/task';
 
@@ -30,7 +32,7 @@ type TaskCardDescriptionProps = {
   isCurator: boolean;
 };
 
-export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
+export const TaskCardDescription = ({
   description,
   address,
   startTime,
@@ -42,8 +44,26 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   executors,
   subsetID,
   isCurator,
-}) => {
+}: TaskCardDescriptionProps) => {
   const theme = useTheme();
+
+  const toast = useToast();
+
+  const [deleteInvitation, { isLoading, isError, error }] =
+    useDeleteInvitationMutation();
+
+  const cancelInvitation = async (memberID: number | undefined) => {
+    memberID && (await deleteInvitation(memberID));
+  };
+
+  useEffect(() => {
+    if (isError) {
+      toast.show({
+        type: 'error',
+        title: (error as AxiosQueryErrorResponse).data.message,
+      });
+    }
+  }, [isError]);
 
   const applicationFiles = files.filter(file => file.isApplication);
 
@@ -54,90 +74,96 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
     <View>
       {/* Выбор подрядчиков  */}
       {executors.length &&
-      (subsetID === TaskType.IT_AUCTION_SALE ||
-        subsetID === TaskType.IT_FIRST_RESPONSE) &&
+      subsetID &&
+      [TaskType.IT_AUCTION_SALE, TaskType.IT_FIRST_RESPONSE].includes(
+        subsetID
+      ) &&
       isCurator &&
       statusID === StatusType.ACTIVE ? (
         <>
           <Text variant="title3" style={styles.mt36} color={theme.text.basic}>
             Выбранные подрядчики
           </Text>
-          {executors.map((executor, index) => {
-            return (
-              <View key={index}>
-                <View style={styles.mt16}>
-                  <Text variant="captionRegular" color={theme.text.neutral}>
-                    ID {executor.ID}
-                  </Text>
-                  <Text variant="bodyMRegular">
-                    {executor.name} {executor.pname} {executor.sname}
-                  </Text>
-                  {executor.phone ? (
-                    <MaskedText
-                      mask="+ 9 (999) 999-99-99"
-                      style={[styles.phoneText, { color: theme.text.basic }]}
-                    >
-                      {executor?.phone?.toString()}
-                    </MaskedText>
-                  ) : (
-                    <Text variant="bodyMRegular">{executor.email}</Text>
-                  )}
-                  <View style={styles.wrapBottom}>
-                    <View style={styles.wrapStatus}>
-                      {executor.isRefuse && (
-                        <Text
-                          variant="captionRegular"
-                          color={theme.background.danger}
-                          style={styles.mt5}
-                        >
-                          Отказался от задачи
-                        </Text>
-                      )}
-                      {executor.isConfirm && (
-                        <Text
-                          variant="captionRegular"
-                          color={theme.background.success}
-                          style={styles.mt5}
-                        >
-                          Задачу принял
-                        </Text>
-                      )}
-                      {!executor.isRefuse && !executor.isConfirm && (
-                        <Text
-                          variant="captionRegular"
-                          color={theme.text.warning}
-                          style={styles.mt5}
-                        >
-                          Пока не принял задачу
-                        </Text>
-                      )}
-                    </View>
-                    <View style={styles.wrapInvitation}>
-                      <TouchableOpacity
-                        style={styles.ph2}
-                        onPress={() => console.log('Отменить приглашение')}
+          {isLoading ? (
+            <View style={styles.pv20}>
+              <Spacer />
+              <ActivityIndicator size="large" color={theme.background.accent} />
+            </View>
+          ) : (
+            executors.map((executor, index) => {
+              return (
+                <View key={index}>
+                  <View style={styles.mt16}>
+                    <Text variant="captionRegular" color={theme.text.neutral}>
+                      ID {executor.ID}
+                    </Text>
+                    <Text variant="bodyMRegular">
+                      {executor.name} {executor.pname} {executor.sname}
+                    </Text>
+                    {executor.phone ? (
+                      <MaskedText
+                        mask="+ 9 (999) 999-99-99"
+                        style={[styles.phoneText, { color: theme.text.basic }]}
                       >
-                        <Text
-                          variant="captionBold"
-                          color={theme.text.basic}
-                          style={styles.mt5}
-                        >
-                          Отменить приглашение
-                        </Text>
-                      </TouchableOpacity>
+                        {executor?.phone?.toString()}
+                      </MaskedText>
+                    ) : (
+                      <Text variant="bodyMRegular">{executor.email}</Text>
+                    )}
+                    <View style={styles.wrapBottom}>
+                      <View style={styles.wrapStatus}>
+                        {executor.isRefuse && (
+                          <Text
+                            variant="captionRegular"
+                            color={theme.background.danger}
+                            style={styles.mt5}
+                          >
+                            Отказался от задачи
+                          </Text>
+                        )}
+                        {executor.isConfirm && (
+                          <Text
+                            variant="captionRegular"
+                            color={theme.background.success}
+                            style={styles.mt5}
+                          >
+                            Задачу принял
+                          </Text>
+                        )}
+                        {!executor.isRefuse && !executor.isConfirm && (
+                          <Text
+                            variant="captionRegular"
+                            color={theme.text.warning}
+                            style={styles.mt5}
+                          >
+                            Пока не принял задачу
+                          </Text>
+                        )}
+                      </View>
+                      <View style={styles.wrapInvitation}>
+                        <Button
+                          label="Отменить приглашение"
+                          size="S"
+                          variant="ghost"
+                          style={styles.pv3}
+                          onPress={() => cancelInvitation(executor?.memberID)}
+                        />
+                      </View>
                     </View>
+                    <Spacer size={'m'} separator="bottom" />
                   </View>
-                  <Spacer size={'m'} separator="bottom" />
                 </View>
-              </View>
-            );
-          })}
-          <Button
-            label="Изменить выбор"
-            size="S"
-            style={styles.mt16}
-            onPress={() => console.log('Переход на выбор подрядчика')}
-          />
+              );
+            })
+          )}
+          {!isLoading && (
+            <Button
+              label="Изменить выбор"
+              size="S"
+              style={styles.mt16}
+              onPress={() => console.log('Переход на выбор подрядчика')}
+            />
+          )}
         </>
       ) : (
         <></>
