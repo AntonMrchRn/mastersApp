@@ -49,8 +49,6 @@ export const styles = StyleSheet.create({
   wrapInvitation: {
     width: '50%',
     alignItems: 'flex-end',
-  },
-  pv3: {
     paddingHorizontal: 0,
     paddingVertical: 3,
   },

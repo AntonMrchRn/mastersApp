@@ -52,7 +52,7 @@ export const TaskCardDescription = ({
   const [deleteInvitation, { isLoading, isError, error }] =
     useDeleteInvitationMutation();
 
-  const cancelInvitation = async (memberID: number | undefined) => {
+  const cancelInvitation = async (memberID?: number) => {
     memberID && (await deleteInvitation(memberID));
   };
 
@@ -85,10 +85,11 @@ export const TaskCardDescription = ({
             Выбранные подрядчики
           </Text>
           {isLoading ? (
-            <View style={styles.pv20}>
-              <Spacer />
-              <ActivityIndicator size="large" color={theme.background.accent} />
-            </View>
+            <ActivityIndicator
+              size="large"
+              style={styles.pv20}
+              color={theme.background.accent}
+            />
           ) : (
             executors.map((executor, index) => {
               return (
@@ -140,15 +141,13 @@ export const TaskCardDescription = ({
                           </Text>
                         )}
                       </View>
-                      <View style={styles.wrapInvitation}>
-                        <Button
-                          label="Отменить приглашение"
-                          size="S"
-                          variant="ghost"
-                          style={styles.pv3}
-                          onPress={() => cancelInvitation(executor?.memberID)}
-                        />
-                      </View>
+                      <Button
+                        label="Отменить приглашение"
+                        size="S"
+                        variant="ghost"
+                        style={styles.wrapInvitation}
+                        onPress={() => cancelInvitation(executor?.memberID)}
+                      />
                     </View>
                     <Spacer size={'m'} separator="bottom" />
                   </View>
