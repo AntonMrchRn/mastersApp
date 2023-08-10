@@ -18,6 +18,9 @@ export const styles = StyleSheet.create({
     marginTop: 10,
   },
   wrapperTitle: {
-    marginBottom: 10,
+    marginBottom: 8,
+  },
+  price: {
+    marginBottom: 16,
   },
 });

@@ -8,17 +8,6 @@ const deviceWidth = Dimensions.get('window').width;
 const hitSlop = { top: 10, left: 10, right: 10, bottom: 10 };
 
 const platform = Platform.OS;
-const platformStyle = undefined;
-const isIphoneX =
-  platform === 'ios' &&
-  (deviceHeight === 812 ||
-    deviceWidth === 812 ||
-    deviceHeight === 844 ||
-    deviceWidth === 844 ||
-    deviceHeight === 896 ||
-    deviceWidth === 896 ||
-    deviceHeight === 926 ||
-    deviceWidth === 926);
 
 const MyTheme = {
   ...DefaultTheme,
@@ -32,7 +21,7 @@ const configApp = {
   // system
   ios: platform === 'ios',
   android: platform === 'android',
-  platformStyle,
+
   platform,
   // Color
   brandColor: '#3f51b5',
@@ -48,30 +37,16 @@ const configApp = {
   //errors
   deviceWidth,
   deviceHeight,
-  isIphoneX,
 
-  shadow:
-    platform === 'ios'
-      ? {
-          shadowColor: 'rgba(2, 52, 227, 0.12)',
-          shadowOffset: {
-            width: 0,
-            height: -6,
-          },
-          shadowOpacity: 0.6,
-          shadowRadius: 4,
-          elevation: 2,
-        }
-      : {
-          shadowColor: 'rgba(2, 52, 227, 0.12)',
-          shadowOffset: {
-            width: 0,
-            height: -6,
-          },
-          shadowOpacity: 0.6,
-          shadowRadius: 4,
-          elevation: 2,
-        },
+  shadow: {
+    shadowColor: 'rgba(2, 52, 227, 0.12)',
+    shadowOffset: {
+      width: 0,
+      height: -6,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 4,
+  },
 };
 
 export { MyTheme, configApp, deviceHeight, deviceWidth, hitSlop };

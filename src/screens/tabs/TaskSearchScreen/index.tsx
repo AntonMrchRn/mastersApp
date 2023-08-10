@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   View,
 } from 'react-native';
+import { ShadowedView } from 'react-native-fast-shadow';
 
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, useIsFocused } from '@react-navigation/native';
@@ -121,7 +122,7 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
           tabs={['IT услуги', 'Общие']}
         />
       </View>
-      <View
+      <ShadowedView
         style={[
           styles.shadowWrapper,
           !!data?.length && { ...configApp.shadow },
@@ -158,7 +159,7 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
             onEndReached={onEndReached}
           />
         )}
-      </View>
+      </ShadowedView>
     </SafeAreaView>
   );
 };

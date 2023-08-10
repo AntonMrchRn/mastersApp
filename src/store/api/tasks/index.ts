@@ -31,7 +31,7 @@ export const tasksAPI = api
       }),
       getTaskHistory: builder.query<GetTaskHistoryResponse, string>({
         query: id => ({
-          url: `tasks/comments?query=?ID==${id}*authorTypeID==3?creationTime,asc,,`,
+          url: `tasks/comments?query=?taskID==${id}*authorTypeID==3?creationTime,asc,,`,
           method: 'GET',
         }),
       }),
