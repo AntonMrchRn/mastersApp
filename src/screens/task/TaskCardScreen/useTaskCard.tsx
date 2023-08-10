@@ -20,6 +20,7 @@ import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   useDeleteOffersMutation,
+  useGetTaskHistoryQuery,
   useGetTaskQuery,
   useGetUserOffersQuery,
   usePatchOffersMutation,
@@ -117,6 +118,7 @@ export const useTaskCard = ({
   const [patchOffers] = usePatchOffersMutation();
   const [deleteOffer, deleteOffersMutation] = useDeleteOffersMutation();
   const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
+  const getTaskHistory = useGetTaskHistoryQuery(taskId);
   const task = data?.tasks?.[0];
 
   const getUserOffersQuery = useGetUserOffersQuery(
@@ -253,6 +255,7 @@ export const useTaskCard = ({
     dispatch(
       getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'desc' })
     );
+    getTaskHistory.refetch();
   };
 
   const onSubmissionModalVisible = () => {
