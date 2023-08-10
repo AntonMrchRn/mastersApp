@@ -46,7 +46,6 @@ const configApp = {
     },
     shadowOpacity: 0.6,
     shadowRadius: 4,
-    elevation: 2,
   },
 };
 
