@@ -96,6 +96,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     onEditEstimate,
     userRoleID,
     setId,
+    isInternalExecutor,
   } = useTaskCardEstimate({
     services,
     taskId,
@@ -106,6 +107,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     statusID,
     winnerOffer,
     subsetID,
+    isContractor,
   });
 
   if (!services.length) {
@@ -197,12 +199,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                   count={service?.count}
                   sum={service?.sum}
                   roleID={service?.roleID}
-                  canSwipe={
-                    (subsetID === TaskType.IT_FIRST_RESPONSE && isContractor) ||
-                    (subsetID === TaskType.IT_AUCTION_SALE && isContractor)
-                      ? false
-                      : canSwipe
-                  }
+                  canSwipe={canSwipe}
                 />
               </View>
               <Spacer size={0} separator="bottom" />
@@ -223,13 +220,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                       count={material?.count}
                       sum={(material?.count || 0) * (material?.price || 0)}
                       roleID={material?.roleID}
-                      canSwipe={
-                        (subsetID === TaskType.IT_FIRST_RESPONSE &&
-                          isContractor) ||
-                        (subsetID === TaskType.IT_AUCTION_SALE && isContractor)
-                          ? false
-                          : canSwipe
-                      }
+                      canSwipe={canSwipe}
                     />
                     <Spacer size={0} separator="bottom" />
                   </View>
@@ -238,85 +229,95 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             </View>
           );
         })}
-        {(subsetID === TaskType.IT_FIRST_RESPONSE && isContractor) ||
-        (subsetID === TaskType.IT_AUCTION_SALE && isContractor) ||
-        (setId === TaskSetType.ITServices &&
-          userRoleID === RoleType.INTERNAL_EXECUTOR) ? null : (
+        {(isContractor &&
+          subsetID &&
+          [TaskType.IT_FIRST_RESPONSE, TaskType.IT_AUCTION_SALE].includes(
+            subsetID
+          )) ||
+        (setId === TaskSetType.ITServices && isInternalExecutor) ? null : (
           <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
         )}
-        {(subsetID === TaskType.COMMON_AUCTION_SALE ||
-          subsetID === TaskType.IT_AUCTION_SALE) && (
-          <View style={styles.mt16}>
-            {isTaskEctimateTab ? (
-              <>
-                {isOffersPublic && (
-                  <>
-                    {!isOffersDeadlineOver && !winnerOffer ? (
-                      <>
-                        {isAnotherOffers ? (
-                          <TouchableOpacity
-                            style={styles.candidatRow}
-                            onPress={onCompetitorEstimates}
-                          >
-                            <CalculatorIcon color={theme.text.basic} />
-                            <Text variant="bodySBold" color={theme.text.basic}>
-                              Сметы других кандидатов
+        {subsetID &&
+          [TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE].includes(
+            subsetID
+          ) && (
+            <View style={styles.mt16}>
+              {isTaskEctimateTab ? (
+                <>
+                  {isOffersPublic && (
+                    <>
+                      {!isOffersDeadlineOver && !winnerOffer ? (
+                        <>
+                          {isAnotherOffers ? (
+                            <TouchableOpacity
+                              style={styles.candidatRow}
+                              onPress={onCompetitorEstimates}
+                            >
+                              <CalculatorIcon color={theme.text.basic} />
+                              <Text
+                                variant="bodySBold"
+                                color={theme.text.basic}
+                              >
+                                Сметы других кандидатов
+                              </Text>
+                            </TouchableOpacity>
+                          ) : (
+                            <Text
+                              variant="bodySRegular"
+                              color={theme.text.neutral}
+                            >
+                              Предложений других кандидатов пока нет
                             </Text>
-                          </TouchableOpacity>
-                        ) : (
-                          <Text
-                            variant="bodySRegular"
-                            color={theme.text.neutral}
-                          >
-                            Предложений других кандидатов пока нет
+                          )}
+                        </>
+                      ) : (
+                        <TouchableOpacity
+                          style={styles.candidatRow}
+                          onPress={onTradingResults}
+                        >
+                          <GavelIcon />
+                          <Text variant="bodySBold" color={theme.text.basic}>
+                            Посмотреть результаты торгов
                           </Text>
-                        )}
-                      </>
-                    ) : (
-                      <TouchableOpacity
-                        style={styles.candidatRow}
-                        onPress={onTradingResults}
-                      >
-                        <GavelIcon />
-                        <Text variant="bodySBold" color={theme.text.basic}>
-                          Посмотреть результаты торгов
+                        </TouchableOpacity>
+                      )}
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  {!isOffersDeadlineOver && !winnerOffer && (
+                    <TouchableOpacity
+                      style={styles.edit}
+                      onPress={onEditEstimate}
+                    >
+                      <EditIcon />
+                      <Text variant="bodySBold" color={theme.text.basic}>
+                        Редактировать смету
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                  {userComment && (
+                    <>
+                      <Spacer size={20} />
+                      <View style={styles.comment}>
+                        <Text
+                          variant="captionRegular"
+                          color={theme.text.neutral}
+                        >
+                          Ваш комментарий к ценовому предложению
                         </Text>
-                      </TouchableOpacity>
-                    )}
-                  </>
-                )}
-              </>
-            ) : (
-              <>
-                {!isOffersDeadlineOver && !winnerOffer && (
-                  <TouchableOpacity
-                    style={styles.edit}
-                    onPress={onEditEstimate}
-                  >
-                    <EditIcon />
-                    <Text variant="bodySBold" color={theme.text.basic}>
-                      Редактировать смету
-                    </Text>
-                  </TouchableOpacity>
-                )}
-                {userComment && (
-                  <>
-                    <Spacer size={20} />
-                    <View style={styles.comment}>
-                      <Text variant="captionRegular" color={theme.text.neutral}>
-                        Ваш комментарий к ценовому предложению
-                      </Text>
-                      <Text variant="bodyMRegular" color={theme.text.basic}>
-                        {userComment}
-                      </Text>
-                    </View>
-                    <Spacer size={20} separator="bottom" />
-                  </>
-                )}
-              </>
-            )}
-          </View>
-        )}
+                        <Text variant="bodyMRegular" color={theme.text.basic}>
+                          {userComment}
+                        </Text>
+                      </View>
+                      <Spacer size={20} separator="bottom" />
+                    </>
+                  )}
+                </>
+              )}
+            </View>
+          )}
       </View>
     </>
   );

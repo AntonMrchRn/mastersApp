@@ -207,11 +207,15 @@ export const useTaskCard = ({
    */
   const isContractor = !!executorMember?.hasCurator && !isRefusedContractor;
 
+  const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
+
   const budget =
-    (subsetID === TaskType.IT_FIRST_RESPONSE && isContractor) ||
-    (subsetID === TaskType.IT_AUCTION_SALE && isContractor) ||
-    (setId === TaskSetType.ITServices &&
-      user?.roleID === RoleType.INTERNAL_EXECUTOR)
+    (subsetID &&
+      isContractor &&
+      [TaskType.IT_FIRST_RESPONSE, TaskType.IT_AUCTION_SALE].includes(
+        subsetID
+      )) ||
+    (setId === TaskSetType.ITServices && isInternalExecutor)
       ? ''
       : `${task?.budget} ₽` || '';
 
@@ -422,7 +426,7 @@ export const useTaskCard = ({
     }
     refetch();
   };
-  console.log('subsetID', subsetID);
+
   const onRevokeBudget = async () => {
     setBudgetModalVisible(!budgetModalVisible);
     if (userOffersData.length) {
