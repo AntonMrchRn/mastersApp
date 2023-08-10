@@ -178,6 +178,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
         <ControlledInput
           name={'estimateCount'}
           variant={'text'}
+          keyboardType="numeric"
           label={'Количество'}
           hint={errors.estimateCount?.message}
           isError={!!errors.estimateCount?.message}
