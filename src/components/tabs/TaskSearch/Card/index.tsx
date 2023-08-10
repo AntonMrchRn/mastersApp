@@ -26,6 +26,7 @@ const CardTasks = ({
   ID,
   onItemPress,
   outlayStatusID,
+  currentSum,
 }: CardTasksProp) => {
   const address = object?.name || '';
 
@@ -53,6 +54,11 @@ const CardTasks = ({
           <Text variant="title3" style={styles.wrapperTitle}>
             {name}
           </Text>
+          {currentSum && (
+            <Text variant="title2" style={styles.price}>
+              {currentSum} ₽
+            </Text>
+          )}
           <Text variant="bodySRegular">{description}</Text>
           <View style={styles.wrapperAddress}>
             <TaskAddress address={address} />

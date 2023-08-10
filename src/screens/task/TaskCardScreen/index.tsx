@@ -1,5 +1,6 @@
 import React from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
+import { ShadowedView } from 'react-native-fast-shadow';
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -23,7 +24,7 @@ import { TaskCardBottom } from '@/components/task/TaskCard/TaskCardBottom';
 import { TaskCardBudgetModal } from '@/components/task/TaskCard/TaskCardBudgetModal';
 import { TaskCardCancelBottomSheet } from '@/components/task/TaskCard/TaskCardCancelBottomSheet';
 import { TaskCardSubmissionBottomSheet } from '@/components/task/TaskCard/TaskCardSubmissionBottomSheet';
-import { deviceWidth } from '@/constants/platform';
+import { configApp, deviceWidth } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { BottomTabParamList } from '@/navigation/TabNavigation';
 import { StatusType, TaskType } from '@/types/task';
@@ -166,7 +167,9 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
                 </View>
               )}
             </View>
-            <View style={styles.card}>{getCurrentTab()}</View>
+            <ShadowedView style={[styles.card, configApp.shadow]}>
+              {getCurrentTab()}
+            </ShadowedView>
           </View>
         </ScrollView>
       </SafeAreaView>
