@@ -22,7 +22,7 @@ import {
   setOfferComment,
   setOfferID,
 } from '@/store/slices/tasks/actions';
-import { EstimateTab, StatusType, TaskType } from '@/types/task';
+import { EstimateTab, RoleType, StatusType, TaskType } from '@/types/task';
 
 export const useTaskCardEstimate = ({
   services,
@@ -34,6 +34,7 @@ export const useTaskCardEstimate = ({
   statusID,
   winnerOffer,
   subsetID,
+  isContractor,
 }: {
   services: Service[];
   taskId: number;
@@ -48,6 +49,7 @@ export const useTaskCardEstimate = ({
   statusID: StatusType | undefined;
   winnerOffer: Offer | undefined;
   subsetID: TaskType | undefined;
+  isContractor: boolean;
 }) => {
   const toast = useToast();
   const dispatch = useAppDispatch();
@@ -76,6 +78,8 @@ export const useTaskCardEstimate = ({
   const isOffersDeadlineOver =
     offersDeadline && dayjs().isAfter(offersDeadline);
 
+  const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
+
   const userServices = userOffer?.services || [];
   const isTaskEctimateTab = currentEstimateTab === EstimateTab.TASK_ESTIMATE;
   const userComment = userOffer?.comment;
@@ -99,6 +103,11 @@ export const useTaskCardEstimate = ({
 
   const currentServices = getCurrentServices();
   const canSwipe =
+    subsetID &&
+    !(
+      isContractor &&
+      [TaskType.IT_FIRST_RESPONSE, TaskType.IT_AUCTION_SALE].includes(subsetID)
+    ) &&
     !estimateBottomVisible &&
     statusID === StatusType.WORK &&
     subsetID !== TaskType.COMMON_AUCTION_SALE;
@@ -274,5 +283,6 @@ export const useTaskCardEstimate = ({
     onEditEstimate,
     userRoleID,
     setId,
+    isInternalExecutor,
   };
 };

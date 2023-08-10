@@ -18,7 +18,7 @@ type TaskEstimateItemProps = {
   count?: number;
   sum?: number;
   roleID: RoleType;
-  canSwipe: boolean;
+  canSwipe?: boolean;
 };
 export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   previewActions,

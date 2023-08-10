@@ -27,6 +27,7 @@ type TaskCardDescriptionProps = {
   webdata: WebData | undefined;
   executors: Executor[] | [];
   subsetID: TaskType | undefined;
+  isCurator: boolean;
 };
 
 export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
@@ -40,6 +41,7 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   webdata,
   executors,
   subsetID,
+  isCurator,
 }) => {
   const theme = useTheme();
 
@@ -51,15 +53,19 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
   return (
     <View>
       {/* Выбор подрядчиков  */}
-      {executors.length && subsetID !== 4 && subsetID !== 5 ? (
+      {executors.length &&
+      (subsetID === TaskType.IT_AUCTION_SALE ||
+        subsetID === TaskType.IT_FIRST_RESPONSE) &&
+      isCurator &&
+      statusID === StatusType.ACTIVE ? (
         <>
           <Text variant="title3" style={styles.mt36} color={theme.text.basic}>
             Выбранные подрядчики
           </Text>
           {executors.map((executor, index) => {
             return (
-              <>
-                <View key={index} style={styles.mt16}>
+              <View key={index}>
+                <View style={styles.mt16}>
                   <Text variant="captionRegular" color={theme.text.neutral}>
                     ID {executor.ID}
                   </Text>
@@ -76,27 +82,54 @@ export const TaskCardDescription: FC<TaskCardDescriptionProps> = ({
                   ) : (
                     <Text variant="bodyMRegular">{executor.email}</Text>
                   )}
-                  {executor.isRefuse && (
-                    <Text
-                      variant="captionRegular"
-                      color={theme.background.danger}
-                      style={styles.mt5}
-                    >
-                      Отказался от задачи
-                    </Text>
-                  )}
-                  {!executor.isRefuse && !executor.isConfirm && (
-                    <Text
-                      variant="captionRegular"
-                      color={theme.text.warning}
-                      style={styles.mt5}
-                    >
-                      Пока не принял задачу
-                    </Text>
-                  )}
+                  <View style={styles.wrapBottom}>
+                    <View style={styles.wrapStatus}>
+                      {executor.isRefuse && (
+                        <Text
+                          variant="captionRegular"
+                          color={theme.background.danger}
+                          style={styles.mt5}
+                        >
+                          Отказался от задачи
+                        </Text>
+                      )}
+                      {executor.isConfirm && (
+                        <Text
+                          variant="captionRegular"
+                          color={theme.background.success}
+                          style={styles.mt5}
+                        >
+                          Задачу принял
+                        </Text>
+                      )}
+                      {!executor.isRefuse && !executor.isConfirm && (
+                        <Text
+                          variant="captionRegular"
+                          color={theme.text.warning}
+                          style={styles.mt5}
+                        >
+                          Пока не принял задачу
+                        </Text>
+                      )}
+                    </View>
+                    <View style={styles.wrapInvitation}>
+                      <TouchableOpacity
+                        style={styles.ph2}
+                        onPress={() => console.log('Отменить приглашение')}
+                      >
+                        <Text
+                          variant="captionBold"
+                          color={theme.text.basic}
+                          style={styles.mt5}
+                        >
+                          Отменить приглашение
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
                   <Spacer size={'m'} separator="bottom" />
                 </View>
-              </>
+              </View>
             );
           })}
           <Button
