@@ -94,14 +94,7 @@ const SignInScreen = () => {
               <Spacer size="xl" />
               <AgreementCheckBox />
             </View>
-            <View
-              style={[
-                styles.bottomWrapper,
-                configApp.android &&
-                  deviceHeight < 593 &&
-                  styles.marginTopAndroid,
-              ]}
-            >
+            <View style={styles.bottomWrapper}>
               <Button
                 onPress={signIn}
                 style={styles.btn}
