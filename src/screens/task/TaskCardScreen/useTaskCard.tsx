@@ -202,13 +202,20 @@ export const useTaskCard = ({
    */
   const outlayStatusID: OutlayStatusType | undefined = task?.outlayStatusID;
   const name = task?.name || '';
-
+  /**
+   * Является ли пользователь подрядчиком в задаче
+   */
   const isContractor = !!executorMember?.hasCurator && !isRefusedContractor;
 
+  const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
+
   const budget =
-    (subsetID === TaskType.IT_FIRST_RESPONSE && isContractor) ||
-    (setId === TaskSetType.ITServices &&
-      user?.roleID === RoleType.INTERNAL_EXECUTOR)
+    (subsetID &&
+      isContractor &&
+      [TaskType.IT_FIRST_RESPONSE, TaskType.IT_AUCTION_SALE].includes(
+        subsetID
+      )) ||
+    (setId === TaskSetType.ITServices && isInternalExecutor)
       ? ''
       : `${task?.budget} ₽` || '';
 
@@ -223,17 +230,25 @@ export const useTaskCard = ({
   const publicTime = task?.publicTime
     ? `Опубликовано ${dayjs(task?.publicTime).format('DD MMMM в HH:mm')}`
     : '';
-  const budgetEndTime = offersDeadline
-    ? `Срок подачи сметы до ${dayjs(offersDeadline).format('DD MMMM в HH:mm')}`
-    : '';
+  const budgetEndTime =
+    subsetID === TaskType.IT_AUCTION_SALE && isContractor
+      ? ''
+      : offersDeadline
+      ? `Срок подачи сметы до ${dayjs(offersDeadline).format(
+          'DD MMMM в HH:mm'
+        )}`
+      : '';
   const banner = getBanner({
     tab: tab.label,
     statusID,
     outlayStatusID,
   });
 
+  const curator = curators.find(curator => curator.ID === user?.userID);
+
   const isITServices = setId === TaskSetType.ITServices;
-  const isCurator = curators.some(curator => curator.ID === user?.userID);
+  const isCurator =
+    curators.some(curator => curator.ID === user?.userID) && !curator?.isRefuse;
 
   const isExecutor = !!executorMember && !isRefusedContractor;
 
@@ -411,7 +426,7 @@ export const useTaskCard = ({
     }
     refetch();
   };
-  console.log('subsetID', subsetID);
+
   const onRevokeBudget = async () => {
     setBudgetModalVisible(!budgetModalVisible);
     if (userOffersData.length) {
@@ -452,6 +467,7 @@ export const useTaskCard = ({
             webdata={webdata}
             executors={executors}
             subsetID={subsetID}
+            isCurator={isCurator}
           />
         );
       case TaskTab.ESTIMATE:
