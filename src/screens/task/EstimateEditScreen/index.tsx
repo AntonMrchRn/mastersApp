@@ -177,8 +177,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
       <FormProvider {...methods}>
         <ControlledInput
           name={'estimateCount'}
-          variant={'text'}
-          keyboardType="numeric"
+          variant={'number'}
           label={'Количество'}
           hint={errors.estimateCount?.message}
           isError={!!errors.estimateCount?.message}
