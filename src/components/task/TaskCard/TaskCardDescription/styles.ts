@@ -7,6 +7,9 @@ export const styles = StyleSheet.create({
   mr11: {
     marginRight: 11,
   },
+  pv20: {
+    paddingVertical: 20,
+  },
   mt5: {
     marginTop: 5,
   },
@@ -46,9 +49,8 @@ export const styles = StyleSheet.create({
   wrapInvitation: {
     width: '50%',
     alignItems: 'flex-end',
-  },
-  ph2: {
-    paddingHorizontal: 2,
+    paddingHorizontal: 0,
+    paddingVertical: 3,
   },
   attachments: {
     marginTop: 36,

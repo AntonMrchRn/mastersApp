@@ -125,6 +125,13 @@ export const tasksAPI = api
           data,
         }),
       }),
+      deleteInvitation: builder.mutation<object, number>({
+        query: memberID => ({
+          url: `/tasks/members/it/${memberID}`,
+          method: 'DELETE',
+        }),
+        invalidatesTags: ['task'],
+      }),
       patchTaskLot: builder.mutation<
         object,
         { taskID: number; offerID?: number; sum: number }
@@ -236,4 +243,5 @@ export const {
   useGetAnotherOffersQuery,
   usePatchOffersMutation,
   useDeleteOffersMutation,
+  useDeleteInvitationMutation,
 } = tasksAPI;
