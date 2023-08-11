@@ -81,6 +81,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
     onNoAccessToTaskBannerVisible,
     noAccessToTaskBannerVisible,
     noAccessButtonPress,
+    toClose,
   } = useTaskCard({ taskId, navigation });
 
   return (
@@ -122,6 +123,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
                     isNight={isNight}
                     isUrgent={isUrgent}
                     statusID={statusID}
+                    toClose={toClose}
                   />
                 </View>
                 <Text

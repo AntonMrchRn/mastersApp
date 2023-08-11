@@ -190,6 +190,12 @@ export const useTaskCard = ({
   const offersDeadline = task?.offersDeadline;
   const winnerOffer = task?.winnerOffer;
   /**
+   * Промежуточный статус “к Закрытию“ для:
+   * Самозанятых без Сбера “Свое дело”(им нужно чек сфоткать и прислать)
+   * ИП и юр.лиц, если они не прислали координатору закрывающие документы
+   */
+  const toClose = task?.toClose;
+  /**
    * Закончился ли дедлайн подачи сметы
    */
   const isOffersDeadlineOver = !!(
@@ -584,5 +590,6 @@ export const useTaskCard = ({
     noAccessToTaskBannerVisible,
     noAccessButtonPress,
     tab,
+    toClose,
   };
 };
