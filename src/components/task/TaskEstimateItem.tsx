@@ -19,6 +19,7 @@ type TaskEstimateItemProps = {
   sum?: number;
   roleID: RoleType;
   canSwipe?: boolean;
+  measure: string | undefined;
 };
 export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   previewActions,
@@ -30,14 +31,15 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   sum = 0,
   roleID,
   canSwipe,
+  measure = '',
 }) => {
   const items = [
     {
-      text: `${price} ₽ за шт.`,
+      text: `${price} ₽ за ${measure}`,
       icon: <PriceIcon />,
     },
     {
-      text: `${count} шт.`,
+      text: `${count} ${measure}`,
       icon: <CubeIcon />,
     },
     {
