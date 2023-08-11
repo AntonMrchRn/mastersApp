@@ -36,6 +36,7 @@ type File = {
   extensionOriginal: string;
   isApplication?: boolean;
   sizeBytes: number;
+  isClosure?: boolean;
 };
 
 export type {

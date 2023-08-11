@@ -180,6 +180,18 @@ export const useTaskCard = ({
    */
   const subsetID = task?.subsetID;
   const files = task?.files || [];
+  /**
+   * Вложения
+   */
+  const applicationFiles = files.filter(file => file.isApplication);
+  /**
+   * Загруженные файлы сметы
+   */
+  const reportFiles = files.filter(file => file.isOffer);
+  /**
+   * закрывающие документы сметы
+   */
+  const closureFiles = files.filter(file => file.isClosure);
   const services = task?.services || [];
   const startTime = task?.startTime || '';
   const contacts = task?.contacts || [];
@@ -471,7 +483,7 @@ export const useTaskCard = ({
             startTime={startTime}
             endTimePlan={endTimePlan}
             contacts={contacts}
-            files={files}
+            applicationFiles={applicationFiles}
             statusID={statusID}
             webdata={webdata}
             executors={executors}
@@ -503,10 +515,12 @@ export const useTaskCard = ({
           <TaskCardReport
             activeBudgetCanceled={!!banner}
             statusID={statusID}
-            files={files}
+            reportFiles={reportFiles}
             taskId={id.toString()}
             uploadModalVisible={uploadModalVisible}
             onUploadModalVisible={onUploadModalVisible}
+            closureFiles={closureFiles}
+            toClose={toClose}
           />
         );
       case TaskTab.HISTORY:
@@ -543,11 +557,13 @@ export const useTaskCard = ({
     onAddEstimateMaterial,
     selectedServiceId,
     onEstimateBottomVisible,
-    files,
+    reportFiles,
     onUploadModalVisible,
     outlayStatusID,
     onSendEstimateForApproval,
     onBudgetModalVisible,
+    toClose,
+    closureFiles,
   });
 
   return {
