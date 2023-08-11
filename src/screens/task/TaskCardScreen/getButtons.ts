@@ -69,7 +69,7 @@ export const getButtons = ({
               return [
                 {
                   label: 'Загрузить еще файлы',
-                  variant: 'outlineAccent',
+                  variant: 'accent',
                   onPress: onUploadModalVisible,
                 },
               ];
@@ -313,7 +313,7 @@ export const getButtons = ({
               return [
                 {
                   label: 'Загрузить еще файлы',
-                  variant: 'outlineAccent',
+                  variant: 'accent',
                   onPress: onUploadModalVisible,
                 },
               ];
@@ -537,7 +537,7 @@ export const getButtons = ({
               return [
                 {
                   label: 'Загрузить еще файлы',
-                  variant: 'outlineAccent',
+                  variant: 'accent',
                   onPress: onUploadModalVisible,
                 },
               ];
@@ -574,7 +574,7 @@ export const getButtons = ({
               return [
                 {
                   label: 'Загрузить еще файлы',
-                  variant: 'outlineAccent',
+                  variant: 'accent',
                   onPress: onUploadModalVisible,
                 },
               ];
