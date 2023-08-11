@@ -12,6 +12,7 @@ type TaskBadgesProps = {
   statusID?: StatusType;
   outlayStatusID?: OutlayStatusType;
   useOutlayStatus?: boolean;
+  toClose: boolean | undefined;
 };
 export const TaskBadges: FC<TaskBadgesProps> = ({
   isNight,
@@ -19,8 +20,20 @@ export const TaskBadges: FC<TaskBadgesProps> = ({
   statusID,
   outlayStatusID,
   useOutlayStatus,
+  toClose,
 }) => {
   const getBadges = () => {
+    if (toClose) {
+      return (
+        <Badge
+          secondary={true}
+          label={'К закрытию'}
+          icon={false}
+          variant={'success'}
+          style={styles.badge}
+        />
+      );
+    }
     switch (statusID) {
       case StatusType.PENDING:
         return (

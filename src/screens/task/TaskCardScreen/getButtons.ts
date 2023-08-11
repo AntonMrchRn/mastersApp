@@ -19,11 +19,13 @@ export const getButtons = ({
   onAddEstimateMaterial,
   selectedServiceId,
   onEstimateBottomVisible,
-  files,
+  reportFiles,
   onUploadModalVisible,
   outlayStatusID,
   onSendEstimateForApproval,
   onBudgetModalVisible,
+  toClose,
+  closureFiles,
 }: {
   /**
    * Тип задачи
@@ -50,13 +52,50 @@ export const getButtons = ({
   selectedServiceId: number | undefined;
   onEstimateBottomVisible: () => void;
   onUploadModalVisible: () => void;
-  files: File[];
+  reportFiles: File[];
+  closureFiles: File[];
   outlayStatusID: OutlayStatusType | undefined;
   onSendEstimateForApproval: () => Promise<void>;
   onBudgetModalVisible: () => void;
+  toClose: boolean | undefined;
 }): TaskCardBottomButton[] => {
   switch (subsetID) {
     case TaskType.COMMON_FIRST_RESPONSE:
+      //к закрытию
+      if (toClose) {
+        switch (tab) {
+          case TaskTab.REPORT:
+            if (closureFiles.length) {
+              return [
+                {
+                  label: 'Загрузить еще файлы',
+                  variant: 'accent',
+                  onPress: onUploadModalVisible,
+                },
+              ];
+            }
+            return [
+              {
+                label: 'Загрузить файлы',
+                variant: 'accent',
+                onPress: onUploadModalVisible,
+              },
+            ];
+          case TaskTab.COMMENTS:
+            if (isCommentsAvailable) {
+              return [
+                {
+                  label: 'Перейти в чат',
+                  variant: 'accent',
+                  onPress: navigateToChat,
+                },
+              ];
+            }
+            return [];
+          default:
+            return [];
+        }
+      }
       switch (statusID) {
         case StatusType.ACTIVE:
           switch (tab) {
@@ -94,7 +133,7 @@ export const getButtons = ({
         case StatusType.WORK:
           switch (tab) {
             case TaskTab.REPORT:
-              if (files.length) {
+              if (reportFiles.length) {
                 return [
                   {
                     label: 'Сдать работы',
@@ -211,7 +250,7 @@ export const getButtons = ({
               }
               return [];
             case TaskTab.REPORT:
-              if (files.length) {
+              if (reportFiles.length) {
                 return [
                   {
                     label: 'Загрузить еще файлы',
@@ -266,6 +305,41 @@ export const getButtons = ({
       }
 
     case TaskType.COMMON_AUCTION_SALE:
+      //к закрытию
+      if (toClose) {
+        switch (tab) {
+          case TaskTab.REPORT:
+            if (closureFiles.length) {
+              return [
+                {
+                  label: 'Загрузить еще файлы',
+                  variant: 'accent',
+                  onPress: onUploadModalVisible,
+                },
+              ];
+            }
+            return [
+              {
+                label: 'Загрузить файлы',
+                variant: 'accent',
+                onPress: onUploadModalVisible,
+              },
+            ];
+          case TaskTab.COMMENTS:
+            if (isCommentsAvailable) {
+              return [
+                {
+                  label: 'Перейти в чат',
+                  variant: 'accent',
+                  onPress: navigateToChat,
+                },
+              ];
+            }
+            return [];
+          default:
+            return [];
+        }
+      }
       switch (statusID) {
         case StatusType.ACTIVE:
           switch (tab) {
@@ -299,7 +373,7 @@ export const getButtons = ({
         case StatusType.WORK:
           switch (tab) {
             case TaskTab.REPORT:
-              if (files.length) {
+              if (reportFiles.length) {
                 return [
                   {
                     label: 'Сдать работы',
@@ -401,7 +475,7 @@ export const getButtons = ({
               }
               return [];
             case TaskTab.REPORT:
-              if (files.length) {
+              if (reportFiles.length) {
                 return [
                   {
                     label: 'Загрузить еще файлы',
@@ -455,7 +529,79 @@ export const getButtons = ({
           return [];
       }
     case TaskType.IT_AUCTION_SALE:
+      //к закрытию
+      if (toClose) {
+        switch (tab) {
+          case TaskTab.REPORT:
+            if (closureFiles.length) {
+              return [
+                {
+                  label: 'Загрузить еще файлы',
+                  variant: 'accent',
+                  onPress: onUploadModalVisible,
+                },
+              ];
+            }
+            return [
+              {
+                label: 'Загрузить файлы',
+                variant: 'accent',
+                onPress: onUploadModalVisible,
+              },
+            ];
+          case TaskTab.COMMENTS:
+            if (isCommentsAvailable) {
+              return [
+                {
+                  label: 'Перейти в чат',
+                  variant: 'accent',
+                  onPress: navigateToChat,
+                },
+              ];
+            }
+            return [];
+          default:
+            return [];
+        }
+      }
+      return [];
     case TaskType.IT_FIRST_RESPONSE:
+      //к закрытию
+      if (toClose) {
+        switch (tab) {
+          case TaskTab.REPORT:
+            if (closureFiles.length) {
+              return [
+                {
+                  label: 'Загрузить еще файлы',
+                  variant: 'accent',
+                  onPress: onUploadModalVisible,
+                },
+              ];
+            }
+            return [
+              {
+                label: 'Загрузить файлы',
+                variant: 'accent',
+                onPress: onUploadModalVisible,
+              },
+            ];
+          case TaskTab.COMMENTS:
+            if (isCommentsAvailable) {
+              return [
+                {
+                  label: 'Перейти в чат',
+                  variant: 'accent',
+                  onPress: navigateToChat,
+                },
+              ];
+            }
+            return [];
+          default:
+            return [];
+        }
+      }
+      return [];
     case TaskType.IT_INTERNAL_EXECUTIVES:
     default:
       return [];

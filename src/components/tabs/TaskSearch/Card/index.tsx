@@ -27,6 +27,7 @@ const CardTasks = ({
   onItemPress,
   outlayStatusID,
   currentSum,
+  toClose,
 }: CardTasksProp) => {
   const address = object?.name || '';
 
@@ -46,6 +47,7 @@ const CardTasks = ({
               isUrgent={isUrgent}
               isNight={isNight}
               useOutlayStatus
+              toClose={toClose}
             />
           </View>
           <Text variant="bodySRegular" style={styles.wrapperTitle}>

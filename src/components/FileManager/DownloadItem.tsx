@@ -75,7 +75,7 @@ export const DownloadItem = ({
     setActiveTask(active);
     active.progress((rec, total) => {
       setReceived(+rec);
-      setProgress(+Math.floor((rec / total) * 100));
+      setProgress(+Math.floor((+rec / +total) * 100));
     });
     active
       .catch(err => {

@@ -27,20 +27,24 @@ import { styles } from './styles';
 type TaskCardReportProps = {
   activeBudgetCanceled: boolean;
   statusID: StatusType | undefined;
-  files: File[];
+  reportFiles: File[];
+  closureFiles: File[];
   taskId: string;
   uploadModalVisible: boolean;
   onUploadModalVisible: () => void;
+  toClose: boolean | undefined;
 };
 
 export let controllers: Controllers = {};
 export const TaskCardReport: FC<TaskCardReportProps> = ({
   activeBudgetCanceled,
   statusID,
-  files,
+  reportFiles,
+  closureFiles,
   taskId,
   uploadModalVisible,
   onUploadModalVisible,
+  toClose,
 }) => {
   const theme = useTheme();
   const [banner, setBanner] = useState(false);
@@ -52,7 +56,9 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
 
   const progressesSelector = useAppSelector(selectTasks).progresses;
   const canDelete =
-    statusID && [StatusType.SUMMARIZING, StatusType.WORK].includes(statusID);
+    statusID &&
+    ([StatusType.SUMMARIZING, StatusType.WORK].includes(statusID) || toClose);
+
   const handleUpload = async ({
     formData,
     files,
@@ -61,7 +67,6 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
   }: HandleUpload) => {
     const controller = new AbortController();
     controllers = { ...controllers, [date]: controller };
-
     const request = await postTasksFiles({
       formData,
       files,
@@ -71,7 +76,6 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
     const addedFiles = request.filter(file => names.includes(file.name));
     saveOnDevice(addedFiles);
   };
-  const reportFiles = files.filter(file => file.isOffer);
 
   const onDelete = async ({ fileID }: { fileID?: number }) => {
     fileID && (await deleteTasksFiles(fileID.toString()).unwrap());
@@ -79,6 +83,72 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
   };
 
   const getContent = () => {
+    //к закрытию
+    //необходимо отправить закрывающие документы
+    if (toClose) {
+      return (
+        <View style={styles.mt36}>
+          <Text variant="title3" color={theme.text.basic}>
+            Загруженные файлы
+          </Text>
+          {reportFiles.length ? (
+            <View style={styles.mt24}>
+              <DownloadManager
+                files={reportFiles}
+                onDelete={onDelete}
+                canDelete={false}
+              />
+            </View>
+          ) : (
+            <Text
+              variant="bodySRegular"
+              style={styles.mt8}
+              color={theme.text.neutral}
+            >
+              Файлов нет
+            </Text>
+          )}
+          <View style={styles.mt36}>
+            <Text variant="title3" color={theme.text.basic}>
+              Закрывающие документы
+            </Text>
+            <View style={styles.mt24}>
+              {closureFiles.length ? (
+                <>
+                  <DownloadManager
+                    files={closureFiles}
+                    onDelete={onDelete}
+                    canDelete={canDelete}
+                  />
+                  <UploadProgress
+                    controllers={controllers}
+                    progressesSelector={progressesSelector}
+                  />
+                </>
+              ) : (
+                <>
+                  <View style={styles.download}>
+                    <DownloadFilesIcon />
+                    <Text
+                      variant="bodySRegular"
+                      style={styles.desc}
+                      color={theme.text.neutral}
+                    >
+                      Загрузите чеки или иные финансовые документы общим
+                      размером не более 250 МВ
+                    </Text>
+                  </View>
+                  <UploadProgress
+                    controllers={controllers}
+                    progressesSelector={progressesSelector}
+                  />
+                </>
+              )}
+            </View>
+          </View>
+        </View>
+      );
+    }
     switch (statusID) {
       case StatusType.ACTIVE:
         return (
@@ -122,23 +192,8 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
                   <DownloadManager
                     files={reportFiles}
                     onDelete={onDelete}
-                    canDelete={canDelete}
+                    canDelete={false}
                   />
-                  <UploadProgress
-                    controllers={controllers}
-                    progressesSelector={progressesSelector}
-                  />
-                  <View style={styles.mt36} />
-                  <Text variant="title3" color={theme.text.basic}>
-                    Закрывающие документы
-                  </Text>
-                  <Text
-                    variant="bodySRegular"
-                    style={styles.mt8}
-                    color={theme.text.neutral}
-                  >
-                    Пока здесь ничего нет
-                  </Text>
                 </>
               ) : (
                 <>
@@ -160,37 +215,82 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
                 </>
               )}
             </View>
+            <View style={styles.mt36}>
+              <Text variant="title3" color={theme.text.basic}>
+                Закрывающие документы
+              </Text>
+              {closureFiles.length ? (
+                <View style={styles.mt24}>
+                  <DownloadManager
+                    files={closureFiles}
+                    onDelete={onDelete}
+                    canDelete={false}
+                  />
+                </View>
+              ) : (
+                <Text
+                  variant="bodySRegular"
+                  style={styles.mt8}
+                  color={theme.text.neutral}
+                >
+                  Пока здесь ничего нет
+                </Text>
+              )}
+            </View>
           </View>
         );
       default:
         return (
           <>
-            {reportFiles.length ? (
+            {reportFiles.length || closureFiles.length ? (
               <View style={styles.mt36}>
                 <Text variant="title3" color={theme.text.basic}>
                   Загруженные файлы
                 </Text>
                 <View style={styles.mt24}>
-                  <DownloadManager
-                    files={reportFiles}
-                    onDelete={onDelete}
-                    canDelete={canDelete}
-                  />
-                  <UploadProgress
-                    controllers={controllers}
-                    progressesSelector={progressesSelector}
-                  />
-                  <View style={styles.mt36} />
-                  <Text variant="title3" color={theme.text.basic}>
-                    Закрывающие документы
-                  </Text>
-                  <Text
-                    variant="bodySRegular"
-                    style={styles.mt8}
-                    color={theme.text.neutral}
-                  >
-                    Пока здесь ничего нет
-                  </Text>
+                  {reportFiles.length ? (
+                    <>
+                      <DownloadManager
+                        files={reportFiles}
+                        onDelete={onDelete}
+                        canDelete={canDelete}
+                      />
+                      <UploadProgress
+                        controllers={controllers}
+                        progressesSelector={progressesSelector}
+                      />
+                    </>
+                  ) : (
+                    <Text
+                      variant="bodySRegular"
+                      style={styles.mt8}
+                      color={theme.text.neutral}
+                    >
+                      Пока здесь ничего нет
+                    </Text>
+                  )}
+                  <View style={styles.mt36}>
+                    <Text variant="title3" color={theme.text.basic}>
+                      Закрывающие документы
+                    </Text>
+                    {closureFiles.length ? (
+                      <View style={styles.mt24}>
+                        <DownloadManager
+                          files={closureFiles}
+                          onDelete={onDelete}
+                          canDelete={false}
+                        />
+                      </View>
+                    ) : (
+                      <Text
+                        variant="bodySRegular"
+                        style={styles.mt8}
+                        color={theme.text.neutral}
+                      >
+                        Пока здесь ничего нет
+                      </Text>
+                    )}
+                  </View>
                 </View>
               </View>
             ) : (
@@ -222,7 +322,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
         onBanner={onBanner}
         handleUpload={handleUpload}
         isVisible={uploadModalVisible}
-        formData={getFormData(taskId)}
+        formData={getFormData(taskId, toClose)}
         onClose={onUploadModalVisible}
         deleteProgress={deleteProgress}
       />

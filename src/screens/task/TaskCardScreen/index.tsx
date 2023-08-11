@@ -40,7 +40,8 @@ type TaskCardScreenProps = CompositeScreenProps<
 export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
-  const taskId = route.params.taskId.toString();
+  const taskId = '1310';
+  // const taskId = route.params.taskId.toString();
 
   const {
     onTabChange,
@@ -81,6 +82,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
     onNoAccessToTaskBannerVisible,
     noAccessToTaskBannerVisible,
     noAccessButtonPress,
+    toClose,
   } = useTaskCard({ taskId, navigation });
 
   return (
@@ -122,6 +124,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
                     isNight={isNight}
                     isUrgent={isUrgent}
                     statusID={statusID}
+                    toClose={toClose}
                   />
                 </View>
                 <Text

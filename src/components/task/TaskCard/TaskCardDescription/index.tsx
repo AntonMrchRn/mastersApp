@@ -24,7 +24,7 @@ type TaskCardDescriptionProps = {
   startTime: string;
   endTimePlan: string;
   contacts: Contact[];
-  files: File[];
+  applicationFiles: File[];
   statusID: StatusType | undefined;
   webdata: WebData | undefined;
   executors: Executor[] | [];
@@ -38,7 +38,7 @@ export const TaskCardDescription = ({
   startTime,
   endTimePlan,
   contacts,
-  files,
+  applicationFiles,
   statusID,
   webdata,
   executors,
@@ -64,8 +64,6 @@ export const TaskCardDescription = ({
       });
     }
   }, [isError]);
-
-  const applicationFiles = files.filter(file => file.isApplication);
 
   const onDelete = async ({ filePath }: { filePath?: string }) => {
     filePath && (await ReactNativeBlobUtil.fs.unlink(filePath));

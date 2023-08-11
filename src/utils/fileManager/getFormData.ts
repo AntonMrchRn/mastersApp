@@ -1,11 +1,12 @@
-export const getFormData = (taskId?: string) => {
+export const getFormData = (taskId?: string, toClose?: boolean | undefined) => {
   const formData = new FormData();
   if (taskId) {
     formData.append('taskID', taskId);
-    formData.append('isApplication', false);
-    formData.append('isOffer', true);
-    formData.append('isCheck', false);
+    if (!toClose) {
+      formData.append('isApplication', false);
+      formData.append('isOffer', true);
+      formData.append('isCheck', false);
+    }
   }
-
   return formData;
 };

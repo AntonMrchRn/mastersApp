@@ -122,6 +122,12 @@ type Task = {
   isDirectum?: boolean;
   isNight?: boolean;
   isOffersPublic?: boolean;
+  /**
+   * Промежуточный статус “к Закрытию“ для:
+   * Самозанятых без Сбера “Свое дело”(им нужно чек сфоткать и прислать)
+   * ИП и юр.лиц, если они не прислали координатору закрывающие документы
+   */
+  toClose?: boolean;
   isOpenAccess?: boolean;
   isUrgent?: boolean;
   name?: string;
