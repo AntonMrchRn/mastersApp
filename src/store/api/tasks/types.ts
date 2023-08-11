@@ -24,6 +24,7 @@ type Service = {
   description: string;
   measureID: number;
   name: string;
+  measure?: string;
   price: number;
   roleID: RoleType;
   setID: TaskSetType;
