@@ -524,7 +524,7 @@ export const useTaskCard = ({
           />
         );
       case TaskTab.HISTORY:
-        return <TaskCardHisory taskId={taskId} />;
+        return <TaskCardHisory taskId={taskId} statusID={statusID} />;
       case TaskTab.COMMENTS:
         return (
           <TaskCardComment

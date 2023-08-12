@@ -17,8 +17,10 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   container: {
-    alignItems: 'flex-start',
     marginTop: 36,
+  },
+  txt: {
+    textAlign: 'left',
   },
   wrapperLoading: {
     width: '100%',

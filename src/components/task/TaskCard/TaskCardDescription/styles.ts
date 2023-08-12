@@ -28,6 +28,12 @@ export const styles = StyleSheet.create({
   mt16: {
     marginTop: 16,
   },
+  w20: {
+    width: '20%',
+  },
+  w80: {
+    width: '80%',
+  },
   mt36: {
     marginTop: 36,
   },

@@ -6,6 +6,7 @@ import { MaskedText } from 'react-native-mask-text';
 import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
 import { CaretDownIcon } from '@/assets/icons/svg/screens/CaretDownIcon';
+import { IconUsers } from '@/assets/icons/svg/screens/IconUsers';
 import { DownloadManager } from '@/components/FileManager/DownloadManager';
 import { TaskAddress } from '@/components/task/TaskAddress';
 import { useDeleteInvitationMutation } from '@/store/api/tasks';
@@ -71,8 +72,7 @@ export const TaskCardDescription = ({
   return (
     <View>
       {/* Выбор подрядчиков  */}
-      {executors.length &&
-      subsetID &&
+      {subsetID &&
       [TaskType.IT_AUCTION_SALE, TaskType.IT_FIRST_RESPONSE].includes(
         subsetID
       ) &&
@@ -80,7 +80,7 @@ export const TaskCardDescription = ({
       statusID === StatusType.ACTIVE ? (
         <>
           <Text variant="title3" style={styles.mt36} color={theme.text.basic}>
-            Выбранные подрядчики
+            Приглашенные подрядчики
           </Text>
           {isLoading ? (
             <ActivityIndicator
@@ -88,7 +88,7 @@ export const TaskCardDescription = ({
               style={styles.pv20}
               color={theme.background.accent}
             />
-          ) : (
+          ) : executors.length ? (
             executors.map((executor, index) => {
               return (
                 <View key={index}>
@@ -152,13 +152,33 @@ export const TaskCardDescription = ({
                 </View>
               );
             })
+          ) : (
+            <View style={styles.mt16}>
+              <View style={styles.wrapBottom}>
+                <View style={styles.w20}>
+                  <IconUsers />
+                </View>
+                <View style={styles.w80}>
+                  <Text variant="bodySRegular" color={theme.text.neutral}>
+                    Для выполнения задачи пригласите хотя-бы одного подрядчика
+                  </Text>
+                </View>
+              </View>
+            </View>
           )}
-          {!isLoading && (
+          {!isLoading && executors.length ? (
             <Button
               label="Изменить выбор"
               size="S"
               style={styles.mt16}
               onPress={() => console.log('Переход на выбор подрядчика')}
+            />
+          ) : (
+            <Button
+              label="Пригласить"
+              size="S"
+              style={styles.mt16}
+              onPress={() => console.log('Пригласить подрядчика')}
             />
           )}
         </>
