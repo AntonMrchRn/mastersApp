@@ -23,7 +23,7 @@ type TaskCardHistoryProps = {
   statusID?: number;
 };
 
-export const TaskCardHisory: FC<TaskCardHistoryProps> = ({
+export const TaskCardHistory: FC<TaskCardHistoryProps> = ({
   taskId,
   statusID,
 }) => {
@@ -50,7 +50,7 @@ export const TaskCardHisory: FC<TaskCardHistoryProps> = ({
 
   const getContent = () => {
     return statusID === StatusType.ACTIVE ? (
-      <PreviewNotFound type={PreviewNotFoundType.ActiveTaskStatusHistory} />
+      <PreviewNotFound type={PreviewNotFoundType.NoHistoryEvents} />
     ) : (
       <View style={styles.container}>
         <Text variant="title3" style={styles.txt} color={theme.text.basic}>

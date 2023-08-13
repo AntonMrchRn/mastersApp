@@ -25,7 +25,7 @@ export enum PreviewNotFoundType {
   NoMessages = 'NoMessages',
   MessagesNotAvailable = 'MessagesNotAvailable',
   RegionNotChanged = 'RegionNotChanged',
-  ActiveTaskStatusHistory = 'ActiveTaskStatusHistory',
+  NoHistoryEvents = 'NoHistoryEvents',
 }
 
 type PreviewNotFoundProps = {
@@ -57,7 +57,7 @@ const PreviewNotFound = ({ type, closeModal }: PreviewNotFoundProps) => {
       text: 'В вашем регионе задач сейчас нет. Попробуйте продолжить поиск позже',
       button: undefined,
     },
-    [PreviewNotFoundType.ActiveTaskStatusHistory]: {
+    [PreviewNotFoundType.NoHistoryEvents]: {
       icon: <ActiveTaskIcon />,
       title: 'Событий нет',
       text: 'Здесь будет отображаться ход событий задачи, когда задача перейдет в работу',

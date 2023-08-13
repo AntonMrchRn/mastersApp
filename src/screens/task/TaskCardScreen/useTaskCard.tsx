@@ -13,7 +13,7 @@ import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
 import { TaskCardComment } from '@/components/task/TaskCard/TaskCardComment';
 import { TaskCardDescription } from '@/components/task/TaskCard/TaskCardDescription';
 import { TaskCardEstimate } from '@/components/task/TaskCard/TaskCardEstimate';
-import { TaskCardHisory } from '@/components/task/TaskCard/TaskCardHistory';
+import { TaskCardHistory } from '@/components/task/TaskCard/TaskCardHistory';
 import { TaskCardReport } from '@/components/task/TaskCard/TaskCardReport';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
@@ -524,7 +524,7 @@ export const useTaskCard = ({
           />
         );
       case TaskTab.HISTORY:
-        return <TaskCardHisory taskId={taskId} statusID={statusID} />;
+        return <TaskCardHistory taskId={taskId} statusID={statusID} />;
       case TaskTab.COMMENTS:
         return (
           <TaskCardComment

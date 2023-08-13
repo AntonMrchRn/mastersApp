@@ -6,7 +6,7 @@ import { MaskedText } from 'react-native-mask-text';
 import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
 import { CaretDownIcon } from '@/assets/icons/svg/screens/CaretDownIcon';
-import { IconUsers } from '@/assets/icons/svg/screens/IconUsers';
+import { UsersIcon } from '@/assets/icons/svg/screens/UsersIcon';
 import { DownloadManager } from '@/components/FileManager/DownloadManager';
 import { TaskAddress } from '@/components/task/TaskAddress';
 import { useDeleteInvitationMutation } from '@/store/api/tasks';
@@ -156,7 +156,7 @@ export const TaskCardDescription = ({
             <View style={styles.mt16}>
               <View style={styles.wrapBottom}>
                 <View style={styles.w20}>
-                  <IconUsers />
+                  <UsersIcon />
                 </View>
                 <View style={styles.w80}>
                   <Text variant="bodySRegular" color={theme.text.neutral}>
