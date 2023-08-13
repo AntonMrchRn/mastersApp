@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Button } from 'rn-ui-kit';
 
+import { ActiveTaskIcon } from '@/assets/icons/svg/screens/ActiveTaskIcon';
 import { InfoIcon } from '@/assets/icons/svg/screens/InfoIcon';
 import { NoMessagesIcon } from '@/assets/icons/svg/screens/NoMessagesIcon';
 import { NoRegionIcon } from '@/assets/icons/svg/screens/NoRegionIcon';
@@ -24,6 +25,7 @@ export enum PreviewNotFoundType {
   NoMessages = 'NoMessages',
   MessagesNotAvailable = 'MessagesNotAvailable',
   RegionNotChanged = 'RegionNotChanged',
+  NoHistoryEvents = 'NoHistoryEvents',
 }
 
 type PreviewNotFoundProps = {
@@ -53,6 +55,12 @@ const PreviewNotFound = ({ type, closeModal }: PreviewNotFoundProps) => {
       icon: <TaskSearchClear />,
       title: 'Задачи не найдены',
       text: 'В вашем регионе задач сейчас нет. Попробуйте продолжить поиск позже',
+      button: undefined,
+    },
+    [PreviewNotFoundType.NoHistoryEvents]: {
+      icon: <ActiveTaskIcon />,
+      title: 'Событий нет',
+      text: 'Здесь будет отображаться ход событий задачи, когда задача перейдет в работу',
       button: undefined,
     },
     [PreviewNotFoundType.TasksNotAvailable]: {

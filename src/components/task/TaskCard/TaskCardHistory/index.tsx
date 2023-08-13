@@ -6,7 +6,11 @@ import updateLocale from 'dayjs/plugin/updateLocale';
 import { Text, useTheme } from 'rn-ui-kit';
 
 import { NoHistoryIcon } from '@/assets/icons/svg/screens/NoHistoryIcon';
+import PreviewNotFound, {
+  PreviewNotFoundType,
+} from '@/components/tabs/TaskSearch/PreviewNotFound';
 import { useGetTaskHistoryQuery } from '@/store/api/tasks';
+import { StatusType } from '@/types/task';
 
 import { ContentHistory } from './ContentHistory';
 
@@ -16,9 +20,13 @@ dayjs.extend(updateLocale);
 
 type TaskCardHistoryProps = {
   taskId: string;
+  statusID?: number;
 };
 
-export const TaskCardHisory: FC<TaskCardHistoryProps> = ({ taskId }) => {
+export const TaskCardHistory: FC<TaskCardHistoryProps> = ({
+  taskId,
+  statusID,
+}) => {
   const theme = useTheme();
 
   const { data: history } = useGetTaskHistoryQuery(taskId);
@@ -41,9 +49,11 @@ export const TaskCardHisory: FC<TaskCardHistoryProps> = ({ taskId }) => {
   };
 
   const getContent = () => {
-    return (
+    return statusID === StatusType.ACTIVE ? (
+      <PreviewNotFound type={PreviewNotFoundType.NoHistoryEvents} />
+    ) : (
       <View style={styles.container}>
-        <Text variant="title3" color={theme.text.basic}>
+        <Text variant="title3" style={styles.txt} color={theme.text.basic}>
           События задачи
         </Text>
         {history?.isLoading ? (

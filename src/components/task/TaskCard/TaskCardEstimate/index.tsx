@@ -17,7 +17,6 @@ import { Offer, Service } from '@/store/api/tasks/types';
 import {
   EstimateTab,
   OutlayStatusType,
-  RoleType,
   StatusType,
   TaskSetType,
   TaskType,
@@ -94,7 +93,6 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     onCompetitorEstimates,
     onTradingResults,
     onEditEstimate,
-    userRoleID,
     setId,
     isInternalExecutor,
   } = useTaskCardEstimate({
@@ -158,7 +156,13 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
         <Spacer size={'xxxl'} />
         {outlayStatusID &&
           statusID === StatusType.WORK &&
-          subsetID === TaskType.COMMON_FIRST_RESPONSE && (
+          !isContractor &&
+          subsetID &&
+          [
+            TaskType.COMMON_FIRST_RESPONSE,
+            TaskType.IT_AUCTION_SALE,
+            TaskType.IT_FIRST_RESPONSE,
+          ].includes(subsetID) && (
             <TaskEstimateOutline
               outlayStatusID={outlayStatusID}
               onPress={onEstimateSheetVisible}
