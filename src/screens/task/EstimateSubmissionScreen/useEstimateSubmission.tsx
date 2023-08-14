@@ -140,7 +140,11 @@ export const useEstimateSubmission = ({
   };
   const pressMaterial = () => {
     onEstimateModalVisible();
-    navigation.navigate(AppScreenName.NewMaterial, { taskId });
+    navigation.navigate(AppScreenName.NewMaterial, {
+      taskId,
+      fromEstimateSubmission: true,
+      services: offerServices,
+    });
   };
   const pressService = () => {
     onEstimateModalVisible();

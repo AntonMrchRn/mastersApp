@@ -7,8 +7,6 @@ import { Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { CaretRightIcon } from '@/assets/icons/svg/estimate/CaretRightIcon';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
-import { useAppSelector } from '@/store';
-import { selectTasks } from '@/store/slices/tasks/selectors';
 
 import { styles } from './styles';
 
@@ -22,9 +20,7 @@ export const NewMaterialScreen: FC<NewMaterialScreenProps> = ({
 }) => {
   const theme = useTheme();
 
-  const { taskId, isEdit } = route.params;
-
-  const { offerServices } = useAppSelector(selectTasks);
+  const { taskId, isEdit, services, fromEstimateSubmission } = route.params;
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
@@ -32,22 +28,22 @@ export const NewMaterialScreen: FC<NewMaterialScreenProps> = ({
         <Text variant="title3" style={styles.title} color={theme.text.basic}>
           Добавить к услуге
         </Text>
-        {offerServices.map(offerService => {
+        {services.map(service => {
           const onPress = () => {
             navigation.navigate(AppScreenName.EstimateAddMaterial, {
-              serviceId: offerService.ID as number,
-              taskId: taskId,
-              fromEstimateSubmission: true,
+              serviceId: service.ID as number,
+              taskId,
+              fromEstimateSubmission,
               isEdit,
             });
           };
           return (
-            <View key={offerService.ID}>
+            <View key={service.ID}>
               <TouchableOpacity onPress={onPress}>
                 <Spacer size={20} />
                 <View style={styles.row}>
                   <Text variant="bodyMRegular" color={theme.text.basic}>
-                    {offerService.name}
+                    {service.name}
                   </Text>
                   <CaretRightIcon />
                 </View>

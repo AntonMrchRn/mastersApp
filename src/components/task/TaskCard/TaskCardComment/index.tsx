@@ -76,7 +76,7 @@ export const TaskCardComment = ({
 
   return (
     <View style={styles.container}>
-      {isCommentsAvailable && commentsPreview?.taskComment?.length && (
+      {!!(isCommentsAvailable && commentsPreview?.taskComment?.length) && (
         <Text variant="title3">Последние сообщения</Text>
       )}
       <View style={[styles.containerList]}>{renderContent()}</View>

@@ -15,10 +15,6 @@ export const getButtons = ({
   onSubmitAnEstimate,
   onWorkDelivery,
   onCancelModalVisible,
-  estimateBottomVisible,
-  onAddEstimateMaterial,
-  selectedServiceId,
-  onEstimateBottomVisible,
   reportFiles,
   onUploadModalVisible,
   outlayStatusID,
@@ -47,10 +43,6 @@ export const getButtons = ({
   onSubmitAnEstimate: () => void;
   onWorkDelivery: () => Promise<void>;
   onCancelModalVisible: () => void;
-  estimateBottomVisible: boolean;
-  onAddEstimateMaterial: () => void;
-  selectedServiceId: number | undefined;
-  onEstimateBottomVisible: () => void;
   onUploadModalVisible: () => void;
   reportFiles: File[];
   closureFiles: File[];
@@ -191,21 +183,6 @@ export const getButtons = ({
                 },
               ];
             case TaskTab.ESTIMATE:
-              if (estimateBottomVisible) {
-                return [
-                  {
-                    label: 'Выбрать',
-                    variant: 'accent',
-                    onPress: onAddEstimateMaterial,
-                    disabled: !selectedServiceId,
-                  },
-                  {
-                    label: 'Отменить',
-                    variant: 'outlineAccent',
-                    onPress: onEstimateBottomVisible,
-                  },
-                ];
-              }
               if (outlayStatusID !== OutlayStatusType.READY) {
                 return [
                   {
@@ -431,21 +408,6 @@ export const getButtons = ({
                 },
               ];
             case TaskTab.ESTIMATE:
-              if (estimateBottomVisible) {
-                return [
-                  {
-                    label: 'Выбрать',
-                    variant: 'accent',
-                    onPress: onAddEstimateMaterial,
-                    disabled: !selectedServiceId,
-                  },
-                  {
-                    label: 'Отменить',
-                    variant: 'outlineAccent',
-                    onPress: onEstimateBottomVisible,
-                  },
-                ];
-              }
               return [
                 {
                   label: 'Сдать работы',

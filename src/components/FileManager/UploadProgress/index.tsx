@@ -22,6 +22,7 @@ export const UploadProgress = ({
   const theme = useTheme();
 
   const progresses = Object.values(progressesSelector);
+  console.log('🚀 ~ file: index.tsx:25 ~ progresses:', progresses);
   const dates = Object.keys(progressesSelector);
 
   return (

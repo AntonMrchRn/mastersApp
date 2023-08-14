@@ -93,7 +93,6 @@ export const useTaskCard = ({
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [estimateBottomVisible, setEstimateBottomVisible] = useState(false);
-  const [selectedServiceId, setSelectedServiceId] = useState<number>();
   const [estimateBannerVisible, setEstimateBannerVisible] = useState(false);
   const [cantDeleteBannerVisible, setCantDeleteBannerVisible] = useState(false);
   const [noAccessToTaskBannerVisible, setNoAccessToTaskBannerVisible] =
@@ -338,16 +337,7 @@ export const useTaskCard = ({
     const newTab = estimateTabsArray[index];
     newTab && setCurrentEstimateTab(newTab);
   };
-  const onAddEstimateMaterial = () => {
-    if (selectedServiceId) {
-      navigation.navigate(AppScreenName.EstimateAddMaterial, {
-        serviceId: selectedServiceId,
-        taskId: id,
-      });
-      onEstimateBottomVisible();
-      setSelectedServiceId(undefined);
-    }
-  };
+
   const onTaskSubmission = async () => {
     //принимаем таску в работу, если первый отклик
     if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
@@ -501,8 +491,6 @@ export const useTaskCard = ({
             navigation={navigation}
             onEstimateBottomVisible={onEstimateBottomVisible}
             estimateBottomVisible={estimateBottomVisible}
-            selectedServiceId={selectedServiceId}
-            setSelectedServiceId={setSelectedServiceId}
             onCantDeleteBannerVisible={onCantDeleteBannerVisible}
             subsetID={subsetID}
             currentEstimateTab={currentEstimateTab}
@@ -553,10 +541,6 @@ export const useTaskCard = ({
     onSubmitAnEstimate,
     onWorkDelivery,
     onCancelModalVisible,
-    estimateBottomVisible,
-    onAddEstimateMaterial,
-    selectedServiceId,
-    onEstimateBottomVisible,
     reportFiles,
     onUploadModalVisible,
     outlayStatusID,
