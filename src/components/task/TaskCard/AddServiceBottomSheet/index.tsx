@@ -79,7 +79,7 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
       timeout = timer;
     }, []);
     const handleAddService = (service: Service) => {
-      if (serviceIDs?.includes(service.ID)) {
+      if (service.ID && serviceIDs?.includes(service.ID)) {
         onBanner();
       } else {
         addService(service);
@@ -148,14 +148,6 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
                     );
                   })
                 )}
-                <Button
-                  style={styles.button}
-                  size="M"
-                  label="Выбрать"
-                  onPress={onChoose}
-                  disabled={!selectCategories.length}
-                />
-                <View style={{ height: insets.bottom + 20 }} />
               </>
             )}
             {chipses.length ? (
@@ -176,7 +168,20 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
             ) : (
               <></>
             )}
+            <Spacer size={24} />
           </BottomSheetScrollView>
+          {!serviceName.length && (
+            <>
+              <Button
+                size="M"
+                label="Выбрать"
+                onPress={onChoose}
+                disabled={!selectCategories.length}
+              />
+              <View style={{ height: insets.bottom + 20 }} />
+            </>
+          )}
+
           {banner && (
             <View style={{ position: 'absolute', bottom: 100, width: '100%' }}>
               <Banner

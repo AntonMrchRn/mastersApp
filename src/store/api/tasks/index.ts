@@ -61,7 +61,7 @@ export const tasksAPI = api
       }),
       getServicesByName: builder.query<GetServicesResponse, string>({
         query: categoryName => ({
-          url: `services?query=??&searchQuery=${categoryName}?`,
+          url: `services/search?query=??&searchQuery=name~~${categoryName}`,
           method: 'GET',
         }),
       }),

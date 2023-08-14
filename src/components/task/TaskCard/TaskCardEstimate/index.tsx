@@ -3,7 +3,7 @@ import { TouchableOpacity, View } from 'react-native';
 
 import { useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RadioButton, Spacer, Text, useTheme } from 'rn-ui-kit';
+import { Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
 import { CalculatorLargeIcon } from '@/assets/icons/svg/estimate/CalculatorLargeIcon';
@@ -40,10 +40,6 @@ type TaskCardEstimateProps = {
   >;
   onEstimateBottomVisible: () => void;
   estimateBottomVisible: boolean;
-  selectedServiceId: number | undefined;
-  setSelectedServiceId: React.Dispatch<
-    React.SetStateAction<number | undefined>
-  >;
   onCantDeleteBannerVisible: () => void;
   subsetID: TaskType | undefined;
   currentEstimateTab: EstimateTab;
@@ -57,10 +53,6 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   statusID,
   taskId,
   navigation,
-  onEstimateBottomVisible,
-  estimateBottomVisible,
-  selectedServiceId,
-  setSelectedServiceId,
   onCantDeleteBannerVisible,
   subsetID,
   currentEstimateTab,
@@ -99,8 +91,6 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     services,
     taskId,
     navigation,
-    onEstimateBottomVisible,
-    estimateBottomVisible,
     currentEstimateTab,
     statusID,
     winnerOffer,
@@ -182,31 +172,19 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
               onCantDeleteBannerVisible();
             }
           };
-          const radioPress = () => {
-            setSelectedServiceId(service.ID);
-          };
           return (
             <View key={service.ID}>
-              <View style={styles.itemRow}>
-                {estimateBottomVisible && (
-                  <RadioButton
-                    checked={selectedServiceId === service.ID}
-                    style={styles.radio}
-                    onPress={radioPress}
-                  />
-                )}
-                <TaskEstimateItem
-                  firstAction={firstActionService}
-                  secondAction={secondActionService}
-                  title={service?.name}
-                  price={service?.price}
-                  count={service?.count}
-                  sum={service?.sum}
-                  roleID={service?.roleID}
-                  canSwipe={canSwipe}
-                  measure={service.measure}
-                />
-              </View>
+              <TaskEstimateItem
+                firstAction={firstActionService}
+                secondAction={secondActionService}
+                title={service?.name}
+                price={service?.price}
+                count={service?.count}
+                sum={service?.sum}
+                roleID={service?.roleID}
+                canSwipe={canSwipe}
+                measure={service.measure?.toLowerCase()}
+              />
               <Spacer size={0} separator="bottom" />
               {service?.materials?.map(material => {
                 const firstActionMaterial = () => {
@@ -218,7 +196,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                 return (
                   <View key={material.ID}>
                     <TaskEstimateItem
-                      measure={material.measure}
+                      measure={material.measure.split('(')[1]?.slice(0, -1)}
                       firstAction={firstActionMaterial}
                       secondAction={secondActionMaterial}
                       title={material?.name}

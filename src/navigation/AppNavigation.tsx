@@ -75,7 +75,13 @@ export type AppStackParamList = {
   [AppScreenName.EstimateAddMaterial]: {
     serviceId: number;
     taskId: number;
+    /**
+     * Переход из скрина изменения сметы офера
+     */
     fromEstimateSubmission?: boolean;
+    /**
+     * Редактирование уже имеющейся сметы офера
+     */
     isEdit?: boolean;
   };
   [AppScreenName.EstimateAddService]: {
@@ -91,7 +97,12 @@ export type AppStackParamList = {
   [AppScreenName.WebView]: { uri: string };
   [AppScreenName.EstimateSubmission]: { taskId: number };
   [AppScreenName.UserEstimateEdit]: { taskId: number };
-  [AppScreenName.NewMaterial]: { taskId: number; isEdit?: boolean };
+  [AppScreenName.NewMaterial]: {
+    taskId: number;
+    services: Service[];
+    isEdit?: boolean;
+    fromEstimateSubmission?: boolean;
+  };
   [AppScreenName.EstimateSubmissionSuccess]: { taskId: number };
   [AppScreenName.Contractors]: {
     taskId: number;

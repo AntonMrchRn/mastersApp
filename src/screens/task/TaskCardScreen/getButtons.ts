@@ -21,18 +21,14 @@ export const getButtons = ({
   isInvitedCurator,
   onTaskSubmission,
   isInvitedExecutor,
-  selectedServiceId,
   onSubmitAnEstimate,
   isInternalExecutor,
   isCommentsAvailable,
   isCuratorAllowedTask,
   isOffersDeadlineOver,
   onCancelModalVisible,
-  estimateBottomVisible,
-  onAddEstimateMaterial,
   onUploadModalVisible,
   onBudgetModalVisible,
-  onEstimateBottomVisible,
   onSubmissionModalVisible,
   onApproveEstimateChanges,
   onSendEstimateForApproval,
@@ -56,7 +52,6 @@ export const getButtons = ({
   reportFiles: File[];
   closureFiles: File[];
   userOffersData: Offer[];
-  selectedServiceId?: number;
   outlayStatusID?: OutlayStatusType;
   toClose: boolean | undefined;
   isCurator: boolean;
@@ -67,7 +62,6 @@ export const getButtons = ({
   isCommentsAvailable: boolean;
   isCuratorAllowedTask: boolean;
   isOffersDeadlineOver: boolean;
-  estimateBottomVisible: boolean;
   isTaskClosedWithoutMessages: boolean;
   isTaskWithUnconfirmedCurator: boolean;
   isLastChangesFromCoordinator: boolean;
@@ -80,8 +74,6 @@ export const getButtons = ({
   onCancelModalVisible: () => void;
   onUploadModalVisible: () => void;
   onBudgetModalVisible: () => void;
-  onAddEstimateMaterial: () => void;
-  onEstimateBottomVisible: () => void;
   onSubmissionModalVisible: () => void;
   onApproveEstimateChanges: () => void;
   onSendEstimateForApproval: () => void;
@@ -219,21 +211,6 @@ export const getButtons = ({
                 },
               ];
             case TaskTab.ESTIMATE:
-              if (estimateBottomVisible) {
-                return [
-                  {
-                    label: 'Выбрать',
-                    variant: 'accent',
-                    onPress: onAddEstimateMaterial,
-                    disabled: !selectedServiceId,
-                  },
-                  {
-                    label: 'Отменить',
-                    variant: 'outlineAccent',
-                    onPress: onEstimateBottomVisible,
-                  },
-                ];
-              }
               if (outlayStatusID !== OutlayStatusType.READY) {
                 return [
                   {
@@ -459,21 +436,6 @@ export const getButtons = ({
                 },
               ];
             case TaskTab.ESTIMATE:
-              if (estimateBottomVisible) {
-                return [
-                  {
-                    label: 'Выбрать',
-                    variant: 'accent',
-                    onPress: onAddEstimateMaterial,
-                    disabled: !selectedServiceId,
-                  },
-                  {
-                    label: 'Отменить',
-                    variant: 'outlineAccent',
-                    onPress: onEstimateBottomVisible,
-                  },
-                ];
-              }
               return [
                 {
                   label: 'Сдать работы',

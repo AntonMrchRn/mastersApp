@@ -36,6 +36,7 @@ export enum PreviewNotFoundType {
   ReportNotYetAvailable = 'ReportNotYetAvailable',
   NoFiles = 'NoFiles',
   CommentsClosedNow = 'CommentsClosedNow',
+  ServiceNotFound = 'ServiceNotFound',
 }
 
 type PreviewContent = {
@@ -145,6 +146,11 @@ const PreviewNotFound = ({ type, closeModal }: PreviewNotFoundProps) => {
     [PreviewNotFoundType.NoFiles]: {
       icon: <NoFilesIcon />,
       title: 'Файлов нет',
+    },
+    [PreviewNotFoundType.ServiceNotFound]: {
+      icon: <CloseIcon fill={theme.icons.danger} size={40} />,
+      title: 'Услуга не найдена',
+      text: 'Пожалуйста, убедитесь, что все слова написаны без ошибок или попробуйте другой запрос',
     },
   };
 

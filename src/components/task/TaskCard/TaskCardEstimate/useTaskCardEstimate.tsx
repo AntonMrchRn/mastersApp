@@ -28,8 +28,6 @@ export const useTaskCardEstimate = ({
   services,
   taskId,
   navigation,
-  onEstimateBottomVisible,
-  estimateBottomVisible,
   currentEstimateTab,
   statusID,
   winnerOffer,
@@ -43,8 +41,6 @@ export const useTaskCardEstimate = ({
     AppScreenName.TaskCard,
     undefined
   >;
-  onEstimateBottomVisible: () => void;
-  estimateBottomVisible: boolean;
   currentEstimateTab: EstimateTab;
   statusID: StatusType | undefined;
   winnerOffer: Offer | undefined;
@@ -108,7 +104,6 @@ export const useTaskCardEstimate = ({
       isContractor &&
       [TaskType.IT_FIRST_RESPONSE, TaskType.IT_AUCTION_SALE].includes(subsetID)
     ) &&
-    !estimateBottomVisible &&
     statusID === StatusType.WORK &&
     subsetID !== TaskType.COMMON_AUCTION_SALE;
 
@@ -143,11 +138,13 @@ export const useTaskCardEstimate = ({
     bsRef.current?.close();
   };
   const onPressMaterial = () => {
-    !estimateBottomVisible && onEstimateBottomVisible();
     onEstimateSheetVisible();
+    navigation.navigate(AppScreenName.NewMaterial, {
+      taskId,
+      services: currentServices,
+    });
   };
   const onPressService = () => {
-    estimateBottomVisible && onEstimateBottomVisible();
     onEstimateSheetVisible();
     setTimeout(() => {
       bsRef.current?.present();

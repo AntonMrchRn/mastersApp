@@ -103,7 +103,6 @@ export const useTaskCard = ({
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [estimateBottomVisible, setEstimateBottomVisible] = useState(false);
-  const [selectedServiceId, setSelectedServiceId] = useState<number>();
   const [estimateBannerVisible, setEstimateBannerVisible] = useState(false);
   const [cantDeleteBannerVisible, setCantDeleteBannerVisible] = useState(false);
   const [noAccessToTaskBannerVisible, setNoAccessToTaskBannerVisible] =
@@ -302,15 +301,33 @@ export const useTaskCard = ({
     (executor?.inviterRoleID === RoleType.COORDINATOR ||
       executor?.inviterRoleID === RoleType.SUPERVISOR);
 
-  const budget =
-    (subsetID &&
-      isContractor &&
-      [TaskType.IT_FIRST_RESPONSE, TaskType.IT_AUCTION_SALE].includes(
-        subsetID
-      )) ||
-    (isITServices && isInternalExecutor)
-      ? ''
-      : `${task?.budget} ₽` || '';
+  const getBudget = () => {
+    if (
+      (subsetID &&
+        isContractor &&
+        [TaskType.IT_FIRST_RESPONSE, TaskType.IT_AUCTION_SALE].includes(
+          subsetID
+        )) ||
+      (isITServices && isInternalExecutor)
+    ) {
+      return '';
+    }
+    // В шапке задания отображать сумму сметы из "Итого" в статусах сметы "Смета не согласована", "Смета на согласовании" и "Смета возвращена".
+    if (
+      outlayStatusID &&
+      [
+        OutlayStatusType.PENDING,
+        OutlayStatusType.RETURNED,
+        OutlayStatusType.MATCHING,
+      ].includes(outlayStatusID)
+    ) {
+      return (
+        `${services.reduce((acc, val) => acc + (val?.sum || 0), 0)} ₽` || ''
+      );
+    }
+    return `${task?.budget} ₽` || '';
+  };
+  const budget = getBudget();
 
   const budgetEndTime =
     subsetID === TaskType.IT_AUCTION_SALE && isContractor
@@ -394,17 +411,6 @@ export const useTaskCard = ({
   const onSwitchEstimateTab = (index: number) => {
     const newTab = estimateTabsArray[index];
     newTab && setCurrentEstimateTab(newTab);
-  };
-
-  const onAddEstimateMaterial = () => {
-    if (selectedServiceId) {
-      navigation.navigate(AppScreenName.EstimateAddMaterial, {
-        serviceId: selectedServiceId,
-        taskId: id,
-      });
-      onEstimateBottomVisible();
-      setSelectedServiceId(undefined);
-    }
   };
 
   const onTaskSubmission = async () => {
@@ -675,8 +681,6 @@ export const useTaskCard = ({
             navigation={navigation}
             onEstimateBottomVisible={onEstimateBottomVisible}
             estimateBottomVisible={estimateBottomVisible}
-            selectedServiceId={selectedServiceId}
-            setSelectedServiceId={setSelectedServiceId}
             onCantDeleteBannerVisible={onCantDeleteBannerVisible}
             subsetID={subsetID}
             currentEstimateTab={currentEstimateTab}
@@ -725,6 +729,7 @@ export const useTaskCard = ({
   };
 
   const buttons = getButtons({
+    tab: tab.label,
     toClose,
     subsetID,
     statusID,
@@ -734,30 +739,25 @@ export const useTaskCard = ({
     onCancelTask,
     isContractor,
     navigateToChat,
-    tab: tab.label,
     userOffersData,
     onWorkDelivery,
     outlayStatusID,
+    onBecomeCurator: navigateToContractors,
     isInvitedCurator,
     onTaskSubmission,
-    selectedServiceId,
-    onSubmitAnEstimate,
     isInvitedExecutor,
+    onSubmitAnEstimate,
     isInternalExecutor,
     isCommentsAvailable,
     isCuratorAllowedTask,
     isOffersDeadlineOver,
     onCancelModalVisible,
-    estimateBottomVisible,
-    onAddEstimateMaterial,
     onUploadModalVisible,
     onBudgetModalVisible,
-    onEstimateBottomVisible,
     onSubmissionModalVisible,
     onApproveEstimateChanges,
     onSendEstimateForApproval,
     isTaskWithUnconfirmedCurator,
-    onBecomeCurator: navigateToContractors,
     isTaskClosedWithoutMessages: isTaskClosed && !isMessagesExist,
     isTaskCanceledWithoutMessages: isTaskCanceled && !isMessagesExist,
     isLastChangesFromCoordinator:

@@ -167,9 +167,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
         });
       }
       getTask.refetch();
-      if (navigation.canGoBack()) {
-        navigation.goBack();
-      }
+      navigation.navigate(AppScreenName.TaskCard, { taskId });
     }
   };
   const measures: Measure[] = [

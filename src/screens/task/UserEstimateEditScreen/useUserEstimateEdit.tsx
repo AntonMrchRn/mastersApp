@@ -127,7 +127,12 @@ export const useUserEstimateEdit = ({
   };
   const pressMaterial = () => {
     onEstimateModalVisible();
-    navigation.navigate(AppScreenName.NewMaterial, { taskId, isEdit: true });
+    navigation.navigate(AppScreenName.NewMaterial, {
+      taskId,
+      isEdit: true,
+      fromEstimateSubmission: true,
+      services: offerServices,
+    });
   };
   const pressService = () => {
     onEstimateModalVisible();

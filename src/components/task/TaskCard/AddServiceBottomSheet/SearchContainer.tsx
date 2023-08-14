@@ -3,6 +3,9 @@ import { ActivityIndicator, View } from 'react-native';
 
 import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
+import PreviewNotFound, {
+  PreviewNotFoundType,
+} from '@/components/tabs/TaskSearch/PreviewNotFound';
 import { ServiceItem } from '@/components/task/ServiceItem';
 import { GetServicesResponse, Service } from '@/store/api/tasks/types';
 
@@ -25,6 +28,13 @@ export const SearchContainer: FC<SearchContainerProps> = ({
       </View>
     );
   }
+  if (!data?.services?.length) {
+    return (
+      <View style={{ marginTop: '33%' }}>
+        <PreviewNotFound type={PreviewNotFoundType.ServiceNotFound} />
+      </View>
+    );
+  }
   return (
     <View>
       <Text variant={'title3'} color={theme.text.basic}>
@@ -37,24 +47,23 @@ export const SearchContainer: FC<SearchContainerProps> = ({
       >
         Найдено {data?.count || 0} совпадений
       </Text>
-      {data?.services?.length &&
-        data?.services.map(service => {
-          const onPress = () => {
-            addService(service);
-          };
-          return (
-            <View key={service.ID}>
-              <ServiceItem service={service} />
-              <Button
-                label={'Добавить'}
-                size={'S'}
-                style={styles.itemButton}
-                onPress={onPress}
-              />
-              <Spacer size={15} separator="bottom" />
-            </View>
-          );
-        })}
+      {data?.services.map(service => {
+        const onPress = () => {
+          addService(service);
+        };
+        return (
+          <View key={service.ID}>
+            <ServiceItem service={service} />
+            <Button
+              label={'Добавить'}
+              size={'S'}
+              style={styles.itemButton}
+              onPress={onPress}
+            />
+            <Spacer size={15} separator="bottom" />
+          </View>
+        );
+      })}
     </View>
   );
 };
