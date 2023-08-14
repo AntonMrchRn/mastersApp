@@ -130,7 +130,6 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
       <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
         Заполните данные об услуге
       </Text>
-      <Spacer size={'xl'} />
       <ServiceItem service={service} />
       <FormProvider {...methods}>
         <View style={styles.input}>
