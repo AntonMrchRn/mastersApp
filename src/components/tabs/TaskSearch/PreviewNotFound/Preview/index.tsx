@@ -24,10 +24,12 @@ const Preview = ({ text, icon, title, button, type }: PreviewProps) => {
         style={[
           styles.iconWrapper,
           {
-            backgroundColor:
-              type === PreviewNotFoundType.TasksNotAvailable
-                ? theme.background.fieldDanger
-                : theme.background.fieldMain,
+            backgroundColor: [
+              PreviewNotFoundType.TasksNotAvailable,
+              PreviewNotFoundType.ServiceNotFound,
+            ].includes(type)
+              ? theme.background.fieldDanger
+              : theme.background.fieldMain,
           },
         ]}
       >
