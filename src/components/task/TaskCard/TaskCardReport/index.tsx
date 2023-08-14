@@ -1,14 +1,15 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 
 import { Banner, Text, useTheme } from 'rn-ui-kit';
 
 import { DownloadFilesIcon } from '@/assets/icons/svg/screens/DownloadFilesIcon';
-import { NoFilesIcon } from '@/assets/icons/svg/screens/NoFilesIcon';
-import { OtesIcon } from '@/assets/icons/svg/screens/OtesIcon';
 import { DownloadManager } from '@/components/FileManager/DownloadManager';
 import { UploadBottomSheet } from '@/components/FileManager/UploadBottomSheet';
 import { UploadProgress } from '@/components/FileManager/UploadProgress';
+import PreviewNotFound, {
+  PreviewNotFoundType,
+} from '@/components/tabs/TaskSearch/PreviewNotFound';
 import { useAppSelector } from '@/store';
 import {
   useDeleteTasksFilesMutation,
@@ -18,7 +19,7 @@ import {
 import { deleteProgress } from '@/store/slices/tasks/actions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
 import { Controllers, File, HandleUpload } from '@/types/fileManager';
-import { StatusType } from '@/types/task';
+import { StatusType, TaskType } from '@/types/task';
 import { getFormData } from '@/utils/fileManager/getFormData';
 import { saveOnDevice } from '@/utils/fileManager/saveOnDevice';
 
@@ -30,22 +31,26 @@ type TaskCardReportProps = {
   reportFiles: File[];
   closureFiles: File[];
   taskId: string;
+  subsetID: TaskType | undefined;
+  isCurator: boolean;
   uploadModalVisible: boolean;
   onUploadModalVisible: () => void;
   toClose: boolean | undefined;
 };
 
 export let controllers: Controllers = {};
-export const TaskCardReport: FC<TaskCardReportProps> = ({
+export const TaskCardReport = ({
   activeBudgetCanceled,
   statusID,
   reportFiles,
   closureFiles,
   taskId,
+  subsetID,
+  isCurator,
   uploadModalVisible,
   onUploadModalVisible,
   toClose,
-}) => {
+}: TaskCardReportProps) => {
   const theme = useTheme();
   const [banner, setBanner] = useState(false);
   const getTask = useGetTaskQuery(taskId);
@@ -81,6 +86,124 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
     fileID && (await deleteTasksFiles(fileID.toString()).unwrap());
     getTask.refetch();
   };
+
+  const UploadedFiles = (
+    <View style={styles.mt36}>
+      <Text variant="title3" color={theme.text.basic}>
+        Загруженные файлы
+      </Text>
+      <View style={styles.mt24}>
+        {reportFiles.length ? (
+          <>
+            <DownloadManager
+              files={reportFiles}
+              onDelete={onDelete}
+              canDelete={false}
+            />
+          </>
+        ) : (
+          <>
+            <View style={styles.download}>
+              <DownloadFilesIcon />
+              <Text
+                variant="bodySRegular"
+                style={styles.desc}
+                color={theme.text.neutral}
+              >
+                Загрузите файлы, подтверждающие выполнение услуг общим размером
+                не более 250 МВ
+              </Text>
+            </View>
+            <UploadProgress
+              controllers={controllers}
+              progressesSelector={progressesSelector}
+            />
+          </>
+        )}
+      </View>
+      <View style={styles.mt36}>
+        <Text variant="title3" color={theme.text.basic}>
+          Закрывающие документы
+        </Text>
+        {closureFiles.length ? (
+          <View style={styles.mt24}>
+            <DownloadManager
+              files={closureFiles}
+              onDelete={onDelete}
+              canDelete={false}
+            />
+          </View>
+        ) : (
+          <Text
+            variant="bodySRegular"
+            style={styles.mt8}
+            color={theme.text.neutral}
+          >
+            Пока здесь ничего нет
+          </Text>
+        )}
+      </View>
+    </View>
+  );
+
+  const DefaultUploadFiles = (
+    <>
+      {reportFiles.length || closureFiles.length ? (
+        <View style={styles.mt36}>
+          <Text variant="title3" color={theme.text.basic}>
+            Загруженные файлы
+          </Text>
+          <View style={styles.mt24}>
+            {reportFiles.length ? (
+              <>
+                <DownloadManager
+                  files={reportFiles}
+                  onDelete={onDelete}
+                  canDelete={canDelete}
+                />
+                <UploadProgress
+                  controllers={controllers}
+                  progressesSelector={progressesSelector}
+                />
+              </>
+            ) : (
+              <Text
+                variant="bodySRegular"
+                style={styles.mt8}
+                color={theme.text.neutral}
+              >
+                Пока здесь ничего нет
+              </Text>
+            )}
+            <View style={styles.mt36}>
+              <Text variant="title3" color={theme.text.basic}>
+                Закрывающие документы
+              </Text>
+              {closureFiles.length ? (
+                <View style={styles.mt24}>
+                  <DownloadManager
+                    files={closureFiles}
+                    onDelete={onDelete}
+                    canDelete={false}
+                  />
+                </View>
+              ) : (
+                <Text
+                  variant="bodySRegular"
+                  style={styles.mt8}
+                  color={theme.text.neutral}
+                >
+                  Пока здесь ничего нет
+                </Text>
+              )}
+            </View>
+          </View>
+        </View>
+      ) : (
+        <PreviewNotFound type={PreviewNotFoundType.NoFiles} />
+      )}
+    </>
+  );
 
   const getContent = () => {
     //к закрытию
@@ -152,168 +275,26 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
     switch (statusID) {
       case StatusType.ACTIVE:
         return (
-          <View style={styles.container}>
-            <View
-              style={[
-                styles.otes,
-                { backgroundColor: theme.background.fieldMain },
-              ]}
-            >
-              <OtesIcon />
-            </View>
-            <Text variant="title2" style={styles.mt24} color={theme.text.basic}>
-              {activeBudgetCanceled
-                ? 'Отчет  недоступен'
-                : 'Отчет пока недоступен'}
-            </Text>
-            <Text
-              variant="bodySRegular"
-              style={styles.description}
-              color={theme.text.neutral}
-            >
-              {activeBudgetCanceled
-                ? 'Отправка файлов доступна только назначенным исполнителям'
-                : 'Вы сможете отправлять файлы для подтверждения выполненных услуг в случае назначения вас исполнителем'}
-            </Text>
-          </View>
+          <PreviewNotFound
+            type={
+              activeBudgetCanceled
+                ? PreviewNotFoundType.ReportNotAvailable
+                : PreviewNotFoundType.ReportNotYetAvailable
+            }
+          />
         );
-      case StatusType.WORK:
       case StatusType.SUMMARIZING:
+        if (subsetID === TaskType.IT_FIRST_RESPONSE && isCurator) {
+          return DefaultUploadFiles;
+        }
+
+        return UploadedFiles;
+      case StatusType.WORK:
       case StatusType.COMPLETED:
       case StatusType.PAID:
-        return (
-          <View style={styles.mt36}>
-            <Text variant="title3" color={theme.text.basic}>
-              Загруженные файлы
-            </Text>
-            <View style={styles.mt24}>
-              {reportFiles.length ? (
-                <>
-                  <DownloadManager
-                    files={reportFiles}
-                    onDelete={onDelete}
-                    canDelete={false}
-                  />
-                </>
-              ) : (
-                <>
-                  <View style={styles.download}>
-                    <DownloadFilesIcon />
-                    <Text
-                      variant="bodySRegular"
-                      style={styles.desc}
-                      color={theme.text.neutral}
-                    >
-                      Загрузите файлы, подтверждающие выполнение услуг общим
-                      размером не более 250 МВ
-                    </Text>
-                  </View>
-                  <UploadProgress
-                    controllers={controllers}
-                    progressesSelector={progressesSelector}
-                  />
-                </>
-              )}
-            </View>
-            <View style={styles.mt36}>
-              <Text variant="title3" color={theme.text.basic}>
-                Закрывающие документы
-              </Text>
-              {closureFiles.length ? (
-                <View style={styles.mt24}>
-                  <DownloadManager
-                    files={closureFiles}
-                    onDelete={onDelete}
-                    canDelete={false}
-                  />
-                </View>
-              ) : (
-                <Text
-                  variant="bodySRegular"
-                  style={styles.mt8}
-                  color={theme.text.neutral}
-                >
-                  Пока здесь ничего нет
-                </Text>
-              )}
-            </View>
-          </View>
-        );
+        return UploadedFiles;
       default:
-        return (
-          <>
-            {reportFiles.length || closureFiles.length ? (
-              <View style={styles.mt36}>
-                <Text variant="title3" color={theme.text.basic}>
-                  Загруженные файлы
-                </Text>
-                <View style={styles.mt24}>
-                  {reportFiles.length ? (
-                    <>
-                      <DownloadManager
-                        files={reportFiles}
-                        onDelete={onDelete}
-                        canDelete={canDelete}
-                      />
-                      <UploadProgress
-                        controllers={controllers}
-                        progressesSelector={progressesSelector}
-                      />
-                    </>
-                  ) : (
-                    <Text
-                      variant="bodySRegular"
-                      style={styles.mt8}
-                      color={theme.text.neutral}
-                    >
-                      Пока здесь ничего нет
-                    </Text>
-                  )}
-                  <View style={styles.mt36}>
-                    <Text variant="title3" color={theme.text.basic}>
-                      Закрывающие документы
-                    </Text>
-                    {closureFiles.length ? (
-                      <View style={styles.mt24}>
-                        <DownloadManager
-                          files={closureFiles}
-                          onDelete={onDelete}
-                          canDelete={false}
-                        />
-                      </View>
-                    ) : (
-                      <Text
-                        variant="bodySRegular"
-                        style={styles.mt8}
-                        color={theme.text.neutral}
-                      >
-                        Пока здесь ничего нет
-                      </Text>
-                    )}
-                  </View>
-                </View>
-              </View>
-            ) : (
-              <View style={styles.container}>
-                <View
-                  style={[
-                    styles.otes,
-                    { backgroundColor: theme.background.fieldMain },
-                  ]}
-                >
-                  <NoFilesIcon />
-                </View>
-                <Text
-                  variant="title2"
-                  style={styles.mt24}
-                  color={theme.text.basic}
-                >
-                  Файлов нет
-                </Text>
-              </View>
-            )}
-          </>
-        );
+        return DefaultUploadFiles;
     }
   };
   return (
@@ -329,12 +310,7 @@ export const TaskCardReport: FC<TaskCardReportProps> = ({
       {banner && (
         <Banner
           onClosePress={onBanner}
-          containerStyle={{
-            position: 'absolute',
-            zIndex: 1,
-            alignSelf: 'center',
-            bottom: 170,
-          }}
+          containerStyle={styles.banner}
           type={'error'}
           icon={'alert'}
           title="Превышен лимит загрузки"

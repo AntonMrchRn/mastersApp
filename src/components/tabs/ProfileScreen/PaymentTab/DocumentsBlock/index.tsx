@@ -99,8 +99,8 @@ const DocumentsBlock = ({
   return (
     <>
       <Title
+        withButton
         title="Документы"
-        withButton={true}
         onPress={onModal}
         buttonLabel={files.length ? 'Загрузить еще' : 'Загрузить'}
         icon={<UploadIcon fill={theme.icons.basic} />}

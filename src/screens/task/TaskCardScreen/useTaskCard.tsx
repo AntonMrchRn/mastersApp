@@ -9,6 +9,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import dayjs from 'dayjs';
 import { useToast } from 'rn-ui-kit';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
+import { boolean } from 'yup';
 
 import { TaskCardComment } from '@/components/task/TaskCard/TaskCardComment';
 import { TaskCardDescription } from '@/components/task/TaskCard/TaskCardDescription';
@@ -19,12 +20,15 @@ import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
+  useDeleteITTaskMemberMutation,
   useDeleteOffersMutation,
   useGetTaskHistoryQuery,
   useGetTaskQuery,
   useGetUserOffersQuery,
+  usePatchITTaskMemberMutation,
   usePatchOffersMutation,
   usePatchTaskMutation,
+  usePostITTaskMemberMutation,
 } from '@/store/api/tasks';
 import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
@@ -33,6 +37,7 @@ import { setNewOfferServices } from '@/store/slices/tasks/actions';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import {
   EstimateTab,
+  OutlayConfirmStatus,
   OutlayStatusType,
   RoleType,
   StatusType,
@@ -43,6 +48,33 @@ import {
 
 import { getBanner } from './getBanner';
 import { getButtons } from './getButtons';
+
+const tabs: TabItem[] = [
+  {
+    id: 0,
+    label: TaskTab.DESCRIPTION,
+  },
+  {
+    id: 1,
+    label: TaskTab.ESTIMATE,
+  },
+  {
+    id: 2,
+    label: TaskTab.COMMENTS,
+  },
+  {
+    id: 3,
+    label: TaskTab.REPORT,
+  },
+  {
+    id: 4,
+    label: TaskTab.HISTORY,
+  },
+];
+const estimateTabsArray = [
+  EstimateTab.TASK_ESTIMATE,
+  EstimateTab.MY_SUGGESTION,
+];
 
 export const useTaskCard = ({
   taskId,
@@ -58,28 +90,6 @@ export const useTaskCard = ({
     >
   >;
 }) => {
-  const tabs: TabItem[] = [
-    {
-      id: 0,
-      label: TaskTab.DESCRIPTION,
-    },
-    {
-      id: 1,
-      label: TaskTab.ESTIMATE,
-    },
-    {
-      id: 2,
-      label: TaskTab.COMMENTS,
-    },
-    {
-      id: 3,
-      label: TaskTab.REPORT,
-    },
-    {
-      id: 4,
-      label: TaskTab.HISTORY,
-    },
-  ];
   const [tab, setTab] = useState<{
     id: number;
     label: TaskTab;
@@ -108,6 +118,9 @@ export const useTaskCard = ({
 
   const toast = useToast();
   const { user } = useAppSelector(selectAuth);
+
+  const isMessagesExist = !!useAppSelector(state => state.myTasks)
+    .commentsPreview?.taskComment?.length;
   const getUserQuery = useGetUserQuery(user?.userID);
   const userData = getUserQuery.data;
 
@@ -117,6 +130,9 @@ export const useTaskCard = ({
   const [patchTask] = usePatchTaskMutation();
   const [patchOffers] = usePatchOffersMutation();
   const [deleteOffer, deleteOffersMutation] = useDeleteOffersMutation();
+  const [patchITTaskMember] = usePatchITTaskMemberMutation();
+  const [deleteITTaskMember] = useDeleteITTaskMemberMutation();
+  const [postITTaskMember] = usePostITTaskMemberMutation();
   const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
   const getTaskHistory = useGetTaskHistoryQuery(taskId);
   const task = data?.tasks?.[0];
@@ -155,30 +171,24 @@ export const useTaskCard = ({
     }
   }, [deleteOffersMutation.isError]);
 
-  const estimateTabsArray = [
-    EstimateTab.TASK_ESTIMATE,
-    EstimateTab.MY_SUGGESTION,
-  ];
-
   const id = task?.ID || 0;
+  const name = task?.name || '';
   /**
    * участники задачи
    */
   const executors = task?.executors || [];
   const curators = task?.curators || [];
   const coordinator = task?.coordinator;
-
-  const executorMember = executors.find(
-    executor => executor.ID === user?.userID
-  );
-
-  const isRefusedContractor = !!executorMember?.isRefuse;
-
-  const setId = task?.setID;
+  const executor = executors.find(executor => executor.ID === user?.userID);
+  const curator = curators.find(curator => curator.ID === user?.userID);
+  const executorMemberId = executor?.memberID;
+  const curatorMemberId = curator?.memberID;
   /**
    * тип задачи
    */
+  const setId = task?.setID;
   const subsetID = task?.subsetID;
+  const isITServices = setId === TaskSetType.IT_SERVICES;
   const files = task?.files || [];
   /**
    * Вложения
@@ -201,12 +211,13 @@ export const useTaskCard = ({
   const description = task?.description || '';
   const offersDeadline = task?.offersDeadline;
   const winnerOffer = task?.winnerOffer;
+
   /**
    * Промежуточный статус “к Закрытию“ для:
    * Самозанятых без Сбера “Свое дело”(им нужно чек сфоткать и прислать)
    * ИП и юр.лиц, если они не прислали координатору закрывающие документы
    */
-  const toClose = task?.toClose;
+  const toClose = !!task?.toClose;
   /**
    * Закончился ли дедлайн подачи сметы
    */
@@ -217,28 +228,16 @@ export const useTaskCard = ({
    * Статус задачи
    */
   const statusID: StatusType | undefined = task?.statusID;
+  // const statusID: StatusType | undefined = 12;
   /**
    * Статус сметы
    */
   const outlayStatusID: OutlayStatusType | undefined = task?.outlayStatusID;
-  const name = task?.name || '';
   /**
-   * Является ли пользователь подрядчиком в задаче
+   * Статус подтверждения сметы
    */
-  const isContractor = !!executorMember?.hasCurator && !isRefusedContractor;
-
-  const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
-
-  const budget =
-    (subsetID &&
-      isContractor &&
-      [TaskType.IT_FIRST_RESPONSE, TaskType.IT_AUCTION_SALE].includes(
-        subsetID
-      )) ||
-    (setId === TaskSetType.ITServices && isInternalExecutor)
-      ? ''
-      : `${task?.budget} ₽` || '';
-
+  const outlayConfirmID: OutlayConfirmStatus | undefined =
+    task?.outlayConfirmID;
   /**
    * Ночные работы
    */
@@ -250,6 +249,69 @@ export const useTaskCard = ({
   const publicTime = task?.publicTime
     ? `Опубликовано ${dayjs(task?.publicTime).format('DD MMMM в HH:mm')}`
     : '';
+  const banner = getBanner({
+    tab: tab.label,
+    statusID,
+    outlayStatusID,
+  });
+  /**
+   * Отказался ли подрядчик принять задачу
+   */
+  const isRefusedExecutor = !!executor?.isRefuse;
+  /**
+   * Отказался ли куратор принять задачу
+   */
+  const isRefusedCurator = !!curator?.isRefuse;
+  // проверка на роль в задаче
+  const isContractor = !!executor?.hasCurator && !isRefusedExecutor;
+  const isExecutor = !!executor && !executor.hasCurator && !isRefusedExecutor;
+  const isCoordinator = coordinator?.ID === user?.userID;
+  const isSupervisor = user?.roleID === RoleType.SUPERVISOR;
+  const isCurator =
+    curators.some(curator => curator.ID === user?.userID) && !curator?.isRefuse;
+  const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
+  /**
+   * Принял ли задачу куратор
+   */
+  const isConfirmedCurator = isCurator && !!curator?.isConfirm;
+  /**
+   * Принял ли задачу подрядчик
+   */
+  const isConfirmedExecutor = isExecutor && !!executor?.isConfirm;
+  /**
+   * Задача с куратором
+   */
+  const isCuratorAllowedTask = !!task?.isCuratorAllowed;
+  /**
+   * Задача с участием куратора, которые её ещё не принял (или принял, но отказался)
+   */
+  const isTaskWithUnconfirmedCurator =
+    isCuratorAllowedTask && (!isConfirmedCurator || isRefusedCurator);
+  /**
+   * Является ли куратор приглашённым (координатором или руководителем)
+   */
+  const isInvitedCurator =
+    (!isConfirmedCurator || isRefusedCurator) &&
+    (curator?.inviterRoleID === RoleType.COORDINATOR ||
+      curator?.inviterRoleID === RoleType.SUPERVISOR);
+  /**
+   * Является ли исполнитель приглашённым (координатором или руководителем)
+   */
+  const isInvitedExecutor =
+    (!isConfirmedExecutor || (isConfirmedExecutor && isRefusedExecutor)) &&
+    (executor?.inviterRoleID === RoleType.COORDINATOR ||
+      executor?.inviterRoleID === RoleType.SUPERVISOR);
+
+  const budget =
+    (subsetID &&
+      isContractor &&
+      [TaskType.IT_FIRST_RESPONSE, TaskType.IT_AUCTION_SALE].includes(
+        subsetID
+      )) ||
+    (isITServices && isInternalExecutor)
+      ? ''
+      : `${task?.budget} ₽` || '';
+
   const budgetEndTime =
     subsetID === TaskType.IT_AUCTION_SALE && isContractor
       ? ''
@@ -258,30 +320,28 @@ export const useTaskCard = ({
           'DD MMMM в HH:mm'
         )}`
       : '';
-  const banner = getBanner({
-    tab: tab.label,
-    statusID,
-    outlayStatusID,
-  });
 
-  const curator = curators.find(curator => curator.ID === user?.userID);
-
-  const isITServices = setId === TaskSetType.ITServices;
-  const isCurator =
-    curators.some(curator => curator.ID === user?.userID) && !curator?.isRefuse;
-
-  const isExecutor = !!executorMember && !isRefusedContractor;
-
-  const isCoordinator = coordinator?.ID === user?.userID;
-  const isSupervisor = user?.roleID === RoleType.SUPERVISOR;
   const hasAccessToTask =
     userData?.isApproved && setId && userData?.setIDs?.includes(setId);
+  const isCommentsAvailable =
+    (isSupervisor ||
+      isExecutor ||
+      isContractor ||
+      isCurator ||
+      isCoordinator) &&
+    statusID !== StatusType.ACTIVE;
+  const isTaskCanceled =
+    !!statusID &&
+    [
+      StatusType.CANCELLED_BY_CUSTOMER,
+      StatusType.CANCELLED_BY_EXECUTOR,
+    ].includes(statusID);
+  const isTaskClosed = statusID === StatusType.CLOSED;
+
   const isEstimateTabs =
     tab.label === TaskTab.ESTIMATE &&
     statusID === StatusType.ACTIVE &&
     !!userOffersData.length;
-  const isCommentsAvailable =
-    isSupervisor || isExecutor || isCurator || isCoordinator;
 
   const onRefresh = () => {
     refetch();
@@ -291,6 +351,17 @@ export const useTaskCard = ({
     getTaskHistory.refetch();
   };
 
+  const onCantDeleteBannerVisible = () =>
+    setCantDeleteBannerVisible(!cantDeleteBannerVisible);
+  const onNoAccessToTaskBannerVisible = () =>
+    setNoAccessToTaskBannerVisible(!noAccessToTaskBannerVisible);
+  const onEstimateBannerVisible = () =>
+    setEstimateBannerVisible(!estimateBannerVisible);
+  const onEstimateBottomVisible = () =>
+    setEstimateBottomVisible(!estimateBottomVisible);
+  const onBudgetModalVisible = () => setBudgetModalVisible(!budgetModalVisible);
+  const onUploadModalVisible = () => setUploadModalVisible(!uploadModalVisible);
+
   const onSubmissionModalVisible = () => {
     if (hasAccessToTask) {
       setSubmissionModalVisible(!submissionModalVisible);
@@ -298,21 +369,6 @@ export const useTaskCard = ({
       onNoAccessToTaskBannerVisible();
     }
   };
-
-  const onCantDeleteBannerVisible = () =>
-    setCantDeleteBannerVisible(!cantDeleteBannerVisible);
-
-  const onNoAccessToTaskBannerVisible = () =>
-    setNoAccessToTaskBannerVisible(!noAccessToTaskBannerVisible);
-
-  const onEstimateBannerVisible = () =>
-    setEstimateBannerVisible(!estimateBannerVisible);
-
-  const onEstimateBottomVisible = () =>
-    setEstimateBottomVisible(!estimateBottomVisible);
-
-  const onBudgetModalVisible = () => setBudgetModalVisible(!budgetModalVisible);
-  const onUploadModalVisible = () => setUploadModalVisible(!uploadModalVisible);
 
   const navigateToChat = () => {
     const recipientIDs = executors
@@ -323,6 +379,7 @@ export const useTaskCard = ({
       taskId: id,
       recipientIDs,
       isITServices,
+      isMessageInputAvailable: !isTaskClosed && !isTaskCanceled,
     });
   };
 
@@ -338,6 +395,7 @@ export const useTaskCard = ({
     const newTab = estimateTabsArray[index];
     newTab && setCurrentEstimateTab(newTab);
   };
+
   const onAddEstimateMaterial = () => {
     if (selectedServiceId) {
       navigation.navigate(AppScreenName.EstimateAddMaterial, {
@@ -348,6 +406,7 @@ export const useTaskCard = ({
       setSelectedServiceId(undefined);
     }
   };
+
   const onTaskSubmission = async () => {
     //принимаем таску в работу, если первый отклик
     if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
@@ -357,7 +416,7 @@ export const useTaskCard = ({
             //id таски
             ID: id,
             //статус для принятия в работу
-            statusID: 11,
+            statusID: StatusType.WORK,
             //id профиля
             executors: [{ ID: user?.userID }],
           }).unwrap();
@@ -367,8 +426,6 @@ export const useTaskCard = ({
           type: 'error',
           title: (error as AxiosQueryErrorResponse).data.message,
         });
-      } finally {
-        refetch();
       }
     }
     //навигация на скрин подачи сметы, если ЛОТЫ
@@ -378,7 +435,55 @@ export const useTaskCard = ({
         taskId: +taskId,
       });
     }
-    onSubmissionModalVisible();
+
+    //принять задачу, если IT первый отклик
+    if (subsetID === TaskType.IT_FIRST_RESPONSE && user?.userID) {
+      try {
+        // куратор-подрядчик
+        // сначала делаем patch задачи, потом patch участника задания (подрядчика)
+        if (isContractor) {
+          executorMemberId &&
+            (await patchITTaskMember({
+              ID: executorMemberId,
+              isConfirm: true,
+            }).unwrap());
+          await patchTask({
+            ID: +taskId,
+            statusID: StatusType.WORK,
+            outlayStatusID: OutlayStatusType.READY,
+          }).unwrap();
+        }
+
+        // самостоятельный исполнитель
+        // сначала post - создаём исполнителя, затем patch задания
+        if (!isContractor) {
+          // mutation order matters
+          await postITTaskMember({
+            taskID: +taskId,
+            members: [
+              {
+                userID: user.userID,
+                isConfirm: true,
+              },
+            ],
+          }).unwrap();
+          await patchTask({
+            ID: +taskId,
+            statusID: StatusType.WORK,
+            outlayStatusID: OutlayStatusType.READY,
+          }).unwrap();
+        }
+      } catch (error) {
+        toast.show({
+          type: 'error',
+          title: (error as AxiosQueryErrorResponse).data.message,
+        });
+      }
+    }
+
+    if (submissionModalVisible) {
+      onSubmissionModalVisible();
+    }
   };
   const onCancelModalVisible = () => {
     setCancelModalVisible(!cancelModalVisible);
@@ -389,7 +494,10 @@ export const useTaskCard = ({
   };
   const onWorkDelivery = async () => {
     if (
-      subsetID === TaskType.COMMON_FIRST_RESPONSE &&
+      subsetID &&
+      [TaskType.COMMON_FIRST_RESPONSE, TaskType.IT_FIRST_RESPONSE].includes(
+        subsetID
+      ) &&
       outlayStatusID !== OutlayStatusType.READY
     ) {
       !estimateBannerVisible && onEstimateBannerVisible();
@@ -401,36 +509,82 @@ export const useTaskCard = ({
         statusID: 5,
       });
     }
-
-    refetch();
   };
-  const onCancelTask = async (text: string) => {
-    //если это общие, то
-    //первый отклик - патч задания, refuseReason, id задания
-    if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
-      await patchTask({
-        //id таски
-        ID: id,
-        //причина отказа
-        refuseReason: text,
-      });
-    }
-    //если общие лоты то - патч оффера, id оффера, taskID, refuseReason
-    if (subsetID === TaskType.COMMON_AUCTION_SALE && winnerOffer) {
-      await patchOffers({
-        //id таски
-        taskID: id,
-        //id выигрышного офера (юзер уже должен его выиграть)
-        ID: winnerOffer.ID,
-        //причина отказа
-        refuseReason: text,
-      });
-    }
-    //в ИТ там все иначе 🙂
 
-    refetch();
-    onCancelModalVisible();
+  const onCancelTask = async (refuseReason?: string) => {
+    try {
+      //если это общие, то
+      //первый отклик - патч задания, refuseReason, id задания
+      if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
+        await patchTask({
+          //id таски
+          ID: id,
+          //причина отказа
+          refuseReason,
+        }).unwrap();
+      }
+      //если общие лоты то - патч оффера, id оффера, taskID, refuseReason
+      if (subsetID === TaskType.COMMON_AUCTION_SALE && winnerOffer) {
+        await patchOffers({
+          //id таски
+          taskID: id,
+          //id выигрышного офера (юзер уже должен его выиграть)
+          ID: winnerOffer.ID,
+          //причина отказа
+          refuseReason,
+        }).unwrap();
+      }
+      // IT задачи - первый отклик
+      if (subsetID === TaskType.IT_FIRST_RESPONSE) {
+        // при отказе от задачи в статусе 'опубликовано' сбрасываем участника через patch
+        if (statusID === StatusType.ACTIVE && user?.userID) {
+          await patchITTaskMember({
+            ID: (isConfirmedCurator ? curatorMemberId : executorMemberId)!,
+            userID: user?.userID,
+            isConfirm: false,
+            isRefuse: true,
+          }).unwrap();
+        }
+        // при отказе от задачи в статусе 'в работе' делаем patch задачи (если это не куратор)
+        // и сбрасываем участника через delete
+        if (statusID === StatusType.WORK && user?.userID) {
+          if (!isCurator) {
+            await patchTask({
+              ID: +taskId,
+              refuseReason,
+              statusID: StatusType.ACTIVE,
+              outlayStatusID: OutlayStatusType.READY,
+            }).unwrap();
+          }
+
+          // если куратор-подрядчик, то удалять и себя и куратора
+          // удаление куратора
+          isContractor &&
+            curators[0]?.memberID &&
+            (await deleteITTaskMember(curators[0].memberID).unwrap());
+          // удаление исполнителя
+          isExecutor &&
+            executorMemberId &&
+            (await deleteITTaskMember(executorMemberId).unwrap());
+          // удаление куратора
+          isCurator &&
+            curatorMemberId &&
+            (await deleteITTaskMember(curatorMemberId).unwrap());
+          // navigation.goBack();
+        }
+      }
+    } catch (error) {
+      toast.show({
+        type: 'error',
+        title: (error as AxiosQueryErrorResponse).data.message,
+      });
+    } finally {
+      if (cancelModalVisible) {
+        onCancelModalVisible();
+      }
+    }
   };
+
   const onSendEstimateForApproval = async () => {
     if (outlayStatusID === OutlayStatusType.MATCHING) {
       toast.show({
@@ -445,7 +599,15 @@ export const useTaskCard = ({
         outlayStatusID: OutlayStatusType.MATCHING,
       });
     }
-    refetch();
+  };
+
+  const onApproveEstimateChanges = async () => {
+    await patchTask({
+      //id таски
+      ID: id,
+      //меняем статус сметы на Согласовано
+      outlayStatusID: OutlayStatusType.READY,
+    });
   };
 
   const onRevokeBudget = async () => {
@@ -473,22 +635,34 @@ export const useTaskCard = ({
     }
   };
 
+  const navigateToContractors = () => {
+    if (user?.userID) {
+      navigation.navigate(AppScreenName.Contractors, {
+        taskId: +taskId,
+        isInvitedCurator,
+        curatorId: user.userID,
+        curatorMemberId: curator?.memberID,
+      });
+    }
+  };
+
   const getCurrentTab = () => {
     switch (tab.label) {
       case TaskTab.DESCRIPTION:
         return (
           <TaskCardDescription
-            description={description}
             address={address}
-            startTime={startTime}
-            endTimePlan={endTimePlan}
-            contacts={contacts}
-            applicationFiles={applicationFiles}
-            statusID={statusID}
             webdata={webdata}
+            contacts={contacts}
+            statusID={statusID}
+            startTime={startTime}
             executors={executors}
             subsetID={subsetID}
             isCurator={isCurator}
+            endTimePlan={endTimePlan}
+            description={description}
+            applicationFiles={applicationFiles}
+            navigateToContractors={navigateToContractors}
           />
         );
       case TaskTab.ESTIMATE:
@@ -513,14 +687,16 @@ export const useTaskCard = ({
       case TaskTab.REPORT:
         return (
           <TaskCardReport
-            activeBudgetCanceled={!!banner}
+            toClose={toClose}
             statusID={statusID}
-            reportFiles={reportFiles}
+            subsetID={subsetID}
+            isCurator={isCurator}
             taskId={id.toString()}
+            reportFiles={reportFiles}
+            closureFiles={closureFiles}
+            activeBudgetCanceled={!!banner}
             uploadModalVisible={uploadModalVisible}
             onUploadModalVisible={onUploadModalVisible}
-            closureFiles={closureFiles}
-            toClose={toClose}
           />
         );
       case TaskTab.HISTORY:
@@ -529,8 +705,15 @@ export const useTaskCard = ({
         return (
           <TaskCardComment
             taskId={taskId}
+            isTaskClosed={isTaskClosed}
             isITServices={isITServices}
+            isTaskCanceled={isTaskCanceled}
             isCommentsAvailable={isCommentsAvailable}
+            isNotAvailableForActiveType={statusID === StatusType.ACTIVE}
+            isNotAvailableForFutureExecutor={
+              statusID === StatusType.ACTIVE &&
+              (isContractor || isInvitedExecutor)
+            }
           />
         );
       default:
@@ -542,70 +725,86 @@ export const useTaskCard = ({
   };
 
   const buttons = getButtons({
+    toClose,
     subsetID,
     statusID,
-    tab: tab.label,
-    isCommentsAvailable,
+    isCurator,
+    reportFiles,
+    closureFiles,
+    onCancelTask,
+    isContractor,
     navigateToChat,
-    onSubmissionModalVisible,
+    tab: tab.label,
     userOffersData,
-    isOffersDeadlineOver,
-    onSubmitAnEstimate,
     onWorkDelivery,
+    outlayStatusID,
+    isInvitedCurator,
+    onTaskSubmission,
+    selectedServiceId,
+    onSubmitAnEstimate,
+    isInvitedExecutor,
+    isInternalExecutor,
+    isCommentsAvailable,
+    isCuratorAllowedTask,
+    isOffersDeadlineOver,
     onCancelModalVisible,
     estimateBottomVisible,
     onAddEstimateMaterial,
-    selectedServiceId,
-    onEstimateBottomVisible,
-    reportFiles,
     onUploadModalVisible,
-    outlayStatusID,
-    onSendEstimateForApproval,
     onBudgetModalVisible,
-    toClose,
-    closureFiles,
+    onEstimateBottomVisible,
+    onSubmissionModalVisible,
+    onApproveEstimateChanges,
+    onSendEstimateForApproval,
+    isTaskWithUnconfirmedCurator,
+    onBecomeCurator: navigateToContractors,
+    isTaskClosedWithoutMessages: isTaskClosed && !isMessagesExist,
+    isTaskCanceledWithoutMessages: isTaskCanceled && !isMessagesExist,
+    isLastChangesFromCoordinator:
+      outlayConfirmID === OutlayConfirmStatus.ESTIMATE_CONFIRMED_BY_COORDINATOR,
   });
 
   return {
-    onTabChange,
-    tabs,
-    getCurrentTab,
     id,
+    tab,
+    tabs,
     name,
     budget,
-    isNight,
-    publicTime,
-    isUrgent,
-    budgetEndTime,
     banner,
     buttons,
-    budgetModalVisible,
-    onBudgetModalVisible,
-    onRevokeBudget,
-    cancelModalVisible,
-    onCancelModalVisible,
-    onCancelTask,
+    toClose,
+    isNight,
+    isUrgent,
     subsetID,
     statusID,
-    estimateBannerVisible,
-    onEstimateBannerVisible,
-    onEstimateBannerPress,
-    onCantDeleteBannerVisible,
-    cantDeleteBannerVisible,
-    outlayStatusID,
-    onRefresh,
-    refreshing: isLoading,
+    publicTime,
     executors,
-    onSubmissionModalVisible,
-    onTaskSubmission,
-    submissionModalVisible,
-    estimateTabsArray,
-    onSwitchEstimateTab,
+    onRefresh,
+    onTabChange,
+    isContractor,
+    onCancelTask,
+    budgetEndTime,
+    getCurrentTab,
+    outlayStatusID,
     isEstimateTabs,
-    onNoAccessToTaskBannerVisible,
-    noAccessToTaskBannerVisible,
+    onRevokeBudget,
+    onTaskSubmission,
+    estimateTabsArray,
+    cancelModalVisible,
+    budgetModalVisible,
+    onSwitchEstimateTab,
     noAccessButtonPress,
-    tab,
-    toClose,
+    onBudgetModalVisible,
+    onCancelModalVisible,
+    refreshing: isLoading,
+    estimateBannerVisible,
+    onEstimateBannerPress,
+    submissionModalVisible,
+    cantDeleteBannerVisible,
+    onEstimateBannerVisible,
+    onSubmissionModalVisible,
+    onCantDeleteBannerVisible,
+    noAccessToTaskBannerVisible,
+    onNoAccessToTaskBannerVisible,
   };
 };

@@ -35,7 +35,7 @@ type CommentsChatScreenProps = StackScreenProps<
 
 export const CommentsChatScreen = ({
   route: {
-    params: { taskId, recipientIDs, isITServices },
+    params: { taskId, recipientIDs, isITServices, isMessageInputAvailable },
   },
 }: CommentsChatScreenProps) => {
   const theme = useTheme();
@@ -102,13 +102,14 @@ export const CommentsChatScreen = ({
           <FlatList
             inverted
             ref={flatList}
-            keyExtractor={keyExtractor}
             renderItem={renderItem}
-            contentContainerStyle={styles.wrapperChat}
+            keyExtractor={keyExtractor}
             data={comments?.taskComment}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.wrapperChat}
           />
         ) : !loadingComments || comments?.taskComment ? (
-          <PreviewNotFound type={PreviewNotFoundType.NoMessages} />
+          <PreviewNotFound type={PreviewNotFoundType.NoMessagesYet} />
         ) : (
           !comments?.taskComment && (
             <View style={styles.wrapperLoader}>
@@ -120,32 +121,34 @@ export const CommentsChatScreen = ({
           )
         )}
       </Animated.View>
-      <Animated.View
-        style={[
-          styles.risingBlock,
-          {
-            transform: [{ translateY: height }],
-            bottom: configApp.ios && isActive ? -20 : 0,
-          },
-        ]}
-      >
-        <Input
-          value={!loadingSend ? valueText : ''}
-          onChangeText={!loadingSend ? setValueText : undefined}
-          variant="message"
-          placeholder="Сообщение..."
-          ref={ref => ref && setIsActive(ref?.isFocused())}
-          style={isActive ? styles.w80 : styles.w100}
-        />
-        {isActive && (
-          <TouchableOpacity
-            style={[styles.btn, { backgroundColor: theme.background.accent }]}
-            onPress={onPressSend}
-          >
-            <SendButton />
-          </TouchableOpacity>
-        )}
-      </Animated.View>
+      {isMessageInputAvailable && (
+        <Animated.View
+          style={[
+            styles.risingBlock,
+            {
+              transform: [{ translateY: height }],
+              bottom: configApp.ios && isActive ? -20 : 0,
+            },
+          ]}
+        >
+          <Input
+            value={!loadingSend ? valueText : ''}
+            onChangeText={!loadingSend ? setValueText : undefined}
+            variant="message"
+            placeholder="Сообщение..."
+            ref={ref => ref && setIsActive(ref?.isFocused())}
+            style={isActive ? styles.w80 : styles.w100}
+          />
+          {isActive && (
+            <TouchableOpacity
+              style={[styles.btn, { backgroundColor: theme.background.accent }]}
+              onPress={onPressSend}
+            >
+              <SendButton />
+            </TouchableOpacity>
+          )}
+        </Animated.View>
+      )}
     </SafeAreaView>
   );
 };

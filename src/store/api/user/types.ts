@@ -1,4 +1,5 @@
 import { File } from '@/types/fileManager';
+import { ContractorStatus } from '@/types/task';
 import { UserEntityType } from '@/types/user';
 
 type UserResponse = {
@@ -22,6 +23,7 @@ type User = {
   ITIN: string | null;
   RRC: string | null;
   simpleSign: string | null;
+  subStatusID?: ContractorStatus;
   checkingAccount: string | null;
   correspondingAccount: string | null;
   bankID: string | null;

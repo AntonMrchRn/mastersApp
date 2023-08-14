@@ -32,4 +32,10 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
     marginLeft: 8,
   },
+  banner: {
+    position: 'absolute',
+    zIndex: 1,
+    alignSelf: 'center',
+    bottom: 170,
+  },
 });

@@ -53,6 +53,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
     isNight,
     isUrgent,
     budgetEndTime,
+    isContractor,
     banner,
     buttons,
     budgetModalVisible,
@@ -99,8 +100,15 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
         />
         <TaskCardCancelBottomSheet
           isVisible={cancelModalVisible}
+          isContractor={isContractor}
           onCancel={onCancelModalVisible}
           onRefuse={onCancelTask}
+          withReason={
+            !(
+              subsetID === TaskType.IT_FIRST_RESPONSE &&
+              statusID === StatusType.ACTIVE
+            )
+          }
         />
         <Header title={`Задача ID ${id}`} description={publicTime} />
         <ScrollView

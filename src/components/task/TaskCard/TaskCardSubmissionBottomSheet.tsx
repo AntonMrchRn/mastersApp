@@ -1,10 +1,12 @@
 import React, { FC } from 'react';
 import { Linking, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { BottomSheet, Button, Text, useTheme } from 'rn-ui-kit';
 
+import { configApp } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 
 type TaskCardSubmissionBottomSheetProps = {
@@ -15,6 +17,7 @@ type TaskCardSubmissionBottomSheetProps = {
 export const TaskCardSubmissionBottomSheet: FC<
   TaskCardSubmissionBottomSheetProps
 > = ({ isVisible, onCancel, onSubmit }) => {
+  const insets = useSafeAreaInsets();
   const theme = useTheme();
   const navigation =
     useNavigation<
@@ -33,16 +36,15 @@ export const TaskCardSubmissionBottomSheet: FC<
     }
   };
 
-  const styles = StyleSheet.create({
-    buttons: {
-      marginTop: 24,
-      gap: 16,
-    },
-  });
-
   return (
-    <BottomSheet onSwipeComplete={onCancel} isVisible={isVisible}>
-      <View style={{ marginTop: 28 }}>
+    <BottomSheet
+      isVisible={isVisible}
+      onSwipeComplete={onCancel}
+      onBackdropPress={onCancel}
+      backdropTransitionOutTiming={0}
+      containerStyle={{ paddingBottom: configApp.android ? 20 : insets.bottom }}
+    >
+      <View style={styles.mt28}>
         <Text variant="bodySRegular" color={theme.text.basic}>
           Участвуя в задаче, вы принимаете{' '}
           <Text
@@ -73,3 +75,13 @@ export const TaskCardSubmissionBottomSheet: FC<
     </BottomSheet>
   );
 };
+
+const styles = StyleSheet.create({
+  buttons: {
+    marginTop: 24,
+    gap: 16,
+  },
+  mt28: {
+    marginTop: 28,
+  },
+});

@@ -44,7 +44,6 @@ const ContractorsInvitationScreen = () => {
               : 'Сгенерировать ссылку-приглашение'
           }
           onPress={link ? () => copyLink(link) : onGenerateLink}
-          style={styles.btn}
         />
         {(!!linkTimeout || !!link) && (
           <TimerBlockLink

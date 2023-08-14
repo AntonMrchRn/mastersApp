@@ -21,9 +21,9 @@ const regExpPasswordValidation = Yup.string()
 const authPhoneValidation = {
   phone: Yup.string().length(10, '').required(''),
 };
-const cancelTaskValidation = {
-  cancelTask: Yup.string().required(''),
-};
+const cancelTaskValidation = (withReason: boolean) => ({
+  cancelTask: withReason ? Yup.string().required('') : Yup.string().optional(),
+});
 const estimateCountValidation = {
   estimateCount: Yup.string()
     .notOneOf(['0'], 'Количество должно быть больше 0')
@@ -133,7 +133,8 @@ const accountDeletionPasswordValidation = {
     .matches(passwordRegExp, { message: passwordErrorMessage }),
 };
 
-const cancelTaskValidationSchema = Yup.object().shape(cancelTaskValidation);
+const cancelTaskValidationSchema = (withReason: boolean) =>
+  Yup.object().shape(cancelTaskValidation(withReason));
 const estimateCountValidationSchema = Yup.object().shape(
   estimateCountValidation
 );

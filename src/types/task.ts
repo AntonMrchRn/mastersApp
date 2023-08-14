@@ -155,9 +155,39 @@ enum EstimateTab {
   MY_SUGGESTION = 'Мое предложение',
 }
 
+enum ContractorStatus {
+  /**
+   * Подрядчик недоступен для приглашения куратором
+   */
+  NOT_AVAILABLE = 1,
+  /**
+   * Подрядчик доступен для приглашения куратором
+   */
+  AVAILABLE = 2,
+  /**
+   * Подрядчик уже приглашен куратором
+   */
+  ALREADY_INVITED = 3,
+}
+
+enum OutlayConfirmStatus {
+  /**
+   * Последние изменения по смете подтверждены исполнителем
+   */
+  ESTIMATE_CONFIRMED_BY_CONTRACTOR = 1,
+  /**
+   * Последние изменения по смете подтверждены координатором
+   */
+  ESTIMATE_CONFIRMED_BY_COORDINATOR = 2,
+  /**
+   * Последние изменения по смете подтверждены обеими сторонами
+   */
+  ESTIMATE_CONFIRMED_BY_BOTH = 3,
+}
+
 enum TaskSetType {
-  ITServices = 1,
-  Common = 2,
+  IT_SERVICES = 1,
+  COMMON = 2,
 }
 
 type TaskSearch = {
@@ -177,5 +207,7 @@ export {
   TaskSetType,
   EstimateTab,
   OutlayStatusType,
+  ContractorStatus,
+  OutlayConfirmStatus,
 };
 export type { TaskSearch, Measure };
