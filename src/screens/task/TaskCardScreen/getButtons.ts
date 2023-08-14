@@ -652,7 +652,7 @@ export const getButtons = ({
                   variant: 'accent',
                   onPress: onSubmissionModalVisible,
                 },
-                // задача с участием куратора, которые её ещё не принял (или принял, но отказался)
+                // задача с участием куратора, который её ещё не принял (или принял, но отказался)
                 ...(isTaskWithUnconfirmedCurator
                   ? [
                       {

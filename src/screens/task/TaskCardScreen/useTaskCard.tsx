@@ -283,7 +283,7 @@ export const useTaskCard = ({
    */
   const isCuratorAllowedTask = !!task?.isCuratorAllowed;
   /**
-   * Задача с участием куратора, которые её ещё не принял (или принял, но отказался)
+   * Задача с участием куратора, который её ещё не принял (или принял, но отказался)
    */
   const isTaskWithUnconfirmedCurator =
     isCuratorAllowedTask && (!isConfirmedCurator || isRefusedCurator);
