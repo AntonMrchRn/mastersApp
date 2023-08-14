@@ -133,8 +133,8 @@ const TeamBlock = ({ subcontractorIDs, curatorId }: TeamBlockProps) => {
       <Text variant="title3">Команда</Text>
       <Spacer size="xl" />
       <Title
-        icon={true}
-        withButton={true}
+        icon
+        withButton
         title="Подрядчики"
         buttonLabel="Пригласить"
         titleStyle={styles.teamTitle}

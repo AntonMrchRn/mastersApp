@@ -79,8 +79,8 @@ const CommonTab = ({
   return (
     <>
       <Title
+        withButton
         onPress={onEdit}
-        withButton={true}
         buttonLabel="Изменить"
         title="Персональные данные"
         icon={<PencilIcon fill={theme.icons.basic} />}
@@ -88,7 +88,9 @@ const CommonTab = ({
       <Spacer />
       <UserInfoBlock label="Фамилия" info={user?.sname || 'Не указано'} />
       <UserInfoBlock label="Имя" info={user?.name || 'Не указано'} />
-      <UserInfoBlock label="Отчество" info={user?.pname || 'Не указано'} />
+      {!!user?.pname && (
+        <UserInfoBlock label="Отчество" info={user?.pname || 'Не указано'} />
+      )}
       <Spacer size="xxxl" />
       <Title title="Контакты" />
       <Spacer />

@@ -22,6 +22,10 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 24,
     borderTopLeftRadius: 24,
   },
+  emptyListContainer: {
+    paddingHorizontal: 20,
+    flex: 1,
+  },
   wrapper: {
     width: '100%',
     flex: 1,

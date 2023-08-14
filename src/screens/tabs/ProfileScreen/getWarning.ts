@@ -22,7 +22,7 @@ const getWarning = (isInternalExecutor: boolean, user?: User) => {
   const commonWarningMessage = `Для выполнения задач во вкладке Общее укажите свои персональные данные`;
 
   const commonWarning =
-    !user?.name || !user.sname || !user?.pname
+    !user?.name || !user.sname
       ? '\n  •  Во вкладке Общее укажите свои персональные данные'
       : '';
   const paymentWarning =

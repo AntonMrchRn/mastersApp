@@ -15,6 +15,7 @@ import RecoveryScreen from '@/screens/auth/RecoveryScreen';
 import SignInScreen from '@/screens/auth/SignInScreen';
 import { CommentsChatScreen } from '@/screens/task/CommentsChatScreen';
 import { CompetitorEstimatesScreen } from '@/screens/task/CompetitorEstimatesScreen';
+import ContractorsScreen from '@/screens/task/Contractors';
 import { EstimateAddMaterialScreen } from '@/screens/task/EstimateAddMaterialScreen';
 import { EstimateAddServiceScreen } from '@/screens/task/EstimateAddServiceScreen';
 import { EstimateEditScreen } from '@/screens/task/EstimateEditScreen';
@@ -25,7 +26,7 @@ import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { TradingResultsScreen } from '@/screens/task/TradingResultsScreen';
 import { UserEstimateEditScreen } from '@/screens/task/UserEstimateEditScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
-import { Offer, Service } from '@/store/api/tasks/types';
+import { Executor, Offer, Service } from '@/store/api/tasks/types';
 
 export enum AppScreenName {
   AppNavigator = 'AppNavigator',
@@ -47,6 +48,7 @@ export enum AppScreenName {
   TradingResults = 'TradingResults',
   NewMaterial = 'NewMaterial',
   EstimateSubmissionSuccess = 'EstimateSubmissionSuccess',
+  Contractors = 'Contractors',
 }
 export type AppStackParamList = {
   [AppScreenName.SignIn]: undefined;
@@ -58,6 +60,7 @@ export type AppStackParamList = {
     taskId: number;
     isITServices: boolean;
     recipientIDs: number[];
+    isMessageInputAvailable: boolean;
   };
   [AppScreenName.RecoveryConfirmation]: {
     phone: string;
@@ -101,6 +104,12 @@ export type AppStackParamList = {
     fromEstimateSubmission?: boolean;
   };
   [AppScreenName.EstimateSubmissionSuccess]: { taskId: number };
+  [AppScreenName.Contractors]: {
+    taskId: number;
+    curatorId: number;
+    curatorMemberId?: number;
+    isInvitedCurator: boolean;
+  };
 };
 const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<AppStackParamList>();
@@ -131,6 +140,14 @@ export const AppNavigation = () => {
           <Stack.Screen
             name={AppScreenName.TaskCard}
             component={TaskCardScreen}
+          />
+          <Stack.Screen
+            name={AppScreenName.Contractors}
+            component={ContractorsScreen}
+            options={{
+              headerShown: true,
+              header: props => <Header {...props} title="Подрядчики" />,
+            }}
           />
           <Stack.Screen
             name={AppScreenName.CommentsChat}

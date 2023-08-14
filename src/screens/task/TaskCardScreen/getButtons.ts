@@ -4,52 +4,84 @@ import { File } from '@/types/fileManager';
 import { OutlayStatusType, StatusType, TaskTab, TaskType } from '@/types/task';
 
 export const getButtons = ({
+  tab,
+  toClose,
   subsetID,
   statusID,
-  tab,
-  isCommentsAvailable,
-  navigateToChat,
-  onSubmissionModalVisible,
-  userOffersData,
-  isOffersDeadlineOver,
-  onSubmitAnEstimate,
-  onWorkDelivery,
-  onCancelModalVisible,
+  isCurator,
   reportFiles,
-  onUploadModalVisible,
-  outlayStatusID,
-  onSendEstimateForApproval,
-  onBudgetModalVisible,
-  toClose,
   closureFiles,
+  onCancelTask,
+  isContractor,
+  navigateToChat,
+  userOffersData,
+  onWorkDelivery,
+  outlayStatusID,
+  onBecomeCurator,
+  isInvitedCurator,
+  onTaskSubmission,
+  isInvitedExecutor,
+  onSubmitAnEstimate,
+  isInternalExecutor,
+  isCommentsAvailable,
+  isCuratorAllowedTask,
+  isOffersDeadlineOver,
+  onCancelModalVisible,
+  onUploadModalVisible,
+  onBudgetModalVisible,
+  onSubmissionModalVisible,
+  onApproveEstimateChanges,
+  onSendEstimateForApproval,
+  isTaskClosedWithoutMessages,
+  isTaskWithUnconfirmedCurator,
+  isLastChangesFromCoordinator,
+  isTaskCanceledWithoutMessages,
 }: {
-  /**
-   * Тип задачи
-   */
-  subsetID: TaskType | undefined;
-  /**
-   * Статус задачи
-   */
-  statusID: StatusType | undefined;
   /**
    * Текущий таб задачи
    */
   tab: TaskTab;
-  isCommentsAvailable: boolean;
-  navigateToChat: () => void;
-  onSubmissionModalVisible: () => void;
-  isOffersDeadlineOver: boolean;
-  userOffersData: Offer[];
-  onSubmitAnEstimate: () => void;
-  onWorkDelivery: () => Promise<void>;
-  onCancelModalVisible: () => void;
-  onUploadModalVisible: () => void;
+  /**
+   * Тип задачи
+   */
+  subsetID?: TaskType;
+  /**
+   * Статус задачи
+   */
+  statusID?: StatusType;
   reportFiles: File[];
   closureFiles: File[];
-  outlayStatusID: OutlayStatusType | undefined;
-  onSendEstimateForApproval: () => Promise<void>;
-  onBudgetModalVisible: () => void;
+  userOffersData: Offer[];
+  selectedServiceId?: number;
+  outlayStatusID?: OutlayStatusType;
   toClose: boolean | undefined;
+  isCurator: boolean;
+  isContractor: boolean;
+  isInvitedCurator: boolean;
+  isInvitedExecutor: boolean;
+  isInternalExecutor: boolean;
+  isCommentsAvailable: boolean;
+  isCuratorAllowedTask: boolean;
+  isOffersDeadlineOver: boolean;
+  estimateBottomVisible: boolean;
+  isTaskClosedWithoutMessages: boolean;
+  isTaskWithUnconfirmedCurator: boolean;
+  isLastChangesFromCoordinator: boolean;
+  isTaskCanceledWithoutMessages: boolean;
+  onWorkDelivery: () => void;
+  navigateToChat: () => void;
+  onBecomeCurator: () => void;
+  onTaskSubmission: () => void;
+  onSubmitAnEstimate: () => void;
+  onCancelModalVisible: () => void;
+  onUploadModalVisible: () => void;
+  onBudgetModalVisible: () => void;
+  onAddEstimateMaterial: () => void;
+  onEstimateBottomVisible: () => void;
+  onSubmissionModalVisible: () => void;
+  onApproveEstimateChanges: () => void;
+  onSendEstimateForApproval: () => void;
+  onCancelTask: (refuseReason?: string) => void;
 }): TaskCardBottomButton[] => {
   switch (subsetID) {
     case TaskType.COMMON_FIRST_RESPONSE:
@@ -490,7 +522,7 @@ export const getButtons = ({
         default:
           return [];
       }
-    case TaskType.IT_AUCTION_SALE:
+    case TaskType.IT_FIRST_RESPONSE:
       //к закрытию
       if (toClose) {
         switch (tab) {
@@ -526,8 +558,326 @@ export const getButtons = ({
             return [];
         }
       }
-      return [];
-    case TaskType.IT_FIRST_RESPONSE:
+      switch (statusID) {
+        case StatusType.ACTIVE:
+          switch (tab) {
+            case TaskTab.DESCRIPTION:
+            case TaskTab.ESTIMATE:
+            case TaskTab.REPORT:
+            case TaskTab.HISTORY:
+            case TaskTab.COMMENTS:
+              // приглашенный координатором куратор
+              if (isInvitedCurator) {
+                return [
+                  {
+                    label: 'Стать куратором',
+                    variant: 'outlineAccent',
+                    onPress: onBecomeCurator,
+                  } as TaskCardBottomButton,
+                ];
+              }
+              // куратор/подрядчик/приглашенный координатором исполнитель/задача без участия куратора
+              if (
+                isCurator ||
+                isContractor ||
+                isInvitedExecutor ||
+                !isCuratorAllowedTask
+              ) {
+                return [
+                  ...(!isCurator
+                    ? [
+                        {
+                          label: 'Принять задачу',
+                          variant: 'accent',
+                          onPress:
+                            isContractor || isInternalExecutor
+                              ? onTaskSubmission
+                              : onSubmissionModalVisible,
+                        } as TaskCardBottomButton,
+                      ]
+                    : []),
+                  // задача с участием куратора, в которой нет приглашенного координатором исполнителя
+                  ...(isCuratorAllowedTask && !isInvitedExecutor
+                    ? [
+                        {
+                          label: isContractor
+                            ? 'Отклонить приглашение'
+                            : 'Отказаться от задачи',
+                          variant: 'outlineDanger',
+                          onPress: isContractor
+                            ? onCancelModalVisible
+                            : onCancelTask,
+                        } as TaskCardBottomButton,
+                      ]
+                    : []),
+                ];
+              }
+              return [
+                {
+                  label: 'Принять задачу как исполнитель',
+                  variant: 'accent',
+                  onPress: onSubmissionModalVisible,
+                },
+                // задача с участием куратора, который её ещё не принял (или принял, но отказался)
+                ...(isTaskWithUnconfirmedCurator
+                  ? [
+                      {
+                        label: 'Стать куратором',
+                        variant: 'outlineAccent',
+                        onPress: onBecomeCurator,
+                      } as TaskCardBottomButton,
+                    ]
+                  : []),
+              ];
+            default:
+              return [];
+          }
+
+        case StatusType.WORK: {
+          switch (tab) {
+            case TaskTab.DESCRIPTION:
+              return [
+                ...(!isCurator
+                  ? [
+                      {
+                        label: 'Сдать работы',
+                        variant: 'accent',
+                        onPress: onWorkDelivery,
+                      } as TaskCardBottomButton,
+                    ]
+                  : []),
+                {
+                  label: 'Отказаться от задачи',
+                  variant: 'outlineDanger',
+                  onPress: onCancelModalVisible,
+                },
+              ];
+            case TaskTab.ESTIMATE:
+              return [
+                ...((outlayStatusID === OutlayStatusType.PENDING &&
+                  !isLastChangesFromCoordinator) ||
+                (outlayStatusID &&
+                  [
+                    OutlayStatusType.RETURNED,
+                    OutlayStatusType.MATCHING,
+                  ].includes(outlayStatusID))
+                  ? [
+                      {
+                        label: 'Отправить смету на согласование',
+                        variant: 'accent',
+                        onPress: onSendEstimateForApproval,
+                        disabled: outlayStatusID === OutlayStatusType.MATCHING,
+                      } as TaskCardBottomButton,
+                    ]
+                  : []),
+
+                // Если последние изменения были только от координатора
+                ...(isLastChangesFromCoordinator &&
+                outlayStatusID === OutlayStatusType.PENDING
+                  ? [
+                      {
+                        label: 'Согласовать изменения сметы',
+                        variant: 'accent',
+                        onPress: onApproveEstimateChanges,
+                      } as TaskCardBottomButton,
+                    ]
+                  : []),
+
+                ...(!isCurator && outlayStatusID === OutlayStatusType.READY
+                  ? [
+                      {
+                        label: 'Сдать работы',
+                        variant: 'accent',
+                        onPress: onWorkDelivery,
+                      } as TaskCardBottomButton,
+                    ]
+                  : []),
+                {
+                  label: 'Отказаться от задачи',
+                  variant: 'outlineDanger',
+                  onPress: onCancelModalVisible,
+                },
+              ];
+            case TaskTab.COMMENTS:
+              if (isCommentsAvailable) {
+                return [
+                  {
+                    label: 'Перейти в чат',
+                    variant: 'accent',
+                    onPress: navigateToChat,
+                  },
+                ];
+              }
+              return [];
+            case TaskTab.REPORT:
+              return [
+                ...(isCurator
+                  ? [
+                      {
+                        label: 'Отказаться от задачи',
+                        variant: 'outlineDanger',
+                        onPress: onCancelModalVisible,
+                      } as TaskCardBottomButton,
+                    ]
+                  : []),
+                ...(!isCurator
+                  ? !reportFiles.length
+                    ? [
+                        {
+                          label: 'Загрузить файлы',
+                          variant: 'accent',
+                          onPress: onUploadModalVisible,
+                        } as TaskCardBottomButton,
+                      ]
+                    : [
+                        {
+                          label: 'Сдать работы',
+                          variant: 'accent',
+                          onPress: onWorkDelivery,
+                        } as TaskCardBottomButton,
+                        {
+                          label: 'Загрузить еще файлы',
+                          variant: 'outlineAccent',
+                          onPress: onUploadModalVisible,
+                        } as TaskCardBottomButton,
+                      ]
+                  : []),
+              ];
+            case TaskTab.HISTORY:
+              return [
+                ...(!isCurator
+                  ? [
+                      {
+                        label: 'Сдать работы',
+                        variant: 'accent',
+                        onPress: onWorkDelivery,
+                      } as TaskCardBottomButton,
+                    ]
+                  : []),
+                {
+                  label: 'Отказаться от задачи',
+                  variant: 'outlineDanger',
+                  onPress: onCancelModalVisible,
+                },
+              ];
+
+            default:
+              return [];
+          }
+        }
+
+        case StatusType.PAID:
+        case StatusType.COMPLETED:
+        case StatusType.SUMMARIZING:
+          switch (tab) {
+            case TaskTab.COMMENTS:
+              if (isCommentsAvailable) {
+                return [
+                  {
+                    label: 'Перейти в чат',
+                    variant: 'accent',
+                    onPress: navigateToChat,
+                  },
+                ];
+              }
+              return [];
+            case TaskTab.REPORT:
+              if (!isCurator) {
+                return !reportFiles.length
+                  ? [
+                      {
+                        label: 'Загрузить файлы',
+                        variant: 'accent',
+                        onPress: onUploadModalVisible,
+                      },
+                    ]
+                  : [
+                      {
+                        label: 'Сдать работы',
+                        variant: 'accent',
+                        onPress: onWorkDelivery,
+                      },
+                      {
+                        label: 'Загрузить еще файлы',
+                        variant: 'outlineAccent',
+                        onPress: onUploadModalVisible,
+                      },
+                    ];
+              }
+              return [];
+            case TaskTab.DESCRIPTION:
+            case TaskTab.ESTIMATE:
+            case TaskTab.HISTORY:
+              return [];
+            default:
+              return [];
+          }
+        case StatusType.CANCELLED_BY_CUSTOMER:
+        case StatusType.CANCELLED_BY_EXECUTOR:
+          switch (tab) {
+            case TaskTab.COMMENTS:
+              if (isCommentsAvailable && !isTaskCanceledWithoutMessages) {
+                return [
+                  {
+                    label: 'Перейти в чат',
+                    variant: 'accent',
+                    onPress: navigateToChat,
+                  },
+                ];
+              }
+              return [];
+            case TaskTab.REPORT:
+            case TaskTab.DESCRIPTION:
+            case TaskTab.ESTIMATE:
+            case TaskTab.HISTORY:
+            default:
+              return [];
+          }
+        case StatusType.CLOSED:
+          switch (tab) {
+            case TaskTab.COMMENTS:
+              if (isCommentsAvailable && !isTaskClosedWithoutMessages) {
+                return [
+                  {
+                    label: 'Перейти в чат',
+                    variant: 'accent',
+                    onPress: navigateToChat,
+                  },
+                ];
+              }
+              return [];
+            case TaskTab.REPORT:
+            case TaskTab.DESCRIPTION:
+            case TaskTab.ESTIMATE:
+            case TaskTab.HISTORY:
+            default:
+              return [];
+          }
+
+        case StatusType.PENDING:
+        case StatusType.MATCHING:
+        case StatusType.RETURNED:
+        case StatusType.SIGNING:
+          switch (tab) {
+            case TaskTab.COMMENTS:
+              return [
+                {
+                  label: 'Перейти в чат',
+                  variant: 'accent',
+                  onPress: navigateToChat,
+                },
+              ];
+            case TaskTab.REPORT:
+            case TaskTab.DESCRIPTION:
+            case TaskTab.ESTIMATE:
+            case TaskTab.HISTORY:
+            default:
+              return [];
+          }
+        default:
+          return [];
+      }
+    case TaskType.IT_AUCTION_SALE:
       //к закрытию
       if (toClose) {
         switch (tab) {

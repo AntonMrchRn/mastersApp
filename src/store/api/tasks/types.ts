@@ -1,5 +1,6 @@
 import { File } from '@/types/fileManager';
 import {
+  OutlayConfirmStatus,
   OutlayStatusType,
   RoleType,
   TaskSetType,
@@ -39,13 +40,14 @@ type Service = {
 type Executor = {
   ID: number;
   email?: string;
-  phone?: string;
+  phone?: number;
   entityTypeID?: number;
   isAccept?: boolean;
   isApproved?: boolean;
   isConfirm?: boolean;
   isNDSPayer?: boolean;
   isSberPayment?: boolean;
+  inviterRoleID?: number;
   memberID?: number;
   name?: string;
   pname?: string;
@@ -57,6 +59,7 @@ type Curator = {
   ID: number;
   entityTypeID: number;
   invitedIDs: number[];
+  inviterRoleID: number;
   isAccept: boolean;
   isApproved: boolean;
   isConfirm: boolean;
@@ -68,7 +71,7 @@ type Curator = {
   phone: number;
   pname: string;
   sname: string;
-  isRefuse?: boolean;
+  isRefuse: boolean;
 };
 type Contact = {
   name: string;
@@ -121,6 +124,7 @@ type Task = {
   files?: File[];
   isCuratorAllowed?: boolean;
   isDirectum?: boolean;
+  outlayConfirmID?: OutlayConfirmStatus;
   isNight?: boolean;
   isOffersPublic?: boolean;
   /**
@@ -324,6 +328,35 @@ type PatchOffersRequest = {
   services?: Service[];
   refuseReason?: string;
 };
+type PostITTaskMemberParams = {
+  taskID: number;
+  members: ITTaskMember[];
+};
+type ITTaskMember = {
+  ID?: number;
+  fullname?: string;
+  name?: string;
+  sname?: string;
+  pname?: string;
+  userID?: number;
+  isCurator?: boolean;
+  isConfirm?: boolean;
+  offerID?: number;
+  isAccept?: boolean;
+  invitedIDs?: number[];
+};
+type GetAvailableContractorsParams = {
+  taskId: number;
+  curatorId: number;
+};
+type PatchITTaskMemberParams = {
+  ID?: number;
+  isRefuse?: boolean;
+  userID?: number;
+  isConfirm?: boolean;
+  isCurator?: boolean;
+};
+
 export type {
   WebData,
   GetTaskStatusesResponse,
@@ -336,6 +369,9 @@ export type {
   Contact,
   Curator,
   Material,
+  PostITTaskMemberParams,
+  PatchITTaskMemberParams,
+  GetAvailableContractorsParams,
   GetTaskHistoryResponse,
   ServicesCategory,
   GetServicesCategoriesResponse,

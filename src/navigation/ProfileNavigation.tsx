@@ -29,7 +29,7 @@ export enum ProfileScreenName {
   PhoneEditingConfirmation = 'PhoneEditingConfirmation',
 }
 export type ProfileStackParamList = {
-  [ProfileScreenName.Profile]: { tab?: TabProf };
+  [ProfileScreenName.Profile]: { tab?: TabProf } | undefined;
   [ProfileScreenName.BankDetails]: {
     isCompany: boolean;
     bankID: string | null;

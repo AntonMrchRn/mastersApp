@@ -10,7 +10,7 @@ import { fonts } from '@/constants/fonts';
 import MyTasksScreen from '@/screens/tabs/MyTasksScreen';
 import TaskSearchScreen from '@/screens/tabs/TaskSearchScreen';
 
-import { ProfileNavigation } from './ProfileNavigation';
+import { ProfileNavigation, ProfileScreenName } from './ProfileNavigation';
 
 const styles = StyleSheet.create({
   label: {
@@ -35,7 +35,7 @@ export enum BottomTabName {
 export type BottomTabParamList = {
   [BottomTabName.TaskSearch]: undefined;
   [BottomTabName.MyTasks]: undefined;
-  [BottomTabName.ProfileNavigation]: undefined;
+  [BottomTabName.ProfileNavigation]: { screen?: ProfileScreenName } | undefined;
 };
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 export const TabNavigation = () => (

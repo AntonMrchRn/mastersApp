@@ -35,8 +35,8 @@ import { TaskSearch, TaskSetType } from '@/types/task';
 import styles from './style';
 
 const setTypeByTabIndex: Record<0 | 1, TaskSetType> = {
-  0: TaskSetType.ITServices,
-  1: TaskSetType.Common,
+  0: TaskSetType.IT_SERVICES,
+  1: TaskSetType.COMMON,
 };
 
 type TaskSearchScreenProps = CompositeScreenProps<
@@ -50,7 +50,7 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
   const dispatch = useAppDispatch();
 
   const [selectedTabId, setSelectedTabId] = useState<TaskSetType>(
-    TaskSetType.ITServices
+    TaskSetType.IT_SERVICES
   );
   const {
     data = [],
@@ -147,7 +147,7 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
             refreshing={loadingList}
             contentContainerStyle={[
               styles.listContainer,
-              !data?.length && styles.container,
+              !data?.length && styles.emptyListContainer,
             ]}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
