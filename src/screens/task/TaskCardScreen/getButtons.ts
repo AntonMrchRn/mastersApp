@@ -52,7 +52,6 @@ export const getButtons = ({
   reportFiles: File[];
   closureFiles: File[];
   userOffersData: Offer[];
-  selectedServiceId?: number;
   outlayStatusID?: OutlayStatusType;
   toClose: boolean | undefined;
   isCurator: boolean;
@@ -63,7 +62,6 @@ export const getButtons = ({
   isCommentsAvailable: boolean;
   isCuratorAllowedTask: boolean;
   isOffersDeadlineOver: boolean;
-  estimateBottomVisible: boolean;
   isTaskClosedWithoutMessages: boolean;
   isTaskWithUnconfirmedCurator: boolean;
   isLastChangesFromCoordinator: boolean;
@@ -76,8 +74,6 @@ export const getButtons = ({
   onCancelModalVisible: () => void;
   onUploadModalVisible: () => void;
   onBudgetModalVisible: () => void;
-  onAddEstimateMaterial: () => void;
-  onEstimateBottomVisible: () => void;
   onSubmissionModalVisible: () => void;
   onApproveEstimateChanges: () => void;
   onSendEstimateForApproval: () => void;
