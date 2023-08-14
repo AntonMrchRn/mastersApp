@@ -114,7 +114,7 @@ const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
       </View>
       <TabControl
         contentContainerStyle={styles.wrapperTab}
-        data={mobileCounts}
+        data={mobileCounts || []}
         onChange={onChangeTab}
         currentTabId={selectedTabID}
       />
