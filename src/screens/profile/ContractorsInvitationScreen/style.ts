@@ -23,9 +23,6 @@ const styles = StyleSheet.create({
   toastTitle: {
     fontSize: 17,
   },
-  btn: {
-    height: 48,
-  },
   info: {
     width: '100%',
     marginTop: 'auto',

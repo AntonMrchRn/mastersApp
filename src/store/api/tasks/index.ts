@@ -1,16 +1,20 @@
 import { store } from '@/store';
 import { api } from '@/store/api';
+import { User, UserResponse } from '@/store/api/user/types';
 import { setProgresses } from '@/store/slices/tasks/actions';
 import { File, FilesParams, Progress } from '@/types/fileManager';
 
 import {
+  GetAvailableContractorsParams,
   GetOffersResponse,
   GetServicesCategoriesResponse,
   GetServicesResponse,
   GetTaskHistoryResponse,
   GetTaskResponse,
   GetTaskStatusesResponse,
+  PatchITTaskMemberParams,
   PatchOffersRequest,
+  PostITTaskMemberParams,
   PostOffersRequest,
   Service,
   Task,
@@ -67,12 +71,31 @@ export const tasksAPI = api
           method: 'GET',
         }),
       }),
+      getAvailableContractors: builder.query<
+        User[],
+        GetAvailableContractorsParams
+      >({
+        query: ({ taskId, curatorId }) => ({
+          url: `users?query=?*curatorID==${curatorId}*taskID==${taskId}?`,
+          method: 'GET',
+        }),
+        transformResponse: (response: UserResponse) => response.users,
+      }),
+      postITTaskMember: builder.mutation<object, PostITTaskMemberParams>({
+        query: data => ({
+          url: 'tasks/members/it',
+          method: 'POST',
+          data,
+        }),
+        invalidatesTags: ['task'],
+      }),
       patchTask: builder.mutation<GetTaskResponse, Task>({
         query: data => ({
           url: `tasks/web`,
           method: 'PATCH',
           data,
         }),
+        invalidatesTags: ['task'],
       }),
       deleteTaskService: builder.mutation<object, { serviceId: number }>({
         query: ({ serviceId }) => ({
@@ -109,6 +132,14 @@ export const tasksAPI = api
           method: 'PATCH',
           data,
         }),
+      }),
+      patchITTaskMember: builder.mutation<object, PatchITTaskMemberParams>({
+        query: data => ({
+          url: 'tasks/members/it',
+          method: 'PATCH',
+          data,
+        }),
+        invalidatesTags: ['task'],
       }),
       postMaterial: builder.mutation<object, unknown>({
         query: data => ({
@@ -161,6 +192,7 @@ export const tasksAPI = api
           method: 'PATCH',
           data,
         }),
+        invalidatesTags: ['task'],
       }),
       getUserOffers: builder.query<
         GetOffersResponse,
@@ -215,12 +247,19 @@ export const tasksAPI = api
           method: 'DELETE',
         }),
       }),
+      deleteITTaskMember: builder.mutation<object, number>({
+        query: id => ({
+          url: `tasks/members/it/${id}`,
+          method: 'DELETE',
+        }),
+      }),
     }),
     overrideExisting: true,
   });
 
 export const {
   useGetTaskQuery,
+  useGetAvailableContractorsQuery,
   useGetTaskHistoryQuery,
   useGetTaskStatusesQuery,
   usePatchTaskMutation,
@@ -244,4 +283,7 @@ export const {
   usePatchOffersMutation,
   useDeleteOffersMutation,
   useDeleteInvitationMutation,
+  usePostITTaskMemberMutation,
+  useDeleteITTaskMemberMutation,
+  usePatchITTaskMemberMutation,
 } = tasksAPI;

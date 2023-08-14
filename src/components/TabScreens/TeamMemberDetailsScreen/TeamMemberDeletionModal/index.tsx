@@ -31,6 +31,9 @@ const TeamMemberDeletionModal = ({
 
   const onDelete = async () => {
     onClose();
+    // kickSubs - удалить всех подрядчиков
+    // subcontractorIDs - для удаления одного подрядчика, кидаем массив без этого подрядчика
+    // kickCurator - удалить куратора
     await deleteTeamMember(
       isContractor
         ? undeletedContractorIDs?.length

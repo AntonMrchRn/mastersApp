@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   },
   teamTitle: {
     fontSize: 18,
-    fontFamily: 'Nunito Sans SemiBold',
+    fontFamily: 'Nunito Sans',
     fontWeight: '600',
   },
   curatorsDefault: {

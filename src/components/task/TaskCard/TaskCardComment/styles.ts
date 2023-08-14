@@ -8,12 +8,19 @@ export const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingTop: 36,
+    justifyContent: 'center',
+  },
+  title: {
+    paddingTop: 32,
   },
   containerList: {
     flex: 1,
     paddingVertical: 10,
     justifyContent: 'flex-end',
     bottom: -20,
+  },
+  notAvailableContainerList: {
+    bottom: 0,
+    paddingTop: 0,
   },
 });

@@ -9,6 +9,10 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
   },
+  iconWrapper: {
+    padding: 20,
+    borderRadius: 16,
+  },
 });
 
 export default styles;

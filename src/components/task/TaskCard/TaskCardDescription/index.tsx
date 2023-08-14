@@ -9,13 +9,12 @@ import { CaretDownIcon } from '@/assets/icons/svg/screens/CaretDownIcon';
 import { UsersIcon } from '@/assets/icons/svg/screens/UsersIcon';
 import { DownloadManager } from '@/components/FileManager/DownloadManager';
 import { TaskAddress } from '@/components/task/TaskAddress';
+import { TaskDate } from '@/components/task/TaskDate';
 import { useDeleteInvitationMutation } from '@/store/api/tasks';
 import { Contact, Executor, WebData } from '@/store/api/tasks/types';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import { File } from '@/types/fileManager';
 import { StatusType, TaskType } from '@/types/task';
-
-import { TaskDate } from '../../TaskDate';
 
 import { styles } from './styles';
 
@@ -31,6 +30,7 @@ type TaskCardDescriptionProps = {
   executors: Executor[] | [];
   subsetID: TaskType | undefined;
   isCurator: boolean;
+  navigateToContractors: () => void;
 };
 
 export const TaskCardDescription = ({
@@ -40,6 +40,7 @@ export const TaskCardDescription = ({
   endTimePlan,
   contacts,
   applicationFiles,
+  navigateToContractors,
   statusID,
   webdata,
   executors,
@@ -47,15 +48,10 @@ export const TaskCardDescription = ({
   isCurator,
 }: TaskCardDescriptionProps) => {
   const theme = useTheme();
-
   const toast = useToast();
 
   const [deleteInvitation, { isLoading, isError, error }] =
     useDeleteInvitationMutation();
-
-  const cancelInvitation = async (memberID?: number) => {
-    memberID && (await deleteInvitation(memberID));
-  };
 
   useEffect(() => {
     if (isError) {
@@ -66,9 +62,13 @@ export const TaskCardDescription = ({
     }
   }, [isError]);
 
+  const cancelInvitation = async (memberID?: number) =>
+    memberID && (await deleteInvitation(memberID));
+
   const onDelete = async ({ filePath }: { filePath?: string }) => {
     filePath && (await ReactNativeBlobUtil.fs.unlink(filePath));
   };
+
   return (
     <View>
       {/* Выбор подрядчиков  */}
@@ -140,9 +140,9 @@ export const TaskCardDescription = ({
                         )}
                       </View>
                       <Button
-                        label="Отменить приглашение"
                         size="S"
                         variant="ghost"
+                        label="Отменить приглашение"
                         style={styles.wrapInvitation}
                         onPress={() => cancelInvitation(executor?.memberID)}
                       />
@@ -171,14 +171,14 @@ export const TaskCardDescription = ({
               label="Изменить выбор"
               size="S"
               style={styles.mt16}
-              onPress={() => console.log('Переход на выбор подрядчика')}
+              onPress={navigateToContractors}
             />
           ) : (
             <Button
               label="Пригласить"
               size="S"
               style={styles.mt16}
-              onPress={() => console.log('Пригласить подрядчика')}
+              onPress={navigateToContractors}
             />
           )}
         </>

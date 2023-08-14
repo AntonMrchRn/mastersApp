@@ -139,7 +139,7 @@ const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
             refreshing={loadingList}
             contentContainerStyle={[
               styles.listContainer,
-              !data?.length && styles.container,
+              !data?.length && styles.emptyListContainer,
             ]}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}

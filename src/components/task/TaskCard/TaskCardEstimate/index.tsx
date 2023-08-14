@@ -240,7 +240,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           [TaskType.IT_FIRST_RESPONSE, TaskType.IT_AUCTION_SALE].includes(
             subsetID
           )) ||
-        (setId === TaskSetType.ITServices && isInternalExecutor) ? null : (
+        (setId === TaskSetType.IT_SERVICES && isInternalExecutor) ? null : (
           <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
         )}
         {subsetID &&

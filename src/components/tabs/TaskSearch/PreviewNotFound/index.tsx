@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { JSX } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Button } from 'rn-ui-kit';
+import { Button, useTheme } from 'rn-ui-kit';
 
-import { ActiveTaskIcon } from '@/assets/icons/svg/screens/ActiveTaskIcon';
-import { InfoIcon } from '@/assets/icons/svg/screens/InfoIcon';
-import { NoMessagesIcon } from '@/assets/icons/svg/screens/NoMessagesIcon';
-import { NoRegionIcon } from '@/assets/icons/svg/screens/NoRegionIcon';
-import { NotFoundIcon } from '@/assets/icons/svg/screens/NotFoundIcon';
-import TaskSearchClear from '@/assets/icons/svg/screens/TaskSearchClear';
+import ActiveTaskIcon from '@/assets/icons/svg/screens/ActiveTaskIcon';
+import ChatIcon from '@/assets/icons/svg/screens/Chat';
+import CloseIcon from '@/assets/icons/svg/screens/CloseIcon';
+import ListBulletsIcon from '@/assets/icons/svg/screens/ListBulletsIcon';
+import MapPinIcon from '@/assets/icons/svg/screens/MapPinIcon';
+import { NoFilesIcon } from '@/assets/icons/svg/screens/NoFilesIcon';
+import { OtesIcon } from '@/assets/icons/svg/screens/OtesIcon';
+import SearchIcon from '@/assets/icons/svg/screens/SearchIcon';
+import UserIcon from '@/assets/icons/svg/screens/UserIcon';
 import Preview from '@/components/tabs/TaskSearch/PreviewNotFound/Preview';
 import {
   ProfileScreenName,
@@ -22,11 +25,25 @@ export enum PreviewNotFoundType {
   TasksNotFound = 'TasksNotFound',
   TasksNotAvailable = 'TasksNotAvailable',
   NoTasks = 'NoTasks',
-  NoMessages = 'NoMessages',
+  NoMessagesTaskCanceled = 'NoMessagesTaskCanceled',
+  NoMessagesTaskClosed = 'NoMessagesTaskClosed',
+  NoMessagesYet = 'NoMessagesYet',
   MessagesNotAvailable = 'MessagesNotAvailable',
   RegionNotChanged = 'RegionNotChanged',
   NoHistoryEvents = 'NoHistoryEvents',
+  NoContractors = 'NoContractors',
+  ReportNotAvailable = 'ReportNotAvailable',
+  ReportNotYetAvailable = 'ReportNotYetAvailable',
+  NoFiles = 'NoFiles',
+  CommentsClosedNow = 'CommentsClosedNow',
 }
+
+type PreviewContent = {
+  icon: JSX.Element;
+  title: string;
+  text?: string;
+  button?: JSX.Element;
+};
 
 type PreviewNotFoundProps = {
   type: PreviewNotFoundType;
@@ -34,6 +51,7 @@ type PreviewNotFoundProps = {
 };
 
 const PreviewNotFound = ({ type, closeModal }: PreviewNotFoundProps) => {
+  const theme = useTheme();
   const { navigate } =
     useNavigation<
       StackNavigationProp<BottomTabParamList & ProfileStackParamList>
@@ -50,45 +68,56 @@ const PreviewNotFound = ({ type, closeModal }: PreviewNotFoundProps) => {
   };
   const navigateToTaskSearch = () => navigate(BottomTabName.TaskSearch);
 
-  const previewContents = {
+  const previewContents: Record<PreviewNotFoundType, PreviewContent> = {
     [PreviewNotFoundType.TasksNotFound]: {
-      icon: <TaskSearchClear />,
+      icon: <SearchIcon />,
       title: 'Задачи не найдены',
       text: 'В вашем регионе задач сейчас нет. Попробуйте продолжить поиск позже',
-      button: undefined,
     },
     [PreviewNotFoundType.NoHistoryEvents]: {
       icon: <ActiveTaskIcon />,
       title: 'Событий нет',
       text: 'Здесь будет отображаться ход событий задачи, когда задача перейдет в работу',
-      button: undefined,
     },
     [PreviewNotFoundType.TasksNotAvailable]: {
-      icon: <NotFoundIcon />,
+      icon: <CloseIcon fill={theme.icons.danger} size={40} />,
       title: 'Задачи не доступны',
       text: 'Для доступа к IT-задачам у вас должна быть подтверждена учетная запись',
       button: <Button label="Перейти в профиль" onPress={navigateToProfile} />,
     },
     [PreviewNotFoundType.NoTasks]: {
-      icon: <InfoIcon />,
+      icon: <ListBulletsIcon />,
       title: 'Задач пока нет',
       text: 'Здесь будут отображаться задачи, в которых вы участвуете или подали смету. Найдите свою первую задачу с помощью поиска',
       button: <Button label="Найти задачу" onPress={navigateToTaskSearch} />,
     },
-    [PreviewNotFoundType.NoMessages]: {
-      icon: <NoMessagesIcon />,
+    [PreviewNotFoundType.NoMessagesYet]: {
+      icon: <ChatIcon />,
       title: 'Сообщений пока нет',
       text: 'Здесь вы можете обсудить детали задачи с координатором',
-      button: undefined,
+    },
+    [PreviewNotFoundType.NoMessagesTaskCanceled]: {
+      icon: <ChatIcon />,
+      title: 'Сообщений нет',
+      text: 'Задача отменена. Отправка сообщений координатору недоступна',
+    },
+    [PreviewNotFoundType.NoMessagesTaskClosed]: {
+      icon: <ChatIcon />,
+      title: 'Сообщений нет',
+      text: 'Задача закрыта. Отправка сообщений координатору недоступна',
+    },
+    [PreviewNotFoundType.CommentsClosedNow]: {
+      icon: <ChatIcon />,
+      title: 'Комментарии пока закрыты',
+      text: 'Отправка сообщений будет доступна, когда задача перейдет в работу',
     },
     [PreviewNotFoundType.MessagesNotAvailable]: {
-      icon: <NoMessagesIcon />,
+      icon: <ChatIcon />,
       title: 'Комментарии пока закрыты',
       text: 'Отправка сообщений будет доступна в случае назначения вас в качестве исполнителя',
-      button: undefined,
     },
     [PreviewNotFoundType.RegionNotChanged]: {
-      icon: <NoRegionIcon />,
+      icon: <MapPinIcon />,
       title: 'Регион не выбран',
       text: 'Для поиска задач необходимо в Профиле выбрать подходящий регион',
       button: (
@@ -98,15 +127,35 @@ const PreviewNotFound = ({ type, closeModal }: PreviewNotFoundProps) => {
         />
       ),
     },
+    [PreviewNotFoundType.NoContractors]: {
+      icon: <UserIcon />,
+      title: 'У вас нет подрядчиков',
+      text: 'Чтобы выполнять задачи в роли куратора вам необходимо пригласить в свою команду других пользователей',
+    },
+    [PreviewNotFoundType.ReportNotAvailable]: {
+      icon: <OtesIcon />,
+      title: 'Отчет недоступен',
+      text: 'Отправка файлов доступна только назначенным исполнителям',
+    },
+    [PreviewNotFoundType.ReportNotYetAvailable]: {
+      icon: <OtesIcon />,
+      title: 'Отчет пока недоступен',
+      text: 'Вы сможете отправлять файлы для подтверждения выполненных услуг, когда задача перейдет в работу',
+    },
+    [PreviewNotFoundType.NoFiles]: {
+      icon: <NoFilesIcon />,
+      title: 'Файлов нет',
+    },
   };
 
   const currentPreview = previewContents[type];
 
   return (
     <Preview
-      title={currentPreview.title}
+      type={type}
       text={currentPreview.text}
       icon={currentPreview.icon}
+      title={currentPreview.title}
       button={currentPreview.button}
     />
   );

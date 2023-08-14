@@ -83,7 +83,7 @@ const PaymentTab = ({
   return (
     <>
       <Title
-        withButton={true}
+        withButton
         title="Личные реквизиты"
         onPress={editPersonalDetails}
         buttonLabel={isUserDetailsExist ? 'Изменить' : 'Добавить'}
@@ -131,8 +131,8 @@ const PaymentTab = ({
       )}
       <Spacer size="xxxl" />
       <Title
+        withButton
         title="Банк"
-        withButton={true}
         onPress={editBankDetails}
         buttonLabel={isBankDetailsExist ? 'Изменить' : 'Добавить'}
         icon={

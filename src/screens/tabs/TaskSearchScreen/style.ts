@@ -33,6 +33,10 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 24,
     paddingTop: 25,
   },
+  emptyListContainer: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
   wrapperList: {
     paddingHorizontal: 12,
     borderTopLeftRadius: 16,
