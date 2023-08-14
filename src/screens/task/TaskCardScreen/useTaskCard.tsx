@@ -301,15 +301,33 @@ export const useTaskCard = ({
     (executor?.inviterRoleID === RoleType.COORDINATOR ||
       executor?.inviterRoleID === RoleType.SUPERVISOR);
 
-  const budget =
-    (subsetID &&
-      isContractor &&
-      [TaskType.IT_FIRST_RESPONSE, TaskType.IT_AUCTION_SALE].includes(
-        subsetID
-      )) ||
-    (isITServices && isInternalExecutor)
-      ? ''
-      : `${task?.budget} ₽` || '';
+  const getBudget = () => {
+    if (
+      (subsetID &&
+        isContractor &&
+        [TaskType.IT_FIRST_RESPONSE, TaskType.IT_AUCTION_SALE].includes(
+          subsetID
+        )) ||
+      (isITServices && isInternalExecutor)
+    ) {
+      return '';
+    }
+    // В шапке задания отображать сумму сметы из "Итого" в статусах сметы "Смета не согласована", "Смета на согласовании" и "Смета возвращена".
+    if (
+      outlayStatusID &&
+      [
+        OutlayStatusType.PENDING,
+        OutlayStatusType.RETURNED,
+        OutlayStatusType.MATCHING,
+      ].includes(outlayStatusID)
+    ) {
+      return (
+        `${services.reduce((acc, val) => acc + (val?.sum || 0), 0)} ₽` || ''
+      );
+    }
+    return `${task?.budget} ₽` || '';
+  };
+  const budget = getBudget();
 
   const budgetEndTime =
     subsetID === TaskType.IT_AUCTION_SALE && isContractor
