@@ -34,6 +34,7 @@ type File = {
   mime: string;
   extension: string;
   extensionOriginal: string;
+  sourceExtension: string;
   isApplication?: boolean;
   sizeBytes: number;
   isClosure?: boolean;

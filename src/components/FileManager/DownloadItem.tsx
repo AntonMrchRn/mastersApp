@@ -54,7 +54,7 @@ export const DownloadItem = ({
   }, []);
 
   const dirs = ReactNativeBlobUtil.fs.dirs;
-  const fileType = file?.extensionOriginal || '';
+  const fileType = file?.sourceExtension || '';
 
   const title = `${file.name}.${fileType}`;
   const FILE_PATH = `${dirs.DocumentDir}/${title}`;
