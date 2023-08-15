@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
+import ImagePicker, { ImageOrVideo } from 'react-native-image-crop-picker';
 import {
   ImagePickerResponse,
   launchCamera,
@@ -54,10 +55,15 @@ export const UploadBottomSheet = ({
 
   const uploadActions = {
     [UploadAction.TakeFromGallery]: async () =>
-      await launchImageLibrary({
-        mediaType: isUserFile ? 'photo' : 'mixed',
-        selectionLimit: 10,
+      await ImagePicker.openPicker({
+        mediaType: isUserFile ? 'photo' : 'any',
+        multiple: true,
+        maxFiles: 10,
       }),
+    // await launchImageLibrary({
+    //   mediaType: isUserFile ? 'photo' : 'mixed',
+    //   selectionLimit: 10,
+    // }),
     [UploadAction.TakePhotoMedia]: async () =>
       await launchCamera({ mediaType: 'photo' }),
     [UploadAction.TakeVideoMedia]: async () =>
@@ -75,11 +81,18 @@ export const UploadBottomSheet = ({
           actionType === UploadAction.TakeVideoMedia) &&
         (result as ImagePickerResponse).errorCode === 'camera_unavailable';
       const isDocuments = actionType === UploadAction.TakeFromFiles;
+      const isCropPicker = actionType === UploadAction.TakeFromGallery;
 
       if (isMediaError) {
         return toast.show({
           type: 'error',
           title: 'Камера недоступна',
+        });
+      }
+      if (isCropPicker && (result as ImageOrVideo[]).length > 10) {
+        return toast.show({
+          type: 'error',
+          title: 'Нельзя выбрать более 10 файлов',
         });
       }
 
@@ -90,7 +103,8 @@ export const UploadBottomSheet = ({
         const { sizes, files, names } = fillFormData(
           formData,
           result,
-          isDocuments
+          isDocuments,
+          isCropPicker
         );
         onClose();
         const check = checkSizes({

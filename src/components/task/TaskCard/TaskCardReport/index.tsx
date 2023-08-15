@@ -98,7 +98,7 @@ export const TaskCardReport = ({
             <DownloadManager
               files={reportFiles}
               onDelete={onDelete}
-              canDelete={false}
+              canDelete={canDelete}
             />
           </>
         ) : (
@@ -114,12 +114,12 @@ export const TaskCardReport = ({
                 не более 250 МВ
               </Text>
             </View>
-            <UploadProgress
-              controllers={controllers}
-              progressesSelector={progressesSelector}
-            />
           </>
         )}
+        <UploadProgress
+          controllers={controllers}
+          progressesSelector={progressesSelector}
+        />
       </View>
       <View style={styles.mt36}>
         <Text variant="title3" color={theme.text.basic}>

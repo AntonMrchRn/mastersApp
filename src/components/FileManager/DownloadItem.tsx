@@ -145,7 +145,7 @@ export const DownloadItem = ({
         </TouchableOpacity>
       );
     }
-    if (canDownload) {
+    if (canDownload && !onDevice) {
       return (
         <TouchableOpacity onPress={handleDownload} hitSlop={hitSlop}>
           <DownloadFileIcon />
