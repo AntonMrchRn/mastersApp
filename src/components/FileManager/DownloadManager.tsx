@@ -25,7 +25,7 @@ export const DownloadManager: FC<DownloadManagerProps> = ({
   <View style={styles.container}>
     {files.map((file, index) => {
       return (
-        <View style={[index !== 0 && styles.mt8]} key={file.url}>
+        <View style={[index !== 0 && styles.mt8]} key={file.fileID}>
           <DownloadItem
             key={file.url}
             file={file}
