@@ -5,10 +5,13 @@ import ReactNativeBlobUtil, {
   StatefulPromise,
 } from 'react-native-blob-util';
 
+import { useToast } from 'rn-ui-kit';
+
 import { CloseFileIcon } from '@/assets/icons/svg/files/CloseFileIcon';
 import { DeleteFileIcon } from '@/assets/icons/svg/files/DeleteFileIcon';
 import { DownloadFileIcon } from '@/assets/icons/svg/files/DownloadFileIcon';
 import { configApp, hitSlop } from '@/constants/platform';
+import { AxiosQueryErrorResponse } from '@/types/error';
 import { File } from '@/types/fileManager';
 
 import { FileItem } from './FileItem';
@@ -37,6 +40,8 @@ export const DownloadItem = ({
   const [progress, setProgress] = useState(0);
   const [activeTask, setActiveTask] =
     useState<StatefulPromise<FetchBlobResponse>>();
+
+  const toast = useToast();
 
   useEffect(() => {
     if (!onDevice && !canDownload) {
@@ -98,7 +103,10 @@ export const DownloadItem = ({
       await hasOnDevice();
     } catch (err) {
       setIsDeleting(false);
-      console.log('🚀 ~ file: DownloadItem.tsx:97 ~ handleDelete ~ err:', err);
+      toast.show({
+        type: 'error',
+        title: (err as AxiosQueryErrorResponse).data.message,
+      });
     }
   };
 
