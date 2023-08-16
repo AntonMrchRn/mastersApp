@@ -2,7 +2,11 @@ import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import ImagePicker, { ImageOrVideo } from 'react-native-image-crop-picker';
-import { ImagePickerResponse, launchCamera } from 'react-native-image-picker';
+import {
+  ImagePickerResponse,
+  launchCamera,
+  PhotoQuality,
+} from 'react-native-image-picker';
 
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { BottomSheet, Button, Text, useTheme, useToast } from 'rn-ui-kit';
@@ -13,6 +17,7 @@ import { GalleryIcon } from '@/assets/icons/svg/screens/GalleryIcon';
 import { VideoIcon } from '@/assets/icons/svg/screens/VideoIcon';
 import { configApp } from '@/constants/platform';
 import { useAppDispatch } from '@/store';
+import { useGetCompressRateQuery } from '@/store/api/tasks';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import { HandleUpload } from '@/types/fileManager';
 import { checkSizes } from '@/utils/fileManager/checkSizes';
@@ -49,16 +54,21 @@ export const UploadBottomSheet = ({
   const theme = useTheme();
   const toast = useToast();
   const dispatch = useAppDispatch();
-
+  const compressRateQuery = useGetCompressRateQuery();
+  const quality = compressRateQuery.data || 0.8;
   const uploadActions = {
     [UploadAction.TakeFromGallery]: async () =>
       await ImagePicker.openPicker({
         mediaType: isUserFile ? 'photo' : 'any',
         multiple: true,
         maxFiles: 10,
+        compressImageQuality: quality,
       }),
     [UploadAction.TakePhotoMedia]: async () =>
-      await launchCamera({ mediaType: 'photo' }),
+      await launchCamera({
+        mediaType: 'photo',
+        quality: quality as PhotoQuality,
+      }),
     [UploadAction.TakeVideoMedia]: async () =>
       await launchCamera({ mediaType: 'video' }),
     [UploadAction.TakeFromFiles]: async () =>
