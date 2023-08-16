@@ -545,7 +545,7 @@ export const useTaskCard = ({
         // при отказе от задачи в статусе 'опубликовано' сбрасываем участника через patch
         if (statusID === StatusType.ACTIVE && user?.userID) {
           await patchITTaskMember({
-            ID: (isConfirmedCurator ? curatorMemberId : executorMemberId)!,
+            ID: isConfirmedCurator ? curatorMemberId : executorMemberId,
             userID: user?.userID,
             isConfirm: false,
             isRefuse: true,
