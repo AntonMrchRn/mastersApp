@@ -121,28 +121,6 @@ export const TaskCardReport = ({
           progressesSelector={progressesSelector}
         />
       </View>
-      <View style={styles.mt36}>
-        <Text variant="title3" color={theme.text.basic}>
-          Закрывающие документы
-        </Text>
-        {closureFiles.length ? (
-          <View style={styles.mt24}>
-            <DownloadManager
-              files={closureFiles}
-              onDelete={onDelete}
-              canDelete={false}
-            />
-          </View>
-        ) : (
-          <Text
-            variant="bodySRegular"
-            style={styles.mt8}
-            color={theme.text.neutral}
-          >
-            Пока здесь ничего нет
-          </Text>
-        )}
-      </View>
     </View>
   );
 
@@ -175,28 +153,6 @@ export const TaskCardReport = ({
                 Пока здесь ничего нет
               </Text>
             )}
-            <View style={styles.mt36}>
-              <Text variant="title3" color={theme.text.basic}>
-                Закрывающие документы
-              </Text>
-              {closureFiles.length ? (
-                <View style={styles.mt24}>
-                  <DownloadManager
-                    files={closureFiles}
-                    onDelete={onDelete}
-                    canDelete={false}
-                  />
-                </View>
-              ) : (
-                <Text
-                  variant="bodySRegular"
-                  style={styles.mt8}
-                  color={theme.text.neutral}
-                >
-                  Пока здесь ничего нет
-                </Text>
-              )}
-            </View>
           </View>
         </View>
       ) : (
