@@ -1,6 +1,8 @@
 import React, { FC, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useIsFocused } from '@react-navigation/native';
@@ -126,38 +128,40 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
     goBack();
   };
   return (
-    <View style={styles.container}>
-      <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
-        Заполните данные об услуге
-      </Text>
-      <ServiceItem service={service} />
-      <FormProvider {...methods}>
-        <View style={styles.input}>
-          <ControlledInput
-            name={'count'}
-            label={count ? 'Количество' : undefined}
-            placeholder={'Количество'}
-            variant={'text'}
-            hint={errors.count?.message}
-            isError={!!errors.count?.message}
-            keyboardType="numeric"
-          />
-        </View>
-        <Spacer size={'xl'} />
-        <View style={styles.row}>
-          <Button
-            label={'Отменить'}
-            onPress={goBack}
-            variant={'outlineAccent'}
-            style={styles.button}
-          />
-          <Button
-            label={'Добавить'}
-            onPress={methods.handleSubmit(onSubmit)}
-            style={styles.button}
-          />
-        </View>
-      </FormProvider>
-    </View>
+    <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
+      <KeyboardAwareScrollView contentContainerStyle={styles.container}>
+        <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
+          Заполните данные об услуге
+        </Text>
+        <ServiceItem service={service} />
+        <FormProvider {...methods}>
+          <View style={styles.input}>
+            <ControlledInput
+              name={'count'}
+              label={count ? 'Количество' : undefined}
+              placeholder={'Количество'}
+              variant={'number'}
+              hint={errors.count?.message}
+              isError={!!errors.count?.message}
+              maxLength={3}
+            />
+          </View>
+          <Spacer size={'xl'} />
+          <View style={styles.row}>
+            <Button
+              label={'Отменить'}
+              onPress={goBack}
+              variant={'outlineAccent'}
+              style={styles.button}
+            />
+            <Button
+              label={'Добавить'}
+              onPress={methods.handleSubmit(onSubmit)}
+              style={styles.button}
+            />
+          </View>
+        </FormProvider>
+      </KeyboardAwareScrollView>
+    </SafeAreaView>
   );
 };

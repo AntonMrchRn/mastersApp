@@ -80,11 +80,21 @@ export const CommentsChatScreen = ({
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
 
   const onPressSend = async () => {
-    try {
-      await dispatch(sendMessage({ taskId, comment: valueText, recipientIDs }));
-      setValueText('');
-    } catch (e) {
-      console.log('onPressSend error: ', e);
+    if (valueText.trim()) {
+      try {
+        await dispatch(
+          sendMessage({ taskId, comment: valueText, recipientIDs })
+        );
+        setValueText('');
+      } catch (e) {
+        console.log('onPressSend error: ', e);
+      }
+    }
+  };
+
+  const onChangeText = (text: string) => {
+    if (!loadingSend) {
+      setValueText(text);
     }
   };
 
@@ -133,7 +143,7 @@ export const CommentsChatScreen = ({
         >
           <Input
             value={!loadingSend ? valueText : ''}
-            onChangeText={!loadingSend ? setValueText : undefined}
+            onChangeText={onChangeText}
             variant="message"
             placeholder="Сообщение..."
             ref={ref => ref && setIsActive(ref?.isFocused())}

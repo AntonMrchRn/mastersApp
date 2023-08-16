@@ -5,10 +5,13 @@ import ReactNativeBlobUtil, {
   StatefulPromise,
 } from 'react-native-blob-util';
 
+import { useToast } from 'rn-ui-kit';
+
 import { CloseFileIcon } from '@/assets/icons/svg/files/CloseFileIcon';
 import { DeleteFileIcon } from '@/assets/icons/svg/files/DeleteFileIcon';
 import { DownloadFileIcon } from '@/assets/icons/svg/files/DownloadFileIcon';
 import { configApp, hitSlop } from '@/constants/platform';
+import { AxiosQueryErrorResponse } from '@/types/error';
 import { File } from '@/types/fileManager';
 
 import { FileItem } from './FileItem';
@@ -38,6 +41,8 @@ export const DownloadItem = ({
   const [activeTask, setActiveTask] =
     useState<StatefulPromise<FetchBlobResponse>>();
 
+  const toast = useToast();
+
   useEffect(() => {
     if (!onDevice && !canDownload) {
       setIsDeleting(false);
@@ -49,7 +54,7 @@ export const DownloadItem = ({
   }, []);
 
   const dirs = ReactNativeBlobUtil.fs.dirs;
-  const fileType = file?.extensionOriginal || '';
+  const fileType = file?.sourceExtension || '';
 
   const title = `${file.name}.${fileType}`;
   const FILE_PATH = `${dirs.DocumentDir}/${title}`;
@@ -98,7 +103,10 @@ export const DownloadItem = ({
       await hasOnDevice();
     } catch (err) {
       setIsDeleting(false);
-      console.log('🚀 ~ file: DownloadItem.tsx:97 ~ handleDelete ~ err:', err);
+      toast.show({
+        type: 'error',
+        title: (err as AxiosQueryErrorResponse).data.message,
+      });
     }
   };
 
@@ -145,7 +153,7 @@ export const DownloadItem = ({
         </TouchableOpacity>
       );
     }
-    if (canDownload) {
+    if (canDownload && !onDevice) {
       return (
         <TouchableOpacity onPress={handleDownload} hitSlop={hitSlop}>
           <DownloadFileIcon />

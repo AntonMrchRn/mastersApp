@@ -98,7 +98,7 @@ export const TaskCardReport = ({
             <DownloadManager
               files={reportFiles}
               onDelete={onDelete}
-              canDelete={false}
+              canDelete={canDelete}
             />
           </>
         ) : (
@@ -114,34 +114,12 @@ export const TaskCardReport = ({
                 не более 250 МВ
               </Text>
             </View>
-            <UploadProgress
-              controllers={controllers}
-              progressesSelector={progressesSelector}
-            />
           </>
         )}
-      </View>
-      <View style={styles.mt36}>
-        <Text variant="title3" color={theme.text.basic}>
-          Закрывающие документы
-        </Text>
-        {closureFiles.length ? (
-          <View style={styles.mt24}>
-            <DownloadManager
-              files={closureFiles}
-              onDelete={onDelete}
-              canDelete={false}
-            />
-          </View>
-        ) : (
-          <Text
-            variant="bodySRegular"
-            style={styles.mt8}
-            color={theme.text.neutral}
-          >
-            Пока здесь ничего нет
-          </Text>
-        )}
+        <UploadProgress
+          controllers={controllers}
+          progressesSelector={progressesSelector}
+        />
       </View>
     </View>
   );
@@ -175,28 +153,6 @@ export const TaskCardReport = ({
                 Пока здесь ничего нет
               </Text>
             )}
-            <View style={styles.mt36}>
-              <Text variant="title3" color={theme.text.basic}>
-                Закрывающие документы
-              </Text>
-              {closureFiles.length ? (
-                <View style={styles.mt24}>
-                  <DownloadManager
-                    files={closureFiles}
-                    onDelete={onDelete}
-                    canDelete={false}
-                  />
-                </View>
-              ) : (
-                <Text
-                  variant="bodySRegular"
-                  style={styles.mt8}
-                  color={theme.text.neutral}
-                >
-                  Пока здесь ничего нет
-                </Text>
-              )}
-            </View>
           </View>
         </View>
       ) : (

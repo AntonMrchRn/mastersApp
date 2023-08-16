@@ -1,5 +1,5 @@
 import { File } from '@/types/fileManager';
-import { ContractorStatus } from '@/types/task';
+import { ContractorStatus, RoleType } from '@/types/task';
 import { UserEntityType } from '@/types/user';
 
 type UserResponse = {
@@ -42,7 +42,7 @@ type User = {
   offerIDs: number[];
   phone: number | null;
   regionIDs: number[];
-  roleID: number;
+  roleID: RoleType;
   session: string;
   sessionID: number;
   setIDs: number[];

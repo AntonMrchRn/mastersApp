@@ -149,7 +149,10 @@ type Task = {
   outlayStatusID?: OutlayStatusType;
   publicTime?: string;
   services?: Service[];
-  setID?: number;
+  /**
+   * тип задачи
+   */
+  setID?: TaskSetType;
   stage?: string;
   /**
    * Статус задачи

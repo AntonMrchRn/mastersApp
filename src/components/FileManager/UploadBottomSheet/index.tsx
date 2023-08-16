@@ -1,11 +1,8 @@
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
-import {
-  ImagePickerResponse,
-  launchCamera,
-  launchImageLibrary,
-} from 'react-native-image-picker';
+import ImagePicker, { ImageOrVideo } from 'react-native-image-crop-picker';
+import { ImagePickerResponse, launchCamera } from 'react-native-image-picker';
 
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { BottomSheet, Button, Text, useTheme, useToast } from 'rn-ui-kit';
@@ -14,6 +11,7 @@ import { FileIcon } from '@/assets/icons/svg/files/FileIcon';
 import { CameraIcon } from '@/assets/icons/svg/screens/CameraIcon';
 import { GalleryIcon } from '@/assets/icons/svg/screens/GalleryIcon';
 import { VideoIcon } from '@/assets/icons/svg/screens/VideoIcon';
+import { configApp } from '@/constants/platform';
 import { useAppDispatch } from '@/store';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import { HandleUpload } from '@/types/fileManager';
@@ -54,15 +52,51 @@ export const UploadBottomSheet = ({
 
   const uploadActions = {
     [UploadAction.TakeFromGallery]: async () =>
-      await launchImageLibrary({
-        mediaType: isUserFile ? 'photo' : 'mixed',
-        selectionLimit: 10,
+      await ImagePicker.openPicker({
+        mediaType: isUserFile ? 'photo' : 'any',
+        multiple: true,
+        maxFiles: 10,
       }),
     [UploadAction.TakePhotoMedia]: async () =>
       await launchCamera({ mediaType: 'photo' }),
     [UploadAction.TakeVideoMedia]: async () =>
       await launchCamera({ mediaType: 'video' }),
-    [UploadAction.TakeFromFiles]: async () => await DocumentPicker.pick(),
+    [UploadAction.TakeFromFiles]: async () =>
+      await DocumentPicker.pick({
+        type: configApp.android
+          ? [
+              'image/jpeg',
+              'image/png',
+              'image/webp',
+              'application/zip',
+              'application/pdf',
+              'application/msword',
+              'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+              'application/vnd.ms-excel',
+              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+              'video/mpeg',
+              'video/mp4',
+              'video/ogg',
+              'video/webm',
+              'video/quicktime',
+              'image/gif',
+              'video/x-matroska',
+            ]
+          : [
+              'public.jpg',
+              'public.jpeg',
+              'public.png',
+              'public.zip-archive',
+              'com.adobe.pdf',
+              'public.content',
+              'public.mpeg',
+              'public.mpeg-4',
+              'com.microsoft.excel.xls',
+              'org.openxmlformats.spreadsheetml.sheet',
+              'com.apple.quicktime-movie',
+              'com.compuserve.gif',
+            ],
+      }),
   };
 
   const onUploadAction = async (actionType: UploadAction) => {
@@ -75,11 +109,18 @@ export const UploadBottomSheet = ({
           actionType === UploadAction.TakeVideoMedia) &&
         (result as ImagePickerResponse).errorCode === 'camera_unavailable';
       const isDocuments = actionType === UploadAction.TakeFromFiles;
+      const isCropPicker = actionType === UploadAction.TakeFromGallery;
 
       if (isMediaError) {
         return toast.show({
           type: 'error',
           title: 'Камера недоступна',
+        });
+      }
+      if (isCropPicker && (result as ImageOrVideo[]).length > 10) {
+        return toast.show({
+          type: 'error',
+          title: 'Нельзя выбрать более 10 файлов',
         });
       }
 
@@ -90,7 +131,8 @@ export const UploadBottomSheet = ({
         const { sizes, files, names } = fillFormData(
           formData,
           result,
-          isDocuments
+          isDocuments,
+          isCropPicker
         );
         onClose();
         const check = checkSizes({

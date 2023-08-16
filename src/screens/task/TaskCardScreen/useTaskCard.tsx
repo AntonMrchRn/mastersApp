@@ -9,7 +9,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import dayjs from 'dayjs';
 import { useToast } from 'rn-ui-kit';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
-import { boolean } from 'yup';
 
 import { TaskCardComment } from '@/components/task/TaskCard/TaskCardComment';
 import { TaskCardDescription } from '@/components/task/TaskCard/TaskCardDescription';
@@ -107,6 +106,10 @@ export const useTaskCard = ({
   const [cantDeleteBannerVisible, setCantDeleteBannerVisible] = useState(false);
   const [noAccessToTaskBannerVisible, setNoAccessToTaskBannerVisible] =
     useState(false);
+  const [
+    directionNotSpecifiedBannerVisible,
+    setDirectionNotSpecifiedBannerVisible,
+  ] = useState(false);
   const [submissionModalVisible, setSubmissionModalVisible] = useState(false);
   const [currentEstimateTab, setCurrentEstimateTab] = useState<EstimateTab>(
     EstimateTab.TASK_ESTIMATE
@@ -338,8 +341,7 @@ export const useTaskCard = ({
         )}`
       : '';
 
-  const hasAccessToTask =
-    userData?.isApproved && setId && userData?.setIDs?.includes(setId);
+  const hasAccessToTask = userData?.isApproved;
   const isCommentsAvailable =
     (isSupervisor ||
       isExecutor ||
@@ -353,6 +355,9 @@ export const useTaskCard = ({
       StatusType.CANCELLED_BY_CUSTOMER,
       StatusType.CANCELLED_BY_EXECUTOR,
     ].includes(statusID);
+
+  const hasAccessToDirection = setId && userData?.setIDs?.includes(setId);
+
   const isTaskClosed = statusID === StatusType.CLOSED;
 
   const isEstimateTabs =
@@ -370,6 +375,8 @@ export const useTaskCard = ({
 
   const onCantDeleteBannerVisible = () =>
     setCantDeleteBannerVisible(!cantDeleteBannerVisible);
+  const onDirectionNotSpecifiedBannerVisible = () =>
+    setDirectionNotSpecifiedBannerVisible(!directionNotSpecifiedBannerVisible);
   const onNoAccessToTaskBannerVisible = () =>
     setNoAccessToTaskBannerVisible(!noAccessToTaskBannerVisible);
   const onEstimateBannerVisible = () =>
@@ -380,11 +387,13 @@ export const useTaskCard = ({
   const onUploadModalVisible = () => setUploadModalVisible(!uploadModalVisible);
 
   const onSubmissionModalVisible = () => {
-    if (hasAccessToTask) {
-      setSubmissionModalVisible(!submissionModalVisible);
-    } else {
-      onNoAccessToTaskBannerVisible();
+    if (!hasAccessToTask) {
+      return onNoAccessToTaskBannerVisible();
     }
+    if (!hasAccessToDirection) {
+      return onDirectionNotSpecifiedBannerVisible();
+    }
+    return setSubmissionModalVisible(!submissionModalVisible);
   };
 
   const navigateToChat = () => {
@@ -498,6 +507,10 @@ export const useTaskCard = ({
     onNoAccessToTaskBannerVisible();
     navigation.navigate(BottomTabName.ProfileNavigation);
   };
+  const noDirectionButtonPress = () => {
+    onDirectionNotSpecifiedBannerVisible();
+    navigation.navigate(BottomTabName.ProfileNavigation);
+  };
   const onWorkDelivery = async () => {
     if (
       subsetID &&
@@ -545,7 +558,7 @@ export const useTaskCard = ({
         // при отказе от задачи в статусе 'опубликовано' сбрасываем участника через patch
         if (statusID === StatusType.ACTIVE && user?.userID) {
           await patchITTaskMember({
-            ID: (isConfirmedCurator ? curatorMemberId : executorMemberId)!,
+            ID: isConfirmedCurator ? curatorMemberId : executorMemberId,
             userID: user?.userID,
             isConfirm: false,
             isRefuse: true,
@@ -629,16 +642,17 @@ export const useTaskCard = ({
   };
 
   const onSubmitAnEstimate = () => {
-    if (hasAccessToTask) {
-      //показываем модалку с условиями если самозанятый
-      if (isSelfEmployed) {
-        onSubmissionModalVisible();
-      } else {
-        onTaskSubmission();
-      }
-    } else {
-      onNoAccessToTaskBannerVisible();
+    if (!hasAccessToTask) {
+      return onNoAccessToTaskBannerVisible();
     }
+    if (!hasAccessToDirection) {
+      return onDirectionNotSpecifiedBannerVisible();
+    }
+    if (!isSelfEmployed) {
+      return onTaskSubmission();
+    }
+    //показываем модалку с условиями если самозанятый
+    return onSubmissionModalVisible();
   };
 
   const navigateToContractors = () => {
@@ -806,5 +820,9 @@ export const useTaskCard = ({
     onCantDeleteBannerVisible,
     noAccessToTaskBannerVisible,
     onNoAccessToTaskBannerVisible,
+    directionNotSpecifiedBannerVisible,
+    onDirectionNotSpecifiedBannerVisible,
+    noDirectionButtonPress,
+    setId,
   };
 };

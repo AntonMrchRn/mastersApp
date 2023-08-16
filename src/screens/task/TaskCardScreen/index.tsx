@@ -27,7 +27,7 @@ import { TaskCardSubmissionBottomSheet } from '@/components/task/TaskCard/TaskCa
 import { configApp, deviceWidth } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { BottomTabParamList } from '@/navigation/TabNavigation';
-import { StatusType, TaskType } from '@/types/task';
+import { StatusType, TaskSetType, TaskType } from '@/types/task';
 
 import { useTaskCard } from './useTaskCard';
 
@@ -83,6 +83,10 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
     noAccessToTaskBannerVisible,
     noAccessButtonPress,
     toClose,
+    directionNotSpecifiedBannerVisible,
+    onDirectionNotSpecifiedBannerVisible,
+    noDirectionButtonPress,
+    setId,
   } = useTaskCard({ taskId, navigation });
 
   return (
@@ -217,6 +221,21 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
               onClosePress={onNoAccessToTaskBannerVisible}
               buttonText="Перейти в Профиль"
               onButtonPress={noAccessButtonPress}
+            />
+          </View>
+        )}
+        {directionNotSpecifiedBannerVisible && (
+          <View style={styles.mb16}>
+            <Banner
+              type={'error'}
+              title="Направление не указано"
+              icon={'alert'}
+              text={`Для выполнения задач ${
+                setId === TaskSetType.COMMON ? 'Общих' : 'IT'
+              } услуг выберите в профиле соответствующее направление во вкладке Деятельность`}
+              onClosePress={onDirectionNotSpecifiedBannerVisible}
+              buttonText="Перейти в Профиль"
+              onButtonPress={noDirectionButtonPress}
             />
           </View>
         )}
