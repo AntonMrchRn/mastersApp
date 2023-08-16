@@ -212,6 +212,12 @@ export const tasksAPI = api
           method: 'GET',
         }),
       }),
+      getCompressRate: builder.query<number, void>({
+        query: () => ({
+          url: 'params?name=compressRate',
+          method: 'GET',
+        }),
+      }),
       postTasksFiles: builder.mutation<File[], FilesParams>({
         query: ({ formData, files, date, signal }) => {
           return {
@@ -286,4 +292,5 @@ export const {
   usePostITTaskMemberMutation,
   useDeleteITTaskMemberMutation,
   usePatchITTaskMemberMutation,
+  useGetCompressRateQuery,
 } = tasksAPI;
