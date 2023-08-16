@@ -140,10 +140,10 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
               name={'count'}
               label={count ? 'Количество' : undefined}
               placeholder={'Количество'}
-              variant={'text'}
+              variant={'number'}
               hint={errors.count?.message}
               isError={!!errors.count?.message}
-              keyboardType="numeric"
+              maxLength={3}
             />
           </View>
           <Spacer size={'xl'} />

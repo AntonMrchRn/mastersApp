@@ -209,6 +209,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
             label={name ? 'Наименование' : undefined}
             placeholder={'Наименование'}
             variant={'text'}
+            maxLength={50}
             hint={
               errors.name?.message ||
               (hasName ? 'Данный материал уже включен в смету' : undefined)
@@ -219,17 +220,17 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
             name={'count'}
             label={count ? 'Количество' : undefined}
             placeholder={'Количество'}
-            variant={'text'}
+            variant={'number'}
             hint={errors.count?.message}
             isError={!!errors.count?.message}
-            keyboardType="numeric"
+            maxLength={3}
           />
           <ControlledInput
             name={'price'}
             label={price ? 'Цена' : undefined}
             placeholder={'Цена'}
-            variant={'text'}
-            keyboardType="numeric"
+            variant={'number'}
+            maxLength={6}
             hint={
               errors.price?.message ||
               'Указывается в рублях за одну единицу измерения'
