@@ -7,11 +7,13 @@ import { TaskAddress } from '@/components/task/TaskAddress';
 import { TaskBadges } from '@/components/task/TaskBadges';
 import { TaskDate } from '@/components/task/TaskDate';
 import { Task } from '@/store/api/tasks/types';
+import { RoleType } from '@/types/task';
 
 import { styles } from './styles';
 
 type CardTasksProp = Task & {
   onItemPress: (id: number) => void;
+  userRole: RoleType | undefined;
 };
 
 const CardTasks = ({
@@ -28,6 +30,7 @@ const CardTasks = ({
   outlayStatusID,
   currentSum,
   toClose,
+  userRole,
 }: CardTasksProp) => {
   const address = object?.name || '';
 
@@ -56,7 +59,7 @@ const CardTasks = ({
           <Text variant="title3" style={styles.wrapperTitle}>
             {name}
           </Text>
-          {currentSum && (
+          {currentSum && userRole !== RoleType.INTERNAL_EXECUTOR && (
             <Text variant="title2" style={styles.price}>
               {currentSum} ₽
             </Text>

@@ -30,7 +30,7 @@ import {
 } from '@/store/slices/taskSearch/asyncActions';
 import { clearList } from '@/store/slices/taskSearch/reducer';
 import { ErrorCode } from '@/types/error';
-import { TaskSearch, TaskSetType } from '@/types/task';
+import { RoleType, TaskSearch, TaskSetType } from '@/types/task';
 
 import styles from './style';
 
@@ -63,6 +63,7 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
     skip: !authUser?.userID,
   });
   const regionIDs = user?.regionIDs;
+  const userRole = user?.roleID;
 
   useEffect(() => {
     if (regionIDs?.length && isFocused) {
@@ -89,7 +90,7 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
 
   const renderItem = ({ item }: ListRenderItemInfo<Task>) => (
-    <CardTasks {...item} onItemPress={onItemPress} />
+    <CardTasks {...item} onItemPress={onItemPress} userRole={userRole} />
   );
 
   const onRefresh = () => {
@@ -116,11 +117,13 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
         <Text variant="title1" style={styles.textHeader}>
           Поиск задач
         </Text>
-        <SegmentedControl
-          style={styles.tabs}
-          onChange={switchTab}
-          tabs={['IT услуги', 'Общие']}
-        />
+        {userRole !== RoleType.INTERNAL_EXECUTOR && (
+          <SegmentedControl
+            style={styles.tabs}
+            onChange={switchTab}
+            tabs={['IT услуги', 'Общие']}
+          />
+        )}
       </View>
       <ShadowedView
         style={[

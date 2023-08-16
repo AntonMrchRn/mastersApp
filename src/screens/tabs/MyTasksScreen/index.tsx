@@ -66,8 +66,9 @@ const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
       taskId: id,
     });
   };
+  const userRole = user?.roleID;
   const renderItem = ({ item }: ListRenderItemInfo<Task>) => (
-    <CardTasks {...item} onItemPress={onItemPress} />
+    <CardTasks {...item} onItemPress={onItemPress} userRole={userRole} />
   );
 
   const onRefresh = () =>
