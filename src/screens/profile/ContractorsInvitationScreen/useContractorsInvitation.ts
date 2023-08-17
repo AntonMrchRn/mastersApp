@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Share from 'react-native-share';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Clipboard from '@react-native-community/clipboard';
@@ -89,12 +90,26 @@ const useContractorsInvitation = () => {
     });
   };
 
+  const sharePress = async () => {
+    if (link) {
+      try {
+        await Share.open({ url: link });
+      } catch (err) {
+        console.log(
+          '🚀 ~ file: useContractorsInvitation.ts:98 ~ sharePress ~ err:',
+          err
+        );
+      }
+    }
+  };
+
   return {
     link,
     isLoading,
     copyLink,
     linkTimeout,
     onGenerateLink,
+    sharePress,
   };
 };
 

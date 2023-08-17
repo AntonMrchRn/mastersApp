@@ -28,6 +28,24 @@ const styles = StyleSheet.create({
     marginTop: 'auto',
     marginBottom: 12,
   },
+  rowBetween: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 16,
+  },
+  button: {
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    height: 48,
+    flexGrow: 1,
+  },
+  share: {
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    borderRadius: 12,
+    width: 48,
+    height: 48,
+  },
 });
 
 export default styles;

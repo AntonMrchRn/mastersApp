@@ -3,6 +3,7 @@ import { View } from 'react-native';
 
 import { Button, Spacer, Text, Tips, useTheme } from 'rn-ui-kit';
 
+import { ShareIcon } from '@/assets/icons/svg/profile/ShareIcon';
 import MegaphoneIcon from '@/assets/icons/svg/screens/MegaphoneIcon';
 import Header from '@/components/Header';
 import TimerBlockLink from '@/components/Timer/TimerBlockLink';
@@ -12,9 +13,8 @@ import styles from './style';
 
 const ContractorsInvitationScreen = () => {
   const theme = useTheme();
-  const { link, isLoading, copyLink, linkTimeout, onGenerateLink } =
+  const { link, isLoading, copyLink, linkTimeout, onGenerateLink, sharePress } =
     useContractorsInvitation();
-
   return (
     <View style={styles.container}>
       <Header title="Приглашение подрядчиков" />
@@ -36,15 +36,26 @@ const ContractorsInvitationScreen = () => {
           сможете курировать работы вступивших в команду
         </Text>
         <Spacer size="xl" />
-        <Button
-          isPending={isLoading}
-          label={
-            link
-              ? 'Копировать ссылку-приглашение'
-              : 'Сгенерировать ссылку-приглашение'
-          }
-          onPress={link ? () => copyLink(link) : onGenerateLink}
-        />
+        <View style={styles.rowBetween}>
+          <Button
+            isPending={isLoading}
+            size="S"
+            style={styles.button}
+            label={
+              link ? 'Копировать ссылку' : 'Сгенерировать ссылку-приглашение'
+            }
+            onPress={link ? () => copyLink(link) : onGenerateLink}
+          />
+          {!!link && (
+            <Button
+              onPress={sharePress}
+              icon={<ShareIcon />}
+              size="S"
+              variant="outlineAccent"
+              style={styles.share}
+            />
+          )}
+        </View>
         {(!!linkTimeout || !!link) && (
           <TimerBlockLink
             isConfirm={!!link}
