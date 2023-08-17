@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingHorizontal: 24,
-    paddingVertical: 12,
     height: 48,
     flexGrow: 1,
   },

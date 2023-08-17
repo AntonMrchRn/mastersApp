@@ -39,7 +39,7 @@ const ContractorsInvitationScreen = () => {
         <View style={styles.rowBetween}>
           <Button
             isPending={isLoading}
-            size="S"
+            size={'S'}
             style={styles.button}
             label={
               link ? 'Копировать ссылку' : 'Сгенерировать ссылку-приглашение'
