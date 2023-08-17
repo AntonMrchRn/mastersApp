@@ -129,7 +129,10 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
   };
   return (
     <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
-      <KeyboardAwareScrollView contentContainerStyle={styles.container}>
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.container}
+        enableOnAndroid={true}
+      >
         <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
           Заполните данные об услуге
         </Text>
