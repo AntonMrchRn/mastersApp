@@ -6,7 +6,13 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
   ],
-  plugins: ['@typescript-eslint', 'prettier', 'simple-import-sort'],
+  plugins: [
+    'react',
+    'react-hooks',
+    '@typescript-eslint',
+    'prettier',
+    'simple-import-sort',
+  ],
   rules: {
     'react-hooks/exhaustive-deps': 'off',
     'react/prop-types': 'off',
