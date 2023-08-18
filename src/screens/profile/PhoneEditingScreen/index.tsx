@@ -42,6 +42,7 @@ const PhoneEditingScreen = () => {
           <FormProvider {...methods}>
             <ControlledInputPhone
               name="phone"
+              withRuFlagIcon
               hint={errors.phone?.message}
               isError={!!errors.phone?.message}
             />

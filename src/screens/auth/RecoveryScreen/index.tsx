@@ -59,6 +59,7 @@ const RecoveryScreen = () => {
             {isPhoneAuth ? (
               <ControlledInputPhone
                 name="phone"
+                withRuFlagIcon
                 hint={errors.phone?.message}
                 containerStyle={styles.input}
                 isError={!!errors.phone?.message}

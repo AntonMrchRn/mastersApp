@@ -61,6 +61,7 @@ const SignInScreen = () => {
               {isPhoneAuth ? (
                 <ControlledInputPhone
                   name="phone"
+                  withRuFlagIcon
                   hint={errors.phone?.message}
                   isError={!!errors.phone?.message}
                   onFocus={configApp.ios ? onFocus : () => null}
