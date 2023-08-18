@@ -3,17 +3,11 @@ import { StyleSheet, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { Banner, Button } from 'rn-ui-kit';
-import { IconTypes, Types } from 'rn-ui-kit/lib/typescript/components/Banner';
+import { BannerProps } from 'rn-ui-kit/lib/typescript/components/Banner';
 import { Variant } from 'rn-ui-kit/lib/typescript/components/Button';
 
 import { configApp } from '@/constants/platform';
 
-export type TaskCardBottomBanner = {
-  title: string;
-  type: Types;
-  icon: IconTypes;
-  text: string;
-} | null;
 export type TaskCardBottomButton = {
   label: string;
   variant: Variant;
@@ -21,7 +15,7 @@ export type TaskCardBottomButton = {
   disabled?: boolean;
 };
 type TaskCardBottomProps = {
-  banner: TaskCardBottomBanner;
+  banner: BannerProps | null;
   buttons: TaskCardBottomButton[];
 };
 export const TaskCardBottom: FC<TaskCardBottomProps> = ({
@@ -40,6 +34,7 @@ export const TaskCardBottom: FC<TaskCardBottomProps> = ({
       locations={[0, 0.9]}
     >
       <View style={styles.container}>
+        {banner && <Banner {...banner} />}
         {buttons.map((button, index) => (
           <Button
             onPress={button.onPress}
@@ -49,14 +44,6 @@ export const TaskCardBottom: FC<TaskCardBottomProps> = ({
             disabled={button.disabled}
           />
         ))}
-        {banner && (
-          <Banner
-            type={banner.type}
-            icon={banner.icon}
-            text={banner.text}
-            title={banner.title}
-          />
-        )}
       </View>
     </LinearGradient>
   );

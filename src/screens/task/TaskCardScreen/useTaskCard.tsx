@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from '@/store';
 import {
   useDeleteITTaskMemberMutation,
   useDeleteOffersMutation,
+  useGetAnotherOffersQuery,
   useGetTaskHistoryQuery,
   useGetTaskQuery,
   useGetUserOffersQuery,
@@ -148,6 +149,16 @@ export const useTaskCard = ({
       skip: task?.subsetID !== TaskType.COMMON_AUCTION_SALE,
     }
   );
+  const getAnotherOffers = useGetAnotherOffersQuery(
+    {
+      taskID: +taskId,
+      userID: user?.userID as number,
+    },
+    {
+      skip: task?.subsetID !== TaskType.COMMON_AUCTION_SALE,
+    }
+  );
+
   const userOffersData = getUserOffersQuery.data?.offers || [];
 
   useEffect(() => {
@@ -251,11 +262,7 @@ export const useTaskCard = ({
   const publicTime = task?.publicTime
     ? `Опубликовано ${dayjs(task?.publicTime).format('DD MMMM в HH:mm')}`
     : '';
-  const banner = getBanner({
-    tab: tab.label,
-    statusID,
-    outlayStatusID,
-  });
+
   /**
    * Отказался ли подрядчик принять задачу
    */
@@ -371,6 +378,10 @@ export const useTaskCard = ({
       getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'desc' })
     );
     getTaskHistory.refetch();
+    if (task?.subsetID === TaskType.COMMON_AUCTION_SALE) {
+      getUserOffersQuery.refetch();
+      getAnotherOffers.refetch();
+    }
   };
 
   const onCantDeleteBannerVisible = () =>
@@ -408,6 +419,13 @@ export const useTaskCard = ({
       isMessageInputAvailable: !isTaskClosed && !isTaskCanceled,
     });
   };
+
+  const banner = getBanner({
+    tab: tab.label,
+    statusID,
+    outlayStatusID,
+    navigateToChat,
+  });
 
   const onEstimateBannerPress = () => {
     onEstimateBannerVisible();

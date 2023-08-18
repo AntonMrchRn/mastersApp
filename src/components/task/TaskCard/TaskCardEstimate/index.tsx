@@ -224,7 +224,8 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
         {subsetID &&
           [TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE].includes(
             subsetID
-          ) && (
+          ) &&
+          statusID === StatusType.ACTIVE && (
             <View style={styles.mt16}>
               {isTaskEctimateTab ? (
                 <>
