@@ -196,7 +196,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                 return (
                   <View key={material.ID}>
                     <TaskEstimateItem
-                      measure={material.measure.split('(')[1]?.slice(0, -1)}
+                      measure={material?.measure?.split('(')?.[1]?.slice(0, -1)}
                       firstAction={firstActionMaterial}
                       secondAction={secondActionMaterial}
                       title={material?.name}
@@ -224,7 +224,8 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
         {subsetID &&
           [TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE].includes(
             subsetID
-          ) && (
+          ) &&
+          statusID === StatusType.ACTIVE && (
             <View style={styles.mt16}>
               {isTaskEctimateTab ? (
                 <>

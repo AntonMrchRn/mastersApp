@@ -170,6 +170,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
       navigation.navigate(AppScreenName.TaskCard, { taskId });
     }
   };
+
   const measures: Measure[] = [
     {
       text: 'Метр (м.)',

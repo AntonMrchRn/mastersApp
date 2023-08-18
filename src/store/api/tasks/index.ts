@@ -203,6 +203,12 @@ export const tasksAPI = api
           method: 'GET',
         }),
       }),
+      getMeasures: builder.query<unknown, void>({
+        query: () => ({
+          url: 'measures?query=??',
+          method: 'GET',
+        }),
+      }),
       getAnotherOffers: builder.query<
         GetOffersResponse,
         { taskID: number; userID: number }
@@ -293,4 +299,5 @@ export const {
   useDeleteITTaskMemberMutation,
   usePatchITTaskMemberMutation,
   useGetCompressRateQuery,
+  useGetMeasuresQuery,
 } = tasksAPI;

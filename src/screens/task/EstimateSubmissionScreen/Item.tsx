@@ -83,8 +83,8 @@ export const Item: FC<ItemProps> = ({
       </View>
       <Spacer size={16} />
       <Input
-        variant={'text'}
-        keyboardType="numeric"
+        variant={'number'}
+        maxLength={6}
         label={'Стоимость'}
         placeholder={'Стоимость'}
         hint={

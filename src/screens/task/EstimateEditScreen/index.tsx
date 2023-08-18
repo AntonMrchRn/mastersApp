@@ -73,6 +73,13 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
     ? service?.materials?.find(materia => materia.name === materialName)
     : undefined;
 
+  const name = materialName ? material?.name : service?.name;
+  const description = materialName ? '' : service?.description;
+  const price = materialName ? material?.price : service?.price;
+  const measure = materialName
+    ? material?.measure?.split('(')?.[1]?.slice(0, -1)
+    : service?.measure?.toLowerCase();
+
   const methods = useForm({
     defaultValues: { estimateCount: '' },
     resolver: yupResolver(estimateCountValidationSchema),
@@ -85,9 +92,12 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
     if (!materialName) {
       //для услуги
       //кинуть только то что меняем
+      const newSum =
+        ((service?.sum || 0) / (service?.count || 1)) * +estimateCount;
       await patchTaskService({
         ID: serviceId,
         count: +estimateCount,
+        sum: newSum,
         taskID: taskId,
         materials: [],
       });
@@ -133,34 +143,36 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
           {service?.categoryName}
         </Text>
       )}
-      {service?.name && (
+      {name && (
         <Text
           variant={'bodyMBold'}
           color={theme.text.basic}
           style={styles.name}
         >
-          {service?.name}
+          {name}
         </Text>
       )}
-      {service?.description && (
+      {description && (
         <Text
           variant={'bodySRegular'}
           color={theme.text.basic}
           style={styles.description}
         >
-          {service?.description}
+          {description}
         </Text>
       )}
-      <View style={styles.row}>
-        <PriceIcon />
-        <Text
-          variant={'bodySRegular'}
-          color={theme.text.neutral}
-          style={styles.rowText}
-        >
-          {`${service?.price} ₽ за шт.`}
-        </Text>
-      </View>
+      {price && (
+        <View style={styles.row}>
+          <PriceIcon />
+          <Text
+            variant={'bodySRegular'}
+            color={theme.text.neutral}
+            style={styles.rowText}
+          >
+            {`${price} ₽ за ${measure}`}
+          </Text>
+        </View>
+      )}
       <View style={styles.row}>
         <CubeIcon />
         <Text
@@ -168,9 +180,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
           color={theme.text.neutral}
           style={styles.rowText}
         >
-          {`Измеряется в ${
-            materialName ? material?.measure?.toLowerCase() : 'шт.'
-          }`}
+          {`Измеряется в ${measure}`}
         </Text>
       </View>
       <Spacer size={'l'} />
@@ -179,6 +189,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
           name={'estimateCount'}
           variant={'number'}
           label={'Количество'}
+          maxLength={3}
           hint={errors.estimateCount?.message}
           isError={!!errors.estimateCount?.message}
         />

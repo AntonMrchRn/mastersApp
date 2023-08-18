@@ -72,8 +72,8 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   };
 
   const styles = StyleSheet.create({
-    containerStyle: { paddingRight: 20, paddingHorizontal: 0 },
-    wrapper: { width: '100%' },
+    containerStyle: { paddingRight: 20, paddingHorizontal: 20 },
+    wrapper: { flexGrow: 1, marginHorizontal: -20 },
   });
 
   return (
