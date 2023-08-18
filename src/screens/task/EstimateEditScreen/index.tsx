@@ -179,6 +179,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
           name={'estimateCount'}
           variant={'number'}
           label={'Количество'}
+          maxLength={3}
           hint={errors.estimateCount?.message}
           isError={!!errors.estimateCount?.message}
         />

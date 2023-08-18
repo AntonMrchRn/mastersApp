@@ -11,7 +11,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  radio: { marginRight: 12, height: 20, width: 20 },
   container: {
     flexGrow: 1,
     alignItems: 'center',
