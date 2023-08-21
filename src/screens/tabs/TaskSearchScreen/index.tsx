@@ -43,7 +43,7 @@ type TaskSearchScreenProps = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, BottomTabName.TaskSearch>,
   StackScreenProps<AppStackParamList>
 >;
-
+let abort: () => void | undefined;
 const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
   const theme = useTheme();
   const isFocused = useIsFocused();
@@ -95,7 +95,11 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
 
   const onRefresh = () => {
     if (regionIDs && regionIDs?.length) {
-      dispatch(refreshTasks({ idList: selectedTabId, regionID: regionIDs }));
+      abort && abort();
+      const ex = dispatch(
+        refreshTasks({ idList: selectedTabId, regionID: regionIDs })
+      );
+      abort = ex.abort;
     }
   };
 
@@ -147,7 +151,7 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
             keyExtractor={keyExtractor}
             style={styles.list}
             onRefresh={onRefresh}
-            refreshing={loadingList}
+            refreshing={!!loadingList}
             contentContainerStyle={[
               styles.listContainer,
               !data?.length && styles.emptyListContainer,

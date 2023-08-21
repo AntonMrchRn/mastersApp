@@ -10,7 +10,7 @@ const initialState: InitialState = {
   data: [],
   tableNames: [],
   loadingNames: false,
-  loadingList: false,
+  loadingList: 0,
   errorList: null,
   errorNames: null,
 };
@@ -27,7 +27,7 @@ const myTasks = createSlice({
   extraReducers: builder => {
     // get search tasks
     builder.addCase(getSearchTasks.pending, state => {
-      state.loadingList = true;
+      state.loadingList = state.loadingList + 1;
     });
     builder.addCase(
       getSearchTasks.fulfilled,
@@ -37,29 +37,29 @@ const myTasks = createSlice({
           ? state.data?.concat(<[]>payload.tasks)
           : state.data;
 
-        state.loadingList = false;
+        state.loadingList = state.loadingList - 1;
       }
     );
     builder.addCase(getSearchTasks.rejected, (state, { payload }) => {
       state.errorList = payload as Error;
-      state.loadingList = false;
+      state.loadingList = state.loadingList - 1;
     });
 
     // refresh tasks
     builder.addCase(refreshTasks.pending, state => {
-      state.loadingList = true;
+      state.loadingList = state.loadingList + 1;
     });
     builder.addCase(
       refreshTasks.fulfilled,
       (state, { payload }: PayloadAction<InitialState['list']>) => {
         state.list = payload;
         state.data = payload.tasks;
-        state.loadingList = false;
+        state.loadingList = state.loadingList - 1;
       }
     );
     builder.addCase(refreshTasks.rejected, (state, { payload }) => {
       state.errorList = payload as Error;
-      state.loadingList = false;
+      state.loadingList = state.loadingList - 1;
     });
   },
 });
