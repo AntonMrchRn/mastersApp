@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 
+import plural from 'plural-ru';
 import { Swipeable } from 'rn-ui-kit';
 import { Variant } from 'rn-ui-kit/lib/typescript/components/Swipeable';
 
@@ -33,13 +34,18 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   canSwipe,
   measure = '',
 }) => {
+  const currentMeasure =
+    measure === 'час'
+      ? plural(count, '%d час', '%d часa', '%d часов')
+      : `${count} ${measure}`;
+
   const items = [
     {
       text: `${price} ₽ за ${measure}`,
       icon: <PriceIcon />,
     },
     {
-      text: `${count} ${measure}`,
+      text: currentMeasure,
       icon: <CubeIcon />,
     },
     {
