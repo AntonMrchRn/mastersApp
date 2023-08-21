@@ -244,7 +244,6 @@ export const useTaskCard = ({
    * Статус задачи
    */
   const statusID: StatusType | undefined = task?.statusID;
-  // const statusID: StatusType | undefined = 12;
   /**
    * Статус сметы
    */
