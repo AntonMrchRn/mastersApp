@@ -1,6 +1,10 @@
 import React, { JSX } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import {
+  CompositeNavigationProp,
+  useNavigation,
+} from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Button, useTheme } from 'rn-ui-kit';
 
@@ -55,16 +59,22 @@ const PreviewNotFound = ({ type, closeModal }: PreviewNotFoundProps) => {
   const theme = useTheme();
   const { navigate } =
     useNavigation<
-      StackNavigationProp<BottomTabParamList & ProfileStackParamList>
+      CompositeNavigationProp<
+        BottomTabNavigationProp<BottomTabParamList>,
+        StackNavigationProp<ProfileStackParamList>
+      >
     >();
 
   const navigateToProfile = () => {
-    navigate(BottomTabName.ProfileNavigation);
+    navigate(BottomTabName.ProfileNavigation, {
+      screen: ProfileScreenName.Profile,
+    });
     closeModal && closeModal();
   };
   const navigateToProfileOnActivity = () => {
-    navigate(ProfileScreenName.Profile, {
-      tab: { id: 2, label: ProfileTab.Activity },
+    navigate(BottomTabName.ProfileNavigation, {
+      screen: ProfileScreenName.Profile,
+      params: { tab: { id: 2, label: ProfileTab.Activity } },
     });
   };
   const navigateToTaskSearch = () => navigate(BottomTabName.TaskSearch);

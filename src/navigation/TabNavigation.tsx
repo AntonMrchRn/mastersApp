@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigatorScreenParams } from '@react-navigation/native';
 
 import Employees from '@/assets/icons/svg/tabBar/Employees';
 import Profile from '@/assets/icons/svg/tabBar/Profile';
@@ -10,7 +11,7 @@ import { fonts } from '@/constants/fonts';
 import MyTasksScreen from '@/screens/tabs/MyTasksScreen';
 import TaskSearchScreen from '@/screens/tabs/TaskSearchScreen';
 
-import { ProfileNavigation, ProfileScreenName } from './ProfileNavigation';
+import { ProfileNavigation, ProfileStackParamList } from './ProfileNavigation';
 
 const styles = StyleSheet.create({
   label: {
@@ -35,7 +36,7 @@ export enum BottomTabName {
 export type BottomTabParamList = {
   [BottomTabName.TaskSearch]: undefined;
   [BottomTabName.MyTasks]: undefined;
-  [BottomTabName.ProfileNavigation]: { screen?: ProfileScreenName } | undefined;
+  [BottomTabName.ProfileNavigation]: NavigatorScreenParams<ProfileStackParamList>;
 };
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 export const TabNavigation = () => (
