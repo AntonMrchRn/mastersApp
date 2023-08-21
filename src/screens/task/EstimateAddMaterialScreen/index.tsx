@@ -83,10 +83,10 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
       measure: '',
     },
     resolver: yupResolver(estimateAddMaterialValidationSchema),
-    mode: 'onChange',
+    mode: 'onSubmit',
   });
   const {
-    formState: { errors, isValid },
+    formState: { errors },
     watch,
   } = methods;
 
@@ -250,7 +250,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
           onPress={methods.handleSubmit(onSubmit)}
           style={styles.button}
           isPending={mutationMaterial.isLoading}
-          disabled={!isValid || hasName}
+          disabled={hasName}
         />
       </FormProvider>
     </View>

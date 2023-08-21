@@ -46,6 +46,7 @@ const useProfile = ({ tab }: { tab: TabProf | undefined }) => {
   const {
     data: user,
     isLoading,
+    isFetching,
     isError,
     error,
     refetch,
@@ -146,6 +147,8 @@ const useProfile = ({ tab }: { tab: TabProf | undefined }) => {
     isInternalExecutor,
     isBlockingModalVisible,
     isApprovalNotificationVisible,
+    refetch,
+    isFetching,
   };
 };
 

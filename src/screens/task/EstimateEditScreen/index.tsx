@@ -83,7 +83,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
   const methods = useForm({
     defaultValues: { estimateCount: '' },
     resolver: yupResolver(estimateCountValidationSchema),
-    mode: 'onChange',
+    mode: 'onSubmit',
   });
   const {
     formState: { errors },
@@ -91,9 +91,11 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
   const onSubmit = async ({ estimateCount }: { estimateCount: string }) => {
     if (!materialName) {
       //для услуги
-      //кинуть только то что меняем
+      //кинуть только то что меняем и новую сумму (от старой суммы отнимаем сумму чистой услуги и добавляем новую сумму чистой услуги)
       const newSum =
-        ((service?.sum || 0) / (service?.count || 1)) * +estimateCount;
+        (service?.sum || 0) -
+        (service?.count || 1) * (service?.price || 0) +
+        +estimateCount * (service?.price || 0);
       await patchTaskService({
         ID: serviceId,
         count: +estimateCount,

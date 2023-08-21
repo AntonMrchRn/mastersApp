@@ -87,6 +87,8 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
     onDirectionNotSpecifiedBannerVisible,
     noDirectionButtonPress,
     setId,
+    uploadLimitBannerVisible,
+    onUploadLimitBannerVisible,
   } = useTaskCard({ taskId, navigation });
 
   return (
@@ -188,6 +190,19 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
         </ScrollView>
       </SafeAreaView>
       <View style={[styles.bottom, { bottom: insets.bottom }]}>
+        {uploadLimitBannerVisible && (
+          <View style={styles.mb16}>
+            <Banner
+              onClosePress={onUploadLimitBannerVisible}
+              type={'error'}
+              icon={'alert'}
+              title="Превышен лимит загрузки"
+              text={
+                'Максимальный размер загружаемого файла:\n ● изображения до 20 МБ форматов jpg, jpeg, png, webp\n ● видео до 50 МБ\nОбщий размер загружаемых файлов не более 250 МВ'
+              }
+            />
+          </View>
+        )}
         {estimateBannerVisible && (
           <View style={styles.mb16}>
             <Banner

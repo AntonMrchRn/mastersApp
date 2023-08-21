@@ -9,6 +9,8 @@ const hitSlop = { top: 10, left: 10, right: 10, bottom: 10 };
 
 const platform = Platform.OS;
 
+const isDev = __DEV__;
+
 const MyTheme = {
   ...DefaultTheme,
   colors: {
@@ -49,4 +51,4 @@ const configApp = {
   },
 };
 
-export { MyTheme, configApp, deviceHeight, deviceWidth, hitSlop };
+export { MyTheme, configApp, deviceHeight, deviceWidth, hitSlop, isDev };

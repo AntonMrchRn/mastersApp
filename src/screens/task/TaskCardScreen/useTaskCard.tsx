@@ -16,6 +16,7 @@ import { TaskCardEstimate } from '@/components/task/TaskCard/TaskCardEstimate';
 import { TaskCardHistory } from '@/components/task/TaskCard/TaskCardHistory';
 import { TaskCardReport } from '@/components/task/TaskCard/TaskCardReport';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
+import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
@@ -100,6 +101,8 @@ export const useTaskCard = ({
     }
   );
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
+  const [uploadLimitBannerVisible, setUploadLimitBannerVisible] =
+    useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [estimateBottomVisible, setEstimateBottomVisible] = useState(false);
@@ -241,7 +244,6 @@ export const useTaskCard = ({
    * Статус задачи
    */
   const statusID: StatusType | undefined = task?.statusID;
-  // const statusID: StatusType | undefined = 12;
   /**
    * Статус сметы
    */
@@ -384,6 +386,9 @@ export const useTaskCard = ({
     }
   };
 
+  const onUploadLimitBannerVisible = () => {
+    setUploadLimitBannerVisible(!uploadLimitBannerVisible);
+  };
   const onCantDeleteBannerVisible = () =>
     setCantDeleteBannerVisible(!cantDeleteBannerVisible);
   const onDirectionNotSpecifiedBannerVisible = () =>
@@ -523,11 +528,15 @@ export const useTaskCard = ({
   };
   const noAccessButtonPress = () => {
     onNoAccessToTaskBannerVisible();
-    navigation.navigate(BottomTabName.ProfileNavigation);
+    navigation.navigate(BottomTabName.ProfileNavigation, {
+      screen: ProfileScreenName.Profile,
+    });
   };
   const noDirectionButtonPress = () => {
     onDirectionNotSpecifiedBannerVisible();
-    navigation.navigate(BottomTabName.ProfileNavigation);
+    navigation.navigate(BottomTabName.ProfileNavigation, {
+      screen: ProfileScreenName.Profile,
+    });
   };
   const onWorkDelivery = async () => {
     if (
@@ -733,6 +742,8 @@ export const useTaskCard = ({
             activeBudgetCanceled={!!banner}
             uploadModalVisible={uploadModalVisible}
             onUploadModalVisible={onUploadModalVisible}
+            onUploadLimitBannerVisible={onUploadLimitBannerVisible}
+            uploadLimitBannerVisible={uploadLimitBannerVisible}
           />
         );
       case TaskTab.HISTORY:
@@ -842,5 +853,7 @@ export const useTaskCard = ({
     onDirectionNotSpecifiedBannerVisible,
     noDirectionButtonPress,
     setId,
+    uploadLimitBannerVisible,
+    onUploadLimitBannerVisible,
   };
 };

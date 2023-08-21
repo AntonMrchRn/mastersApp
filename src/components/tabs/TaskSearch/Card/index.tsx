@@ -6,6 +6,7 @@ import { Card, Spacer, Text } from 'rn-ui-kit';
 import { TaskAddress } from '@/components/task/TaskAddress';
 import { TaskBadges } from '@/components/task/TaskBadges';
 import { TaskDate } from '@/components/task/TaskDate';
+import { isDev } from '@/constants/platform';
 import { Task } from '@/store/api/tasks/types';
 import { RoleType } from '@/types/task';
 
@@ -53,9 +54,11 @@ const CardTasks = ({
               toClose={toClose}
             />
           </View>
-          <Text variant="bodySRegular" style={styles.wrapperTitle}>
-            Номер задачи: {ID}
-          </Text>
+          {isDev && (
+            <Text variant="bodySRegular" style={styles.wrapperTitle}>
+              Номер задачи: {ID}
+            </Text>
+          )}
           <Text variant="title3" style={styles.wrapperTitle}>
             {name}
           </Text>

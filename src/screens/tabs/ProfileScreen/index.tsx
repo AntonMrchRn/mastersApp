@@ -1,5 +1,10 @@
 import React, { FC } from 'react';
-import { ActivityIndicator, SafeAreaView, View } from 'react-native';
+import {
+  ActivityIndicator,
+  RefreshControl,
+  SafeAreaView,
+  View,
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { StackScreenProps } from '@react-navigation/stack';
@@ -51,6 +56,8 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
     isInternalExecutor,
     isBlockingModalVisible,
     isApprovalNotificationVisible,
+    refetch,
+    isFetching,
   } = useProfile({ tab });
 
   const tabComponents = {
@@ -81,6 +88,9 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView
+        refreshControl={
+          <RefreshControl refreshing={isFetching} onRefresh={refetch} />
+        }
         ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.content}

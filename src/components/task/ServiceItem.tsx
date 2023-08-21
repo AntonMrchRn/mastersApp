@@ -30,6 +30,8 @@ export const ServiceItem: FC<ServiceItemProps> = ({ service }) => {
     },
   });
 
+  const measureName = service?.measureName?.toLowerCase();
+  const measure = measureName === 'час' ? 'часах' : measureName;
   return (
     <View>
       <Spacer size={'l'} />
@@ -81,7 +83,7 @@ export const ServiceItem: FC<ServiceItemProps> = ({ service }) => {
               color={theme.text.neutral}
               style={styles.ml4}
             >
-              Измеряется в {service?.measureName?.toLowerCase()}
+              Измеряется в {measure}
             </Text>
           </View>
         )}

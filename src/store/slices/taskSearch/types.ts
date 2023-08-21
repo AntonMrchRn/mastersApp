@@ -6,7 +6,7 @@ type InitialState = {
   data?: Task[];
   tableNames: [];
   loadingNames: boolean;
-  loadingList: boolean;
+  loadingList: number;
   errorList: Error | null;
   errorNames: null | Error;
 };
