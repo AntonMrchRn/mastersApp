@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 
-import { Banner, Text, useTheme } from 'rn-ui-kit';
+import { Text, useTheme } from 'rn-ui-kit';
 
 import { DownloadFilesIcon } from '@/assets/icons/svg/screens/DownloadFilesIcon';
 import { DownloadManager } from '@/components/FileManager/DownloadManager';
@@ -36,6 +36,8 @@ type TaskCardReportProps = {
   uploadModalVisible: boolean;
   onUploadModalVisible: () => void;
   toClose: boolean | undefined;
+  uploadLimitBannerVisible: boolean;
+  onUploadLimitBannerVisible: () => void;
 };
 
 export let controllers: Controllers = {};
@@ -50,12 +52,12 @@ export const TaskCardReport = ({
   uploadModalVisible,
   onUploadModalVisible,
   toClose,
+  onUploadLimitBannerVisible,
+  uploadLimitBannerVisible,
 }: TaskCardReportProps) => {
   const theme = useTheme();
-  const [banner, setBanner] = useState(false);
   const getTask = useGetTaskQuery(taskId);
 
-  const onBanner = () => setBanner(!banner);
   const [postTasksFiles] = usePostTasksFilesMutation();
   const [deleteTasksFiles] = useDeleteTasksFilesMutation();
 
@@ -85,6 +87,10 @@ export const TaskCardReport = ({
   const onDelete = async ({ fileID }: { fileID?: number }) => {
     fileID && (await deleteTasksFiles(fileID.toString()).unwrap());
     getTask.refetch();
+  };
+
+  const onBanner = () => {
+    !uploadLimitBannerVisible && onUploadLimitBannerVisible();
   };
 
   const UploadedFiles = (
@@ -263,18 +269,6 @@ export const TaskCardReport = ({
         onClose={onUploadModalVisible}
         deleteProgress={deleteProgress}
       />
-      {banner && (
-        <Banner
-          onClosePress={onBanner}
-          containerStyle={styles.banner}
-          type={'error'}
-          icon={'alert'}
-          title="Превышен лимит загрузки"
-          text={
-            'Максимальный размер загружаемого файла:\n ● изображения до 20 МБ форматов jpg, jpeg, png, webp\n ● видео до 50 МБ\nОбщий размер загружаемых файлов не более 250 МВ'
-          }
-        />
-      )}
       {getContent()}
     </>
   );

@@ -101,6 +101,8 @@ export const useTaskCard = ({
     }
   );
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
+  const [uploadLimitBannerVisible, setUploadLimitBannerVisible] =
+    useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [estimateBottomVisible, setEstimateBottomVisible] = useState(false);
@@ -385,6 +387,9 @@ export const useTaskCard = ({
     }
   };
 
+  const onUploadLimitBannerVisible = () => {
+    setUploadLimitBannerVisible(!uploadLimitBannerVisible);
+  };
   const onCantDeleteBannerVisible = () =>
     setCantDeleteBannerVisible(!cantDeleteBannerVisible);
   const onDirectionNotSpecifiedBannerVisible = () =>
@@ -738,6 +743,8 @@ export const useTaskCard = ({
             activeBudgetCanceled={!!banner}
             uploadModalVisible={uploadModalVisible}
             onUploadModalVisible={onUploadModalVisible}
+            onUploadLimitBannerVisible={onUploadLimitBannerVisible}
+            uploadLimitBannerVisible={uploadLimitBannerVisible}
           />
         );
       case TaskTab.HISTORY:
@@ -847,5 +854,7 @@ export const useTaskCard = ({
     onDirectionNotSpecifiedBannerVisible,
     noDirectionButtonPress,
     setId,
+    uploadLimitBannerVisible,
+    onUploadLimitBannerVisible,
   };
 };
