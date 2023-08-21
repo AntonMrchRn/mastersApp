@@ -53,9 +53,9 @@ const CardTasks = ({
               toClose={toClose}
             />
           </View>
-          <Text variant="bodySRegular" style={styles.wrapperTitle}>
+          {/* <Text variant="bodySRegular" style={styles.wrapperTitle}>
             Номер задачи: {ID}
-          </Text>
+          </Text> */}
           <Text variant="title3" style={styles.wrapperTitle}>
             {name}
           </Text>
