@@ -206,7 +206,19 @@ export const AppNavigation = () => {
             component={EstimateSubmissionScreen}
             options={{
               headerShown: true,
-              header: props => <Header {...props} title={'Подача сметы'} />,
+              header: props => (
+                <Header
+                  {...props}
+                  title={
+                    (
+                      props.route
+                        .params as AppStackParamList[AppScreenName.EstimateSubmission]
+                    )?.isEdit
+                      ? 'Редактирование сметы'
+                      : 'Подача сметы'
+                  }
+                />
+              ),
             }}
           />
           <Stack.Screen
