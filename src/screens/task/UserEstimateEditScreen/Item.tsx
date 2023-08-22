@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
 import { Input, Spacer, Text, useTheme } from 'rn-ui-kit';
@@ -34,9 +34,22 @@ export const Item: FC<ItemProps> = ({
   measure,
 }) => {
   const theme = useTheme();
+
+  const [hasDot, setHasDot] = useState(false);
+
   const onClear = () => {
     onChangeText('');
   };
+
+  const handleChangeText = (text: string) => {
+    setHasDot(text.includes('.'));
+    const valid = /^\d*\.?(?:\d{1,2})?$/;
+    const res = valid.test(text);
+    if (res) {
+      onChangeText(text);
+    }
+  };
+
   return (
     <View>
       {canDelete && (
@@ -84,7 +97,7 @@ export const Item: FC<ItemProps> = ({
       <Spacer size={16} />
       <Input
         variant={'number'}
-        maxLength={6}
+        maxLength={hasDot ? 8 : 6}
         label={'Стоимость'}
         placeholder={'Стоимость'}
         hint={
@@ -94,7 +107,7 @@ export const Item: FC<ItemProps> = ({
         }
         isError={!!error}
         value={value}
-        onChangeText={onChangeText}
+        onChangeText={handleChangeText}
         onClear={onClear}
       />
       <Spacer size={20} separator="bottom" />
