@@ -1,5 +1,10 @@
 import React, { useEffect } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Linking,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import { MaskedText } from 'react-native-mask-text';
 
@@ -69,6 +74,14 @@ export const TaskCardDescription = ({
     filePath && (await ReactNativeBlobUtil.fs.unlink(filePath));
   };
 
+  const handlePhone = async (phone: number) => {
+    const url = `tel:${phone}`;
+    const canOpen = await Linking.canOpenURL(url);
+    if (canOpen) {
+      Linking.openURL(url);
+    }
+  };
+
   return (
     <View>
       {/* Выбор подрядчиков  */}
@@ -100,12 +113,19 @@ export const TaskCardDescription = ({
                       {executor.name} {executor.pname} {executor.sname}
                     </Text>
                     {executor.phone ? (
-                      <MaskedText
-                        mask="+ 9 (999) 999-99-99"
-                        style={[styles.phoneText, { color: theme.text.basic }]}
+                      <TouchableOpacity
+                        onPress={() => handlePhone(executor?.phone as number)}
                       >
-                        {executor?.phone?.toString()}
-                      </MaskedText>
+                        <MaskedText
+                          mask="+ 9 (999) 999-99-99"
+                          style={[
+                            styles.phoneText,
+                            { color: theme.text.basic },
+                          ]}
+                        >
+                          {executor?.phone?.toString()}
+                        </MaskedText>
+                      </TouchableOpacity>
                     ) : (
                       <Text variant="bodyMRegular">{executor.email}</Text>
                     )}
@@ -226,14 +246,17 @@ export const TaskCardDescription = ({
                     {contact?.sname} {contact?.name} {contact?.pname}
                   </Text>
                   {contact?.phone && (
-                    <View style={styles.phone}>
+                    <TouchableOpacity
+                      style={styles.phone}
+                      onPress={() => handlePhone(contact?.phone)}
+                    >
                       <MaskedText
                         mask="+ 9 (999) 999-99-99"
                         style={[styles.phoneText, { color: theme.text.basic }]}
                       >
                         {contact?.phone?.toString()}
                       </MaskedText>
-                    </View>
+                    </TouchableOpacity>
                   )}
                 </View>
                 <Spacer size={'m'} separator="top" />
