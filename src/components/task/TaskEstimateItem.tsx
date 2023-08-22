@@ -41,11 +41,11 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
 
   const items = [
     {
-      text: `${price} ₽ за ${measure}`,
+      text: `${price} ₽ ${measure === 'пустое' ? '' : `за ${measure}`}`,
       icon: <PriceIcon />,
     },
     {
-      text: currentMeasure,
+      text: measure === 'пустое' ? count.toString() : currentMeasure,
       icon: <CubeIcon />,
     },
     {

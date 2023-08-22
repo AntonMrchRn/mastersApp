@@ -171,7 +171,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
             color={theme.text.neutral}
             style={styles.rowText}
           >
-            {`${price} ₽ за ${measure}`}
+            {`${price} ₽ ${measure === 'пустое' ? '' : `за ${measure}`}`}
           </Text>
         </View>
       )}
@@ -182,7 +182,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
           color={theme.text.neutral}
           style={styles.rowText}
         >
-          {`Измеряется в ${measure}`}
+          {measure === 'пустое' ? 'Не указано' : `Измеряется в ${measure}`}
         </Text>
       </View>
       <Spacer size={'l'} />
