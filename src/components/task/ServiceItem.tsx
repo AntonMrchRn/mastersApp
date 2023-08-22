@@ -83,7 +83,7 @@ export const ServiceItem: FC<ServiceItemProps> = ({ service }) => {
               color={theme.text.neutral}
               style={styles.ml4}
             >
-              Измеряется в {measure}
+              {measure === 'пустое' ? 'Не указано' : `Измеряется в ${measure}`}
             </Text>
           </View>
         )}

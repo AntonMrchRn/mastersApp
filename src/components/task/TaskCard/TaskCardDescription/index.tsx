@@ -1,11 +1,15 @@
 import React, { useEffect } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Linking,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import { MaskedText } from 'react-native-mask-text';
 
 import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
-import { CaretDownIcon } from '@/assets/icons/svg/screens/CaretDownIcon';
 import { UsersIcon } from '@/assets/icons/svg/screens/UsersIcon';
 import { DownloadManager } from '@/components/FileManager/DownloadManager';
 import { TaskAddress } from '@/components/task/TaskAddress';
@@ -69,6 +73,14 @@ export const TaskCardDescription = ({
     filePath && (await ReactNativeBlobUtil.fs.unlink(filePath));
   };
 
+  const handlePhone = async (phone: number) => {
+    const url = `tel:${phone}`;
+    const canOpen = await Linking.canOpenURL(url);
+    if (canOpen) {
+      Linking.openURL(url);
+    }
+  };
+
   return (
     <View>
       {/* Выбор подрядчиков  */}
@@ -100,12 +112,19 @@ export const TaskCardDescription = ({
                       {executor.name} {executor.pname} {executor.sname}
                     </Text>
                     {executor.phone ? (
-                      <MaskedText
-                        mask="+ 9 (999) 999-99-99"
-                        style={[styles.phoneText, { color: theme.text.basic }]}
+                      <TouchableOpacity
+                        onPress={() => handlePhone(executor?.phone as number)}
                       >
-                        {executor?.phone?.toString()}
-                      </MaskedText>
+                        <MaskedText
+                          mask="+ 9 (999) 999-99-99"
+                          style={[
+                            styles.phoneText,
+                            { color: theme.text.basic },
+                          ]}
+                        >
+                          {executor?.phone?.toString()}
+                        </MaskedText>
+                      </TouchableOpacity>
                     ) : (
                       <Text variant="bodyMRegular">{executor.email}</Text>
                     )}
@@ -215,26 +234,29 @@ export const TaskCardDescription = ({
             return (
               <View key={index} style={styles.wrapperGrid}>
                 <View>
-                  <Text variant="captionRegular" color={theme.text.neutral}>
-                    {contact?.position}
-                  </Text>
-                  <Text
-                    variant="bodyMRegular"
-                    color={theme.text.basic}
-                    style={styles.name}
-                  >
+                  <Text variant="bodyMRegular" color={theme.text.basic}>
                     {contact?.sname} {contact?.name} {contact?.pname}
                   </Text>
                   {contact?.phone && (
-                    <View style={styles.phone}>
+                    <TouchableOpacity
+                      style={styles.phone}
+                      onPress={() => handlePhone(contact?.phone)}
+                    >
                       <MaskedText
                         mask="+ 9 (999) 999-99-99"
                         style={[styles.phoneText, { color: theme.text.basic }]}
                       >
                         {contact?.phone?.toString()}
                       </MaskedText>
-                    </View>
+                    </TouchableOpacity>
                   )}
+                  <Text
+                    variant="captionRegular"
+                    color={theme.text.neutral}
+                    style={styles.name}
+                  >
+                    {contact?.position}
+                  </Text>
                 </View>
                 <Spacer size={'m'} separator="top" />
               </View>
@@ -350,7 +372,6 @@ export const TaskCardDescription = ({
             <Text variant="title3" color={theme.text.basic} style={styles.mr11}>
               Вложения
             </Text>
-            <CaretDownIcon />
           </View>
           <DownloadManager files={applicationFiles} onDelete={onDelete} />
         </>

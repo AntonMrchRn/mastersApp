@@ -8,6 +8,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
 import ControlledInput from '@/components/inputs/ControlledInput';
+import ControlledPriceInput from '@/components/inputs/ControlledPriceInput';
 import { MeasureItem } from '@/components/task/MeasureItem';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
@@ -137,19 +138,19 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
         return acc.concat(val);
       }, []);
       dispatch(setNewOfferServices(newServices));
-      navigation.navigate(
-        isEdit
-          ? AppScreenName.UserEstimateEdit
-          : AppScreenName.EstimateSubmission,
-        { taskId }
-      );
+      navigation.navigate(AppScreenName.EstimateSubmission, { taskId, isEdit });
     } else {
       try {
+        const newSum = ((service?.sum || 0) + +price * +count)
+          .toString()
+          .includes('.')
+          ? Number(((service?.sum || 0) + +price * +count).toFixed(2))
+          : (service?.sum || 0) + +price * +count;
         await patchTaskService({
           ID: service?.ID,
           taskID: taskId,
           materials: [],
-          sum: (service?.sum || 0) + +price * +count,
+          sum: newSum,
         }).unwrap();
         await postMaterial({
           serviceID: service?.ID,
@@ -226,12 +227,12 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
             isError={!!errors.count?.message}
             maxLength={3}
           />
-          <ControlledInput
+          <ControlledPriceInput
             name={'price'}
             label={price ? 'Цена' : undefined}
             placeholder={'Цена'}
-            variant={'number'}
-            maxLength={6}
+            variant={'text'}
+            keyboardType="numeric"
             hint={
               errors.price?.message ||
               'Указывается в рублях за одну единицу измерения'

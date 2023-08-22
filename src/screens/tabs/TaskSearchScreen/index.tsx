@@ -125,7 +125,7 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
           <SegmentedControl
             style={styles.tabs}
             onChange={switchTab}
-            tabs={['IT услуги', 'Общие']}
+            tabs={['IT услуги', 'Общие услуги']}
           />
         )}
       </View>

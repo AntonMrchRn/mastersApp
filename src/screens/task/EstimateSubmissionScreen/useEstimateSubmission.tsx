@@ -9,6 +9,7 @@ import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   useGetTaskQuery,
+  usePatchOffersMutation,
   usePatchTaskLotMutation,
   usePostOffersMutation,
 } from '@/store/api/tasks';
@@ -17,6 +18,7 @@ import { selectAuth } from '@/store/slices/auth/selectors';
 import {
   setNewOfferServices,
   setOfferComment,
+  setOfferID,
 } from '@/store/slices/tasks/actions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
@@ -24,6 +26,7 @@ import { AxiosQueryErrorResponse } from '@/types/error';
 export const useEstimateSubmission = ({
   navigation,
   taskId,
+  isEdit,
 }: {
   navigation: StackNavigationProp<
     AppStackParamList,
@@ -31,6 +34,7 @@ export const useEstimateSubmission = ({
     undefined
   >;
   taskId: number;
+  isEdit: boolean | undefined;
 }) => {
   const dispatch = useAppDispatch();
   const toast = useToast();
@@ -42,6 +46,7 @@ export const useEstimateSubmission = ({
 
   const [patchTaskLot] = usePatchTaskLotMutation();
   const [postOffers] = usePostOffersMutation();
+  const [patchOffers] = usePatchOffersMutation();
 
   const [serviceForDelete, setServiceForDelete] = useState<Service>();
   const [banner, setBanner] = useState<{ title: string; text: string }>();
@@ -50,7 +55,7 @@ export const useEstimateSubmission = ({
   const [deleteEstimateModalVisible, setDeleteEstimateModalVisible] =
     useState(false);
 
-  const { offerServices, error, loading, offerComment } =
+  const { offerServices, error, loading, offerComment, offerID } =
     useAppSelector(selectTasks);
   const userRole = useAppSelector(selectAuth).user?.roleID;
 
@@ -76,7 +81,7 @@ export const useEstimateSubmission = ({
     }
     return acc;
   }, []);
-  const allSum = services.reduce((acc, val) => {
+  const allSumReduce = services.reduce((acc, val) => {
     const mSums =
       val?.materials?.reduce((mAcc, mVal) => {
         const mSum = +(mVal.localSum || 0);
@@ -85,6 +90,9 @@ export const useEstimateSubmission = ({
     const sum = +(val.localSum || 0) + mSums;
     return acc + sum;
   }, 0);
+  const allSum = allSumReduce.toString().includes('.')
+    ? Number(allSumReduce.toFixed(2))
+    : allSumReduce;
   const task = getTaskQuery?.data?.tasks?.[0];
   const allowCostIncrease = task?.allowCostIncrease;
   const currentSum = task?.currentSum;
@@ -95,12 +103,15 @@ export const useEstimateSubmission = ({
     }
     return acc;
   }, []);
-  const materialsSum = materials.reduce((acc, val) => {
+  const materialsSumReduce = materials.reduce((acc, val) => {
     if (val.localSum) {
       return acc + +val.localSum;
     }
     return acc;
   }, 0);
+  const materialsSum = materialsSumReduce.toString().includes('.')
+    ? Number(materialsSumReduce.toFixed(2))
+    : materialsSumReduce;
   const fields = services.reduce((acc, val) => {
     const mFields = val?.materials?.reduce((mAcc, mVal) => {
       return { ...mAcc, [mVal.ID as number]: !mVal.localSum };
@@ -142,6 +153,7 @@ export const useEstimateSubmission = ({
     onEstimateModalVisible();
     navigation.navigate(AppScreenName.NewMaterial, {
       taskId,
+      isEdit: isEdit,
       fromEstimateSubmission: true,
       services: offerServices,
     });
@@ -202,6 +214,7 @@ export const useEstimateSubmission = ({
       await patchTaskLot({
         taskID: taskId,
         sum: allSum,
+        ...(isEdit && offerID && { offerID }),
       }).unwrap();
       const postServices: Service[] = services.map(service => {
         const postMaterials =
@@ -239,19 +252,42 @@ export const useEstimateSubmission = ({
         };
         return res;
       });
-      await postOffers({
-        taskID: taskId,
-        comment: offerComment,
-        services: postServices,
-      }).unwrap();
-      dispatch(setNewOfferServices([]));
-      dispatch(setOfferComment(''));
-      navigation.navigate(AppScreenName.EstimateSubmissionSuccess, { taskId });
+      if (isEdit) {
+        if (offerID) {
+          await patchOffers({
+            taskID: taskId,
+            ID: offerID,
+            comment: offerComment,
+            services: postServices,
+          }).unwrap();
+          toast.show({
+            type: 'success',
+            title: 'Ценовое предложение изменено',
+          });
+          getTaskQuery.refetch();
+          dispatch(setNewOfferServices([]));
+          dispatch(setOfferComment(''));
+          dispatch(setOfferID(undefined));
+          navigation.navigate(AppScreenName.TaskCard, {
+            taskId,
+          });
+        }
+      } else {
+        await postOffers({
+          taskID: taskId,
+          comment: offerComment,
+          services: postServices,
+        }).unwrap();
+        dispatch(setNewOfferServices([]));
+        dispatch(setOfferComment(''));
+        navigation.navigate(AppScreenName.EstimateSubmissionSuccess, {
+          taskId,
+        });
+      }
     } catch (err) {
       toast.show({
         type: 'error',
         title: (err as AxiosQueryErrorResponse).data.message,
-        contentHeight: 100,
       });
     }
   };

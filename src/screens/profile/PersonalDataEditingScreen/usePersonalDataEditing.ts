@@ -62,7 +62,7 @@ const usePersonalDataEditing = () => {
         ID: authUser?.userID,
         name,
         sname,
-        ...(pname && { pname }),
+        pname,
       });
     }
   };
