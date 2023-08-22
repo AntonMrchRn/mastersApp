@@ -138,12 +138,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
         return acc.concat(val);
       }, []);
       dispatch(setNewOfferServices(newServices));
-      navigation.navigate(
-        isEdit
-          ? AppScreenName.UserEstimateEdit
-          : AppScreenName.EstimateSubmission,
-        { taskId }
-      );
+      navigation.navigate(AppScreenName.EstimateSubmission, { taskId, isEdit });
     } else {
       try {
         const newSum = ((service?.sum || 0) + +price * +count)

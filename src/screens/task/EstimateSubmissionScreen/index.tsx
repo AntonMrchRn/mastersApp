@@ -37,7 +37,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   navigation,
   route,
 }) => {
-  const { taskId } = route.params;
+  const { taskId, isEdit } = route.params;
 
   const {
     bsRef,
@@ -65,7 +65,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     materialsSum,
     isError,
     onSubmit,
-  } = useEstimateSubmission({ navigation, taskId });
+  } = useEstimateSubmission({ navigation, taskId, isEdit });
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -213,7 +213,11 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
               />
             )}
           </View>
-          <Button label="Подать смету" disabled={isError} onPress={onSubmit} />
+          <Button
+            label={isEdit ? 'Редактировать смету' : 'Подать смету'}
+            disabled={isError}
+            onPress={onSubmit}
+          />
         </View>
       </SafeAreaView>
     </>

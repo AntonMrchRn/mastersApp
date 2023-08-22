@@ -217,8 +217,9 @@ export const useTaskCardEstimate = ({
       dispatch(setNewOfferServices(initServices));
       dispatch(setOfferComment(userOffer.comment));
       dispatch(setOfferID(userOffer.ID));
-      navigation.navigate(AppScreenName.UserEstimateEdit, {
+      navigation.navigate(AppScreenName.EstimateSubmission, {
         taskId,
+        isEdit: true,
       });
     }
   };

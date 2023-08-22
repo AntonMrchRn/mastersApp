@@ -24,9 +24,8 @@ import { EstimateSubmissionSuccessScreen } from '@/screens/task/EstimateSubmissi
 import { NewMaterialScreen } from '@/screens/task/NewMaterialScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { TradingResultsScreen } from '@/screens/task/TradingResultsScreen';
-import { UserEstimateEditScreen } from '@/screens/task/UserEstimateEditScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
-import { Executor, Offer, Service } from '@/store/api/tasks/types';
+import { Offer, Service } from '@/store/api/tasks/types';
 
 export enum AppScreenName {
   AppNavigator = 'AppNavigator',
@@ -95,8 +94,7 @@ export type AppStackParamList = {
     winnerOffer: Offer | undefined;
   };
   [AppScreenName.WebView]: { uri: string };
-  [AppScreenName.EstimateSubmission]: { taskId: number };
-  [AppScreenName.UserEstimateEdit]: { taskId: number };
+  [AppScreenName.EstimateSubmission]: { taskId: number; isEdit?: boolean };
   [AppScreenName.NewMaterial]: {
     taskId: number;
     services: Service[];
@@ -209,16 +207,6 @@ export const AppNavigation = () => {
             options={{
               headerShown: true,
               header: props => <Header {...props} title={'Подача сметы'} />,
-            }}
-          />
-          <Stack.Screen
-            name={AppScreenName.UserEstimateEdit}
-            component={UserEstimateEditScreen}
-            options={{
-              headerShown: true,
-              header: props => (
-                <Header {...props} title={'Редактирование сметы'} />
-              ),
             }}
           />
           <Stack.Screen
