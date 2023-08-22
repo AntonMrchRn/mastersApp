@@ -234,14 +234,7 @@ export const TaskCardDescription = ({
             return (
               <View key={index} style={styles.wrapperGrid}>
                 <View>
-                  <Text variant="captionRegular" color={theme.text.neutral}>
-                    {contact?.position}
-                  </Text>
-                  <Text
-                    variant="bodyMRegular"
-                    color={theme.text.basic}
-                    style={styles.name}
-                  >
+                  <Text variant="bodyMRegular" color={theme.text.basic}>
                     {contact?.sname} {contact?.name} {contact?.pname}
                   </Text>
                   {contact?.phone && (
@@ -257,6 +250,13 @@ export const TaskCardDescription = ({
                       </MaskedText>
                     </TouchableOpacity>
                   )}
+                  <Text
+                    variant="captionRegular"
+                    color={theme.text.neutral}
+                    style={styles.name}
+                  >
+                    {contact?.position}
+                  </Text>
                 </View>
                 <Spacer size={'m'} separator="top" />
               </View>
