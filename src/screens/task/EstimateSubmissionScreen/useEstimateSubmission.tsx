@@ -81,7 +81,7 @@ export const useEstimateSubmission = ({
     }
     return acc;
   }, []);
-  const allSum = services.reduce((acc, val) => {
+  const allSumReduce = services.reduce((acc, val) => {
     const mSums =
       val?.materials?.reduce((mAcc, mVal) => {
         const mSum = +(mVal.localSum || 0);
@@ -90,6 +90,9 @@ export const useEstimateSubmission = ({
     const sum = +(val.localSum || 0) + mSums;
     return acc + sum;
   }, 0);
+  const allSum = allSumReduce.toString().includes('.')
+    ? Number(allSumReduce.toFixed(2))
+    : allSumReduce;
   const task = getTaskQuery?.data?.tasks?.[0];
   const allowCostIncrease = task?.allowCostIncrease;
   const currentSum = task?.currentSum;
@@ -100,12 +103,15 @@ export const useEstimateSubmission = ({
     }
     return acc;
   }, []);
-  const materialsSum = materials.reduce((acc, val) => {
+  const materialsSumReduce = materials.reduce((acc, val) => {
     if (val.localSum) {
       return acc + +val.localSum;
     }
     return acc;
   }, 0);
+  const materialsSum = materialsSumReduce.toString().includes('.')
+    ? Number(materialsSumReduce.toFixed(2))
+    : materialsSumReduce;
   const fields = services.reduce((acc, val) => {
     const mFields = val?.materials?.reduce((mAcc, mVal) => {
       return { ...mAcc, [mVal.ID as number]: !mVal.localSum };

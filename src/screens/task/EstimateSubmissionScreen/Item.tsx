@@ -96,7 +96,8 @@ export const Item: FC<ItemProps> = ({
       </View>
       <Spacer size={16} />
       <Input
-        variant={'number'}
+        variant={'text'}
+        keyboardType="numeric"
         maxLength={hasDot ? 8 : 6}
         label={'Стоимость'}
         placeholder={'Стоимость'}
