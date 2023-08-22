@@ -93,7 +93,7 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
         secondAction={secondAction}
         title={title}
         items={items}
-        canSwipe={canSwipe}
+        canSwipe={canSwipe && roleID !== RoleType.COORDINATOR}
       />
     </View>
   );
