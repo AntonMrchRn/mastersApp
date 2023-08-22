@@ -10,7 +10,6 @@ import { MaskedText } from 'react-native-mask-text';
 
 import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
-import { CaretDownIcon } from '@/assets/icons/svg/screens/CaretDownIcon';
 import { UsersIcon } from '@/assets/icons/svg/screens/UsersIcon';
 import { DownloadManager } from '@/components/FileManager/DownloadManager';
 import { TaskAddress } from '@/components/task/TaskAddress';
@@ -373,7 +372,6 @@ export const TaskCardDescription = ({
             <Text variant="title3" color={theme.text.basic} style={styles.mr11}>
               Вложения
             </Text>
-            <CaretDownIcon />
           </View>
           <DownloadManager files={applicationFiles} onDelete={onDelete} />
         </>
