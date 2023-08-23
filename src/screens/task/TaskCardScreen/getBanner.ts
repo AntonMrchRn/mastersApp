@@ -22,7 +22,6 @@ export const getBanner = ({
   isContractor: boolean;
   isCurator: boolean;
 }): BannerProps | null => {
-  console.log('curator', curator);
   if (tab === TaskTab.DESCRIPTION) {
     switch (statusID) {
       case StatusType.ACTIVE:
