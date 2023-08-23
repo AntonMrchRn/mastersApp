@@ -1,8 +1,23 @@
-export const getFormData = (taskId?: string, toClose?: boolean | undefined) => {
+import { StatusType } from '@/types/task';
+
+export const getFormData = ({
+  taskId,
+  toClose,
+  statusID,
+}: {
+  taskId?: string;
+  toClose?: boolean | undefined;
+  statusID?: StatusType | undefined;
+}) => {
   const formData = new FormData();
   if (taskId) {
     formData.append('taskID', taskId);
-    if (!toClose) {
+    if (
+      !toClose &&
+      (!statusID ||
+        (statusID &&
+          ![StatusType.PAID, StatusType.COMPLETED].includes(statusID)))
+    ) {
       formData.append('isApplication', false);
       formData.append('isOffer', true);
       formData.append('isCheck', false);
