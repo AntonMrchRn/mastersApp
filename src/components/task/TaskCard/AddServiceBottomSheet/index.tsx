@@ -140,7 +140,11 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
                             >
                               {category.name}
                             </Text>
-                            <CheckBox checked={isActive} onPress={onPress} />
+                            <CheckBox
+                              checked={isActive}
+                              onPress={onPress}
+                              style={{ marginRight: 1 }}
+                            />
                           </View>
                         </View>
                         <Spacer size={0} separator="bottom" />
