@@ -85,7 +85,7 @@ const RegionsModal = forwardRef(
       [filter]
     );
     const filterData = (region: Region) =>
-      region.name.toLowerCase().includes(debouncedFilter.toLowerCase());
+      region.name.toLowerCase().includes(debouncedFilter.toLowerCase().trim());
 
     const onSelect = async () => {
       await editUserRegions({
