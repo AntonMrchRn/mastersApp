@@ -1,10 +1,12 @@
 import { StyleSheet } from 'react-native';
 
+import { configApp } from '@/constants/platform';
+
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     paddingHorizontal: 20,
-    flex: 1,
+    paddingBottom: configApp.android ? 20 : 0,
   },
   title: {
     marginTop: 24,
