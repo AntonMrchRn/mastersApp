@@ -45,7 +45,7 @@ export const fillFormData = (
       ) {
         return `МастерА-${dayjs().format('DD/MM/YYYY-hh:mm:ss')}`;
       }
-      return (asset as Asset)?.fileName;
+      return (asset as Asset)?.fileName?.split('.')[0] || `name-${index}`;
     };
     const name = getName()?.split('.')[0] || `name-${index}`;
     const getType = () => {

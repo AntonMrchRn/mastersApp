@@ -79,6 +79,7 @@ type Contact = {
   pname: string;
   position: string;
   sname: string;
+  note: string;
 };
 type CountMobile = {
   id: number;

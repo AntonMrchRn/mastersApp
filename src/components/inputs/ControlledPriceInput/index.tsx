@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useController } from 'react-hook-form';
 import { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
 
@@ -28,11 +28,12 @@ const ControlledPriceInput = ({
 
   // в цене 7 целых чисел + после точки 2 числа
   const onChangeText = (text: string) => {
-    const hasDot = text.includes('.');
+    const curText = text.includes(',') ? text.replace(',', '.') : text;
+    const hasDot = curText.includes('.');
     const valid = /^\d*\.?(?:\d{1,2})?$/;
-    const res = valid.test(text);
+    const res = valid.test(curText);
     if (res) {
-      field.onChange(text.slice(0, hasDot ? 10 : 7));
+      field.onChange(curText.slice(0, hasDot ? 10 : 7));
     }
   };
 

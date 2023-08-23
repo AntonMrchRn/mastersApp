@@ -40,11 +40,12 @@ export const Item: FC<ItemProps> = ({
   };
 
   const handleChangeText = (text: string) => {
-    const hasDot = text.includes('.');
+    const curText = text.includes(',') ? text.replace(',', '.') : text;
+    const hasDot = curText.includes('.');
     const valid = /^\d*\.?(?:\d{1,2})?$/;
-    const res = valid.test(text);
+    const res = valid.test(curText);
     if (res) {
-      onChangeText(text.slice(0, hasDot ? 10 : 7));
+      onChangeText(curText.slice(0, hasDot ? 10 : 7));
     }
   };
 

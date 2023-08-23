@@ -225,7 +225,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
             variant={'number'}
             hint={errors.count?.message}
             isError={!!errors.count?.message}
-            maxLength={3}
+            maxLength={5}
           />
           <ControlledPriceInput
             name={'price'}

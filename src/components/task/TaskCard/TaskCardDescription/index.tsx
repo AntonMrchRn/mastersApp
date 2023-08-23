@@ -255,7 +255,7 @@ export const TaskCardDescription = ({
                     color={theme.text.neutral}
                     style={styles.name}
                   >
-                    {contact?.position}
+                    {contact?.note}
                   </Text>
                 </View>
                 <Spacer size={'m'} separator="top" />
