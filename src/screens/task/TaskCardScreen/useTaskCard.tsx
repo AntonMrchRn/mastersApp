@@ -374,6 +374,21 @@ export const useTaskCard = ({
     statusID === StatusType.ACTIVE &&
     !!userOffersData.length;
 
+  console.log('executor', executor);
+  console.log('isContarctor', isContractor);
+  console.log('curator', curator);
+  console.log('isCurator', isCurator);
+
+  const banner = getBanner({
+    tab: tab.label,
+    statusID,
+    outlayStatusID,
+    isContractor,
+    executor,
+    isCurator,
+    curator,
+  });
+
   const onRefresh = () => {
     refetch();
     dispatch(

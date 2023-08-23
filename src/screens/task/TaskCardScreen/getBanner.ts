@@ -7,6 +7,10 @@ export const getBanner = ({
   statusID,
   outlayStatusID,
   navigateToChat,
+  executor,
+  isContractor,
+  isCurator,
+  curator,
 }: {
   tab: TaskTab;
   statusID: StatusType | undefined;
@@ -20,6 +24,14 @@ export const getBanner = ({
           return {
             title: 'Ваша смета отклонена координатором',
             type: 'error',
+            icon: 'alert',
+            text: 'К сожалению, теперь вы не можете стать исполнителем этой задачи',
+          };
+        }
+        if (isContractor) {
+          return {
+            title: 'Ваша смета отклонена координатором',
+            type: 'info',
             icon: 'alert',
             text: 'К сожалению, теперь вы не можете стать исполнителем этой задачи',
           };
