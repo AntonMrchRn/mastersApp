@@ -379,16 +379,6 @@ export const useTaskCard = ({
   console.log('curator', curator);
   console.log('isCurator', isCurator);
 
-  const banner = getBanner({
-    tab: tab.label,
-    statusID,
-    outlayStatusID,
-    isContractor,
-    executor,
-    isCurator,
-    curator,
-  });
-
   const onRefresh = () => {
     refetch();
     dispatch(
@@ -445,6 +435,10 @@ export const useTaskCard = ({
     statusID,
     outlayStatusID,
     navigateToChat,
+    isContractor,
+    executor,
+    isCurator,
+    curator,
   });
 
   const onEstimateBannerPress = () => {

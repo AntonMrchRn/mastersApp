@@ -1,5 +1,6 @@
 import { BannerProps } from 'rn-ui-kit/lib/typescript/components/Banner';
 
+import { Curator, Executor } from '@/store/api/tasks/types';
 import { OutlayStatusType, StatusType, TaskTab } from '@/types/task';
 
 export const getBanner = ({
@@ -16,7 +17,12 @@ export const getBanner = ({
   statusID: StatusType | undefined;
   outlayStatusID: OutlayStatusType | undefined;
   navigateToChat: () => void;
+  curator?: Curator;
+  executor?: Executor;
+  isContractor: boolean;
+  isCurator: boolean;
 }): BannerProps | null => {
+  console.log('curator', curator);
   if (tab === TaskTab.DESCRIPTION) {
     switch (statusID) {
       case StatusType.ACTIVE:
@@ -30,10 +36,18 @@ export const getBanner = ({
         }
         if (isContractor) {
           return {
-            title: 'Ваша смета отклонена координатором',
             type: 'info',
             icon: 'alert',
-            text: 'К сожалению, теперь вы не можете стать исполнителем этой задачи',
+            text: `Куратор ${
+              executor?.curatorName + ' ' + executor?.curatorSname
+            } выбрал вас в качестве подрядчика`,
+          };
+        }
+        if (isCurator && curator && !curator.isConfirm) {
+          return {
+            type: 'info',
+            icon: 'alert',
+            text: 'Вас выбрали в качестве кандидата на роль куратора',
           };
         }
         return null;
