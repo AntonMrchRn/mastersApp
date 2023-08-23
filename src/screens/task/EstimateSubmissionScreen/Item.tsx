@@ -35,18 +35,16 @@ export const Item: FC<ItemProps> = ({
 }) => {
   const theme = useTheme();
 
-  const [hasDot, setHasDot] = useState(false);
-
   const onClear = () => {
     onChangeText('');
   };
 
   const handleChangeText = (text: string) => {
-    setHasDot(text.includes('.'));
+    const hasDot = text.includes('.');
     const valid = /^\d*\.?(?:\d{1,2})?$/;
     const res = valid.test(text);
     if (res) {
-      onChangeText(text);
+      onChangeText(text.slice(0, hasDot ? 10 : 7));
     }
   };
 
@@ -98,7 +96,7 @@ export const Item: FC<ItemProps> = ({
       <Input
         variant={'text'}
         keyboardType="numeric"
-        maxLength={hasDot ? 8 : 6}
+        maxLength={10}
         label={'Стоимость'}
         placeholder={'Стоимость'}
         hint={
