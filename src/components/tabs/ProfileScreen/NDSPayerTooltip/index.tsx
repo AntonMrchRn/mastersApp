@@ -12,7 +12,7 @@ const payerTooltipCoords = { x: -171, y: 101 };
 
 const NDSPayerTooltip = () => {
   const theme = useTheme();
-  const [isTooltipVisible, setIsTooltipVisible] = useState<boolean>(false);
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
   const onTooltipOpen = () => setIsTooltipVisible(true);
   const onTooltipClose = () => setIsTooltipVisible(false);

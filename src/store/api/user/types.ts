@@ -47,6 +47,10 @@ type User = {
   sessionID: number;
   setIDs: number[];
   subcontractorIDs: number[];
+  /**
+   * личный коэффициент оплаты исполнителя
+   */
+  serviceMultiplier: number;
 };
 
 type EntityType = {
