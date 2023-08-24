@@ -430,6 +430,10 @@ export const useTaskCard = ({
     statusID,
     outlayStatusID,
     navigateToChat,
+    isContractor,
+    executor,
+    isCurator,
+    curator,
   });
 
   const onEstimateBannerPress = () => {

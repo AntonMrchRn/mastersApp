@@ -54,6 +54,8 @@ type Executor = {
   sname?: string;
   hasCurator?: boolean;
   isRefuse?: boolean;
+  curatorName?: string;
+  curatorSname?: string;
 };
 type Curator = {
   ID: number;
