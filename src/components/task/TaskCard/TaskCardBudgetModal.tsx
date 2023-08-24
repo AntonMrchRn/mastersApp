@@ -21,13 +21,12 @@ export const TaskCardBudgetModal: FC<TaskCardBudgetModalProps> = ({
     },
     modalButton: {
       width: '48%',
+      minHeight: 48,
     },
   });
 
   return (
     <Modal
-      closeIcon
-      closeIconPress={onCancel}
       isVisible={isVisible}
       headerIcon="error"
       title="Вы точно хотите отозвать смету?"
