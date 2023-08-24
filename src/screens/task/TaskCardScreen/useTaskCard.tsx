@@ -772,6 +772,7 @@ export const useTaskCard = ({
     }
   };
   const onTabChange = (item: TabItem) => {
+    setCurrentEstimateTab(EstimateTab.TASK_ESTIMATE);
     setTab({ id: item.id, label: item.label as TaskTab });
   };
 
