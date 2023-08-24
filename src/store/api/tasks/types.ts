@@ -195,6 +195,7 @@ type Offer = {
   taskID: number;
   updateTime: string;
   userID: number;
+  clientComment?: string;
 };
 type GetTaskResponse = {
   count?: number;

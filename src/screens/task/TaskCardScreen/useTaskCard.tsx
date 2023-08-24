@@ -349,7 +349,7 @@ export const useTaskCard = ({
           'DD MMMM в HH:mm'
         )}`
       : '';
-
+  // offersDeadline: "2023-08-23T00:00:00.000Z"
   const hasAccessToTask = userData?.isApproved;
   const isCommentsAvailable =
     (isSupervisor ||

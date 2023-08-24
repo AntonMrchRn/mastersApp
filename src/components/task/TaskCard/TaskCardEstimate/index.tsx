@@ -87,6 +87,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     onEditEstimate,
     setId,
     isInternalExecutor,
+    clientComment,
   } = useTaskCardEstimate({
     services,
     taskId,
@@ -294,6 +295,23 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                         </Text>
                         <Text variant="bodyMRegular" color={theme.text.basic}>
                           {userComment}
+                        </Text>
+                      </View>
+                      <Spacer size={20} separator="bottom" />
+                    </>
+                  )}
+                  {clientComment && (
+                    <>
+                      <Spacer size={20} />
+                      <View style={styles.comment}>
+                        <Text
+                          variant="captionRegular"
+                          color={theme.text.neutral}
+                        >
+                          Ответ координатора
+                        </Text>
+                        <Text variant="bodyMRegular" color={theme.text.basic}>
+                          {clientComment}
                         </Text>
                       </View>
                       <Spacer size={20} separator="bottom" />

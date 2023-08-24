@@ -79,6 +79,7 @@ export const useTaskCardEstimate = ({
   const userServices = userOffer?.services || [];
   const isTaskEctimateTab = currentEstimateTab === EstimateTab.TASK_ESTIMATE;
   const userComment = userOffer?.comment;
+  const clientComment = userOffer?.clientComment || '';
 
   const getCurrentServices = () => {
     switch (subsetID) {
@@ -268,6 +269,7 @@ export const useTaskCardEstimate = ({
     currentServices,
     userID,
     userComment,
+    clientComment,
     isTaskEctimateTab,
     isOffersPublic,
     isOffersDeadlineOver,
