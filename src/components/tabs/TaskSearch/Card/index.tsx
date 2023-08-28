@@ -59,7 +59,7 @@ const CardTasks = ({
               Номер задачи: {ID}
             </Text>
           )}
-          <Text variant="title3" style={styles.wrapperTitle}>
+          <Text variant="title3" style={styles.wrapperTitle} numberOfLines={2}>
             {name}
           </Text>
           {currentSum && userRole !== RoleType.INTERNAL_EXECUTOR && (
@@ -67,7 +67,9 @@ const CardTasks = ({
               {currentSum} ₽
             </Text>
           )}
-          <Text variant="bodySRegular">{description}</Text>
+          <Text variant="bodySRegular" numberOfLines={3}>
+            {description}
+          </Text>
           <View style={styles.wrapperAddress}>
             <TaskAddress address={address} />
           </View>

@@ -176,7 +176,7 @@ export const TaskBadges: FC<TaskBadgesProps> = ({
       flexWrap: 'wrap',
     },
     badge: {
-      marginRight: 4,
+      marginRight: 8,
       marginVertical: 4,
     },
   });

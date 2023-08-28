@@ -3,7 +3,7 @@ import SVG, { Path } from 'react-native-svg';
 
 export const AddressIcon = () => {
   return (
-    <SVG width="14" height="18" viewBox="0 0 14 18" fill="none">
+    <SVG width="16" height="15" viewBox="0 0 18 18" fill="none">
       <Path
         fill-rule="evenodd"
         clip-rule="evenodd"
