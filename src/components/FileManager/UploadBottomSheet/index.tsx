@@ -35,6 +35,7 @@ type UploadBottomSheetProps = {
   deleteProgress: ActionCreatorWithPayload<string>;
   handleUpload: ({ formData, files, date }: HandleUpload) => void;
   isUserFile?: boolean;
+  toClose?: boolean | undefined;
 };
 
 export const UploadBottomSheet = ({
@@ -45,6 +46,7 @@ export const UploadBottomSheet = ({
   handleUpload,
   deleteProgress,
   isUserFile = false,
+  toClose = false,
 }: UploadBottomSheetProps) => {
   const theme = useTheme();
   const toast = useToast();
@@ -177,7 +179,8 @@ export const UploadBottomSheet = ({
       title: 'Сделать фото',
       action: () => onUploadAction(UploadAction.TakePhotoMedia),
     },
-    ...(!isUserFile
+    //в загруженные документы и документы пользователя нельзя кидать видео
+    ...(!isUserFile && !toClose
       ? [
           {
             icon: <VideoIcon />,

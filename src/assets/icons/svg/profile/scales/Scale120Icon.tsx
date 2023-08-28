@@ -5,7 +5,7 @@ type Scale120IconProps = {
 };
 export const Scale120Icon: FC<Scale120IconProps> = () => {
   return (
-    <SVG width="302" height="16" viewBox="0 0 302 16" fill="none">
+    <SVG width="100%" height="16" viewBox="0 0 302 16" fill="none">
       <Path
         d="M155.601 8C155.601 10.2091 153.81 12 151.601 12C149.392 12 147.601 10.2091 147.601 8C147.601 5.79086 149.392 4 151.601 4C153.81 4 155.601 5.79086 155.601 8Z"
         fill="#FEE30A"

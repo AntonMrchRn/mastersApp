@@ -8,7 +8,7 @@ import { Variant } from 'rn-ui-kit/lib/typescript/components/Swipeable';
 import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
 import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { PriceIcon } from '@/assets/icons/svg/estimate/PriceIcon';
-import { RoleType } from '@/types/task';
+import { OutlayStatusType, RoleType, StatusType } from '@/types/task';
 
 type TaskEstimateItemProps = {
   previewActions?: boolean;
@@ -21,6 +21,8 @@ type TaskEstimateItemProps = {
   roleID: RoleType;
   canSwipe?: boolean;
   measure: string | undefined;
+  outlayStatusID: OutlayStatusType | undefined;
+  statusID: StatusType | undefined;
 };
 export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   previewActions,
@@ -33,7 +35,10 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   roleID,
   canSwipe,
   measure = '',
+  outlayStatusID,
+  statusID,
 }) => {
+  console.log('🚀 ~ file: TaskEstimateItem.tsx:39 ~ roleID:', roleID);
   const currentMeasure =
     measure === 'час'
       ? plural(count, '%d час', '%d часa', '%d часов')
@@ -55,26 +60,51 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   ];
 
   const getVariant = (): Variant => {
-    switch (roleID) {
-      case RoleType.EXTERNAL_EXECUTOR:
-      case RoleType.INTERNAL_EXECUTOR:
-        return 'user';
-      case RoleType.COORDINATOR:
-        return 'coordinator';
-      default:
-        return 'default';
+    if (
+      outlayStatusID &&
+      statusID &&
+      statusID !== StatusType.ACTIVE &&
+      [OutlayStatusType.RETURNED, OutlayStatusType.MATCHING].includes(
+        outlayStatusID
+      )
+    ) {
+      switch (roleID) {
+        case RoleType.EXTERNAL_EXECUTOR:
+        case RoleType.INTERNAL_EXECUTOR:
+          return 'user';
+        case RoleType.COORDINATOR:
+        case RoleType.SUPERVISOR:
+        case RoleType.CLIENT:
+          return 'coordinator';
+        default:
+          return 'default';
+      }
     }
+    return 'default';
   };
+
   const getLabel = (): string => {
-    switch (roleID) {
-      case RoleType.EXTERNAL_EXECUTOR:
-      case RoleType.INTERNAL_EXECUTOR:
-        return 'Изменено исполнителем';
-      case RoleType.COORDINATOR:
-        return 'Изменено координатором';
-      default:
-        return '';
+    if (
+      outlayStatusID &&
+      statusID &&
+      statusID !== StatusType.ACTIVE &&
+      [OutlayStatusType.RETURNED, OutlayStatusType.MATCHING].includes(
+        outlayStatusID
+      )
+    ) {
+      switch (roleID) {
+        case RoleType.EXTERNAL_EXECUTOR:
+        case RoleType.INTERNAL_EXECUTOR:
+          return 'Изменено исполнителем';
+        case RoleType.COORDINATOR:
+        case RoleType.SUPERVISOR:
+        case RoleType.CLIENT:
+          return 'Изменено координатором';
+        default:
+          return '';
+      }
     }
+    return '';
   };
 
   const styles = StyleSheet.create({
@@ -93,7 +123,15 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
         secondAction={secondAction}
         title={title}
         items={items}
-        canSwipe={canSwipe && roleID !== RoleType.COORDINATOR}
+        canSwipe={
+          canSwipe &&
+          outlayStatusID &&
+          [
+            OutlayStatusType.PENDING,
+            OutlayStatusType.RETURNED,
+            OutlayStatusType.READY,
+          ].includes(outlayStatusID)
+        }
       />
     </View>
   );

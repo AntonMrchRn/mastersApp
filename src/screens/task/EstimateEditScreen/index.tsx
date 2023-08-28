@@ -140,12 +140,12 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
       <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
         Внесите необходимые изменения
       </Text>
-      {service?.categoryName && (
+      {!!service?.categoryName && (
         <Text variant={'captionRegular'} color={theme.text.neutral}>
           {service?.categoryName}
         </Text>
       )}
-      {name && (
+      {!!name && (
         <Text
           variant={'bodyMBold'}
           color={theme.text.basic}
@@ -154,7 +154,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
           {name}
         </Text>
       )}
-      {description && (
+      {!!description && (
         <Text
           variant={'bodySRegular'}
           color={theme.text.basic}
@@ -163,7 +163,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
           {description}
         </Text>
       )}
-      {price && (
+      {!!price && (
         <View style={styles.row}>
           <PriceIcon />
           <Text
