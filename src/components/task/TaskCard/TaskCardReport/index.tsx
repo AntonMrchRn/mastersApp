@@ -178,7 +178,7 @@ export const TaskCardReport = ({
             <DownloadManager
               files={reportFiles}
               onDelete={onDelete}
-              canDelete={false}
+              canDelete={canDelete}
             />
             {statusID === StatusType.WORK && (
               <UploadProgress
