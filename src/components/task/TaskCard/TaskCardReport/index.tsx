@@ -180,17 +180,31 @@ export const TaskCardReport = ({
               onDelete={onDelete}
               canDelete={false}
             />
+            {statusID === StatusType.WORK && (
+              <UploadProgress
+                controllers={controllers}
+                progressesSelector={progressesSelector}
+              />
+            )}
           </View>
         ) : (
-          <Text
-            variant="bodySRegular"
-            style={styles.mt8}
-            color={theme.text.neutral}
-          >
-            {statusID === StatusType.WORK
-              ? 'Загрузите чеки или иные финансовые документы общим размером не более 250 МВ'
-              : 'Файлов нет'}
-          </Text>
+          <>
+            <Text
+              variant="bodySRegular"
+              style={styles.mt8}
+              color={theme.text.neutral}
+            >
+              {statusID === StatusType.WORK
+                ? 'Загрузите чеки или иные финансовые документы общим размером не более 250 МВ'
+                : 'Файлов нет'}
+            </Text>
+            {statusID === StatusType.WORK && (
+              <UploadProgress
+                controllers={controllers}
+                progressesSelector={progressesSelector}
+              />
+            )}
+          </>
         )}
         <View style={styles.mt36}>
           <Text variant="title3" color={theme.text.basic}>
@@ -204,10 +218,12 @@ export const TaskCardReport = ({
                   onDelete={onDelete}
                   canDelete={canDelete}
                 />
-                <UploadProgress
-                  controllers={controllers}
-                  progressesSelector={progressesSelector}
-                />
+                {statusID !== StatusType.WORK && (
+                  <UploadProgress
+                    controllers={controllers}
+                    progressesSelector={progressesSelector}
+                  />
+                )}
               </>
             ) : (
               <>
@@ -223,10 +239,12 @@ export const TaskCardReport = ({
                       : 'Файлов нет'}
                   </Text>
                 </View>
-                <UploadProgress
-                  controllers={controllers}
-                  progressesSelector={progressesSelector}
-                />
+                {statusID !== StatusType.WORK && (
+                  <UploadProgress
+                    controllers={controllers}
+                    progressesSelector={progressesSelector}
+                  />
+                )}
               </>
             )}
           </View>

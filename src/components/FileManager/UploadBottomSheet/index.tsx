@@ -109,6 +109,10 @@ export const UploadBottomSheet = ({
 
     try {
       const result = await uploadActions[actionType]();
+      console.log(
+        '🚀 ~ file: index.tsx:112 ~ onUploadAction ~ result:',
+        result
+      );
       const isDocuments = actionType === UploadAction.TakeFromFiles;
 
       if ((result as ImageOrVideo[]).length > 10) {
@@ -118,29 +122,27 @@ export const UploadBottomSheet = ({
         });
       }
 
-      if (isDocuments) {
-        const { sizes, files, names } = fillFormData(
-          formData,
-          result,
-          actionType
-        );
-        onClose();
-        const check = checkSizes({
-          sizes,
-          isDoc: isDocuments,
-          isUserFile,
-        });
+      const { sizes, files, names } = fillFormData(
+        formData,
+        result,
+        actionType
+      );
+      onClose();
+      const check = checkSizes({
+        sizes,
+        isDoc: isDocuments,
+        isUserFile,
+      });
 
-        if (check) {
-          await handleUpload({
-            formData,
-            files,
-            date,
-            names,
-          });
-        } else {
-          onBanner();
-        }
+      if (check) {
+        await handleUpload({
+          formData,
+          files,
+          date,
+          names,
+        });
+      } else {
+        onBanner();
       }
     } catch (error) {
       onClose();
