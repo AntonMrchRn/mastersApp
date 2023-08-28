@@ -34,6 +34,11 @@ export const EstimateTotal: FC<EstimateTotalProps> = ({
       alignItems: 'center',
       justifyContent: 'space-between',
     },
+    rowStart: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      justifyContent: 'space-between',
+    },
     estimate: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -56,7 +61,7 @@ export const EstimateTotal: FC<EstimateTotalProps> = ({
     : allSum * serviceMultiplier;
   return (
     <View style={styles.bottom}>
-      <View style={styles.row}>
+      <View style={styles.rowStart}>
         <View style={styles.estimate}>
           <Text variant="bodySBold" color={theme.text.basic}>
             Всего по услугам

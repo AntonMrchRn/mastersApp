@@ -225,7 +225,11 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           <EstimateTotal
             allSum={allSum}
             materialsSum={materialsSum}
-            serviceMultiplier={1.2}
+            serviceMultiplier={
+              subsetID === TaskType.COMMON_FIRST_RESPONSE
+                ? serviceMultiplier
+                : undefined
+            }
           />
         )}
         {subsetID &&
