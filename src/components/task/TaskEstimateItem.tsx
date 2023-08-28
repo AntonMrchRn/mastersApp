@@ -58,24 +58,27 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
     switch (roleID) {
       case RoleType.EXTERNAL_EXECUTOR:
       case RoleType.INTERNAL_EXECUTOR:
-        return 'user';
-      case RoleType.COORDINATOR:
-        return 'coordinator';
-      default:
         return 'default';
-    }
-  };
-  const getLabel = (): string => {
-    switch (roleID) {
-      case RoleType.EXTERNAL_EXECUTOR:
-      case RoleType.INTERNAL_EXECUTOR:
-        return 'Изменено исполнителем';
-      case RoleType.COORDINATOR:
-        return 'Изменено координатором';
+      // case RoleType.COORDINATOR:
+      // case RoleType.SUPERVISOR:
+      // case RoleType.CLIENT:
+      //   return 'coordinator';
       default:
-        return '';
+        return 'coordinator';
     }
   };
+
+  // const getLabel = (): string => {
+  //   switch (roleID) {
+  //     case RoleType.EXTERNAL_EXECUTOR:
+  //     case RoleType.INTERNAL_EXECUTOR:
+  //       return 'Изменено исполнителем';
+  //     case RoleType.COORDINATOR:
+  //       return 'Изменено координатором';
+  //     default:
+  //       return '';
+  //   }
+  // };
 
   const styles = StyleSheet.create({
     containerStyle: { paddingRight: 20, paddingHorizontal: 20 },
@@ -85,7 +88,7 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   return (
     <View style={styles.wrapper}>
       <Swipeable
-        label={getLabel()}
+        // label={getLabel()}
         containerStyle={styles.containerStyle}
         variant={getVariant()}
         previewActions={previewActions}
