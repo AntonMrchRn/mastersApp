@@ -292,6 +292,12 @@ export const TaskCardReport = ({
         formData={getFormData({ taskId, toClose, statusID })}
         onClose={onUploadModalVisible}
         deleteProgress={deleteProgress}
+        toClose={
+          //в загруженные документы нельзя кидать видео
+          toClose ||
+          (statusID &&
+            [StatusType.PAID, StatusType.COMPLETED].includes(statusID))
+        }
       />
       {getContent()}
     </>
