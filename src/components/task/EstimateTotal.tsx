@@ -18,7 +18,7 @@ type EstimateTotalProps = {
 export const EstimateTotal: FC<EstimateTotalProps> = ({
   allSum,
   materialsSum,
-  serviceMultiplier = 1,
+  serviceMultiplier,
 }) => {
   const theme = useTheme();
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
@@ -55,10 +55,13 @@ export const EstimateTotal: FC<EstimateTotalProps> = ({
       textDecorationLine: 'line-through',
     },
   });
-  const coords = { x: -200, y: 160 };
-  const allSumMultiplier = (allSum * serviceMultiplier).toString().includes('.')
-    ? (allSum * serviceMultiplier).toFixed(2)
-    : allSum * serviceMultiplier;
+  const coords = { x: -160, y: 150 };
+  const allSumMultiplierPure = serviceMultiplier
+    ? (allSum - materialsSum) * serviceMultiplier + materialsSum
+    : allSum;
+  const allSumMultiplier = allSumMultiplierPure.toString().includes('.')
+    ? allSumMultiplierPure.toFixed(2)
+    : allSumMultiplierPure;
   return (
     <View style={styles.bottom}>
       <View style={styles.rowStart}>
@@ -66,21 +69,24 @@ export const EstimateTotal: FC<EstimateTotalProps> = ({
           <Text variant="bodySBold" color={theme.text.basic}>
             Всего по услугам
           </Text>
-          <TouchableOpacity onPress={onTooltipOpen}>
-            <InfoIcon />
-          </TouchableOpacity>
-          <Tooltip
-            triangleEdge="bottom"
-            triagnleAlign="center"
-            coords={coords}
-            onClose={onTooltipClose}
-            isVisible={isTooltipVisible}
-            title={`Ваш коэффициент доверия — ${serviceMultiplier}`}
-            text={`Зависит от количества выполненных задач, качества работ и скорости их выполнения. Чтобы повысить стоимость услуг выполняйте задачи качественно и в срок`}
-          />
+          {serviceMultiplier && (
+            <Tooltip
+              triangleEdge="bottom"
+              triagnleAlign="center"
+              coords={coords}
+              onClose={onTooltipClose}
+              isVisible={isTooltipVisible}
+              title={`Ваш коэффициент доверия — ${serviceMultiplier}`}
+              text={`Зависит от количества выполненных задач, качества работ и скорости их выполнения. Чтобы повысить стоимость услуг выполняйте задачи качественно и в срок`}
+            >
+              <TouchableOpacity onPress={onTooltipOpen}>
+                <InfoIcon />
+              </TouchableOpacity>
+            </Tooltip>
+          )}
         </View>
         <View style={styles.estimateSum}>
-          {serviceMultiplier !== 1 && (
+          {serviceMultiplier && serviceMultiplier !== 1 && (
             <RNText style={styles.crossed}>{allSum} ₽</RNText>
           )}
           <Text variant="bodySBold" color={theme.text.basic}>
