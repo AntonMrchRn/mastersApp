@@ -228,7 +228,7 @@ export const TaskCardReport = ({
             ) : (
               <>
                 <View style={styles.download}>
-                  <DownloadFilesIcon />
+                  {statusID !== StatusType.WORK && <DownloadFilesIcon />}
                   <Text
                     variant="bodySRegular"
                     style={styles.desc}
