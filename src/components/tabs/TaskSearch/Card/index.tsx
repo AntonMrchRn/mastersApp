@@ -29,9 +29,9 @@ const CardTasks = ({
   ID,
   onItemPress,
   outlayStatusID,
-  currentSum,
   toClose,
   userRole,
+  services,
 }: CardTasksProp) => {
   const address = object?.name || '';
 
@@ -40,6 +40,10 @@ const CardTasks = ({
       onItemPress(ID);
     }
   };
+
+  const sum =
+    services && services.reduce((acc, val) => acc + (val?.sum || 0), 0);
+
   return (
     <TouchableOpacity style={styles.btn} onPress={onPress}>
       <Card style={styles.wrapper}>
@@ -62,9 +66,9 @@ const CardTasks = ({
           <Text variant="title3" style={styles.wrapperTitle}>
             {name}
           </Text>
-          {currentSum && userRole !== RoleType.INTERNAL_EXECUTOR && (
+          {!!sum && !!(userRole !== RoleType.INTERNAL_EXECUTOR) && (
             <Text variant="title2" style={styles.price}>
-              {currentSum} ₽
+              {sum} ₽
             </Text>
           )}
           <Text variant="bodySRegular">{description}</Text>
