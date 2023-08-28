@@ -38,6 +38,7 @@ type File = {
   isApplication?: boolean;
   sizeBytes: number;
   isClosure?: boolean;
+  isAct?: boolean;
 };
 
 export type {

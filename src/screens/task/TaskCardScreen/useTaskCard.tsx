@@ -220,7 +220,7 @@ export const useTaskCard = ({
   /**
    * закрывающие документы сметы
    */
-  const closureFiles = files.filter(file => file.isClosure);
+  const closureFiles = files.filter(file => file.isClosure || file.isAct);
   const services = task?.services || [];
   const startTime = task?.startTime || '';
   const contacts = task?.contacts || [];
