@@ -127,22 +127,17 @@ export const useTaskCard = ({
 
   const isMessagesExist = !!useAppSelector(state => state.myTasks)
     .commentsPreview?.taskComment?.length;
-  const getUserQuery = useGetUserQuery(user?.userID);
-  const userData = getUserQuery.data;
 
-  const entityTypeID = userData?.entityTypeID;
-
-  const isSelfEmployed = entityTypeID === 1;
   const [patchTask] = usePatchTaskMutation();
   const [patchOffers] = usePatchOffersMutation();
   const [deleteOffer, deleteOffersMutation] = useDeleteOffersMutation();
   const [patchITTaskMember] = usePatchITTaskMemberMutation();
   const [deleteITTaskMember] = useDeleteITTaskMemberMutation();
   const [postITTaskMember] = usePostITTaskMemberMutation();
+  const getUserQuery = useGetUserQuery(user?.userID);
   const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
   const getTaskHistory = useGetTaskHistoryQuery(taskId);
   const task = data?.tasks?.[0];
-
   const getUserOffersQuery = useGetUserOffersQuery(
     {
       taskID: +taskId,
@@ -186,6 +181,14 @@ export const useTaskCard = ({
       });
     }
   }, [deleteOffersMutation.isError]);
+
+  const userData = getUserQuery.data;
+  const entityTypeID = userData?.entityTypeID;
+  /**
+   * личный коэффициент оплаты исполнителя
+   */
+  const serviceMultiplier = userData?.serviceMultiplier || 1;
+  const isSelfEmployed = entityTypeID === 1;
 
   const id = task?.ID || 0;
   const name = task?.name || '';
@@ -349,7 +352,7 @@ export const useTaskCard = ({
           'DD MMMM в HH:mm'
         )}`
       : '';
-
+  // offersDeadline: "2023-08-23T00:00:00.000Z"
   const hasAccessToTask = userData?.isApproved;
   const isCommentsAvailable =
     (isSupervisor ||
@@ -719,6 +722,7 @@ export const useTaskCard = ({
       case TaskTab.ESTIMATE:
         return (
           <TaskCardEstimate
+            serviceMultiplier={serviceMultiplier}
             services={services}
             outlayStatusID={outlayStatusID}
             statusID={statusID}
@@ -772,6 +776,7 @@ export const useTaskCard = ({
     }
   };
   const onTabChange = (item: TabItem) => {
+    setCurrentEstimateTab(EstimateTab.TASK_ESTIMATE);
     setTab({ id: item.id, label: item.label as TaskTab });
   };
 

@@ -81,6 +81,7 @@ type Contact = {
   pname: string;
   position: string;
   sname: string;
+  note: string;
 };
 type CountMobile = {
   id: number;
@@ -194,6 +195,7 @@ type Offer = {
   taskID: number;
   updateTime: string;
   userID: number;
+  clientComment?: string;
 };
 type GetTaskResponse = {
   count?: number;

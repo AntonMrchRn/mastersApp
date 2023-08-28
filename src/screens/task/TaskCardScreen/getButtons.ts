@@ -242,6 +242,8 @@ export const getButtons = ({
               return [];
           }
         case StatusType.SUMMARIZING:
+        case StatusType.PAID:
+        case StatusType.COMPLETED:
           switch (tab) {
             case TaskTab.COMMENTS:
               if (isCommentsAvailable) {
@@ -277,9 +279,7 @@ export const getButtons = ({
             default:
               return [];
           }
-        case StatusType.PAID:
         case StatusType.PENDING:
-        case StatusType.COMPLETED:
         case StatusType.CANCELLED_BY_CUSTOMER:
         case StatusType.CANCELLED_BY_EXECUTOR:
         case StatusType.CLOSED:
@@ -452,6 +452,8 @@ export const getButtons = ({
               return [];
           }
         case StatusType.SUMMARIZING:
+        case StatusType.PAID:
+        case StatusType.COMPLETED:
           switch (tab) {
             case TaskTab.COMMENTS:
               if (isCommentsAvailable) {
@@ -487,9 +489,8 @@ export const getButtons = ({
             default:
               return [];
           }
-        case StatusType.PAID:
+
         case StatusType.PENDING:
-        case StatusType.COMPLETED:
         case StatusType.CANCELLED_BY_CUSTOMER:
         case StatusType.CANCELLED_BY_EXECUTOR:
         case StatusType.CLOSED:

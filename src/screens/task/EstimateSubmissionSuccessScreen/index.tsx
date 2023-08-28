@@ -9,6 +9,7 @@ import { Button, Text, useTheme } from 'rn-ui-kit';
 
 import ArrowBack from '@/assets/icons/svg/auth/ArrowBack';
 import { CheckmarkIcon } from '@/assets/icons/svg/estimate/CheckmarkIcon';
+import { configApp } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 
@@ -59,7 +60,11 @@ export const EstimateSubmissionSuccessScreen: FC<
           во вкладке Мои задачи
         </Text>
       </View>
-      <Button label="Перейти в Мои задачи" onPress={navigateMyTasks} />
+      <Button
+        label="Перейти в Мои задачи"
+        onPress={navigateMyTasks}
+        style={{ marginBottom: configApp.android ? 20 : 0 }}
+      />
     </SafeAreaView>
   );
 };

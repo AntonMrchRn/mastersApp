@@ -77,8 +77,13 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
   }, [selectedTabId]);
 
   const switchTab = (tabIndex: number) => {
-    dispatch(clearList());
-    setSelectedTabId(setTypeByTabIndex[tabIndex as 0 | 1]);
+    if (
+      (tabIndex === 0 || tabIndex === 1) &&
+      selectedTabId !== setTypeByTabIndex[tabIndex]
+    ) {
+      dispatch(clearList());
+      setSelectedTabId(setTypeByTabIndex[tabIndex]);
+    }
   };
 
   const onItemPress = (id: number) => {

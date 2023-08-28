@@ -16,7 +16,7 @@ import { DeleteEstimateModal } from '@/components/task/DeleteEstimateModal';
 import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { AddServiceBottomSheet } from '@/components/task/TaskCard/AddServiceBottomSheet';
 import { TaskCardAddEstimateBottomSheet } from '@/components/task/TaskCard/TaskCardAddEstimateBottomSheet';
-import { deviceWidth } from '@/constants/platform';
+import { configApp, deviceWidth } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch } from '@/store';
 import {
@@ -217,6 +217,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
             label={isEdit ? 'Редактировать смету' : 'Подать смету'}
             disabled={isError}
             onPress={onSubmit}
+            style={{ marginBottom: configApp.android ? 20 : 0 }}
           />
         </View>
       </SafeAreaView>

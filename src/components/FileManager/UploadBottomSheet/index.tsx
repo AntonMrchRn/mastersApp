@@ -25,7 +25,7 @@ import { fillFormData } from '@/utils/fileManager/fillFormData';
 
 import styles from './style';
 
-enum UploadAction {
+export enum UploadAction {
   TakeFromGallery = 'TakeFromGallery',
   TakePhotoMedia = 'TakePhotoMedia',
   TakeVideoMedia = 'TakeVideoMedia',
@@ -141,8 +141,7 @@ export const UploadBottomSheet = ({
         const { sizes, files, names } = fillFormData(
           formData,
           result,
-          isDocuments,
-          isCropPicker
+          actionType
         );
         onClose();
         const check = checkSizes({

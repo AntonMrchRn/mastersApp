@@ -2,23 +2,25 @@ import { DocumentPickerResponse } from 'react-native-document-picker';
 import { ImageOrVideo } from 'react-native-image-crop-picker';
 import { Asset, ImagePickerResponse } from 'react-native-image-picker';
 
+import dayjs from 'dayjs';
+
+import { UploadAction } from '@/components/FileManager/UploadBottomSheet';
 import { configApp } from '@/constants/platform';
 
 export const fillFormData = (
   formData: FormData,
   result: ImagePickerResponse | DocumentPickerResponse[] | ImageOrVideo[],
-  isDocumentPicker = false,
-  isCropPicker = false
+  actionType: UploadAction
 ) => {
   let files: { name: string; size: number }[] = [];
   let sizes: { size: number; type: string }[] = [];
 
   const names: string[] = [];
   const getAssets = () => {
-    if (isDocumentPicker) {
+    if (actionType === UploadAction.TakeFromFiles) {
       return result as DocumentPickerResponse[];
     }
-    if (isCropPicker) {
+    if (actionType === UploadAction.TakeFromGallery) {
       return result as ImageOrVideo[];
     }
     return (result as ImagePickerResponse)?.assets as Asset[];
@@ -27,31 +29,33 @@ export const fillFormData = (
 
   assets?.map((asset, index) => {
     const getName = () => {
-      if (isDocumentPicker) {
+      if (actionType === UploadAction.TakeFromFiles) {
         return (asset as DocumentPickerResponse)?.name;
       }
-      if (isCropPicker) {
+      if (actionType === UploadAction.TakeFromGallery) {
         if (configApp.android) {
           return (asset as ImageOrVideo)?.path.split('/').at(-1);
         }
         return (asset as ImageOrVideo)?.filename;
       }
-      if (configApp.android) {
-        return `МастерА-${
-          (asset as Asset)?.fileName?.split('rn_image_picker_lib_temp_')[1]
-        }`;
+      if (
+        [UploadAction.TakePhotoMedia, UploadAction.TakeVideoMedia].includes(
+          actionType
+        )
+      ) {
+        return `МастерА-${dayjs().format('DD/MM/YYYY-hh:mm:ss')}`;
       }
-      return (asset as Asset)?.fileName;
+      return (asset as Asset)?.fileName?.split('.')[0] || `name-${index}`;
     };
     const name = getName()?.split('.')[0] || `name-${index}`;
     const getType = () => {
-      if (isCropPicker) {
+      if (actionType === UploadAction.TakeFromGallery) {
         return (asset as ImageOrVideo).mime;
       }
       return (asset as Asset).type;
     };
     const getUri = () => {
-      if (isCropPicker) {
+      if (actionType === UploadAction.TakeFromGallery) {
         if (configApp.android) {
           return (asset as ImageOrVideo)?.path;
         }
@@ -59,10 +63,12 @@ export const fillFormData = (
       }
       return (asset as Asset)?.uri;
     };
-    const size =
-      isDocumentPicker || isCropPicker
-        ? (asset as DocumentPickerResponse)?.size
-        : (asset as Asset)?.fileSize;
+    const size = [
+      UploadAction.TakeFromFiles,
+      UploadAction.TakeFromGallery,
+    ].includes(actionType)
+      ? (asset as DocumentPickerResponse)?.size
+      : (asset as Asset)?.fileSize;
 
     formData.append(`file${Number(index) + 1}`, {
       uri: getUri(),

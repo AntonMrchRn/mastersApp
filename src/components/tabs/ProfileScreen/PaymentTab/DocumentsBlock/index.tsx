@@ -137,7 +137,7 @@ const DocumentsBlock = ({
         isUserFile
         onClose={onModal}
         onBanner={onBanner}
-        formData={getFormData()}
+        formData={getFormData({})}
         isVisible={isModalVisible}
         handleUpload={handleUpload}
         deleteProgress={deleteProgress}

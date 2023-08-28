@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useController } from 'react-hook-form';
 import { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
 
@@ -16,7 +16,6 @@ const ControlledPriceInput = ({
   const { field } = useController({
     name,
   });
-  const [hasDot, setHasDot] = useState(false);
   const onClear = () => {
     inputProps.onClear && inputProps.onClear();
     field.onChange('');
@@ -27,12 +26,14 @@ const ControlledPriceInput = ({
     field.onBlur();
   };
 
+  // в цене 7 целых чисел + после точки 2 числа
   const onChangeText = (text: string) => {
-    setHasDot(text.includes('.'));
+    const curText = text.includes(',') ? text.replace(',', '.') : text;
+    const hasDot = curText.includes('.');
     const valid = /^\d*\.?(?:\d{1,2})?$/;
-    const res = valid.test(text);
+    const res = valid.test(curText);
     if (res) {
-      field.onChange(text);
+      field.onChange(curText.slice(0, hasDot ? 10 : 7));
     }
   };
 
@@ -44,7 +45,7 @@ const ControlledPriceInput = ({
       onClear={onClear}
       value={field.value}
       onChangeText={onChangeText}
-      maxLength={hasDot ? 8 : 6}
+      maxLength={10}
     />
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 
 import { Text, useTheme } from 'rn-ui-kit';
@@ -167,72 +167,79 @@ export const TaskCardReport = ({
     </>
   );
 
+  const AllUploadFiles = () => {
+    return (
+      <View style={styles.mt36}>
+        <Text variant="title3" color={theme.text.basic}>
+          Загруженные файлы
+        </Text>
+        {reportFiles.length ? (
+          <View style={styles.mt24}>
+            <DownloadManager
+              files={reportFiles}
+              onDelete={onDelete}
+              canDelete={false}
+            />
+          </View>
+        ) : (
+          <Text
+            variant="bodySRegular"
+            style={styles.mt8}
+            color={theme.text.neutral}
+          >
+            {statusID === StatusType.WORK
+              ? 'Загрузите чеки или иные финансовые документы общим размером не более 250 МВ'
+              : 'Файлов нет'}
+          </Text>
+        )}
+        <View style={styles.mt36}>
+          <Text variant="title3" color={theme.text.basic}>
+            Закрывающие документы
+          </Text>
+          <View style={styles.mt24}>
+            {closureFiles.length ? (
+              <>
+                <DownloadManager
+                  files={closureFiles}
+                  onDelete={onDelete}
+                  canDelete={canDelete}
+                />
+                <UploadProgress
+                  controllers={controllers}
+                  progressesSelector={progressesSelector}
+                />
+              </>
+            ) : (
+              <>
+                <View style={styles.download}>
+                  <DownloadFilesIcon />
+                  <Text
+                    variant="bodySRegular"
+                    style={styles.desc}
+                    color={theme.text.neutral}
+                  >
+                    {statusID !== StatusType.WORK
+                      ? 'Загрузите чеки или иные финансовые документы общим размером не более 250 МВ'
+                      : 'Файлов нет'}
+                  </Text>
+                </View>
+                <UploadProgress
+                  controllers={controllers}
+                  progressesSelector={progressesSelector}
+                />
+              </>
+            )}
+          </View>
+        </View>
+      </View>
+    );
+  };
+
   const getContent = () => {
     //к закрытию
     //необходимо отправить закрывающие документы
     if (toClose) {
-      return (
-        <View style={styles.mt36}>
-          <Text variant="title3" color={theme.text.basic}>
-            Загруженные файлы
-          </Text>
-          {reportFiles.length ? (
-            <View style={styles.mt24}>
-              <DownloadManager
-                files={reportFiles}
-                onDelete={onDelete}
-                canDelete={false}
-              />
-            </View>
-          ) : (
-            <Text
-              variant="bodySRegular"
-              style={styles.mt8}
-              color={theme.text.neutral}
-            >
-              Файлов нет
-            </Text>
-          )}
-          <View style={styles.mt36}>
-            <Text variant="title3" color={theme.text.basic}>
-              Закрывающие документы
-            </Text>
-            <View style={styles.mt24}>
-              {closureFiles.length ? (
-                <>
-                  <DownloadManager
-                    files={closureFiles}
-                    onDelete={onDelete}
-                    canDelete={canDelete}
-                  />
-                  <UploadProgress
-                    controllers={controllers}
-                    progressesSelector={progressesSelector}
-                  />
-                </>
-              ) : (
-                <>
-                  <View style={styles.download}>
-                    <DownloadFilesIcon />
-                    <Text
-                      variant="bodySRegular"
-                      style={styles.desc}
-                      color={theme.text.neutral}
-                    >
-                      Загрузите чеки или иные финансовые документы общим
-                      размером не более 250 МВ
-                    </Text>
-                  </View>
-                  <UploadProgress
-                    controllers={controllers}
-                    progressesSelector={progressesSelector}
-                  />
-                </>
-              )}
-            </View>
-          </View>
-        </View>
-      );
+      return <AllUploadFiles />;
     }
     switch (statusID) {
       case StatusType.ACTIVE:
@@ -249,12 +256,11 @@ export const TaskCardReport = ({
         if (subsetID === TaskType.IT_FIRST_RESPONSE && isCurator) {
           return DefaultUploadFiles;
         }
-
         return UploadedFiles;
       case StatusType.WORK:
       case StatusType.COMPLETED:
       case StatusType.PAID:
-        return UploadedFiles;
+        return <AllUploadFiles />;
       default:
         return DefaultUploadFiles;
     }
@@ -265,7 +271,7 @@ export const TaskCardReport = ({
         onBanner={onBanner}
         handleUpload={handleUpload}
         isVisible={uploadModalVisible}
-        formData={getFormData(taskId, toClose)}
+        formData={getFormData({ taskId, toClose, statusID })}
         onClose={onUploadModalVisible}
         deleteProgress={deleteProgress}
       />

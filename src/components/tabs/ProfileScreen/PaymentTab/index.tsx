@@ -13,10 +13,11 @@ import Title from '@/components/tabs/ProfileScreen/Title';
 import UserInfoBlock from '@/components/tabs/ProfileScreen/UserInfoBlock';
 import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { User } from '@/store/api/user/types';
-import { login } from '@/store/slices/auth/actions';
 import { BankDetailsScreenNavigationProp } from '@/types/navigation';
 import { ProfileTab } from '@/types/tab';
 import { UserEntityType } from '@/types/user';
+
+import { ConfidenceCoefficientBlock } from './ConfidenceCoefficientBlock';
 
 import styles from './style';
 
@@ -82,6 +83,11 @@ const PaymentTab = ({
 
   return (
     <>
+      {!!user.serviceMultiplier && (
+        <ConfidenceCoefficientBlock
+          serviceMultiplier={user.serviceMultiplier}
+        />
+      )}
       <Title
         withButton
         title="Личные реквизиты"

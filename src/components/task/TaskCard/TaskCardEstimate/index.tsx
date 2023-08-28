@@ -45,6 +45,7 @@ type TaskCardEstimateProps = {
   currentEstimateTab: EstimateTab;
   winnerOffer: Offer | undefined;
   isContractor: boolean;
+  serviceMultiplier: number;
 };
 
 export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
@@ -58,6 +59,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   currentEstimateTab,
   winnerOffer,
   isContractor,
+  serviceMultiplier,
 }) => {
   const theme = useTheme();
   const isFocused = useIsFocused();
@@ -87,6 +89,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     onEditEstimate,
     setId,
     isInternalExecutor,
+    clientComment,
   } = useTaskCardEstimate({
     services,
     taskId,
@@ -219,7 +222,15 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             subsetID
           )) ||
         (setId === TaskSetType.IT_SERVICES && isInternalExecutor) ? null : (
-          <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
+          <EstimateTotal
+            allSum={allSum}
+            materialsSum={materialsSum}
+            serviceMultiplier={
+              subsetID === TaskType.COMMON_FIRST_RESPONSE
+                ? serviceMultiplier
+                : undefined
+            }
+          />
         )}
         {subsetID &&
           [TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE].includes(
@@ -294,6 +305,23 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                         </Text>
                         <Text variant="bodyMRegular" color={theme.text.basic}>
                           {userComment}
+                        </Text>
+                      </View>
+                      <Spacer size={20} separator="bottom" />
+                    </>
+                  )}
+                  {clientComment && (
+                    <>
+                      <Spacer size={20} />
+                      <View style={styles.comment}>
+                        <Text
+                          variant="captionRegular"
+                          color={theme.text.neutral}
+                        >
+                          Ответ координатора
+                        </Text>
+                        <Text variant="bodyMRegular" color={theme.text.basic}>
+                          {clientComment}
                         </Text>
                       </View>
                       <Spacer size={20} separator="bottom" />
