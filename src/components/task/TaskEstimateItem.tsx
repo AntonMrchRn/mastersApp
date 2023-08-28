@@ -8,7 +8,7 @@ import { Variant } from 'rn-ui-kit/lib/typescript/components/Swipeable';
 import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
 import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { PriceIcon } from '@/assets/icons/svg/estimate/PriceIcon';
-import { OutlayStatusType, RoleType } from '@/types/task';
+import { OutlayStatusType, RoleType, StatusType } from '@/types/task';
 
 type TaskEstimateItemProps = {
   previewActions?: boolean;
@@ -22,6 +22,7 @@ type TaskEstimateItemProps = {
   canSwipe?: boolean;
   measure: string | undefined;
   outlayStatusID: OutlayStatusType | undefined;
+  statusID: StatusType | undefined;
 };
 export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   previewActions,
@@ -35,6 +36,7 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   canSwipe,
   measure = '',
   outlayStatusID,
+  statusID,
 }) => {
   console.log('🚀 ~ file: TaskEstimateItem.tsx:39 ~ roleID:', roleID);
   const currentMeasure =
@@ -60,7 +62,9 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   const getVariant = (): Variant => {
     if (
       outlayStatusID &&
-      [OutlayStatusType.PENDING, OutlayStatusType.RETURNED].includes(
+      statusID &&
+      statusID !== StatusType.ACTIVE &&
+      [OutlayStatusType.RETURNED, OutlayStatusType.MATCHING].includes(
         outlayStatusID
       )
     ) {
@@ -82,11 +86,11 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   const getLabel = (): string => {
     if (
       outlayStatusID &&
-      [
-        OutlayStatusType.PENDING,
-        OutlayStatusType.RETURNED,
-        OutlayStatusType.READY,
-      ].includes(outlayStatusID)
+      statusID &&
+      statusID !== StatusType.ACTIVE &&
+      [OutlayStatusType.RETURNED, OutlayStatusType.MATCHING].includes(
+        outlayStatusID
+      )
     ) {
       switch (roleID) {
         case RoleType.EXTERNAL_EXECUTOR:

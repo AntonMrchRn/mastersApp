@@ -188,6 +188,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                 canSwipe={canSwipe}
                 measure={service.measure?.toLowerCase()}
                 outlayStatusID={outlayStatusID}
+                statusID={statusID}
               />
               <Spacer size={0} separator="bottom" />
               {service?.materials?.map(material => {
@@ -210,6 +211,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                       roleID={material?.roleID}
                       canSwipe={canSwipe}
                       outlayStatusID={outlayStatusID}
+                      statusID={statusID}
                     />
                     <Spacer size={0} separator="bottom" />
                   </View>
