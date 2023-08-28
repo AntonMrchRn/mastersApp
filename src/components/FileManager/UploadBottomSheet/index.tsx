@@ -2,11 +2,6 @@ import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import ImagePicker, { ImageOrVideo } from 'react-native-image-crop-picker';
-import {
-  ImagePickerResponse,
-  launchCamera,
-  PhotoQuality,
-} from 'react-native-image-picker';
 
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { BottomSheet, Button, Text, useTheme, useToast } from 'rn-ui-kit';
@@ -65,12 +60,12 @@ export const UploadBottomSheet = ({
         compressImageQuality: quality,
       }),
     [UploadAction.TakePhotoMedia]: async () =>
-      await launchCamera({
+      await ImagePicker.openCamera({
         mediaType: 'photo',
-        quality: quality as PhotoQuality,
+        compressImageQuality: quality,
       }),
     [UploadAction.TakeVideoMedia]: async () =>
-      await launchCamera({ mediaType: 'video' }),
+      await ImagePicker.openCamera({ mediaType: 'video' }),
     [UploadAction.TakeFromFiles]: async () =>
       await DocumentPicker.pick({
         type: configApp.android
@@ -114,30 +109,16 @@ export const UploadBottomSheet = ({
 
     try {
       const result = await uploadActions[actionType]();
-      const isMediaError =
-        (actionType === UploadAction.TakePhotoMedia ||
-          actionType === UploadAction.TakeVideoMedia) &&
-        (result as ImagePickerResponse).errorCode === 'camera_unavailable';
       const isDocuments = actionType === UploadAction.TakeFromFiles;
-      const isCropPicker = actionType === UploadAction.TakeFromGallery;
 
-      if (isMediaError) {
-        return toast.show({
-          type: 'error',
-          title: 'Камера недоступна',
-        });
-      }
-      if (isCropPicker && (result as ImageOrVideo[]).length > 10) {
+      if ((result as ImageOrVideo[]).length > 10) {
         return toast.show({
           type: 'error',
           title: 'Нельзя выбрать более 10 файлов',
         });
       }
 
-      if (
-        isDocuments ||
-        (!isDocuments && !(result as ImagePickerResponse)?.didCancel)
-      ) {
+      if (isDocuments) {
         const { sizes, files, names } = fillFormData(
           formData,
           result,
