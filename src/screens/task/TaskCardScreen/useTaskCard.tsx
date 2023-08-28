@@ -184,7 +184,6 @@ export const useTaskCard = ({
 
   const userData = getUserQuery.data;
   const entityTypeID = userData?.entityTypeID;
-  console.log('🚀 ~ file: useTaskCard.tsx:187 ~ entityTypeID:', entityTypeID);
   /**
    * личный коэффициент оплаты исполнителя
    */
