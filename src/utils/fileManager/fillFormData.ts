@@ -1,6 +1,5 @@
 import { DocumentPickerResponse } from 'react-native-document-picker';
-import { ImageOrVideo } from 'react-native-image-crop-picker';
-import { Asset, ImagePickerResponse } from 'react-native-image-picker';
+import { Image, ImageOrVideo, Video } from 'react-native-image-crop-picker';
 
 import dayjs from 'dayjs';
 
@@ -9,7 +8,7 @@ import { configApp } from '@/constants/platform';
 
 export const fillFormData = (
   formData: FormData,
-  result: ImagePickerResponse | DocumentPickerResponse[] | ImageOrVideo[],
+  result: Image | Video | ImageOrVideo[] | DocumentPickerResponse[],
   actionType: UploadAction
 ) => {
   let files: { name: string; size: number }[] = [];
@@ -23,7 +22,7 @@ export const fillFormData = (
     if (actionType === UploadAction.TakeFromGallery) {
       return result as ImageOrVideo[];
     }
-    return (result as ImagePickerResponse)?.assets as Asset[];
+    return [result as ImageOrVideo];
   };
   const assets = getAssets();
 
@@ -45,30 +44,25 @@ export const fillFormData = (
       ) {
         return `МастерА-${dayjs().format('DD/MM/YYYY-hh:mm:ss')}`;
       }
-      return (asset as Asset)?.fileName?.split('.')[0] || `name-${index}`;
+      return `МастерА-${dayjs().format('DD/MM/YYYY-hh:mm:ss')}`;
     };
     const name = getName()?.split('.')[0] || `name-${index}`;
     const getType = () => {
-      if (actionType === UploadAction.TakeFromGallery) {
+      if (actionType !== UploadAction.TakeFromFiles) {
         return (asset as ImageOrVideo).mime;
       }
-      return (asset as Asset).type;
+      return (asset as DocumentPickerResponse).type;
     };
     const getUri = () => {
-      if (actionType === UploadAction.TakeFromGallery) {
+      if (actionType !== UploadAction.TakeFromFiles) {
         if (configApp.android) {
           return (asset as ImageOrVideo)?.path;
         }
         return (asset as ImageOrVideo)?.sourceURL;
       }
-      return (asset as Asset)?.uri;
+      return (asset as DocumentPickerResponse)?.uri;
     };
-    const size = [
-      UploadAction.TakeFromFiles,
-      UploadAction.TakeFromGallery,
-    ].includes(actionType)
-      ? (asset as DocumentPickerResponse)?.size
-      : (asset as Asset)?.fileSize;
+    const size = asset?.size;
 
     formData.append(`file${Number(index) + 1}`, {
       uri: getUri(),

@@ -675,7 +675,7 @@ export const useTaskCard = ({
     }
   };
 
-  const onSubmitAnEstimate = () => {
+  const onSubmitAnTask = () => {
     if (!hasAccessToTask) {
       return onNoAccessToTaskBannerVisible();
     }
@@ -798,7 +798,7 @@ export const useTaskCard = ({
     isInvitedCurator,
     onTaskSubmission,
     isInvitedExecutor,
-    onSubmitAnEstimate,
+    onSubmitAnTask,
     isInternalExecutor,
     isCommentsAvailable,
     isCuratorAllowedTask,
