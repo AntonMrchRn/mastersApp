@@ -5,7 +5,7 @@ type Scale100IconProps = {
 };
 export const Scale100Icon: FC<Scale100IconProps> = () => {
   return (
-    <SVG width="302" height="16" viewBox="0 0 302 16" fill="none">
+    <SVG width="100%" height="16" viewBox="0 0 302 16" fill="none">
       <Path
         fillRule="evenodd"
         clipRule="evenodd"

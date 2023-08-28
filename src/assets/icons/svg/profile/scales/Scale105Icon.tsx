@@ -5,7 +5,7 @@ type Scale105IconProps = {
 };
 export const Scale105Icon: FC<Scale105IconProps> = () => {
   return (
-    <SVG width="302" height="16" viewBox="0 0 302 16" fill="none">
+    <SVG width="100%" height="16" viewBox="0 0 302 16" fill="none">
       <Path
         d="M4 8C4 6.89543 4.30873 6 4.68956 6H79.3104C79.6913 6 80 6.89543 80 8C80 9.10457 79.6913 10 79.3104 10H4.68956C4.30873 10 4 9.10457 4 8Z"
         fill="url(#paint0_linear_3345_109766)"

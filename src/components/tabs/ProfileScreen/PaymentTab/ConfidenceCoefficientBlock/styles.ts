@@ -16,5 +16,8 @@ export const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   title: { gap: 8, alignItems: 'center', flexDirection: 'row' },
-  scale: { marginVertical: 16 },
+  scale: {
+    marginVertical: 16,
+    backgroundColor: 'red',
+  },
 });
