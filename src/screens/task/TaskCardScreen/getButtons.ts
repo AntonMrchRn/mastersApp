@@ -21,7 +21,7 @@ export const getButtons = ({
   isInvitedCurator,
   onTaskSubmission,
   isInvitedExecutor,
-  onSubmitAnEstimate,
+  onSubmitAnTask,
   isInternalExecutor,
   isCommentsAvailable,
   isCuratorAllowedTask,
@@ -70,7 +70,7 @@ export const getButtons = ({
   navigateToChat: () => void;
   onBecomeCurator: () => void;
   onTaskSubmission: () => void;
-  onSubmitAnEstimate: () => void;
+  onSubmitAnTask: () => void;
   onCancelModalVisible: () => void;
   onUploadModalVisible: () => void;
   onBudgetModalVisible: () => void;
@@ -127,7 +127,7 @@ export const getButtons = ({
                 {
                   label: 'Принять задачу',
                   variant: 'accent',
-                  onPress: onSubmissionModalVisible,
+                  onPress: onSubmitAnTask,
                 },
               ];
             case TaskTab.COMMENTS:
@@ -144,7 +144,7 @@ export const getButtons = ({
                 {
                   label: 'Принять задачу',
                   variant: 'accent',
-                  onPress: onSubmissionModalVisible,
+                  onPress: onSubmitAnTask,
                 },
               ];
             default:
@@ -369,7 +369,7 @@ export const getButtons = ({
                 {
                   label: 'Подать смету',
                   variant: 'accent',
-                  onPress: onSubmitAnEstimate,
+                  onPress: onSubmitAnTask,
                 },
               ];
             default:

@@ -184,6 +184,7 @@ export const useTaskCard = ({
 
   const userData = getUserQuery.data;
   const entityTypeID = userData?.entityTypeID;
+  console.log('🚀 ~ file: useTaskCard.tsx:187 ~ entityTypeID:', entityTypeID);
   /**
    * личный коэффициент оплаты исполнителя
    */
@@ -675,7 +676,7 @@ export const useTaskCard = ({
     }
   };
 
-  const onSubmitAnEstimate = () => {
+  const onSubmitAnTask = () => {
     if (!hasAccessToTask) {
       return onNoAccessToTaskBannerVisible();
     }
@@ -798,7 +799,7 @@ export const useTaskCard = ({
     isInvitedCurator,
     onTaskSubmission,
     isInvitedExecutor,
-    onSubmitAnEstimate,
+    onSubmitAnTask,
     isInternalExecutor,
     isCommentsAvailable,
     isCuratorAllowedTask,
