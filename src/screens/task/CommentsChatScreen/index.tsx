@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useKeyboardAnimation } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import EventSource, { EventSourceListener } from 'react-native-sse';
 
 import { StackScreenProps } from '@react-navigation/stack';
 import { Input, useTheme } from 'rn-ui-kit';
@@ -19,7 +20,9 @@ import PreviewNotFound, {
 } from '@/components/tabs/TaskSearch/PreviewNotFound';
 import ChatMessage from '@/components/task/TaskCard/TaskCardComment/Chat';
 import { configApp } from '@/constants/platform';
+import { storageMMKV } from '@/mmkv/storage';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
+import { axiosInstance } from '@/services/axios/axiosInstance';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { getComments, sendMessage } from '@/store/slices/myTasks/asyncActions';
 import { clearComments } from '@/store/slices/myTasks/reducer';
@@ -32,7 +35,7 @@ type CommentsChatScreenProps = StackScreenProps<
   AppStackParamList,
   AppScreenName.CommentsChat
 >;
-
+let sse: EventSource<never>;
 export const CommentsChatScreen = ({
   route: {
     params: { taskId, recipientIDs, isITServices, isMessageInputAvailable },
@@ -60,10 +63,41 @@ export const CommentsChatScreen = ({
         ),
       4000
     );
-
     return () => {
       dispatch(clearComments());
       clearInterval(timeout);
+    };
+  }, []);
+  const token = storageMMKV.getString('token');
+  useEffect(() => {
+    (async () => {
+      const res = await axiosInstance.get(
+        `https://sandbox8.apteka-aprel.ru/api/postman/subscribe?taskID=${taskId}`
+      );
+      const ress = new EventSource(res.data, {
+        headers: { ['M-Token']: token },
+      });
+      sse = ress;
+      const listener: EventSourceListener = event => {
+        if (event.type === 'open') {
+          console.log('Open SSE connection.');
+        } else if (event.type === 'message') {
+          const res = JSON.parse(event.data);
+          console.log('🚀 ~ file: index.tsx:77 ~ useEffect ~ res:', res);
+        } else if (event.type === 'error') {
+          console.error('Connection error:', event.message);
+        } else if (event.type === 'exception') {
+          console.error('Error:', event.message, event.error);
+        }
+      };
+      sse.addEventListener('open', listener);
+      sse.addEventListener('message', listener);
+      sse.addEventListener('error', listener);
+    })();
+
+    return () => {
+      sse.removeAllEventListeners();
+      sse.close();
     };
   }, []);
 
