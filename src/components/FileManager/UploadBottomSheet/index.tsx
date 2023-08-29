@@ -100,12 +100,12 @@ export const UploadBottomSheet = ({
               'public.zip-archive',
               'com.adobe.pdf',
               'public.content',
-              'public.mpeg',
-              'public.mpeg-4',
               'com.microsoft.excel.xls',
               'org.openxmlformats.spreadsheetml.sheet',
-              'com.apple.quicktime-movie',
               'com.compuserve.gif',
+              ...(!toClose
+                ? ['public.mpeg', 'public.mpeg-4', 'com.apple.quicktime-movie']
+                : []),
             ],
       }),
   };
