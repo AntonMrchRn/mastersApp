@@ -18,8 +18,8 @@ export const TaskAddress: FC<TaskAddressProps> = ({ address }) => {
       alignItems: 'center',
       marginBottom: 5,
     },
-    ml10: { marginLeft: 7 },
-    wrapperIcon: { width: 20, alignItems: 'center', bottom: 2 },
+    ml10: { marginLeft: 5 },
+    wrapperIcon: { width: 20, alignItems: 'center', bottom: 1.2 },
   });
 
   return (
@@ -29,7 +29,7 @@ export const TaskAddress: FC<TaskAddressProps> = ({ address }) => {
       </View>
       <Text
         variant="captionRegular"
-        color={theme.text.basic}
+        color={theme.text.neutral}
         style={styles.ml10}
       >
         {address}
