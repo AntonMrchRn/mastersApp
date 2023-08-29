@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useKeyboardAnimation } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import EventSource, { EventSourceListener } from 'react-native-sse';
+import EventSource, { EventSourceListener, EventType } from 'react-native-sse';
 
 import { StackScreenProps } from '@react-navigation/stack';
 import { Input, useTheme } from 'rn-ui-kit';
@@ -35,7 +35,7 @@ type CommentsChatScreenProps = StackScreenProps<
   AppStackParamList,
   AppScreenName.CommentsChat
 >;
-let sse: EventSource<never>;
+let sse: EventSource<'comments'>;
 export const CommentsChatScreen = ({
   route: {
     params: { taskId, recipientIDs, isITServices, isMessageInputAvailable },
@@ -74,24 +74,25 @@ export const CommentsChatScreen = ({
       const res = await axiosInstance.get(
         `https://sandbox8.apteka-aprel.ru/api/postman/subscribe?taskID=${taskId}`
       );
-      const ress = new EventSource(res.data, {
+      const ress = new EventSource<'comments'>(res.data, {
         headers: { ['M-Token']: token },
       });
       sse = ress;
-      const listener: EventSourceListener = event => {
+      const listener: EventSourceListener<EventType | 'comments'> = event => {
+        console.log('🚀 ~ file: index.tsx:82 ~ event:', event);
         if (event.type === 'open') {
           console.log('Open SSE connection.');
         } else if (event.type === 'message') {
           const res = JSON.parse(event.data || '');
           console.log('🚀 ~ file: index.tsx:77 ~ useEffect ~ res:', res);
         } else if (event.type === 'error') {
-          console.error('Connection error:', event.message);
+          console.error('Connection error:');
         } else if (event.type === 'exception') {
           console.error('Error:', event.message, event.error);
         }
       };
       sse.addEventListener('open', listener);
-      sse.addEventListener('message', listener);
+      sse.addEventListener('comments', listener);
       sse.addEventListener('error', listener);
     })();
 
