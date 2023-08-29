@@ -79,7 +79,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
   const measure = materialName
     ? material?.measure?.split('(')?.[1]?.slice(0, -1)
     : service?.measure?.toLowerCase();
-
+  const currMeasure = measure === 'час' ? 'часах' : measure;
   const methods = useForm({
     defaultValues: { estimateCount: '' },
     resolver: yupResolver(estimateCountValidationSchema),
@@ -182,7 +182,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
           color={theme.text.neutral}
           style={styles.rowText}
         >
-          {measure === 'пустое' ? 'Не указано' : `Измеряется в ${measure}`}
+          {measure === 'пустое' ? 'Не указано' : `Измеряется в ${currMeasure}`}
         </Text>
       </View>
       <Spacer size={'l'} />

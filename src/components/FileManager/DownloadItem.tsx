@@ -68,7 +68,9 @@ export const DownloadItem = ({
     try {
       const FILE_PATH = `${dirs.DocumentDir}/${title}`;
       const exist = await ReactNativeBlobUtil.fs.exists(FILE_PATH);
-      setOnDevice(exist);
+      if (onDevice !== exist) {
+        setOnDevice(exist);
+      }
     } catch (e) {
       console.log('hasOnDevice error: ', e);
     }
