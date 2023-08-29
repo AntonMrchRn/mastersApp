@@ -51,20 +51,20 @@ export const UploadBottomSheet = ({
   const theme = useTheme();
   const toast = useToast();
   const dispatch = useAppDispatch();
-  const compressRateQuery = useGetCompressRateQuery();
-  const quality = compressRateQuery.data || 0.8;
+  // const compressRateQuery = useGetCompressRateQuery();
+  // const quality = compressRateQuery.data || 0.8;
   const uploadActions = {
     [UploadAction.TakeFromGallery]: async () =>
       await ImagePicker.openPicker({
         mediaType: isUserFile ? 'photo' : 'any',
         multiple: true,
         maxFiles: 10,
-        compressImageQuality: quality,
+        // compressImageQuality: quality,
       }),
     [UploadAction.TakePhotoMedia]: async () =>
       await ImagePicker.openCamera({
         mediaType: 'photo',
-        compressImageQuality: quality,
+        // compressImageQuality: quality,
       }),
     [UploadAction.TakeVideoMedia]: async () =>
       await ImagePicker.openCamera({ mediaType: 'video' }),
@@ -111,10 +111,7 @@ export const UploadBottomSheet = ({
 
     try {
       const result = await uploadActions[actionType]();
-      console.log(
-        '🚀 ~ file: index.tsx:112 ~ onUploadAction ~ result:',
-        result
-      );
+
       const isDocuments = actionType === UploadAction.TakeFromFiles;
 
       if ((result as ImageOrVideo[]).length > 10) {
