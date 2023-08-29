@@ -82,7 +82,7 @@ export const CommentsChatScreen = ({
         if (event.type === 'open') {
           console.log('Open SSE connection.');
         } else if (event.type === 'message') {
-          const res = JSON.parse(event.data);
+          const res = JSON.parse(event.data || '');
           console.log('🚀 ~ file: index.tsx:77 ~ useEffect ~ res:', res);
         } else if (event.type === 'error') {
           console.error('Connection error:', event.message);
