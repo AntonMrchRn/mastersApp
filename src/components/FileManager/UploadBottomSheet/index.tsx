@@ -81,13 +81,17 @@ export const UploadBottomSheet = ({
               'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
               'application/vnd.ms-excel',
               'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-              'video/mpeg',
-              'video/mp4',
-              'video/ogg',
-              'video/webm',
-              'video/quicktime',
               'image/gif',
-              'video/x-matroska',
+              ...(!toClose
+                ? [
+                    'video/mpeg',
+                    'video/mp4',
+                    'video/ogg',
+                    'video/webm',
+                    'video/quicktime',
+                    'video/x-matroska',
+                  ]
+                : []),
             ]
           : [
               'public.jpg',
