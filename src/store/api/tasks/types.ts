@@ -352,6 +352,12 @@ type ITTaskMember = {
   isAccept?: boolean;
   invitedIDs?: number[];
 };
+type Measure = {
+  ID: number;
+  description: string;
+  name: string;
+  type: 'service' | 'material';
+};
 type GetAvailableContractorsParams = {
   taskId: number;
   curatorId: number;
@@ -364,6 +370,10 @@ type PatchITTaskMemberParams = {
   isCurator?: boolean;
 };
 
+type GetMeasuresResponse = {
+  count: number;
+  measures: Measure[];
+};
 export type {
   WebData,
   GetTaskStatusesResponse,
@@ -386,4 +396,6 @@ export type {
   GetOffersResponse,
   PostOffersRequest,
   PatchOffersRequest,
+  Measure,
+  GetMeasuresResponse,
 };

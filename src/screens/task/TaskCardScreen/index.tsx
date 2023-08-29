@@ -232,7 +232,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
               type={'error'}
               title="Аккаунт не подтвержден"
               icon={'alert'}
-              text="Для выполнения задач необходимо заполнить данные учетной записи"
+              text="Для выполнения задач необходимо заполнить данные учетной записи и дождаться ее подтверждения"
               onClosePress={onNoAccessToTaskBannerVisible}
               buttonText="Перейти в Профиль"
               onButtonPress={noAccessButtonPress}

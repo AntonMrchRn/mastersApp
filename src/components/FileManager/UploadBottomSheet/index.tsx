@@ -51,20 +51,20 @@ export const UploadBottomSheet = ({
   const theme = useTheme();
   const toast = useToast();
   const dispatch = useAppDispatch();
-  const compressRateQuery = useGetCompressRateQuery();
-  const quality = compressRateQuery.data || 0.8;
+  // const compressRateQuery = useGetCompressRateQuery();
+  // const quality = compressRateQuery.data || 0.8;
   const uploadActions = {
     [UploadAction.TakeFromGallery]: async () =>
       await ImagePicker.openPicker({
         mediaType: isUserFile ? 'photo' : 'any',
         multiple: true,
         maxFiles: 10,
-        compressImageQuality: quality,
+        // compressImageQuality: quality,
       }),
     [UploadAction.TakePhotoMedia]: async () =>
       await ImagePicker.openCamera({
         mediaType: 'photo',
-        compressImageQuality: quality,
+        // compressImageQuality: quality,
       }),
     [UploadAction.TakeVideoMedia]: async () =>
       await ImagePicker.openCamera({ mediaType: 'video' }),
@@ -81,13 +81,17 @@ export const UploadBottomSheet = ({
               'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
               'application/vnd.ms-excel',
               'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-              'video/mpeg',
-              'video/mp4',
-              'video/ogg',
-              'video/webm',
-              'video/quicktime',
               'image/gif',
-              'video/x-matroska',
+              ...(!toClose
+                ? [
+                    'video/mpeg',
+                    'video/mp4',
+                    'video/ogg',
+                    'video/webm',
+                    'video/quicktime',
+                    'video/x-matroska',
+                  ]
+                : []),
             ]
           : [
               'public.jpg',
@@ -96,12 +100,12 @@ export const UploadBottomSheet = ({
               'public.zip-archive',
               'com.adobe.pdf',
               'public.content',
-              'public.mpeg',
-              'public.mpeg-4',
               'com.microsoft.excel.xls',
               'org.openxmlformats.spreadsheetml.sheet',
-              'com.apple.quicktime-movie',
               'com.compuserve.gif',
+              ...(!toClose
+                ? ['public.mpeg', 'public.mpeg-4', 'com.apple.quicktime-movie']
+                : []),
             ],
       }),
   };
@@ -111,10 +115,7 @@ export const UploadBottomSheet = ({
 
     try {
       const result = await uploadActions[actionType]();
-      console.log(
-        '🚀 ~ file: index.tsx:112 ~ onUploadAction ~ result:',
-        result
-      );
+
       const isDocuments = actionType === UploadAction.TakeFromFiles;
 
       if ((result as ImageOrVideo[]).length > 10) {

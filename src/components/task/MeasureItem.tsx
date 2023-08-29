@@ -6,7 +6,7 @@ import { Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { CaretRightIcon } from '@/assets/icons/svg/estimate/CaretRightIcon';
 import { CubeLargeIcon } from '@/assets/icons/svg/estimate/CubeLargeIcon';
-import { Measure } from '@/types/task';
+import { Measure } from '@/store/api/tasks/types';
 
 import { EstimateMeasureBottomSheet } from './EstimateMeasureBottomSheet';
 
