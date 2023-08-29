@@ -14,15 +14,14 @@ export const TaskDate: FC<TaskDateProps> = ({ from, to }) => {
   const theme = useTheme();
   const styles = StyleSheet.create({
     ml10: {
-      marginLeft: 7,
+      marginLeft: 5,
     },
     date: {
       marginTop: 8,
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: 'red',
     },
-    wrapperIcon: { width: 20, bottom: 2 },
+    wrapperIcon: { width: 20, bottom: 2.7 },
   });
 
   return (
@@ -32,7 +31,7 @@ export const TaskDate: FC<TaskDateProps> = ({ from, to }) => {
       </View>
       <Text
         variant="captionRegular"
-        color={theme.text.basic}
+        color={theme.text.neutral}
         style={styles.ml10}
       >
         {from && `с ${dayjs(from).format('DD MMMM YYYY')} `}
