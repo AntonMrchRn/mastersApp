@@ -6,6 +6,7 @@ import { File, FilesParams, Progress } from '@/types/fileManager';
 
 import {
   GetAvailableContractorsParams,
+  GetMeasuresResponse,
   GetOffersResponse,
   GetServicesCategoriesResponse,
   GetServicesResponse,
@@ -68,6 +69,12 @@ export const tasksAPI = api
       getOffers: builder.query<GetOffersResponse, string>({
         query: taskID => ({
           url: `offers?query=?taskID==${taskID}?`,
+          method: 'GET',
+        }),
+      }),
+      getMeasures: builder.query<GetMeasuresResponse, 'service' | 'material'>({
+        query: type => ({
+          url: `measures?query=?type==${type}?`,
           method: 'GET',
         }),
       }),
@@ -200,12 +207,6 @@ export const tasksAPI = api
       >({
         query: data => ({
           url: `offers?query=?taskID==${data.taskID}*userID==${data.userID}?`,
-          method: 'GET',
-        }),
-      }),
-      getMeasures: builder.query<unknown, void>({
-        query: () => ({
-          url: 'measures?query=??',
           method: 'GET',
         }),
       }),

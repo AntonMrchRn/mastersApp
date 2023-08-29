@@ -13,6 +13,7 @@ import { MeasureItem } from '@/components/task/MeasureItem';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
+  useGetMeasuresQuery,
   useGetTaskQuery,
   usePatchTaskServiceMutation,
   usePostMaterialMutation,
@@ -22,7 +23,6 @@ import { selectAuth } from '@/store/slices/auth/selectors';
 import { setNewOfferServices } from '@/store/slices/tasks/actions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
-import { Measure } from '@/types/task';
 import { estimateAddMaterialValidationSchema } from '@/utils/formValidation';
 import { getRandomUniqNumber } from '@/utils/getRandomUniqNumber';
 
@@ -48,6 +48,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
   const { offerServices } = useAppSelector(selectTasks);
 
   const getTask = useGetTaskQuery(taskId.toString());
+  const getMeasures = useGetMeasuresQuery('material');
 
   const [postMaterial, mutationMaterial] = usePostMaterialMutation();
   const [patchTaskService] = usePatchTaskServiceMutation();
@@ -124,7 +125,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
       const newMaterial: Material = {
         ID: getRandomUniqNumber(ids),
         count: +count,
-        measure: measures.find(m => m.text === measure)?.text || '',
+        measure: measures.find(m => m.description === measure)?.name || '',
         name,
         price: +price,
         roleID: userRole,
@@ -156,7 +157,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
           serviceID: service?.ID,
           taskID: taskId,
           count: +count,
-          measure: measures.find(m => m.text === measure)?.text,
+          measure: measures.find(m => m.description === measure)?.name,
           name,
           price: +price,
           roleID: userRole,
@@ -172,32 +173,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
     }
   };
 
-  const measures: Measure[] = [
-    {
-      text: 'Метр (м.)',
-      name: 'М',
-    },
-    {
-      text: 'Квадратный метр (кв.м.)',
-      name: 'М²',
-    },
-    {
-      text: 'Кубический метр (куб.м.)',
-      name: 'М³',
-    },
-    {
-      text: 'Километр (км.)',
-      name: 'Км',
-    },
-    {
-      text: 'Погонный метр (п.м.)',
-      name: 'М/П',
-    },
-    {
-      text: 'Штука (шт.)',
-      name: 'Шт.',
-    },
-  ];
+  const measures = getMeasures.data?.measures || [];
   return (
     <View style={styles.container}>
       <Text variant={'title3'} style={styles.title} color={theme.text.basic}>

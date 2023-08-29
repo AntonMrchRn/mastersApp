@@ -194,11 +194,6 @@ type TaskSearch = {
   ID?: number;
 };
 
-type Measure = {
-  text: string;
-  name: string;
-};
-
 export {
   TaskTab,
   RoleType,
@@ -210,4 +205,4 @@ export {
   ContractorStatus,
   OutlayConfirmStatus,
 };
-export type { TaskSearch, Measure };
+export type { TaskSearch };

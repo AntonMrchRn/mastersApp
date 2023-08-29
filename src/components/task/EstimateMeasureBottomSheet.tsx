@@ -4,7 +4,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { BottomSheet, Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { CheckMeasureIcon } from '@/assets/icons/svg/estimate/CheckMeasureIcon';
-import { Measure } from '@/types/task';
+import { Measure } from '@/store/api/tasks/types';
 
 type EstimateMeasureBottomSheetProps = {
   isVisible: boolean;
@@ -48,13 +48,13 @@ export const EstimateMeasureBottomSheet: FC<
       <View style={styles.container}>
         {data.map(item => {
           const onPress = () => {
-            setSelectName(item.text);
+            setSelectName(item.description);
           };
-          const isSelected = item.text === selectName;
+          const isSelected = item.description === selectName;
           return (
             <TouchableOpacity
               onPress={onPress}
-              key={item.name}
+              key={item.ID}
               style={styles.between}
             >
               <Text
@@ -62,7 +62,7 @@ export const EstimateMeasureBottomSheet: FC<
                 variant={'bodyMRegular'}
                 color={theme.text.basic}
               >
-                {item.text}
+                {item.description} ({item.name.toLowerCase()})
               </Text>
               {isSelected && <CheckMeasureIcon />}
             </TouchableOpacity>
