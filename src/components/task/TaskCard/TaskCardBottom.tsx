@@ -25,26 +25,33 @@ export const TaskCardBottom: FC<TaskCardBottomProps> = ({
   const styles = StyleSheet.create({
     container: {
       gap: 16,
-      marginBottom: configApp.android ? 24 : 0,
     },
   });
   return (
-    <LinearGradient
-      colors={['rgba(255, 255, 255, 0.00)', '#FFF']}
-      locations={[0, 0.9]}
-    >
-      <View style={styles.container}>
-        {banner && <Banner {...banner} />}
-        {buttons.map((button, index) => (
-          <Button
-            onPress={button.onPress}
-            key={index}
-            label={button.label}
-            variant={button.variant}
-            disabled={button.disabled}
-          />
-        ))}
-      </View>
-    </LinearGradient>
+    <>
+      <LinearGradient
+        colors={['rgba(255, 255, 255, 0.00)', '#FFF']}
+        locations={[0, 0.9]}
+      >
+        <View style={styles.container}>
+          {banner && <Banner {...banner} />}
+          {buttons.map((button, index) => (
+            <Button
+              onPress={button.onPress}
+              key={index}
+              label={button.label}
+              variant={button.variant}
+              disabled={button.disabled}
+            />
+          ))}
+        </View>
+      </LinearGradient>
+      <View
+        style={{
+          height: configApp.android ? 24 : 0,
+          backgroundColor: 'transparent',
+        }}
+      />
+    </>
   );
 };
