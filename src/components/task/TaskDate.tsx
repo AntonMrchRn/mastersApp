@@ -20,7 +20,6 @@ export const TaskDate: FC<TaskDateProps> = ({ from, to }) => {
       marginTop: 8,
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: 'red',
     },
     wrapperIcon: { width: 20, bottom: 2 },
   });

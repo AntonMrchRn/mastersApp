@@ -17,7 +17,6 @@ export const TaskAddress: FC<TaskAddressProps> = ({ address }) => {
       flexDirection: 'row',
       alignItems: 'center',
       marginBottom: 5,
-      backgroundColor: 'red',
     },
     ml10: { marginLeft: 7 },
     wrapperIcon: { width: 20, alignItems: 'center', bottom: 2 },
