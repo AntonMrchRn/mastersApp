@@ -38,7 +38,6 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   outlayStatusID,
   statusID,
 }) => {
-  console.log('🚀 ~ file: TaskEstimateItem.tsx:39 ~ roleID:', roleID);
   const currentMeasure =
     measure === 'час'
       ? plural(count, '%d час', '%d часa', '%d часов')

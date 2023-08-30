@@ -128,7 +128,10 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
     goBack();
   };
   return (
-    <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
+    <SafeAreaView
+      edges={['bottom']}
+      style={{ flex: 1, backgroundColor: 'white' }}
+    >
       <KeyboardAwareScrollView
         contentContainerStyle={styles.container}
         enableOnAndroid={true}

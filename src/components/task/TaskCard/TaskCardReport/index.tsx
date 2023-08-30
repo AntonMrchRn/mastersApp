@@ -278,6 +278,7 @@ export const TaskCardReport = ({
       case StatusType.WORK:
       case StatusType.COMPLETED:
       case StatusType.PAID:
+      case StatusType.CLOSED:
         return <AllUploadFiles />;
       default:
         return DefaultUploadFiles;

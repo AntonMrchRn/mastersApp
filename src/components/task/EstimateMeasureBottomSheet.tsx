@@ -4,6 +4,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { BottomSheet, Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { CheckMeasureIcon } from '@/assets/icons/svg/estimate/CheckMeasureIcon';
+import { configApp } from '@/constants/platform';
 import { Measure } from '@/store/api/tasks/types';
 
 type EstimateMeasureBottomSheetProps = {
@@ -75,6 +76,7 @@ export const EstimateMeasureBottomSheet: FC<
           label="Выбрать"
           onPress={onChangeMeasure}
         />
+        <Spacer size={configApp.android ? 20 : 0} />
       </View>
     </BottomSheet>
   );

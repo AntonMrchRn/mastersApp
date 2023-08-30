@@ -51,24 +51,17 @@ export const Item: FC<ItemProps> = ({
 
   return (
     <View>
-      {canDelete && (
-        <TouchableOpacity
-          style={styles.trash}
-          onPress={onDelete}
-          hitSlop={{
-            bottom: 20,
-            left: 20,
-            right: 20,
-            top: 20,
-          }}
-        >
-          <TrashIcon />
-        </TouchableOpacity>
-      )}
       <Spacer size={20} />
-      <Text variant="captionRegular" color={theme.text.neutral}>
-        Категория услуг
-      </Text>
+      <View style={styles.head}>
+        <Text variant="captionRegular" color={theme.text.neutral}>
+          Категория услуг
+        </Text>
+        {canDelete && (
+          <TouchableOpacity onPress={onDelete}>
+            <TrashIcon />
+          </TouchableOpacity>
+        )}
+      </View>
       <Text
         variant="bodyMBold"
         style={styles.itemTitle}

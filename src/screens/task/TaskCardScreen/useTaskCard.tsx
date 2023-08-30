@@ -673,6 +673,7 @@ export const useTaskCard = ({
         refetch();
       }
     }
+    setCurrentEstimateTab(EstimateTab.TASK_ESTIMATE);
   };
 
   const onSubmitAnTask = () => {
