@@ -76,7 +76,9 @@ export const EstimateTotal: FC<EstimateTotalProps> = ({
               coords={coords}
               onClose={onTooltipClose}
               isVisible={isTooltipVisible}
-              title={`Ваш коэффициент доверия — ${serviceMultiplier}`}
+              title={`Ваш коэффициент доверия — ${serviceMultiplier
+                .toFixed(2)
+                .replace('.', ',')}`}
               text={`Зависит от количества выполненных задач, качества работ и скорости их выполнения. Чтобы повысить стоимость услуг выполняйте задачи качественно и в срок`}
             >
               <TouchableOpacity onPress={onTooltipOpen}>
