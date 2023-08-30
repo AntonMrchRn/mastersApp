@@ -198,7 +198,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
           <View
             style={{
               position: 'absolute',
-              bottom: 60,
+              bottom: 70,
               width: deviceWidth - 40,
               alignSelf: 'center',
             }}

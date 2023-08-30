@@ -183,7 +183,7 @@ export const useEstimateSubmission = ({
       return setErrors(fields);
     }
     //если нельзя подать смету ценой выше поданной ранее
-    if (allowCostIncrease && currentSum && allSum > currentSum) {
+    if (!allowCostIncrease && currentSum && allSum > currentSum) {
       //ошибка
       return setBanner({
         title: 'Скорректируйте смету',
