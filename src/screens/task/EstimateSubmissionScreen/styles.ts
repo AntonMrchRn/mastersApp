@@ -29,5 +29,9 @@ export const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     paddingVertical: 8,
   },
-  trash: { position: 'absolute', top: 20, right: 0 },
+  head: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
 });
