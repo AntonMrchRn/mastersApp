@@ -153,7 +153,7 @@ export const useEstimateSubmission = ({
     onEstimateModalVisible();
     navigation.navigate(AppScreenName.NewMaterial, {
       taskId,
-      isEdit: isEdit,
+      isEdit,
       fromEstimateSubmission: true,
       services: offerServices,
     });

@@ -122,10 +122,13 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
         }
         return acc;
       }, []);
+      const newMeasure =
+        measures.find(m => m.description === measure)?.name || '';
       const newMaterial: Material = {
         ID: getRandomUniqNumber(ids),
         count: +count,
-        measure: measures.find(m => m.description === measure)?.name || '',
+        measure: newMeasure,
+        localSum: (+price * +count).toString(),
         name,
         price: +price,
         roleID: userRole,
