@@ -183,24 +183,29 @@ export const TaskBadges: FC<TaskBadgesProps> = ({
   return (
     <View style={styles.badges}>
       {getBadges()}
-      {isUrgent && (
-        <Badge
-          secondary={true}
-          label={'Срочно'}
-          icon={true}
-          variant={'secondary'}
-          style={styles.badge}
-        />
-      )}
-      {isNight && (
-        <Badge
-          secondary={true}
-          label={'Ночные работы'}
-          icon={<NightIcon />}
-          variant={'special'}
-          style={styles.badge}
-        />
-      )}
+      {!!statusID &&
+        !![StatusType.ACTIVE, StatusType.WORK].includes(statusID) && (
+          <>
+            {isUrgent && (
+              <Badge
+                secondary={true}
+                label={'Срочно'}
+                icon={true}
+                variant={'secondary'}
+                style={styles.badge}
+              />
+            )}
+            {isNight && (
+              <Badge
+                secondary={true}
+                label={'Ночные работы'}
+                icon={<NightIcon />}
+                variant={'special'}
+                style={styles.badge}
+              />
+            )}
+          </>
+        )}
     </View>
   );
 };

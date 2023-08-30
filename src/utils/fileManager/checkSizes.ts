@@ -26,8 +26,8 @@ export const checkSizes = ({
         return false;
       }
 
-      const moreThan50MB = moreThanMaxSize.find(si => si.size >= 50 * MB);
-      if (moreThan50MB) {
+      const moreThan100MB = moreThanMaxSize.find(si => si.size >= 100 * MB);
+      if (moreThan100MB) {
         return false;
       }
     }

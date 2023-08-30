@@ -153,7 +153,7 @@ export const useEstimateSubmission = ({
     onEstimateModalVisible();
     navigation.navigate(AppScreenName.NewMaterial, {
       taskId,
-      isEdit: isEdit,
+      isEdit,
       fromEstimateSubmission: true,
       services: offerServices,
     });
@@ -183,7 +183,7 @@ export const useEstimateSubmission = ({
       return setErrors(fields);
     }
     //если нельзя подать смету ценой выше поданной ранее
-    if (allowCostIncrease && currentSum && allSum > currentSum) {
+    if (!allowCostIncrease && currentSum && allSum > currentSum) {
       //ошибка
       return setBanner({
         title: 'Скорректируйте смету',
@@ -240,6 +240,7 @@ export const useEstimateSubmission = ({
           description: service.description,
           measureID: service.measureID,
           measureName: service.measureName,
+          measure: service.measure,
           name: service.name,
           price: +(service.localSum || 0) / (service.count || 0),
           setID: service.setID,
