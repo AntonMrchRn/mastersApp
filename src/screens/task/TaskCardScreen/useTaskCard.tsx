@@ -265,7 +265,7 @@ export const useTaskCard = ({
    */
   const isUrgent = task?.isUrgent || false;
   const publicTime = task?.publicTime
-    ? `Опубликовано ${dayjs(task?.publicTime).format('DD MMMM в HH:mm')}`
+    ? `Опубликовано ${dayjs(task?.publicTime).format('D MMMM в HH:mm')}`
     : '';
 
   /**

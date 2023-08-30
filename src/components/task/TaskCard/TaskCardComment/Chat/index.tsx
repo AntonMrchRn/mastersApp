@@ -24,7 +24,7 @@ const ChatMessage = ({
   isITServices,
 }: ChatItemProps) => {
   const theme = useTheme();
-  const time = dayjs(creationTime).locale('ru').format('DD MMMM, HH:mm');
+  const time = dayjs(creationTime).locale('ru').format('D MMMM, HH:mm');
 
   return (
     <>
