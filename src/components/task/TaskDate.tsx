@@ -34,8 +34,8 @@ export const TaskDate: FC<TaskDateProps> = ({ from, to }) => {
         color={theme.text.neutral}
         style={styles.ml10}
       >
-        {from && `с ${dayjs(from).format('DD MMMM YYYY')} `}
-        {to && `по ${dayjs(to).format('DD MMMM YYYY')}`}
+        {from && `с ${dayjs(from).format('D MMMM YYYY')} `}
+        {to && `по ${dayjs(to).format('D MMMM YYYY')}`}
       </Text>
     </View>
   );

@@ -265,7 +265,7 @@ export const useTaskCard = ({
    */
   const isUrgent = task?.isUrgent || false;
   const publicTime = task?.publicTime
-    ? `Опубликовано ${dayjs(task?.publicTime).format('DD MMMM в HH:mm')}`
+    ? `Опубликовано ${dayjs(task?.publicTime).format('D MMMM в HH:mm')}`
     : '';
 
   /**
@@ -348,9 +348,7 @@ export const useTaskCard = ({
     subsetID === TaskType.IT_AUCTION_SALE && isContractor
       ? ''
       : offersDeadline
-      ? `Срок подачи сметы до ${dayjs(offersDeadline).format(
-          'DD MMMM в HH:mm'
-        )}`
+      ? `Срок подачи сметы до ${dayjs(offersDeadline).format('D MMMM в HH:mm')}`
       : '';
   // offersDeadline: "2023-08-23T00:00:00.000Z"
   const hasAccessToTask = userData?.isApproved;
