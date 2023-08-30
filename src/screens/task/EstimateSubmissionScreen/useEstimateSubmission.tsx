@@ -240,6 +240,7 @@ export const useEstimateSubmission = ({
           description: service.description,
           measureID: service.measureID,
           measureName: service.measureName,
+          measure: service.measure,
           name: service.name,
           price: +(service.localSum || 0) / (service.count || 0),
           setID: service.setID,

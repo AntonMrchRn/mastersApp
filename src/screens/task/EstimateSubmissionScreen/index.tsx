@@ -140,7 +140,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                   error={errors?.[service.ID as number]}
                   canDelete={service.canDelete}
                   onDelete={onDelete}
-                  measure={'шт.'}
+                  measure={service.measure || ''}
                 />
                 {service.materials?.map(material => {
                   const error = errors?.[material.ID as number];
@@ -170,7 +170,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                       count={material.count}
                       sum={material.count * material.price}
                       canDelete={material.canDelete}
-                      measure={material.measure || 'шт.'}
+                      measure={material.measure || ''}
                     />
                   );
                 })}
