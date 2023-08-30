@@ -18,6 +18,5 @@ export const styles = StyleSheet.create({
   title: { gap: 8, alignItems: 'center', flexDirection: 'row' },
   scale: {
     marginVertical: 16,
-    backgroundColor: 'red',
   },
 });
