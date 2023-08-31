@@ -19,10 +19,10 @@ import PreviewNotFound, {
 } from '@/components/tabs/TaskSearch/PreviewNotFound';
 import ChatMessage from '@/components/task/TaskCard/TaskCardComment/Chat';
 import { configApp } from '@/constants/platform';
+import { useCommentsSSE } from '@/hooks/useCommentsSSE';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { getComments, sendMessage } from '@/store/slices/myTasks/asyncActions';
-import { clearComments } from '@/store/slices/myTasks/reducer';
+import { sendMessage } from '@/store/slices/myTasks/asyncActions';
 import { Comment } from '@/store/slices/myTasks/types';
 import { TaskSearch } from '@/types/task';
 
@@ -51,21 +51,7 @@ export const CommentsChatScreen = ({
     state => state.myTasks
   );
 
-  useEffect(() => {
-    dispatch(getComments({ idCard: taskId, numberOfPosts: 30, sort: 'desc' }));
-    const timeout = setInterval(
-      () =>
-        dispatch(
-          getComments({ idCard: taskId, numberOfPosts: 999, sort: 'desc' })
-        ),
-      4000
-    );
-
-    return () => {
-      dispatch(clearComments());
-      clearInterval(timeout);
-    };
-  }, []);
+  useCommentsSSE(taskId.toString());
 
   useEffect(() => {
     if (isActive) {

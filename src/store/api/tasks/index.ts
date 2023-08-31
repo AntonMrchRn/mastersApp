@@ -32,7 +32,6 @@ export const tasksAPI = api
           url: `tasks/web?query=?ID==${id}?`,
           method: 'GET',
         }),
-        providesTags: ['task'],
       }),
       getTaskHistory: builder.query<GetTaskHistoryResponse, string>({
         query: id => ({

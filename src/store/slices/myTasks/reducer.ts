@@ -42,6 +42,14 @@ const taskSearch = createSlice({
     clearComments: state => {
       state.comments = {};
     },
+    setComment: (state, { payload }) => {
+      if (
+        state.comments.taskComment &&
+        state.comments.taskComment?.[0]?.ID !== payload.ID
+      ) {
+        state.comments.taskComment.unshift(payload);
+      }
+    },
   },
   extraReducers: builder => {
     // получить список задач в поиске
@@ -131,7 +139,7 @@ const taskSearch = createSlice({
   },
 });
 
-export const { clearList, clearCommentsPreview, clearComments } =
+export const { clearList, clearCommentsPreview, clearComments, setComment } =
   taskSearch.actions;
 
 export default taskSearch;
