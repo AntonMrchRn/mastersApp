@@ -15,6 +15,7 @@ import { TaskCardDescription } from '@/components/task/TaskCard/TaskCardDescript
 import { TaskCardEstimate } from '@/components/task/TaskCard/TaskCardEstimate';
 import { TaskCardHistory } from '@/components/task/TaskCard/TaskCardHistory';
 import { TaskCardReport } from '@/components/task/TaskCard/TaskCardReport';
+import { useTaskSSE } from '@/hooks/useTaskSSE';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
@@ -76,7 +77,6 @@ const estimateTabsArray = [
   EstimateTab.TASK_ESTIMATE,
   EstimateTab.MY_SUGGESTION,
 ];
-
 export const useTaskCard = ({
   taskId,
   navigation,
@@ -134,8 +134,10 @@ export const useTaskCard = ({
   const [patchITTaskMember] = usePatchITTaskMemberMutation();
   const [deleteITTaskMember] = useDeleteITTaskMemberMutation();
   const [postITTaskMember] = usePostITTaskMemberMutation();
+
   const getUserQuery = useGetUserQuery(user?.userID);
   const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
+  useTaskSSE(taskId);
   const getTaskHistory = useGetTaskHistoryQuery(taskId);
   const task = data?.tasks?.[0];
   const getUserOffersQuery = useGetUserOffersQuery(
@@ -350,7 +352,7 @@ export const useTaskCard = ({
       : offersDeadline
       ? `Срок подачи сметы до ${dayjs(offersDeadline).format('D MMMM в HH:mm')}`
       : '';
-  // offersDeadline: "2023-08-23T00:00:00.000Z"
+
   const hasAccessToTask = userData?.isApproved;
   const isCommentsAvailable =
     (isSupervisor ||
