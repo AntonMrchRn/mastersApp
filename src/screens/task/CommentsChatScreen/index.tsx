@@ -50,7 +50,6 @@ export const CommentsChatScreen = ({
   const { comments, loadingComments, loadingSend } = useAppSelector(
     state => state.myTasks
   );
-  console.log('🚀 ~ file: index.tsx:51 ~ comments:', comments);
 
   useCommentsSSE(taskId.toString());
 
