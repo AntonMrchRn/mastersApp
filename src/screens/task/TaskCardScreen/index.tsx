@@ -147,7 +147,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
                 >
                   {name}
                 </Text>
-                {!!budget && (
+                {!!budget && !isContractor && (
                   <Text
                     variant="title3"
                     style={styles.price}

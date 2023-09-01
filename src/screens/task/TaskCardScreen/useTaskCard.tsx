@@ -279,6 +279,8 @@ export const useTaskCard = ({
    */
   const isRefusedCurator = !!curator?.isRefuse;
   // проверка на роль в задаче
+
+  // is подрядчик
   const isContractor = !!executor?.hasCurator && !isRefusedExecutor;
   const isExecutor = !!executor && !executor.hasCurator && !isRefusedExecutor;
   const isCoordinator = coordinator?.ID === user?.userID;
