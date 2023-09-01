@@ -9,4 +9,6 @@ export const {
   addMaterialLocalSum,
   setOfferComment,
   setOfferID,
+  addMaterialCount,
+  addServiceCount,
 } = tasks.actions;

@@ -52,10 +52,10 @@ export const useCommentsSSE = (taskId: string) => {
             console.log('🚀 ~ file: useTaskSSE.tsx:30 ~ err:', err);
           }
         } else if (event.type === 'error') {
-          console.error('Connection error:');
+          console.log('Connection error:');
           hadnleGetComments();
         } else if (event.type === 'exception') {
-          console.error('Error:', event.message, event.error);
+          console.log('Error:', event.message, event.error);
         }
       };
       sse.addEventListener('open', listener);

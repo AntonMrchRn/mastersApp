@@ -20,7 +20,9 @@ import { configApp, deviceWidth } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch } from '@/store';
 import {
+  addMaterialCount,
   addMaterialLocalSum,
+  addServiceCount,
   addServiceLocalSum,
 } from '@/store/slices/tasks/actions';
 
@@ -117,7 +119,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
               setServiceForDelete(service);
               onDeleteEstimateModalVisible();
             };
-            const onChangeText = (text: string) => {
+            const onChangeSum = (text: string) => {
               if (text && error) {
                 delete errors[service.ID as number];
               }
@@ -128,15 +130,27 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                 })
               );
             };
+            const onChangeCount = (text: string) => {
+              if (text && error) {
+                delete errors[service.ID as number];
+              }
+              dispatch(
+                addServiceCount({
+                  serviceID: service.ID,
+                  count: +text,
+                })
+              );
+            };
             return (
               <View key={service.name}>
                 <Item
-                  onChangeText={onChangeText}
+                  onChangeSum={onChangeSum}
+                  onChangeCount={onChangeCount}
                   title={service.name}
                   description={service.description}
                   count={service?.count || 0}
                   sum={service.sum || 0}
-                  value={service?.localSum}
+                  localSum={service?.localSum}
                   error={errors?.[service.ID as number]}
                   canDelete={service.canDelete}
                   onDelete={onDelete}
@@ -147,7 +161,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                   const onDelete = () => {
                     onDeleteMaterial(service, material);
                   };
-                  const onChangeText = (text: string) => {
+                  const onChangeSum = (text: string) => {
                     if (text && error) {
                       delete errors[material.ID as number];
                     }
@@ -159,10 +173,23 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                       })
                     );
                   };
+                  const onChangeCount = (text: string) => {
+                    if (text && error) {
+                      delete errors[material.ID as number];
+                    }
+                    dispatch(
+                      addMaterialCount({
+                        serviceID: service.ID,
+                        materialID: material.ID,
+                        count: +text,
+                      })
+                    );
+                  };
                   return (
                     <Item
-                      onChangeText={onChangeText}
-                      value={material?.localSum}
+                      onChangeSum={onChangeSum}
+                      onChangeCount={onChangeCount}
+                      localSum={material?.localSum}
                       key={material.name}
                       onDelete={onDelete}
                       error={error}
