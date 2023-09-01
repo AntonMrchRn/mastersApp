@@ -72,7 +72,7 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
       count: '',
     },
     resolver: yupResolver(estimateAddServiceValidationSchema),
-    mode: 'onChange',
+    mode: 'onSubmit',
   });
   const {
     formState: { errors },
