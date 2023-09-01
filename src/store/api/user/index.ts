@@ -27,6 +27,7 @@ export const userAPI = api
           url: `users?query=?ID==${id}?`,
           method: 'GET',
         }),
+        providesTags: ['user'],
         transformResponse: (response: UserResponse) => response.users[0],
       }),
       getUsers: builder.query<User[], number[]>({
