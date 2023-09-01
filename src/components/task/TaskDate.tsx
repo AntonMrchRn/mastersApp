@@ -24,19 +24,36 @@ export const TaskDate: FC<TaskDateProps> = ({ from, to }) => {
     wrapperIcon: { width: 20, bottom: 2.7 },
   });
 
+  const inOneMonth = !!(
+    from &&
+    to &&
+    dayjs(from).year() === dayjs(to).year() &&
+    dayjs(from).month() === dayjs(to).month()
+  );
+
   return (
     <View style={styles.date}>
       <View style={styles.wrapperIcon}>
         <CalendarCheckIcon />
       </View>
-      <Text
-        variant="captionRegular"
-        color={theme.text.neutral}
-        style={styles.ml10}
-      >
-        {from && `с ${dayjs(from).format('D MMMM YYYY')} `}
-        {to && `по ${dayjs(to).format('D MMMM YYYY')}`}
-      </Text>
+      {inOneMonth ? (
+        <Text
+          variant="captionRegular"
+          color={theme.text.neutral}
+          style={styles.ml10}
+        >
+          {`${dayjs(from).format('D')}`}-{`${dayjs(to).format('D MMMM YYYY')}`}
+        </Text>
+      ) : (
+        <Text
+          variant="captionRegular"
+          color={theme.text.neutral}
+          style={styles.ml10}
+        >
+          {from && `с ${dayjs(from).format('D MMMM YYYY')} `}
+          {to && `по ${dayjs(to).format('D MMMM YYYY')}`}
+        </Text>
+      )}
     </View>
   );
 };
