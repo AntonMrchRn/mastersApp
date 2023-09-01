@@ -93,8 +93,6 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
   } = methods;
 
   const name = watch('name');
-  const count = watch('count');
-  const price = watch('price');
   const measure = watch('measure');
 
   const hasName = materialsNames.includes(name);
@@ -187,7 +185,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
         <View style={styles.inputs}>
           <ControlledInput
             name={'name'}
-            label={name ? 'Наименование' : undefined}
+            label={'Наименование'}
             placeholder={'Наименование'}
             variant={'text'}
             maxLength={50}
@@ -199,7 +197,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
           />
           <ControlledInput
             name={'count'}
-            label={count ? 'Количество' : undefined}
+            label={'Количество'}
             placeholder={'Количество'}
             variant={'number'}
             hint={errors.count?.message}
@@ -208,7 +206,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
           />
           <ControlledPriceInput
             name={'price'}
-            label={price ? 'Цена' : undefined}
+            label={'Цена'}
             placeholder={'Цена'}
             variant={'text'}
             keyboardType="numeric"
