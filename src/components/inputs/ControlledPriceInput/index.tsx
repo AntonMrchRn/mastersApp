@@ -30,10 +30,15 @@ const ControlledPriceInput = ({
   const onChangeText = (text: string) => {
     const curText = text.includes(',') ? text.replace(',', '.') : text;
     const hasDot = curText.includes('.');
-    const valid = /^\d*\.?(?:\d{1,2})?$/;
-    const res = valid.test(curText);
-    if (res) {
-      field.onChange(curText.slice(0, hasDot ? 10 : 7));
+    const afterDots = curText.split('.')[1];
+    if (afterDots && afterDots.length > 2) {
+      field.onChange((+curText).toFixed());
+    } else {
+      const valid = /^\d*\.?(?:\d{1,2})?$/;
+      const res = valid.test(curText);
+      if (res) {
+        field.onChange(curText.slice(0, hasDot ? 10 : 7));
+      }
     }
   };
 
@@ -45,7 +50,6 @@ const ControlledPriceInput = ({
       onClear={onClear}
       value={field.value}
       onChangeText={onChangeText}
-      maxLength={10}
     />
   );
 };
