@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
 import { Input, Spacer, Text, useTheme } from 'rn-ui-kit';
@@ -15,10 +15,11 @@ type ItemProps = {
   count: number;
   sum: number;
   canDelete?: boolean;
-  error: boolean | undefined;
+  error: { localSum: boolean; count: boolean } | undefined;
   onDelete: () => void;
-  value?: string;
-  onChangeText: (text: string) => void;
+  localSum?: string;
+  onChangeSum: (text: string) => void;
+  onChangeCount: (text: string) => void;
   measure: string;
 };
 export const Item: FC<ItemProps> = ({
@@ -28,28 +29,32 @@ export const Item: FC<ItemProps> = ({
   sum,
   canDelete,
   error,
-  value,
+  localSum,
   onDelete,
-  onChangeText,
+  onChangeSum,
+  onChangeCount,
   measure,
 }) => {
   const theme = useTheme();
 
-  const onClear = () => {
-    onChangeText('');
+  const onClearSum = () => {
+    onChangeSum('');
+  };
+  const onClearCount = () => {
+    onChangeCount('');
   };
 
-  const handleChangeText = (text: string) => {
+  const handleChangeSum = (text: string) => {
     const curText = text.includes(',') ? text.replace(',', '.') : text;
     const hasDot = curText.includes('.');
     const afterDots = curText.split('.')[1];
     if (afterDots && afterDots.length > 2) {
-      onChangeText((+curText).toFixed());
+      onChangeSum((+curText).toFixed());
     } else {
       const valid = /^\d*\.?(?:\d{1,2})?$/;
       const res = valid.test(curText);
       if (res) {
-        onChangeText(curText.slice(0, hasDot ? 10 : 7));
+        onChangeSum(curText.slice(0, hasDot ? 10 : 7));
       }
     }
   };
@@ -82,7 +87,7 @@ export const Item: FC<ItemProps> = ({
       <View style={styles.char}>
         <CubeIcon />
         <Text variant="bodySRegular" color={theme.text.neutral}>
-          {count} {measure.toLowerCase()}
+          Измеряется в {measure.toLowerCase()}
         </Text>
       </View>
       <View style={styles.char}>
@@ -93,19 +98,35 @@ export const Item: FC<ItemProps> = ({
       </View>
       <Spacer size={16} />
       <Input
+        variant={'number'}
+        label={'Количество'}
+        maxLength={5}
+        placeholder={'Количество'}
+        hint={
+          error?.count
+            ? 'Для подачи сметы необходимо заполнить все поля'
+            : undefined
+        }
+        isError={!!error?.count}
+        value={count.toString()}
+        onChangeText={onChangeCount}
+        onClear={onClearCount}
+      />
+      <Spacer size={16} />
+      <Input
         variant={'text'}
         keyboardType="numeric"
-        label={'Стоимость'}
-        placeholder={'Стоимость'}
+        label={'Ваша стоимость '}
+        placeholder={'Указывается за весь обьем'}
         hint={
-          error
+          error?.localSum
             ? 'Для подачи сметы необходимо заполнить все поля'
-            : 'Указывается в рублях за весь объем услуги'
+            : undefined
         }
-        isError={!!error}
-        value={value}
-        onChangeText={handleChangeText}
-        onClear={onClear}
+        isError={!!error?.localSum}
+        value={localSum}
+        onChangeText={handleChangeSum}
+        onClear={onClearSum}
       />
       <Spacer size={20} separator="bottom" />
     </View>
