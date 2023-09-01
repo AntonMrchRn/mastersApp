@@ -42,10 +42,15 @@ export const Item: FC<ItemProps> = ({
   const handleChangeText = (text: string) => {
     const curText = text.includes(',') ? text.replace(',', '.') : text;
     const hasDot = curText.includes('.');
-    const valid = /^\d*\.?(?:\d{1,2})?$/;
-    const res = valid.test(curText);
-    if (res) {
-      onChangeText(curText.slice(0, hasDot ? 10 : 7));
+    const afterDots = curText.split('.')[1];
+    if (afterDots && afterDots.length > 2) {
+      onChangeText((+curText).toFixed());
+    } else {
+      const valid = /^\d*\.?(?:\d{1,2})?$/;
+      const res = valid.test(curText);
+      if (res) {
+        onChangeText(curText.slice(0, hasDot ? 10 : 7));
+      }
     }
   };
 
@@ -90,7 +95,6 @@ export const Item: FC<ItemProps> = ({
       <Input
         variant={'text'}
         keyboardType="numeric"
-        maxLength={10}
         label={'Стоимость'}
         placeholder={'Стоимость'}
         hint={
