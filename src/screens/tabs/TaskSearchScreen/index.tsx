@@ -35,8 +35,8 @@ import { RoleType, TaskSearch, TaskSetType } from '@/types/task';
 import styles from './style';
 
 const setTypeByTabIndex: Record<0 | 1, TaskSetType> = {
-  0: TaskSetType.IT_SERVICES,
-  1: TaskSetType.COMMON,
+  0: TaskSetType.COMMON,
+  1: TaskSetType.IT_SERVICES,
 };
 
 type TaskSearchScreenProps = CompositeScreenProps<
@@ -50,7 +50,7 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
   const dispatch = useAppDispatch();
 
   const [selectedTabId, setSelectedTabId] = useState<TaskSetType>(
-    TaskSetType.IT_SERVICES
+    TaskSetType.COMMON
   );
   const {
     data = [],
@@ -130,7 +130,7 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
           <SegmentedControl
             style={styles.tabs}
             onChange={switchTab}
-            tabs={['IT услуги', 'Общие услуги']}
+            tabs={['Общие услуги', 'IT услуги']}
           />
         )}
       </View>
