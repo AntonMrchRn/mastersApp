@@ -11,11 +11,13 @@ import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { PriceIcon } from '@/assets/icons/svg/estimate/PriceIcon';
 import ControlledInput from '@/components/inputs/ControlledInput';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
+import { useAppSelector } from '@/store';
 import {
   useGetTaskQuery,
   usePatchMaterialMutation,
   usePatchTaskServiceMutation,
 } from '@/store/api/tasks';
+import { selectAuth } from '@/store/slices/auth/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import { estimateCountValidationSchema } from '@/utils/formValidation';
 
@@ -72,7 +74,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
   const material = materialName
     ? service?.materials?.find(materia => materia.name === materialName)
     : undefined;
-
+  const userRole = useAppSelector(selectAuth).user?.roleID;
   const name = materialName ? material?.name : service?.name;
   const description = materialName ? '' : service?.description;
   const price = materialName ? material?.price : service?.price;
@@ -102,6 +104,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
         sum: newSum,
         taskID: taskId,
         materials: [],
+        roleID: userRole,
       });
     } else {
       //для материалов patch materials
@@ -121,6 +124,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
           ID: material?.ID,
           taskID: taskId,
           count: +estimateCount,
+          roleID: userRole,
         });
       } catch (error) {
         toast.show({
