@@ -56,12 +56,15 @@ export const EstimateTotal: FC<EstimateTotalProps> = ({
     },
   });
   const coords = { x: -160, y: 150 };
-  const allSumMultiplierPure = serviceMultiplier
-    ? (allSum - materialsSum) * serviceMultiplier + materialsSum
-    : allSum;
-  const allSumMultiplier = allSumMultiplierPure.toString().includes('.')
-    ? allSumMultiplierPure.toFixed(2)
-    : allSumMultiplierPure;
+  const allServiceSum = allSum - materialsSum;
+  const allServiceSumMultiplierPure = serviceMultiplier
+    ? allServiceSum * serviceMultiplier
+    : allServiceSum;
+  const allServiceSumMultiplier = allServiceSumMultiplierPure
+    .toString()
+    .includes('.')
+    ? allServiceSumMultiplierPure.toFixed(2)
+    : allServiceSumMultiplierPure;
   return (
     <View style={styles.bottom}>
       <View style={styles.rowStart}>
@@ -89,10 +92,10 @@ export const EstimateTotal: FC<EstimateTotalProps> = ({
         </View>
         <View style={styles.estimateSum}>
           {serviceMultiplier && serviceMultiplier !== 1 && (
-            <RNText style={styles.crossed}>{allSum} ₽</RNText>
+            <RNText style={styles.crossed}>{allServiceSum} ₽</RNText>
           )}
           <Text variant="bodySBold" color={theme.text.basic}>
-            {allSumMultiplier} ₽
+            {allServiceSumMultiplier} ₽
           </Text>
         </View>
       </View>
@@ -111,7 +114,7 @@ export const EstimateTotal: FC<EstimateTotalProps> = ({
           ИТОГО
         </Text>
         <Text variant="bodySBold" color={theme.text.accent}>
-          {allSumMultiplier} ₽
+          {allSum} ₽
         </Text>
       </View>
     </View>
