@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -29,6 +29,11 @@ const App = () => {
                 <KeyboardProvider>
                   <NavigationContainer theme={MyTheme}>
                     <BottomSheetModalProvider>
+                      <StatusBar
+                        translucent
+                        barStyle={'dark-content'}
+                        backgroundColor={'#FFFFFF'}
+                      />
                       <AppNavigation />
                     </BottomSheetModalProvider>
                   </NavigationContainer>
