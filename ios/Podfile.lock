@@ -339,6 +339,8 @@ PODS:
     - React-Core
   - react-native-image-picker (5.6.0):
     - React-Core
+  - react-native-image-resizer (3.0.7):
+    - React-Core
   - react-native-keyboard-controller (1.5.8):
     - React-Core
   - react-native-mmkv (2.10.1):
@@ -544,6 +546,7 @@ DEPENDENCIES:
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - "react-native-image-resizer (from `../node_modules/@bam.tech/react-native-image-resizer`)"
   - react-native-keyboard-controller (from `../node_modules/react-native-keyboard-controller`)
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
@@ -645,6 +648,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-flipper"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-image-resizer:
+    :path: "../node_modules/@bam.tech/react-native-image-resizer"
   react-native-keyboard-controller:
     :path: "../node_modules/react-native-keyboard-controller"
   react-native-mmkv:
@@ -745,6 +750,7 @@ SPEC CHECKSUMS:
   react-native-document-picker: 2b8f18667caee73a96708a82b284a4f40b30a156
   react-native-flipper: b8d360c0943151d85150cb6da83572f03c6faa9f
   react-native-image-picker: db60857e03d63721f19b6f4027de20429ddd9cba
+  react-native-image-resizer: 681f7607418b97c084ba2d0999b153b103040d8a
   react-native-keyboard-controller: 6c07a462c1b7020b48efd37f2ece16d52e66a03a
   react-native-mmkv: dea675cf9697ad35940f1687e98e133e1358ef9f
   react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
