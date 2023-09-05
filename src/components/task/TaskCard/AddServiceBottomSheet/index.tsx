@@ -79,15 +79,6 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
       timeout = timer;
     }, []);
     const handleAddService = (service: Service) => {
-      console.log(
-        '🚀 ~ file: index.tsx:82 ~ handleAddService ~ service:',
-        service.name
-      );
-      console.log(
-        '🚀 ~ file: index.tsx:84 ~ handleAddService ~ serviceNames:',
-        serviceNames
-      );
-
       if (service.name && serviceNames?.includes(service.name)) {
         onBanner();
       } else {
