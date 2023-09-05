@@ -160,7 +160,7 @@ export const UploadBottomSheet = ({
       if (actionType === UploadAction.TakeFromGallery) {
         result = await Promise.all(convertResponse(result as ImageOrVideo[]));
       }
-      ///////////////////////////////////////////////////////////////////////////
+      //////////
 
       if ((result as ImageOrVideo[]).length > 10) {
         return toast.show({

@@ -32,17 +32,12 @@ export const fillFormData = (
         return (asset as DocumentPickerResponse)?.name;
       }
       if (actionType === UploadAction.TakeFromGallery) {
-        const isImage = (asset as ImageOrVideo).mime.split('/')[0] === 'image';
+        const isVideo = (asset as ImageOrVideo).mime.split('/')[0] === 'video';
 
-        // наименование изображения
-        if (isImage) {
-          return (asset as Image)?.filename;
-        }
-
-        // наименование видео
-        if (configApp.android) {
+        if (configApp.android && isVideo) {
           return (asset as Video)?.path.split('/').at(-1);
         }
+
         return (asset as Video)?.filename;
       }
       if (
