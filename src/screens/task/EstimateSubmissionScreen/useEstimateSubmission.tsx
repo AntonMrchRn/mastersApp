@@ -124,17 +124,21 @@ export const useEstimateSubmission = ({
       return {
         ...mAcc,
         [mVal.ID as number]: {
-          localSum: !mVal.localSum,
-          count: !mVal.localSum,
+          localSum: !+(mVal.localSum || '0'),
+          count: !mVal.count,
         },
       };
     }, {});
     return {
       ...acc,
-      [val.ID as number]: { localSum: !val.localSum, count: !val.count },
+      [val.ID as number]: {
+        localSum: !+(val.localSum || '0'),
+        count: !val.count,
+      },
       ...mFields,
     };
   }, {});
+
   const isError = Object.values(fields).some(
     field => !!field.localSum || !!field.count
   );
