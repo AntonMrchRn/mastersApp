@@ -17,6 +17,7 @@ type ItemProps = {
   canDelete?: boolean;
   error: { localSum: boolean; count: boolean } | undefined;
   onDelete: () => void;
+  categoryName?: string;
   localSum?: string;
   onChangeSum: (text: string) => void;
   onChangeCount: (text: string) => void;
@@ -34,6 +35,7 @@ export const Item: FC<ItemProps> = ({
   onChangeSum,
   onChangeCount,
   measure,
+  categoryName,
 }) => {
   const theme = useTheme();
 
@@ -63,9 +65,13 @@ export const Item: FC<ItemProps> = ({
     <View>
       <Spacer size={20} />
       <View style={styles.head}>
-        <Text variant="captionRegular" color={theme.text.neutral}>
-          Категория услуг
-        </Text>
+        {categoryName ? (
+          <Text variant="captionRegular" color={theme.text.neutral}>
+            {categoryName}
+          </Text>
+        ) : (
+          <View />
+        )}
         {canDelete && (
           <TouchableOpacity onPress={onDelete}>
             <TrashIcon />

@@ -127,10 +127,12 @@ export const useTaskCardEstimate = ({
     (acc, val) => acc + (val?.count || 0) * (val?.price || 0),
     0
   );
-  const serviceIDs = services?.reduce<number[]>(
-    (acc, val) => acc.concat(val.ID as number),
-    []
-  );
+  const serviceNames = services?.reduce<string[]>((acc, val) => {
+    if (val.name) {
+      return acc.concat(val.name);
+    }
+    return acc;
+  }, []);
 
   const onEstimateSheetVisible = () => {
     setEstimateSheetVisible(!estimateSheetVisible);
@@ -274,7 +276,7 @@ export const useTaskCardEstimate = ({
     isOffersPublic,
     isOffersDeadlineOver,
     canSwipe,
-    serviceIDs,
+    serviceNames,
     addService,
     onCompetitorEstimates,
     onTradingResults,

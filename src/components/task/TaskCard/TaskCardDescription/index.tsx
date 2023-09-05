@@ -223,7 +223,13 @@ export const TaskCardDescription = ({
       )}
 
       {/* Контакты в задаче */}
-      {contacts.length && statusID !== StatusType.ACTIVE ? (
+      {contacts.length &&
+      statusID &&
+      ![
+        StatusType.ACTIVE,
+        StatusType.CANCELLED_BY_CUSTOMER,
+        StatusType.CANCELLED_BY_EXECUTOR,
+      ].includes(statusID) ? (
         <>
           <View style={styles.contacts}>
             <Text variant="title3" color={theme.text.basic} style={styles.mr11}>

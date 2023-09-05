@@ -82,7 +82,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     userComment,
     isOffersDeadlineOver,
     canSwipe,
-    serviceIDs,
+    serviceNames,
     addService,
     onCompetitorEstimates,
     onTradingResults,
@@ -142,7 +142,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           ref={bsRef}
           onCancel={addServiceBottomSheetClose}
           addService={addService}
-          serviceIDs={serviceIDs}
+          serviceNames={serviceNames}
         />
       )}
       <View>
