@@ -63,6 +63,7 @@ export const UploadBottomSheet = ({
     // передаем quality для IOS здесь, потому что фото с камеры
     // и фото из галереи (которые не сделаны на это устройство)
     // не обрабатываются функцией fixImageRotation
+    // андроид при передаче параметра compressImageQuality меняет оригинальное наименование файла
     [UploadAction.TakeFromGallery]: async () =>
       await ImagePicker.openPicker({
         mediaType: isUserFile ? 'photo' : 'any',
