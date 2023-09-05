@@ -29,7 +29,6 @@ axiosInstance.interceptors.request.use(config => {
   }
 
   unsubscribe();
-
   return {
     signal: controller.signal,
     ...config,

@@ -63,10 +63,20 @@ const useSignIn = () => {
       if (error?.code === ErrorCode.Server) {
         return navigation.navigate(AppScreenName.Error);
       }
-      if (error?.code === ErrorCode.NetworkError) {
+      if (
+        error?.code === ErrorCode.NetworkError &&
+        error.message !== 'canceled'
+      ) {
         toast.show({
           type: 'error',
-          text: error.message,
+          title: error.message,
+        });
+      }
+      if (error.message === 'canceled') {
+        toast.show({
+          type: 'error',
+          title:
+            'Отсутствует связь с сервером. Проверьте доступность сети интернет или сети Wi-Fi.',
         });
       }
 
