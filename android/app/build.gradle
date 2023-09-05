@@ -62,7 +62,7 @@ android {
 
     namespace "com.mastersapp"
     defaultConfig {
-        applicationId "com.mastersapp"
+        applicationId "com.vectora.mastera"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
