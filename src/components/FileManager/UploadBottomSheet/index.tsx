@@ -1,7 +1,11 @@
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
-import ImagePicker, { ImageOrVideo } from 'react-native-image-crop-picker';
+import ImagePicker, {
+  Image,
+  ImageOrVideo,
+  Video,
+} from 'react-native-image-crop-picker';
 
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { BottomSheet, Button, Text, useTheme, useToast } from 'rn-ui-kit';
@@ -17,6 +21,7 @@ import { AxiosQueryErrorResponse } from '@/types/error';
 import { HandleUpload } from '@/types/fileManager';
 import { checkSizes } from '@/utils/fileManager/checkSizes';
 import { fillFormData } from '@/utils/fileManager/fillFormData';
+import { Exif, fixImageRotation } from '@/utils/fileManager/fixImageRotation';
 
 import styles from './style';
 
@@ -51,20 +56,26 @@ export const UploadBottomSheet = ({
   const theme = useTheme();
   const toast = useToast();
   const dispatch = useAppDispatch();
-  // const compressRateQuery = useGetCompressRateQuery();
-  // const quality = compressRateQuery.data || 0.8;
+  const compressRateQuery = useGetCompressRateQuery();
+  const quality = compressRateQuery.data || 0.8;
+
   const uploadActions = {
+    // передаем quality для IOS здесь, потому что фото с камеры
+    // и фото из галереи (которые не сделаны на это устройство)
+    // не обрабатываются функцией fixImageRotation
     [UploadAction.TakeFromGallery]: async () =>
       await ImagePicker.openPicker({
         mediaType: isUserFile ? 'photo' : 'any',
+        includeExif: true,
         multiple: true,
         maxFiles: 10,
-        // compressImageQuality: quality,
+        ...(configApp.ios && { compressImageQuality: quality }),
       }),
     [UploadAction.TakePhotoMedia]: async () =>
       await ImagePicker.openCamera({
+        includeExif: true,
         mediaType: 'photo',
-        // compressImageQuality: quality,
+        ...(configApp.ios && { compressImageQuality: quality }),
       }),
     [UploadAction.TakeVideoMedia]: async () =>
       await ImagePicker.openCamera({ mediaType: 'video' }),
@@ -110,13 +121,46 @@ export const UploadBottomSheet = ({
       }),
   };
 
+  const convertResponse = (result: ImageOrVideo[]) =>
+    result.map((resp: Image | Video) => {
+      const isImage = resp.mime.split('/')[0] === 'image';
+
+      // ios
+      // если фото из галереи и оно сделано на данное устройство
+      // (скриншоты/загруженные картинки и т.п. не теряют корректный поворот(rotation) и не нуждаются в обработке)
+      const isImageTakenOnThisIOS =
+        isImage &&
+        configApp.ios &&
+        !!((resp as Image)?.exif as Exif)['{MakerApple}'];
+
+      // передаем quality только для android, потому что для ios передается
+      // параметр compressImageQuality в опциях пикера
+      return isImage && (configApp.android || isImageTakenOnThisIOS)
+        ? fixImageRotation(
+            resp as Image,
+            configApp.android ? quality : undefined
+          )
+        : resp;
+    });
+
   const onUploadAction = async (actionType: UploadAction) => {
     const date = new Date().toISOString();
 
     try {
-      const result = await uploadActions[actionType]();
+      let result = await uploadActions[actionType]();
 
-      const isDocuments = actionType === UploadAction.TakeFromFiles;
+      // исправление поворота изображения на android
+      // и ios (только в кейсе загрузки изображения, снятого на данное устройство, из галереи)
+      if (actionType === UploadAction.TakePhotoMedia && configApp.android) {
+        // передаем quality только для android, потому что для ios передается
+        // параметр compressImageQuality в опциях пикера
+        result = await fixImageRotation(result as Image, quality);
+      }
+
+      if (actionType === UploadAction.TakeFromGallery) {
+        result = await Promise.all(convertResponse(result as ImageOrVideo[]));
+      }
+      ///////////////////////////////////////////////////////////////////////////
 
       if ((result as ImageOrVideo[]).length > 10) {
         return toast.show({
@@ -133,8 +177,8 @@ export const UploadBottomSheet = ({
       onClose();
       const check = checkSizes({
         sizes,
-        isDoc: isDocuments,
         isUserFile,
+        isDoc: actionType === UploadAction.TakeFromFiles,
       });
 
       if (check) {
@@ -180,7 +224,7 @@ export const UploadBottomSheet = ({
       title: 'Сделать фото',
       action: () => onUploadAction(UploadAction.TakePhotoMedia),
     },
-    //в загруженные документы и документы пользователя нельзя кидать видео
+    // в загруженные документы и документы пользователя нельзя кидать видео
     ...(!isUserFile && !toClose
       ? [
           {

@@ -32,10 +32,18 @@ export const fillFormData = (
         return (asset as DocumentPickerResponse)?.name;
       }
       if (actionType === UploadAction.TakeFromGallery) {
-        if (configApp.android) {
-          return (asset as ImageOrVideo)?.path.split('/').at(-1);
+        const isImage = (asset as ImageOrVideo).mime.split('/')[0] === 'image';
+
+        // наименование изображения
+        if (isImage) {
+          return (asset as Image)?.filename;
         }
-        return (asset as ImageOrVideo)?.filename;
+
+        // наименование видео
+        if (configApp.android) {
+          return (asset as Video)?.path.split('/').at(-1);
+        }
+        return (asset as Video)?.filename;
       }
       if (
         [UploadAction.TakePhotoMedia, UploadAction.TakeVideoMedia].includes(
@@ -54,11 +62,12 @@ export const fillFormData = (
       return (asset as DocumentPickerResponse).type;
     };
     const getUri = () => {
+      if (actionType === UploadAction.TakePhotoMedia && configApp.ios) {
+        return `file://${(asset as Image).path}`;
+      }
+
       if (actionType !== UploadAction.TakeFromFiles) {
-        if (configApp.android) {
-          return (asset as ImageOrVideo)?.path;
-        }
-        return (asset as ImageOrVideo)?.sourceURL;
+        return (asset as ImageOrVideo)?.path;
       }
       return (asset as DocumentPickerResponse)?.uri;
     };

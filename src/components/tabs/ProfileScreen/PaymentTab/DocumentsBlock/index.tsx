@@ -80,18 +80,22 @@ const DocumentsBlock = ({
     date,
     names,
   }: HandleUpload) => {
-    const controller = new AbortController();
-    controllers = { ...controllers, [date]: controller };
+    try {
+      const controller = new AbortController();
+      controllers = { ...controllers, [date]: controller };
 
-    const request = await addFiles({
-      formData,
-      files,
-      date,
-      signal: controller.signal,
-    }).unwrap();
-    const addedFiles = request.filter(file => names.includes(file.name));
+      const request = await addFiles({
+        formData,
+        files,
+        date,
+        signal: controller.signal,
+      }).unwrap();
 
-    saveOnDevice(addedFiles);
+      const addedFiles = request.filter(file => names.includes(file.name));
+      saveOnDevice(addedFiles);
+    } catch (err) {
+      console.log('handleUpload error', err);
+    }
   };
   const onDelete = async ({ fileID }: { fileID?: number }) => {
     fileID && (await deleteFile(fileID).unwrap());
@@ -116,7 +120,7 @@ const DocumentsBlock = ({
         </>
       ) : (
         <>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={styles.preview}>
             <DownloadFilesIcon />
             <Text
               variant="bodySRegular"
