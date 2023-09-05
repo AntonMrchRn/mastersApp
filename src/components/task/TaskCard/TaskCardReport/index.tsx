@@ -72,16 +72,20 @@ export const TaskCardReport = ({
     date,
     names,
   }: HandleUpload) => {
-    const controller = new AbortController();
-    controllers = { ...controllers, [date]: controller };
-    const request = await postTasksFiles({
-      formData,
-      files,
-      date,
-      signal: controller.signal,
-    }).unwrap();
-    const addedFiles = request.filter(file => names.includes(file.name));
-    saveOnDevice(addedFiles);
+    try {
+      const controller = new AbortController();
+      controllers = { ...controllers, [date]: controller };
+      const request = await postTasksFiles({
+        formData,
+        files,
+        date,
+        signal: controller.signal,
+      }).unwrap();
+      const addedFiles = request.filter(file => names.includes(file.name));
+      saveOnDevice(addedFiles);
+    } catch (err) {
+      console.log('handleUpload error: ', err);
+    }
   };
 
   const onDelete = async ({ fileID }: { fileID?: number }) => {

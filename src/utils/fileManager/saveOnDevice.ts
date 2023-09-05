@@ -6,7 +6,7 @@ const dirs = ReactNativeBlobUtil.fs.dirs;
 
 export const saveOnDevice = (files: File[]) => {
   files.forEach(file => {
-    const title = `${file.name}.${file.extensionOriginal}`;
+    const title = `${file.name}.${file.sourceExtension}`;
     const FILE_PATH = `${dirs.DocumentDir}/${title}`;
     const newFile = ReactNativeBlobUtil.config({
       fileCache: true,

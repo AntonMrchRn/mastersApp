@@ -24,9 +24,7 @@
 		420B98CA20E8487CABD768A9 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4026FED791AC4DA6B0C28E3A /* OpenSans-Regular.ttf */; };
 		46D599E2ED6B455F881F847A /* NunitoSans-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C6B56BE7BD1641A2A49C85CC /* NunitoSans-ExtraLight.ttf */; };
 		57DC35F2B368451788FE5BDC /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C068402937EF42AF9C436442 /* OpenSans-Light.ttf */; };
-		57EF43443A3B5C5E66FE373E /* libPods-MastersApp-MastersAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5EFB6E18C9E66918BEDD630 /* libPods-MastersApp-MastersAppTests.a */; };
 		681FE9D6677642858DDDB2B2 /* OpenSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9A7E351261D84FEA9F850D59 /* OpenSans-Medium.ttf */; };
-		78BC6D8171F3FA0675D650DD /* libPods-MastersApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE6603EAC15F97E9C1E4DEAF /* libPods-MastersApp.a */; };
 		7C43DA2FD517476DA6C90E65 /* NunitoSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 67C8C130C5FD458B88EEA530 /* NunitoSans-SemiBold.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		946A3D9D0DDB40898FA6B40F /* NunitoSans-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9F40E230B8EF4EEC9CFBEA3A /* NunitoSans-BlackItalic.ttf */; };
@@ -35,8 +33,10 @@
 		A7FD0A390AC64387ABC65B7D /* OpenSans-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7341733B1B3545CC90C35FA4 /* OpenSans-SemiBoldItalic.ttf */; };
 		B3A62EBF102D4CF4A66BC392 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5EE7C4B10CBD49B69F27DDF2 /* OpenSans-Bold.ttf */; };
 		B79EED2209294CAC91774E98 /* NunitoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F93E25DDB174AD3B26BF399 /* NunitoSans-Bold.ttf */; };
+		BC603E080F6C3905CA3814E0 /* libPods-MastersApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 172581187327A383951DB7D7 /* libPods-MastersApp.a */; };
 		BC71A61FECC449E689F8D25B /* OpenSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 342B248EE36B4C509B80ECF3 /* OpenSans-BoldItalic.ttf */; };
 		D36EE826ECE74C52935A56E7 /* OpenSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1055706D723E4AD08EEAE5CD /* OpenSans-Italic.ttf */; };
+		DB49D17F55B4394EC0B20724 /* libPods-MastersApp-MastersAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84F51DEE8FBD26BFFFF28DC3 /* libPods-MastersApp-MastersAppTests.a */; };
 		DC8CF9788C87486289898C2F /* NunitoSans-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7C1CAD46B7B4DBF9528F3C4 /* NunitoSans-ExtraBoldItalic.ttf */; };
 		E31F12FBA1D849208758B253 /* NunitoSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5562BC1AB6E64940BAF9D445 /* NunitoSans-Italic.ttf */; };
 		E7AA55B075DD48C197B4E489 /* NunitoSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D64AF841637C43CCB0FDEBA0 /* NunitoSans-LightItalic.ttf */; };
@@ -107,7 +107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57EF43443A3B5C5E66FE373E /* libPods-MastersApp-MastersAppTests.a in Frameworks */,
+				DB49D17F55B4394EC0B20724 /* libPods-MastersApp-MastersAppTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,7 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				78BC6D8171F3FA0675D650DD /* libPods-MastersApp.a in Frameworks */,
+				BC603E080F6C3905CA3814E0 /* libPods-MastersApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -191,8 +191,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				EE6603EAC15F97E9C1E4DEAF /* libPods-MastersApp.a */,
-				C5EFB6E18C9E66918BEDD630 /* libPods-MastersApp-MastersAppTests.a */,
+				172581187327A383951DB7D7 /* libPods-MastersApp.a */,
+				84F51DEE8FBD26BFFFF28DC3 /* libPods-MastersApp-MastersAppTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -232,10 +232,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				7C6B55AD2B2584B003C23880 /* Pods-MastersApp.debug.xcconfig */,
-				0F15F82C7155194FCAC0061E /* Pods-MastersApp.release.xcconfig */,
-				33D9BDA39778899C2BE2D9EE /* Pods-MastersApp-MastersAppTests.debug.xcconfig */,
-				8786EF1539F3B7D735292972 /* Pods-MastersApp-MastersAppTests.release.xcconfig */,
+				7684FBF97B017F5DF914EC69 /* Pods-MastersApp.debug.xcconfig */,
+				B2445344D1162AB1C57AD213 /* Pods-MastersApp.release.xcconfig */,
+				5F0FD494720F98B835637B96 /* Pods-MastersApp-MastersAppTests.debug.xcconfig */,
+				7961580AB170CCB1F6314BE5 /* Pods-MastersApp-MastersAppTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -247,12 +247,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "MastersAppTests" */;
 			buildPhases = (
-				B037D05D42AF4EB75E117834 /* [CP] Check Pods Manifest.lock */,
+				8C1AE764BDB6123428AF0649 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				12389DC3A8A3711B0A1F899D /* [CP] Embed Pods Frameworks */,
-				9985F5D4834B208C60167404 /* [CP] Copy Pods Resources */,
+				860A0F57CB8A3BE87E389719 /* [CP] Embed Pods Frameworks */,
+				B3CABA3E9B9DD07E4B9D8224 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -268,14 +268,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "MastersApp" */;
 			buildPhases = (
-				EC784EFC2F6F1F0FC1ABEDA0 /* [CP] Check Pods Manifest.lock */,
+				03331A13075B42515353147F /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				CD40026DFD8856F621E4539A /* [CP] Embed Pods Frameworks */,
-				EA0D18A10C6E033FC11F168D /* [CP] Copy Pods Resources */,
+				AB19933A42F8274C048C6C2A /* [CP] Embed Pods Frameworks */,
+				6773836E1AEC12A0361595F3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -386,7 +386,46 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		12389DC3A8A3711B0A1F899D /* [CP] Embed Pods Frameworks */ = {
+		03331A13075B42515353147F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MastersApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6773836E1AEC12A0361595F3 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		860A0F57CB8A3BE87E389719 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -403,24 +442,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9985F5D4834B208C60167404 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B037D05D42AF4EB75E117834 /* [CP] Check Pods Manifest.lock */ = {
+		8C1AE764BDB6123428AF0649 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -442,7 +464,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		CD40026DFD8856F621E4539A /* [CP] Embed Pods Frameworks */ = {
+		AB19933A42F8274C048C6C2A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -459,43 +481,21 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		EA0D18A10C6E033FC11F168D /* [CP] Copy Pods Resources */ = {
+		B3CABA3E9B9DD07E4B9D8224 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EC784EFC2F6F1F0FC1ABEDA0 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MastersApp-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -550,7 +550,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 33D9BDA39778899C2BE2D9EE /* Pods-MastersApp-MastersAppTests.debug.xcconfig */;
+			baseConfigurationReference = 5F0FD494720F98B835637B96 /* Pods-MastersApp-MastersAppTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -577,7 +577,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8786EF1539F3B7D735292972 /* Pods-MastersApp-MastersAppTests.release.xcconfig */;
+			baseConfigurationReference = 7961580AB170CCB1F6314BE5 /* Pods-MastersApp-MastersAppTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -601,7 +601,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7C6B55AD2B2584B003C23880 /* Pods-MastersApp.debug.xcconfig */;
+			baseConfigurationReference = 7684FBF97B017F5DF914EC69 /* Pods-MastersApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -629,7 +629,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0F15F82C7155194FCAC0061E /* Pods-MastersApp.release.xcconfig */;
+			baseConfigurationReference = B2445344D1162AB1C57AD213 /* Pods-MastersApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

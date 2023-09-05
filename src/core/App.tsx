@@ -1,4 +1,5 @@
 import React from 'react';
+import { StatusBar, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -19,7 +20,7 @@ import 'dayjs/locale/ru';
 dayjs.locale('ru');
 const App = () => {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={styles.container}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <SafeAreaProvider>
@@ -28,6 +29,11 @@ const App = () => {
                 <KeyboardProvider>
                   <NavigationContainer theme={MyTheme}>
                     <BottomSheetModalProvider>
+                      <StatusBar
+                        translucent
+                        barStyle={'dark-content'}
+                        backgroundColor={'#FFFFFF'}
+                      />
                       <AppNavigation />
                     </BottomSheetModalProvider>
                   </NavigationContainer>
@@ -40,5 +46,11 @@ const App = () => {
     </GestureHandlerRootView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 export default App;
