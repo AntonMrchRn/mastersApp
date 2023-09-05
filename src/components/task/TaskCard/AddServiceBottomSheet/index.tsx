@@ -38,10 +38,10 @@ type AddServiceBottomSheetProps = {
   onCancel: () => void;
   ref?: ForwardedRef<BottomSheetModalMethods>;
   addService: (service: Service) => void;
-  serviceIDs: number[];
+  serviceNames: string[];
 };
 export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
-  ({ onCancel, addService, serviceIDs }, ref) => {
+  ({ onCancel, addService, serviceNames }, ref) => {
     const theme = useTheme();
     const insets = useSafeAreaInsets();
 
@@ -79,7 +79,16 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
       timeout = timer;
     }, []);
     const handleAddService = (service: Service) => {
-      if (service.ID && serviceIDs?.includes(service.ID)) {
+      console.log(
+        '🚀 ~ file: index.tsx:82 ~ handleAddService ~ service:',
+        service.name
+      );
+      console.log(
+        '🚀 ~ file: index.tsx:84 ~ handleAddService ~ serviceNames:',
+        serviceNames
+      );
+
+      if (service.name && serviceNames?.includes(service.name)) {
         onBanner();
       } else {
         addService(service);

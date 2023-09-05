@@ -130,7 +130,6 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
         name,
         price: +price,
         roleID: userRole,
-        canDelete: true,
       };
       const newMaterials = materials.concat(newMaterial);
       const newServices = offerServices.reduce<Service[]>((acc, val) => {

@@ -104,7 +104,6 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
           localSum: (+count * service.price).toString(),
           roleID: userRole,
           materials: [],
-          canDelete: true,
         })
       );
     } else {

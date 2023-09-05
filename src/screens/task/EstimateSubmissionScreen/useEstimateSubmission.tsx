@@ -77,9 +77,9 @@ export const useEstimateSubmission = ({
   }, [error]);
 
   const services = offerServices || [];
-  const serviceIDs = services?.reduce<number[]>((acc, val) => {
-    if (val.ID) {
-      acc.concat(val.ID);
+  const serviceNames = services?.reduce<string[]>((acc, val) => {
+    if (val.name) {
+      return acc.concat(val.name);
     }
     return acc;
   }, []);
@@ -99,6 +99,7 @@ export const useEstimateSubmission = ({
   const allowCostIncrease = task?.allowCostIncrease;
   const currentSum = task?.currentSum;
   const costStep = task?.costStep;
+  const initialEstimateServices = task?.services || [];
   const materials = services.reduce<Material[]>((acc, val) => {
     if (val.materials) {
       return acc.concat(val.materials);
@@ -332,7 +333,7 @@ export const useEstimateSubmission = ({
     addService,
     onDeleteService,
     loading,
-    serviceIDs,
+    serviceNames,
     allSum,
     pressMaterial,
     pressService,
@@ -341,5 +342,6 @@ export const useEstimateSubmission = ({
     materialsSum,
     isError,
     onSubmit,
+    initialEstimateServices,
   };
 };

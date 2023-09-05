@@ -57,7 +57,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     banner,
     addService,
     loading,
-    serviceIDs,
+    serviceNames,
     allSum,
     onDeleteService,
     pressMaterial,
@@ -67,6 +67,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     materialsSum,
     isError,
     onSubmit,
+    initialEstimateServices,
   } = useEstimateSubmission({ navigation, taskId, isEdit });
 
   const dispatch = useAppDispatch();
@@ -99,7 +100,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
           ref={bsRef}
           onCancel={addServiceBottomSheetClose}
           addService={addService}
-          serviceIDs={serviceIDs}
+          serviceNames={serviceNames}
         />
       )}
       <TaskCardAddEstimateBottomSheet
@@ -115,6 +116,9 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
           </Text>
           {services.map(service => {
             const error = errors?.[service.ID as number];
+            const serviceInInitialEstimate = initialEstimateServices.find(
+              serv => serv.name === service.name
+            );
             const onDelete = () => {
               setServiceForDelete(service);
               onDeleteEstimateModalVisible();
@@ -152,12 +156,17 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                   sum={service.sum || 0}
                   localSum={service?.localSum}
                   error={errors?.[service.ID as number]}
-                  canDelete={service.canDelete}
+                  canDelete={!serviceInInitialEstimate}
                   onDelete={onDelete}
                   measure={service.measure || ''}
+                  categoryName={service?.categoryName}
                 />
                 {service.materials?.map(material => {
                   const error = errors?.[material.ID as number];
+                  const materialInInitialService =
+                    serviceInInitialEstimate?.materials?.find(
+                      mat => mat.name === material.name
+                    );
                   const onDelete = () => {
                     onDeleteMaterial(service, material);
                   };
@@ -196,7 +205,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                       title={material.name}
                       count={material.count}
                       sum={material.count * material.price}
-                      canDelete={material.canDelete}
+                      canDelete={!materialInInitialService}
                       measure={material.measure || ''}
                     />
                   );
