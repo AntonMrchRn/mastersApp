@@ -127,6 +127,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
         count: +count,
         measure: newMeasure,
         localPrice: price,
+        canDelete: true,
         name,
         price: +price,
         roleID: userRole,

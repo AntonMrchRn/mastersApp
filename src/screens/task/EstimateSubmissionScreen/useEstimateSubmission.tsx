@@ -99,7 +99,6 @@ export const useEstimateSubmission = ({
   const allowCostIncrease = task?.allowCostIncrease;
   const currentSum = task?.currentSum;
   const costStep = task?.costStep;
-  const initialEstimateServices = task?.services || [];
   const materials = services.reduce<Material[]>((acc, val) => {
     if (val.materials) {
       return acc.concat(val.materials);
@@ -342,7 +341,6 @@ export const useEstimateSubmission = ({
     materialsSum,
     isError,
     onSubmit,
-    initialEstimateServices,
     allowCostIncrease,
     currentSum,
     costStep,

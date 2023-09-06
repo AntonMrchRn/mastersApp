@@ -15,6 +15,7 @@ type Material = {
   price: number;
   roleID: RoleType;
   localPrice?: string;
+  canDelete?: boolean;
 };
 type Service = {
   ID?: number;
@@ -34,6 +35,7 @@ type Service = {
   localPrice?: string;
   serviceID?: number;
   taskID?: number;
+  canDelete?: boolean;
 };
 type Executor = {
   ID: number;

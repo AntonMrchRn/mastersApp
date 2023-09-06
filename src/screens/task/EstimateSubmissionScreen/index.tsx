@@ -67,7 +67,6 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     materialsSum,
     isError,
     onSubmit,
-    initialEstimateServices,
     allowCostIncrease,
     currentSum,
     costStep,
@@ -129,9 +128,6 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
           </Text>
           {services.map(service => {
             const error = errors?.[service.ID as number];
-            const serviceInInitialEstimate = initialEstimateServices.find(
-              serv => serv.name === service.name
-            );
             const onDelete = () => {
               setServiceForDelete(service);
               onDeleteEstimateModalVisible();
@@ -169,17 +165,13 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                   price={service.price || 0}
                   localPrice={service?.localPrice}
                   error={errors?.[service.ID as number]}
-                  canDelete={!serviceInInitialEstimate}
+                  canDelete={service.canDelete}
                   onDelete={onDelete}
                   measure={service.measure || ''}
                   categoryName={service?.categoryName}
                 />
                 {service.materials?.map(material => {
                   const error = errors?.[material.ID as number];
-                  const materialInInitialService =
-                    serviceInInitialEstimate?.materials?.find(
-                      mat => mat.name === material.name
-                    );
                   const onDelete = () => {
                     onDeleteMaterial(service, material);
                   };
@@ -218,7 +210,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                       title={material.name}
                       count={material.count}
                       price={material.price}
-                      canDelete={!materialInInitialService}
+                      canDelete={material.canDelete}
                       measure={material.measure || ''}
                     />
                   );

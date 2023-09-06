@@ -204,15 +204,23 @@ export const useTaskCardEstimate = ({
   const onEditEstimate = () => {
     if (userOffer) {
       const initServices: Service[] = userOffer.services.map(serv => {
+        const coordServices = services.find(ser => ser.name === serv.name);
         const initMaterials: Material[] =
           serv.materials?.map(mat => {
+            const coordMaterial = coordServices?.materials?.find(
+              m => m.name === mat.name
+            );
             return {
               ...mat,
+              price: coordMaterial ? coordMaterial.price : mat.price,
+              canDelete: !coordMaterial,
               localPrice: mat.price.toString(),
             };
           }) || [];
         return {
           ...serv,
+          canDelete: !coordServices,
+          price: coordServices ? coordServices.price : serv.price,
           localPrice: serv.price.toString(),
           materials: initMaterials,
         };

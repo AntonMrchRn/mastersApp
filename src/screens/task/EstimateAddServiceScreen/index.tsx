@@ -102,6 +102,7 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
           count: +count,
           sum: +count * service.price,
           localPrice: service.price.toString(),
+          canDelete: true,
           roleID: userRole,
           materials: [],
         })
