@@ -66,15 +66,16 @@ export const Item: FC<ItemProps> = ({
     <View>
       <Spacer size={20} />
       <View style={styles.head}>
-        {categoryName ? (
+        {!!categoryName && (
           <Text variant="captionRegular" color={theme.text.neutral}>
             {categoryName}
           </Text>
-        ) : (
-          <View />
         )}
         {canDelete && (
-          <TouchableOpacity onPress={onDelete}>
+          <TouchableOpacity
+            onPress={onDelete}
+            style={{ position: 'absolute', top: 0, right: 0 }}
+          >
             <TrashIcon />
           </TouchableOpacity>
         )}

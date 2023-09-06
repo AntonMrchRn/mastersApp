@@ -3,16 +3,14 @@ import { StyleSheet, View } from 'react-native';
 
 import { Button, Modal } from 'rn-ui-kit';
 
-type DeleteEstimateModalProps = {
+type DeleteEstimateServiceModalProps = {
   isVisible: boolean;
   onCancel: () => void;
   onDelete: () => void;
 };
-export const DeleteEstimateModal: FC<DeleteEstimateModalProps> = ({
-  isVisible,
-  onCancel,
-  onDelete,
-}) => {
+export const DeleteEstimateServiceModal: FC<
+  DeleteEstimateServiceModalProps
+> = ({ isVisible, onCancel, onDelete }) => {
   const styles = StyleSheet.create({
     buttons: {
       flexDirection: 'row',

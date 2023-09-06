@@ -12,7 +12,8 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { Banner, Button, Input, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { PlusIcon } from '@/assets/icons/svg/estimate/PlusIcon';
-import { DeleteEstimateModal } from '@/components/task/DeleteEstimateModal';
+import { DeleteEstimateMaterialModal } from '@/components/task/DeleteEstimateMaterialModal';
+import { DeleteEstimateServiceModal } from '@/components/task/DeleteEstimateServiceModal';
 import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { AddServiceBottomSheet } from '@/components/task/TaskCard/AddServiceBottomSheet';
 import { TaskCardAddEstimateBottomSheet } from '@/components/task/TaskCard/TaskCardAddEstimateBottomSheet';
@@ -45,11 +46,11 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     bsRef,
     onEstimateModalVisible,
     onClosePress,
-    onDeleteEstimateModalVisible,
+    onDeleteEstimateServiceModalVisible,
     onCancelDeleteService,
     addServiceBottomSheetClose,
     offerComment,
-    deleteEstimateModalVisible,
+    deleteEstimateServiceModalVisible,
     estimateModalVisible,
     errors,
     setServiceForDelete,
@@ -92,8 +93,13 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   }
   return (
     <>
-      <DeleteEstimateModal
-        isVisible={deleteEstimateModalVisible}
+      <DeleteEstimateServiceModal
+        isVisible={deleteEstimateServiceModalVisible}
+        onCancel={onCancelDeleteService}
+        onDelete={onDeleteService}
+      />
+      <DeleteEstimateMaterialModal
+        isVisible={deleteEstimateServiceModalVisible}
         onCancel={onCancelDeleteService}
         onDelete={onDeleteService}
       />
@@ -130,7 +136,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
             const error = errors?.[service.ID as number];
             const onDelete = () => {
               setServiceForDelete(service);
-              onDeleteEstimateModalVisible();
+              onDeleteEstimateServiceModalVisible();
             };
             const onChangePrice = (text: string) => {
               if (text && error) {

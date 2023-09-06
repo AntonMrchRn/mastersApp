@@ -54,8 +54,10 @@ export const useEstimateSubmission = ({
     [key: string]: { localPrice: boolean; localCount: boolean };
   }>({});
   const [estimateModalVisible, setEstimateModalVisible] = useState(false);
-  const [deleteEstimateModalVisible, setDeleteEstimateModalVisible] =
-    useState(false);
+  const [
+    deleteEstimateServiceModalVisible,
+    setDeleteEstimateServiceModalVisible,
+  ] = useState(false);
 
   const { offerServices, error, loading, offerComment, offerID } =
     useAppSelector(selectTasks);
@@ -149,12 +151,12 @@ export const useEstimateSubmission = ({
   const onClosePress = () => {
     setBanner(undefined);
   };
-  const onDeleteEstimateModalVisible = () => {
-    setDeleteEstimateModalVisible(!deleteEstimateModalVisible);
+  const onDeleteEstimateServiceModalVisible = () => {
+    setDeleteEstimateServiceModalVisible(!deleteEstimateServiceModalVisible);
   };
   const onCancelDeleteService = () => {
     setServiceForDelete(undefined);
-    setDeleteEstimateModalVisible(!deleteEstimateModalVisible);
+    setDeleteEstimateServiceModalVisible(!deleteEstimateServiceModalVisible);
   };
   const addServiceBottomSheetClose = () => {
     bsRef.current?.close();
@@ -170,7 +172,7 @@ export const useEstimateSubmission = ({
   const onDeleteService = () => {
     const newServices = services.filter(ser => ser !== serviceForDelete);
     dispatch(setNewOfferServices(newServices));
-    onDeleteEstimateModalVisible();
+    onDeleteEstimateServiceModalVisible();
   };
   const pressMaterial = () => {
     onEstimateModalVisible();
@@ -320,11 +322,11 @@ export const useEstimateSubmission = ({
     bsRef,
     onEstimateModalVisible,
     onClosePress,
-    onDeleteEstimateModalVisible,
+    onDeleteEstimateServiceModalVisible,
     onCancelDeleteService,
     addServiceBottomSheetClose,
     offerComment,
-    deleteEstimateModalVisible,
+    deleteEstimateServiceModalVisible,
     estimateModalVisible,
     errors,
     setServiceForDelete,
