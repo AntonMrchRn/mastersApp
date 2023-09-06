@@ -105,6 +105,10 @@ type Task = {
   budget?: number;
   candidateIDs?: number[];
   contacts?: Contact[];
+  /**
+   * Причина отмены задачи координатором
+   */
+  cancelReason?: string;
   coordinator?: {
     ID?: number;
     name?: string;

@@ -198,6 +198,7 @@ export const useTaskCard = ({
    * участники задачи
    */
   const executors = task?.executors || [];
+  const cancelReason = task?.cancelReason;
   const curators = task?.curators || [];
   const coordinator = task?.coordinator;
   const executor = executors.find(executor => executor.ID === user?.userID);
@@ -439,6 +440,7 @@ export const useTaskCard = ({
     executor,
     isCurator,
     curator,
+    cancelReason,
   });
 
   const onEstimateBannerPress = () => {

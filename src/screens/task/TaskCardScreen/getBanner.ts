@@ -12,6 +12,7 @@ export const getBanner = ({
   isContractor,
   isCurator,
   curator,
+  cancelReason,
 }: {
   tab: TaskTab;
   statusID: StatusType | undefined;
@@ -21,6 +22,7 @@ export const getBanner = ({
   executor?: Executor;
   isContractor: boolean;
   isCurator: boolean;
+  cancelReason: string | undefined;
 }): BannerProps | null => {
   if (tab === TaskTab.DESCRIPTION) {
     switch (statusID) {
@@ -89,7 +91,9 @@ export const getBanner = ({
           title: 'Задача отменена',
           type: 'error',
           icon: 'alert',
-          text: 'По инициативе координатора выполнение задачи прекращено',
+          text: cancelReason
+            ? `Координатор указал причину «${cancelReason}»`
+            : 'По инициативе координатора выполнение задачи прекращено',
         };
       default:
         return null;
