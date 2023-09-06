@@ -68,6 +68,9 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     isError,
     onSubmit,
     initialEstimateServices,
+    allowCostIncrease,
+    currentSum,
+    costStep,
   } = useEstimateSubmission({ navigation, taskId, isEdit });
 
   const dispatch = useAppDispatch();
@@ -111,6 +114,16 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
       />
       <SafeAreaView style={styles.container} edges={['bottom']}>
         <ScrollView style={styles.ph20}>
+          <Banner
+            type={'info'}
+            icon={<></>}
+            closeIcon={<></>}
+            text={
+              allowCostIncrease
+                ? `Смета должна отличаться от последнего предложения (${currentSum} ₽) как минимум на ${costStep} ₽`
+                : `Смета должна быть меньше последнего предложения (${currentSum} ₽) как минимум на ${costStep} ₽`
+            }
+          />
           <Text variant="title3" color={theme.text.basic} style={styles.title}>
             Ваше ценовое предложение
           </Text>

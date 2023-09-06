@@ -211,7 +211,7 @@ export const useEstimateSubmission = ({
       //ошибка
       return setBanner({
         title: 'Скорректируйте смету',
-        text: `Ваше предложение превышает текущую минимальную цену торгов — ${currentSum} ₽. Для участия необходимо понизить смету как минимум на ${costStep} ₽ (шаг торгов)`,
+        text: `Ваша цена должна быть меньше последнего предложения (${currentSum} ₽) как минимум на ${costStep} ₽`,
       });
     }
     //если сумма предложения не более или менее шага цены от текущей суммы сметы
@@ -223,8 +223,8 @@ export const useEstimateSubmission = ({
     ) {
       //ошибка
       return setBanner({
-        title: 'Недостаточный шаг цены',
-        text: `Измените свое предложения как минимум на ${costStep} ₽`,
+        title: 'Скорректируйте смету',
+        text: `Ваша цена должна отличаться от последнего предложения (${currentSum} ₽) как минимум на ${costStep} ₽`,
       });
     }
     if (!userRole) {
@@ -343,5 +343,8 @@ export const useEstimateSubmission = ({
     isError,
     onSubmit,
     initialEstimateServices,
+    allowCostIncrease,
+    currentSum,
+    costStep,
   };
 };
