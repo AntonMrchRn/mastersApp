@@ -29,11 +29,11 @@ const tasks = createSlice({
     addOfferService: (state, { payload }) => {
       state.offerServices = state.offerServices.concat(payload);
     },
-    addServiceLocalSum: (state, { payload }) => {
+    addServiceLocalPrice: (state, { payload }) => {
       state.offerServices = state.offerServices.reduce<Service[]>(
         (acc, val) => {
           if (val.ID === payload.serviceID) {
-            return acc.concat({ ...val, localSum: payload.localSum });
+            return acc.concat({ ...val, localPrice: payload.localPrice });
           }
           return acc.concat(val);
         },
@@ -51,7 +51,7 @@ const tasks = createSlice({
         []
       );
     },
-    addMaterialLocalSum: (state, { payload }) => {
+    addMaterialLocalPrice: (state, { payload }) => {
       state.offerServices = state.offerServices.reduce<Service[]>(
         (acc, val) => {
           if (val.ID === payload.serviceID) {
@@ -60,7 +60,7 @@ const tasks = createSlice({
                 if (matVal.ID === payload.materialID) {
                   return matAcc.concat({
                     ...matVal,
-                    localSum: payload.localSum,
+                    localPrice: payload.localPrice,
                   });
                 }
                 return matAcc.concat(matVal);

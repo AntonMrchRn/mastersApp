@@ -21,9 +21,9 @@ import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch } from '@/store';
 import {
   addMaterialCount,
-  addMaterialLocalSum,
+  addMaterialLocalPrice,
   addServiceCount,
-  addServiceLocalSum,
+  addServiceLocalPrice,
 } from '@/store/slices/tasks/actions';
 
 import { Item } from './Item';
@@ -136,20 +136,20 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
               setServiceForDelete(service);
               onDeleteEstimateModalVisible();
             };
-            const onChangeSum = (text: string) => {
+            const onChangePrice = (text: string) => {
               if (text && error) {
-                delete errors[service.ID as number];
+                error.localPrice = false;
               }
               dispatch(
-                addServiceLocalSum({
+                addServiceLocalPrice({
                   serviceID: service.ID,
-                  localSum: text,
+                  localPrice: text,
                 })
               );
             };
             const onChangeCount = (text: string) => {
-              if (text && error) {
-                delete errors[service.ID as number];
+              if (text && error && service.ID) {
+                error.count = false;
               }
               dispatch(
                 addServiceCount({
@@ -161,13 +161,13 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
             return (
               <View key={service.name}>
                 <Item
-                  onChangeSum={onChangeSum}
+                  onChangePrice={onChangePrice}
                   onChangeCount={onChangeCount}
                   title={service.name}
                   description={service.description}
                   count={service?.count || 0}
-                  sum={service.sum || 0}
-                  localSum={service?.localSum}
+                  price={service.price || 0}
+                  localPrice={service?.localPrice}
                   error={errors?.[service.ID as number]}
                   canDelete={!serviceInInitialEstimate}
                   onDelete={onDelete}
@@ -183,15 +183,15 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                   const onDelete = () => {
                     onDeleteMaterial(service, material);
                   };
-                  const onChangeSum = (text: string) => {
+                  const onChangePrice = (text: string) => {
                     if (text && error) {
                       delete errors[material.ID as number];
                     }
                     dispatch(
-                      addMaterialLocalSum({
+                      addMaterialLocalPrice({
                         serviceID: service.ID,
                         materialID: material.ID,
-                        localSum: text,
+                        localPrice: text,
                       })
                     );
                   };
@@ -209,15 +209,15 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                   };
                   return (
                     <Item
-                      onChangeSum={onChangeSum}
+                      onChangePrice={onChangePrice}
                       onChangeCount={onChangeCount}
-                      localSum={material?.localSum}
+                      localPrice={material?.localPrice}
                       key={material.name}
                       onDelete={onDelete}
                       error={error}
                       title={material.name}
                       count={material.count}
-                      sum={material.count * material.price}
+                      price={material.price}
                       canDelete={!materialInInitialService}
                       measure={material.measure || ''}
                     />

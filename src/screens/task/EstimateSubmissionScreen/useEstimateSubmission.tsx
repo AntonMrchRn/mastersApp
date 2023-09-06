@@ -51,7 +51,7 @@ export const useEstimateSubmission = ({
   const [serviceForDelete, setServiceForDelete] = useState<Service>();
   const [banner, setBanner] = useState<{ title: string; text: string }>();
   const [errors, setErrors] = useState<{
-    [key: string]: { localSum: boolean; count: boolean };
+    [key: string]: { localPrice: boolean; count: boolean };
   }>({});
   const [estimateModalVisible, setEstimateModalVisible] = useState(false);
   const [deleteEstimateModalVisible, setDeleteEstimateModalVisible] =
@@ -86,10 +86,10 @@ export const useEstimateSubmission = ({
   const allSumReduce = services.reduce((acc, val) => {
     const mSums =
       val?.materials?.reduce((mAcc, mVal) => {
-        const mSum = +(mVal.localSum || 0);
+        const mSum = +(mVal.localPrice || 0) * mVal.count;
         return mAcc + mSum;
       }, 0) || 0;
-    const sum = +(val.localSum || 0) + mSums;
+    const sum = +(val.localPrice || 0) * (val.count || 0) + mSums;
     return acc + sum;
   }, 0);
   const allSum = allSumReduce.toString().includes('.')
@@ -107,8 +107,8 @@ export const useEstimateSubmission = ({
     return acc;
   }, []);
   const materialsSumReduce = materials.reduce((acc, val) => {
-    if (val.localSum) {
-      return acc + +val.localSum;
+    if (val.localPrice) {
+      return acc + +val.localPrice * val.count;
     }
     return acc;
   }, 0);
@@ -117,7 +117,7 @@ export const useEstimateSubmission = ({
     : materialsSumReduce;
   const fields = services.reduce<{
     [key: number]: {
-      localSum: boolean;
+      localPrice: boolean;
       count: boolean;
     };
   }>((acc, val) => {
@@ -125,7 +125,7 @@ export const useEstimateSubmission = ({
       return {
         ...mAcc,
         [mVal.ID as number]: {
-          localSum: !+(mVal.localSum || '0'),
+          localPrice: !+(mVal.localPrice || '0'),
           count: !mVal.count,
         },
       };
@@ -133,7 +133,7 @@ export const useEstimateSubmission = ({
     return {
       ...acc,
       [val.ID as number]: {
-        localSum: !+(val.localSum || '0'),
+        localPrice: !+(val.localPrice || '0'),
         count: !val.count,
       },
       ...mFields,
@@ -141,7 +141,7 @@ export const useEstimateSubmission = ({
   }, {});
 
   const isError = Object.values(fields).some(
-    field => !!field.localSum || !!field.count
+    field => !!field.localPrice || !!field.count
   );
 
   const onEstimateModalVisible = () => {
@@ -247,14 +247,14 @@ export const useEstimateSubmission = ({
               count: material.count,
               measure: material.measure,
               name: material.name,
-              price: +(material.localSum || 0) / material.count,
+              price: +(material.localPrice || 0),
               roleID: userRole,
             };
           }) || [];
         const matSums =
           service?.materials?.reduce((acc, val) => {
-            if (val.localSum) {
-              return acc + +val.localSum;
+            if (val.localPrice) {
+              return acc + +val.localPrice * val.count;
             }
             return acc;
           }, 0) || 0;
@@ -266,11 +266,11 @@ export const useEstimateSubmission = ({
           measureName: service.measureName,
           measure: service.measure,
           name: service.name,
-          price: +(service.localSum || 0) / (service.count || 0),
+          price: +(service.localPrice || 0),
           setID: service.setID,
           serviceID: service.serviceID || service.ID,
           count: service.count,
-          sum: +(service.localSum || 0) + matSums,
+          sum: +(service.localPrice || 0) * (service.count || 0) + matSums,
           roleID: userRole,
           taskID: taskId,
           materials: postMaterials,

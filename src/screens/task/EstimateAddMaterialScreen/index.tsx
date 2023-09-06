@@ -126,7 +126,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
         ID: getRandomUniqNumber(ids),
         count: +count,
         measure: newMeasure,
-        localSum: (+price * +count).toString(),
+        localPrice: price,
         name,
         price: +price,
         roleID: userRole,

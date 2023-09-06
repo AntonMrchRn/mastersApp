@@ -14,7 +14,7 @@ type Material = {
   name: string;
   price: number;
   roleID: RoleType;
-  localSum?: string;
+  localPrice?: string;
 };
 type Service = {
   ID?: number;
@@ -31,7 +31,7 @@ type Service = {
   sum?: number;
   materials?: Material[];
   measureName?: string;
-  localSum?: string;
+  localPrice?: string;
   serviceID?: number;
   taskID?: number;
 };

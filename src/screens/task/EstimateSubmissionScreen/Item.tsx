@@ -3,7 +3,6 @@ import { TouchableOpacity, View } from 'react-native';
 
 import { Input, Spacer, Text, useTheme } from 'rn-ui-kit';
 
-import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
 import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { TrashIcon } from '@/assets/icons/svg/estimate/TrashIcon';
 
@@ -13,13 +12,13 @@ type ItemProps = {
   title: string;
   description?: string;
   count: number;
-  sum: number;
+  price: number;
   canDelete?: boolean;
-  error: { localSum: boolean; count: boolean } | undefined;
+  error: { localPrice: boolean; count: boolean } | undefined;
   onDelete: () => void;
   categoryName?: string;
-  localSum?: string;
-  onChangeSum: (text: string) => void;
+  localPrice?: string;
+  onChangePrice: (text: string) => void;
   onChangeCount: (text: string) => void;
   measure: string;
 };
@@ -27,36 +26,36 @@ export const Item: FC<ItemProps> = ({
   title,
   description,
   count,
-  sum,
+  price,
   canDelete,
   error,
-  localSum,
+  localPrice,
   onDelete,
-  onChangeSum,
+  onChangePrice,
   onChangeCount,
   measure,
   categoryName,
 }) => {
   const theme = useTheme();
 
-  const onClearSum = () => {
-    onChangeSum('');
+  const onClearPrice = () => {
+    onChangePrice('');
   };
   const onClearCount = () => {
     onChangeCount('');
   };
 
-  const handleChangeSum = (text: string) => {
+  const handleChangePrice = (text: string) => {
     const curText = text.includes(',') ? text.replace(',', '.') : text;
     const hasDot = curText.includes('.');
     const afterDots = curText.split('.')[1];
     if (afterDots && afterDots.length > 2) {
-      onChangeSum((+curText).toFixed());
+      onChangePrice((+curText).toFixed());
     } else {
       const valid = /^\d*\.?(?:\d{1,2})?$/;
       const res = valid.test(curText);
       if (res) {
-        onChangeSum(curText.slice(0, hasDot ? 10 : 7));
+        onChangePrice(curText.slice(0, hasDot ? 10 : 7));
       }
     }
   };
@@ -96,12 +95,6 @@ export const Item: FC<ItemProps> = ({
           Измеряется в {measure.toLowerCase()}
         </Text>
       </View>
-      <View style={styles.char}>
-        <CalculatorIcon />
-        <Text variant="bodySRegular" color={theme.text.neutral}>
-          {sum} ₽ (изначальная стоимость)
-        </Text>
-      </View>
       <Spacer size={16} />
       <Input
         variant={'number'}
@@ -122,17 +115,17 @@ export const Item: FC<ItemProps> = ({
       <Input
         variant={'text'}
         keyboardType="numeric"
-        label={'Ваша стоимость '}
-        placeholder={'Указывается за весь обьем'}
+        label={'Цена за единицу'}
+        placeholder={`${price} ₽ (изначальная)`}
         hint={
-          error?.localSum
+          error?.localPrice
             ? 'Для подачи сметы необходимо заполнить все поля'
             : undefined
         }
-        isError={!!error?.localSum}
-        value={localSum}
-        onChangeText={handleChangeSum}
-        onClear={onClearSum}
+        isError={!!error?.localPrice}
+        value={localPrice}
+        onChangeText={handleChangePrice}
+        onClear={onClearPrice}
       />
       <Spacer size={20} separator="bottom" />
     </View>

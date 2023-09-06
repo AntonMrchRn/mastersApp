@@ -208,12 +208,12 @@ export const useTaskCardEstimate = ({
           serv.materials?.map(mat => {
             return {
               ...mat,
-              localSum: (mat.count * mat.price).toString(),
+              localPrice: mat.price.toString(),
             };
           }) || [];
         return {
           ...serv,
-          localSum: serv.sum?.toString(),
+          localPrice: serv.price.toString(),
           materials: initMaterials,
         };
       });
