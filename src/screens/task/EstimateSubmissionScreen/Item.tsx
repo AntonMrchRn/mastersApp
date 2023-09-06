@@ -100,7 +100,9 @@ export const Item: FC<ItemProps> = ({
         variant={'number'}
         label={'Количество'}
         maxLength={5}
-        placeholder={'Количество'}
+        placeholder={
+          !canDelete ? `${count} ${measure} (изначальная)` : undefined
+        }
         hint={
           error?.count
             ? 'Для подачи сметы необходимо заполнить все поля'
@@ -116,7 +118,7 @@ export const Item: FC<ItemProps> = ({
         variant={'text'}
         keyboardType="numeric"
         label={'Цена за единицу'}
-        placeholder={`${price} ₽ (изначальная)`}
+        placeholder={!canDelete ? `${price} ₽ (изначальная)` : undefined}
         hint={
           error?.localPrice
             ? 'Для подачи сметы необходимо заполнить все поля'
