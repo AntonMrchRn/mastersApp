@@ -28,8 +28,7 @@ export const DeleteEstimateMaterialModal: FC<
       closeIconPress={onCancel}
       isVisible={isVisible}
       headerIcon="error"
-      title="Удалить услугу?"
-      description="Все связанные с ней материалы также будут удалены"
+      title="Удалить материал?"
     >
       <View style={styles.buttons}>
         <Button

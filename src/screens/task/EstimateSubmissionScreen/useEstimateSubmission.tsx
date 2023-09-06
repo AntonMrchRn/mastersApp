@@ -49,6 +49,10 @@ export const useEstimateSubmission = ({
   const [patchOffers] = usePatchOffersMutation();
 
   const [serviceForDelete, setServiceForDelete] = useState<Service>();
+  const [materialForDelete, setMaterialForDelete] = useState<{
+    service: Service;
+    material: Material;
+  }>();
   const [banner, setBanner] = useState<{ title: string; text: string }>();
   const [errors, setErrors] = useState<{
     [key: string]: { localPrice: boolean; localCount: boolean };
@@ -57,6 +61,10 @@ export const useEstimateSubmission = ({
   const [
     deleteEstimateServiceModalVisible,
     setDeleteEstimateServiceModalVisible,
+  ] = useState(false);
+  const [
+    deleteEstimateMaterialModalVisible,
+    setDeleteEstimateMaterialModalVisible,
   ] = useState(false);
 
   const { offerServices, error, loading, offerComment, offerID } =
@@ -154,9 +162,16 @@ export const useEstimateSubmission = ({
   const onDeleteEstimateServiceModalVisible = () => {
     setDeleteEstimateServiceModalVisible(!deleteEstimateServiceModalVisible);
   };
+  const onDeleteEstimateMaterialModalVisible = () => {
+    setDeleteEstimateMaterialModalVisible(!deleteEstimateMaterialModalVisible);
+  };
   const onCancelDeleteService = () => {
     setServiceForDelete(undefined);
     setDeleteEstimateServiceModalVisible(!deleteEstimateServiceModalVisible);
+  };
+  const onCancelDeleteMaterial = () => {
+    setMaterialForDelete(undefined);
+    setDeleteEstimateMaterialModalVisible(!deleteEstimateMaterialModalVisible);
   };
   const addServiceBottomSheetClose = () => {
     bsRef.current?.close();
@@ -189,15 +204,24 @@ export const useEstimateSubmission = ({
       bsRef.current?.present();
     }, 500);
   };
-  const onDeleteMaterial = (service: Service, material: Material) => {
-    const newMaterials = service?.materials?.filter(m => m !== material) || [];
-    const newServices = services.reduce<Service[]>((acc, val) => {
-      if (val === service) {
-        return acc.concat({ ...service, materials: newMaterials });
-      }
-      return acc.concat(val);
-    }, []);
-    dispatch(setNewOfferServices(newServices));
+  const onDeleteMaterial = () => {
+    if (materialForDelete) {
+      const newMaterials =
+        materialForDelete?.service?.materials?.filter(
+          m => m !== materialForDelete?.material
+        ) || [];
+      const newServices = services.reduce<Service[]>((acc, val) => {
+        if (val === materialForDelete.service) {
+          return acc.concat({
+            ...materialForDelete.service,
+            materials: newMaterials,
+          });
+        }
+        return acc.concat(val);
+      }, []);
+      dispatch(setNewOfferServices(newServices));
+    }
+    onDeleteEstimateMaterialModalVisible();
   };
   const setComment = (text: string) => {
     dispatch(setOfferComment(text));
@@ -347,5 +371,9 @@ export const useEstimateSubmission = ({
     allowCostIncrease,
     currentSum,
     costStep,
+    setMaterialForDelete,
+    onDeleteEstimateMaterialModalVisible,
+    onCancelDeleteMaterial,
+    deleteEstimateMaterialModalVisible,
   };
 };

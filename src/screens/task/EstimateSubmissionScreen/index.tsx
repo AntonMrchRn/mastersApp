@@ -71,6 +71,10 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     allowCostIncrease,
     currentSum,
     costStep,
+    setMaterialForDelete,
+    onDeleteEstimateMaterialModalVisible,
+    onCancelDeleteMaterial,
+    deleteEstimateMaterialModalVisible,
   } = useEstimateSubmission({ navigation, taskId, isEdit });
 
   const dispatch = useAppDispatch();
@@ -99,9 +103,9 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
         onDelete={onDeleteService}
       />
       <DeleteEstimateMaterialModal
-        isVisible={deleteEstimateServiceModalVisible}
-        onCancel={onCancelDeleteService}
-        onDelete={onDeleteService}
+        isVisible={deleteEstimateMaterialModalVisible}
+        onCancel={onCancelDeleteMaterial}
+        onDelete={onDeleteMaterial}
       />
       {isFocused && (
         <AddServiceBottomSheet
@@ -180,7 +184,9 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                 {service.materials?.map(material => {
                   const error = errors?.[material.ID as number];
                   const onDelete = () => {
-                    onDeleteMaterial(service, material);
+                    setMaterialForDelete({ service, material });
+                    onDeleteEstimateMaterialModalVisible();
+                    // onDeleteMaterial(service, material);
                   };
                   const onChangePrice = (text: string) => {
                     if (text && error) {
