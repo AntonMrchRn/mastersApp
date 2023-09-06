@@ -15,6 +15,7 @@ type Material = {
   price: number;
   roleID: RoleType;
   localPrice?: string;
+  localCount?: string;
   canDelete?: boolean;
 };
 type Service = {
@@ -33,6 +34,7 @@ type Service = {
   materials?: Material[];
   measureName?: string;
   localPrice?: string;
+  localCount?: string;
   serviceID?: number;
   taskID?: number;
   canDelete?: boolean;

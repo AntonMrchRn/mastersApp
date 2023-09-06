@@ -20,9 +20,9 @@ import { configApp, deviceWidth } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch } from '@/store';
 import {
-  addMaterialCount,
+  addMaterialLocalCount,
   addMaterialLocalPrice,
-  addServiceCount,
+  addServiceLocalCount,
   addServiceLocalPrice,
 } from '@/store/slices/tasks/actions';
 
@@ -145,12 +145,12 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
             };
             const onChangeCount = (text: string) => {
               if (text && error && service.ID) {
-                error.count = false;
+                error.localCount = false;
               }
               dispatch(
-                addServiceCount({
+                addServiceLocalCount({
                   serviceID: service.ID,
-                  count: +text,
+                  localCount: text,
                 })
               );
             };
@@ -162,6 +162,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                   title={service.name}
                   description={service.description}
                   count={service?.count || 0}
+                  localCount={service?.localCount}
                   price={service.price || 0}
                   localPrice={service?.localPrice}
                   error={errors?.[service.ID as number]}
@@ -192,10 +193,10 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                       delete errors[material.ID as number];
                     }
                     dispatch(
-                      addMaterialCount({
+                      addMaterialLocalCount({
                         serviceID: service.ID,
                         materialID: material.ID,
-                        count: +text,
+                        localCount: text,
                       })
                     );
                   };
@@ -205,6 +206,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                       onChangeCount={onChangeCount}
                       localPrice={material?.localPrice}
                       key={material.name}
+                      localCount={material?.localCount}
                       onDelete={onDelete}
                       error={error}
                       title={material.name}

@@ -215,6 +215,7 @@ export const useTaskCardEstimate = ({
               price: coordMaterial ? coordMaterial.price : mat.price,
               canDelete: !coordMaterial,
               localPrice: mat.price.toString(),
+              localCount: mat.count.toString(),
             };
           }) || [];
         return {
@@ -222,6 +223,7 @@ export const useTaskCardEstimate = ({
           canDelete: !coordServices,
           price: coordServices ? coordServices.price : serv.price,
           localPrice: serv.price.toString(),
+          localCount: serv.count?.toString() || '',
           materials: initMaterials,
         };
       });

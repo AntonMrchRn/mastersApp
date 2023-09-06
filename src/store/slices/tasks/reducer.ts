@@ -40,11 +40,11 @@ const tasks = createSlice({
         []
       );
     },
-    addServiceCount: (state, { payload }) => {
+    addServiceLocalCount: (state, { payload }) => {
       state.offerServices = state.offerServices.reduce<Service[]>(
         (acc, val) => {
           if (val.ID === payload.serviceID) {
-            return acc.concat({ ...val, count: payload.count });
+            return acc.concat({ ...val, localCount: payload.localCount });
           }
           return acc.concat(val);
         },
@@ -74,7 +74,7 @@ const tasks = createSlice({
         []
       );
     },
-    addMaterialCount: (state, { payload }) => {
+    addMaterialLocalCount: (state, { payload }) => {
       state.offerServices = state.offerServices.reduce<Service[]>(
         (acc, val) => {
           if (val.ID === payload.serviceID) {
@@ -83,7 +83,7 @@ const tasks = createSlice({
                 if (matVal.ID === payload.materialID) {
                   return matAcc.concat({
                     ...matVal,
-                    count: payload.count,
+                    localCount: payload.localCount,
                   });
                 }
                 return matAcc.concat(matVal);

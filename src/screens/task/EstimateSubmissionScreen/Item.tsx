@@ -14,10 +14,11 @@ type ItemProps = {
   count: number;
   price: number;
   canDelete?: boolean;
-  error: { localPrice: boolean; count: boolean } | undefined;
+  error: { localPrice: boolean; localCount: boolean } | undefined;
   onDelete: () => void;
   categoryName?: string;
-  localPrice?: string;
+  localPrice?: string | undefined;
+  localCount: string | undefined;
   onChangePrice: (text: string) => void;
   onChangeCount: (text: string) => void;
   measure: string;
@@ -35,6 +36,7 @@ export const Item: FC<ItemProps> = ({
   onChangeCount,
   measure,
   categoryName,
+  localCount,
 }) => {
   const theme = useTheme();
 
@@ -101,15 +103,17 @@ export const Item: FC<ItemProps> = ({
         label={'Количество'}
         maxLength={5}
         placeholder={
-          !canDelete ? `${count} ${measure} (изначальная)` : undefined
+          !canDelete
+            ? `${count} ${measure.toLowerCase()} (изначальная)`
+            : undefined
         }
         hint={
-          error?.count
+          error?.localCount
             ? 'Для подачи сметы необходимо заполнить все поля'
             : undefined
         }
-        isError={!!error?.count}
-        value={count.toString()}
+        isError={!!error?.localCount}
+        value={localCount || ''}
         onChangeText={onChangeCount}
         onClear={onClearCount}
       />
@@ -125,7 +129,7 @@ export const Item: FC<ItemProps> = ({
             : undefined
         }
         isError={!!error?.localPrice}
-        value={localPrice}
+        value={localPrice || ''}
         onChangeText={handleChangePrice}
         onClear={onClearPrice}
       />
