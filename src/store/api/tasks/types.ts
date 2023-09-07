@@ -14,7 +14,9 @@ type Material = {
   name: string;
   price: number;
   roleID: RoleType;
-  localSum?: string;
+  localPrice?: string;
+  localCount?: string;
+  canDelete?: boolean;
 };
 type Service = {
   ID?: number;
@@ -31,9 +33,11 @@ type Service = {
   sum?: number;
   materials?: Material[];
   measureName?: string;
-  localSum?: string;
+  localPrice?: string;
+  localCount?: string;
   serviceID?: number;
   taskID?: number;
+  canDelete?: boolean;
 };
 type Executor = {
   ID: number;
@@ -105,6 +109,10 @@ type Task = {
   budget?: number;
   candidateIDs?: number[];
   contacts?: Contact[];
+  /**
+   * Причина отмены задачи координатором
+   */
+  cancelReason?: string;
   coordinator?: {
     ID?: number;
     name?: string;

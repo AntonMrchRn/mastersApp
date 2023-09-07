@@ -12,7 +12,8 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { Banner, Button, Input, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { PlusIcon } from '@/assets/icons/svg/estimate/PlusIcon';
-import { DeleteEstimateModal } from '@/components/task/DeleteEstimateModal';
+import { DeleteEstimateMaterialModal } from '@/components/task/DeleteEstimateMaterialModal';
+import { DeleteEstimateServiceModal } from '@/components/task/DeleteEstimateServiceModal';
 import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { AddServiceBottomSheet } from '@/components/task/TaskCard/AddServiceBottomSheet';
 import { TaskCardAddEstimateBottomSheet } from '@/components/task/TaskCard/TaskCardAddEstimateBottomSheet';
@@ -20,10 +21,10 @@ import { configApp, deviceWidth } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch } from '@/store';
 import {
-  addMaterialCount,
-  addMaterialLocalSum,
-  addServiceCount,
-  addServiceLocalSum,
+  addMaterialLocalCount,
+  addMaterialLocalPrice,
+  addServiceLocalCount,
+  addServiceLocalPrice,
 } from '@/store/slices/tasks/actions';
 
 import { Item } from './Item';
@@ -45,11 +46,11 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     bsRef,
     onEstimateModalVisible,
     onClosePress,
-    onDeleteEstimateModalVisible,
+    onDeleteEstimateServiceModalVisible,
     onCancelDeleteService,
     addServiceBottomSheetClose,
     offerComment,
-    deleteEstimateModalVisible,
+    deleteEstimateServiceModalVisible,
     estimateModalVisible,
     errors,
     setServiceForDelete,
@@ -67,7 +68,13 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     materialsSum,
     isError,
     onSubmit,
-    initialEstimateServices,
+    allowCostIncrease,
+    currentSum,
+    costStep,
+    setMaterialForDelete,
+    onDeleteEstimateMaterialModalVisible,
+    onCancelDeleteMaterial,
+    deleteEstimateMaterialModalVisible,
   } = useEstimateSubmission({ navigation, taskId, isEdit });
 
   const dispatch = useAppDispatch();
@@ -90,10 +97,15 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   }
   return (
     <>
-      <DeleteEstimateModal
-        isVisible={deleteEstimateModalVisible}
+      <DeleteEstimateServiceModal
+        isVisible={deleteEstimateServiceModalVisible}
         onCancel={onCancelDeleteService}
         onDelete={onDeleteService}
+      />
+      <DeleteEstimateMaterialModal
+        isVisible={deleteEstimateMaterialModalVisible}
+        onCancel={onCancelDeleteMaterial}
+        onDelete={onDeleteMaterial}
       />
       {isFocused && (
         <AddServiceBottomSheet
@@ -111,74 +123,80 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
       />
       <SafeAreaView style={styles.container} edges={['bottom']}>
         <ScrollView style={styles.ph20}>
+          <Banner
+            type={'info'}
+            icon={<></>}
+            closeIcon={<></>}
+            text={
+              allowCostIncrease
+                ? `Смета должна отличаться от последнего предложения (${currentSum} ₽) как минимум на ${costStep} ₽`
+                : `Смета должна быть меньше последнего предложения (${currentSum} ₽) как минимум на ${costStep} ₽`
+            }
+          />
           <Text variant="title3" color={theme.text.basic} style={styles.title}>
             Ваше ценовое предложение
           </Text>
           {services.map(service => {
             const error = errors?.[service.ID as number];
-            const serviceInInitialEstimate = initialEstimateServices.find(
-              serv => serv.name === service.name
-            );
             const onDelete = () => {
               setServiceForDelete(service);
-              onDeleteEstimateModalVisible();
+              onDeleteEstimateServiceModalVisible();
             };
-            const onChangeSum = (text: string) => {
+            const onChangePrice = (text: string) => {
               if (text && error) {
-                delete errors[service.ID as number];
+                error.localPrice = false;
               }
               dispatch(
-                addServiceLocalSum({
+                addServiceLocalPrice({
                   serviceID: service.ID,
-                  localSum: text,
+                  localPrice: text,
                 })
               );
             };
             const onChangeCount = (text: string) => {
-              if (text && error) {
-                delete errors[service.ID as number];
+              if (text && error && service.ID) {
+                error.localCount = false;
               }
               dispatch(
-                addServiceCount({
+                addServiceLocalCount({
                   serviceID: service.ID,
-                  count: +text,
+                  localCount: text,
                 })
               );
             };
             return (
               <View key={service.name}>
                 <Item
-                  onChangeSum={onChangeSum}
+                  onChangePrice={onChangePrice}
                   onChangeCount={onChangeCount}
                   title={service.name}
                   description={service.description}
                   count={service?.count || 0}
-                  sum={service.sum || 0}
-                  localSum={service?.localSum}
+                  localCount={service?.localCount}
+                  price={service.price || 0}
+                  localPrice={service?.localPrice}
                   error={errors?.[service.ID as number]}
-                  canDelete={!serviceInInitialEstimate}
+                  canDelete={service.canDelete}
                   onDelete={onDelete}
                   measure={service.measure || ''}
                   categoryName={service?.categoryName}
                 />
                 {service.materials?.map(material => {
                   const error = errors?.[material.ID as number];
-                  const materialInInitialService =
-                    serviceInInitialEstimate?.materials?.find(
-                      mat => mat.name === material.name
-                    );
                   const onDelete = () => {
-                    onDeleteMaterial(service, material);
+                    setMaterialForDelete({ service, material });
+                    onDeleteEstimateMaterialModalVisible();
+                    // onDeleteMaterial(service, material);
                   };
-                  const onChangeSum = (text: string) => {
+                  const onChangePrice = (text: string) => {
                     if (text && error) {
                       delete errors[material.ID as number];
                     }
                     dispatch(
-                      addMaterialLocalSum({
+                      addMaterialLocalPrice({
                         serviceID: service.ID,
                         materialID: material.ID,
-                        localSum: text,
+                        localPrice: text,
                       })
                     );
                   };
@@ -187,25 +205,26 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                       delete errors[material.ID as number];
                     }
                     dispatch(
-                      addMaterialCount({
+                      addMaterialLocalCount({
                         serviceID: service.ID,
                         materialID: material.ID,
-                        count: +text,
+                        localCount: text,
                       })
                     );
                   };
                   return (
                     <Item
-                      onChangeSum={onChangeSum}
+                      onChangePrice={onChangePrice}
                       onChangeCount={onChangeCount}
-                      localSum={material?.localSum}
+                      localPrice={material?.localPrice}
                       key={material.name}
+                      localCount={material?.localCount}
                       onDelete={onDelete}
                       error={error}
                       title={material.name}
                       count={material.count}
-                      sum={material.count * material.price}
-                      canDelete={!materialInInitialService}
+                      price={material.price}
+                      canDelete={material.canDelete}
                       measure={material.measure || ''}
                     />
                   );

@@ -30,7 +30,6 @@ export const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   head: {
-    justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
   },
