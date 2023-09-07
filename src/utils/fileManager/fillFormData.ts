@@ -45,9 +45,9 @@ export const fillFormData = (
           actionType
         )
       ) {
-        return `МастерА-${dayjs().format('D/MM/YYYY-hh:mm:ss')}`;
+        return `МастерА-${dayjs().format('D/MM/YYYY-HH:mm:ss')}`;
       }
-      return `МастерА-${dayjs().format('D/MM/YYYY-hh:mm:ss')}`;
+      return `МастерА-${dayjs().format('D/MM/YYYY-HH:mm:ss')}`;
     };
     const name = getName()?.split('.')[0] || `name-${index}`;
     const getType = () => {
