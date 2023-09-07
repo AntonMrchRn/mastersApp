@@ -16,7 +16,7 @@ import ChatMessage from './Chat';
 import { styles } from './styles';
 
 type TaskCardCommentProps = {
-  taskId: string;
+  taskId: number;
   isITServices: boolean;
   isTaskClosed: boolean;
   isTaskCanceled: boolean;

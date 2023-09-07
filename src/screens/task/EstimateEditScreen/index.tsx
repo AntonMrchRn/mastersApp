@@ -38,14 +38,14 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
 
   const { taskId, serviceId, materialName } = route.params;
 
-  const getTask = useGetTaskQuery(taskId.toString());
+  const { data, refetch } = useGetTaskQuery(taskId);
 
   const [patchTaskService, mutationTaskService] = usePatchTaskServiceMutation();
   const [patchMaterial, mutationMaterial] = usePatchMaterialMutation();
 
   useEffect(() => {
     if (isFocused) {
-      getTask.refetch();
+      refetch();
     }
   }, [isFocused]);
   useEffect(() => {
@@ -65,7 +65,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
     }
   }, [mutationMaterial.error]);
 
-  const task = getTask?.data?.tasks?.[0];
+  const task = data?.tasks?.[0];
   const services = task?.services || [];
   const service = services.find(service => {
     return service.ID === serviceId;
@@ -134,7 +134,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
       }
     }
 
-    getTask.refetch();
+    refetch();
     if (navigation.canGoBack()) {
       navigation.goBack();
     }

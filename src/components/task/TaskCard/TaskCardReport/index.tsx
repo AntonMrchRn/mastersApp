@@ -12,8 +12,7 @@ import PreviewNotFound, {
 } from '@/components/tabs/TaskSearch/PreviewNotFound';
 import { useAppSelector } from '@/store';
 import {
-  useDeleteTasksFilesMutation,
-  useGetTaskQuery,
+  useDeleteTaskFileMutation,
   usePostTasksFilesMutation,
 } from '@/store/api/tasks';
 import { deleteProgress } from '@/store/slices/tasks/actions';
@@ -30,7 +29,7 @@ type TaskCardReportProps = {
   statusID: StatusType | undefined;
   reportFiles: File[];
   closureFiles: File[];
-  taskId: string;
+  taskId: number;
   subsetID: TaskType | undefined;
   isCurator: boolean;
   uploadModalVisible: boolean;
@@ -56,10 +55,9 @@ export const TaskCardReport = ({
   uploadLimitBannerVisible,
 }: TaskCardReportProps) => {
   const theme = useTheme();
-  const getTask = useGetTaskQuery(taskId);
 
-  const [postTasksFiles] = usePostTasksFilesMutation();
-  const [deleteTasksFiles] = useDeleteTasksFilesMutation();
+  const [postFiles] = usePostTasksFilesMutation();
+  const [deleteFile] = useDeleteTaskFileMutation();
 
   const progressesSelector = useAppSelector(selectTasks).progresses;
   const canDelete =
@@ -75,7 +73,7 @@ export const TaskCardReport = ({
     try {
       const controller = new AbortController();
       controllers = { ...controllers, [date]: controller };
-      const request = await postTasksFiles({
+      const request = await postFiles({
         formData,
         files,
         date,
@@ -89,8 +87,7 @@ export const TaskCardReport = ({
   };
 
   const onDelete = async ({ fileID }: { fileID?: number }) => {
-    fileID && (await deleteTasksFiles(fileID.toString()).unwrap());
-    getTask.refetch();
+    fileID && (await deleteFile(fileID).unwrap());
   };
 
   const onBanner = () => {
@@ -171,97 +168,95 @@ export const TaskCardReport = ({
     </>
   );
 
-  const AllUploadFiles = () => {
-    return (
+  const AllUploadFiles = (
+    <View style={styles.mt36}>
+      <Text variant="title3" color={theme.text.basic}>
+        Загруженные файлы
+      </Text>
+      {reportFiles.length ? (
+        <View style={styles.mt24}>
+          <DownloadManager
+            files={reportFiles}
+            onDelete={onDelete}
+            canDelete={canDelete}
+          />
+          {statusID === StatusType.WORK && (
+            <UploadProgress
+              controllers={controllers}
+              progressesSelector={progressesSelector}
+            />
+          )}
+        </View>
+      ) : (
+        <>
+          <Text
+            variant="bodySRegular"
+            style={styles.mt8}
+            color={theme.text.neutral}
+          >
+            {statusID === StatusType.WORK
+              ? 'Загрузите чеки или иные финансовые документы общим размером не более 250 МВ'
+              : 'Файлов нет'}
+          </Text>
+          {statusID === StatusType.WORK && (
+            <UploadProgress
+              controllers={controllers}
+              progressesSelector={progressesSelector}
+            />
+          )}
+        </>
+      )}
       <View style={styles.mt36}>
         <Text variant="title3" color={theme.text.basic}>
-          Загруженные файлы
+          Закрывающие документы
         </Text>
-        {reportFiles.length ? (
-          <View style={styles.mt24}>
-            <DownloadManager
-              files={reportFiles}
-              onDelete={onDelete}
-              canDelete={canDelete}
-            />
-            {statusID === StatusType.WORK && (
-              <UploadProgress
-                controllers={controllers}
-                progressesSelector={progressesSelector}
+        <View style={styles.mt24}>
+          {closureFiles.length ? (
+            <>
+              <DownloadManager
+                canDelete={false}
+                files={closureFiles}
+                onDelete={onDelete}
               />
-            )}
-          </View>
-        ) : (
-          <>
-            <Text
-              variant="bodySRegular"
-              style={styles.mt8}
-              color={theme.text.neutral}
-            >
-              {statusID === StatusType.WORK
-                ? 'Загрузите чеки или иные финансовые документы общим размером не более 250 МВ'
-                : 'Файлов нет'}
-            </Text>
-            {statusID === StatusType.WORK && (
-              <UploadProgress
-                controllers={controllers}
-                progressesSelector={progressesSelector}
-              />
-            )}
-          </>
-        )}
-        <View style={styles.mt36}>
-          <Text variant="title3" color={theme.text.basic}>
-            Закрывающие документы
-          </Text>
-          <View style={styles.mt24}>
-            {closureFiles.length ? (
-              <>
-                <DownloadManager
-                  canDelete={false}
-                  files={closureFiles}
-                  onDelete={onDelete}
+              {statusID !== StatusType.WORK && (
+                <UploadProgress
+                  controllers={controllers}
+                  progressesSelector={progressesSelector}
                 />
-                {statusID !== StatusType.WORK && (
-                  <UploadProgress
-                    controllers={controllers}
-                    progressesSelector={progressesSelector}
-                  />
-                )}
-              </>
-            ) : (
-              <>
-                <View style={styles.download}>
-                  {statusID !== StatusType.WORK && <DownloadFilesIcon />}
-                  <Text
-                    variant="bodySRegular"
-                    style={styles.desc}
-                    color={theme.text.neutral}
-                  >
-                    {statusID !== StatusType.WORK
-                      ? 'Загрузите чеки или иные финансовые документы общим размером не более 250 МВ'
-                      : 'Файлов нет'}
-                  </Text>
-                </View>
-                {statusID !== StatusType.WORK && (
-                  <UploadProgress
-                    controllers={controllers}
-                    progressesSelector={progressesSelector}
-                  />
-                )}
-              </>
-            )}
-          </View>
+              )}
+            </>
+          ) : (
+            <>
+              <View style={styles.download}>
+                {statusID !== StatusType.WORK && <DownloadFilesIcon />}
+                <Text
+                  variant="bodySRegular"
+                  style={styles.desc}
+                  color={theme.text.neutral}
+                >
+                  {statusID !== StatusType.WORK
+                    ? 'Загрузите чеки или иные финансовые документы общим размером не более 250 МВ'
+                    : 'Файлов нет'}
+                </Text>
+              </View>
+              {statusID !== StatusType.WORK && (
+                <UploadProgress
+                  controllers={controllers}
+                  progressesSelector={progressesSelector}
+                />
+              )}
+            </>
+          )}
         </View>
       </View>
-    );
-  };
+    </View>
+  );
 
   const getContent = () => {
     //к закрытию
     //необходимо отправить закрывающие документы
     if (toClose) {
-      return <AllUploadFiles />;
+      return AllUploadFiles;
     }
     switch (statusID) {
       case StatusType.ACTIVE:
@@ -283,7 +278,7 @@ export const TaskCardReport = ({
       case StatusType.COMPLETED:
       case StatusType.PAID:
       case StatusType.CLOSED:
-        return <AllUploadFiles />;
+        return AllUploadFiles;
       default:
         return DefaultUploadFiles;
     }

@@ -47,7 +47,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
   const userRole = useAppSelector(selectAuth).user?.roleID;
   const { offerServices } = useAppSelector(selectTasks);
 
-  const getTask = useGetTaskQuery(taskId.toString());
+  const { data, refetch } = useGetTaskQuery(taskId);
   const getMeasures = useGetMeasuresQuery('material');
 
   const [postMaterial, mutationMaterial] = usePostMaterialMutation();
@@ -63,11 +63,11 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
   }, [mutationMaterial.error]);
   useEffect(() => {
     if (isFocused) {
-      getTask.refetch();
+      refetch();
     }
   }, [isFocused]);
 
-  const task = getTask?.data && getTask?.data?.tasks && getTask?.data?.tasks[0];
+  const task = data?.tasks && data?.tasks[0];
   const services = fromEstimateSubmission
     ? offerServices
     : task?.services || [];
@@ -170,7 +170,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
           title: (error as AxiosQueryErrorResponse).data.message,
         });
       }
-      getTask.refetch();
+      refetch();
       navigation.navigate(AppScreenName.TaskCard, { taskId });
     }
   };

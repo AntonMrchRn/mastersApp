@@ -19,7 +19,7 @@ import { styles } from './styles';
 dayjs.extend(updateLocale);
 
 type TaskCardHistoryProps = {
-  taskId: string;
+  taskId: number;
   statusID?: number;
 };
 

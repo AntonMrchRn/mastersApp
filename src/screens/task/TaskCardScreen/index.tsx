@@ -1,5 +1,10 @@
 import React from 'react';
-import { RefreshControl, ScrollView, View } from 'react-native';
+import {
+  ActivityIndicator,
+  RefreshControl,
+  ScrollView,
+  View,
+} from 'react-native';
 import { ShadowedView } from 'react-native-fast-shadow';
 import {
   SafeAreaView,
@@ -40,12 +45,12 @@ type TaskCardScreenProps = CompositeScreenProps<
 export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
-  const taskId = route.params.taskId.toString();
+  const taskId = route.params.taskId;
 
   const {
+    id,
     onTabChange,
     getCurrentTab,
-    id,
     tabs,
     publicTime,
     name,
@@ -116,78 +121,82 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
             )
           }
         />
-        <Header title={`Задача ID ${id}`} description={publicTime} />
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={[
-            styles.wrapper,
-            { paddingBottom: buttons.length * 56 + 24 },
-          ]}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        >
-          <View style={styles.wrapper}>
-            <View>
-              <View style={styles.body}>
-                <View style={styles.badges}>
-                  <TaskBadges
-                    outlayStatusID={outlayStatusID}
-                    isNight={isNight}
-                    isUrgent={isUrgent}
-                    statusID={statusID}
-                    toClose={toClose}
-                  />
-                </View>
-                <Text
-                  variant="title2"
-                  style={styles.title}
-                  color={theme.text.basic}
-                >
-                  {name}
-                </Text>
-                {!!budget && !isContractor && (
+        <Header title={`Задача ID ${taskId}`} description={publicTime} />
+        {!id ? (
+          <ActivityIndicator size="large" style={styles.loader} />
+        ) : (
+          <ScrollView
+            style={styles.scrollView}
+            contentContainerStyle={[
+              styles.wrapper,
+              { paddingBottom: buttons.length * 56 + 24 },
+            ]}
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          >
+            <View style={styles.wrapper}>
+              <View>
+                <View style={styles.body}>
+                  <View style={styles.badges}>
+                    <TaskBadges
+                      outlayStatusID={outlayStatusID}
+                      isNight={isNight}
+                      isUrgent={isUrgent}
+                      statusID={statusID}
+                      toClose={toClose}
+                    />
+                  </View>
                   <Text
-                    variant="title3"
-                    style={styles.price}
+                    variant="title2"
+                    style={styles.title}
                     color={theme.text.basic}
                   >
-                    {budget}
+                    {name}
                   </Text>
-                )}
-                {statusID === StatusType.ACTIVE &&
-                  subsetID !== TaskType.COMMON_FIRST_RESPONSE &&
-                  budgetEndTime && (
-                    <Tips
-                      type={'info'}
-                      text={budgetEndTime}
-                      containerStyle={styles.tips}
-                    />
+                  {!!budget && !isContractor && (
+                    <Text
+                      variant="title3"
+                      style={styles.price}
+                      color={theme.text.basic}
+                    >
+                      {budget}
+                    </Text>
                   )}
-              </View>
-              <TabControl
-                data={tabs}
-                currentTabId={tab.id}
-                onChange={onTabChange}
-                style={styles.mt16}
-                contentContainerStyle={styles.contentContainerTab}
-              />
-              {isEstimateTabs && (
-                <View style={styles.segment}>
-                  <SegmentedControl
-                    tabs={estimateTabsArray}
-                    onChange={onSwitchEstimateTab}
-                    width={deviceWidth - 40}
-                  />
+                  {statusID === StatusType.ACTIVE &&
+                    subsetID !== TaskType.COMMON_FIRST_RESPONSE &&
+                    budgetEndTime && (
+                      <Tips
+                        type={'info'}
+                        text={budgetEndTime}
+                        containerStyle={styles.tips}
+                      />
+                    )}
                 </View>
-              )}
+                <TabControl
+                  data={tabs}
+                  currentTabId={tab.id}
+                  onChange={onTabChange}
+                  style={styles.mt16}
+                  contentContainerStyle={styles.contentContainerTab}
+                />
+                {isEstimateTabs && (
+                  <View style={styles.segment}>
+                    <SegmentedControl
+                      tabs={estimateTabsArray}
+                      onChange={onSwitchEstimateTab}
+                      width={deviceWidth - 40}
+                    />
+                  </View>
+                )}
+              </View>
+              <ShadowedView style={[styles.card, configApp.shadow]}>
+                {getCurrentTab()}
+              </ShadowedView>
             </View>
-            <ShadowedView style={[styles.card, configApp.shadow]}>
-              {getCurrentTab()}
-            </ShadowedView>
-          </View>
-        </ScrollView>
+          </ScrollView>
+        )}
       </SafeAreaView>
       <View style={[styles.bottom, { bottom: insets.bottom }]}>
         {uploadLimitBannerVisible && (

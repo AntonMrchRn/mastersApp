@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import {
-  CompositeNavigationProp,
-  useIsFocused,
-} from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { useIsFocused } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import { useToast } from 'rn-ui-kit';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
@@ -16,9 +11,9 @@ import { TaskCardEstimate } from '@/components/task/TaskCard/TaskCardEstimate';
 import { TaskCardHistory } from '@/components/task/TaskCard/TaskCardHistory';
 import { TaskCardReport } from '@/components/task/TaskCard/TaskCardReport';
 import { useTaskSSE } from '@/hooks/useTaskSSE';
-import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
+import { AppScreenName } from '@/navigation/AppNavigation';
 import { ProfileScreenName } from '@/navigation/ProfileNavigation';
-import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
+import { BottomTabName } from '@/navigation/TabNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   useDeleteITTaskMemberMutation,
@@ -37,6 +32,7 @@ import { selectAuth } from '@/store/slices/auth/selectors';
 import { getCommentsPreview } from '@/store/slices/myTasks/asyncActions';
 import { setNewOfferServices } from '@/store/slices/tasks/actions';
 import { AxiosQueryErrorResponse } from '@/types/error';
+import { CompositeTaskCardNavigationProp } from '@/types/navigation';
 import {
   EstimateTab,
   OutlayConfirmStatus,
@@ -50,6 +46,11 @@ import {
 
 import { getBanner } from './getBanner';
 import { getButtons } from './getButtons';
+
+type Tab = {
+  id: number;
+  label: TaskTab;
+};
 
 const tabs: TabItem[] = [
   {
@@ -77,29 +78,23 @@ const estimateTabsArray = [
   EstimateTab.TASK_ESTIMATE,
   EstimateTab.MY_SUGGESTION,
 ];
+const initialTab = {
+  id: 0,
+  label: TaskTab.DESCRIPTION,
+};
+
 export const useTaskCard = ({
   taskId,
   navigation,
 }: {
-  taskId: string;
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<AppStackParamList, AppScreenName.TaskCard, undefined>,
-    BottomTabNavigationProp<
-      BottomTabParamList,
-      keyof BottomTabParamList,
-      undefined
-    >
-  >;
+  taskId: number;
+  navigation: CompositeTaskCardNavigationProp;
 }) => {
-  const [tab, setTab] = useState<{
-    id: number;
-    label: TaskTab;
-  }>(
-    tabs[0] as {
-      id: number;
-      label: TaskTab;
-    }
-  );
+  const isFocused = useIsFocused();
+  const toast = useToast();
+  const dispatch = useAppDispatch();
+
+  const [tab, setTab] = useState<Tab>(initialTab);
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [uploadLimitBannerVisible, setUploadLimitBannerVisible] =
     useState(false);
@@ -119,12 +114,7 @@ export const useTaskCard = ({
     EstimateTab.TASK_ESTIMATE
   );
 
-  const dispatch = useAppDispatch();
-  const isFocused = useIsFocused();
-
-  const toast = useToast();
-  const { user } = useAppSelector(selectAuth);
-
+  const user = useAppSelector(selectAuth).user;
   const isMessagesExist = !!useAppSelector(state => state.myTasks)
     .commentsPreview?.taskComment?.length;
 
@@ -142,7 +132,7 @@ export const useTaskCard = ({
   const task = data?.tasks?.[0];
   const getUserOffersQuery = useGetUserOffersQuery(
     {
-      taskID: +taskId,
+      taskID: taskId,
       userID: user?.userID as number,
     },
     {
@@ -151,7 +141,7 @@ export const useTaskCard = ({
   );
   const getAnotherOffers = useGetAnotherOffersQuery(
     {
-      taskID: +taskId,
+      taskID: taskId,
       userID: user?.userID as number,
     },
     {
@@ -407,6 +397,7 @@ export const useTaskCard = ({
     setEstimateBottomVisible(!estimateBottomVisible);
   const onBudgetModalVisible = () => setBudgetModalVisible(!budgetModalVisible);
   const onUploadModalVisible = () => setUploadModalVisible(!uploadModalVisible);
+  const onCancelModalVisible = () => setCancelModalVisible(!cancelModalVisible);
 
   const onSubmissionModalVisible = () => {
     if (!hasAccessToTask) {
@@ -424,7 +415,7 @@ export const useTaskCard = ({
       .map(recipient => recipient.ID);
 
     navigation.navigate(AppScreenName.CommentsChat, {
-      taskId: id,
+      taskId,
       recipientIDs,
       isITServices,
       isMessageInputAvailable: !isTaskClosed && !isTaskCanceled,
@@ -481,7 +472,7 @@ export const useTaskCard = ({
     if (subsetID === TaskType.COMMON_AUCTION_SALE) {
       dispatch(setNewOfferServices(services));
       navigation.navigate(AppScreenName.EstimateSubmission, {
-        taskId: +taskId,
+        taskId,
       });
     }
 
@@ -497,7 +488,7 @@ export const useTaskCard = ({
               isConfirm: true,
             }).unwrap());
           await patchTask({
-            ID: +taskId,
+            ID: taskId,
             statusID: StatusType.WORK,
             outlayStatusID: OutlayStatusType.READY,
           }).unwrap();
@@ -508,7 +499,7 @@ export const useTaskCard = ({
         if (!isContractor) {
           // mutation order matters
           await postITTaskMember({
-            taskID: +taskId,
+            taskID: taskId,
             members: [
               {
                 userID: user.userID,
@@ -517,7 +508,7 @@ export const useTaskCard = ({
             ],
           }).unwrap();
           await patchTask({
-            ID: +taskId,
+            ID: taskId,
             statusID: StatusType.WORK,
             outlayStatusID: OutlayStatusType.READY,
           }).unwrap();
@@ -533,9 +524,6 @@ export const useTaskCard = ({
     if (submissionModalVisible) {
       onSubmissionModalVisible();
     }
-  };
-  const onCancelModalVisible = () => {
-    setCancelModalVisible(!cancelModalVisible);
   };
   const noAccessButtonPress = () => {
     onNoAccessToTaskBannerVisible();
@@ -607,7 +595,7 @@ export const useTaskCard = ({
         if (statusID === StatusType.WORK && user?.userID) {
           if (!isCurator) {
             await patchTask({
-              ID: +taskId,
+              ID: taskId,
               refuseReason,
               statusID: StatusType.ACTIVE,
               outlayStatusID: OutlayStatusType.READY,
@@ -697,7 +685,7 @@ export const useTaskCard = ({
   const navigateToContractors = () => {
     if (user?.userID) {
       navigation.navigate(AppScreenName.Contractors, {
-        taskId: +taskId,
+        taskId,
         isInvitedCurator,
         curatorId: user.userID,
         curatorMemberId: curator?.memberID,
@@ -745,11 +733,11 @@ export const useTaskCard = ({
       case TaskTab.REPORT:
         return (
           <TaskCardReport
+            taskId={taskId}
             toClose={toClose}
             statusID={statusID}
             subsetID={subsetID}
             isCurator={isCurator}
-            taskId={id.toString()}
             reportFiles={reportFiles}
             closureFiles={closureFiles}
             activeBudgetCanceled={!!banner}
@@ -799,7 +787,6 @@ export const useTaskCard = ({
     userOffersData,
     onWorkDelivery,
     outlayStatusID,
-    onBecomeCurator: navigateToContractors,
     isInvitedCurator,
     onTaskSubmission,
     isInvitedExecutor,
@@ -815,6 +802,7 @@ export const useTaskCard = ({
     onApproveEstimateChanges,
     onSendEstimateForApproval,
     isTaskWithUnconfirmedCurator,
+    onBecomeCurator: navigateToContractors,
     isTaskClosedWithoutMessages: isTaskClosed && !isMessagesExist,
     isTaskCanceledWithoutMessages: isTaskCanceled && !isMessagesExist,
     isLastChangesFromCoordinator:
@@ -826,6 +814,7 @@ export const useTaskCard = ({
     tab,
     tabs,
     name,
+    setId,
     budget,
     banner,
     buttons,
@@ -856,18 +845,17 @@ export const useTaskCard = ({
     refreshing: isLoading,
     estimateBannerVisible,
     onEstimateBannerPress,
+    noDirectionButtonPress,
     submissionModalVisible,
     cantDeleteBannerVisible,
     onEstimateBannerVisible,
+    uploadLimitBannerVisible,
     onSubmissionModalVisible,
     onCantDeleteBannerVisible,
+    onUploadLimitBannerVisible,
     noAccessToTaskBannerVisible,
     onNoAccessToTaskBannerVisible,
     directionNotSpecifiedBannerVisible,
     onDirectionNotSpecifiedBannerVisible,
-    noDirectionButtonPress,
-    setId,
-    uploadLimitBannerVisible,
-    onUploadLimitBannerVisible,
   };
 };

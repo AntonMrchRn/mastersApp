@@ -8,7 +8,7 @@ import { tasksAPI } from '@/store/api/tasks';
 
 type CustomEvent = 'tasks';
 let sse: EventSource<CustomEvent>;
-export const useTaskSSE = (taskId: string) => {
+export const useTaskSSE = (taskId: number) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     (async () => {

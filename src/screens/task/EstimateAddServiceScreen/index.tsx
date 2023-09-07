@@ -49,7 +49,7 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
   }, []);
   const ID = service?.ID || getRandomUniqNumber(ids);
 
-  const getTask = useGetTaskQuery(taskId.toString());
+  const { refetch } = useGetTaskQuery(taskId);
 
   const [postTask, mutationTask] = usePostTaskServiceMutation();
 
@@ -63,7 +63,7 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
   }, [mutationTask.error]);
   useEffect(() => {
     if (isFocused) {
-      getTask.refetch();
+      refetch();
     }
   }, [isFocused]);
 
@@ -125,7 +125,7 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
         taskID: taskId,
         materials: [],
       });
-      getTask.refetch();
+      refetch();
     }
     goBack();
   };
