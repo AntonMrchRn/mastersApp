@@ -76,7 +76,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     bsRef,
     isAnotherOffers,
     addServiceBottomSheetClose,
-    isTaskEctimateTab,
+    isTaskEstimateTab,
     currentServices,
     isOffersPublic,
     userComment,
@@ -242,7 +242,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           ) &&
           statusID === StatusType.ACTIVE && (
             <View style={styles.mt16}>
-              {isTaskEctimateTab ? (
+              {isTaskEstimateTab ? (
                 <>
                   {isOffersPublic && (
                     <>

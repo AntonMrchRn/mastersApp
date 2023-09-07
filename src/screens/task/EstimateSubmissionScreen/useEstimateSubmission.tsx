@@ -42,7 +42,7 @@ export const useEstimateSubmission = ({
 
   const bsRef = useRef<BottomSheetModal>(null);
 
-  const getTaskQuery = useGetTaskQuery(taskId.toString());
+  const { data, refetch } = useGetTaskQuery(taskId);
 
   const [patchTaskLot] = usePatchTaskLotMutation();
   const [postOffers] = usePostOffersMutation();
@@ -73,7 +73,7 @@ export const useEstimateSubmission = ({
 
   useEffect(() => {
     if (isFocused) {
-      getTaskQuery.refetch();
+      refetch();
     }
   }, [isFocused]);
 
@@ -105,7 +105,8 @@ export const useEstimateSubmission = ({
   const allSum = allSumReduce.toString().includes('.')
     ? Number(allSumReduce.toFixed(2))
     : allSumReduce;
-  const task = getTaskQuery?.data?.tasks?.[0];
+
+  const task = data?.tasks?.[0];
   const allowCostIncrease = task?.allowCostIncrease;
   const currentSum = task?.currentSum;
   const costStep = task?.costStep;
@@ -315,7 +316,7 @@ export const useEstimateSubmission = ({
             type: 'success',
             title: 'Ценовое предложение изменено',
           });
-          getTaskQuery.refetch();
+          refetch();
           dispatch(setNewOfferServices([]));
           dispatch(setOfferComment(''));
           dispatch(setOfferID(undefined));

@@ -27,14 +27,15 @@ export const tasksAPI = api
   })
   .injectEndpoints({
     endpoints: builder => ({
-      getTask: builder.query<GetTaskResponse, string>({
+      getTask: builder.query<GetTaskResponse, number>({
         query: id => ({
           url: `tasks/web?query=?ID==${id}?`,
           method: 'GET',
         }),
         providesTags: ['task'],
+        // transformResponse: (response: GetTaskResponse) => response.tasks[0],
       }),
-      getTaskHistory: builder.query<GetTaskHistoryResponse, string>({
+      getTaskHistory: builder.query<GetTaskHistoryResponse, number>({
         query: id => ({
           url: `tasks/comments?query=?taskID==${id}*authorTypeID==3?creationTime,asc,,`,
           method: 'GET',
@@ -109,6 +110,7 @@ export const tasksAPI = api
           url: `tasks/services/${serviceId}`,
           method: 'DELETE',
         }),
+        invalidatesTags: ['task'],
       }),
       getTaskService: builder.query<
         { count: number; services: Service[] },
@@ -125,6 +127,7 @@ export const tasksAPI = api
           method: 'PATCH',
           data,
         }),
+        invalidatesTags: ['task'],
       }),
       postTaskService: builder.mutation<object, unknown>({
         query: data => ({
@@ -162,6 +165,7 @@ export const tasksAPI = api
           method: 'DELETE',
           data,
         }),
+        invalidatesTags: ['task'],
       }),
       deleteInvitation: builder.mutation<object, number>({
         query: memberID => ({
@@ -254,11 +258,12 @@ export const tasksAPI = api
         },
         invalidatesTags: ['task'],
       }),
-      deleteTasksFiles: builder.mutation<object, string>({
+      deleteTaskFile: builder.mutation<object, number>({
         query: id => ({
           url: `tasks/files/${id}`,
           method: 'DELETE',
         }),
+        invalidatesTags: ['task'],
       }),
       deleteITTaskMember: builder.mutation<object, number>({
         query: id => ({
@@ -277,7 +282,7 @@ export const {
   useGetTaskStatusesQuery,
   usePatchTaskMutation,
   usePostTasksFilesMutation,
-  useDeleteTasksFilesMutation,
+  useDeleteTaskFileMutation,
   useGetServicesCategoriesQuery,
   useGetServicesByCategoriesQuery,
   useLazyGetServicesByNameQuery,

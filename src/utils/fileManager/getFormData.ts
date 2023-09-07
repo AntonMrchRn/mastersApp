@@ -5,7 +5,7 @@ export const getFormData = ({
   toClose,
   statusID,
 }: {
-  taskId?: string;
+  taskId?: number;
   toClose?: boolean | undefined;
   statusID?: StatusType | undefined;
 }) => {
