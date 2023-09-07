@@ -6,6 +6,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 16,
   },
+  text: {
+    flexShrink: 1,
+  },
 });
 
 export default styles;

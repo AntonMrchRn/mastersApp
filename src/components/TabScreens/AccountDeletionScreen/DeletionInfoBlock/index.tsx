@@ -19,7 +19,9 @@ export const DeletionInfoBlock = ({ text }: DeletionInfoBlock) => {
       <View style={styles.container}>
         <WarningCircleIcon />
         <Spacer size="s" horizontal />
-        <Text variant="bodyMRegular">{text}</Text>
+        <Text variant="bodyMRegular" style={styles.text}>
+          {text}
+        </Text>
       </View>
       <Spacer
         size="l"
