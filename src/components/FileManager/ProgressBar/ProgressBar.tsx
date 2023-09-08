@@ -10,7 +10,7 @@ type ProgressBarProps = {
   size: number;
 };
 
-import styles from './style';
+import styles from './styles';
 
 export const ProgressBar = ({ progress, loaded, size }: ProgressBarProps) => {
   const theme = useTheme();

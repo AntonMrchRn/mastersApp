@@ -8,7 +8,7 @@ import { Text, useTheme } from 'rn-ui-kit';
 import { ProgressBar } from '@/components/FileManager/ProgressBar/ProgressBar';
 import { Controllers, Progresses } from '@/types/fileManager';
 
-import styles from './style';
+import styles from './styles';
 
 type UploadProgressProps = {
   controllers: Controllers;

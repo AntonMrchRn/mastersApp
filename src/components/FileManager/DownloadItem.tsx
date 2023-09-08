@@ -18,6 +18,7 @@ import { FileItem } from './FileItem';
 
 type DownloadItemProps = {
   file: File;
+  isUploading: boolean;
   onDelete: ({
     fileID,
     filePath,
@@ -30,6 +31,7 @@ type DownloadItemProps = {
 
 export const DownloadItem = ({
   file,
+  isUploading,
   onDelete,
   canDelete,
 }: DownloadItemProps) => {
@@ -51,7 +53,7 @@ export const DownloadItem = ({
 
   useEffect(() => {
     hasOnDevice();
-  }, []);
+  }, [isUploading]);
 
   const dirs = ReactNativeBlobUtil.fs.dirs;
   const fileType = file?.sourceExtension || '';
@@ -67,6 +69,7 @@ export const DownloadItem = ({
   const hasOnDevice = async () => {
     try {
       const exist = await ReactNativeBlobUtil.fs.exists(FILE_PATH);
+
       if (onDevice !== exist) {
         setOnDevice(exist);
       }
@@ -144,7 +147,7 @@ export const DownloadItem = ({
         </TouchableOpacity>
       );
     }
-    if (isDeleting) {
+    if (isDeleting || isUploading) {
       return <ActivityIndicator />;
     }
     if (onDevice && canDelete) {

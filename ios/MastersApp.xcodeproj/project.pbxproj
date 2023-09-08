@@ -35,10 +35,10 @@
 		A7FD0A390AC64387ABC65B7D /* OpenSans-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7341733B1B3545CC90C35FA4 /* OpenSans-SemiBoldItalic.ttf */; };
 		B3A62EBF102D4CF4A66BC392 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5EE7C4B10CBD49B69F27DDF2 /* OpenSans-Bold.ttf */; };
 		B79EED2209294CAC91774E98 /* NunitoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F93E25DDB174AD3B26BF399 /* NunitoSans-Bold.ttf */; };
-		BC603E080F6C3905CA3814E0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		BC603E080F6C3905CA3814E0 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		BC71A61FECC449E689F8D25B /* OpenSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 342B248EE36B4C509B80ECF3 /* OpenSans-BoldItalic.ttf */; };
 		D36EE826ECE74C52935A56E7 /* OpenSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1055706D723E4AD08EEAE5CD /* OpenSans-Italic.ttf */; };
-		DB49D17F55B4394EC0B20724 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		DB49D17F55B4394EC0B20724 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		DC8CF9788C87486289898C2F /* NunitoSans-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7C1CAD46B7B4DBF9528F3C4 /* NunitoSans-ExtraBoldItalic.ttf */; };
 		E31F12FBA1D849208758B253 /* NunitoSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5562BC1AB6E64940BAF9D445 /* NunitoSans-Italic.ttf */; };
 		E7AA55B075DD48C197B4E489 /* NunitoSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D64AF841637C43CCB0FDEBA0 /* NunitoSans-LightItalic.ttf */; };
@@ -109,7 +109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DB49D17F55B4394EC0B20724 /* BuildFile in Frameworks */,
+				DB49D17F55B4394EC0B20724 /* (null) in Frameworks */,
 				A5DC53E994B7263D2880A468 /* libPods-MastersApp-MastersAppTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -118,7 +118,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BC603E080F6C3905CA3814E0 /* BuildFile in Frameworks */,
+				BC603E080F6C3905CA3814E0 /* (null) in Frameworks */,
 				713295FF5EFC41B03A41C447 /* libPods-MastersApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -610,7 +610,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 5;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = G62BZGTRYF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MastersApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -638,7 +638,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 5;
-				DEVELOPMENT_TEAM = 8S5JMGSU5G;
+				DEVELOPMENT_TEAM = G62BZGTRYF;
 				INFOPLIST_FILE = MastersApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
