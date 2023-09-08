@@ -1,10 +1,12 @@
 import React, { FC } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import dayjs from 'dayjs';
 import { Text, useTheme } from 'rn-ui-kit';
 
 import { CalendarCheckIcon } from '@/assets/icons/svg/screens/CalendarCheckIcon';
+
+import { styles } from './styles';
 
 type TaskDateProps = {
   from: string;
@@ -12,17 +14,6 @@ type TaskDateProps = {
 };
 export const TaskDate: FC<TaskDateProps> = ({ from, to }) => {
   const theme = useTheme();
-  const styles = StyleSheet.create({
-    ml10: {
-      marginLeft: 5,
-    },
-    date: {
-      marginTop: 8,
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    wrapperIcon: { width: 20, bottom: 2.7 },
-  });
 
   const inOneMonth = !!(
     from &&

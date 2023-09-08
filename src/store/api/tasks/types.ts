@@ -173,7 +173,6 @@ type Task = {
   subsetID?: TaskType;
   startTime?: string;
   endTime?: string;
-  endTimePlan?: string;
   webdata?: WebData;
   /**
    * Подача смет ценой выше поданной ранее
