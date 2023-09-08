@@ -8,7 +8,7 @@ import { Variant } from 'rn-ui-kit/lib/typescript/components/Swipeable';
 import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
 import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { PriceIcon } from '@/assets/icons/svg/estimate/PriceIcon';
-import { OutlayStatusType, RoleType, StatusType } from '@/types/task';
+import { OutlayStatusType, RoleType, StatusType, TaskType } from '@/types/task';
 
 type TaskEstimateItemProps = {
   previewActions?: boolean;
@@ -23,6 +23,7 @@ type TaskEstimateItemProps = {
   measure: string | undefined;
   outlayStatusID: OutlayStatusType | undefined;
   statusID: StatusType | undefined;
+  subsetID: TaskType | undefined;
 };
 export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   previewActions,
@@ -37,6 +38,7 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   measure = '',
   outlayStatusID,
   statusID,
+  subsetID,
 }) => {
   const currentMeasure =
     measure === 'час'
@@ -62,9 +64,13 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
     if (
       outlayStatusID &&
       statusID &&
+      subsetID &&
       statusID !== StatusType.ACTIVE &&
       [OutlayStatusType.RETURNED, OutlayStatusType.MATCHING].includes(
         outlayStatusID
+      ) &&
+      [TaskType.COMMON_FIRST_RESPONSE, TaskType.IT_FIRST_RESPONSE].includes(
+        subsetID
       )
     ) {
       switch (roleID) {

@@ -87,8 +87,8 @@ export const useTaskCardEstimate = ({
       case TaskType.COMMON_FIRST_RESPONSE:
         return services;
       case TaskType.COMMON_AUCTION_SALE:
-        if (statusID === StatusType.WORK) {
-          return winnerOffer?.services || [];
+        if (statusID !== StatusType.ACTIVE) {
+          return userServices;
         }
         if (currentEstimateTab === EstimateTab.MY_SUGGESTION) {
           return userServices;
