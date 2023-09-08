@@ -20,7 +20,7 @@ type CardTasksProp = Task & {
 const CardTasks = ({
   object,
   startTime = '',
-  endTimePlan = '',
+  endTime = '',
   name,
   description,
   statusID,
@@ -77,9 +77,7 @@ const CardTasks = ({
           <View style={styles.wrapperAddress}>
             <TaskAddress address={address} />
           </View>
-          {(startTime || endTimePlan) && (
-            <TaskDate from={startTime} to={endTimePlan} />
-          )}
+          {(startTime || endTime) && <TaskDate from={startTime} to={endTime} />}
         </>
       </Card>
       <Spacer size="xs" separator="bottom" />

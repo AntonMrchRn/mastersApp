@@ -18,7 +18,7 @@ import { ZIPIcon } from '@/assets/icons/svg/files/ZIPIcon';
 
 import { ProgressBar } from '../ProgressBar/ProgressBar';
 
-import styles from './style';
+import styles from './styles';
 
 type FileItemProps = {
   action: React.JSX.Element | null;

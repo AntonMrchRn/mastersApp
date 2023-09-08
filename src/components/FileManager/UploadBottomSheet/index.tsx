@@ -23,7 +23,7 @@ import { checkSizes } from '@/utils/fileManager/checkSizes';
 import { fillFormData } from '@/utils/fileManager/fillFormData';
 import { Exif, fixImageRotation } from '@/utils/fileManager/fixImageRotation';
 
-import styles from './style';
+import styles from './styles';
 
 export enum UploadAction {
   TakeFromGallery = 'TakeFromGallery',
@@ -166,7 +166,7 @@ export const UploadBottomSheet = ({
       if ((result as ImageOrVideo[]).length > 10) {
         return toast.show({
           type: 'error',
-          title: 'Нельзя выбрать более 10 файлов',
+          title: 'Превышено максимальное число файлов (10)',
         });
       }
 

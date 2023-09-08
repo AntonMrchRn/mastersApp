@@ -25,8 +25,8 @@ import { styles } from './styles';
 type TaskCardDescriptionProps = {
   description: string;
   address: string;
+  endTime: string;
   startTime: string;
-  endTimePlan: string;
   contacts: Contact[];
   applicationFiles: File[];
   statusID: StatusType | undefined;
@@ -40,8 +40,8 @@ type TaskCardDescriptionProps = {
 export const TaskCardDescription = ({
   description,
   address,
+  endTime,
   startTime,
-  endTimePlan,
   contacts,
   applicationFiles,
   navigateToContractors,
@@ -216,9 +216,9 @@ export const TaskCardDescription = ({
           <TaskAddress address={address} />
         </View>
       )}
-      {(startTime || endTimePlan) && (
+      {(startTime || endTime) && (
         <View style={styles.date}>
-          <TaskDate from={startTime} to={endTimePlan} />
+          <TaskDate from={startTime} to={endTime} />
         </View>
       )}
 

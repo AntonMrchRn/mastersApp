@@ -40,9 +40,9 @@ const AccountDeletionScreen = ({
         <Spacer size="xl" />
         <Text variant="title2">Удалить аккаунт?</Text>
         <Spacer size="s" />
-        <DeletionInfoBlock text="Данные аккаунта будут удалены" />
-        <DeletionInfoBlock text="Информация о прошлых задачах будет недоступна" />
-        <DeletionInfoBlock text="Это действие нельзя будет отменить" />
+        <DeletionInfoBlock text="Данные аккаунта будут безвозвратно удалены через 6 месяцев" />
+        <DeletionInfoBlock text="Информация о прошлых задачах будет недоступна после удаления" />
+        <DeletionInfoBlock text="Восстановить аккаунт можно в течении 6 месяцев через службу поддержки: info@mastera-service.ru" />
         <Spacer size="xxl" />
         <FormProvider {...methods}>
           <ControlledInput

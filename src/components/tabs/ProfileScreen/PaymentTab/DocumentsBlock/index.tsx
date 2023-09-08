@@ -17,6 +17,7 @@ import { selectUser } from '@/store/slices/user/selectors';
 import { Controllers, File, HandleUpload } from '@/types/fileManager';
 import { ProfileTab } from '@/types/tab';
 import { getFormData } from '@/utils/fileManager/getFormData';
+import { getUniqAddedFiles } from '@/utils/fileManager/getUniqAddedFiles';
 import { saveOnDevice } from '@/utils/fileManager/saveOnDevice';
 
 import styles from './style';
@@ -44,6 +45,7 @@ const DocumentsBlock = ({
 
   const [isBannerVisible, setIsBannerVisible] = useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [uploadedFileIDs, setUploadedFileIDs] = useState<number[]>([]);
 
   useEffect(() => {
     if (isLoading || isSuccess) {
@@ -91,8 +93,14 @@ const DocumentsBlock = ({
         signal: controller.signal,
       }).unwrap();
 
-      const addedFiles = request.filter(file => names.includes(file.name));
-      saveOnDevice(addedFiles);
+      const { uniqAddedFiles, uniqAddedFileIDs } = getUniqAddedFiles(
+        request,
+        names
+      );
+
+      setUploadedFileIDs(uniqAddedFileIDs);
+      await saveOnDevice(uniqAddedFiles);
+      setUploadedFileIDs([]);
     } catch (err) {
       console.log('handleUpload error', err);
     }
@@ -112,7 +120,11 @@ const DocumentsBlock = ({
       <Spacer size="xl" />
       {files.length ? (
         <>
-          <DownloadManager files={files} onDelete={onDelete} />
+          <DownloadManager
+            files={files}
+            onDelete={onDelete}
+            uploadedFileIDs={uploadedFileIDs}
+          />
           <UploadProgress
             controllers={controllers}
             progressesSelector={progressesSelector}

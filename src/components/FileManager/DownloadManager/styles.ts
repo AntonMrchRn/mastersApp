@@ -2,12 +2,10 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingTop: 16,
+    width: '100%',
   },
-  text: {
-    flexShrink: 1,
+  mt8: {
+    marginTop: 8,
   },
 });
 

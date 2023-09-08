@@ -218,7 +218,7 @@ export const useTaskCard = ({
   const startTime = task?.startTime || '';
   const contacts = task?.contacts || [];
   const webdata = task?.webdata;
-  const endTimePlan = task?.endTimePlan || '';
+  const endTime = task?.endTime || '';
   const address = task?.object?.name || '';
   const description = task?.description || '';
   const offersDeadline = task?.offersDeadline;
@@ -698,6 +698,7 @@ export const useTaskCard = ({
       case TaskTab.DESCRIPTION:
         return (
           <TaskCardDescription
+            endTime={endTime}
             address={address}
             webdata={webdata}
             contacts={contacts}
@@ -706,7 +707,6 @@ export const useTaskCard = ({
             executors={executors}
             subsetID={subsetID}
             isCurator={isCurator}
-            endTimePlan={endTimePlan}
             description={description}
             applicationFiles={applicationFiles}
             navigateToContractors={navigateToContractors}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 
 import { Text, useTheme } from 'rn-ui-kit';
@@ -20,6 +20,7 @@ import { selectTasks } from '@/store/slices/tasks/selectors';
 import { Controllers, File, HandleUpload } from '@/types/fileManager';
 import { StatusType, TaskType } from '@/types/task';
 import { getFormData } from '@/utils/fileManager/getFormData';
+import { getUniqAddedFiles } from '@/utils/fileManager/getUniqAddedFiles';
 import { saveOnDevice } from '@/utils/fileManager/saveOnDevice';
 
 import { styles } from './styles';
@@ -55,9 +56,10 @@ export const TaskCardReport = ({
   uploadLimitBannerVisible,
 }: TaskCardReportProps) => {
   const theme = useTheme();
-
   const [postFiles] = usePostTasksFilesMutation();
   const [deleteFile] = useDeleteTaskFileMutation();
+
+  const [uploadedFileIDs, setUploadedFileIDs] = useState<number[]>([]);
 
   const progressesSelector = useAppSelector(selectTasks).progresses;
   const canDelete =
@@ -83,8 +85,15 @@ export const TaskCardReport = ({
         date,
         signal: controller.signal,
       }).unwrap();
-      const addedFiles = request.filter(file => names.includes(file.name));
-      saveOnDevice(addedFiles);
+
+      const { uniqAddedFiles, uniqAddedFileIDs } = getUniqAddedFiles(
+        request,
+        names
+      );
+
+      setUploadedFileIDs(uniqAddedFileIDs);
+      await saveOnDevice(uniqAddedFiles);
+      setUploadedFileIDs([]);
     } catch (err) {
       console.log('handleUpload error: ', err);
     }
@@ -105,13 +114,12 @@ export const TaskCardReport = ({
       </Text>
       <View style={styles.mt24}>
         {reportFiles.length ? (
-          <>
-            <DownloadManager
-              files={reportFiles}
-              onDelete={onDelete}
-              canDelete={canDelete}
-            />
-          </>
+          <DownloadManager
+            files={reportFiles}
+            onDelete={onDelete}
+            canDelete={canDelete}
+            uploadedFileIDs={uploadedFileIDs}
+          />
         ) : (
           <>
             <View style={styles.download}>
@@ -149,6 +157,7 @@ export const TaskCardReport = ({
                   files={reportFiles}
                   onDelete={onDelete}
                   canDelete={canDelete}
+                  uploadedFileIDs={uploadedFileIDs}
                 />
                 <UploadProgress
                   controllers={controllers}
@@ -183,6 +192,7 @@ export const TaskCardReport = ({
             files={reportFiles}
             onDelete={onDelete}
             canDelete={canDelete}
+            uploadedFileIDs={uploadedFileIDs}
           />
           {statusID === StatusType.WORK && (
             <UploadProgress
@@ -231,6 +241,7 @@ export const TaskCardReport = ({
                 canDelete={canDelete}
                 files={closureFiles}
                 onDelete={onDelete}
+                uploadedFileIDs={uploadedFileIDs}
               />
               {!!statusID &&
                 ![
