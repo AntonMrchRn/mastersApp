@@ -28,7 +28,7 @@ export const useTaskSSE = (taskId: number) => {
             if (res) {
               dispatch(
                 tasksAPI.util.updateQueryData('getTask', taskId, resp => {
-                  resp.tasks = [res];
+                  resp.tasks = [{ ...resp.tasks[0], ...res }];
                 })
               );
             }
