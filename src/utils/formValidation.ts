@@ -107,11 +107,16 @@ const bankDetailsValidation = (isCompany: boolean) => ({
     })
     .length(20, 'Укажите 20-значный номер счета в цифровом формате'),
 });
-const itinValidation = {
+const itinValidation = (isCompany = false) => ({
   ITIN: Yup.string()
-    .required('Укажите 12-значный номер ИНН в цифровом формате')
-    .length(12, 'Укажите 12-значный номер ИНН в цифровом формате'),
-};
+    .required(
+      `Укажите ${isCompany ? 10 : 12}-значный номер ИНН в цифровом формате`
+    )
+    .length(
+      isCompany ? 10 : 12,
+      `Укажите ${isCompany ? 10 : 12}-значный номер ИНН в цифровом формате`
+    ),
+});
 const entityNameValidation = {
   entityName: Yup.string()
     .required('Наименование должно содержать не менее 4 символов')
@@ -167,13 +172,15 @@ const recoveryConfirmationValidationSchema = Yup.object().shape(
 const personalDataValidationSchema = Yup.object().shape(personalDataValidation);
 const bankDetailsValidationSchema = (isCompany: boolean) =>
   Yup.object().shape(bankDetailsValidation(isCompany));
-const selfEmployedEntityValidationSchema = Yup.object().shape(itinValidation);
+const selfEmployedEntityValidationSchema = Yup.object().shape({
+  ...itinValidation(),
+});
 const individualEntityValidationSchema = Yup.object().shape({
-  ...itinValidation,
+  ...itinValidation(),
   ...entityNameValidation,
 });
 const companyEntityValidationSchema = Yup.object().shape({
-  ...itinValidation,
+  ...itinValidation(true),
   ...entityNameValidation,
   ...rrcValidation,
 });

@@ -107,7 +107,7 @@ const DataEditingStep = ({
     control,
     setFocus,
     handleSubmit,
-    formState: { errors, isDirty, isValid },
+    formState: { errors, isDirty },
   } = methods;
   const RRC = watch('RRC');
   const ITIN = watch('ITIN');
@@ -154,8 +154,7 @@ const DataEditingStep = ({
     await editEntityType({
       ID: typeValues.ID,
       ...(isApproved && { entityName }),
-      ...(!isApproved && { entityTypeId: ID }),
-      ...(!isApproved && { ...params[description] }),
+      ...(!isApproved && { entityTypeId: ID, ...params[description] }),
     });
   };
 
@@ -185,7 +184,7 @@ const DataEditingStep = ({
             name="ITIN"
             label="ИНН"
             variant="text"
-            maxLength={12}
+            maxLength={isCompany ? 10 : 12}
             isAnimatedLabel
             autoCapitalize="none"
             style={styles.input}
