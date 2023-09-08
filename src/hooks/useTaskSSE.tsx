@@ -8,7 +8,7 @@ import { tasksAPI } from '@/store/api/tasks';
 
 type CustomEvent = 'tasks';
 let sse: EventSource<CustomEvent>;
-export const useTaskSSE = (taskId: string) => {
+export const useTaskSSE = (taskId: number) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     (async () => {
@@ -28,7 +28,7 @@ export const useTaskSSE = (taskId: string) => {
             if (res) {
               dispatch(
                 tasksAPI.util.updateQueryData('getTask', taskId, resp => {
-                  resp.tasks = [res];
+                  resp.tasks = [{ ...resp.tasks[0], ...res }];
                 })
               );
             }

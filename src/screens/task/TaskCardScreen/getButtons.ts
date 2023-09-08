@@ -244,6 +244,8 @@ export const getButtons = ({
         case StatusType.SUMMARIZING:
         case StatusType.PAID:
         case StatusType.COMPLETED:
+        case StatusType.MATCHING:
+        case StatusType.RETURNED:
           switch (tab) {
             case TaskTab.COMMENTS:
               if (isCommentsAvailable) {
@@ -283,9 +285,6 @@ export const getButtons = ({
         case StatusType.CANCELLED_BY_CUSTOMER:
         case StatusType.CANCELLED_BY_EXECUTOR:
         case StatusType.CLOSED:
-        case StatusType.MATCHING:
-        case StatusType.RETURNED:
-        case StatusType.SIGNING:
           switch (tab) {
             case TaskTab.COMMENTS:
               if (isCommentsAvailable) {
@@ -454,6 +453,8 @@ export const getButtons = ({
         case StatusType.SUMMARIZING:
         case StatusType.PAID:
         case StatusType.COMPLETED:
+        case StatusType.MATCHING:
+        case StatusType.RETURNED:
           switch (tab) {
             case TaskTab.COMMENTS:
               if (isCommentsAvailable) {
@@ -494,9 +495,6 @@ export const getButtons = ({
         case StatusType.CANCELLED_BY_CUSTOMER:
         case StatusType.CANCELLED_BY_EXECUTOR:
         case StatusType.CLOSED:
-        case StatusType.MATCHING:
-        case StatusType.RETURNED:
-        case StatusType.SIGNING:
           switch (tab) {
             case TaskTab.COMMENTS:
               if (isCommentsAvailable) {
@@ -854,7 +852,6 @@ export const getButtons = ({
         case StatusType.PENDING:
         case StatusType.MATCHING:
         case StatusType.RETURNED:
-        case StatusType.SIGNING:
           switch (tab) {
             case TaskTab.COMMENTS:
               return [

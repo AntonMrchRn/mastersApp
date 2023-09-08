@@ -22,6 +22,7 @@ import {
   setOfferComment,
   setOfferID,
 } from '@/store/slices/tasks/actions';
+import { AxiosQueryErrorResponse } from '@/types/error';
 import { EstimateTab, RoleType, StatusType, TaskType } from '@/types/task';
 
 export const useTaskCardEstimate = ({
@@ -57,7 +58,7 @@ export const useTaskCardEstimate = ({
 
   const userID = user?.userID;
 
-  const getTask = useGetTaskQuery(taskId.toString());
+  const { data } = useGetTaskQuery(taskId);
   const getAnotherOffers = useGetAnotherOffersQuery({
     taskID: +taskId,
     userID: userID as number,
@@ -67,7 +68,7 @@ export const useTaskCardEstimate = ({
     userID: userID as number,
   });
   const userOffer = getUserOffersQuery.data?.offers?.[0];
-  const task = getTask.data?.tasks?.[0];
+  const task = data?.tasks?.[0];
   const setId = task?.setID;
   const isOffersPublic = task?.isOffersPublic;
   const offersDeadline = task?.offersDeadline;
@@ -77,7 +78,7 @@ export const useTaskCardEstimate = ({
   const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
 
   const userServices = userOffer?.services || [];
-  const isTaskEctimateTab = currentEstimateTab === EstimateTab.TASK_ESTIMATE;
+  const isTaskEstimateTab = currentEstimateTab === EstimateTab.TASK_ESTIMATE;
   const userComment = userOffer?.comment;
   const clientComment = userOffer?.clientComment || '';
 
@@ -86,8 +87,8 @@ export const useTaskCardEstimate = ({
       case TaskType.COMMON_FIRST_RESPONSE:
         return services;
       case TaskType.COMMON_AUCTION_SALE:
-        if (statusID === StatusType.WORK) {
-          return winnerOffer?.services || [];
+        if (statusID !== StatusType.ACTIVE) {
+          return userServices;
         }
         if (currentEstimateTab === EstimateTab.MY_SUGGESTION) {
           return userServices;
@@ -108,10 +109,18 @@ export const useTaskCardEstimate = ({
     statusID === StatusType.WORK &&
     subsetID !== TaskType.COMMON_AUCTION_SALE;
 
-  const [deleteTaskService, mutationDeleteTaskService] =
-    useDeleteTaskServiceMutation();
-  const [patchTaskService, mutationTaskService] = usePatchTaskServiceMutation();
-  const [deleteMaterial, mutationDeleteMateria] = useDeleteMaterialMutation();
+  const [
+    deleteTaskService,
+    { isError: isServiceDeletionError, error: serviceDeletionError },
+  ] = useDeleteTaskServiceMutation();
+  const [
+    patchTaskService,
+    { isError: isServicePatchingError, error: servicePatchingError },
+  ] = usePatchTaskServiceMutation();
+  const [
+    deleteMaterial,
+    { isError: isMaterialDeletionError, error: materialDeletionError },
+  ] = useDeleteMaterialMutation();
 
   const [estimateSheetVisible, setEstimateSheetVisible] = useState(false);
 
@@ -162,7 +171,6 @@ export const useTaskCardEstimate = ({
     await deleteTaskService({
       serviceId,
     });
-    getTask.refetch();
   };
   const onDeleteMaterial = async (service: Service, material: Material) => {
     if (material.ID) {
@@ -177,7 +185,6 @@ export const useTaskCardEstimate = ({
         ID: material.ID.toString(),
         taskID: taskId.toString(),
       });
-      getTask.refetch();
     }
   };
   const addService = (service: Service) => {
@@ -240,32 +247,29 @@ export const useTaskCardEstimate = ({
   };
 
   useEffect(() => {
-    if (
-      mutationDeleteTaskService.error &&
-      'data' in mutationDeleteTaskService.error
-    ) {
+    if (isServiceDeletionError) {
       toast.show({
         type: 'error',
-        title: mutationDeleteTaskService?.error?.data?.message,
+        title: (serviceDeletionError as AxiosQueryErrorResponse).data.message,
       });
     }
-  }, [mutationDeleteTaskService.error]);
+  }, [isServiceDeletionError]);
   useEffect(() => {
-    if (mutationTaskService.error && 'data' in mutationTaskService.error) {
+    if (isServicePatchingError) {
       toast.show({
         type: 'error',
-        title: mutationTaskService?.error?.data?.message,
+        title: (servicePatchingError as AxiosQueryErrorResponse).data.message,
       });
     }
-  }, [mutationTaskService.error]);
+  }, [isServicePatchingError]);
   useEffect(() => {
-    if (mutationDeleteMateria.error && 'data' in mutationDeleteMateria.error) {
+    if (isMaterialDeletionError) {
       toast.show({
         type: 'error',
-        title: mutationDeleteMateria?.error?.data?.message,
+        title: (materialDeletionError as AxiosQueryErrorResponse).data.message,
       });
     }
-  }, [mutationDeleteMateria.error]);
+  }, [isMaterialDeletionError]);
 
   return {
     estimateSheetVisible,
@@ -284,7 +288,7 @@ export const useTaskCardEstimate = ({
     userID,
     userComment,
     clientComment,
-    isTaskEctimateTab,
+    isTaskEstimateTab,
     isOffersPublic,
     isOffersDeadlineOver,
     canSwipe,

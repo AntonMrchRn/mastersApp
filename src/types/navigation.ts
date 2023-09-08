@@ -1,5 +1,6 @@
 import { NativeStackNavigationProp } from 'react-native-screens/native-stack';
 
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
@@ -105,6 +106,10 @@ type CompositeEditingNavigationProp = CompositeNavigationProp<
   StackNavigationProp<ProfileStackParamList, ProfileScreenName.EmailEditing>,
   StackNavigationProp<ProfileStackParamList, ProfileScreenName.PhoneEditing>
 >;
+type CompositeTaskCardNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<AppStackParamList, AppScreenName.TaskCard, undefined>,
+  BottomTabNavigationProp<BottomTabParamList, keyof BottomTabParamList>
+>;
 
 export type {
   EmailEditingScreenRoute,
@@ -129,5 +134,6 @@ export type {
   AccountDeletionScreenNavigationProp,
   ContractorsInvitationScreenNavigationProp,
   PhoneEditingConfirmationScreenNavigationProp,
+  CompositeTaskCardNavigationProp,
   CompositeRecoveryConfirmationAndEmailNavigationProp,
 };

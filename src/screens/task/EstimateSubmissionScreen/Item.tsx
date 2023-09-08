@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
+import plural from 'plural-ru';
 import { Input, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
@@ -39,6 +40,13 @@ export const Item: FC<ItemProps> = ({
   localCount,
 }) => {
   const theme = useTheme();
+
+  const measureName = measure.toLowerCase();
+  const currentMeasure = measureName === 'час' ? 'часах' : measureName;
+  const placeholderMeasure =
+    measureName === 'час'
+      ? plural(count, '%d час', '%d часa', '%d часов')
+      : `${count} ${measureName}`;
 
   const onClearPrice = () => {
     onChangePrice('');
@@ -95,7 +103,7 @@ export const Item: FC<ItemProps> = ({
       <View style={styles.char}>
         <CubeIcon />
         <Text variant="bodySRegular" color={theme.text.neutral}>
-          Измеряется в {measure.toLowerCase()}
+          Измеряется в {currentMeasure}
         </Text>
       </View>
       <Spacer size={16} />
@@ -104,9 +112,7 @@ export const Item: FC<ItemProps> = ({
         label={'Количество'}
         maxLength={5}
         placeholder={
-          !canDelete
-            ? `${count} ${measure.toLowerCase()} (изначальная)`
-            : undefined
+          !canDelete ? `${placeholderMeasure} (изначальная)` : undefined
         }
         hint={
           error?.localCount

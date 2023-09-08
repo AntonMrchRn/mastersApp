@@ -76,7 +76,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     bsRef,
     isAnotherOffers,
     addServiceBottomSheetClose,
-    isTaskEctimateTab,
+    isTaskEstimateTab,
     currentServices,
     isOffersPublic,
     userComment,
@@ -178,6 +178,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           return (
             <View key={service.ID}>
               <TaskEstimateItem
+                subsetID={subsetID}
                 firstAction={firstActionService}
                 secondAction={secondActionService}
                 title={service?.name}
@@ -201,6 +202,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                 return (
                   <View key={material.ID}>
                     <TaskEstimateItem
+                      subsetID={subsetID}
                       measure={material?.measure.toLowerCase()}
                       firstAction={firstActionMaterial}
                       secondAction={secondActionMaterial}
@@ -242,7 +244,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           ) &&
           statusID === StatusType.ACTIVE && (
             <View style={styles.mt16}>
-              {isTaskEctimateTab ? (
+              {isTaskEstimateTab ? (
                 <>
                   {isOffersPublic && (
                     <>

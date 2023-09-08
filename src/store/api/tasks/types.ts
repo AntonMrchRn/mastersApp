@@ -215,7 +215,7 @@ type GetTaskResponse = {
     work: number;
   } | null;
   mobileCounts?: CountMobile[];
-  tasks?: Task[];
+  tasks: Task[];
 };
 type GetOffersResponse = {
   count: number;

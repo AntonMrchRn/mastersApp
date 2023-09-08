@@ -62,4 +62,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginTop: 24,
   },
+  loader: {
+    flex: 1,
+  },
 });
