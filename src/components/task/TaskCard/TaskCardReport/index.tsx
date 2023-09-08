@@ -61,8 +61,12 @@ export const TaskCardReport = ({
 
   const progressesSelector = useAppSelector(selectTasks).progresses;
   const canDelete =
-    statusID &&
-    ([StatusType.SUMMARIZING, StatusType.WORK].includes(statusID) || toClose);
+    !statusID ||
+    ![
+      StatusType.CANCELLED_BY_CUSTOMER,
+      StatusType.CANCELLED_BY_EXECUTOR,
+      StatusType.CLOSED,
+    ].includes(statusID);
 
   const handleUpload = async ({
     formData,
@@ -194,16 +198,26 @@ export const TaskCardReport = ({
             style={styles.mt8}
             color={theme.text.neutral}
           >
-            {statusID === StatusType.WORK
+            {statusID &&
+            [
+              StatusType.WORK,
+              StatusType.MATCHING,
+              StatusType.RETURNED,
+            ].includes(statusID)
               ? 'Загрузите чеки или иные финансовые документы общим размером не более 250 МВ'
               : 'Файлов нет'}
           </Text>
-          {statusID === StatusType.WORK && (
-            <UploadProgress
-              controllers={controllers}
-              progressesSelector={progressesSelector}
-            />
-          )}
+          {!!statusID &&
+            !![
+              StatusType.WORK,
+              StatusType.MATCHING,
+              StatusType.RETURNED,
+            ].includes(statusID) && (
+              <UploadProgress
+                controllers={controllers}
+                progressesSelector={progressesSelector}
+              />
+            )}
         </>
       )}
       <View style={styles.mt36}>
@@ -214,16 +228,21 @@ export const TaskCardReport = ({
           {closureFiles.length ? (
             <>
               <DownloadManager
-                canDelete={false}
+                canDelete={canDelete}
                 files={closureFiles}
                 onDelete={onDelete}
               />
-              {statusID !== StatusType.WORK && (
-                <UploadProgress
-                  controllers={controllers}
-                  progressesSelector={progressesSelector}
-                />
-              )}
+              {!!statusID &&
+                ![
+                  StatusType.WORK,
+                  StatusType.MATCHING,
+                  StatusType.RETURNED,
+                ].includes(statusID) && (
+                  <UploadProgress
+                    controllers={controllers}
+                    progressesSelector={progressesSelector}
+                  />
+                )}
             </>
           ) : (
             <>
@@ -234,17 +253,27 @@ export const TaskCardReport = ({
                   style={styles.desc}
                   color={theme.text.neutral}
                 >
-                  {statusID !== StatusType.WORK
+                  {!!statusID &&
+                  ![
+                    StatusType.WORK,
+                    StatusType.MATCHING,
+                    StatusType.RETURNED,
+                  ].includes(statusID)
                     ? 'Загрузите чеки или иные финансовые документы общим размером не более 250 МВ'
                     : 'Файлов нет'}
                 </Text>
               </View>
-              {statusID !== StatusType.WORK && (
-                <UploadProgress
-                  controllers={controllers}
-                  progressesSelector={progressesSelector}
-                />
-              )}
+              {!!statusID &&
+                ![
+                  StatusType.WORK,
+                  StatusType.MATCHING,
+                  StatusType.RETURNED,
+                ].includes(statusID) && (
+                  <UploadProgress
+                    controllers={controllers}
+                    progressesSelector={progressesSelector}
+                  />
+                )}
             </>
           )}
         </View>
@@ -278,6 +307,8 @@ export const TaskCardReport = ({
       case StatusType.COMPLETED:
       case StatusType.PAID:
       case StatusType.CLOSED:
+      case StatusType.MATCHING:
+      case StatusType.RETURNED:
         return AllUploadFiles;
       default:
         return DefaultUploadFiles;
@@ -292,8 +323,8 @@ export const TaskCardReport = ({
         formData={getFormData({ taskId, toClose, statusID })}
         onClose={onUploadModalVisible}
         deleteProgress={deleteProgress}
+        //в загруженные документы нельзя кидать видео
         toClose={
-          //в загруженные документы нельзя кидать видео
           toClose ||
           (statusID &&
             [StatusType.PAID, StatusType.COMPLETED].includes(statusID))
