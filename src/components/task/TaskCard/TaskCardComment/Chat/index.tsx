@@ -16,12 +16,10 @@ type ChatItemProps = {
     fullname: string;
     ID: number;
   };
-  isITServices: boolean;
 };
 
 const ChatMessage = ({
   message: { isMine, comment, creationTime, fullname },
-  isITServices,
 }: ChatItemProps) => {
   const theme = useTheme();
   const time = dayjs(creationTime).locale('ru').format('D MMMM, HH:mm');
@@ -29,8 +27,7 @@ const ChatMessage = ({
   return (
     <>
       <View style={[isMine ? styles.container : styles.containerHuman]}>
-        {/*// TODO add author type when the BE is ready */}
-        {isITServices && !isMine && (
+        {!isMine && (
           <Text
             numberOfLines={1}
             style={[styles.humanInfo, { color: theme.text.neutral }]}
