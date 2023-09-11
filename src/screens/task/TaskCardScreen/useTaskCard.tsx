@@ -31,7 +31,7 @@ import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { getCommentsPreview } from '@/store/slices/myTasks/asyncActions';
 import { setNewOfferServices } from '@/store/slices/tasks/actions';
-import { AxiosQueryErrorResponse } from '@/types/error';
+import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
 import { CompositeTaskCardNavigationProp } from '@/types/navigation';
 import {
   EstimateTab,
@@ -158,10 +158,24 @@ export const useTaskCard = ({
   }, [isFocused]);
   useEffect(() => {
     if (isError) {
-      toast.show({
-        type: 'error',
-        title: (error as AxiosQueryErrorResponse).data.message,
-      });
+      if (
+        (error as AxiosQueryErrorResponse).data.code ===
+        ErrorCode.TaskIsAlreadyTaken
+      ) {
+        navigation.goBack();
+        return toast.show({
+          type: 'info',
+          duration: 6000,
+          title: (error as AxiosQueryErrorResponse).data.message,
+        });
+      }
+
+      if (isError) {
+        toast.show({
+          type: 'error',
+          title: (error as AxiosQueryErrorResponse).data.message,
+        });
+      }
     }
   }, [isError]);
   useEffect(() => {
