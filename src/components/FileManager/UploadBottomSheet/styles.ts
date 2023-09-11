@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   container: {
-    marginTop: 24,
+    marginTop: 8,
     paddingBottom: configApp.android ? 20 : 0,
   },
   action: {
@@ -24,6 +24,9 @@ const styles = StyleSheet.create({
   line: {
     width: '100%',
     height: 1,
+  },
+  mt12: {
+    marginTop: 12,
   },
 });
 

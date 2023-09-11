@@ -244,13 +244,14 @@ export const UploadBottomSheet = ({
 
   return (
     <BottomSheet
-      closeIcon
       isVisible={isVisible}
       title="Загрузка файлов"
       closeIconPress={onClose}
+      titleStyle={styles.mt12}
       onSwipeComplete={onClose}
       onBackdropPress={onClose}
       backdropTransitionOutTiming={0}
+      subtitle="Не более 10 вложений одновременно"
     >
       <View style={styles.container}>
         {actions.map(action => (
