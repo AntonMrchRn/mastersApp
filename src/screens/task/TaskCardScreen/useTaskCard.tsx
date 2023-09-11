@@ -722,6 +722,7 @@ export const useTaskCard = ({
             subsetID={subsetID}
             isCurator={isCurator}
             description={description}
+            coordinator={coordinator}
             applicationFiles={applicationFiles}
             navigateToContractors={navigateToContractors}
           />

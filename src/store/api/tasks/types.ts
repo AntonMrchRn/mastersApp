@@ -102,7 +102,13 @@ type WebData = {
   password?: string;
   objectID?: number;
 };
-
+type Coordinator = {
+  ID?: number;
+  name?: string;
+  phone?: number;
+  pname?: string;
+  sname?: string;
+};
 type Task = {
   ID?: number;
   refuseReason?: string;
@@ -113,13 +119,7 @@ type Task = {
    * Причина отмены задачи координатором
    */
   cancelReason?: string;
-  coordinator?: {
-    ID?: number;
-    name?: string;
-    phone?: number;
-    pname?: string;
-    sname?: string;
-  };
+  coordinator?: Coordinator;
   /**
    * Оффер выбранный заказчиком
    */
@@ -403,4 +403,5 @@ export type {
   PatchOffersRequest,
   Measure,
   GetMeasuresResponse,
+  Coordinator,
 };
