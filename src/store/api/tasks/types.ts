@@ -332,6 +332,7 @@ type PostOffersRequest = {
   taskID: number;
   comment?: string;
   services: Service[];
+  sum: number;
 };
 type PatchOffersRequest = {
   taskID: number;
@@ -339,6 +340,7 @@ type PatchOffersRequest = {
   comment?: string;
   services?: Service[];
   refuseReason?: string;
+  sum?: number;
 };
 type PostITTaskMemberParams = {
   taskID: number;
