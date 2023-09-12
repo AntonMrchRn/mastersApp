@@ -45,7 +45,7 @@ export const useCommentsSSE = (taskId: string) => {
         } else if (event.type === 'comments') {
           try {
             const res = JSON.parse(event.data || '');
-            if (res) {
+            if (res && res?.authorTypeID !== 3) {
               dispatch(setComment({ ...res, isMine: res.userID === userID }));
             }
           } catch (err) {

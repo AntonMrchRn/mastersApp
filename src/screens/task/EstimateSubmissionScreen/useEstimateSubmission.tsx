@@ -311,6 +311,7 @@ export const useEstimateSubmission = ({
             ID: offerID,
             comment: offerComment,
             services: postServices,
+            sum: allSum,
           }).unwrap();
           toast.show({
             type: 'success',
@@ -329,6 +330,7 @@ export const useEstimateSubmission = ({
           taskID: taskId,
           comment: offerComment,
           services: postServices,
+          sum: allSum,
         }).unwrap();
         dispatch(setNewOfferServices([]));
         dispatch(setOfferComment(''));

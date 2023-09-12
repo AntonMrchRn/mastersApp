@@ -60,7 +60,7 @@ export const CommentsChatScreen = ({
   }, [isActive]);
 
   const renderItem = ({ item: message }: ListRenderItemInfo<Comment>) => (
-    <ChatMessage message={message} isITServices={isITServices} />
+    <ChatMessage message={message} />
   );
 
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
