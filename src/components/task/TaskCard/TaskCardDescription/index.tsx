@@ -83,7 +83,7 @@ export const TaskCardDescription = ({
   };
 
   const handlePhone = async (phone: number) => {
-    const url = `tel:${phone}`;
+    const url = `tel:+${phone}`;
     const canOpen = await Linking.canOpenURL(url);
     if (canOpen) {
       Linking.openURL(url);
