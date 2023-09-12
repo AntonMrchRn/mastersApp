@@ -27,6 +27,7 @@ const Preview = ({ text, icon, title, button, type }: PreviewProps) => {
             backgroundColor: [
               PreviewNotFoundType.TasksNotAvailable,
               PreviewNotFoundType.ServiceNotFound,
+              PreviewNotFoundType.AccessRestricted,
             ].includes(type)
               ? theme.background.fieldDanger
               : theme.background.fieldMain,

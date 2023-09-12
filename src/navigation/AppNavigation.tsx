@@ -7,6 +7,7 @@ import Header from '@/components/Header';
 import { useCheckLogin } from '@/hooks/useCheckLogin';
 import useConnectionToast from '@/hooks/useConnectionToast';
 import { TabNavigation } from '@/navigation/TabNavigation';
+import { AccessRestrictedScreen } from '@/screens/auth/AccessRestrictedScreen';
 import EmailScreen from '@/screens/auth/EmailScreen';
 import ErrorScreen from '@/screens/auth/ErrorScreen';
 import PasswordScreen from '@/screens/auth/PasswordScreen';
@@ -48,8 +49,10 @@ export enum AppScreenName {
   NewMaterial = 'NewMaterial',
   EstimateSubmissionSuccess = 'EstimateSubmissionSuccess',
   Contractors = 'Contractors',
+  AccessRestricted = 'AccessRestricted',
 }
 export type AppStackParamList = {
+  [AppScreenName.AccessRestricted]: undefined;
   [AppScreenName.SignIn]: undefined;
   [AppScreenName.AppNavigator]: undefined;
   [AppScreenName.Email]: undefined;
@@ -113,7 +116,7 @@ const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<AppStackParamList>();
 export const AppNavigation = () => {
   useConnectionToast();
-  const { checkLogin, isAuth } = useCheckLogin();
+  const { checkLogin, isAuth, isExecutor } = useCheckLogin();
   const [isLoad, setIsLoad] = useState<boolean>(false);
 
   useEffect(() => {
@@ -131,108 +134,121 @@ export const AppNavigation = () => {
     <Stack.Navigator screenOptions={screenOptions}>
       {isAuth ? (
         <>
-          <Stack.Screen
-            name={AppScreenName.AppNavigator}
-            component={TabNavigation}
-          />
-          <Stack.Screen
-            name={AppScreenName.TaskCard}
-            component={TaskCardScreen}
-          />
-          <Stack.Screen
-            name={AppScreenName.Contractors}
-            component={ContractorsScreen}
-            options={{
-              headerShown: true,
-              header: props => <Header {...props} title="Подрядчики" />,
-            }}
-          />
-          <Stack.Screen
-            name={AppScreenName.CommentsChat}
-            component={CommentsChatScreen}
-            options={{
-              headerShown: true,
-              header: props => <Header {...props} title={'Чат'} />,
-            }}
-          />
-          <Stack.Screen
-            name={AppScreenName.EstimateEdit}
-            component={EstimateEditScreen}
-            options={{
-              headerShown: true,
-              header: props => (
-                <Header {...props} title={'Редактирование сметы'} />
-              ),
-            }}
-          />
-          <Stack.Screen
-            name={AppScreenName.EstimateAddMaterial}
-            component={EstimateAddMaterialScreen}
-            options={{
-              headerShown: true,
-              header: props => <Header {...props} title={'Новый материал'} />,
-            }}
-          />
-          <Stack.Screen
-            name={AppScreenName.EstimateAddService}
-            component={EstimateAddServiceScreen}
-            options={{
-              headerShown: true,
-              header: props => <Header {...props} title={'Новая услуга'} />,
-            }}
-          />
-          <Stack.Screen
-            name={AppScreenName.CompetitorEstimates}
-            component={CompetitorEstimatesScreen}
-            options={{
-              headerShown: true,
-              header: props => (
-                <Header {...props} title={'Сметы других кандидатов'} />
-              ),
-            }}
-          />
-          <Stack.Screen
-            name={AppScreenName.TradingResults}
-            component={TradingResultsScreen}
-            options={{
-              headerShown: true,
-              header: props => (
-                <Header {...props} title={'Сметы других кандидатов'} />
-              ),
-            }}
-          />
-          <Stack.Screen
-            name={AppScreenName.EstimateSubmission}
-            component={EstimateSubmissionScreen}
-            options={{
-              headerShown: true,
-              header: props => (
-                <Header
-                  {...props}
-                  title={
-                    (
-                      props.route
-                        .params as AppStackParamList[AppScreenName.EstimateSubmission]
-                    )?.isEdit
-                      ? 'Редактирование сметы'
-                      : 'Подача сметы'
-                  }
-                />
-              ),
-            }}
-          />
-          <Stack.Screen
-            name={AppScreenName.NewMaterial}
-            component={NewMaterialScreen}
-            options={{
-              headerShown: true,
-              header: props => <Header {...props} title={'Новый материал'} />,
-            }}
-          />
-          <Stack.Screen
-            name={AppScreenName.EstimateSubmissionSuccess}
-            component={EstimateSubmissionSuccessScreen}
-          />
+          {isExecutor ? (
+            <>
+              <Stack.Screen
+                name={AppScreenName.AppNavigator}
+                component={TabNavigation}
+              />
+              <Stack.Screen
+                name={AppScreenName.TaskCard}
+                component={TaskCardScreen}
+              />
+              <Stack.Screen
+                name={AppScreenName.Contractors}
+                component={ContractorsScreen}
+                options={{
+                  headerShown: true,
+                  header: props => <Header {...props} title="Подрядчики" />,
+                }}
+              />
+              <Stack.Screen
+                name={AppScreenName.CommentsChat}
+                component={CommentsChatScreen}
+                options={{
+                  headerShown: true,
+                  header: props => <Header {...props} title={'Чат'} />,
+                }}
+              />
+              <Stack.Screen
+                name={AppScreenName.EstimateEdit}
+                component={EstimateEditScreen}
+                options={{
+                  headerShown: true,
+                  header: props => (
+                    <Header {...props} title={'Редактирование сметы'} />
+                  ),
+                }}
+              />
+              <Stack.Screen
+                name={AppScreenName.EstimateAddMaterial}
+                component={EstimateAddMaterialScreen}
+                options={{
+                  headerShown: true,
+                  header: props => (
+                    <Header {...props} title={'Новый материал'} />
+                  ),
+                }}
+              />
+              <Stack.Screen
+                name={AppScreenName.EstimateAddService}
+                component={EstimateAddServiceScreen}
+                options={{
+                  headerShown: true,
+                  header: props => <Header {...props} title={'Новая услуга'} />,
+                }}
+              />
+              <Stack.Screen
+                name={AppScreenName.CompetitorEstimates}
+                component={CompetitorEstimatesScreen}
+                options={{
+                  headerShown: true,
+                  header: props => (
+                    <Header {...props} title={'Сметы других кандидатов'} />
+                  ),
+                }}
+              />
+              <Stack.Screen
+                name={AppScreenName.TradingResults}
+                component={TradingResultsScreen}
+                options={{
+                  headerShown: true,
+                  header: props => (
+                    <Header {...props} title={'Сметы других кандидатов'} />
+                  ),
+                }}
+              />
+              <Stack.Screen
+                name={AppScreenName.EstimateSubmission}
+                component={EstimateSubmissionScreen}
+                options={{
+                  headerShown: true,
+                  header: props => (
+                    <Header
+                      {...props}
+                      title={
+                        (
+                          props.route
+                            .params as AppStackParamList[AppScreenName.EstimateSubmission]
+                        )?.isEdit
+                          ? 'Редактирование сметы'
+                          : 'Подача сметы'
+                      }
+                    />
+                  ),
+                }}
+              />
+              <Stack.Screen
+                name={AppScreenName.NewMaterial}
+                component={NewMaterialScreen}
+                options={{
+                  headerShown: true,
+                  header: props => (
+                    <Header {...props} title={'Новый материал'} />
+                  ),
+                }}
+              />
+              <Stack.Screen
+                name={AppScreenName.EstimateSubmissionSuccess}
+                component={EstimateSubmissionSuccessScreen}
+              />
+            </>
+          ) : (
+            <Stack.Screen
+              name={AppScreenName.AccessRestricted}
+              component={AccessRestrictedScreen}
+            />
+          )}
         </>
       ) : (
         <>
