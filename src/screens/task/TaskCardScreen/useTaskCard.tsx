@@ -432,7 +432,6 @@ export const useTaskCard = ({
     navigation.navigate(AppScreenName.CommentsChat, {
       taskId,
       recipientIDs,
-      isITServices,
       isMessageInputAvailable: !isTaskClosed && !isTaskCanceled,
     });
   };

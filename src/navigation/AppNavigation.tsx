@@ -60,7 +60,6 @@ export type AppStackParamList = {
   [AppScreenName.Password]: undefined;
   [AppScreenName.CommentsChat]: {
     taskId: number;
-    isITServices: boolean;
     recipientIDs: number[];
     isMessageInputAvailable: boolean;
   };
