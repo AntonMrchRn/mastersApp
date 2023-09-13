@@ -37,8 +37,7 @@ const DocumentsBlock = ({
   const theme = useTheme();
   const isFocused = useIsFocused();
 
-  const [addFiles, { isLoading, isSuccess, data: newFiles }] =
-    useAddFilesMutation();
+  const [addFiles, { isLoading, isSuccess }] = useAddFilesMutation();
   const [deleteFile] = useDeleteFileMutation();
 
   const progressesSelector = useAppSelector(selectUser).progresses;
@@ -58,12 +57,6 @@ const DocumentsBlock = ({
     await saveOnDevice(files);
     setUploadedFileIDs([]);
   };
-
-  useEffect(() => {
-    if (isSuccess && newFiles) {
-      saveFiles(newFiles);
-    }
-  }, [isSuccess]);
 
   useEffect(() => {
     if (isBannerVisible) {
@@ -93,12 +86,14 @@ const DocumentsBlock = ({
       const controller = new AbortController();
       controllers = { ...controllers, [date]: controller };
 
-      await addFiles({
+      const addedFiles = await addFiles({
         formData,
         files,
         date,
         signal: controller.signal,
       }).unwrap();
+
+      saveFiles(addedFiles);
     } catch (err) {
       console.log('handleUpload error', err);
     }
