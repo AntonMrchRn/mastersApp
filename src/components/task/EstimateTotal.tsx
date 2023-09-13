@@ -65,6 +65,9 @@ export const EstimateTotal: FC<EstimateTotalProps> = ({
     .includes('.')
     ? allServiceSumMultiplierPure.toFixed(2)
     : allServiceSumMultiplierPure;
+  const allCurrentSum = allSum.toString().includes('.')
+    ? allSum.toFixed(2)
+    : allSum;
   return (
     <View style={styles.bottom}>
       <View style={styles.rowStart}>
@@ -114,7 +117,7 @@ export const EstimateTotal: FC<EstimateTotalProps> = ({
           ИТОГО
         </Text>
         <Text variant="bodySBold" color={theme.text.accent}>
-          {allSum} ₽
+          {allCurrentSum} ₽
         </Text>
       </View>
     </View>
