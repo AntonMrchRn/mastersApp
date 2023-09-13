@@ -46,6 +46,7 @@ type TaskCardEstimateProps = {
   winnerOffer: Offer | undefined;
   isContractor: boolean;
   serviceMultiplier: number;
+  cantDeleteBannerVisible: boolean;
 };
 
 export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
@@ -60,13 +61,13 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   winnerOffer,
   isContractor,
   serviceMultiplier,
+  cantDeleteBannerVisible,
 }) => {
   const theme = useTheme();
   const isFocused = useIsFocused();
   const {
     estimateSheetVisible,
     onEstimateSheetVisible,
-    allSum,
     materialsSum,
     onEdit,
     onDeleteService,
@@ -90,6 +91,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     setId,
     isInternalExecutor,
     clientComment,
+    servicesSum,
   } = useTaskCardEstimate({
     services,
     taskId,
@@ -172,7 +174,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             if (services.length > 1) {
               onDeleteService(service.ID as number);
             } else {
-              onCantDeleteBannerVisible();
+              !cantDeleteBannerVisible && onCantDeleteBannerVisible();
             }
           };
           return (
@@ -229,7 +231,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           )) ||
         (setId === TaskSetType.IT_SERVICES && isInternalExecutor) ? null : (
           <EstimateTotal
-            allSum={allSum}
+            servicesSum={servicesSum}
             materialsSum={materialsSum}
             serviceMultiplier={
               subsetID === TaskType.COMMON_FIRST_RESPONSE

@@ -124,7 +124,10 @@ export const TradingResultsScreen: FC<TradingResultsScreenProps> = ({
                     </View>
                   );
                 })}
-                <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
+                <EstimateTotal
+                  servicesSum={allSum - materialsSum}
+                  materialsSum={materialsSum}
+                />
               </View>
             );
           })}

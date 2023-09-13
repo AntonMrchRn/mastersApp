@@ -232,7 +232,10 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
               </View>
             );
           })}
-          <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
+          <EstimateTotal
+            servicesSum={allSum - materialsSum}
+            materialsSum={materialsSum}
+          />
           <Spacer size={20} />
           <TouchableOpacity style={styles.add} onPress={onEstimateModalVisible}>
             <PlusIcon fill={theme.icons.basic} />
