@@ -100,10 +100,6 @@ export const useTaskCardEstimate = ({
   };
 
   const currentServices = getCurrentServices();
-  console.log(
-    '🚀 ~ file: useTaskCardEstimate.tsx:103 ~ currentServices:',
-    currentServices
-  );
   const canSwipe =
     subsetID &&
     !(
