@@ -15,10 +15,17 @@ import { DownloadManager } from '@/components/FileManager/DownloadManager';
 import { TaskAddress } from '@/components/task/TaskAddress';
 import { TaskDate } from '@/components/task/TaskDate';
 import { useDeleteInvitationMutation } from '@/store/api/tasks';
-import { Contact, Executor, WebData } from '@/store/api/tasks/types';
+import {
+  Contact,
+  Coordinator,
+  Executor,
+  WebData,
+} from '@/store/api/tasks/types';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import { File } from '@/types/fileManager';
 import { StatusType, TaskType } from '@/types/task';
+
+import { ContactItem } from './ContactItem';
 
 import { styles } from './styles';
 
@@ -35,6 +42,7 @@ type TaskCardDescriptionProps = {
   subsetID: TaskType | undefined;
   isCurator: boolean;
   navigateToContractors: () => void;
+  coordinator: Coordinator | undefined;
 };
 
 export const TaskCardDescription = ({
@@ -50,6 +58,7 @@ export const TaskCardDescription = ({
   executors,
   subsetID,
   isCurator,
+  coordinator,
 }: TaskCardDescriptionProps) => {
   const theme = useTheme();
   const toast = useToast();
@@ -74,7 +83,7 @@ export const TaskCardDescription = ({
   };
 
   const handlePhone = async (phone: number) => {
-    const url = `tel:${phone}`;
+    const url = `tel:+${phone}`;
     const canOpen = await Linking.canOpenURL(url);
     if (canOpen) {
       Linking.openURL(url);
@@ -223,7 +232,7 @@ export const TaskCardDescription = ({
       )}
 
       {/* Контакты в задаче */}
-      {contacts.length &&
+      {(contacts.length || coordinator) &&
       statusID &&
       ![
         StatusType.ACTIVE,
@@ -236,36 +245,28 @@ export const TaskCardDescription = ({
               Контакты
             </Text>
           </View>
-          {contacts.map((contact, index) => {
+          {/* координатор */}
+          {!!coordinator && (
+            <ContactItem
+              handlePhone={handlePhone}
+              sname={coordinator.sname}
+              name={coordinator.name}
+              pname={coordinator.pname}
+              note={''}
+              phone={coordinator.phone}
+            />
+          )}
+          {contacts?.map((contact, index) => {
             return (
-              <View key={index} style={styles.wrapperGrid}>
-                <View>
-                  <Text variant="bodyMRegular" color={theme.text.basic}>
-                    {contact?.sname} {contact?.name} {contact?.pname}
-                  </Text>
-                  {contact?.phone && (
-                    <TouchableOpacity
-                      style={styles.phone}
-                      onPress={() => handlePhone(contact?.phone)}
-                    >
-                      <MaskedText
-                        mask="+ 9 (999) 999-99-99"
-                        style={[styles.phoneText, { color: theme.text.basic }]}
-                      >
-                        {contact?.phone?.toString()}
-                      </MaskedText>
-                    </TouchableOpacity>
-                  )}
-                  <Text
-                    variant="captionRegular"
-                    color={theme.text.neutral}
-                    style={styles.name}
-                  >
-                    {contact?.note}
-                  </Text>
-                </View>
-                <Spacer size={'m'} separator="top" />
-              </View>
+              <ContactItem
+                key={index}
+                handlePhone={handlePhone}
+                sname={contact.sname}
+                name={contact.name}
+                pname={contact.pname}
+                note={contact.note}
+                phone={contact.phone}
+              />
             );
           })}
         </>

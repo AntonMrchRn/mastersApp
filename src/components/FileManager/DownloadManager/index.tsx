@@ -33,7 +33,8 @@ export const DownloadManager: FC<DownloadManagerProps> = ({
           file={file}
           key={file.url}
           onDelete={onDelete}
-          canDelete={canDelete}
+          //акты удалять нельзя
+          canDelete={canDelete && !file?.isAct}
           isUploading={uploadedFileIDs.includes(file.fileID)}
         />
       </View>

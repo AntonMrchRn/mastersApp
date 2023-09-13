@@ -1,4 +1,5 @@
 import React, { JSX } from 'react';
+import { Linking, View } from 'react-native';
 
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import {
@@ -18,11 +19,14 @@ import { OtesIcon } from '@/assets/icons/svg/screens/OtesIcon';
 import SearchIcon from '@/assets/icons/svg/screens/SearchIcon';
 import UserIcon from '@/assets/icons/svg/screens/UserIcon';
 import Preview from '@/components/tabs/TaskSearch/PreviewNotFound/Preview';
+import { storageMMKV } from '@/mmkv/storage';
 import {
   ProfileScreenName,
   ProfileStackParamList,
 } from '@/navigation/ProfileNavigation';
 import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
+import { useAppDispatch } from '@/store';
+import { logOut } from '@/store/slices/auth/actions';
 import { ProfileTab } from '@/types/tab';
 
 export enum PreviewNotFoundType {
@@ -41,6 +45,7 @@ export enum PreviewNotFoundType {
   NoFiles = 'NoFiles',
   CommentsClosedNow = 'CommentsClosedNow',
   ServiceNotFound = 'ServiceNotFound',
+  AccessRestricted = 'AccessRestricted',
 }
 
 type PreviewContent = {
@@ -57,6 +62,7 @@ type PreviewNotFoundProps = {
 
 const PreviewNotFound = ({ type, closeModal }: PreviewNotFoundProps) => {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
   const { navigate } =
     useNavigation<
       CompositeNavigationProp<
@@ -77,7 +83,21 @@ const PreviewNotFound = ({ type, closeModal }: PreviewNotFoundProps) => {
       params: { tab: { id: 2, label: ProfileTab.Activity } },
     });
   };
+
   const navigateToTaskSearch = () => navigate(BottomTabName.TaskSearch);
+
+  const onExit = () => {
+    storageMMKV.clearAll();
+    dispatch(logOut());
+  };
+
+  const navigateToSite = async () => {
+    const url = 'https://mastera-service.ru/';
+    const canOpenURL = await Linking.canOpenURL(url);
+    if (canOpenURL) {
+      Linking.openURL(url);
+    }
+  };
 
   const previewContents: Record<PreviewNotFoundType, PreviewContent> = {
     [PreviewNotFoundType.TasksNotFound]: {
@@ -126,6 +146,22 @@ const PreviewNotFound = ({ type, closeModal }: PreviewNotFoundProps) => {
       icon: <ChatIcon />,
       title: 'Комментарии пока закрыты',
       text: 'Отправка сообщений будет доступна в случае назначения вас в качестве исполнителя',
+    },
+    [PreviewNotFoundType.AccessRestricted]: {
+      icon: <CloseIcon fill={theme.icons.danger} size={40} />,
+      title: 'Доступ ограничен',
+      text: 'Мобильное приложение работает только для исполнителей. Используйте веб-версию',
+      button: (
+        <View style={{ gap: 16, width: '100%' }}>
+          <Button label="Перейти на сайт" onPress={navigateToSite} />
+          <Button
+            label="Выйти"
+            onPress={onExit}
+            style={{ backgroundColor: 'transparent' }}
+            labelStyle={{ color: theme.text.basic }}
+          />
+        </View>
+      ),
     },
     [PreviewNotFoundType.RegionNotChanged]: {
       icon: <MapPinIcon />,

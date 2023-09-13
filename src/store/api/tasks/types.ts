@@ -102,7 +102,13 @@ type WebData = {
   password?: string;
   objectID?: number;
 };
-
+type Coordinator = {
+  ID?: number;
+  name?: string;
+  phone?: number;
+  pname?: string;
+  sname?: string;
+};
 type Task = {
   ID?: number;
   refuseReason?: string;
@@ -113,13 +119,7 @@ type Task = {
    * Причина отмены задачи координатором
    */
   cancelReason?: string;
-  coordinator?: {
-    ID?: number;
-    name?: string;
-    phone?: number;
-    pname?: string;
-    sname?: string;
-  };
+  coordinator?: Coordinator;
   /**
    * Оффер выбранный заказчиком
    */
@@ -332,6 +332,7 @@ type PostOffersRequest = {
   taskID: number;
   comment?: string;
   services: Service[];
+  sum: number;
 };
 type PatchOffersRequest = {
   taskID: number;
@@ -339,6 +340,7 @@ type PatchOffersRequest = {
   comment?: string;
   services?: Service[];
   refuseReason?: string;
+  sum?: number;
 };
 type PostITTaskMemberParams = {
   taskID: number;
@@ -403,4 +405,5 @@ export type {
   PatchOffersRequest,
   Measure,
   GetMeasuresResponse,
+  Coordinator,
 };
