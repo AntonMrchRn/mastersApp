@@ -17,7 +17,6 @@ import { selectUser } from '@/store/slices/user/selectors';
 import { Controllers, File, HandleUpload } from '@/types/fileManager';
 import { ProfileTab } from '@/types/tab';
 import { getFormData } from '@/utils/fileManager/getFormData';
-import { getUniqAddedFiles } from '@/utils/fileManager/getUniqAddedFiles';
 import { saveOnDevice } from '@/utils/fileManager/saveOnDevice';
 
 import styles from './style';
@@ -38,7 +37,8 @@ const DocumentsBlock = ({
   const theme = useTheme();
   const isFocused = useIsFocused();
 
-  const [addFiles, { isLoading, isSuccess }] = useAddFilesMutation();
+  const [addFiles, { isLoading, isSuccess, data: newFiles }] =
+    useAddFilesMutation();
   const [deleteFile] = useDeleteFileMutation();
 
   const progressesSelector = useAppSelector(selectUser).progresses;
@@ -52,6 +52,18 @@ const DocumentsBlock = ({
       scrollToEnd();
     }
   }, [Object.keys(controllers)]);
+
+  const saveFiles = async (files: File[]) => {
+    setUploadedFileIDs(files.map(file => file.fileID));
+    await saveOnDevice(files);
+    setUploadedFileIDs([]);
+  };
+
+  useEffect(() => {
+    if (isSuccess && newFiles) {
+      saveFiles(newFiles);
+    }
+  }, [isSuccess]);
 
   useEffect(() => {
     if (isBannerVisible) {
@@ -76,31 +88,17 @@ const DocumentsBlock = ({
   const onBanner = () => setIsBannerVisible(!isBannerVisible);
   const onModal = () => setIsModalVisible(!isModalVisible);
 
-  const handleUpload = async ({
-    formData,
-    files,
-    date,
-    names,
-  }: HandleUpload) => {
+  const handleUpload = async ({ formData, files, date }: HandleUpload) => {
     try {
       const controller = new AbortController();
       controllers = { ...controllers, [date]: controller };
 
-      const request = await addFiles({
+      await addFiles({
         formData,
         files,
         date,
         signal: controller.signal,
       }).unwrap();
-
-      const { uniqAddedFiles, uniqAddedFileIDs } = getUniqAddedFiles(
-        request,
-        names
-      );
-
-      setUploadedFileIDs(uniqAddedFileIDs);
-      await saveOnDevice(uniqAddedFiles);
-      setUploadedFileIDs([]);
     } catch (err) {
       console.log('handleUpload error', err);
     }

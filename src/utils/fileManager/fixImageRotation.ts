@@ -7,16 +7,17 @@ import ImageResizer, {
 import { configApp } from '@/constants/platform';
 
 export type Exif = {
-  Orientation: 1 | 6 | 3 | 8;
+  Orientation: 1 | 6 | 3 | 8 | 0;
   '{MakerApple}'?: object;
 };
 
 const COMPRESS_COEFFICIENT = 2;
 
 const rotationByOrientation = {
+  0: 0,
   1: 90,
-  6: 360,
   3: 270,
+  6: 360,
   8: 180,
 };
 

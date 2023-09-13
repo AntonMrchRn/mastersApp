@@ -412,6 +412,7 @@ export const useTaskCard = ({
   const onBudgetModalVisible = () => setBudgetModalVisible(!budgetModalVisible);
   const onUploadModalVisible = () => setUploadModalVisible(!uploadModalVisible);
   const onCancelModalVisible = () => setCancelModalVisible(!cancelModalVisible);
+  const onUploadModalClose = () => setUploadModalVisible(false);
 
   const onSubmissionModalVisible = () => {
     if (!hasAccessToTask) {
@@ -755,9 +756,9 @@ export const useTaskCard = ({
             isCurator={isCurator}
             reportFiles={reportFiles}
             closureFiles={closureFiles}
+            onClose={onUploadModalClose}
             activeBudgetCanceled={!!banner}
             uploadModalVisible={uploadModalVisible}
-            onUploadModalVisible={onUploadModalVisible}
             onUploadLimitBannerVisible={onUploadLimitBannerVisible}
             uploadLimitBannerVisible={uploadLimitBannerVisible}
           />
@@ -784,8 +785,8 @@ export const useTaskCard = ({
     }
   };
   const onTabChange = (item: TabItem) => {
-    setCurrentEstimateTab(EstimateTab.TASK_ESTIMATE);
     setTab({ id: item.id, label: item.label as TaskTab });
+    setCurrentEstimateTab(EstimateTab.TASK_ESTIMATE);
   };
 
   const buttons = getButtons({
