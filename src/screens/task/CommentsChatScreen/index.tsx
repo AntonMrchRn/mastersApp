@@ -20,6 +20,7 @@ import PreviewNotFound, {
 import ChatMessage from '@/components/task/TaskCard/TaskCardComment/Chat';
 import { configApp } from '@/constants/platform';
 import { useCommentsSSE } from '@/hooks/useCommentsSSE';
+import { useKeyboard } from '@/hooks/useKeyboard';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { sendMessage } from '@/store/slices/myTasks/asyncActions';
@@ -35,16 +36,16 @@ type CommentsChatScreenProps = StackScreenProps<
 
 export const CommentsChatScreen = ({
   route: {
-    params: { taskId, recipientIDs, isITServices, isMessageInputAvailable },
+    params: { taskId, recipientIDs, isMessageInputAvailable },
   },
 }: CommentsChatScreenProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const { height } = useKeyboardAnimation();
+  const isKeyboardVisible = useKeyboard();
 
   const flatList = useRef<FlatList>(null);
 
-  const [isActive, setIsActive] = useState(false);
   const [valueText, setValueText] = useState('');
 
   const { comments, loadingComments, loadingSend } = useAppSelector(
@@ -54,10 +55,10 @@ export const CommentsChatScreen = ({
   useCommentsSSE(taskId.toString());
 
   useEffect(() => {
-    if (isActive) {
+    if (isKeyboardVisible) {
       flatList?.current?.scrollToIndex({ index: 0 });
     }
-  }, [isActive]);
+  }, [isKeyboardVisible]);
 
   const renderItem = ({ item: message }: ListRenderItemInfo<Comment>) => (
     <ChatMessage message={message} />
@@ -123,7 +124,7 @@ export const CommentsChatScreen = ({
             styles.risingBlock,
             {
               transform: [{ translateY: height }],
-              bottom: configApp.ios && isActive ? -20 : 0,
+              bottom: configApp.ios && isKeyboardVisible ? -20 : 0,
             },
           ]}
         >
@@ -132,10 +133,9 @@ export const CommentsChatScreen = ({
             onChangeText={onChangeText}
             variant="message"
             placeholder="Сообщение..."
-            ref={ref => ref && setIsActive(ref?.isFocused())}
-            style={isActive ? styles.w80 : styles.w100}
+            style={isKeyboardVisible ? styles.w80 : styles.w100}
           />
-          {isActive && (
+          {isKeyboardVisible && (
             <TouchableOpacity
               style={[styles.btn, { backgroundColor: theme.background.accent }]}
               onPress={onPressSend}
