@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "211889860298",
+    "project_id": "mastera-41d04",
+    "storage_bucket": "mastera-41d04.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:211889860298:android:ff82394f3edb26537d8e33",
+        "android_client_info": {
+          "package_name": "com.vectora.mastera"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "211889860298-lq8dnucg7me2t6k6g1dhlk720sginbrs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBESPoj2XIUySK2Lqo8FiE_UDyjQ6bkiss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "211889860298-lq8dnucg7me2t6k6g1dhlk720sginbrs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

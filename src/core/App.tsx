@@ -13,11 +13,13 @@ import { ThemeProvider, ToastProvider } from 'rn-ui-kit';
 
 import { MyTheme } from '@/constants/platform';
 import { AppNavigation } from '@/navigation/AppNavigation';
+import { getPushToken } from '@/services/notifications/getPushToken';
 import { persistor, store } from '@/store';
 
 import 'dayjs/locale/ru';
 
 dayjs.locale('ru');
+getPushToken();
 const App = () => {
   return (
     <GestureHandlerRootView style={styles.container}>
