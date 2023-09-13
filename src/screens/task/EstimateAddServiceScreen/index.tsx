@@ -126,7 +126,7 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
         taskID: taskId,
         materials: [],
       });
-      refetch();
+      await refetch();
     }
     goBack();
   };

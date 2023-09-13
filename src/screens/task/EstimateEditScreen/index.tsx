@@ -134,7 +134,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
       }
     }
 
-    refetch();
+    await refetch();
     if (navigation.canGoBack()) {
       navigation.goBack();
     }
