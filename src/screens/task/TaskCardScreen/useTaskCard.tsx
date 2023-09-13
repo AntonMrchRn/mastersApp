@@ -738,6 +738,7 @@ export const useTaskCard = ({
             navigation={navigation}
             onEstimateBottomVisible={onEstimateBottomVisible}
             estimateBottomVisible={estimateBottomVisible}
+            cantDeleteBannerVisible={cantDeleteBannerVisible}
             onCantDeleteBannerVisible={onCantDeleteBannerVisible}
             subsetID={subsetID}
             currentEstimateTab={currentEstimateTab}

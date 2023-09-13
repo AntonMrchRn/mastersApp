@@ -58,7 +58,7 @@ export const useTaskCardEstimate = ({
 
   const userID = user?.userID;
 
-  const { data } = useGetTaskQuery(taskId);
+  const { data, refetch } = useGetTaskQuery(taskId);
   const getAnotherOffers = useGetAnotherOffersQuery({
     taskID: +taskId,
     userID: userID as number,
@@ -126,11 +126,14 @@ export const useTaskCardEstimate = ({
 
   const isAnotherOffers = !!getAnotherOffers?.data?.count;
 
-  const allSum = currentServices.reduce((acc, val) => acc + (val?.sum || 0), 0);
   const allMaterials = currentServices.reduce<Material[]>(
     (acc, val) =>
       acc.concat(typeof val.materials !== 'undefined' ? val.materials : []),
     []
+  );
+  const servicesSum = currentServices.reduce(
+    (acc, val) => acc + (val?.count || 0) * (val?.price || 0),
+    0
   );
   const materialsSum = allMaterials.reduce(
     (acc, val) => acc + (val?.count || 0) * (val?.price || 0),
@@ -171,6 +174,7 @@ export const useTaskCardEstimate = ({
     await deleteTaskService({
       serviceId,
     });
+    await refetch();
   };
   const onDeleteMaterial = async (service: Service, material: Material) => {
     if (material.ID) {
@@ -185,6 +189,7 @@ export const useTaskCardEstimate = ({
         ID: material.ID.toString(),
         taskID: taskId.toString(),
       });
+      await refetch();
     }
   };
   const addService = (service: Service) => {
@@ -274,7 +279,6 @@ export const useTaskCardEstimate = ({
   return {
     estimateSheetVisible,
     onEstimateSheetVisible,
-    allSum,
     materialsSum,
     onEdit,
     onDeleteService,
@@ -300,5 +304,6 @@ export const useTaskCardEstimate = ({
     userRoleID,
     setId,
     isInternalExecutor,
+    servicesSum,
   };
 };
