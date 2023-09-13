@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 
 import { Text, useTheme } from 'rn-ui-kit';
@@ -20,7 +20,6 @@ import { selectTasks } from '@/store/slices/tasks/selectors';
 import { Controllers, File, HandleUpload } from '@/types/fileManager';
 import { StatusType, TaskType } from '@/types/task';
 import { getFormData } from '@/utils/fileManager/getFormData';
-import { getUniqAddedFiles } from '@/utils/fileManager/getUniqAddedFiles';
 import { saveOnDevice } from '@/utils/fileManager/saveOnDevice';
 
 import { styles } from './styles';
@@ -34,7 +33,7 @@ type TaskCardReportProps = {
   subsetID: TaskType | undefined;
   isCurator: boolean;
   uploadModalVisible: boolean;
-  onUploadModalVisible: () => void;
+  onClose: () => void;
   toClose: boolean | undefined;
   uploadLimitBannerVisible: boolean;
   onUploadLimitBannerVisible: () => void;
@@ -50,13 +49,14 @@ export const TaskCardReport = ({
   subsetID,
   isCurator,
   uploadModalVisible,
-  onUploadModalVisible,
+  onClose,
   toClose,
   onUploadLimitBannerVisible,
   uploadLimitBannerVisible,
 }: TaskCardReportProps) => {
   const theme = useTheme();
-  const [postFiles] = usePostTasksFilesMutation();
+  const [postFiles, { data: newFiles, isSuccess }] =
+    usePostTasksFilesMutation();
   const [deleteFile] = useDeleteTaskFileMutation();
 
   const [uploadedFileIDs, setUploadedFileIDs] = useState<number[]>([]);
@@ -70,30 +70,28 @@ export const TaskCardReport = ({
       StatusType.CLOSED,
     ].includes(statusID);
 
-  const handleUpload = async ({
-    formData,
-    files,
-    date,
-    names,
-  }: HandleUpload) => {
+  const saveFiles = async (files: File[]) => {
+    setUploadedFileIDs(files.map(file => file.fileID));
+    await saveOnDevice(files);
+    setUploadedFileIDs([]);
+  };
+
+  useEffect(() => {
+    if (isSuccess && newFiles) {
+      saveFiles(newFiles);
+    }
+  }, [isSuccess]);
+
+  const handleUpload = async ({ formData, files, date }: HandleUpload) => {
     try {
       const controller = new AbortController();
       controllers = { ...controllers, [date]: controller };
-      const request = await postFiles({
+      await postFiles({
         formData,
         files,
         date,
         signal: controller.signal,
       }).unwrap();
-
-      const { uniqAddedFiles, uniqAddedFileIDs } = getUniqAddedFiles(
-        request,
-        names
-      );
-
-      setUploadedFileIDs(uniqAddedFileIDs);
-      await saveOnDevice(uniqAddedFiles);
-      setUploadedFileIDs([]);
     } catch (err) {
       console.log('handleUpload error: ', err);
     }
@@ -328,11 +326,11 @@ export const TaskCardReport = ({
   return (
     <>
       <UploadBottomSheet
+        onClose={onClose}
         onBanner={onBanner}
         handleUpload={handleUpload}
         isVisible={uploadModalVisible}
         formData={getFormData({ taskId, toClose, statusID })}
-        onClose={onUploadModalVisible}
         deleteProgress={deleteProgress}
         //в загруженные документы нельзя кидать видео
         toClose={

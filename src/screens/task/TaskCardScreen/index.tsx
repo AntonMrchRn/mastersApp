@@ -29,7 +29,7 @@ import { TaskCardBottom } from '@/components/task/TaskCard/TaskCardBottom';
 import { TaskCardBudgetModal } from '@/components/task/TaskCard/TaskCardBudgetModal';
 import { TaskCardCancelBottomSheet } from '@/components/task/TaskCard/TaskCardCancelBottomSheet';
 import { TaskCardSubmissionBottomSheet } from '@/components/task/TaskCard/TaskCardSubmissionBottomSheet';
-import { configApp, deviceWidth } from '@/constants/platform';
+import { configApp, deviceWidth, hitSlop } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { BottomTabParamList } from '@/navigation/TabNavigation';
 import { StatusType, TaskSetType, TaskType } from '@/types/task';
@@ -175,6 +175,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
                     )}
                 </View>
                 <TabControl
+                  hitSlop={hitSlop}
                   data={tabs}
                   currentTabId={tab.id}
                   onChange={onTabChange}
