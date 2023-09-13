@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 
 import { Text, useTheme } from 'rn-ui-kit';
@@ -55,8 +55,7 @@ export const TaskCardReport = ({
   uploadLimitBannerVisible,
 }: TaskCardReportProps) => {
   const theme = useTheme();
-  const [postFiles, { data: newFiles, isSuccess }] =
-    usePostTasksFilesMutation();
+  const [postFiles] = usePostTasksFilesMutation();
   const [deleteFile] = useDeleteTaskFileMutation();
 
   const [uploadedFileIDs, setUploadedFileIDs] = useState<number[]>([]);
@@ -76,22 +75,18 @@ export const TaskCardReport = ({
     setUploadedFileIDs([]);
   };
 
-  useEffect(() => {
-    if (isSuccess && newFiles) {
-      saveFiles(newFiles);
-    }
-  }, [isSuccess]);
-
   const handleUpload = async ({ formData, files, date }: HandleUpload) => {
     try {
       const controller = new AbortController();
       controllers = { ...controllers, [date]: controller };
-      await postFiles({
+      const addedFiles = await postFiles({
         formData,
         files,
         date,
         signal: controller.signal,
       }).unwrap();
+
+      saveFiles(addedFiles);
     } catch (err) {
       console.log('handleUpload error: ', err);
     }
