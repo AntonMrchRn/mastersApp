@@ -170,7 +170,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
           title: (error as AxiosQueryErrorResponse).data.message,
         });
       }
-      refetch();
+      await refetch();
       navigation.navigate(AppScreenName.TaskCard, { taskId });
     }
   };
