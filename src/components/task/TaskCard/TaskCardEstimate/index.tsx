@@ -10,7 +10,6 @@ import { CalculatorLargeIcon } from '@/assets/icons/svg/estimate/CalculatorLarge
 import { GavelIcon } from '@/assets/icons/svg/estimate/GavelIcon';
 import { EditIcon } from '@/assets/icons/svg/screens/EditIcon';
 import { EstimateTotal } from '@/components/task/EstimateTotal';
-import { TaskEstimateItem } from '@/components/task/TaskEstimateItem';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { Offer, Service } from '@/store/api/tasks/types';
@@ -24,6 +23,8 @@ import {
 
 import { AddServiceBottomSheet } from '../AddServiceBottomSheet';
 import { TaskCardAddEstimateBottomSheet } from '../TaskCardAddEstimateBottomSheet';
+import { MaterialItem } from './MaterialItem';
+import { ServiceItem } from './ServiceItem';
 import { useTaskCardEstimate } from './useTaskCardEstimate';
 
 import { styles } from './styles';
@@ -70,8 +71,6 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     onEstimateSheetVisible,
     materialsSum,
     onEdit,
-    onDeleteService,
-    onDeleteMaterial,
     onPressMaterial,
     onPressService,
     bsRef,
@@ -91,6 +90,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     setId,
     isInternalExecutor,
     clientComment,
+    refetch,
     servicesSum,
   } = useTaskCardEstimate({
     services,
@@ -170,20 +170,16 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           const firstActionService = () => {
             onEdit(service.ID as number);
           };
-          const secondActionService = () => {
-            if (services.length > 1) {
-              onDeleteService(service.ID as number);
-            } else {
-              !cantDeleteBannerVisible && onCantDeleteBannerVisible();
-            }
+          const handleBanner = () => {
+            !cantDeleteBannerVisible && onCantDeleteBannerVisible();
           };
           return (
             <View key={service.ID}>
-              <TaskEstimateItem
+              <ServiceItem
                 subsetID={subsetID}
                 firstAction={firstActionService}
-                secondAction={secondActionService}
                 title={service?.name}
+                servicesLength={services.length}
                 price={service?.price}
                 count={service?.count}
                 sum={(service?.count || 0) * (service?.price || 0)}
@@ -192,22 +188,22 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                 measure={service.measure?.toLowerCase()}
                 outlayStatusID={outlayStatusID}
                 statusID={statusID}
+                serviceID={service.ID as number}
+                refetch={refetch}
+                handleBanner={handleBanner}
               />
               <Spacer size={0} separator="bottom" />
               {service?.materials?.map(material => {
                 const firstActionMaterial = () => {
                   onEdit(service.ID as number, material.name);
                 };
-                const secondActionMaterial = () => {
-                  onDeleteMaterial(service, material);
-                };
+
                 return (
                   <View key={material.ID}>
-                    <TaskEstimateItem
+                    <MaterialItem
                       subsetID={subsetID}
                       measure={material?.measure.toLowerCase()}
                       firstAction={firstActionMaterial}
-                      secondAction={secondActionMaterial}
                       title={material?.name}
                       price={material?.price}
                       count={material?.count}
@@ -216,6 +212,9 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                       canSwipe={canSwipe}
                       outlayStatusID={outlayStatusID}
                       statusID={statusID}
+                      refetch={refetch}
+                      taskId={taskId}
+                      materialID={material?.ID}
                     />
                     <Spacer size={0} separator="bottom" />
                   </View>

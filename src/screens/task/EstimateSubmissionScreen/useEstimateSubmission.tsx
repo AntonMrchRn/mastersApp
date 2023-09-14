@@ -5,6 +5,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useToast } from 'rn-ui-kit';
 
+import { useTaskSSE } from '@/hooks/useTaskSSE';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
@@ -43,6 +44,8 @@ export const useEstimateSubmission = ({
   const bsRef = useRef<BottomSheetModal>(null);
 
   const { data, refetch } = useGetTaskQuery(taskId);
+
+  useTaskSSE(taskId);
 
   const [patchTaskLot] = usePatchTaskLotMutation();
   const [postOffers] = usePostOffersMutation();

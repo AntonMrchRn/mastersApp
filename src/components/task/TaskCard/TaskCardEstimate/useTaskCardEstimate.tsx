@@ -1,19 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { StackNavigationProp } from '@react-navigation/stack';
 import dayjs from 'dayjs';
-import { useToast } from 'rn-ui-kit';
 
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
-  useDeleteMaterialMutation,
-  useDeleteTaskServiceMutation,
   useGetAnotherOffersQuery,
   useGetTaskQuery,
   useGetUserOffersQuery,
-  usePatchTaskServiceMutation,
 } from '@/store/api/tasks';
 import { Material, Offer, Service } from '@/store/api/tasks/types';
 import { selectAuth } from '@/store/slices/auth/selectors';
@@ -22,7 +18,6 @@ import {
   setOfferComment,
   setOfferID,
 } from '@/store/slices/tasks/actions';
-import { AxiosQueryErrorResponse } from '@/types/error';
 import { EstimateTab, RoleType, StatusType, TaskType } from '@/types/task';
 
 export const useTaskCardEstimate = ({
@@ -48,7 +43,6 @@ export const useTaskCardEstimate = ({
   subsetID: TaskType | undefined;
   isContractor: boolean;
 }) => {
-  const toast = useToast();
   const dispatch = useAppDispatch();
   const bsRef = useRef<BottomSheetModal>(null);
 
@@ -109,15 +103,6 @@ export const useTaskCardEstimate = ({
     statusID === StatusType.WORK &&
     subsetID !== TaskType.COMMON_AUCTION_SALE;
 
-  const [
-    deleteTaskService,
-    { isError: isServiceDeletionError, error: serviceDeletionError },
-  ] = useDeleteTaskServiceMutation();
-  const [
-    deleteMaterial,
-    { isError: isMaterialDeletionError, error: materialDeletionError },
-  ] = useDeleteMaterialMutation();
-
   const [estimateSheetVisible, setEstimateSheetVisible] = useState(false);
 
   const isAnotherOffers = !!getAnotherOffers?.data?.count;
@@ -166,21 +151,7 @@ export const useTaskCardEstimate = ({
       materialName,
     });
   };
-  const onDeleteService = async (serviceId: number) => {
-    await deleteTaskService({
-      serviceId,
-    });
-    await refetch();
-  };
-  const onDeleteMaterial = async (service: Service, material: Material) => {
-    if (material.ID) {
-      await deleteMaterial({
-        ID: material.ID.toString(),
-        taskID: taskId.toString(),
-      });
-      await refetch();
-    }
-  };
+
   const addService = (service: Service) => {
     navigation.navigate(AppScreenName.EstimateAddService, {
       service,
@@ -240,30 +211,11 @@ export const useTaskCardEstimate = ({
     }
   };
 
-  useEffect(() => {
-    if (isServiceDeletionError) {
-      toast.show({
-        type: 'error',
-        title: (serviceDeletionError as AxiosQueryErrorResponse).data.message,
-      });
-    }
-  }, [isServiceDeletionError]);
-  useEffect(() => {
-    if (isMaterialDeletionError) {
-      toast.show({
-        type: 'error',
-        title: (materialDeletionError as AxiosQueryErrorResponse).data.message,
-      });
-    }
-  }, [isMaterialDeletionError]);
-
   return {
     estimateSheetVisible,
     onEstimateSheetVisible,
     materialsSum,
     onEdit,
-    onDeleteService,
-    onDeleteMaterial,
     onPressMaterial,
     onPressService,
     bsRef,
@@ -286,5 +238,6 @@ export const useTaskCardEstimate = ({
     setId,
     isInternalExecutor,
     servicesSum,
+    refetch,
   };
 };

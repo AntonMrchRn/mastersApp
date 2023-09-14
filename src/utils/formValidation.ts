@@ -35,7 +35,9 @@ const estimateAddMaterialValidation = {
   count: Yup.string()
     .test('moreThanNull', 'Количество должно быть больше 0', moreThanNull)
     .required('Укажите количество материала'),
-  price: Yup.string().required('Укажите цену за одну единицу измерения'),
+  price: Yup.string()
+    .test('moreThanNull', 'Цена должна быть больше 0', moreThanNull)
+    .required('Укажите цену за одну единицу измерения'),
   measure: Yup.string().required('Выберите единицу измерения'),
 };
 const estimateAddServiceValidation = {
