@@ -114,10 +114,6 @@ export const useTaskCardEstimate = ({
     { isError: isServiceDeletionError, error: serviceDeletionError },
   ] = useDeleteTaskServiceMutation();
   const [
-    patchTaskService,
-    { isError: isServicePatchingError, error: servicePatchingError },
-  ] = usePatchTaskServiceMutation();
-  const [
     deleteMaterial,
     { isError: isMaterialDeletionError, error: materialDeletionError },
   ] = useDeleteMaterialMutation();
@@ -178,13 +174,6 @@ export const useTaskCardEstimate = ({
   };
   const onDeleteMaterial = async (service: Service, material: Material) => {
     if (material.ID) {
-      await patchTaskService({
-        ID: service.ID,
-        taskID: taskId,
-        materials: [],
-        sum:
-          (service?.sum || 0) - (material?.price || 0) * (material?.count || 0),
-      });
       await deleteMaterial({
         ID: material.ID.toString(),
         taskID: taskId.toString(),
@@ -259,14 +248,6 @@ export const useTaskCardEstimate = ({
       });
     }
   }, [isServiceDeletionError]);
-  useEffect(() => {
-    if (isServicePatchingError) {
-      toast.show({
-        type: 'error',
-        title: (servicePatchingError as AxiosQueryErrorResponse).data.message,
-      });
-    }
-  }, [isServicePatchingError]);
   useEffect(() => {
     if (isMaterialDeletionError) {
       toast.show({
