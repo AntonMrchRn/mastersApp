@@ -160,7 +160,7 @@ const getCommentsPreview = createAsyncThunk<
     try {
       if (userID) {
         const { data } = await axiosInstance.get(
-          `tasks/comments?query=ID,userID,authorTypeID,comment,creationTime,fullname?(taskID==${idCard}*authorTypeID!=3)?creationTime,${sort},${numberOfPosts},${fromTask}`
+          `tasks/comments?query=ID,userID,nominy,authorTypeID,comment,creationTime,fullname?(taskID==${idCard}*authorTypeID!=3)?creationTime,${sort},${numberOfPosts},${fromTask}`
         );
         return data;
       }
@@ -186,7 +186,7 @@ const getComments = createAsyncThunk<
     try {
       if (userID) {
         const { data } = await axiosInstance.get(
-          `tasks/comments?query=ID,userID,authorTypeID,comment,creationTime,fullname?(taskID==${idCard}*authorTypeID!=3)?creationTime,${sort},${numberOfPosts},${fromTask}`
+          `tasks/comments?query=ID,userID,nominy,authorTypeID,comment,creationTime,fullname?(taskID==${idCard}*authorTypeID!=3)?creationTime,${sort},${numberOfPosts},${fromTask}`
         );
         return data;
       }

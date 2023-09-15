@@ -62,6 +62,7 @@ export type AppStackParamList = {
     taskId: number;
     recipientIDs: number[];
     isMessageInputAvailable: boolean;
+    isITServices: boolean;
   };
   [AppScreenName.RecoveryConfirmation]: {
     phone: string;

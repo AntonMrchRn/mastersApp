@@ -433,6 +433,7 @@ export const useTaskCard = ({
       taskId,
       recipientIDs,
       isMessageInputAvailable: !isTaskClosed && !isTaskCanceled,
+      isITServices,
     });
   };
 

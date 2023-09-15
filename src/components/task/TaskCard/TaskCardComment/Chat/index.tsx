@@ -9,17 +9,20 @@ import 'dayjs/locale/ru';
 import styles from './style';
 
 type ChatItemProps = {
+  isITServices?: boolean;
   message: {
     isMine?: boolean;
     comment?: string;
     creationTime?: string;
     fullname: string;
     ID: number;
+    nominy?: string;
   };
 };
 
 const ChatMessage = ({
-  message: { isMine, comment, creationTime, fullname },
+  isITServices,
+  message: { isMine, comment, creationTime, fullname, nominy },
 }: ChatItemProps) => {
   const theme = useTheme();
   const time = dayjs(creationTime).locale('ru').format('D MMMM, HH:mm');
@@ -33,7 +36,7 @@ const ChatMessage = ({
             style={[styles.humanInfo, { color: theme.text.neutral }]}
             variant="captionRegular"
           >
-            {fullname}
+            {fullname} {isITServices && `(${nominy})`}
           </Text>
         )}
         <View

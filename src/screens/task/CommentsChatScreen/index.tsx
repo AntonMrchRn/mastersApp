@@ -36,7 +36,7 @@ type CommentsChatScreenProps = StackScreenProps<
 
 export const CommentsChatScreen = ({
   route: {
-    params: { taskId, recipientIDs, isMessageInputAvailable },
+    params: { taskId, recipientIDs, isMessageInputAvailable, isITServices },
   },
 }: CommentsChatScreenProps) => {
   const theme = useTheme();
@@ -61,7 +61,7 @@ export const CommentsChatScreen = ({
   }, [isKeyboardVisible]);
 
   const renderItem = ({ item: message }: ListRenderItemInfo<Comment>) => (
-    <ChatMessage message={message} />
+    <ChatMessage message={message} isITServices={isITServices} />
   );
 
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
