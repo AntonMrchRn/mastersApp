@@ -63,6 +63,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
         type: 'error',
         title: mutationMaterial?.error?.data?.message,
       });
+      setLoading(false);
     }
   }, [mutationMaterial.error]);
   useEffect(() => {
@@ -74,6 +75,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
         type: 'error',
         title: mutationPatchTaskService?.error?.data?.message,
       });
+      setLoading(false);
     }
   }, [mutationPatchTaskService.error]);
   useEffect(() => {
@@ -159,7 +161,6 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
       }, []);
       dispatch(setNewOfferServices(newServices));
       navigation.navigate(AppScreenName.EstimateSubmission, { taskId, isEdit });
-      setLoading(false);
     } else {
       try {
         const newSum = ((service?.sum || 0) + +price * +count)
@@ -190,7 +191,6 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
       }
       await refetch();
       navigation.navigate(AppScreenName.TaskCard, { taskId });
-      setLoading(false);
     }
   };
 

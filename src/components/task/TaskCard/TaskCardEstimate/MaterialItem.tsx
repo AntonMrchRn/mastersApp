@@ -24,6 +24,7 @@ type MaterialItemProps = {
   statusID: StatusType | undefined;
   subsetID: TaskType | undefined;
 };
+
 export const MaterialItem: FC<MaterialItemProps> = ({
   title = '',
   price = 0,
@@ -57,6 +58,13 @@ export const MaterialItem: FC<MaterialItemProps> = ({
     }
   };
 
+  const firstActionMaterial = () => {
+    if (!loading) {
+      setLoading(true);
+      firstAction();
+    }
+  };
+
   useEffect(() => {
     if (isError) {
       toast.show({
@@ -70,7 +78,7 @@ export const MaterialItem: FC<MaterialItemProps> = ({
   return (
     <TaskEstimateItem
       subsetID={subsetID}
-      firstAction={firstAction}
+      firstAction={firstActionMaterial}
       secondAction={secondActionMaterial}
       title={title}
       price={price}

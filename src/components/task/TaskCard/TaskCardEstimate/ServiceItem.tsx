@@ -25,6 +25,7 @@ type ServiceItemProps = {
   refetch: () => void;
   handleBanner: () => void;
 };
+
 export const ServiceItem: FC<ServiceItemProps> = ({
   firstAction,
   title = '',
@@ -63,6 +64,13 @@ export const ServiceItem: FC<ServiceItemProps> = ({
     }
   };
 
+  const firstActionService = () => {
+    if (!loading) {
+      setLoading(true);
+      firstAction();
+    }
+  };
+
   useEffect(() => {
     if (isError) {
       toast.show({
@@ -76,7 +84,7 @@ export const ServiceItem: FC<ServiceItemProps> = ({
   return (
     <TaskEstimateItem
       subsetID={subsetID}
-      firstAction={firstAction}
+      firstAction={firstActionService}
       secondAction={secondActionService}
       title={title}
       price={price}
