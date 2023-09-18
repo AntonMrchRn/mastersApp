@@ -53,6 +53,10 @@ export const DownloadItem = ({
 
   useEffect(() => {
     hasOnDevice();
+  }, []);
+
+  useEffect(() => {
+    hasOnDevice();
   }, [isUploading]);
 
   const dirs = ReactNativeBlobUtil.fs.dirs;
@@ -87,7 +91,13 @@ export const DownloadItem = ({
       setProgress(+Math.floor((+rec / +total) * 100));
     });
     active
-      .catch(err => {
+      .catch(async err => {
+        const exist = await ReactNativeBlobUtil.fs.exists(FILE_PATH);
+
+        if (exist) {
+          await ReactNativeBlobUtil.fs.unlink(FILE_PATH);
+        }
+
         console.log(
           '🚀 ~ file: DownloadItem.tsx:75 ~ handleDownload ~ err:',
           err
@@ -103,7 +113,6 @@ export const DownloadItem = ({
     try {
       setIsDeleting(true);
       await onDelete({ fileID: file.fileID, filePath: FILE_PATH });
-      setIsDeleting(false);
       await hasOnDevice();
     } catch (err) {
       setIsDeleting(false);

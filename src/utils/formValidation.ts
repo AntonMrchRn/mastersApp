@@ -11,7 +11,8 @@ const passwordRegExp = /(?=.*[0-9])((?=.*[a-z])|(?=.*[A-Z]))[0-9a-zA-Z]{6,}/;
 const correspondingAccountRegExp = /^(301[0-9]*)$/i;
 const checkingAccountRegExp = /^((405|406|407)[0-9]*)$/i;
 const checkingSelfAccountRegExp = /^(408[0-9]*)$/i;
-
+const moreThanNull: Yup.TestFunction = (value: unknown) =>
+  typeof value === 'string' && +value > 0;
 const regExpPasswordValidation = Yup.string()
   .matches(passwordRegExp, {
     message: passwordErrorMessage,
@@ -26,20 +27,22 @@ const cancelTaskValidation = (withReason: boolean) => ({
 });
 const estimateCountValidation = {
   estimateCount: Yup.string()
-    .notOneOf(['0'], 'Количество должно быть больше 0')
+    .test('moreThanNull', 'Количество должно быть больше 0', moreThanNull)
     .required('Укажите количество услуги / материала'),
 };
 const estimateAddMaterialValidation = {
   name: Yup.string().required('Укажите название материала'),
   count: Yup.string()
-    .notOneOf(['0'], 'Количество должно быть больше 0')
+    .test('moreThanNull', 'Количество должно быть больше 0', moreThanNull)
     .required('Укажите количество материала'),
-  price: Yup.string().required('Укажите цену за одну единицу измерения'),
+  price: Yup.string()
+    .test('moreThanNull', 'Цена должна быть больше 0', moreThanNull)
+    .required('Укажите цену за одну единицу измерения'),
   measure: Yup.string().required('Выберите единицу измерения'),
 };
 const estimateAddServiceValidation = {
   count: Yup.string()
-    .notOneOf(['0'], 'Количество должно быть больше 0')
+    .test('moreThanNull', 'Количество должно быть больше 0', moreThanNull)
     .required('Укажите количество услуги'),
 };
 const phoneValidation = {

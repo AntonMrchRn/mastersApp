@@ -49,9 +49,8 @@ export const CompetitorEstimatesScreen: FC<CompetitorEstimatesScreenProps> = ({
           contentContainerStyle={styles.contentContainer}
         >
           {data.map((item, index) => {
-            const allSum = item.services.reduce(
-              (acc, val) =>
-                acc + (val?.sum || (val?.count || 0) * (val?.price || 0)),
+            const servicesSum = item.services.reduce(
+              (acc, val) => acc + (val?.count || 0) * (val?.price || 0),
               0
             );
             const allMaterials = item.services.reduce<Material[]>(
@@ -90,7 +89,10 @@ export const CompetitorEstimatesScreen: FC<CompetitorEstimatesScreenProps> = ({
                     })}
                   </View>
                 ))}
-                <EstimateTotal allSum={allSum} materialsSum={materialsSum} />
+                <EstimateTotal
+                  servicesSum={servicesSum}
+                  materialsSum={materialsSum}
+                />
               </View>
             );
           })}

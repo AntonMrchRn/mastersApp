@@ -11,12 +11,12 @@ import { Text, Tooltip, useTheme } from 'rn-ui-kit';
 import { InfoIcon } from '@/assets/icons/svg/estimate/InfoIcon';
 
 type EstimateTotalProps = {
-  allSum: number;
+  servicesSum: number;
   materialsSum: number;
   serviceMultiplier?: number;
 };
 export const EstimateTotal: FC<EstimateTotalProps> = ({
-  allSum,
+  servicesSum,
   materialsSum,
   serviceMultiplier,
 }) => {
@@ -56,15 +56,18 @@ export const EstimateTotal: FC<EstimateTotalProps> = ({
     },
   });
   const coords = { x: -160, y: 150 };
-  const allServiceSum = allSum - materialsSum;
+  const allSum = materialsSum + servicesSum;
   const allServiceSumMultiplierPure = serviceMultiplier
-    ? allServiceSum * serviceMultiplier
-    : allServiceSum;
+    ? servicesSum * serviceMultiplier
+    : servicesSum;
   const allServiceSumMultiplier = allServiceSumMultiplierPure
     .toString()
     .includes('.')
     ? allServiceSumMultiplierPure.toFixed(2)
     : allServiceSumMultiplierPure;
+  const allCurrentSum = allSum.toString().includes('.')
+    ? allSum.toFixed(2)
+    : allSum;
   return (
     <View style={styles.bottom}>
       <View style={styles.rowStart}>
@@ -92,7 +95,7 @@ export const EstimateTotal: FC<EstimateTotalProps> = ({
         </View>
         <View style={styles.estimateSum}>
           {serviceMultiplier && serviceMultiplier !== 1 && (
-            <RNText style={styles.crossed}>{allServiceSum} ₽</RNText>
+            <RNText style={styles.crossed}>{servicesSum} ₽</RNText>
           )}
           <Text variant="bodySBold" color={theme.text.basic}>
             {allServiceSumMultiplier} ₽
@@ -114,7 +117,7 @@ export const EstimateTotal: FC<EstimateTotalProps> = ({
           ИТОГО
         </Text>
         <Text variant="bodySBold" color={theme.text.accent}>
-          {allSum} ₽
+          {allCurrentSum} ₽
         </Text>
       </View>
     </View>

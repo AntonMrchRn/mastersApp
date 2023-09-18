@@ -51,7 +51,8 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
   const getMeasures = useGetMeasuresQuery('material');
 
   const [postMaterial, mutationMaterial] = usePostMaterialMutation();
-  const [patchTaskService] = usePatchTaskServiceMutation();
+  const [patchTaskService, mutationPatchTaskService] =
+    usePatchTaskServiceMutation();
 
   useEffect(() => {
     if (mutationMaterial.error && 'data' in mutationMaterial.error) {
@@ -61,6 +62,17 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
       });
     }
   }, [mutationMaterial.error]);
+  useEffect(() => {
+    if (
+      mutationPatchTaskService.error &&
+      'data' in mutationPatchTaskService.error
+    ) {
+      toast.show({
+        type: 'error',
+        title: mutationPatchTaskService?.error?.data?.message,
+      });
+    }
+  }, [mutationPatchTaskService.error]);
   useEffect(() => {
     if (isFocused) {
       refetch();
@@ -170,7 +182,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
           title: (error as AxiosQueryErrorResponse).data.message,
         });
       }
-      refetch();
+      await refetch();
       navigation.navigate(AppScreenName.TaskCard, { taskId });
     }
   };
@@ -228,8 +240,14 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
           label={'Добавить'}
           onPress={methods.handleSubmit(onSubmit)}
           style={styles.button}
-          isPending={mutationMaterial.isLoading}
-          disabled={hasName}
+          isPending={
+            mutationMaterial.isLoading || mutationPatchTaskService.isLoading
+          }
+          disabled={
+            hasName ||
+            mutationMaterial.isLoading ||
+            mutationPatchTaskService.isLoading
+          }
         />
       </FormProvider>
     </View>
