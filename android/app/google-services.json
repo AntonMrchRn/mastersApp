@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:979172369505:android:130f6b1c67ed3537b3f620",
+        "mobilesdk_app_id": "1:979172369505:android:087def2b4419a247b3f620",
         "android_client_info": {
-          "package_name": "com.vectora.mastera"
+          "package_name": "com.vector.mastera"
         }
       },
       "oauth_client": [],

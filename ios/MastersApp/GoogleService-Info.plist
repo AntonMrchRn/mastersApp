@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.vectora.mastera</string>
+	<string>com.vector.mastera</string>
 	<key>PROJECT_ID</key>
 	<string>mastera-4ee46</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:979172369505:ios:42923a229f879018b3f620</string>
+	<string>1:979172369505:ios:ea7e2c3017bf1b11b3f620</string>
 </dict>
 </plist>
