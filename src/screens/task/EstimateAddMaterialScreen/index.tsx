@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 
@@ -39,8 +39,11 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
 }) => {
   const theme = useTheme();
   const toast = useToast();
+
   const dispatch = useAppDispatch();
   const isFocused = useIsFocused();
+
+  const [loading, setLoading] = useState(false);
 
   const { serviceId, taskId, fromEstimateSubmission, isEdit } = route.params;
 
@@ -108,6 +111,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
   const measure = watch('measure');
 
   const hasName = materialsNames.includes(name);
+
   const onSubmit = async ({
     name,
     count,
@@ -125,6 +129,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
         title: 'Не удалось определить роль пользователя',
       });
     }
+    setLoading(true);
     if (fromEstimateSubmission) {
       const ids = materials.reduce<number[]>((acc, val) => {
         if (val?.ID) {
@@ -154,6 +159,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
       }, []);
       dispatch(setNewOfferServices(newServices));
       navigation.navigate(AppScreenName.EstimateSubmission, { taskId, isEdit });
+      setLoading(false);
     } else {
       try {
         const newSum = ((service?.sum || 0) + +price * +count)
@@ -184,6 +190,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
       }
       await refetch();
       navigation.navigate(AppScreenName.TaskCard, { taskId });
+      setLoading(false);
     }
   };
 
@@ -240,14 +247,8 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
           label={'Добавить'}
           onPress={methods.handleSubmit(onSubmit)}
           style={styles.button}
-          isPending={
-            mutationMaterial.isLoading || mutationPatchTaskService.isLoading
-          }
-          disabled={
-            hasName ||
-            mutationMaterial.isLoading ||
-            mutationPatchTaskService.isLoading
-          }
+          isPending={loading}
+          disabled={hasName || loading}
         />
       </FormProvider>
     </View>
