@@ -57,7 +57,6 @@ export const ServiceItem: FC<ServiceItemProps> = ({
           serviceId: serviceID,
         });
         await refetch();
-        setLoading(false);
       }
     } else {
       handleBanner();
@@ -70,6 +69,7 @@ export const ServiceItem: FC<ServiceItemProps> = ({
         type: 'error',
         title: (error as AxiosQueryErrorResponse).data.message,
       });
+      setLoading(false);
     }
   }, [error]);
 

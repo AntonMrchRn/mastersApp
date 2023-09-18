@@ -54,7 +54,6 @@ export const MaterialItem: FC<MaterialItemProps> = ({
         taskID: taskId.toString(),
       });
       await refetch();
-      setLoading(false);
     }
   };
 
@@ -64,6 +63,7 @@ export const MaterialItem: FC<MaterialItemProps> = ({
         type: 'error',
         title: (error as AxiosQueryErrorResponse).data.message,
       });
+      setLoading(false);
     }
   }, [error]);
 
