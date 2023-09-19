@@ -128,20 +128,24 @@ export const useTaskCardEstimate = ({
   }, []);
 
   const onEstimateSheetVisible = () => {
-    setEstimateSheetVisible(!estimateSheetVisible);
+    setEstimateSheetVisible(true);
   };
+  const onEstimateSheetClose = () => {
+    setEstimateSheetVisible(false);
+  };
+
   const addServiceBottomSheetClose = () => {
     bsRef.current?.close();
   };
   const onPressMaterial = () => {
-    onEstimateSheetVisible();
+    onEstimateSheetClose();
     navigation.navigate(AppScreenName.NewMaterial, {
       taskId,
       services: currentServices,
     });
   };
   const onPressService = () => {
-    onEstimateSheetVisible();
+    onEstimateSheetClose();
     bsRef.current?.present();
   };
   const onEdit = (serviceId: number, materialName?: string) => {
@@ -214,6 +218,7 @@ export const useTaskCardEstimate = ({
   return {
     estimateSheetVisible,
     onEstimateSheetVisible,
+    onEstimateSheetClose,
     materialsSum,
     onEdit,
     onPressMaterial,

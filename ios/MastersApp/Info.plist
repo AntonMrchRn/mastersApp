@@ -40,13 +40,11 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string></string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Необходим доступ к камере для отправки изображений и видео в виде вложений в отчеты задач или профиль пользователя.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string></string>
+	<string>Необходим доступ к микрофону для загрузки видео с аудио с целью отправки в виде вложений в отчеты задач.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string></string>
+	<string>Необходим доступ к галерее для выбора изображений и видео с целью отправки в виде вложений в отчеты задач или профиль пользователя.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>OpenSans-Bold.ttf</string>

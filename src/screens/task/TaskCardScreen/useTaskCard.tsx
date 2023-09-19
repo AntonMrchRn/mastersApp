@@ -421,8 +421,9 @@ export const useTaskCard = ({
     if (!hasAccessToDirection) {
       return onDirectionNotSpecifiedBannerVisible();
     }
-    return setSubmissionModalVisible(!submissionModalVisible);
+    return setSubmissionModalVisible(true);
   };
+  const onSubmissionModalClose = () => setSubmissionModalVisible(false);
 
   const navigateToChat = () => {
     const recipientIDs = executors
@@ -537,7 +538,7 @@ export const useTaskCard = ({
     }
 
     if (submissionModalVisible) {
-      onSubmissionModalVisible();
+      onSubmissionModalClose();
     }
   };
   const noAccessButtonPress = () => {
@@ -867,7 +868,7 @@ export const useTaskCard = ({
     cantDeleteBannerVisible,
     onEstimateBannerVisible,
     uploadLimitBannerVisible,
-    onSubmissionModalVisible,
+    onSubmissionModalClose,
     onCantDeleteBannerVisible,
     onUploadLimitBannerVisible,
     noAccessToTaskBannerVisible,

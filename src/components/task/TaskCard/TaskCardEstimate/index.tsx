@@ -69,6 +69,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   const {
     estimateSheetVisible,
     onEstimateSheetVisible,
+    onEstimateSheetClose,
     materialsSum,
     onEdit,
     onPressMaterial,
@@ -135,7 +136,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     <>
       <TaskCardAddEstimateBottomSheet
         isVisible={estimateSheetVisible}
-        onCancel={onEstimateSheetVisible}
+        onCancel={onEstimateSheetClose}
         pressMaterial={onPressMaterial}
         pressService={onPressService}
       />

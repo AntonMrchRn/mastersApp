@@ -448,7 +448,7 @@ PODS:
     - React-Core
   - react-native-document-picker (9.0.1):
     - React-Core
-  - react-native-flipper (0.209.0):
+  - react-native-flipper (0.163.0):
     - React-Core
   - react-native-image-picker (5.6.0):
     - React-Core
@@ -902,7 +902,7 @@ SPEC CHECKSUMS:
   React-logger: 35538accacf2583693fbc3ee8b53e69a1776fcee
   react-native-blob-util: 2b6627b288e3bd9874704ea9a153f0a179e4f3f5
   react-native-document-picker: 2b8f18667caee73a96708a82b284a4f40b30a156
-  react-native-flipper: b8d360c0943151d85150cb6da83572f03c6faa9f
+  react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
   react-native-image-picker: db60857e03d63721f19b6f4027de20429ddd9cba
   react-native-image-resizer: 681f7607418b97c084ba2d0999b153b103040d8a
   react-native-keyboard-controller: 6c07a462c1b7020b48efd37f2ece16d52e66a03a
