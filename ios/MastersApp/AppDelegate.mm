@@ -8,7 +8,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-
+  [FIRApp configure];
   self.moduleName = @"MastersApp";
     // You can add your custom initial props in the dictionary below.
     // They will be passed down to the ViewController used by React Native.
@@ -16,8 +16,7 @@
     bool didFinish = [super application:application didFinishLaunchingWithOptions:launchOptions];
   
   [RNSplashScreen show];  // this needs to be called after [super application:application didFinishLaunchingWithOptions:launchOptions];
-  [FIRApp configure];
-  return didFinish;
+    return didFinish;
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
