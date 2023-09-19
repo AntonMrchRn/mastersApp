@@ -154,6 +154,14 @@ type TeamMemberDeletionParams =
   | ContractorDeletionParams
   | CuratorDeletionParams;
 
+type PostTokenParams = {
+  /**
+   *   typeID - тип устройства. 1 - android, 2 - ios
+   */
+  typeID: 1 | 2;
+  token: string;
+};
+
 export type {
   User,
   Region,
@@ -166,4 +174,5 @@ export type {
   UserEditingParams,
   AccountDeletionParams,
   TeamMemberDeletionParams,
+  PostTokenParams,
 };

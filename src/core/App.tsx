@@ -14,14 +14,12 @@ import { ThemeProvider, ToastProvider } from 'rn-ui-kit';
 import { MyTheme } from '@/constants/platform';
 import { AppNavigation } from '@/navigation/AppNavigation';
 import { getBackgroundMessages } from '@/services/notifications/getBackgroundMessages';
-import { getPushToken } from '@/services/notifications/getPushToken';
 import { usePushMessages } from '@/services/notifications/usePushMessages';
 import { persistor, store } from '@/store';
 
 import 'dayjs/locale/ru';
 
 dayjs.locale('ru');
-getPushToken();
 getBackgroundMessages();
 const App = () => {
   usePushMessages();

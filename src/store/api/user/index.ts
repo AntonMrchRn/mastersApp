@@ -6,6 +6,7 @@ import {
   ConfirmationCodeResponse,
   EntityType,
   PhoneEditingResponse,
+  PostTokenParams,
   Region,
   TeamMemberDeletionParams,
   User,
@@ -155,6 +156,13 @@ export const userAPI = api
           data,
         }),
       }),
+      postToken: builder.mutation<void, PostTokenParams>({
+        query: data => ({
+          url: 'devices',
+          method: 'POST',
+          data,
+        }),
+      }),
       deleteFile: builder.mutation<UserParamsResponse, number>({
         query: id => ({
           url: `me/files/${id}`,
@@ -183,4 +191,5 @@ export const {
   useDeleteTeamMemberMutation,
   useSendEmailConfirmationCodeMutation,
   useSendPhoneConfirmationCodeMutation,
+  usePostTokenMutation,
 } = userAPI;
