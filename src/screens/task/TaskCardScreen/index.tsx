@@ -78,7 +78,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
     outlayStatusID,
     onRefresh,
     refreshing,
-    onSubmissionModalVisible,
+    onSubmissionModalClose,
     onTaskSubmission,
     submissionModalVisible,
     estimateTabsArray,
@@ -101,7 +101,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
       <SafeAreaView style={styles.container} edges={['bottom']}>
         <TaskCardSubmissionBottomSheet
           isVisible={submissionModalVisible}
-          onCancel={onSubmissionModalVisible}
+          onCancel={onSubmissionModalClose}
           onSubmit={onTaskSubmission}
         />
         <TaskCardBudgetModal

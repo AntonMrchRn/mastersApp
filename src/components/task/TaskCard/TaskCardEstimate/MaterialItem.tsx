@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 
+import { useFocusEffect } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 
 import { useDeleteMaterialMutation } from '@/store/api/tasks';
@@ -24,6 +25,7 @@ type MaterialItemProps = {
   statusID: StatusType | undefined;
   subsetID: TaskType | undefined;
 };
+
 export const MaterialItem: FC<MaterialItemProps> = ({
   title = '',
   price = 0,
@@ -54,9 +56,19 @@ export const MaterialItem: FC<MaterialItemProps> = ({
         taskID: taskId.toString(),
       });
       await refetch();
-      setLoading(false);
     }
   };
+
+  const firstActionMaterial = () => {
+    if (!loading) {
+      setLoading(true);
+      firstAction();
+    }
+  };
+
+  useFocusEffect(() => {
+    return setLoading(false);
+  });
 
   useEffect(() => {
     if (isError) {
@@ -64,13 +76,14 @@ export const MaterialItem: FC<MaterialItemProps> = ({
         type: 'error',
         title: (error as AxiosQueryErrorResponse).data.message,
       });
+      setLoading(false);
     }
   }, [error]);
 
   return (
     <TaskEstimateItem
       subsetID={subsetID}
-      firstAction={firstAction}
+      firstAction={firstActionMaterial}
       secondAction={secondActionMaterial}
       title={title}
       price={price}

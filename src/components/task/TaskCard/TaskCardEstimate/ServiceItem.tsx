@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 
+import { useFocusEffect } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 
 import { useDeleteTaskServiceMutation } from '@/store/api/tasks';
@@ -25,6 +26,7 @@ type ServiceItemProps = {
   refetch: () => void;
   handleBanner: () => void;
 };
+
 export const ServiceItem: FC<ServiceItemProps> = ({
   firstAction,
   title = '',
@@ -49,6 +51,10 @@ export const ServiceItem: FC<ServiceItemProps> = ({
   const [deleteTaskService, { isError, error }] =
     useDeleteTaskServiceMutation();
 
+  useFocusEffect(() => {
+    return setLoading(false);
+  });
+
   const secondActionService = async () => {
     if (servicesLength > 1) {
       if (!loading) {
@@ -57,10 +63,16 @@ export const ServiceItem: FC<ServiceItemProps> = ({
           serviceId: serviceID,
         });
         await refetch();
-        setLoading(false);
       }
     } else {
       handleBanner();
+    }
+  };
+
+  const firstActionService = () => {
+    if (!loading) {
+      setLoading(true);
+      firstAction();
     }
   };
 
@@ -70,13 +82,14 @@ export const ServiceItem: FC<ServiceItemProps> = ({
         type: 'error',
         title: (error as AxiosQueryErrorResponse).data.message,
       });
+      setLoading(false);
     }
   }, [error]);
 
   return (
     <TaskEstimateItem
       subsetID={subsetID}
-      firstAction={firstAction}
+      firstAction={firstActionService}
       secondAction={secondActionService}
       title={title}
       price={price}
