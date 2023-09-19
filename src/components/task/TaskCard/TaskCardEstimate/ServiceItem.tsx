@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 
+import { useFocusEffect } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 
 import { useDeleteTaskServiceMutation } from '@/store/api/tasks';
@@ -49,6 +50,10 @@ export const ServiceItem: FC<ServiceItemProps> = ({
 
   const [deleteTaskService, { isError, error }] =
     useDeleteTaskServiceMutation();
+
+  useFocusEffect(() => {
+    return setLoading(false);
+  });
 
   const secondActionService = async () => {
     if (servicesLength > 1) {
