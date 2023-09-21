@@ -472,8 +472,15 @@ export const useTaskCard = ({
   };
 
   const onTaskSubmission = async () => {
-    //принимаем таску в работу, если первый отклик
+    if (subsetID === TaskType.IT_AUCTION_SALE) {
+      dispatch(setNewOfferServices(services));
+      navigation.navigate(AppScreenName.EstimateSubmission, {
+        taskId,
+      });
+    }
+
     if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
+      //принимаем таску в работу, если первый отклик
       try {
         if (user?.userID) {
           await patchTask({
