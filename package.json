@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "android": "npx react-native run-android",
-    "ios": "npx react-native run-ios --simulator=\"iPhone 14\"",
+    "ios": "npx react-native run-ios",
     "pod": "npx pod-install",
     "start": "npx react-native start",
     "test": "jest",

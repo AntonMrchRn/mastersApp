@@ -14,6 +14,7 @@ import { ThemeProvider, ToastProvider } from 'rn-ui-kit';
 import { MyTheme } from '@/constants/platform';
 import { AppNavigation } from '@/navigation/AppNavigation';
 import { getBackgroundMessages } from '@/services/notifications/getBackgroundMessages';
+import { iosPushPermission } from '@/services/notifications/iosPushPermission';
 import { usePushMessages } from '@/services/notifications/usePushMessages';
 import { persistor, store } from '@/store';
 
@@ -23,6 +24,7 @@ dayjs.locale('ru');
 getBackgroundMessages();
 const App = () => {
   usePushMessages();
+  iosPushPermission();
   return (
     <GestureHandlerRootView style={styles.container}>
       <Provider store={store}>
