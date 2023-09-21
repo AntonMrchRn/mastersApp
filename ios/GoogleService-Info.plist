@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyBrz7AMo6b0ObTvpP7aEkekYtq_vH_oBkw</string>
+	<string>AIzaSyBGH81wLJnJNzXCWxuC0X9Y78IKK_VATQ0</string>
 	<key>GCM_SENDER_ID</key>
-	<string>979172369505</string>
+	<string>1005672931296</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.vector.mastera</string>
 	<key>PROJECT_ID</key>
-	<string>mastera-4ee46</string>
+	<string>mas-tas</string>
 	<key>STORAGE_BUCKET</key>
-	<string>mastera-4ee46.appspot.com</string>
+	<string>mas-tas.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:979172369505:ios:ea7e2c3017bf1b11b3f620</string>
+	<string>1:1005672931296:ios:5afffc43095230ca6ed585</string>
 </dict>
 </plist>
