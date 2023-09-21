@@ -472,10 +472,12 @@ export const useTaskCard = ({
   };
 
   const onTaskSubmission = async () => {
+    //навигация на скрин подачи сметы, если IT-ЛОТЫ
     if (subsetID === TaskType.IT_AUCTION_SALE) {
       dispatch(setNewOfferServices(services));
       navigation.navigate(AppScreenName.EstimateSubmission, {
         taskId,
+        isItLots: true,
       });
     }
 

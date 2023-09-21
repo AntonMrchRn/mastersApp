@@ -96,7 +96,11 @@ export type AppStackParamList = {
     winnerOffer?: Offer;
   };
   [AppScreenName.WebView]: { uri: string };
-  [AppScreenName.EstimateSubmission]: { taskId: number; isEdit?: boolean };
+  [AppScreenName.EstimateSubmission]: {
+    taskId: number;
+    isEdit?: boolean;
+    isItLots?: boolean;
+  };
   [AppScreenName.NewMaterial]: {
     taskId: number;
     services: Service[];

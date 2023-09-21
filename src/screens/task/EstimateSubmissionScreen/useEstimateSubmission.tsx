@@ -28,6 +28,7 @@ export const useEstimateSubmission = ({
   navigation,
   taskId,
   isEdit,
+  isItLots,
 }: {
   navigation: StackNavigationProp<
     AppStackParamList,
@@ -36,13 +37,13 @@ export const useEstimateSubmission = ({
   >;
   taskId: number;
   isEdit: boolean | undefined;
+  isItLots: boolean | undefined;
 }) => {
   const dispatch = useAppDispatch();
   const toast = useToast();
   const isFocused = useIsFocused();
 
   const bsRef = useRef<BottomSheetModal>(null);
-
   const { data, refetch } = useGetTaskQuery(taskId);
 
   useTaskSSE(taskId);
@@ -269,6 +270,10 @@ export const useEstimateSubmission = ({
         sum: allSum,
         ...(isEdit && offerID && { offerID }),
       }).unwrap();
+      if (isItLots) {
+        // /tasks/members/it
+        // /offers
+      }
       const postServices: Service[] = services.map(service => {
         const postMaterials =
           service.materials?.map(material => {
