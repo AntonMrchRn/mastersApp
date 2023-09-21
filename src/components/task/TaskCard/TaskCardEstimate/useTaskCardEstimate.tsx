@@ -163,20 +163,15 @@ export const useTaskCardEstimate = ({
     });
     bsRef.current?.close();
   };
-  const onCompetitorEstimates = () => {
-    if (userID) {
-      navigation.navigate(AppScreenName.CompetitorEstimates, {
-        taskId,
-        userID,
-      });
-    }
-  };
-  const onTradingResults = () => {
-    navigation.navigate(AppScreenName.TradingResults, {
+  const onCandidateEstimates = (isResults: boolean) => {
+    navigation.navigate(AppScreenName.CandidateEstimates, {
       taskId,
-      winnerOffer,
+      ...(!isResults && { userID }),
+      ...(isResults && { winnerOffer }),
+      isResults,
     });
   };
+
   const onEditEstimate = () => {
     if (userOffer) {
       const initServices: Service[] = userOffer.services.map(serv => {
@@ -236,8 +231,7 @@ export const useTaskCardEstimate = ({
     canSwipe,
     serviceNames,
     addService,
-    onCompetitorEstimates,
-    onTradingResults,
+    onCandidateEstimates,
     onEditEstimate,
     userRoleID,
     setId,

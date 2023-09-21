@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 
 import { Spacer, Text, useTheme } from 'rn-ui-kit';
@@ -6,6 +6,7 @@ import { Spacer, Text, useTheme } from 'rn-ui-kit';
 import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
 import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { PriceIcon } from '@/assets/icons/svg/estimate/PriceIcon';
+import { separateThousands } from '@/utils/separateThousands';
 
 import { styles } from './styles';
 
@@ -15,20 +16,21 @@ type ItemProps = {
   count: number;
   sum: number;
 };
-export const Item: FC<ItemProps> = ({ name, price, count, sum }) => {
+
+export const Item = ({ name, price, count, sum }: ItemProps) => {
   const theme = useTheme();
 
   const items = [
     {
-      text: `${price} ₽ за шт.`,
+      text: `${separateThousands(price)} ₽ за шт.`,
       icon: <PriceIcon />,
     },
     {
-      text: `${count} шт.`,
+      text: `${separateThousands(count)} шт.`,
       icon: <CubeIcon />,
     },
     {
-      text: `${sum} ₽`,
+      text: `${separateThousands(sum)} ₽`,
       icon: <CalculatorIcon />,
     },
   ];
@@ -37,14 +39,18 @@ export const Item: FC<ItemProps> = ({ name, price, count, sum }) => {
     <>
       <Spacer size={16} />
       <View style={styles.column}>
-        <Text variant="bodySRegular" style={styles.name}>
+        <Text variant="bodySBold" style={styles.name}>
           {name}
         </Text>
         <View style={styles.row}>
           {items.map((item, index) => (
             <View key={index} style={styles.itemRow}>
               {item.icon}
-              <Text variant="captionRegular" color={theme.text.neutral}>
+              <Text
+                variant="captionRegular"
+                color={theme.text.neutral}
+                style={styles.name}
+              >
                 {item.text}
               </Text>
             </View>

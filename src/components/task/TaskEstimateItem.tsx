@@ -9,6 +9,7 @@ import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
 import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { PriceIcon } from '@/assets/icons/svg/estimate/PriceIcon';
 import { OutlayStatusType, RoleType, StatusType, TaskType } from '@/types/task';
+import { separateThousands } from '@/utils/separateThousands';
 
 type TaskEstimateItemProps = {
   previewActions?: boolean;
@@ -44,11 +45,13 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   const currentMeasure =
     measure === 'час'
       ? plural(count, '%d час', '%d часa', '%d часов')
-      : `${count} ${measure}`;
+      : `${separateThousands(count)} ${measure}`;
 
   const items = [
     {
-      text: `${price} ₽ ${measure === 'пустое' ? '' : `за ${measure}`}`,
+      text: `${separateThousands(price)} ₽ ${
+        measure === 'пустое' ? '' : `за ${measure}`
+      }`,
       icon: <PriceIcon />,
     },
     {
@@ -56,7 +59,7 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
       icon: <CubeIcon />,
     },
     {
-      text: `${sum} ₽`,
+      text: `${separateThousands(sum)} ₽`,
       icon: <CalculatorIcon />,
     },
   ];
@@ -116,11 +119,14 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   const styles = StyleSheet.create({
     containerStyle: { paddingRight: 20, paddingHorizontal: 20 },
     wrapper: { flexGrow: 1, marginHorizontal: -20 },
+    item: { flexShrink: 1 },
   });
 
   return (
     <View style={styles.wrapper}>
       <Swipeable
+        itemContainerStyle={styles.item}
+        itemTextStyle={styles.item}
         label={getLabel()}
         containerStyle={styles.containerStyle}
         variant={getVariant()}
