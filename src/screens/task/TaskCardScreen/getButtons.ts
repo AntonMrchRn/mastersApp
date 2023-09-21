@@ -1230,6 +1230,216 @@ export const getButtons = ({
           return [];
       }
     case TaskType.IT_INTERNAL_EXECUTIVES:
+      // к закрытию
+      if (toClose) {
+        switch (tab) {
+          case TaskTab.REPORT:
+            if (closureFiles.length) {
+              return [
+                {
+                  label: 'Загрузить еще файлы',
+                  variant: 'accent',
+                  onPress: onUploadModalVisible,
+                },
+              ];
+            }
+            return [
+              {
+                label: 'Загрузить файлы',
+                variant: 'accent',
+                onPress: onUploadModalVisible,
+              },
+            ];
+          case TaskTab.COMMENTS:
+            if (isCommentsAvailable) {
+              return [
+                {
+                  label: 'Перейти в чат',
+                  variant: 'accent',
+                  onPress: navigateToChat,
+                },
+              ];
+            }
+            return [];
+          default:
+            return [];
+        }
+      }
+      switch (statusID) {
+        case StatusType.ACTIVE:
+          switch (tab) {
+            case TaskTab.DESCRIPTION:
+            case TaskTab.ESTIMATE:
+            case TaskTab.REPORT:
+            case TaskTab.HISTORY:
+            case TaskTab.COMMENTS:
+              return [
+                {
+                  label: 'Принять задачу',
+                  variant: 'accent',
+                  onPress: onSubmitAnTask,
+                },
+              ];
+            default:
+              return [];
+          }
+        case StatusType.WORK:
+          switch (tab) {
+            case TaskTab.REPORT:
+              if (reportFiles.length) {
+                return [
+                  {
+                    label: 'Сдать работы',
+                    variant: 'accent',
+                    onPress: onWorkDelivery,
+                  },
+                  {
+                    label: 'Загрузить еще файлы',
+                    variant: 'outlineAccent',
+                    onPress: onUploadModalVisible,
+                  },
+                ];
+              }
+              return [
+                {
+                  label: 'Загрузить файлы',
+                  variant: 'accent',
+                  onPress: onUploadModalVisible,
+                },
+              ];
+            case TaskTab.DESCRIPTION:
+            case TaskTab.HISTORY:
+              return [
+                {
+                  label: 'Сдать работы',
+                  variant: 'accent',
+                  onPress: onWorkDelivery,
+                },
+                {
+                  label: 'Отказаться от задачи',
+                  variant: 'outlineDanger',
+                  onPress: onCancelModalVisible,
+                },
+              ];
+            case TaskTab.COMMENTS:
+              if (isCommentsAvailable) {
+                return [
+                  {
+                    label: 'Перейти в чат',
+                    variant: 'accent',
+                    onPress: navigateToChat,
+                  },
+                ];
+              }
+              return [
+                {
+                  label: 'Сдать работы',
+                  variant: 'accent',
+                  onPress: onWorkDelivery,
+                },
+                {
+                  label: 'Отказаться от задачи',
+                  variant: 'outlineDanger',
+                  onPress: onCancelModalVisible,
+                },
+              ];
+            case TaskTab.ESTIMATE:
+              if (outlayStatusID !== OutlayStatusType.READY) {
+                return [
+                  {
+                    label: 'Отправить смету на согласование',
+                    variant: 'accent',
+                    onPress: onSendEstimateForApproval,
+                    disabled: outlayStatusID === OutlayStatusType.MATCHING,
+                  },
+                  {
+                    label: 'Отказаться от задачи',
+                    variant: 'outlineDanger',
+                    onPress: onCancelModalVisible,
+                  },
+                ];
+              }
+              return [
+                {
+                  label: 'Сдать работы',
+                  variant: 'accent',
+                  onPress: onWorkDelivery,
+                },
+                {
+                  label: 'Отказаться от задачи',
+                  variant: 'outlineDanger',
+                  onPress: onCancelModalVisible,
+                },
+              ];
+            default:
+              return [];
+          }
+        case StatusType.SUMMARIZING:
+        case StatusType.PAID:
+        case StatusType.COMPLETED:
+        case StatusType.MATCHING:
+        case StatusType.RETURNED:
+          switch (tab) {
+            case TaskTab.COMMENTS:
+              if (isCommentsAvailable) {
+                return [
+                  {
+                    label: 'Перейти в чат',
+                    variant: 'accent',
+                    onPress: navigateToChat,
+                  },
+                ];
+              }
+              return [];
+            case TaskTab.REPORT:
+              if (reportFiles.length) {
+                return [
+                  {
+                    label: 'Загрузить еще файлы',
+                    variant: 'outlineAccent',
+                    onPress: onUploadModalVisible,
+                  },
+                ];
+              }
+              return [
+                {
+                  label: 'Загрузить файлы',
+                  variant: 'accent',
+                  onPress: onUploadModalVisible,
+                },
+              ];
+            case TaskTab.DESCRIPTION:
+            case TaskTab.ESTIMATE:
+            case TaskTab.HISTORY:
+            default:
+              return [];
+          }
+        case StatusType.PENDING:
+        case StatusType.CANCELLED_BY_CUSTOMER:
+        case StatusType.CANCELLED_BY_EXECUTOR:
+        case StatusType.CLOSED:
+          switch (tab) {
+            case TaskTab.COMMENTS:
+              if (isCommentsAvailable) {
+                return [
+                  {
+                    label: 'Перейти в чат',
+                    variant: 'accent',
+                    onPress: navigateToChat,
+                  },
+                ];
+              }
+              return [];
+            case TaskTab.REPORT:
+            case TaskTab.DESCRIPTION:
+            case TaskTab.ESTIMATE:
+            case TaskTab.HISTORY:
+            default:
+              return [];
+          }
+        default:
+          return [];
+      }
     default:
       return [];
   }
