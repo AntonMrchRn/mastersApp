@@ -357,7 +357,15 @@ export const useTaskCard = ({
     subsetID === TaskType.IT_AUCTION_SALE && isContractor
       ? ''
       : offersDeadline
-      ? `Срок подачи сметы до ${dayjs(offersDeadline).format('D MMMM в HH:mm')}`
+      ? isOffersDeadlineOver &&
+        subsetID &&
+        [TaskType.IT_AUCTION_SALE, TaskType.COMMON_AUCTION_SALE].includes(
+          subsetID
+        )
+        ? 'Подача заявок окончена. Результаты торгов будут объявлены в ближайшее время'
+        : `Срок подачи сметы до ${dayjs(offersDeadline).format(
+            'D MMMM в HH:mm'
+          )}`
       : '';
 
   const hasAccessToTask = userData?.isApproved;

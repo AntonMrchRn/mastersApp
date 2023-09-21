@@ -14,8 +14,8 @@ import PasswordScreen from '@/screens/auth/PasswordScreen';
 import RecoveryConfirmationScreen from '@/screens/auth/RecoveryConfirmationScreen';
 import RecoveryScreen from '@/screens/auth/RecoveryScreen';
 import SignInScreen from '@/screens/auth/SignInScreen';
+import { CandidateEstimatesScreen } from '@/screens/task/CandidateEstimatesScreen';
 import { CommentsChatScreen } from '@/screens/task/CommentsChatScreen';
-import { CompetitorEstimatesScreen } from '@/screens/task/CompetitorEstimatesScreen';
 import ContractorsScreen from '@/screens/task/Contractors';
 import { EstimateAddMaterialScreen } from '@/screens/task/EstimateAddMaterialScreen';
 import { EstimateAddServiceScreen } from '@/screens/task/EstimateAddServiceScreen';
@@ -24,7 +24,6 @@ import { EstimateSubmissionScreen } from '@/screens/task/EstimateSubmissionScree
 import { EstimateSubmissionSuccessScreen } from '@/screens/task/EstimateSubmissionSuccessScreen';
 import { NewMaterialScreen } from '@/screens/task/NewMaterialScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
-import { TradingResultsScreen } from '@/screens/task/TradingResultsScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
 import { Offer, Service } from '@/store/api/tasks/types';
 
@@ -40,12 +39,11 @@ export enum AppScreenName {
   EstimateEdit = 'EstimateEdit',
   EstimateAddMaterial = 'EstimateAddMaterial',
   EstimateAddService = 'EstimateAddService',
-  CompetitorEstimates = 'CompetitorEstimates',
+  CandidateEstimates = 'CandidateEstimates',
   CommentsChat = 'CommentsChatScreen',
   WebView = 'WebView',
   EstimateSubmission = 'EstimateSubmission',
   UserEstimateEdit = 'UserEstimateEdit',
-  TradingResults = 'TradingResults',
   NewMaterial = 'NewMaterial',
   EstimateSubmissionSuccess = 'EstimateSubmissionSuccess',
   Contractors = 'Contractors',
@@ -91,10 +89,11 @@ export type AppStackParamList = {
     service: Service;
     fromEstimateSubmission?: boolean;
   };
-  [AppScreenName.CompetitorEstimates]: { taskId: number; userID: number };
-  [AppScreenName.TradingResults]: {
+  [AppScreenName.CandidateEstimates]: {
     taskId: number;
-    winnerOffer: Offer | undefined;
+    isResults: boolean;
+    userID?: number;
+    winnerOffer?: Offer;
   };
   [AppScreenName.WebView]: { uri: string };
   [AppScreenName.EstimateSubmission]: { taskId: number; isEdit?: boolean };
@@ -189,22 +188,12 @@ export const AppNavigation = () => {
                 }}
               />
               <Stack.Screen
-                name={AppScreenName.CompetitorEstimates}
-                component={CompetitorEstimatesScreen}
+                name={AppScreenName.CandidateEstimates}
+                component={CandidateEstimatesScreen}
                 options={{
                   headerShown: true,
                   header: props => (
-                    <Header {...props} title={'Сметы других кандидатов'} />
-                  ),
-                }}
-              />
-              <Stack.Screen
-                name={AppScreenName.TradingResults}
-                component={TradingResultsScreen}
-                options={{
-                  headerShown: true,
-                  header: props => (
-                    <Header {...props} title={'Сметы других кандидатов'} />
+                    <Header {...props} title={'Сметы кандидатов'} />
                   ),
                 }}
               />
