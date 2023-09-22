@@ -76,6 +76,15 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
     onRefresh();
   }, [selectedTabId]);
 
+  useEffect(() => {
+    if (
+      userRole === RoleType.INTERNAL_EXECUTOR &&
+      selectedTabId !== TaskSetType.IT_SERVICES
+    ) {
+      setSelectedTabId(TaskSetType.IT_SERVICES);
+    }
+  }, [userRole]);
+
   const switchTab = (tabIndex: number) => {
     if (
       (tabIndex === 0 || tabIndex === 1) &&

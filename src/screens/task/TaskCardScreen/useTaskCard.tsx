@@ -577,44 +577,44 @@ export const useTaskCard = ({
             },
           ],
         }).unwrap();
-      } catch (error) {
-        toast.show({
-          type: 'error',
-          title: (error as AxiosQueryErrorResponse).data.message,
-        });
-      }
-      if (task?.executorsCount === 1) {
-        // если исполнитель один, то просто принимаем задачу
-        //патчим таску и берем в работу
-        await patchTask({
-          ID: taskId,
-          statusID: StatusType.WORK,
-          outlayStatusID: OutlayStatusType.READY,
-        }).unwrap();
-      }
-      if (task?.executorsCount === 2) {
-        // если исполнителей двое, то
-        //проверяем на isConfirmed, если двое то патчим таску и переводим в работу
-        //если нет то ждем второго исполнителя и уже он патчит таску
-        //либо же руководитель может пропатчить у себя таску не дожидаясь второго исполнителя
-
-        const currentExecutors =
-          (await refetch()).data?.tasks[0]?.executors || [];
-        console.log(
-          '🚀 ~ file: useTaskCard.tsx:585 ~ onTaskSubmission ~ currentExecutors:',
-          currentExecutors
-        );
-
-        const confirmedExecutors = currentExecutors.filter(
-          executor => executor.isConfirm
-        );
-        if (confirmedExecutors.length > 1) {
+        if (task?.executorsCount === 1) {
+          // если исполнитель один, то просто принимаем задачу
+          //патчим таску и берем в работу
           await patchTask({
             ID: taskId,
             statusID: StatusType.WORK,
             outlayStatusID: OutlayStatusType.READY,
           }).unwrap();
         }
+        if (task?.executorsCount === 2) {
+          // если исполнителей двое, то
+          //проверяем на isConfirmed, если двое то патчим таску и переводим в работу
+          //если нет то ждем второго исполнителя и уже он патчит таску
+          //либо же руководитель может пропатчить у себя таску не дожидаясь второго исполнителя
+
+          const currentExecutors =
+            (await refetch()).data?.tasks[0]?.executors || [];
+          console.log(
+            '🚀 ~ file: useTaskCard.tsx:585 ~ onTaskSubmission ~ currentExecutors:',
+            currentExecutors
+          );
+
+          const confirmedExecutors = currentExecutors.filter(
+            executor => executor.isConfirm
+          );
+          if (confirmedExecutors.length > 1) {
+            await patchTask({
+              ID: taskId,
+              statusID: StatusType.WORK,
+              outlayStatusID: OutlayStatusType.READY,
+            }).unwrap();
+          }
+        }
+      } catch (error) {
+        toast.show({
+          type: 'error',
+          title: (error as AxiosQueryErrorResponse).data.message,
+        });
       }
     }
 
