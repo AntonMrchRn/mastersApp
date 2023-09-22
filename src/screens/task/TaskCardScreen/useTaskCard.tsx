@@ -882,6 +882,7 @@ export const useTaskCard = ({
     closureFiles,
     onCancelTask,
     isContractor,
+    isExecutor,
     navigateToChat,
     userOffersData,
     onWorkDelivery,

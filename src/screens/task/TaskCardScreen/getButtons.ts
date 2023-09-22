@@ -21,6 +21,7 @@ export const getButtons = ({
   isInvitedCurator,
   onTaskSubmission,
   isInvitedExecutor,
+  isExecutor,
   onSubmitAnTask,
   isInternalExecutor,
   isCommentsAvailable,
@@ -56,6 +57,7 @@ export const getButtons = ({
   toClose: boolean | undefined;
   isCurator: boolean;
   isContractor: boolean;
+  isExecutor: boolean;
   isInvitedCurator: boolean;
   isInvitedExecutor: boolean;
   isInternalExecutor: boolean;
@@ -1281,6 +1283,15 @@ export const getButtons = ({
             case TaskTab.REPORT:
             case TaskTab.HISTORY:
             case TaskTab.COMMENTS:
+              if (isExecutor) {
+                return [
+                  {
+                    label: 'Отказаться от задачи',
+                    variant: 'outlineDanger',
+                    onPress: onCancelModalVisible,
+                  },
+                ];
+              }
               return [
                 {
                   label: 'Принять задачу',
