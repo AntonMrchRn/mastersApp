@@ -85,14 +85,14 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     canSwipe,
     serviceNames,
     addService,
-    onCompetitorEstimates,
-    onTradingResults,
+    onCandidateEstimates,
     onEditEstimate,
     setId,
     isInternalExecutor,
     clientComment,
     refetch,
     servicesSum,
+    userID,
   } = useTaskCardEstimate({
     services,
     taskId,
@@ -255,7 +255,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                           {isAnotherOffers ? (
                             <TouchableOpacity
                               style={styles.candidatRow}
-                              onPress={onCompetitorEstimates}
+                              onPress={() => onCandidateEstimates(false)}
                             >
                               <CalculatorIcon color={theme.text.basic} />
                               <Text
@@ -275,15 +275,54 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                           )}
                         </>
                       ) : (
-                        <TouchableOpacity
-                          style={styles.candidatRow}
-                          onPress={onTradingResults}
-                        >
-                          <GavelIcon />
-                          <Text variant="bodySBold" color={theme.text.basic}>
-                            Посмотреть результаты торгов
-                          </Text>
-                        </TouchableOpacity>
+                        <>
+                          {isOffersDeadlineOver && (
+                            <>
+                              {winnerOffer && winnerOffer?.userID !== userID ? (
+                                <TouchableOpacity
+                                  style={styles.candidatRow}
+                                  onPress={() => onCandidateEstimates(true)}
+                                >
+                                  <GavelIcon />
+                                  <Text
+                                    variant="bodySBold"
+                                    color={theme.text.basic}
+                                  >
+                                    Посмотреть результаты торгов
+                                  </Text>
+                                </TouchableOpacity>
+                              ) : (
+                                <>
+                                  {!winnerOffer && isAnotherOffers ? (
+                                    <TouchableOpacity
+                                      style={styles.candidatRow}
+                                      onPress={() =>
+                                        onCandidateEstimates(false)
+                                      }
+                                    >
+                                      <CalculatorIcon
+                                        color={theme.text.basic}
+                                      />
+                                      <Text
+                                        variant="bodySBold"
+                                        color={theme.text.basic}
+                                      >
+                                        Сметы других кандидатов
+                                      </Text>
+                                    </TouchableOpacity>
+                                  ) : (
+                                    <Text
+                                      variant="bodySRegular"
+                                      color={theme.text.neutral}
+                                    >
+                                      Предложений других кандидатов нет
+                                    </Text>
+                                  )}
+                                </>
+                              )}
+                            </>
+                          )}
+                        </>
                       )}
                     </>
                   )}

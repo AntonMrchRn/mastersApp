@@ -94,6 +94,8 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
     setId,
     uploadLimitBannerVisible,
     onUploadLimitBannerVisible,
+    executorsCount,
+    isExecutor,
   } = useTaskCard({ taskId, navigation });
 
   return (
@@ -170,6 +172,16 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
                       <Tips
                         type={'info'}
                         text={budgetEndTime}
+                        containerStyle={styles.tips}
+                      />
+                    )}
+                  {statusID === StatusType.ACTIVE &&
+                    subsetID === TaskType.IT_INTERNAL_EXECUTIVES &&
+                    executorsCount === 2 &&
+                    isExecutor && (
+                      <Tips
+                        type={'info'}
+                        text={'Ожидается второй исполнитель'}
                         containerStyle={styles.tips}
                       />
                     )}

@@ -10,11 +10,17 @@ export const styles = StyleSheet.create({
   pv20: {
     paddingVertical: 20,
   },
+  mt8: {
+    marginTop: 8,
+  },
   mt5: {
     marginTop: 5,
   },
   mr16: {
     marginRight: 16,
+  },
+  mt36: {
+    marginTop: 36,
   },
   wrapperGrid: {
     gap: 10,
@@ -33,15 +39,6 @@ export const styles = StyleSheet.create({
   },
   w80: {
     width: '80%',
-  },
-  mt36: {
-    marginTop: 36,
-  },
-  address: {
-    marginTop: 16,
-  },
-  date: {
-    marginTop: 8,
   },
   wrapStatus: {
     width: '50%',
@@ -70,12 +67,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'flex-start',
   },
-  contacts: {
-    marginTop: 44,
-    marginBottom: 24,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   card: {
     borderRadius: 22,
     borderWidth: 1,
@@ -87,15 +78,16 @@ export const styles = StyleSheet.create({
   name: {
     marginTop: 4,
   },
-  phone: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   phoneText: {
-    fontFamily: 'Nunito Sans Regular',
+    fontFamily: 'Nunito Sans',
     fontStyle: 'normal',
     fontWeight: '400',
     fontSize: 17,
     lineHeight: 24,
+  },
+  car: {
+    flexDirection: 'row',
+    gap: 8,
+    alignItems: 'center',
   },
 });
