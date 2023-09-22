@@ -110,10 +110,17 @@ type Coordinator = {
   pname?: string;
   sname?: string;
 };
+type Car = {
+  ID: number;
+  model: string;
+  number: string;
+  taskID: number;
+};
 type Task = {
   ID?: number;
   refuseReason?: string;
   budget?: number;
+  car?: Car;
   candidateIDs?: number[];
   contacts?: Contact[];
   /**
@@ -391,6 +398,7 @@ export type {
   Status,
   GetTaskResponse,
   Task,
+  Car,
   Offer,
   Executor,
   Service,
