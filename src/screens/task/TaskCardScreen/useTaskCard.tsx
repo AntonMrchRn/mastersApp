@@ -14,6 +14,7 @@ import { useTaskSSE } from '@/hooks/useTaskSSE';
 import { AppScreenName } from '@/navigation/AppNavigation';
 import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { BottomTabName } from '@/navigation/TabNavigation';
+import { axiosInstance } from '@/services/axios/axiosInstance';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   useDeleteITTaskMemberMutation,
@@ -27,6 +28,7 @@ import {
   usePatchTaskMutation,
   usePostITTaskMemberMutation,
 } from '@/store/api/tasks';
+import { GetTaskResponse } from '@/store/api/tasks/types';
 import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { getCommentsPreview } from '@/store/slices/myTasks/asyncActions';
@@ -592,12 +594,10 @@ export const useTaskCard = ({
           //если нет то ждем второго исполнителя и уже он патчит таску
           //либо же руководитель может пропатчить у себя таску не дожидаясь второго исполнителя
 
-          const currentExecutors =
-            (await refetch()).data?.tasks[0]?.executors || [];
-          console.log(
-            '🚀 ~ file: useTaskCard.tsx:585 ~ onTaskSubmission ~ currentExecutors:',
-            currentExecutors
+          const getTask = await axiosInstance.get<GetTaskResponse>(
+            `tasks/web?query=?ID==${id}?`
           );
+          const currentExecutors = getTask.data.tasks[0]?.executors || [];
 
           const confirmedExecutors = currentExecutors.filter(
             executor => executor.isConfirm
