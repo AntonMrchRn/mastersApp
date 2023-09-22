@@ -239,11 +239,7 @@ export const TaskCardDescription = ({
           </Text>
         </View>
       )}
-      {address && (
-        <View style={styles.mt8}>
-          <TaskAddress address={address} />
-        </View>
-      )}
+      {address && <TaskAddress address={address} />}
       {(startTime || endTime) && <TaskDate from={startTime} to={endTime} />}
 
       {/* Контакты в задаче */}

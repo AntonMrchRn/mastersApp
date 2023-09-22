@@ -1,6 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useIsFocused } from '@react-navigation/native';
@@ -140,76 +141,83 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
     }
   };
   return (
-    <View style={styles.container}>
-      <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
-        Внесите необходимые изменения
-      </Text>
-      {!!service?.categoryName && (
-        <Text variant={'captionRegular'} color={theme.text.neutral}>
-          {service?.categoryName}
+    <KeyboardAwareScrollView
+      enableOnAndroid={true}
+      keyboardOpeningTime={100}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+    >
+      <View style={styles.container}>
+        <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
+          Внесите необходимые изменения
         </Text>
-      )}
-      {!!name && (
-        <Text
-          variant={'bodyMBold'}
-          color={theme.text.basic}
-          style={styles.name}
-        >
-          {name}
-        </Text>
-      )}
-      {!!description && (
-        <Text
-          variant={'bodySRegular'}
-          color={theme.text.basic}
-          style={styles.description}
-        >
-          {description}
-        </Text>
-      )}
-      {!!price && (
+        {!!service?.categoryName && (
+          <Text variant={'captionRegular'} color={theme.text.neutral}>
+            {service?.categoryName}
+          </Text>
+        )}
+        {!!name && (
+          <Text
+            variant={'bodyMBold'}
+            color={theme.text.basic}
+            style={styles.name}
+          >
+            {name}
+          </Text>
+        )}
+        {!!description && (
+          <Text
+            variant={'bodySRegular'}
+            color={theme.text.basic}
+            style={styles.description}
+          >
+            {description}
+          </Text>
+        )}
+        {!!price && (
+          <View style={styles.row}>
+            <PriceIcon />
+            <Text
+              variant={'bodySRegular'}
+              color={theme.text.neutral}
+              style={styles.rowText}
+            >
+              {`${price} ₽ ${
+                measure === 'пустое' || !measure ? '' : `за ${measure}`
+              }`}
+            </Text>
+          </View>
+        )}
         <View style={styles.row}>
-          <PriceIcon />
+          <CubeIcon />
           <Text
             variant={'bodySRegular'}
             color={theme.text.neutral}
             style={styles.rowText}
           >
-            {`${price} ₽ ${
-              measure === 'пустое' || !measure ? '' : `за ${measure}`
-            }`}
+            {measure === 'пустое' || !measure
+              ? 'Единица измерения не указана'
+              : `Измеряется в ${currMeasure}`}
           </Text>
         </View>
-      )}
-      <View style={styles.row}>
-        <CubeIcon />
-        <Text
-          variant={'bodySRegular'}
-          color={theme.text.neutral}
-          style={styles.rowText}
-        >
-          {measure === 'пустое' || !measure
-            ? 'Единица измерения не указана'
-            : `Измеряется в ${currMeasure}`}
-        </Text>
+        <Spacer size={'l'} />
+        <FormProvider {...methods}>
+          <ControlledInput
+            name={'estimateCount'}
+            variant={'number'}
+            label={'Количество'}
+            maxLength={5}
+            hint={errors.estimateCount?.message}
+            isError={!!errors.estimateCount?.message}
+          />
+          <Spacer size={'xl'} />
+          <Button
+            label={'Сохранить'}
+            onPress={methods.handleSubmit(onSubmit)}
+            style={styles.button}
+          />
+        </FormProvider>
       </View>
-      <Spacer size={'l'} />
-      <FormProvider {...methods}>
-        <ControlledInput
-          name={'estimateCount'}
-          variant={'number'}
-          label={'Количество'}
-          maxLength={5}
-          hint={errors.estimateCount?.message}
-          isError={!!errors.estimateCount?.message}
-        />
-        <Spacer size={'xl'} />
-        <Button
-          label={'Сохранить'}
-          onPress={methods.handleSubmit(onSubmit)}
-          style={styles.button}
-        />
-      </FormProvider>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
