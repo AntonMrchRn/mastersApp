@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useIsFocused } from '@react-navigation/native';
@@ -196,61 +197,68 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
 
   const measures = getMeasures.data?.measures || [];
   return (
-    <View style={styles.container}>
-      <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
-        Заполните данные о материале
-      </Text>
-      <Spacer size={'xl'} />
-      <FormProvider {...methods}>
-        <View style={styles.inputs}>
-          <ControlledInput
-            name={'name'}
-            label={'Наименование'}
-            placeholder={'Наименование'}
-            variant={'text'}
-            maxLength={50}
-            hint={
-              errors.name?.message ||
-              (hasName ? 'Данный материал уже включен в смету' : undefined)
-            }
-            isError={!!errors.name?.message || hasName}
-          />
-          <ControlledInput
-            name={'count'}
-            label={'Количество'}
-            placeholder={'Количество'}
-            variant={'number'}
-            hint={errors.count?.message}
-            isError={!!errors.count?.message}
-            maxLength={5}
-          />
-          <ControlledPriceInput
-            name={'price'}
-            label={'Цена'}
-            placeholder={'Цена'}
-            variant={'text'}
-            keyboardType="numeric"
-            hint={
-              errors.price?.message ||
-              'Указывается в рублях за одну единицу измерения'
-            }
-            isError={!!errors.price?.message}
-          />
-        </View>
-        <MeasureItem
-          measure={measure}
-          measures={measures}
-          error={errors.measure?.message}
-        />
+    <KeyboardAwareScrollView
+      enableOnAndroid={true}
+      keyboardOpeningTime={100}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+    >
+      <View style={styles.container}>
+        <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
+          Заполните данные о материале
+        </Text>
         <Spacer size={'xl'} />
-        <Button
-          label={'Добавить'}
-          onPress={methods.handleSubmit(onSubmit)}
-          style={styles.button}
-          isPending={loading}
-          disabled={hasName || loading}
-        />
-      </FormProvider>
-    </View>
+        <FormProvider {...methods}>
+          <View style={styles.inputs}>
+            <ControlledInput
+              name={'name'}
+              label={'Наименование'}
+              placeholder={'Наименование'}
+              variant={'text'}
+              maxLength={50}
+              hint={
+                errors.name?.message ||
+                (hasName ? 'Данный материал уже включен в смету' : undefined)
+              }
+              isError={!!errors.name?.message || hasName}
+            />
+            <ControlledInput
+              name={'count'}
+              label={'Количество'}
+              placeholder={'Количество'}
+              variant={'number'}
+              hint={errors.count?.message}
+              isError={!!errors.count?.message}
+              maxLength={5}
+            />
+            <ControlledPriceInput
+              name={'price'}
+              label={'Цена'}
+              placeholder={'Цена'}
+              variant={'text'}
+              keyboardType="numeric"
+              hint={
+                errors.price?.message ||
+                'Указывается в рублях за одну единицу измерения'
+              }
+              isError={!!errors.price?.message}
+            />
+          </View>
+          <MeasureItem
+            measure={measure}
+            measures={measures}
+            error={errors.measure?.message}
+          />
+          <Spacer size={'xl'} />
+          <Button
+            label={'Добавить'}
+            onPress={methods.handleSubmit(onSubmit)}
+            style={styles.button}
+            isPending={loading}
+            disabled={hasName || loading}
+          />
+        </FormProvider>
+      </View>
+    </KeyboardAwareScrollView>
   );
 };
