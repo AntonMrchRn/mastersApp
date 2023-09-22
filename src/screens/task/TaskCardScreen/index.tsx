@@ -45,7 +45,8 @@ type TaskCardScreenProps = CompositeScreenProps<
 export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
-  const taskId = route.params.taskId;
+  // const taskId = route.params.taskId;
+  const taskId = '1602';
 
   const {
     id,

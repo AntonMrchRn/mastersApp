@@ -129,6 +129,9 @@ type Task = {
   curators?: Curator[];
   description?: string;
   executors?: Executor[];
+  /**
+   * количество исполнителей в задаче
+   */
   executorsCount?: number;
   files?: File[];
   isCuratorAllowed?: boolean;
