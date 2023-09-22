@@ -14,6 +14,7 @@ import { useTaskSSE } from '@/hooks/useTaskSSE';
 import { AppScreenName } from '@/navigation/AppNavigation';
 import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { BottomTabName } from '@/navigation/TabNavigation';
+import { axiosInstance } from '@/services/axios/axiosInstance';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   useDeleteITTaskMemberMutation,
@@ -27,6 +28,7 @@ import {
   usePatchTaskMutation,
   usePostITTaskMemberMutation,
 } from '@/store/api/tasks';
+import { GetTaskResponse } from '@/store/api/tasks/types';
 import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { getCommentsPreview } from '@/store/slices/myTasks/asyncActions';
@@ -237,6 +239,7 @@ export const useTaskCard = ({
   const description = task?.description || '';
   const offersDeadline = task?.offersDeadline;
   const winnerOffer = task?.winnerOffer;
+  const executorsCount = task?.executorsCount;
 
   /**
    * Промежуточный статус “к Закрытию“ для:
@@ -554,6 +557,68 @@ export const useTaskCard = ({
       }
     }
 
+    //принять задачу, если IT внутренний исполнитель
+    //исполнителей может быть один или двое
+    if (subsetID === TaskType.IT_INTERNAL_EXECUTIVES && user?.userID) {
+      //проверяем есть ли он в мемберах
+      //если пригласили то isIvitedExecutor
+      try {
+        if (isInvitedExecutor) {
+          //если в мемберах то
+          await patchITTaskMember({
+            ID: executorMemberId,
+            isConfirm: true,
+          }).unwrap();
+        }
+        // если его нет то делаем
+        await postITTaskMember({
+          taskID: taskId,
+          members: [
+            {
+              userID: user.userID,
+              isConfirm: true,
+            },
+          ],
+        }).unwrap();
+        if (task?.executorsCount === 1) {
+          // если исполнитель один, то просто принимаем задачу
+          //патчим таску и берем в работу
+          await patchTask({
+            ID: taskId,
+            statusID: StatusType.WORK,
+            outlayStatusID: OutlayStatusType.READY,
+          }).unwrap();
+        }
+        if (task?.executorsCount === 2) {
+          // если исполнителей двое, то
+          //проверяем на isConfirmed, если двое то патчим таску и переводим в работу
+          //если нет то ждем второго исполнителя и уже он патчит таску
+          //либо же руководитель может пропатчить у себя таску не дожидаясь второго исполнителя
+
+          const getTask = await axiosInstance.get<GetTaskResponse>(
+            `tasks/web?query=?ID==${id}?`
+          );
+          const currentExecutors = getTask.data.tasks[0]?.executors || [];
+
+          const confirmedExecutors = currentExecutors.filter(
+            executor => executor.isConfirm
+          );
+          if (confirmedExecutors.length > 1) {
+            await patchTask({
+              ID: taskId,
+              statusID: StatusType.WORK,
+              outlayStatusID: OutlayStatusType.READY,
+            }).unwrap();
+          }
+        }
+      } catch (error) {
+        toast.show({
+          type: 'error',
+          title: (error as AxiosQueryErrorResponse).data.message,
+        });
+      }
+    }
+
     if (submissionModalVisible) {
       onSubmissionModalClose();
     }
@@ -648,7 +713,21 @@ export const useTaskCard = ({
           isCurator &&
             curatorMemberId &&
             (await deleteITTaskMember(curatorMemberId).unwrap());
-          // navigation.goBack();
+        }
+      }
+      if (subsetID === TaskType.IT_INTERNAL_EXECUTIVES && executorMemberId) {
+        //делаем удаление мембера (себя оттуда)
+        await deleteITTaskMember(executorMemberId).unwrap();
+        // если все ок то в then проверяем длину executors фильтрованному по isConfirm
+        //если задание не в статусе опубликовано
+        // и если он 1 - то задание переводим во 2 статус (опубликовано)
+        if (statusID !== StatusType.ACTIVE) {
+          await patchTask({
+            ID: taskId,
+            refuseReason,
+            statusID: StatusType.ACTIVE,
+            outlayStatusID: OutlayStatusType.READY,
+          }).unwrap();
         }
       }
     } catch (error) {
@@ -818,6 +897,7 @@ export const useTaskCard = ({
     closureFiles,
     onCancelTask,
     isContractor,
+    isExecutor,
     navigateToChat,
     userOffersData,
     onWorkDelivery,
@@ -870,6 +950,7 @@ export const useTaskCard = ({
     isEstimateTabs,
     onRevokeBudget,
     onTaskSubmission,
+    isExecutor,
     estimateTabsArray,
     cancelModalVisible,
     budgetModalVisible,
@@ -892,5 +973,6 @@ export const useTaskCard = ({
     onNoAccessToTaskBannerVisible,
     directionNotSpecifiedBannerVisible,
     onDirectionNotSpecifiedBannerVisible,
+    executorsCount,
   };
 };
