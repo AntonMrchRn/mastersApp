@@ -25,6 +25,17 @@ getBackgroundMessages();
 const App = () => {
   usePushMessages();
   iosPushPermission();
+  const config = {
+    screens: {
+      TaskCard: {
+        path: 'TaskCard/:taskId',
+      },
+    },
+  };
+  const linking = {
+    prefixes: ['mastera://', 'https://mastera-service.ru'],
+    config,
+  };
   return (
     <GestureHandlerRootView style={styles.container}>
       <Provider store={store}>
@@ -33,7 +44,7 @@ const App = () => {
             <ThemeProvider>
               <ToastProvider>
                 <KeyboardProvider>
-                  <NavigationContainer theme={MyTheme}>
+                  <NavigationContainer theme={MyTheme} linking={linking}>
                     <BottomSheetModalProvider>
                       <StatusBar
                         translucent
