@@ -95,6 +95,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
     uploadLimitBannerVisible,
     onUploadLimitBannerVisible,
     executorsCount,
+    isExecutor,
   } = useTaskCard({ taskId, navigation });
 
   return (
@@ -176,7 +177,8 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
                     )}
                   {statusID === StatusType.ACTIVE &&
                     subsetID === TaskType.IT_INTERNAL_EXECUTIVES &&
-                    executorsCount === 2 && (
+                    executorsCount === 2 &&
+                    isExecutor && (
                       <Tips
                         type={'info'}
                         text={'Ожидается второй исполнитель'}

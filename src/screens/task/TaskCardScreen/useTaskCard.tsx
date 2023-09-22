@@ -713,7 +713,21 @@ export const useTaskCard = ({
           isCurator &&
             curatorMemberId &&
             (await deleteITTaskMember(curatorMemberId).unwrap());
-          // navigation.goBack();
+        }
+      }
+      if (subsetID === TaskType.IT_INTERNAL_EXECUTIVES && executorMemberId) {
+        //делаем удаление мембера (себя оттуда)
+        await deleteITTaskMember(executorMemberId).unwrap();
+        // если все ок то в then проверяем длину executors фильтрованному по isConfirm
+        //если задание не в статусе опубликовано
+        // и если он 1 - то задание переводим во 2 статус (опубликовано)
+        if (statusID !== StatusType.ACTIVE) {
+          await patchTask({
+            ID: taskId,
+            refuseReason,
+            statusID: StatusType.ACTIVE,
+            outlayStatusID: OutlayStatusType.READY,
+          }).unwrap();
         }
       }
     } catch (error) {
@@ -936,6 +950,7 @@ export const useTaskCard = ({
     isEstimateTabs,
     onRevokeBudget,
     onTaskSubmission,
+    isExecutor,
     estimateTabsArray,
     cancelModalVisible,
     budgetModalVisible,
