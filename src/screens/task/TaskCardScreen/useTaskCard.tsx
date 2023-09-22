@@ -639,9 +639,11 @@ export const useTaskCard = ({
   const onWorkDelivery = async () => {
     if (
       subsetID &&
-      [TaskType.COMMON_FIRST_RESPONSE, TaskType.IT_FIRST_RESPONSE].includes(
-        subsetID
-      ) &&
+      [
+        TaskType.COMMON_FIRST_RESPONSE,
+        TaskType.IT_FIRST_RESPONSE,
+        TaskType.IT_INTERNAL_EXECUTIVES,
+      ].includes(subsetID) &&
       outlayStatusID !== OutlayStatusType.READY
     ) {
       !estimateBannerVisible && onEstimateBannerVisible();
