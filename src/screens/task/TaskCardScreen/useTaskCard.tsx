@@ -239,6 +239,7 @@ export const useTaskCard = ({
   const description = task?.description || '';
   const offersDeadline = task?.offersDeadline;
   const winnerOffer = task?.winnerOffer;
+  const executorsCount = task?.executorsCount;
 
   /**
    * Промежуточный статус “к Закрытию“ для:
@@ -957,5 +958,6 @@ export const useTaskCard = ({
     onNoAccessToTaskBannerVisible,
     directionNotSpecifiedBannerVisible,
     onDirectionNotSpecifiedBannerVisible,
+    executorsCount,
   };
 };
