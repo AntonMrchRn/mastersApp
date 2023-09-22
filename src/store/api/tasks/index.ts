@@ -67,7 +67,7 @@ export const tasksAPI = api
           method: 'GET',
         }),
       }),
-      getOffers: builder.query<GetOffersResponse, string>({
+      getOffers: builder.query<GetOffersResponse, number>({
         query: taskID => ({
           url: `offers?query=?taskID==${taskID}?`,
           method: 'GET',

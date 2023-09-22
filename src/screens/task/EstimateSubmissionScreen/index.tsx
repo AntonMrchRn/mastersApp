@@ -40,7 +40,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   navigation,
   route,
 }) => {
-  const { taskId, isEdit } = route.params;
+  const { taskId, isEdit, isItLots } = route.params;
 
   const {
     bsRef,
@@ -75,7 +75,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     onDeleteEstimateMaterialModalVisible,
     onCancelDeleteMaterial,
     deleteEstimateMaterialModalVisible,
-  } = useEstimateSubmission({ navigation, taskId, isEdit });
+  } = useEstimateSubmission({ navigation, taskId, isEdit, isItLots });
 
   const dispatch = useAppDispatch();
   const theme = useTheme();

@@ -357,7 +357,15 @@ export const useTaskCard = ({
     subsetID === TaskType.IT_AUCTION_SALE && isContractor
       ? ''
       : offersDeadline
-      ? `Срок подачи сметы до ${dayjs(offersDeadline).format('D MMMM в HH:mm')}`
+      ? isOffersDeadlineOver &&
+        subsetID &&
+        [TaskType.IT_AUCTION_SALE, TaskType.COMMON_AUCTION_SALE].includes(
+          subsetID
+        )
+        ? 'Подача заявок окончена. Результаты торгов будут объявлены в ближайшее время'
+        : `Срок подачи сметы до ${dayjs(offersDeadline).format(
+            'D MMMM в HH:mm'
+          )}`
       : '';
 
   const hasAccessToTask = userData?.isApproved;
@@ -464,8 +472,17 @@ export const useTaskCard = ({
   };
 
   const onTaskSubmission = async () => {
-    //принимаем таску в работу, если первый отклик
+    //навигация на скрин подачи сметы, если IT-ЛОТЫ
+    if (subsetID === TaskType.IT_AUCTION_SALE) {
+      dispatch(setNewOfferServices(services));
+      navigation.navigate(AppScreenName.EstimateSubmission, {
+        taskId,
+        isItLots: true,
+      });
+    }
+
     if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
+      //принимаем таску в работу, если первый отклик
       try {
         if (user?.userID) {
           await patchTask({

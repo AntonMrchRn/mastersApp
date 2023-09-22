@@ -937,8 +937,16 @@ export const getButtons = ({
                   ...(!isCurator
                     ? [
                         {
-                          label: 'Принять задачу',
+                          label: 'Подать смету как исполнитель',
                           variant: 'accent',
+                          onPress:
+                            isContractor || isInternalExecutor
+                              ? onTaskSubmission
+                              : onSubmissionModalVisible,
+                        } as TaskCardBottomButton,
+                        {
+                          label: 'Подать смету как куратор',
+                          variant: 'outlineAccent',
                           onPress:
                             isContractor || isInternalExecutor
                               ? onTaskSubmission

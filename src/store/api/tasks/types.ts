@@ -38,6 +38,7 @@ type Service = {
   serviceID?: number;
   taskID?: number;
   canDelete?: boolean;
+  userID?: number;
 };
 type Executor = {
   ID: number;
