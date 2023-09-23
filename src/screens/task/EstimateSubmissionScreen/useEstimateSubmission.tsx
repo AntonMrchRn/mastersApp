@@ -10,11 +10,13 @@ import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   useGetTaskQuery,
+  usePatchITTaskMemberMutation,
   usePatchOffersMutation,
   usePatchTaskLotMutation,
+  usePostITTaskMemberMutation,
   usePostOffersMutation,
 } from '@/store/api/tasks';
-import { Material, Service } from '@/store/api/tasks/types';
+import { Executor, Material, Service } from '@/store/api/tasks/types';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import {
   setNewOfferServices,
@@ -23,12 +25,14 @@ import {
 } from '@/store/slices/tasks/actions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
+import { TaskType } from '@/types/task';
 
 export const useEstimateSubmission = ({
   navigation,
   taskId,
   isEdit,
-  isItLots,
+  isInvitedExecutor,
+  executor,
 }: {
   navigation: StackNavigationProp<
     AppStackParamList,
@@ -37,7 +41,8 @@ export const useEstimateSubmission = ({
   >;
   taskId: number;
   isEdit: boolean | undefined;
-  isItLots: boolean | undefined;
+  isInvitedExecutor: boolean | undefined;
+  executor: Executor | undefined;
 }) => {
   const dispatch = useAppDispatch();
   const toast = useToast();
@@ -48,6 +53,8 @@ export const useEstimateSubmission = ({
 
   useTaskSSE(taskId);
 
+  const [postITTaskMember] = usePostITTaskMemberMutation();
+  const [patchITTaskMember] = usePatchITTaskMemberMutation();
   const [patchTaskLot] = usePatchTaskLotMutation();
   const [postOffers] = usePostOffersMutation();
   const [patchOffers] = usePatchOffersMutation();
@@ -73,7 +80,9 @@ export const useEstimateSubmission = ({
 
   const { offerServices, error, loading, offerComment, offerID } =
     useAppSelector(selectTasks);
+  const user = useAppSelector(selectAuth).user;
   const userRole = useAppSelector(selectAuth).user?.roleID;
+  const isItLots = data?.tasks[0]?.subsetID === TaskType.IT_AUCTION_SALE;
 
   useEffect(() => {
     if (isFocused) {
@@ -231,6 +240,7 @@ export const useEstimateSubmission = ({
   const setComment = (text: string) => {
     dispatch(setOfferComment(text));
   };
+
   const onSubmit = async () => {
     //если есть ошибка валидации
     if (isError) {
@@ -271,8 +281,25 @@ export const useEstimateSubmission = ({
         ...(isEdit && offerID && { offerID }),
       }).unwrap();
       if (isItLots) {
-        // /tasks/members/it
-        // /offers
+        isInvitedExecutor
+          ? await postITTaskMember({
+              taskID: data?.tasks[0]?.ID as number,
+              members: [
+                {
+                  userID: user?.userID,
+                  isConfirm: true,
+                  isCurator: false,
+                },
+              ],
+            }).unwrap()
+          : await patchITTaskMember({
+              ID: executor?.memberID,
+              userID: user?.userID,
+              isConfirm: true,
+              isCurator: false,
+            }).unwrap();
+
+        // offers
       }
       const postServices: Service[] = services.map(service => {
         const postMaterials =

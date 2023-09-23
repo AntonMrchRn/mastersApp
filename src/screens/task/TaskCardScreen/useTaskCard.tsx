@@ -481,7 +481,8 @@ export const useTaskCard = ({
       dispatch(setNewOfferServices(services));
       navigation.navigate(AppScreenName.EstimateSubmission, {
         taskId,
-        isItLots: true,
+        isInvitedExecutor,
+        executor,
       });
     }
 

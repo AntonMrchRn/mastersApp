@@ -874,7 +874,7 @@ export const getButtons = ({
           return [];
       }
     case TaskType.IT_AUCTION_SALE:
-      //к закрытию
+      //к закрытию IT-Лоты
       if (toClose) {
         switch (tab) {
           case TaskTab.REPORT:
@@ -918,8 +918,11 @@ export const getButtons = ({
             case TaskTab.REPORT:
             case TaskTab.HISTORY:
             case TaskTab.COMMENTS:
-              // приглашенный координатором куратор
+              if (isOffersDeadlineOver) {
+                return [];
+              }
               if (isInvitedCurator) {
+                // приглашенный координатором куратор
                 return [
                   {
                     label: 'Стать куратором',

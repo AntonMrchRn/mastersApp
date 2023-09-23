@@ -33,7 +33,6 @@ export const tasksAPI = api
           method: 'GET',
         }),
         providesTags: ['task'],
-        // transformResponse: (response: GetTaskResponse) => response.tasks[0],
       }),
       getTaskHistory: builder.query<GetTaskHistoryResponse, number>({
         query: id => ({
