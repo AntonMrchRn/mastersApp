@@ -17,7 +17,7 @@ import RecoveryScreen from '@/screens/auth/RecoveryScreen';
 import SignInScreen from '@/screens/auth/SignInScreen';
 import { CandidateEstimatesScreen } from '@/screens/task/CandidateEstimatesScreen';
 import { CommentsChatScreen } from '@/screens/task/CommentsChatScreen';
-import ContractorsScreen from '@/screens/task/Contractors';
+import { ContractorsScreen } from '@/screens/task/ContractorsScreen';
 import { EstimateAddMaterialScreen } from '@/screens/task/EstimateAddMaterialScreen';
 import { EstimateAddServiceScreen } from '@/screens/task/EstimateAddServiceScreen';
 import { EstimateEditScreen } from '@/screens/task/EstimateEditScreen';

@@ -5,7 +5,7 @@ import { useToast } from 'rn-ui-kit';
 
 import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { BottomTabName } from '@/navigation/TabNavigation';
-import { styles } from '@/screens/task/Contractors/style';
+import { styles } from '@/screens/task/ContractorsScreen/style';
 import {
   useGetAvailableContractorsQuery,
   usePatchITTaskMemberMutation,

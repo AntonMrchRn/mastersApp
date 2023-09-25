@@ -21,11 +21,12 @@ import { persistor, store } from '@/store';
 import 'dayjs/locale/ru';
 
 dayjs.locale('ru');
+
 getBackgroundMessages();
+iosPushPermission();
 
 const App = () => {
   usePushMessages();
-  iosPushPermission();
   const config = {
     screens: {
       TaskCard: {
