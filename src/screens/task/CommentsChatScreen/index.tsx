@@ -11,7 +11,7 @@ import { useKeyboardAnimation } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { StackScreenProps } from '@react-navigation/stack';
-import { Input, useTheme } from 'rn-ui-kit';
+import { Input, Text, useTheme } from 'rn-ui-kit';
 
 import SendButton from '@/assets/icons/svg/screens/SendButton';
 import PreviewNotFound, {
@@ -95,6 +95,15 @@ export const CommentsChatScreen = ({
           },
         ]}
       >
+        {!isMessageInputAvailable && (
+          <Text
+            variant="bodySRegular"
+            style={styles.closingText}
+            color={theme.text.neutral}
+          >
+            Задача закрыта. Отправка сообщений координатору недоступна
+          </Text>
+        )}
         {comments?.taskComment?.length ? (
           <FlatList
             inverted
