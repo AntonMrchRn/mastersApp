@@ -44,19 +44,12 @@ const DocumentsBlock = ({
 
   const [isBannerVisible, setIsBannerVisible] = useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [uploadedFileIDs, setUploadedFileIDs] = useState<number[]>([]);
 
   useEffect(() => {
     if (isLoading || isSuccess) {
       scrollToEnd();
     }
   }, [Object.keys(controllers)]);
-
-  const saveFiles = async (files: File[]) => {
-    setUploadedFileIDs(files.map(file => file.fileID));
-    await saveOnDevice(files);
-    setUploadedFileIDs([]);
-  };
 
   useEffect(() => {
     if (isBannerVisible) {
@@ -93,7 +86,7 @@ const DocumentsBlock = ({
         signal: controller.signal,
       }).unwrap();
 
-      saveFiles(addedFiles);
+      saveOnDevice(addedFiles, 'user');
     } catch (err) {
       console.log('handleUpload error', err);
     }
@@ -113,11 +106,7 @@ const DocumentsBlock = ({
       <Spacer size="xl" />
       {files.length ? (
         <>
-          <DownloadManager
-            files={files}
-            onDelete={onDelete}
-            uploadedFileIDs={uploadedFileIDs}
-          />
+          <DownloadManager files={files} onDelete={onDelete} fileType="user" />
           <UploadProgress
             controllers={controllers}
             progressesSelector={progressesSelector}

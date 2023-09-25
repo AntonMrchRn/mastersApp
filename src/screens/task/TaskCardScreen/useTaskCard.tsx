@@ -45,6 +45,7 @@ import {
   TaskTab,
   TaskType,
 } from '@/types/task';
+import { checkFilesOnDevice } from '@/utils/fileManager/checkFilesOnDevice';
 
 import { getBanner } from './getBanner';
 import { getButtons } from './getButtons';
@@ -128,7 +129,8 @@ export const useTaskCard = ({
   const [postITTaskMember] = usePostITTaskMemberMutation();
 
   const getUserQuery = useGetUserQuery(user?.userID);
-  const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
+  const { data, isError, error, refetch, isLoading, isSuccess } =
+    useGetTaskQuery(taskId);
   useTaskSSE(taskId);
   const getTaskHistory = useGetTaskHistoryQuery(taskId);
   const task = data?.tasks?.[0];
@@ -189,6 +191,11 @@ export const useTaskCard = ({
       });
     }
   }, [deleteOffersMutation.isError]);
+  useEffect(() => {
+    if (isSuccess) {
+      checkFilesOnDevice(files);
+    }
+  }, [isSuccess]);
 
   const userData = getUserQuery.data;
   const entityTypeID = userData?.entityTypeID;
@@ -864,8 +871,8 @@ export const useTaskCard = ({
             onClose={onUploadModalClose}
             activeBudgetCanceled={!!banner}
             uploadModalVisible={uploadModalVisible}
-            onUploadLimitBannerVisible={onUploadLimitBannerVisible}
             uploadLimitBannerVisible={uploadLimitBannerVisible}
+            onUploadLimitBannerVisible={onUploadLimitBannerVisible}
           />
         );
       case TaskTab.HISTORY:

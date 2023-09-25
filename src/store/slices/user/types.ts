@@ -11,6 +11,7 @@ type InitialState = {
   linkTimeout: null | { timeout: number };
   phoneTimeout: null | { timeout: number };
   emailTimeout: null | { timeout: number };
+  filesOnDevice: { [index: number]: boolean } | undefined;
   progresses: Progresses;
 };
 

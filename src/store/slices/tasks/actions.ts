@@ -1,6 +1,8 @@
 import tasks from './reducer';
 
 export const {
+  setTaskFileOnDevice,
+  setTaskFilesOnDevice,
   setProgresses,
   deleteProgress,
   setNewOfferServices,
