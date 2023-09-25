@@ -6,13 +6,13 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { NavigationContainer } from '@react-navigation/native';
+import { LinkingOptions, NavigationContainer } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider, ToastProvider } from 'rn-ui-kit';
 
 import { MyTheme } from '@/constants/platform';
-import { AppNavigation } from '@/navigation/AppNavigation';
+import { AppNavigation, AppStackParamList } from '@/navigation/AppNavigation';
 import { getBackgroundMessages } from '@/services/notifications/getBackgroundMessages';
 import { iosPushPermission } from '@/services/notifications/iosPushPermission';
 import { usePushMessages } from '@/services/notifications/usePushMessages';
@@ -22,6 +22,7 @@ import 'dayjs/locale/ru';
 
 dayjs.locale('ru');
 getBackgroundMessages();
+
 const App = () => {
   usePushMessages();
   iosPushPermission();
@@ -30,9 +31,16 @@ const App = () => {
       TaskCard: {
         path: 'TaskCard/:taskId',
       },
+      AppNavigator: {
+        screens: {
+          TaskSearch: {
+            path: 'TaskSearch',
+          },
+        },
+      },
     },
   };
-  const linking = {
+  const linking: LinkingOptions<AppStackParamList> = {
     prefixes: ['mastera://', 'https://mastera-service.ru'],
     config,
   };

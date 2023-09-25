@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 
+import { NavigatorScreenParams } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Header from '@/components/Header';
 import { useCheckLogin } from '@/hooks/useCheckLogin';
 import useConnectionToast from '@/hooks/useConnectionToast';
-import { TabNavigation } from '@/navigation/TabNavigation';
+import { BottomTabParamList, TabNavigation } from '@/navigation/TabNavigation';
 import { AccessRestrictedScreen } from '@/screens/auth/AccessRestrictedScreen';
 import EmailScreen from '@/screens/auth/EmailScreen';
 import ErrorScreen from '@/screens/auth/ErrorScreen';
@@ -52,7 +53,7 @@ export enum AppScreenName {
 export type AppStackParamList = {
   [AppScreenName.AccessRestricted]: undefined;
   [AppScreenName.SignIn]: undefined;
-  [AppScreenName.AppNavigator]: undefined;
+  [AppScreenName.AppNavigator]: NavigatorScreenParams<BottomTabParamList>;
   [AppScreenName.Email]: undefined;
   [AppScreenName.Recovery]: undefined;
   [AppScreenName.Password]: undefined;
