@@ -20,14 +20,14 @@ type DownloadManagerProps = {
     filePath?: string;
   }) => Promise<void>;
   canDelete?: boolean;
-  uploadedFileIDs?: number[];
+  fileType?: 'user' | 'task';
 };
 
 export const DownloadManager = ({
   files,
   onDelete,
   canDelete = true,
-  uploadedFileIDs = [],
+  fileType = 'task',
 }: DownloadManagerProps) => {
   const userID = useAppSelector(selectAuth).user?.userID;
   const userRoleId = useAppSelector(selectAuth).user?.roleID;
@@ -48,9 +48,9 @@ export const DownloadManager = ({
           <View style={[index !== 0 && styles.mt8]} key={file.fileID}>
             <DownloadItem
               file={file}
+              fileType={fileType}
               onDelete={onDelete}
               canDelete={isAvailableForDeletion}
-              isUploading={uploadedFileIDs.includes(file.fileID)}
             />
           </View>
         );

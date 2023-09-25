@@ -21,6 +21,7 @@ import { selectUser } from '@/store/slices/user/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import { ProfileTab } from '@/types/tab';
 import { UserRole } from '@/types/user';
+import { checkFilesOnDevice } from '@/utils/fileManager/checkFilesOnDevice';
 
 import styles from './style';
 
@@ -49,6 +50,7 @@ const useProfile = ({ tab }: { tab: TabProf | undefined }) => {
     isFetching,
     isError,
     error,
+    isSuccess,
     refetch,
   } = useGetUserQuery(authUser?.userID, {
     skip: !authUser?.userID,
@@ -58,6 +60,11 @@ const useProfile = ({ tab }: { tab: TabProf | undefined }) => {
   const [isBlockingModalVisible, setIsBlockingModalVisible] =
     useState<boolean>(false);
 
+  useEffect(() => {
+    if (isSuccess) {
+      checkFilesOnDevice(user.files, 'user');
+    }
+  }, [isSuccess]);
   useEffect(() => {
     if (isError) {
       toast.show({
@@ -71,13 +78,11 @@ const useProfile = ({ tab }: { tab: TabProf | undefined }) => {
       setActiveTab(tab);
     }
   }, [tab]);
-
   useEffect(() => {
     if (isApprovalNotificationVisible) {
       dispatch(setIsApprovalNotificationShown(true));
     }
   }, [isFocused, activeTab.id]);
-
   useEffect(() => {
     if (isFocused) {
       refetch();
@@ -137,9 +142,11 @@ const useProfile = ({ tab }: { tab: TabProf | undefined }) => {
     user,
     tabs,
     warning,
+    refetch,
     activeTab,
     switchTab,
     isLoading,
+    isFetching,
     onCopyEmail,
     scrollToEnd,
     scrollViewRef,
@@ -147,8 +154,6 @@ const useProfile = ({ tab }: { tab: TabProf | undefined }) => {
     isInternalExecutor,
     isBlockingModalVisible,
     isApprovalNotificationVisible,
-    refetch,
-    isFetching,
   };
 };
 
