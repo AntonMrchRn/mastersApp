@@ -204,6 +204,7 @@ export const useTaskCard = ({
    * участники задачи
    */
   const executors = task?.executors || [];
+  const confirmedExecutors = executors.filter(executor => executor.isConfirm);
   const cancelReason = task?.cancelReason;
   const curators = task?.curators || [];
   const coordinator = task?.coordinator;
@@ -601,11 +602,10 @@ export const useTaskCard = ({
             `tasks/web?query=?ID==${id}?`
           );
           const currentExecutors = getTask.data.tasks[0]?.executors || [];
-
-          const confirmedExecutors = currentExecutors.filter(
+          const currentConfirmedExecutors = currentExecutors.filter(
             executor => executor.isConfirm
           );
-          if (confirmedExecutors.length > 1) {
+          if (currentConfirmedExecutors.length > 1) {
             await patchTask({
               ID: taskId,
               statusID: StatusType.WORK,
@@ -720,12 +720,10 @@ export const useTaskCard = ({
         }
       }
       if (subsetID === TaskType.IT_INTERNAL_EXECUTIVES && executorMemberId) {
-        //делаем удаление мембера (себя оттуда)
-        await deleteITTaskMember(executorMemberId).unwrap();
-        // если все ок то в then проверяем длину executors фильтрованному по isConfirm
-        //если задание не в статусе опубликовано
-        // и если он 1 - то задание переводим во 2 статус (опубликовано)
-        if (statusID !== StatusType.ACTIVE) {
+        //* если задание не в статусе опубликовано
+        //* проверяем длину executors фильтрованному по isConfirm (текущее количество исполнителей)
+        //* и если он 1 - то задание переводим во 2 статус (опубликовано)
+        if (statusID !== StatusType.ACTIVE && confirmedExecutors.length === 1) {
           await patchTask({
             ID: taskId,
             refuseReason,
@@ -733,6 +731,8 @@ export const useTaskCard = ({
             outlayStatusID: OutlayStatusType.READY,
           }).unwrap();
         }
+        //* далее делаем удаление мембера (себя оттуда)
+        await deleteITTaskMember(executorMemberId).unwrap();
       }
     } catch (error) {
       toast.show({
