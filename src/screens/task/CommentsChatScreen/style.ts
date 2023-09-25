@@ -43,4 +43,10 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  closingText: {
+    paddingHorizontal: 20,
+    textAlign: 'center',
+    marginTop: 24,
+    marginBottom: 8,
+  },
 });

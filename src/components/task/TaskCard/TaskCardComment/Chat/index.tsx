@@ -36,7 +36,7 @@ const ChatMessage = ({
             style={[styles.humanInfo, { color: theme.text.neutral }]}
             variant="captionRegular"
           >
-            {fullname} {isITServices && `(${nominy})`}
+            {fullname} {isITServices && nominy && `(${nominy})`}
           </Text>
         )}
         <View

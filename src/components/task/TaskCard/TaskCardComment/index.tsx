@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 
 import { useIsFocused } from '@react-navigation/native';
+import plural from 'plural-ru';
 import { Text, useTheme } from 'rn-ui-kit';
 
 import PreviewNotFound, {
@@ -108,7 +109,14 @@ export const TaskCardComment = ({
     <View style={styles.container}>
       {isCommentsAvailable && !!commentsPreview?.taskComment?.length && (
         <Text variant="title3" style={styles.title}>
-          Последние 5 сообщений
+          {`Последние ${plural(
+            commentsPreview.taskComment?.length > 5
+              ? 5
+              : commentsPreview.taskComment?.length,
+            '%d сообщение',
+            '%d сообщения',
+            '%d сообщений'
+          )}`}
         </Text>
       )}
       <View
