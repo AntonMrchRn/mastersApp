@@ -128,12 +128,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
     count,
     price,
     measure,
-  }: {
-    name: string;
-    count: string;
-    price?: string;
-    measure: string;
-  }) => {
+  }: EstimateMaterialAdditionFormValues) => {
     if (!userRole) {
       return toast.show({
         type: 'error',
