@@ -12,7 +12,7 @@ type Material = {
   count: number;
   measure: string;
   name: string;
-  price: number;
+  price?: number;
   roleID: RoleType;
   localPrice?: string;
   localCount?: string;

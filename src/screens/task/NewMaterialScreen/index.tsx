@@ -39,17 +39,17 @@ export const NewMaterialScreen: FC<NewMaterialScreenProps> = ({
           };
           return (
             <View key={service.ID}>
-              <TouchableOpacity onPress={onPress}>
-                <Spacer size={20} />
-                <View style={styles.row}>
-                  <Text variant="bodyMRegular" color={theme.text.basic}>
-                    {service.name}
-                  </Text>
-                  <CaretRightIcon />
-                </View>
-                <Spacer size={20} />
+              <TouchableOpacity onPress={onPress} style={styles.row}>
+                <Text variant="bodyMRegular" color={theme.text.basic}>
+                  {service.name}
+                </Text>
+                <CaretRightIcon />
               </TouchableOpacity>
-              <Spacer size={0} separator="bottom" />
+              <Spacer
+                size={0}
+                separator="bottom"
+                separatorColor={theme.background.neutralDisableSecond}
+              />
             </View>
           );
         })}

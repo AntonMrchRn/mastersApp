@@ -11,17 +11,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  container: {
-    flexGrow: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   icon: {
     padding: 20,
     borderRadius: 16,
-  },
-  text: {
-    textAlign: 'center',
   },
   candidatRow: {
     flexDirection: 'row',

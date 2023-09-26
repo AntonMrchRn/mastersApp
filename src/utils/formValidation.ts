@@ -30,16 +30,18 @@ const estimateCountValidation = {
     .test('moreThanNull', 'Количество должно быть больше 0', moreThanNull)
     .required('Укажите количество услуги / материала'),
 };
-const estimateAddMaterialValidation = {
+const estimateAddMaterialValidation = (isInternalExecutor: boolean) => ({
   name: Yup.string().required('Укажите название материала'),
   count: Yup.string()
     .test('moreThanNull', 'Количество должно быть больше 0', moreThanNull)
     .required('Укажите количество материала'),
-  price: Yup.string()
-    .test('moreThanNull', 'Цена должна быть больше 0', moreThanNull)
-    .required('Укажите цену за одну единицу измерения'),
+  ...(!isInternalExecutor && {
+    price: Yup.string()
+      .test('moreThanNull', 'Цена должна быть больше 0', moreThanNull)
+      .required('Укажите цену за одну единицу измерения'),
+  }),
   measure: Yup.string().required('Выберите единицу измерения'),
-};
+});
 const estimateAddServiceValidation = {
   count: Yup.string()
     .test('moreThanNull', 'Количество должно быть больше 0', moreThanNull)
@@ -146,9 +148,8 @@ const cancelTaskValidationSchema = (withReason: boolean) =>
 const estimateCountValidationSchema = Yup.object().shape(
   estimateCountValidation
 );
-const estimateAddMaterialValidationSchema = Yup.object().shape(
-  estimateAddMaterialValidation
-);
+const estimateAddMaterialValidationSchema = (isInternalExecutor: boolean) =>
+  Yup.object().shape(estimateAddMaterialValidation(isInternalExecutor));
 const estimateAddServiceValidationSchema = Yup.object().shape(
   estimateAddServiceValidation
 );

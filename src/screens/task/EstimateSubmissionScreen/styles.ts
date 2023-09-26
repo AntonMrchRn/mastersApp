@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+import { configApp, deviceWidth } from '@/constants/platform';
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -32,5 +34,14 @@ export const styles = StyleSheet.create({
   head: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  bannerContainer: {
+    position: 'absolute',
+    bottom: 70,
+    width: deviceWidth - 40,
+    alignSelf: 'center',
+  },
+  btn: {
+    marginBottom: configApp.android ? 20 : 0,
   },
 });

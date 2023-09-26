@@ -17,7 +17,6 @@ import { DeleteEstimateServiceModal } from '@/components/task/DeleteEstimateServ
 import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { AddServiceBottomSheet } from '@/components/task/TaskCard/AddServiceBottomSheet';
 import { TaskCardAddEstimateBottomSheet } from '@/components/task/TaskCard/TaskCardAddEstimateBottomSheet';
-import { configApp, deviceWidth } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch } from '@/store';
 import {
@@ -229,7 +228,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                       error={error}
                       title={material.name}
                       count={material.count}
-                      price={material.price}
+                      price={material.price as number}
                       canDelete={material.canDelete}
                       measure={material.measure || ''}
                     />
@@ -259,14 +258,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
           <Spacer size={40} />
         </ScrollView>
         <View style={styles.ph20}>
-          <View
-            style={{
-              position: 'absolute',
-              bottom: 70,
-              width: deviceWidth - 40,
-              alignSelf: 'center',
-            }}
-          >
+          <View style={styles.bannerContainer}>
             {banner && (
               <Banner
                 type={'warning'}
@@ -281,7 +273,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
             label={isEdit ? 'Редактировать смету' : 'Подать смету'}
             disabled={isError}
             onPress={onSubmit}
-            style={{ marginBottom: configApp.android ? 20 : 0 }}
+            style={styles.btn}
           />
         </View>
       </SafeAreaView>

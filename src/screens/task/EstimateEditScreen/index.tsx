@@ -20,6 +20,7 @@ import {
 } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
+import { RoleType } from '@/types/task';
 import { estimateCountValidationSchema } from '@/utils/formValidation';
 
 import { styles } from './styles';
@@ -38,6 +39,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
   const isFocused = useIsFocused();
 
   const { taskId, serviceId, materialName } = route.params;
+  const userRoleId = useAppSelector(selectAuth).user?.roleID;
 
   const { data, refetch } = useGetTaskQuery(taskId);
 
@@ -142,82 +144,81 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
   };
   return (
     <KeyboardAwareScrollView
+      style={styles.container}
       enableOnAndroid={true}
       keyboardOpeningTime={100}
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
     >
-      <View style={styles.container}>
-        <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
-          Внесите необходимые изменения
+      <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
+        Внесите необходимые изменения
+      </Text>
+      {!!service?.categoryName && (
+        <Text variant={'captionRegular'} color={theme.text.neutral}>
+          {service?.categoryName}
         </Text>
-        {!!service?.categoryName && (
-          <Text variant={'captionRegular'} color={theme.text.neutral}>
-            {service?.categoryName}
-          </Text>
-        )}
-        {!!name && (
-          <Text
-            variant={'bodyMBold'}
-            color={theme.text.basic}
-            style={styles.name}
-          >
-            {name}
-          </Text>
-        )}
-        {!!description && (
-          <Text
-            variant={'bodySRegular'}
-            color={theme.text.basic}
-            style={styles.description}
-          >
-            {description}
-          </Text>
-        )}
-        {!!price && (
-          <View style={styles.row}>
-            <PriceIcon />
-            <Text
-              variant={'bodySRegular'}
-              color={theme.text.neutral}
-              style={styles.rowText}
-            >
-              {`${price} ₽ ${
-                measure === 'пустое' || !measure ? '' : `за ${measure}`
-              }`}
-            </Text>
-          </View>
-        )}
+      )}
+      {!!name && (
+        <Text
+          variant={'bodyMBold'}
+          color={theme.text.basic}
+          style={styles.name}
+        >
+          {name}
+        </Text>
+      )}
+      {!!description && (
+        <Text
+          variant={'bodySRegular'}
+          color={theme.text.basic}
+          style={styles.description}
+        >
+          {description}
+        </Text>
+      )}
+      {!!price && userRoleId !== RoleType.INTERNAL_EXECUTOR && (
         <View style={styles.row}>
-          <CubeIcon />
+          <PriceIcon />
           <Text
             variant={'bodySRegular'}
             color={theme.text.neutral}
             style={styles.rowText}
           >
-            {measure === 'пустое' || !measure
-              ? 'Единица измерения не указана'
-              : `Измеряется в ${currMeasure}`}
+            {`${price} ₽ ${
+              measure === 'пустое' || !measure ? '' : `за ${measure}`
+            }`}
           </Text>
         </View>
-        <Spacer size={'l'} />
-        <FormProvider {...methods}>
-          <ControlledInput
-            name={'estimateCount'}
-            variant={'number'}
-            label={'Количество'}
-            maxLength={5}
-            hint={errors.estimateCount?.message}
-            isError={!!errors.estimateCount?.message}
-          />
-          <Spacer size={'xl'} />
-          <Button
-            label={'Сохранить'}
-            onPress={methods.handleSubmit(onSubmit)}
-            style={styles.button}
-          />
-        </FormProvider>
+      )}
+      <View style={styles.row}>
+        <CubeIcon />
+        <Text
+          variant={'bodySRegular'}
+          color={theme.text.neutral}
+          style={styles.rowText}
+        >
+          {measure === 'пустое' || !measure
+            ? 'Единица измерения не указана'
+            : `Измеряется в ${currMeasure}`}
+        </Text>
       </View>
+      <Spacer size={'l'} />
+      <FormProvider {...methods}>
+        <ControlledInput
+          name={'estimateCount'}
+          variant={'number'}
+          label={'Количество'}
+          maxLength={5}
+          hint={errors.estimateCount?.message}
+          isError={!!errors.estimateCount?.message}
+        />
+        <Spacer size={'xl'} />
+        <Button
+          label={'Сохранить'}
+          onPress={methods.handleSubmit(onSubmit)}
+          style={styles.button}
+        />
+      </FormProvider>
     </KeyboardAwareScrollView>
   );
 };

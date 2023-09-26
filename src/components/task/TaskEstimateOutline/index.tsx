@@ -1,34 +1,24 @@
 import React, { FC } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
 import { Badge, Text, useTheme } from 'rn-ui-kit';
 
 import { PlusIcon } from '@/assets/icons/svg/estimate/PlusIcon';
 import { OutlayStatusType } from '@/types/task';
 
+import { styles } from './styles';
+
 type TaskEstimateOutlineProps = {
   outlayStatusID: OutlayStatusType | undefined;
+  showEstimateStatus: boolean;
   onPress?: () => void;
 };
 export const TaskEstimateOutline: FC<TaskEstimateOutlineProps> = ({
+  showEstimateStatus,
   outlayStatusID,
   onPress,
 }) => {
   const theme = useTheme();
-  const styles = StyleSheet.create({
-    container: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: 14,
-    },
-    button: {
-      flexDirection: 'row',
-    },
-    text: {
-      marginLeft: 4,
-    },
-  });
   const getBadge = () => {
     switch (outlayStatusID) {
       case OutlayStatusType.READY:
@@ -49,7 +39,7 @@ export const TaskEstimateOutline: FC<TaskEstimateOutlineProps> = ({
   };
   return (
     <View style={styles.container}>
-      {getBadge()}
+      {showEstimateStatus && getBadge()}
       <TouchableOpacity style={styles.button} onPress={onPress}>
         <PlusIcon fill={theme.icons.basic} />
         <Text variant="bodySBold" color={theme.text.basic} style={styles.text}>
