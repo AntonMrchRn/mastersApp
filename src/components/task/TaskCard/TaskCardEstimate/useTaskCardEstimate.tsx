@@ -185,7 +185,7 @@ export const useTaskCardEstimate = ({
               ...mat,
               price: coordMaterial ? coordMaterial.price : mat.price,
               canDelete: !coordMaterial,
-              localPrice: mat.price.toString(),
+              localPrice: mat.price?.toString(),
               count: coordMaterial ? coordMaterial.count : mat.count,
               localCount: mat.count.toString(),
             };

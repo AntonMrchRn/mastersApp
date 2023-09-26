@@ -835,20 +835,20 @@ export const useTaskCard = ({
       case TaskTab.ESTIMATE:
         return (
           <TaskCardEstimate
-            serviceMultiplier={serviceMultiplier}
-            services={services}
-            outlayStatusID={outlayStatusID}
-            statusID={statusID}
             taskId={id}
-            navigation={navigation}
-            onEstimateBottomVisible={onEstimateBottomVisible}
-            estimateBottomVisible={estimateBottomVisible}
-            cantDeleteBannerVisible={cantDeleteBannerVisible}
-            onCantDeleteBannerVisible={onCantDeleteBannerVisible}
+            services={services}
+            statusID={statusID}
             subsetID={subsetID}
-            currentEstimateTab={currentEstimateTab}
+            navigation={navigation}
             winnerOffer={winnerOffer}
             isContractor={isContractor}
+            outlayStatusID={outlayStatusID}
+            serviceMultiplier={serviceMultiplier}
+            currentEstimateTab={currentEstimateTab}
+            estimateBottomVisible={estimateBottomVisible}
+            cantDeleteBannerVisible={cantDeleteBannerVisible}
+            onEstimateBottomVisible={onEstimateBottomVisible}
+            onCantDeleteBannerVisible={onCantDeleteBannerVisible}
           />
         );
       case TaskTab.REPORT:
@@ -948,6 +948,7 @@ export const useTaskCard = ({
     publicTime,
     executors,
     onRefresh,
+    isExecutor,
     onTabChange,
     isContractor,
     onCancelTask,
@@ -955,9 +956,9 @@ export const useTaskCard = ({
     getCurrentTab,
     outlayStatusID,
     isEstimateTabs,
+    executorsCount,
     onRevokeBudget,
     onTaskSubmission,
-    isExecutor,
     estimateTabsArray,
     cancelModalVisible,
     budgetModalVisible,
@@ -980,6 +981,5 @@ export const useTaskCard = ({
     onNoAccessToTaskBannerVisible,
     directionNotSpecifiedBannerVisible,
     onDirectionNotSpecifiedBannerVisible,
-    executorsCount,
   };
 };

@@ -1,7 +1,9 @@
-import React, { FC } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import { TouchableOpacity, View } from 'react-native';
 
-import { BottomSheet, Button, Spacer, Text } from 'rn-ui-kit';
+import { BottomSheet, Button, Spacer, Text, useTheme } from 'rn-ui-kit';
+
+import { styles } from './styles';
 
 type TaskCardAddEstimateBottomSheetProps = {
   isVisible: boolean;
@@ -9,21 +11,14 @@ type TaskCardAddEstimateBottomSheetProps = {
   pressMaterial: () => void;
   pressService: () => void;
 };
-export const TaskCardAddEstimateBottomSheet: FC<
-  TaskCardAddEstimateBottomSheetProps
-> = ({ isVisible, onCancel, pressMaterial, pressService }) => {
-  const styles = StyleSheet.create({
-    button: {
-      marginTop: 24,
-    },
-    action: {
-      marginVertical: 20,
-    },
-    container: {
-      marginTop: 12,
-      marginBottom: 12,
-    },
-  });
+
+export const TaskCardAddEstimateBottomSheet = ({
+  isVisible,
+  onCancel,
+  pressMaterial,
+  pressService,
+}: TaskCardAddEstimateBottomSheetProps) => {
+  const theme = useTheme();
   return (
     <BottomSheet onSwipeComplete={onCancel} isVisible={isVisible}>
       <View style={styles.container}>
@@ -31,13 +26,21 @@ export const TaskCardAddEstimateBottomSheet: FC<
           <Text style={styles.action} variant={'bodyMRegular'}>
             Добавить материал
           </Text>
-          <Spacer size={0} separator="bottom" />
+          <Spacer
+            size="l"
+            separator="bottom"
+            separatorColor={theme.background.neutralDisableSecond}
+          />
         </TouchableOpacity>
         <TouchableOpacity onPress={pressService}>
           <Text style={styles.action} variant={'bodyMRegular'}>
             Добавить услугу
           </Text>
-          <Spacer size={0} separator="bottom" />
+          <Spacer
+            size="l"
+            separator="bottom"
+            separatorColor={theme.background.neutralDisableSecond}
+          />
         </TouchableOpacity>
         <Button
           style={styles.button}

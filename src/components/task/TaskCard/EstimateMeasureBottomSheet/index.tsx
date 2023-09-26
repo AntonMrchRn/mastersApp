@@ -1,11 +1,13 @@
-import React, { FC, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { TouchableOpacity, View } from 'react-native';
 
 import { BottomSheet, Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { CheckMeasureIcon } from '@/assets/icons/svg/estimate/CheckMeasureIcon';
 import { configApp } from '@/constants/platform';
 import { Measure } from '@/store/api/tasks/types';
+
+import { styles } from './styles';
 
 type EstimateMeasureBottomSheetProps = {
   isVisible: boolean;
@@ -14,32 +16,22 @@ type EstimateMeasureBottomSheetProps = {
   data: Measure[];
   selectedMeasure: string;
 };
-export const EstimateMeasureBottomSheet: FC<
-  EstimateMeasureBottomSheetProps
-> = ({ isVisible, onCancel, onChange, data, selectedMeasure }) => {
+export const EstimateMeasureBottomSheet = ({
+  isVisible,
+  onCancel,
+  onChange,
+  data,
+  selectedMeasure,
+}: EstimateMeasureBottomSheetProps) => {
   const theme = useTheme();
   const [selectName, setSelectName] = useState(selectedMeasure);
   const onChangeMeasure = () => {
     onChange(selectName);
   };
-  const styles = StyleSheet.create({
-    button: {
-      marginTop: 24,
-    },
-    action: {
-      marginVertical: 12,
-    },
-    container: {
-      marginTop: 8,
-    },
-    between: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-  });
+
   return (
     <BottomSheet
+      onBackdropPress={onCancel}
       onSwipeComplete={onCancel}
       isVisible={isVisible}
       title={'Единица измерения'}
@@ -53,23 +45,25 @@ export const EstimateMeasureBottomSheet: FC<
           };
           const isSelected = item.description === selectName;
           return (
-            <TouchableOpacity
-              onPress={onPress}
-              key={item.ID}
-              style={styles.between}
-            >
-              <Text
-                style={styles.action}
-                variant={'bodyMRegular'}
-                color={theme.text.basic}
-              >
-                {item.description} ({item.name.toLowerCase()})
-              </Text>
-              {isSelected && <CheckMeasureIcon />}
-            </TouchableOpacity>
+            <View key={item.ID}>
+              <TouchableOpacity onPress={onPress} style={styles.between}>
+                <Text
+                  style={styles.action}
+                  variant={'bodyMRegular'}
+                  color={theme.text.basic}
+                >
+                  {item.description} ({item.name.toLowerCase()})
+                </Text>
+                {isSelected && <CheckMeasureIcon />}
+              </TouchableOpacity>
+              <Spacer
+                size={0}
+                separator="bottom"
+                separatorColor={theme.background.neutralDisableSecond}
+              />
+            </View>
           );
         })}
-        <Spacer size={0} separator="bottom" />
         <Button
           style={styles.button}
           size="M"
