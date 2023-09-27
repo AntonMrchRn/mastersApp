@@ -25,13 +25,12 @@
 		46D599E2ED6B455F881F847A /* NunitoSans-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C6B56BE7BD1641A2A49C85CC /* NunitoSans-ExtraLight.ttf */; };
 		57DC35F2B368451788FE5BDC /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C068402937EF42AF9C436442 /* OpenSans-Light.ttf */; };
 		681FE9D6677642858DDDB2B2 /* OpenSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9A7E351261D84FEA9F850D59 /* OpenSans-Medium.ttf */; };
-		713295FF5EFC41B03A41C447 /* libPods-MastersApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 05A6D4E84428D5661A151B05 /* libPods-MastersApp.a */; };
+		6A29FDF2CEA8634E635FE46E /* libPods-MastersApp-MastersAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 916ED6B1819AC9BD7F77AA27 /* libPods-MastersApp-MastersAppTests.a */; };
 		7C43DA2FD517476DA6C90E65 /* NunitoSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 67C8C130C5FD458B88EEA530 /* NunitoSans-SemiBold.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		946A3D9D0DDB40898FA6B40F /* NunitoSans-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9F40E230B8EF4EEC9CFBEA3A /* NunitoSans-BlackItalic.ttf */; };
 		9645DB821F024C86A3358CD1 /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FAE4E00677C44A8C983BA444 /* OpenSans-ExtraBold.ttf */; };
 		A52217E575604880B8F9D56E /* NunitoSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CC070988147F4A21970DDA27 /* NunitoSans-Light.ttf */; };
-		A5DC53E994B7263D2880A468 /* libPods-MastersApp-MastersAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 820C98D0C63AA5C7C07040CB /* libPods-MastersApp-MastersAppTests.a */; };
 		A7FD0A390AC64387ABC65B7D /* OpenSans-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7341733B1B3545CC90C35FA4 /* OpenSans-SemiBoldItalic.ttf */; };
 		B3A62EBF102D4CF4A66BC392 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5EE7C4B10CBD49B69F27DDF2 /* OpenSans-Bold.ttf */; };
 		B79EED2209294CAC91774E98 /* NunitoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F93E25DDB174AD3B26BF399 /* NunitoSans-Bold.ttf */; };
@@ -44,6 +43,7 @@
 		E7AA55B075DD48C197B4E489 /* NunitoSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D64AF841637C43CCB0FDEBA0 /* NunitoSans-LightItalic.ttf */; };
 		E86406E1120343109883A42E /* OpenSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC2308B8885F43BDBA7FC2CC /* OpenSans-LightItalic.ttf */; };
 		F22D2E97BED7412B8E7FB1C3 /* NunitoSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0EF48BD9EF7A4F1295C37792 /* NunitoSans-BoldItalic.ttf */; };
+		FCA07B9810E635AEF2DE9C48 /* libPods-MastersApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 07DE05694B9FFF529590728B /* libPods-MastersApp.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,7 +60,8 @@
 		00E356EE1AD99517003FC87E /* MastersAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MastersAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* MastersAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MastersAppTests.m; sourceTree = "<group>"; };
-		05A6D4E84428D5661A151B05 /* libPods-MastersApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MastersApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		07DE05694B9FFF529590728B /* libPods-MastersApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MastersApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		09E6A9DE5B9BB0B269A096C1 /* Pods-MastersApp-MastersAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MastersApp-MastersAppTests.debug.xcconfig"; path = "Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		0EF48BD9EF7A4F1295C37792 /* NunitoSans-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-BoldItalic.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		1055706D723E4AD08EEAE5CD /* OpenSans-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Italic.ttf"; path = "../src/assets/fonts/OpenSans/OpenSans-Italic.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* MastersApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MastersApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,9 +71,11 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MastersApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MastersApp/main.m; sourceTree = "<group>"; };
 		19EFAE1AD21B4EB79C88D0AE /* NunitoSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-Regular.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-Regular.ttf"; sourceTree = "<group>"; };
+		27D63797A9B0A13932AD3018 /* Pods-MastersApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MastersApp.release.xcconfig"; path = "Target Support Files/Pods-MastersApp/Pods-MastersApp.release.xcconfig"; sourceTree = "<group>"; };
 		342B248EE36B4C509B80ECF3 /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-BoldItalic.ttf"; path = "../src/assets/fonts/OpenSans/OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		35E573C8987B4026B5539521 /* OpenSans-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-MediumItalic.ttf"; path = "../src/assets/fonts/OpenSans/OpenSans-MediumItalic.ttf"; sourceTree = "<group>"; };
 		4026FED791AC4DA6B0C28E3A /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Regular.ttf"; path = "../src/assets/fonts/OpenSans/OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		40A0863A8ECD83B11AFCCF5B /* Pods-MastersApp-MastersAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MastersApp-MastersAppTests.release.xcconfig"; path = "Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		4ACAFCF42F094AFAB1B0F99A /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-SemiBold.ttf"; path = "../src/assets/fonts/OpenSans/OpenSans-SemiBold.ttf"; sourceTree = "<group>"; };
 		5562BC1AB6E64940BAF9D445 /* NunitoSans-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-Italic.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-Italic.ttf"; sourceTree = "<group>"; };
 		5A022AFEE52444FD815B63EB /* NunitoSans-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-MediumItalic.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-MediumItalic.ttf"; sourceTree = "<group>"; };
@@ -80,16 +83,13 @@
 		5FD5E69CD26143F8A7D8DBEF /* NunitoSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-SemiBoldItalic.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		67C8C130C5FD458B88EEA530 /* NunitoSans-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-SemiBold.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-SemiBold.ttf"; sourceTree = "<group>"; };
 		6F93E25DDB174AD3B26BF399 /* NunitoSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-Bold.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-Bold.ttf"; sourceTree = "<group>"; };
+		722B30BBD255D2AE9348C7AB /* Pods-MastersApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MastersApp.debug.xcconfig"; path = "Target Support Files/Pods-MastersApp/Pods-MastersApp.debug.xcconfig"; sourceTree = "<group>"; };
 		7341733B1B3545CC90C35FA4 /* OpenSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-SemiBoldItalic.ttf"; path = "../src/assets/fonts/OpenSans/OpenSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
-		7C7E372E7DA36047C4CDEDEB /* Pods-MastersApp-MastersAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MastersApp-MastersAppTests.release.xcconfig"; path = "Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MastersApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		820C98D0C63AA5C7C07040CB /* libPods-MastersApp-MastersAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MastersApp-MastersAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8C04C99CB7E946B7EAD9495E /* Pods-MastersApp-MastersAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MastersApp-MastersAppTests.debug.xcconfig"; path = "Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests.debug.xcconfig"; sourceTree = "<group>"; };
-		982C1204880F012FC96D970E /* Pods-MastersApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MastersApp.debug.xcconfig"; path = "Target Support Files/Pods-MastersApp/Pods-MastersApp.debug.xcconfig"; sourceTree = "<group>"; };
+		916ED6B1819AC9BD7F77AA27 /* libPods-MastersApp-MastersAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MastersApp-MastersAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		991F2DBBF379404EA92B55FA /* OpenSans-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-ExtraBoldItalic.ttf"; path = "../src/assets/fonts/OpenSans/OpenSans-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
 		9A7E351261D84FEA9F850D59 /* OpenSans-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Medium.ttf"; path = "../src/assets/fonts/OpenSans/OpenSans-Medium.ttf"; sourceTree = "<group>"; };
 		9F40E230B8EF4EEC9CFBEA3A /* NunitoSans-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-BlackItalic.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-BlackItalic.ttf"; sourceTree = "<group>"; };
-		B4C5AD90A5335361E25D8950 /* Pods-MastersApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MastersApp.release.xcconfig"; path = "Target Support Files/Pods-MastersApp/Pods-MastersApp.release.xcconfig"; sourceTree = "<group>"; };
 		B8152527D0D24D23A99E8A36 /* NunitoSans-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-ExtraBold.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-ExtraBold.ttf"; sourceTree = "<group>"; };
 		C068402937EF42AF9C436442 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Light.ttf"; path = "../src/assets/fonts/OpenSans/OpenSans-Light.ttf"; sourceTree = "<group>"; };
 		C6B56BE7BD1641A2A49C85CC /* NunitoSans-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-ExtraLight.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-ExtraLight.ttf"; sourceTree = "<group>"; };
@@ -110,7 +110,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB49D17F55B4394EC0B20724 /* BuildFile in Frameworks */,
-				A5DC53E994B7263D2880A468 /* libPods-MastersApp-MastersAppTests.a in Frameworks */,
+				6A29FDF2CEA8634E635FE46E /* libPods-MastersApp-MastersAppTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,7 +119,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BC603E080F6C3905CA3814E0 /* BuildFile in Frameworks */,
-				713295FF5EFC41B03A41C447 /* libPods-MastersApp.a in Frameworks */,
+				FCA07B9810E635AEF2DE9C48 /* libPods-MastersApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,8 +195,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				05A6D4E84428D5661A151B05 /* libPods-MastersApp.a */,
-				820C98D0C63AA5C7C07040CB /* libPods-MastersApp-MastersAppTests.a */,
+				07DE05694B9FFF529590728B /* libPods-MastersApp.a */,
+				916ED6B1819AC9BD7F77AA27 /* libPods-MastersApp-MastersAppTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -236,10 +236,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				982C1204880F012FC96D970E /* Pods-MastersApp.debug.xcconfig */,
-				B4C5AD90A5335361E25D8950 /* Pods-MastersApp.release.xcconfig */,
-				8C04C99CB7E946B7EAD9495E /* Pods-MastersApp-MastersAppTests.debug.xcconfig */,
-				7C7E372E7DA36047C4CDEDEB /* Pods-MastersApp-MastersAppTests.release.xcconfig */,
+				722B30BBD255D2AE9348C7AB /* Pods-MastersApp.debug.xcconfig */,
+				27D63797A9B0A13932AD3018 /* Pods-MastersApp.release.xcconfig */,
+				09E6A9DE5B9BB0B269A096C1 /* Pods-MastersApp-MastersAppTests.debug.xcconfig */,
+				40A0863A8ECD83B11AFCCF5B /* Pods-MastersApp-MastersAppTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -251,12 +251,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "MastersAppTests" */;
 			buildPhases = (
-				8C1AE764BDB6123428AF0649 /* [CP] Check Pods Manifest.lock */,
+				12C3005167A339A915A0156A /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				860A0F57CB8A3BE87E389719 /* [CP] Embed Pods Frameworks */,
-				B3CABA3E9B9DD07E4B9D8224 /* [CP] Copy Pods Resources */,
+				874D5CCA2C023AF9DEDD4F07 /* [CP] Embed Pods Frameworks */,
+				5BB7E5D80AEE494461F38AF3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -272,14 +272,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "MastersApp" */;
 			buildPhases = (
-				03331A13075B42515353147F /* [CP] Check Pods Manifest.lock */,
+				C4D12B8A058DDDF08E45FCAF /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				AB19933A42F8274C048C6C2A /* [CP] Embed Pods Frameworks */,
-				6773836E1AEC12A0361595F3 /* [CP] Copy Pods Resources */,
+				35212C7DF200F1B045DCBE8A /* [CP] Embed Pods Frameworks */,
+				2054E3AD1C1078BE31E9B9C3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -390,63 +390,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		03331A13075B42515353147F /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MastersApp-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6773836E1AEC12A0361595F3 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		860A0F57CB8A3BE87E389719 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8C1AE764BDB6123428AF0649 /* [CP] Check Pods Manifest.lock */ = {
+		12C3005167A339A915A0156A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -468,7 +412,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		AB19933A42F8274C048C6C2A /* [CP] Embed Pods Frameworks */ = {
+		2054E3AD1C1078BE31E9B9C3 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		35212C7DF200F1B045DCBE8A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -485,7 +446,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B3CABA3E9B9DD07E4B9D8224 /* [CP] Copy Pods Resources */ = {
+		5BB7E5D80AEE494461F38AF3 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -500,6 +461,45 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		874D5CCA2C023AF9DEDD4F07 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C4D12B8A058DDDF08E45FCAF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MastersApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -554,7 +554,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8C04C99CB7E946B7EAD9495E /* Pods-MastersApp-MastersAppTests.debug.xcconfig */;
+			baseConfigurationReference = 09E6A9DE5B9BB0B269A096C1 /* Pods-MastersApp-MastersAppTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -581,7 +581,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7C7E372E7DA36047C4CDEDEB /* Pods-MastersApp-MastersAppTests.release.xcconfig */;
+			baseConfigurationReference = 40A0863A8ECD83B11AFCCF5B /* Pods-MastersApp-MastersAppTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -605,7 +605,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 982C1204880F012FC96D970E /* Pods-MastersApp.debug.xcconfig */;
+			baseConfigurationReference = 722B30BBD255D2AE9348C7AB /* Pods-MastersApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -637,7 +637,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B4C5AD90A5335361E25D8950 /* Pods-MastersApp.release.xcconfig */;
+			baseConfigurationReference = 27D63797A9B0A13932AD3018 /* Pods-MastersApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
