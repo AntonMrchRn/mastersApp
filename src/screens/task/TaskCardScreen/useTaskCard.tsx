@@ -571,7 +571,7 @@ export const useTaskCard = ({
     //исполнителей может быть один или двое
     if (subsetID === TaskType.IT_INTERNAL_EXECUTIVES && user?.userID) {
       //проверяем есть ли он в мемберах
-      //если пригласили то isIvitedExecutor
+      //если пригласили то isInvitedExecutor
       try {
         if (isInvitedExecutor) {
           //если в мемберах то
@@ -647,11 +647,9 @@ export const useTaskCard = ({
   const onWorkDelivery = async () => {
     if (
       subsetID &&
-      [
-        TaskType.COMMON_FIRST_RESPONSE,
-        TaskType.IT_FIRST_RESPONSE,
-        TaskType.IT_INTERNAL_EXECUTIVES,
-      ].includes(subsetID) &&
+      [TaskType.COMMON_FIRST_RESPONSE, TaskType.IT_FIRST_RESPONSE].includes(
+        subsetID
+      ) &&
       outlayStatusID !== OutlayStatusType.READY
     ) {
       !estimateBannerVisible && onEstimateBannerVisible();

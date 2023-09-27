@@ -1366,21 +1366,6 @@ export const getButtons = ({
                 },
               ];
             case TaskTab.ESTIMATE:
-              if (outlayStatusID !== OutlayStatusType.READY) {
-                return [
-                  {
-                    label: 'Отправить смету на согласование',
-                    variant: 'accent',
-                    onPress: onSendEstimateForApproval,
-                    disabled: outlayStatusID === OutlayStatusType.MATCHING,
-                  },
-                  {
-                    label: 'Отказаться от задачи',
-                    variant: 'outlineDanger',
-                    onPress: onCancelModalVisible,
-                  },
-                ];
-              }
               return [
                 {
                   label: 'Сдать работы',
