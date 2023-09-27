@@ -140,7 +140,11 @@ export const useTaskCard = ({
       userID: user?.userID as number,
     },
     {
-      skip: task?.subsetID !== TaskType.COMMON_AUCTION_SALE,
+      skip:
+        task?.subsetID &&
+        ![(TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE)].includes(
+          task?.subsetID
+        ),
     }
   );
   const getAnotherOffers = useGetAnotherOffersQuery(

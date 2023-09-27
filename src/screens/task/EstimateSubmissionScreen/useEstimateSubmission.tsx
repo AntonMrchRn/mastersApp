@@ -280,27 +280,7 @@ export const useEstimateSubmission = ({
         sum: allSum,
         ...(isEdit && offerID && { offerID }),
       }).unwrap();
-      if (isItLots) {
-        isInvitedExecutor
-          ? await postITTaskMember({
-              taskID: data?.tasks[0]?.ID as number,
-              members: [
-                {
-                  userID: user?.userID,
-                  isConfirm: true,
-                  isCurator: false,
-                },
-              ],
-            }).unwrap()
-          : await patchITTaskMember({
-              ID: executor?.memberID,
-              userID: user?.userID,
-              isConfirm: true,
-              isCurator: false,
-            }).unwrap();
 
-        // offers
-      }
       const postServices: Service[] = services.map(service => {
         const postMaterials =
           service.materials?.map(material => {
@@ -361,12 +341,44 @@ export const useEstimateSubmission = ({
           });
         }
       } else {
-        await postOffers({
-          taskID: taskId,
-          comment: offerComment,
-          services: postServices,
-          sum: allSum,
-        }).unwrap();
+        // Подача сметы для IT-лотов
+        if (isItLots) {
+          isInvitedExecutor
+            ? await patchITTaskMember({
+                ID: executor?.memberID,
+                isConfirm: true,
+                isCurator: false,
+                offer: {
+                  taskID: taskId,
+                  isCurator: false,
+                  services: postServices,
+                },
+              }).unwrap()
+            : await postITTaskMember({
+                taskID: taskId,
+                members: [
+                  {
+                    userID: user?.userID,
+                    isConfirm: true,
+                    isCurator: false,
+                    offer: {
+                      taskID: taskId,
+                      isCurator: false,
+                      services: postServices,
+                    },
+                  },
+                ],
+              }).unwrap();
+        } else {
+          // Подача сметы для Общих лотов
+          await postOffers({
+            taskID: taskId,
+            comment: offerComment,
+            services: postServices,
+            sum: allSum,
+          }).unwrap();
+        }
+
         dispatch(setNewOfferServices([]));
         dispatch(setOfferComment(''));
         navigation.navigate(AppScreenName.EstimateSubmissionSuccess, {
