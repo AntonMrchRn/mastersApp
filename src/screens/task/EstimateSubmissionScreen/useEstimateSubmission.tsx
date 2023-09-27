@@ -341,7 +341,7 @@ export const useEstimateSubmission = ({
           });
         }
       } else {
-        // Подача сметы для IT-лотов
+        // Подача сметы для IT-лотов исполнителем
         if (isItLots) {
           isInvitedExecutor
             ? await patchITTaskMember({
@@ -370,7 +370,7 @@ export const useEstimateSubmission = ({
                 ],
               }).unwrap();
         } else {
-          // Подача сметы для Общих лотов
+          // Подача сметы для Общих лотов исполнителем
           await postOffers({
             taskID: taskId,
             comment: offerComment,

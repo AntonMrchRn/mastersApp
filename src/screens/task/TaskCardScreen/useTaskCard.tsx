@@ -414,7 +414,12 @@ export const useTaskCard = ({
       getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'desc' })
     );
     getTaskHistory.refetch();
-    if (task?.subsetID === TaskType.COMMON_AUCTION_SALE) {
+    if (
+      task?.subsetID &&
+      [(TaskType.IT_AUCTION_SALE, TaskType.COMMON_AUCTION_SALE)].includes(
+        task?.subsetID
+      )
+    ) {
       getUserOffersQuery.refetch();
       getAnotherOffers.refetch();
     }
