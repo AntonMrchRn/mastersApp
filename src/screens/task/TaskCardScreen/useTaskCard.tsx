@@ -105,6 +105,8 @@ export const useTaskCard = ({
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [estimateBottomVisible, setEstimateBottomVisible] = useState(false);
   const [estimateBannerVisible, setEstimateBannerVisible] = useState(false);
+  const [isSubmissionByCurator, setSubmissionByCurator] = useState(false);
+
   const [cantDeleteBannerVisible, setCantDeleteBannerVisible] = useState(false);
   const [noAccessToTaskBannerVisible, setNoAccessToTaskBannerVisible] =
     useState(false);
@@ -134,17 +136,20 @@ export const useTaskCard = ({
   useTaskSSE(taskId);
   const getTaskHistory = useGetTaskHistoryQuery(taskId);
   const task = data?.tasks?.[0];
+
+  const isSkipTask =
+    task?.subsetID &&
+    ![(TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE)].includes(
+      task?.subsetID
+    );
+
   const getUserOffersQuery = useGetUserOffersQuery(
     {
       taskID: taskId,
       userID: user?.userID as number,
     },
     {
-      skip:
-        task?.subsetID &&
-        ![(TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE)].includes(
-          task?.subsetID
-        ),
+      skip: isSkipTask,
     }
   );
   const getAnotherOffers = useGetAnotherOffersQuery(
@@ -153,7 +158,7 @@ export const useTaskCard = ({
       userID: user?.userID as number,
     },
     {
-      skip: task?.subsetID !== TaskType.COMMON_AUCTION_SALE,
+      skip: isSkipTask,
     }
   );
 
@@ -416,7 +421,7 @@ export const useTaskCard = ({
     getTaskHistory.refetch();
     if (
       task?.subsetID &&
-      [(TaskType.IT_AUCTION_SALE, TaskType.COMMON_AUCTION_SALE)].includes(
+      [(TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE)].includes(
         task?.subsetID
       )
     ) {
@@ -443,15 +448,20 @@ export const useTaskCard = ({
   const onCancelModalVisible = () => setCancelModalVisible(!cancelModalVisible);
   const onUploadModalClose = () => setUploadModalVisible(false);
 
-  const onSubmissionModalVisible = () => {
+  // Проверка модалки
+  const onSubmissionModalVisible = ({ isSubmissionByCurator }) => {
     if (!hasAccessToTask) {
       return onNoAccessToTaskBannerVisible();
     }
     if (!hasAccessToDirection) {
       return onDirectionNotSpecifiedBannerVisible();
     }
+    if (isSubmissionByCurator) {
+      setSubmissionByCurator(true);
+    }
     return setSubmissionModalVisible(true);
   };
+
   const onSubmissionModalClose = () => setSubmissionModalVisible(false);
 
   const navigateToChat = () => {
@@ -494,13 +504,19 @@ export const useTaskCard = ({
 
   const onTaskSubmission = async () => {
     //навигация на скрин подачи сметы, если IT-ЛОТЫ
-    if (subsetID === TaskType.IT_AUCTION_SALE) {
+    if (subsetID === TaskType.IT_AUCTION_SALE && !isSubmissionByCurator) {
       dispatch(setNewOfferServices(services));
       navigation.navigate(AppScreenName.EstimateSubmission, {
         taskId,
         isInvitedExecutor,
         executor,
       });
+    }
+
+    if (subsetID === TaskType.IT_AUCTION_SALE && isSubmissionByCurator) {
+      dispatch(setNewOfferServices(services));
+      setSubmissionByCurator(false);
+      console.log('куратор');
     }
 
     if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {

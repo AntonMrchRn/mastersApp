@@ -954,8 +954,11 @@ export const getButtons = ({
                           variant: 'outlineAccent',
                           onPress:
                             isContractor || isInternalExecutor
-                              ? onTaskSubmission
-                              : onSubmissionModalVisible,
+                              ? onBecomeCurator
+                              : () =>
+                                  onSubmissionModalVisible({
+                                    isSubmissionByCurator: true,
+                                  }),
                         } as TaskCardBottomButton,
                       ]
                     : []),
