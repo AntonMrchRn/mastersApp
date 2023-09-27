@@ -31,22 +31,16 @@ export const TaskCardHistory: FC<TaskCardHistoryProps> = ({
 
   const { data: history } = useGetTaskHistoryQuery(taskId);
 
-  const NotFoundHistory = () => {
-    return (
-      <View style={styles.otes}>
-        <View style={styles.wrapperIconHistory}>
-          <NoHistoryIcon />
-        </View>
-        <Text
-          variant="bodySRegular"
-          style={styles.desc}
-          color={theme.text.basic}
-        >
-          Здесь будет отображаться ход событий задачи
-        </Text>
+  const NotFoundHistory = (
+    <View style={styles.otes}>
+      <View style={styles.wrapperIconHistory}>
+        <NoHistoryIcon />
       </View>
-    );
-  };
+      <Text variant="bodySRegular" style={styles.desc} color={theme.text.basic}>
+        Здесь будет отображаться ход событий задачи
+      </Text>
+    </View>
+  );
 
   const getContent = () => {
     return statusID === StatusType.ACTIVE ? (
@@ -63,7 +57,7 @@ export const TaskCardHistory: FC<TaskCardHistoryProps> = ({
         ) : history?.taskComment ? (
           <ContentHistory history={history} />
         ) : (
-          NotFoundHistory()
+          NotFoundHistory
         )}
       </View>
     );

@@ -17,6 +17,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'off',
     'react/prop-types': 'off',
     '@typescript-eslint/no-explicit-any': 'error',
+    'react/no-unstable-nested-components': 'warn',
     'no-useless-escape': 'off',
     'react/display-name': 'off',
     'react/self-closing-comp': [
