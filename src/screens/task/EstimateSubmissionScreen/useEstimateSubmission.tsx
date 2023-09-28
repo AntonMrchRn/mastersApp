@@ -51,7 +51,7 @@ export const useEstimateSubmission = ({
   const bsRef = useRef<BottomSheetModal>(null);
   const { data, refetch } = useGetTaskQuery(taskId);
 
-  useTaskSSE(taskId);
+  useTaskSSE({ taskId, refresh: refetch });
 
   const [postITTaskMember] = usePostITTaskMemberMutation();
   const [patchITTaskMember] = usePatchITTaskMemberMutation();
@@ -164,7 +164,7 @@ export const useEstimateSubmission = ({
   }, {});
 
   const isError = Object.values(fields).some(
-    field => !!field.localPrice || !!field.localCount
+    field => !!field.localPrice || !!field.localCount,
   );
 
   const onEstimateModalVisible = () => {
@@ -222,7 +222,7 @@ export const useEstimateSubmission = ({
     if (materialForDelete) {
       const newMaterials =
         materialForDelete?.service?.materials?.filter(
-          m => m !== materialForDelete?.material
+          m => m !== materialForDelete?.material,
         ) || [];
       const newServices = services.reduce<Service[]>((acc, val) => {
         if (val === materialForDelete.service) {

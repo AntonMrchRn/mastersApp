@@ -10,7 +10,7 @@ import { clearComments, setComment } from '@/store/slices/myTasks/reducer';
 
 type CustomEvent = 'comments';
 let sse: EventSource<CustomEvent>;
-let timeout: number;
+let timeout: NodeJS.Timer;
 export const useCommentsSSE = (taskId: string) => {
   const dispatch = useAppDispatch();
 
@@ -21,9 +21,9 @@ export const useCommentsSSE = (taskId: string) => {
     const time = setInterval(
       () =>
         dispatch(
-          getComments({ idCard: taskId, numberOfPosts: 999, sort: 'desc' })
+          getComments({ idCard: taskId, numberOfPosts: 999, sort: 'desc' }),
         ),
-      4000
+      4000,
     );
     timeout = time;
   };
@@ -32,7 +32,7 @@ export const useCommentsSSE = (taskId: string) => {
     dispatch(getComments({ idCard: taskId, numberOfPosts: 999, sort: 'desc' }));
     (async () => {
       const res = await axiosInstance.get(
-        `https://sandbox8.apteka-aprel.ru/api/postman/subscribe?taskID=${taskId}`
+        `https://sandbox8.apteka-aprel.ru/api/postman/subscribe?taskID=${taskId}`,
       );
       const ress = new EventSource<CustomEvent>(res.data, {
         headers: { ['M-Token']: storageMMKV.getString('token') },
