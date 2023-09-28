@@ -25,6 +25,7 @@ type ServiceItemProps = {
   serviceID: number;
   refetch: () => void;
   handleBanner: () => void;
+  isContractor: boolean;
 };
 
 export const ServiceItem: FC<ServiceItemProps> = ({
@@ -43,6 +44,7 @@ export const ServiceItem: FC<ServiceItemProps> = ({
   serviceID,
   refetch,
   handleBanner,
+  isContractor,
 }) => {
   const toast = useToast();
 
@@ -100,6 +102,7 @@ export const ServiceItem: FC<ServiceItemProps> = ({
       measure={measure}
       outlayStatusID={outlayStatusID}
       statusID={statusID}
+      isContractor={isContractor}
     />
   );
 };

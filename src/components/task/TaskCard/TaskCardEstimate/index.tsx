@@ -170,6 +170,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                 statusID={statusID}
                 serviceID={service.ID as number}
                 refetch={refetch}
+                isContractor={isContractor}
                 handleBanner={handleBanner}
               />
               <Spacer size={0} separator="bottom" />

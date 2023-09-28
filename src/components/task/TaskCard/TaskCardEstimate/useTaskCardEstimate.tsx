@@ -80,7 +80,7 @@ export const useTaskCardEstimate = ({
     switch (subsetID) {
       case TaskType.COMMON_FIRST_RESPONSE:
         return services;
-      case TaskType.COMMON_AUCTION_SALE:
+      case (TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE):
         if (statusID !== StatusType.ACTIVE) {
           return userServices;
         }
