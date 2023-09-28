@@ -449,7 +449,7 @@ export const useTaskCard = ({
   const onUploadModalClose = () => setUploadModalVisible(false);
 
   // Проверка модалки
-  const onSubmissionModalVisible = ({ isSubmissionByCurator }) => {
+  const onSubmissionModalVisible = (isSubmissionByCurator?: boolean) => {
     if (!hasAccessToTask) {
       return onNoAccessToTaskBannerVisible();
     }
