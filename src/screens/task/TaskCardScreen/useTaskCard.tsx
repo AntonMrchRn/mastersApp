@@ -139,7 +139,7 @@ export const useTaskCard = ({
 
   const isSkipTask =
     task?.subsetID &&
-    ![(TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE)].includes(
+    ![TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE].includes(
       task?.subsetID
     );
 
@@ -421,7 +421,7 @@ export const useTaskCard = ({
     getTaskHistory.refetch();
     if (
       task?.subsetID &&
-      [(TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE)].includes(
+      [TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE].includes(
         task?.subsetID
       )
     ) {
