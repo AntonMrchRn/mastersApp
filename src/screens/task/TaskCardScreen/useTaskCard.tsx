@@ -116,7 +116,7 @@ export const useTaskCard = ({
   ] = useState(false);
   const [submissionModalVisible, setSubmissionModalVisible] = useState(false);
   const [currentEstimateTab, setCurrentEstimateTab] = useState<EstimateTab>(
-    EstimateTab.TASK_ESTIMATE,
+    EstimateTab.TASK_ESTIMATE
   );
 
   const user = useAppSelector(selectAuth).user;
@@ -139,7 +139,7 @@ export const useTaskCard = ({
   const isSkipTask =
     task?.subsetID &&
     ![TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE].includes(
-      task?.subsetID,
+      task?.subsetID
     );
 
   const getUserOffersQuery = useGetUserOffersQuery(
@@ -149,7 +149,7 @@ export const useTaskCard = ({
     },
     {
       skip: isSkipTask,
-    },
+    }
   );
   const getAnotherOffers = useGetAnotherOffersQuery(
     {
@@ -158,7 +158,7 @@ export const useTaskCard = ({
     },
     {
       skip: isSkipTask,
-    },
+    }
   );
 
   const userOffersData = getUserOffersQuery.data?.offers || [];
@@ -172,7 +172,7 @@ export const useTaskCard = ({
     if (isError) {
       if (
         [ErrorCode.TaskIsAlreadyTaken, ErrorCode.OTHER_CANDIDATE].includes(
-          (error as AxiosQueryErrorResponse).data.code,
+          (error as AxiosQueryErrorResponse).data.code
         )
       ) {
         navigation.navigate(BottomTabName.TaskSearch);
@@ -351,7 +351,7 @@ export const useTaskCard = ({
       (subsetID &&
         isContractor &&
         [TaskType.IT_FIRST_RESPONSE, TaskType.IT_AUCTION_SALE].includes(
-          subsetID,
+          subsetID
         )) ||
       (isITServices && isInternalExecutor)
     ) {
@@ -381,11 +381,11 @@ export const useTaskCard = ({
       ? isOffersDeadlineOver &&
         subsetID &&
         [TaskType.IT_AUCTION_SALE, TaskType.COMMON_AUCTION_SALE].includes(
-          subsetID,
+          subsetID
         )
         ? 'Подача заявок окончена. Результаты торгов будут объявлены в ближайшее время'
         : `Срок подачи сметы до ${dayjs(offersDeadline).format(
-            'D MMMM в HH:mm',
+            'D MMMM в HH:mm'
           )}`
       : '';
 
@@ -416,13 +416,13 @@ export const useTaskCard = ({
   const onRefresh = () => {
     refetch();
     dispatch(
-      getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'desc' }),
+      getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'desc' })
     );
     getTaskHistory.refetch();
     if (
       task?.subsetID &&
       [TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE].includes(
-        task?.subsetID,
+        task?.subsetID
       )
     ) {
       getUserOffersQuery.refetch();
@@ -450,14 +450,14 @@ export const useTaskCard = ({
   const onUploadModalClose = () => setUploadModalVisible(false);
 
   // Проверка модалки
-  const onSubmissionModalVisible = (isSubmissionByCurator?: boolean) => {
+  const onSubmissionModalVisible = (isSubmissionCurator?: boolean) => {
     if (!hasAccessToTask) {
       return onNoAccessToTaskBannerVisible();
     }
     if (!hasAccessToDirection) {
       return onDirectionNotSpecifiedBannerVisible();
     }
-    if (isSubmissionByCurator) {
+    if (isSubmissionCurator === true) {
       setSubmissionByCurator(true);
     }
     return setSubmissionModalVisible(true);
@@ -504,9 +504,12 @@ export const useTaskCard = ({
   };
 
   const onTaskSubmission = async () => {
-    //навигация на скрин подачи сметы, если IT-ЛОТЫ
+    //навигация на скрин подачи сметы, если IT-ЛОТЫ Исполнитель
     if (subsetID === TaskType.IT_AUCTION_SALE && !isSubmissionByCurator) {
       dispatch(setNewOfferServices(services));
+      console.log('Исполнитель --->');
+      setSubmissionByCurator(false);
+
       navigation.navigate(AppScreenName.EstimateSubmission, {
         taskId,
         isInvitedExecutor,
@@ -514,10 +517,13 @@ export const useTaskCard = ({
       });
     }
 
+    //навигация на скрин подачи сметы, если IT-ЛОТЫ Куратор
     if (subsetID === TaskType.IT_AUCTION_SALE && isSubmissionByCurator) {
-      dispatch(setNewOfferServices(services));
       setSubmissionByCurator(false);
-      console.log('куратор');
+      dispatch(setNewOfferServices(services));
+      console.log('Куратор --->');
+      // проверять на наличие подрядчиков, если есть - на подачу сметы, затем на приглашение подрядчиков
+      // если нет - на экран, где написано, что нет подрядчиков
     }
 
     if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
@@ -632,11 +638,11 @@ export const useTaskCard = ({
           //либо же руководитель может пропатчить у себя таску не дожидаясь второго исполнителя
 
           const getTask = await axiosInstance.get<GetTaskResponse>(
-            `tasks/web?query=?ID==${id}?`,
+            `tasks/web?query=?ID==${id}?`
           );
           const currentExecutors = getTask.data.tasks[0]?.executors || [];
           const currentConfirmedExecutors = currentExecutors.filter(
-            executor => executor.isConfirm,
+            executor => executor.isConfirm
           );
           if (currentConfirmedExecutors.length > 1) {
             await patchTask({
@@ -674,7 +680,7 @@ export const useTaskCard = ({
     if (
       subsetID &&
       [TaskType.COMMON_FIRST_RESPONSE, TaskType.IT_FIRST_RESPONSE].includes(
-        subsetID,
+        subsetID
       ) &&
       outlayStatusID !== OutlayStatusType.READY
     ) {

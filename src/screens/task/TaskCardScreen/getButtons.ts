@@ -76,7 +76,7 @@ export const getButtons = ({
   onCancelModalVisible: () => void;
   onUploadModalVisible: () => void;
   onBudgetModalVisible: () => void;
-  onSubmissionModalVisible: (isSubmissionByCurator?: boolean) => void
+  onSubmissionModalVisible: (isSubmissionByCurator?: boolean) => void;
   onApproveEstimateChanges: () => void;
   onSendEstimateForApproval: () => void;
   onCancelTask: (refuseReason?: string) => void;
@@ -955,8 +955,7 @@ export const getButtons = ({
                           onPress:
                             isContractor || isInternalExecutor
                               ? onBecomeCurator
-                              : () =>
-                                  onSubmissionModalVisible(true),
+                              : () => onSubmissionModalVisible(true),
                         } as TaskCardBottomButton,
                       ]
                     : []),
