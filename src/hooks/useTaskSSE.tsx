@@ -30,10 +30,8 @@ export const useTaskSSE = ({
         if (event.type === 'open') {
           console.log('Open SSE connection.');
         } else if (event.type === 'refresh') {
-          console.log('refresh SSE connection.');
           refresh();
         } else if (event.type === 'tasks') {
-          console.log('tasks SSE connection.');
           try {
             const res = JSON.parse(event.data || '');
             if (res) {
