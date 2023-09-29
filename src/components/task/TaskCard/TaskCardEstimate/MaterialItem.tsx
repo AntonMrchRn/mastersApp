@@ -24,6 +24,7 @@ type MaterialItemProps = {
   outlayStatusID: OutlayStatusType | undefined;
   statusID: StatusType | undefined;
   subsetID: TaskType | undefined;
+  isContractor: boolean;
 };
 
 export const MaterialItem: FC<MaterialItemProps> = ({
@@ -41,6 +42,7 @@ export const MaterialItem: FC<MaterialItemProps> = ({
   refetch,
   taskId,
   materialID,
+  isContractor,
 }) => {
   const toast = useToast();
 
@@ -82,6 +84,7 @@ export const MaterialItem: FC<MaterialItemProps> = ({
 
   return (
     <TaskEstimateItem
+      isContractor={isContractor}
       subsetID={subsetID}
       firstAction={firstActionMaterial}
       secondAction={secondActionMaterial}

@@ -88,7 +88,7 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
       subsetID &&
       statusID !== StatusType.ACTIVE &&
       [OutlayStatusType.RETURNED, OutlayStatusType.MATCHING].includes(
-        outlayStatusID
+        outlayStatusID,
       ) &&
       [
         TaskType.COMMON_FIRST_RESPONSE,
@@ -117,7 +117,7 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
       statusID &&
       statusID !== StatusType.ACTIVE &&
       [OutlayStatusType.RETURNED, OutlayStatusType.MATCHING].includes(
-        outlayStatusID
+        outlayStatusID,
       )
     ) {
       switch (roleID) {

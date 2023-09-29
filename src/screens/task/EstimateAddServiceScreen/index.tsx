@@ -121,7 +121,7 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
           canDelete: true,
           roleID: userRole,
           materials: [],
-        })
+        }),
       );
     } else {
       await postTask({
