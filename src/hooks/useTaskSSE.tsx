@@ -26,7 +26,6 @@ export const useTaskSSE = ({
       });
       sse = ress;
       const listener: EventSourceListener<EventType | CustomEvent> = event => {
-        console.log('🚀 ~ file: useTaskSSE.tsx:29 ~ event:', event);
         if (event.type === 'open') {
           console.log('Open SSE connection.');
         } else if (event.type === 'refresh') {
