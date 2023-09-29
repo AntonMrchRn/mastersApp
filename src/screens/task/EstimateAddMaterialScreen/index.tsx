@@ -97,7 +97,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
   const materials = service?.materials || [];
   const materialsNames = materials.reduce<string[]>(
     (acc, val) => acc.concat(val?.name || []),
-    []
+    [],
   );
 
   const methods = useForm<EstimateMaterialAdditionFormValues>({
@@ -220,9 +220,11 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
               maxLength={50}
               hint={
                 errors.name?.message ||
-                (hasName ? 'Данный материал уже включен в смету' : undefined)
+                (hasName && !loading
+                  ? 'Данный материал уже включен в смету'
+                  : undefined)
               }
-              isError={!!errors.name?.message || hasName}
+              isError={!!errors.name?.message || (hasName && !loading)}
             />
             <ControlledInput
               name={'count'}

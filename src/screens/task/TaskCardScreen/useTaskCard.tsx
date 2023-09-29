@@ -259,7 +259,6 @@ export const useTaskCard = ({
   const description = task?.description || '';
   const offersDeadline = task?.offersDeadline;
   const winnerOffer = task?.winnerOffer;
-  console.log('🚀 ~ file: useTaskCard.tsx:260 ~ winnerOffer:', winnerOffer);
   const executorsCount = task?.executorsCount;
 
   /**
