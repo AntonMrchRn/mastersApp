@@ -116,7 +116,7 @@ export const useTaskCard = ({
   ] = useState(false);
   const [submissionModalVisible, setSubmissionModalVisible] = useState(false);
   const [currentEstimateTab, setCurrentEstimateTab] = useState<EstimateTab>(
-    EstimateTab.TASK_ESTIMATE
+    EstimateTab.TASK_ESTIMATE,
   );
 
   const user = useAppSelector(selectAuth).user;
@@ -139,7 +139,7 @@ export const useTaskCard = ({
   const isSkipTask =
     task?.subsetID &&
     ![TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE].includes(
-      task?.subsetID
+      task?.subsetID,
     );
 
   const getUserOffersQuery = useGetUserOffersQuery(
@@ -149,7 +149,7 @@ export const useTaskCard = ({
     },
     {
       skip: isSkipTask,
-    }
+    },
   );
   const getAnotherOffers = useGetAnotherOffersQuery(
     {
@@ -158,7 +158,7 @@ export const useTaskCard = ({
     },
     {
       skip: isSkipTask,
-    }
+    },
   );
 
   const userOffersData = getUserOffersQuery.data?.offers || [];
@@ -171,9 +171,11 @@ export const useTaskCard = ({
   useEffect(() => {
     if (isError) {
       if (
-        [ErrorCode.TaskIsAlreadyTaken, ErrorCode.OTHER_CANDIDATE].includes(
-          (error as AxiosQueryErrorResponse).data.code
-        )
+        [
+          ErrorCode.TaskIsAlreadyTaken,
+          ErrorCode.OTHER_CANDIDATE,
+          ErrorCode.NOT_FOUND,
+        ].includes((error as AxiosQueryErrorResponse).data.code)
       ) {
         navigation.navigate(BottomTabName.TaskSearch);
         return toast.show({
@@ -257,6 +259,7 @@ export const useTaskCard = ({
   const description = task?.description || '';
   const offersDeadline = task?.offersDeadline;
   const winnerOffer = task?.winnerOffer;
+  console.log('🚀 ~ file: useTaskCard.tsx:260 ~ winnerOffer:', winnerOffer);
   const executorsCount = task?.executorsCount;
 
   /**
@@ -351,7 +354,7 @@ export const useTaskCard = ({
       (subsetID &&
         isContractor &&
         [TaskType.IT_FIRST_RESPONSE, TaskType.IT_AUCTION_SALE].includes(
-          subsetID
+          subsetID,
         )) ||
       (isITServices && isInternalExecutor)
     ) {
@@ -381,11 +384,11 @@ export const useTaskCard = ({
       ? isOffersDeadlineOver &&
         subsetID &&
         [TaskType.IT_AUCTION_SALE, TaskType.COMMON_AUCTION_SALE].includes(
-          subsetID
+          subsetID,
         )
         ? 'Подача заявок окончена. Результаты торгов будут объявлены в ближайшее время'
         : `Срок подачи сметы до ${dayjs(offersDeadline).format(
-            'D MMMM в HH:mm'
+            'D MMMM в HH:mm',
           )}`
       : '';
 
@@ -416,15 +419,10 @@ export const useTaskCard = ({
   const onRefresh = () => {
     refetch();
     dispatch(
-      getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'desc' })
+      getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'desc' }),
     );
     getTaskHistory.refetch();
-    if (
-      task?.subsetID &&
-      [TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE].includes(
-        task?.subsetID
-      )
-    ) {
+    if (!isSkipTask) {
       getUserOffersQuery.refetch();
       getAnotherOffers.refetch();
     }
@@ -638,11 +636,11 @@ export const useTaskCard = ({
           //либо же руководитель может пропатчить у себя таску не дожидаясь второго исполнителя
 
           const getTask = await axiosInstance.get<GetTaskResponse>(
-            `tasks/web?query=?ID==${id}?`
+            `tasks/web?query=?ID==${id}?`,
           );
           const currentExecutors = getTask.data.tasks[0]?.executors || [];
           const currentConfirmedExecutors = currentExecutors.filter(
-            executor => executor.isConfirm
+            executor => executor.isConfirm,
           );
           if (currentConfirmedExecutors.length > 1) {
             await patchTask({
@@ -680,7 +678,7 @@ export const useTaskCard = ({
     if (
       subsetID &&
       [TaskType.COMMON_FIRST_RESPONSE, TaskType.IT_FIRST_RESPONSE].includes(
-        subsetID
+        subsetID,
       ) &&
       outlayStatusID !== OutlayStatusType.READY
     ) {
