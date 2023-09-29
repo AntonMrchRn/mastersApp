@@ -89,7 +89,9 @@ export const useTaskCardEstimate = ({
         return services;
       case TaskType.IT_AUCTION_SALE:
         if (
-          (statusID !== StatusType.ACTIVE && !isContractor) ||
+          (statusID &&
+            ![StatusType.ACTIVE, StatusType.WORK].includes(statusID) &&
+            !isContractor) ||
           currentEstimateTab === EstimateTab.MY_SUGGESTION
         ) {
           return userServices;
