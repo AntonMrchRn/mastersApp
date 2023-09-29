@@ -55,7 +55,7 @@ export const CategoryContainer: FC<CategoryContainerProps> = ({
             };
             return (
               <View key={service.ID}>
-                <ServiceItem service={service} />
+                <ServiceItem service={service} showPrice={false} />
                 <Button
                   label={'Добавить'}
                   size={'S'}

@@ -81,6 +81,11 @@ type EstimateMaterialAdditionFormValues = {
   measure: string;
 };
 
+type EstimateServiceAdditionFormValues = {
+  count: string;
+  price?: string;
+};
+
 type EntityTypeFormValues =
   | IndividualEntityFormValues
   | CompanyEntityFormValues
@@ -102,5 +107,6 @@ export type {
   SignInWithEmailFormValues,
   SignInWithPhoneFormValues,
   RecoveryConfirmationFormValues,
+  EstimateServiceAdditionFormValues,
   EstimateMaterialAdditionFormValues,
 };

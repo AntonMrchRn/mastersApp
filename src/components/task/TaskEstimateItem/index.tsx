@@ -29,6 +29,7 @@ type TaskEstimateItemProps = {
   outlayStatusID: OutlayStatusType | undefined;
   statusID: StatusType | undefined;
   subsetID: TaskType | undefined;
+  isContractor: boolean;
 };
 
 export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
@@ -45,6 +46,7 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   outlayStatusID,
   statusID,
   subsetID,
+  isContractor,
 }) => {
   const userRoleId = useAppSelector(selectAuth).user?.roleID;
   const isInternalExecutor = userRoleId === RoleType.INTERNAL_EXECUTOR;
@@ -55,7 +57,7 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
       : `${separateThousands(count)} ${measure}`;
 
   const items = [
-    ...(!isInternalExecutor
+    ...(!isInternalExecutor && !isContractor
       ? [
           {
             text: `${separateThousands(price)} ₽ ${
@@ -69,7 +71,7 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
       text: measure === 'пустое' ? count.toString() : currentMeasure,
       icon: <CubeIcon />,
     },
-    ...(!isInternalExecutor
+    ...(!isInternalExecutor && !isContractor
       ? [
           {
             text: `${separateThousands(sum)} ₽`,
@@ -86,7 +88,7 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
       subsetID &&
       statusID !== StatusType.ACTIVE &&
       [OutlayStatusType.RETURNED, OutlayStatusType.MATCHING].includes(
-        outlayStatusID
+        outlayStatusID,
       ) &&
       [
         TaskType.COMMON_FIRST_RESPONSE,
@@ -115,7 +117,7 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
       statusID &&
       statusID !== StatusType.ACTIVE &&
       [OutlayStatusType.RETURNED, OutlayStatusType.MATCHING].includes(
-        outlayStatusID
+        outlayStatusID,
       )
     ) {
       switch (roleID) {

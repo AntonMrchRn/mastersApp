@@ -49,7 +49,7 @@ export const CommentsChatScreen = ({
   const [valueText, setValueText] = useState('');
 
   const { comments, loadingComments, loadingSend } = useAppSelector(
-    state => state.myTasks
+    state => state.myTasks,
   );
 
   useCommentsSSE(taskId.toString());
@@ -70,7 +70,7 @@ export const CommentsChatScreen = ({
     if (valueText.trim()) {
       try {
         await dispatch(
-          sendMessage({ taskId, comment: valueText, recipientIDs })
+          sendMessage({ taskId, comment: valueText, recipientIDs }),
         );
         setValueText('');
       } catch (e) {
@@ -101,7 +101,7 @@ export const CommentsChatScreen = ({
             style={styles.closingText}
             color={theme.text.neutral}
           >
-            Задача закрыта. Отправка сообщений координатору недоступна
+            Отправка сообщений координатору недоступна
           </Text>
         )}
         {comments?.taskComment?.length ? (
