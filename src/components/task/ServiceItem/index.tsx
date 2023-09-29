@@ -14,8 +14,12 @@ import { styles } from './styles';
 
 type ServiceItemProps = {
   service: Service;
+  showPrice?: boolean;
 };
-export const ServiceItem: FC<ServiceItemProps> = ({ service }) => {
+export const ServiceItem: FC<ServiceItemProps> = ({
+  service,
+  showPrice = true,
+}) => {
   const theme = useTheme();
   const isInternalExecutor =
     useAppSelector(selectAuth).user?.roleID === RoleType.INTERNAL_EXECUTOR;
@@ -51,7 +55,7 @@ export const ServiceItem: FC<ServiceItemProps> = ({ service }) => {
         </View>
       )}
       <View style={styles.items}>
-        {service?.price && !isInternalExecutor ? (
+        {service?.price && showPrice && !isInternalExecutor ? (
           <View style={styles.rowDirection}>
             <PriceIcon />
             <Text

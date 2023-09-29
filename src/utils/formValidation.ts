@@ -42,11 +42,16 @@ const estimateAddMaterialValidation = (isInternalExecutor: boolean) => ({
   }),
   measure: Yup.string().required('Выберите единицу измерения'),
 });
-const estimateAddServiceValidation = {
+const estimateAddServiceValidation = (isItLots: boolean) => ({
   count: Yup.string()
     .test('moreThanNull', 'Количество должно быть больше 0', moreThanNull)
     .required('Укажите количество услуги'),
-};
+  ...(isItLots && {
+    price: Yup.string()
+      .test('moreThanNull', 'Цена должна быть больше 0', moreThanNull)
+      .required('Укажите цену за одну единицу измерения'),
+  }),
+});
 const phoneValidation = {
   phone: Yup.string()
     .length(10, 'Введите корректный номер телефона')
@@ -150,9 +155,8 @@ const estimateCountValidationSchema = Yup.object().shape(
 );
 const estimateAddMaterialValidationSchema = (isInternalExecutor: boolean) =>
   Yup.object().shape(estimateAddMaterialValidation(isInternalExecutor));
-const estimateAddServiceValidationSchema = Yup.object().shape(
-  estimateAddServiceValidation
-);
+const estimateAddServiceValidationSchema = (isItLots: boolean) =>
+  Yup.object().shape(estimateAddServiceValidation(isItLots));
 
 const phoneValidationSchema = Yup.object().shape(phoneValidation);
 const emailValidationSchema = Yup.object().shape(emailValidation);

@@ -170,6 +170,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                 statusID={statusID}
                 serviceID={service.ID as number}
                 refetch={refetch}
+                isContractor={isContractor}
                 handleBanner={handleBanner}
               />
               <Spacer size={0} separator="bottom" />
@@ -182,6 +183,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                   <View key={material.ID}>
                     <MaterialItem
                       subsetID={subsetID}
+                      isContractor={isContractor}
                       measure={material?.measure.toLowerCase()}
                       firstAction={firstActionMaterial}
                       title={material?.name}
@@ -206,7 +208,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
         {(isContractor &&
           subsetID &&
           [TaskType.IT_FIRST_RESPONSE, TaskType.IT_AUCTION_SALE].includes(
-            subsetID
+            subsetID,
           )) ||
         (setId === TaskSetType.IT_SERVICES && isInternalExecutor) ? null : (
           <EstimateTotal
@@ -221,7 +223,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
         )}
         {subsetID &&
           [TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE].includes(
-            subsetID
+            subsetID,
           ) &&
           statusID === StatusType.ACTIVE && (
             <View style={styles.mt16}>
