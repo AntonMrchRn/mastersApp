@@ -3,6 +3,7 @@ import EventSource, { EventSourceListener, EventType } from 'react-native-sse';
 
 import { storageMMKV } from '@/mmkv/storage';
 import { axiosInstance } from '@/services/axios/axiosInstance';
+import { host } from '@/services/axios/config';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { getComments } from '@/store/slices/myTasks/asyncActions';
@@ -32,7 +33,7 @@ export const useCommentsSSE = (taskId: string) => {
     dispatch(getComments({ idCard: taskId, numberOfPosts: 999, sort: 'desc' }));
     (async () => {
       const res = await axiosInstance.get(
-        `https://sandbox8.apteka-aprel.ru/api/postman/subscribe?taskID=${taskId}`,
+        `${host}postman/subscribe?taskID=${taskId}`,
       );
       const ress = new EventSource<CustomEvent>(res.data, {
         headers: { ['M-Token']: storageMMKV.getString('token') },
