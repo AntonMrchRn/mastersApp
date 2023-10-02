@@ -19,6 +19,7 @@ export const styles = StyleSheet.create({
   },
   title: {
     marginTop: 24,
+    textAlign: 'center',
   },
   description: {
     marginTop: 12,

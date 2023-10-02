@@ -14,7 +14,7 @@ import { AxiosQueryErrorResponse } from '@/types/error';
 export const useCandidateEstimates = (
   taskId: number,
   isResults: boolean,
-  userID?: number
+  userID?: number,
 ) => {
   const isFocused = useIsFocused();
   const toast = useToast();
@@ -44,7 +44,7 @@ export const useCandidateEstimates = (
       taskID: taskId,
       userID: userID as number,
     },
-    { skip: isResults || !userID }
+    { skip: isResults || !userID },
   );
 
   const error = isResults ? offersError : anotherOffersError;
@@ -71,7 +71,7 @@ export const useCandidateEstimates = (
   const onViewRef = useRef(
     ({ viewableItems }: { viewableItems: Array<ViewToken> }) => {
       setActiveIndex(viewableItems[0]?.index);
-    }
+    },
   );
   const onScroll = useAnimatedScrollHandler({
     onScroll: event => {

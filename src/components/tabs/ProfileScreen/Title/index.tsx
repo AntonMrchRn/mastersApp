@@ -3,8 +3,6 @@ import { TextStyle, View } from 'react-native';
 
 import { Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
-import { scaleFontSize } from '@/utils/scale';
-
 import styles from './style';
 
 type TitleProps = {
@@ -28,10 +26,7 @@ const Title = ({
 
   return (
     <View style={styles.container}>
-      <Text
-        variant="title3"
-        style={[{ fontSize: scaleFontSize(20) }, titleStyle]}
-      >
+      <Text variant="title3" style={[styles.title, titleStyle]}>
         {title}
       </Text>
       {withButton && (
@@ -47,7 +42,6 @@ const Title = ({
             labelStyle={[
               styles.label,
               {
-                fontSize: scaleFontSize(15),
                 color: theme.text.basic,
               },
             ]}

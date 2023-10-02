@@ -20,7 +20,6 @@ export const styles = StyleSheet.create({
     borderRadius: 20,
     width: deviceWidth - 40,
     backgroundColor: 'white',
-    borderWidth: 0.5,
     borderColor: '#F1F1F1',
     marginHorizontal: 10,
     marginVertical: 10,

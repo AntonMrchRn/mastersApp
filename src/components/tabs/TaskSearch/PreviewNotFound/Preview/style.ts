@@ -13,6 +13,9 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 16,
   },
+  title: {
+    textAlign: 'center',
+  },
 });
 
 export default styles;

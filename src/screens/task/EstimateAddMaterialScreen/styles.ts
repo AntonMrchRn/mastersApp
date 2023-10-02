@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+import { configApp } from '@/constants/platform';
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -12,6 +14,7 @@ export const styles = StyleSheet.create({
   button: {
     borderRadius: 12,
     height: 48,
+    marginBottom: configApp.android ? 20 : 0,
   },
   inputs: {
     gap: 16,

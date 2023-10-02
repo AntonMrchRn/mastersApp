@@ -15,6 +15,7 @@ export const styles = StyleSheet.create({
   button: {
     borderRadius: 12,
     width: '47%',
+    paddingHorizontal: 16,
   },
   input: {
     marginTop: 16,
