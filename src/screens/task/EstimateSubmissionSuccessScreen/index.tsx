@@ -56,8 +56,7 @@ export const EstimateSubmissionSuccessScreen: FC<
           color={theme.text.neutral}
           style={styles.description}
         >
-          Скоро координатор назначит исполнителя. Проверить статус задачи можно
-          во вкладке Мои задачи
+          {`Скоро координатор назначит исполнителя. Проверить статус задачи можно во вкладке \n Мои задачи`}
         </Text>
       </View>
       <Button

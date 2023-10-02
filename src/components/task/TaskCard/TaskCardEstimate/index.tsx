@@ -126,7 +126,6 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
         />
       )}
       <View>
-        <Spacer size={'xxxl'} />
         {outlayStatusID &&
           statusID === StatusType.WORK &&
           !isContractor &&

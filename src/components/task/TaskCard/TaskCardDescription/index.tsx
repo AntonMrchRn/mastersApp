@@ -103,7 +103,7 @@ export const TaskCardDescription = ({
       {/* Выбор подрядчиков  */}
       {subsetID &&
       [TaskType.IT_AUCTION_SALE, TaskType.IT_FIRST_RESPONSE].includes(
-        subsetID
+        subsetID,
       ) &&
       isCurator &&
       statusID === StatusType.ACTIVE ? (
@@ -222,7 +222,7 @@ export const TaskCardDescription = ({
         <></>
       )}
 
-      <Text variant="title3" style={styles.mt36} color={theme.text.basic}>
+      <Text variant="title3" color={theme.text.basic}>
         О задаче
       </Text>
       <Text variant="bodySRegular" style={styles.mt24} color={theme.text.basic}>

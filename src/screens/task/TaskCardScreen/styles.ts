@@ -38,6 +38,7 @@ export const styles = StyleSheet.create({
   card: {
     flex: 1,
     width: '100%',
+    paddingTop: 36,
     alignSelf: 'flex-start',
     paddingBottom: 14,
     backgroundColor: 'white',

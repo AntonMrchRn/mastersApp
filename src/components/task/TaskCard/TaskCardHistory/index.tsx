@@ -46,7 +46,7 @@ export const TaskCardHistory: FC<TaskCardHistoryProps> = ({
     return statusID === StatusType.ACTIVE ? (
       <PreviewNotFound type={PreviewNotFoundType.NoHistoryEvents} />
     ) : (
-      <View style={styles.container}>
+      <View>
         <Text variant="title3" style={styles.txt} color={theme.text.basic}>
           События задачи
         </Text>

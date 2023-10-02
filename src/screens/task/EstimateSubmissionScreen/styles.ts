@@ -29,6 +29,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
     alignSelf: 'flex-start',
+    alignItems: 'center',
     paddingVertical: 8,
   },
   head: {
@@ -44,5 +45,8 @@ export const styles = StyleSheet.create({
   btn: {
     marginBottom: configApp.android ? 20 : 0,
     height: 48,
+  },
+  addText: {
+    flex: 1,
   },
 });

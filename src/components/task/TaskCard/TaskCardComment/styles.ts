@@ -10,9 +10,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  title: {
-    paddingTop: 32,
-  },
   containerList: {
     flex: 1,
     paddingVertical: 10,

@@ -93,7 +93,7 @@ export const TaskCardReport = ({
   };
 
   const UploadedFiles = (
-    <View style={styles.mt36}>
+    <View>
       <Text variant="title3" color={theme.text.basic}>
         Загруженные файлы
       </Text>
@@ -130,7 +130,7 @@ export const TaskCardReport = ({
   const DefaultUploadFiles = (
     <>
       {reportFiles.length || closureFiles.length ? (
-        <View style={styles.mt36}>
+        <View>
           <Text variant="title3" color={theme.text.basic}>
             Загруженные файлы
           </Text>
@@ -165,7 +165,7 @@ export const TaskCardReport = ({
   );
 
   const AllUploadFiles = (
-    <View style={styles.mt36}>
+    <View>
       <Text variant="title3" color={theme.text.basic}>
         Загруженные файлы
       </Text>

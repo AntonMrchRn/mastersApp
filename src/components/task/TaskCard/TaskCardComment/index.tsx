@@ -40,13 +40,13 @@ export const TaskCardComment = ({
   const theme = useTheme();
 
   const { commentsPreview, loadingCommentsPreview } = useAppSelector(
-    state => state.myTasks
+    state => state.myTasks,
   );
 
   useEffect(() => {
     if (isFocused) {
       dispatch(
-        getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'desc' })
+        getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'desc' }),
       );
     }
 
@@ -108,14 +108,14 @@ export const TaskCardComment = ({
   return (
     <View style={styles.container}>
       {isCommentsAvailable && !!commentsPreview?.taskComment?.length && (
-        <Text variant="title3" style={styles.title}>
+        <Text variant="title3">
           {`Последние ${plural(
             commentsPreview.taskComment?.length > 5
               ? 5
               : commentsPreview.taskComment?.length,
             '%d сообщение',
             '%d сообщения',
-            '%d сообщений'
+            '%d сообщений',
           )}`}
         </Text>
       )}

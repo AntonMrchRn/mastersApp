@@ -245,7 +245,11 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
           <Spacer size={20} />
           <TouchableOpacity style={styles.add} onPress={onEstimateModalVisible}>
             <PlusIcon fill={theme.icons.basic} />
-            <Text variant="bodySBold" color={theme.text.basic}>
+            <Text
+              variant="bodySBold"
+              color={theme.text.basic}
+              style={styles.addText}
+            >
               Добавить услугу или материал
             </Text>
           </TouchableOpacity>
