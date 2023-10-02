@@ -77,6 +77,7 @@ export const useEstimateSubmission = ({
     deleteEstimateMaterialModalVisible,
     setDeleteEstimateMaterialModalVisible,
   ] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { offerServices, error, loading, offerComment, offerID } =
     useAppSelector(selectTasks);
@@ -275,6 +276,7 @@ export const useEstimateSubmission = ({
       });
     }
     try {
+      setIsLoading(true);
       await patchTaskLot({
         taskID: taskId,
         sum: allSum,
@@ -390,40 +392,43 @@ export const useEstimateSubmission = ({
         type: 'error',
         title: (err as AxiosQueryErrorResponse).data.message,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
   return {
     bsRef,
-    onEstimateModalVisible,
-    onClosePress,
-    onDeleteEstimateServiceModalVisible,
-    onCancelDeleteService,
-    addServiceBottomSheetClose,
-    offerComment,
-    deleteEstimateServiceModalVisible,
-    estimateModalVisible,
     errors,
-    setServiceForDelete,
-    setComment,
     banner,
-    addService,
-    onDeleteService,
-    loading,
-    serviceNames,
     allSum,
-    pressMaterial,
-    pressService,
-    services,
-    onDeleteMaterial,
-    materialsSum,
     isError,
+    loading,
+    services,
     onSubmit,
-    allowCostIncrease,
-    currentSum,
     costStep,
+    isLoading,
+    currentSum,
+    addService,
+    setComment,
+    serviceNames,
+    pressService,
+    offerComment,
+    onClosePress,
+    materialsSum,
+    pressMaterial,
+    onDeleteService,
+    onDeleteMaterial,
+    allowCostIncrease,
+    setServiceForDelete,
+    estimateModalVisible,
     setMaterialForDelete,
-    onDeleteEstimateMaterialModalVisible,
+    onCancelDeleteService,
     onCancelDeleteMaterial,
+    onEstimateModalVisible,
+    addServiceBottomSheetClose,
+    deleteEstimateServiceModalVisible,
     deleteEstimateMaterialModalVisible,
+    onDeleteEstimateServiceModalVisible,
+    onDeleteEstimateMaterialModalVisible,
   };
 };

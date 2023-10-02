@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 12,
+    height: 48,
   },
   inputs: {
     gap: 16,

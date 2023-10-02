@@ -43,5 +43,6 @@ export const styles = StyleSheet.create({
   },
   btn: {
     marginBottom: configApp.android ? 20 : 0,
+    height: 48,
   },
 });

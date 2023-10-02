@@ -7,6 +7,9 @@ export const styles = StyleSheet.create({
   action: {
     marginVertical: 12,
   },
+  loader: {
+    marginVertical: 15,
+  },
   container: {
     marginTop: 8,
   },

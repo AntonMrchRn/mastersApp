@@ -43,37 +43,38 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
 
   const {
     bsRef,
-    onEstimateModalVisible,
-    onClosePress,
-    onDeleteEstimateServiceModalVisible,
-    onCancelDeleteService,
-    addServiceBottomSheetClose,
-    offerComment,
-    deleteEstimateServiceModalVisible,
-    estimateModalVisible,
     errors,
-    setServiceForDelete,
-    setComment,
     banner,
-    addService,
-    loading,
-    serviceNames,
     allSum,
-    onDeleteService,
-    pressMaterial,
-    pressService,
-    services,
-    onDeleteMaterial,
-    materialsSum,
     isError,
+    loading,
+    services,
     onSubmit,
-    allowCostIncrease,
-    currentSum,
     costStep,
+    isLoading,
+    currentSum,
+    addService,
+    setComment,
+    serviceNames,
+    pressService,
+    offerComment,
+    onClosePress,
+    materialsSum,
+    pressMaterial,
+    onDeleteService,
+    onDeleteMaterial,
+    allowCostIncrease,
+    setServiceForDelete,
+    estimateModalVisible,
     setMaterialForDelete,
-    onDeleteEstimateMaterialModalVisible,
+    onCancelDeleteService,
     onCancelDeleteMaterial,
+    onEstimateModalVisible,
+    addServiceBottomSheetClose,
+    deleteEstimateServiceModalVisible,
     deleteEstimateMaterialModalVisible,
+    onDeleteEstimateServiceModalVisible,
+    onDeleteEstimateMaterialModalVisible,
   } = useEstimateSubmission({
     navigation,
     taskId,
@@ -155,7 +156,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                 addServiceLocalPrice({
                   serviceID: service.ID,
                   localPrice: text,
-                })
+                }),
               );
             };
             const onChangeCount = (text: string) => {
@@ -166,7 +167,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                 addServiceLocalCount({
                   serviceID: service.ID,
                   localCount: text,
-                })
+                }),
               );
             };
             return (
@@ -202,7 +203,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                         serviceID: service.ID,
                         materialID: material.ID,
                         localPrice: text,
-                      })
+                      }),
                     );
                   };
                   const onChangeCount = (text: string) => {
@@ -214,7 +215,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                         serviceID: service.ID,
                         materialID: material.ID,
                         localCount: text,
-                      })
+                      }),
                     );
                   };
                   return (
@@ -270,8 +271,9 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
             )}
           </View>
           <Button
+            isPending={isLoading}
             label={isEdit ? 'Редактировать смету' : 'Подать смету'}
-            disabled={isError}
+            disabled={isError || isLoading}
             onPress={onSubmit}
             style={styles.btn}
           />
