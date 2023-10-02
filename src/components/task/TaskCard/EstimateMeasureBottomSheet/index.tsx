@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
 
 import { BottomSheet, Button, Spacer, Text, useTheme } from 'rn-ui-kit';
 
@@ -39,6 +39,9 @@ export const EstimateMeasureBottomSheet = ({
       closeIconPress={onCancel}
     >
       <View style={styles.container}>
+        {!data?.length && (
+          <ActivityIndicator size="large" style={styles.loader} />
+        )}
         {data.map(item => {
           const onPress = () => {
             setSelectName(item.description);
@@ -64,12 +67,14 @@ export const EstimateMeasureBottomSheet = ({
             </View>
           );
         })}
-        <Button
-          style={styles.button}
-          size="M"
-          label="Выбрать"
-          onPress={onChangeMeasure}
-        />
+        {!!data?.length && (
+          <Button
+            style={styles.button}
+            size="M"
+            label="Выбрать"
+            onPress={onChangeMeasure}
+          />
+        )}
         <Spacer size={configApp.android ? 20 : 0} />
       </View>
     </BottomSheet>

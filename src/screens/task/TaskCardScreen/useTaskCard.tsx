@@ -467,12 +467,13 @@ export const useTaskCard = ({
       .concat(curators as { ID: number }[])
       .map(recipient => recipient.ID);
 
-    navigation.navigate(AppScreenName.CommentsChat, {
-      taskId,
-      recipientIDs,
-      isMessageInputAvailable: !isTaskClosed && !isTaskCanceled,
-      isITServices,
-    });
+    statusID &&
+      navigation.navigate(AppScreenName.CommentsChat, {
+        taskId,
+        recipientIDs,
+        statusID,
+        isITServices,
+      });
   };
 
   const banner = getBanner({

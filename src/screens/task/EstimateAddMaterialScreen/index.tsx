@@ -261,7 +261,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
             onPress={methods.handleSubmit(onSubmit)}
             style={styles.button}
             isPending={loading}
-            disabled={hasName || loading}
+            disabled={loading || hasName}
           />
         </FormProvider>
       </View>
