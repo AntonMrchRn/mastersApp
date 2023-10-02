@@ -9,6 +9,7 @@ import { useTaskSSE } from '@/hooks/useTaskSSE';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
+  tasksAPI,
   useGetTaskQuery,
   usePatchITTaskMemberMutation,
   usePatchOffersMutation,
@@ -51,7 +52,15 @@ export const useEstimateSubmission = ({
   const bsRef = useRef<BottomSheetModal>(null);
   const { data, refetch } = useGetTaskQuery(taskId);
 
-  useTaskSSE({ taskId, refresh: refetch });
+  const refresh = () => {
+    dispatch(
+      tasksAPI.endpoints.getTask.initiate(taskId, {
+        forceRefetch: true,
+      }),
+    );
+  };
+
+  useTaskSSE({ taskId, refresh });
 
   const [postITTaskMember] = usePostITTaskMemberMutation();
   const [patchITTaskMember] = usePatchITTaskMemberMutation();

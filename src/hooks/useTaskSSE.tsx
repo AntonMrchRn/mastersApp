@@ -98,8 +98,7 @@ export const useTaskSSE = ({
         );
         sseAndroid = eventSourceAndroid;
 
-        sseAndroid.onmessage = customEventHandler;
-        sseAndroid.addEventListener('tasks', customEventHandler);
+        // sseAndroid.addEventListener('tasks', customEventHandler);
         sseAndroid.addEventListener('refresh', customEventHandler);
       }
     })();
