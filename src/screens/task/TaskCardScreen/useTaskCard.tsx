@@ -202,6 +202,7 @@ export const useTaskCard = ({
       });
     }
   }, [deleteOffersMutation.isError]);
+
   useEffect(() => {
     if (isSuccess) {
       checkFilesOnDevice(files);
