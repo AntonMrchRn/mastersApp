@@ -60,9 +60,10 @@ type PreviewContent = {
 type PreviewNotFoundProps = {
   type: PreviewNotFoundType;
   closeModal?: () => void;
+  text?: string;
 };
 
-const PreviewNotFound = ({ type, closeModal }: PreviewNotFoundProps) => {
+const PreviewNotFound = ({ type, closeModal, text }: PreviewNotFoundProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const { navigate } =
@@ -212,7 +213,7 @@ const PreviewNotFound = ({ type, closeModal }: PreviewNotFoundProps) => {
   return (
     <Preview
       type={type}
-      text={currentPreview.text}
+      text={text || currentPreview.text}
       icon={currentPreview.icon}
       title={currentPreview.title}
       button={currentPreview.button}

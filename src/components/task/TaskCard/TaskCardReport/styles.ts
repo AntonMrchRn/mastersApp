@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
   },
   download: {
     flexDirection: 'row',
+    gap: 8,
   },
   container: {
     alignItems: 'center',
@@ -30,7 +31,6 @@ export const styles = StyleSheet.create({
   },
   desc: {
     flexShrink: 1,
-    marginLeft: 8,
   },
   banner: {
     position: 'absolute',

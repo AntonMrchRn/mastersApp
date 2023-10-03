@@ -108,7 +108,7 @@ export const TaskCardDescription = ({
       isCurator &&
       statusID === StatusType.ACTIVE ? (
         <>
-          <Text variant="title3" style={styles.mt36} color={theme.text.basic}>
+          <Text variant="title3" color={theme.text.basic}>
             Приглашенные подрядчики
           </Text>
           {isLoading ? (
@@ -217,6 +217,7 @@ export const TaskCardDescription = ({
               onPress={navigateToContractors}
             />
           )}
+          <Spacer size="xxxl" />
         </>
       ) : (
         <></>

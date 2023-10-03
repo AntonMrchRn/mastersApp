@@ -527,6 +527,7 @@ export const useTaskCard = ({
     isCurator,
     curator,
     cancelReason,
+    isInvitedExecutor,
   });
 
   const onEstimateBannerPress = () => {
@@ -936,9 +937,12 @@ export const useTaskCard = ({
             subsetID={subsetID}
             isCurator={isCurator}
             reportFiles={reportFiles}
+            isContractor={isContractor}
             closureFiles={closureFiles}
             onClose={onUploadModalClose}
             activeBudgetCanceled={!!banner}
+            isInvitedExecutor={isInvitedExecutor}
+            isInternalExecutor={isInternalExecutor}
             uploadModalVisible={uploadModalVisible}
             uploadLimitBannerVisible={uploadLimitBannerVisible}
             onUploadLimitBannerVisible={onUploadLimitBannerVisible}
