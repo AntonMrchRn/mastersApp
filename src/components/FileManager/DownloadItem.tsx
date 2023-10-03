@@ -35,6 +35,7 @@ type DownloadItemProps = {
     filePath?: string;
   }) => Promise<void>;
   canDelete: boolean;
+  isUploading: boolean;
   fileType: 'user' | 'task';
 };
 
@@ -43,6 +44,7 @@ export const DownloadItem = ({
   onDelete,
   canDelete,
   fileType,
+  isUploading,
 }: DownloadItemProps) => {
   const toast = useToast();
   const dispatch = useAppDispatch();
@@ -55,7 +57,7 @@ export const DownloadItem = ({
     useState<StatefulPromise<FetchBlobResponse>>();
 
   const onDevice = useAppSelector(state =>
-    fileType === 'task' ? state.tasks : state.user
+    fileType === 'task' ? state.tasks : state.user,
   ).filesOnDevice?.[file.fileID];
 
   useEffect(() => {
@@ -91,7 +93,7 @@ export const DownloadItem = ({
 
         console.log(
           '🚀 ~ file: DownloadItem.tsx:93 ~ handleDownload ~ err:',
-          err
+          err,
         );
       })
       .finally(async () => {
@@ -132,7 +134,7 @@ export const DownloadItem = ({
           ? await ReactNativeBlobUtil.ios.openDocument(FILE_PATH)
           : await ReactNativeBlobUtil.android.actionViewIntent(
               FILE_PATH,
-              file.mime
+              file.mime,
             );
       }
     } catch (e) {
@@ -148,7 +150,7 @@ export const DownloadItem = ({
         </TouchableOpacity>
       );
     }
-    if (onDevice === undefined || isDeleting) {
+    if (isUploading || isDeleting) {
       return <ActivityIndicator />;
     }
     if (onDevice && canDelete) {

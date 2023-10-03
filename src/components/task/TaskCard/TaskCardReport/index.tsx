@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 
 import { Text, useTheme } from 'rn-ui-kit';
@@ -20,7 +20,7 @@ import { selectTasks } from '@/store/slices/tasks/selectors';
 import { Controllers, File, HandleUpload } from '@/types/fileManager';
 import { StatusType, TaskType } from '@/types/task';
 import { getFormData } from '@/utils/fileManager/getFormData';
-import { saveOnDevice } from '@/utils/fileManager/saveOnDevice';
+import { saveFiles } from '@/utils/fileManager/saveFiles';
 
 import { styles } from './styles';
 
@@ -58,6 +58,7 @@ export const TaskCardReport = ({
   const [postFiles] = usePostTasksFilesMutation();
   const [deleteFile] = useDeleteTaskFileMutation();
 
+  const [uploadedFileIDs, setUploadedFileIDs] = useState<number[]>([]);
   const progressesSelector = useAppSelector(selectTasks).progresses;
   const canDelete =
     !statusID ||
@@ -78,7 +79,7 @@ export const TaskCardReport = ({
         signal: controller.signal,
       }).unwrap();
 
-      saveOnDevice(addedFiles);
+      saveFiles(addedFiles, setUploadedFileIDs);
     } catch (err) {
       console.log('handleUpload error: ', err);
     }
@@ -103,6 +104,7 @@ export const TaskCardReport = ({
             files={reportFiles}
             onDelete={onDelete}
             canDelete={canDelete}
+            uploadedFileIDs={uploadedFileIDs}
           />
         ) : (
           <>
@@ -141,6 +143,7 @@ export const TaskCardReport = ({
                   files={reportFiles}
                   onDelete={onDelete}
                   canDelete={canDelete}
+                  uploadedFileIDs={uploadedFileIDs}
                 />
                 <UploadProgress
                   controllers={controllers}
@@ -175,6 +178,7 @@ export const TaskCardReport = ({
             files={reportFiles}
             onDelete={onDelete}
             canDelete={canDelete}
+            uploadedFileIDs={uploadedFileIDs}
           />
           {statusID === StatusType.WORK && (
             <UploadProgress
@@ -223,6 +227,7 @@ export const TaskCardReport = ({
                 canDelete={canDelete}
                 files={closureFiles}
                 onDelete={onDelete}
+                uploadedFileIDs={uploadedFileIDs}
               />
               {!!statusID &&
                 ![

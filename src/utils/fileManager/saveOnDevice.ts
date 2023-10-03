@@ -20,7 +20,7 @@ const actionByFileType: Record<
 
 export const saveOnDevice = async (
   files: File[],
-  fileType: 'user' | 'task' = 'task'
+  fileType: 'user' | 'task' = 'task',
 ) => {
   const saveFiles = async (file: File) => {
     const title = `${file.name}.${file.sourceExtension}`;
