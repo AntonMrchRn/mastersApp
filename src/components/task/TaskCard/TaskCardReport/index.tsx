@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 
-import { Text, useTheme } from 'rn-ui-kit';
+import { Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { DownloadFilesIcon } from '@/assets/icons/svg/screens/DownloadFilesIcon';
 import { DownloadManager } from '@/components/FileManager/DownloadManager';
@@ -177,7 +177,14 @@ export const TaskCardReport = ({
     <>
       {!reportFiles.length &&
       !closureFiles.length &&
-      (isCurator || statusID === StatusType.CLOSED) ? (
+      !toClose &&
+      (isCurator ||
+        (statusID &&
+          [
+            StatusType.CLOSED,
+            StatusType.CANCELLED_BY_EXECUTOR,
+            StatusType.CANCELLED_BY_CUSTOMER,
+          ].includes(statusID))) ? (
         <PreviewNotFound type={PreviewNotFoundType.NoFiles} />
       ) : (
         <View>
@@ -201,22 +208,53 @@ export const TaskCardReport = ({
             </View>
           ) : (
             <>
-              <Text
-                variant="bodySRegular"
-                style={styles.mt8}
-                color={theme.text.neutral}
-              >
-                {statusID &&
-                [
-                  StatusType.WORK,
-                  StatusType.SUMMARIZING,
-                  StatusType.MATCHING,
-                  StatusType.RETURNED,
-                ].includes(statusID) &&
-                !isCurator
-                  ? 'Загрузите чеки или иные финансовые документы общим размером не более 250 МВ'
-                  : 'Файлов нет'}
-              </Text>
+              {statusID &&
+              [
+                StatusType.WORK,
+                StatusType.SUMMARIZING,
+                StatusType.MATCHING,
+                StatusType.RETURNED,
+              ].includes(statusID) ? (
+                subsetID &&
+                ([
+                  TaskType.IT_AUCTION_SALE,
+                  TaskType.IT_FIRST_RESPONSE,
+                ].includes(subsetID) &&
+                !toClose &&
+                !isCurator ? (
+                  <>
+                    <Spacer size="xl" />
+                    <View style={styles.download}>
+                      <DownloadFilesIcon />
+                      <Text
+                        variant="bodySRegular"
+                        style={styles.desc}
+                        color={theme.text.neutral}
+                      >
+                        Загрузите файлы, подтверждающие выполнение услуг общим
+                        размером не более 250 МВ
+                      </Text>
+                    </View>
+                  </>
+                ) : (
+                  <Text
+                    variant="bodySRegular"
+                    color={theme.text.neutral}
+                    style={styles.mt8}
+                  >
+                    Загрузите чеки или иные финансовые документы общим размером
+                    не более 250 МВ
+                  </Text>
+                ))
+              ) : (
+                <Text
+                  variant="bodySRegular"
+                  color={theme.text.neutral}
+                  style={styles.mt8}
+                >
+                  Файлов нет
+                </Text>
+              )}
               {statusID &&
                 [
                   StatusType.WORK,
@@ -262,9 +300,13 @@ export const TaskCardReport = ({
                   <>
                     <View style={styles.download}>
                       {!!statusID &&
-                        ![StatusType.WORK, StatusType.SUMMARIZING].includes(
-                          statusID,
-                        ) && <DownloadFilesIcon />}
+                        ![
+                          StatusType.WORK,
+                          StatusType.SUMMARIZING,
+                          StatusType.CLOSED,
+                          StatusType.CANCELLED_BY_CUSTOMER,
+                          StatusType.CANCELLED_BY_EXECUTOR,
+                        ].includes(statusID) && <DownloadFilesIcon />}
                       <Text
                         variant="bodySRegular"
                         style={styles.desc}
@@ -276,6 +318,9 @@ export const TaskCardReport = ({
                           StatusType.MATCHING,
                           StatusType.SUMMARIZING,
                           StatusType.RETURNED,
+                          StatusType.CLOSED,
+                          StatusType.CANCELLED_BY_CUSTOMER,
+                          StatusType.CANCELLED_BY_EXECUTOR,
                         ].includes(statusID)
                           ? 'Загрузите чеки или иные финансовые документы общим размером не более 250 МВ'
                           : 'Пока здесь ничего нет'}
@@ -342,6 +387,12 @@ export const TaskCardReport = ({
       case StatusType.MATCHING:
       case StatusType.RETURNED:
         return AllUploadFiles;
+      case StatusType.CANCELLED_BY_EXECUTOR:
+      case StatusType.CANCELLED_BY_CUSTOMER:
+        if (subsetID === TaskType.IT_AUCTION_SALE) {
+          return AllUploadFiles;
+        }
+        return DefaultUploadFiles;
       default:
         return DefaultUploadFiles;
     }
