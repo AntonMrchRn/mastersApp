@@ -353,62 +353,64 @@ export const useEstimateSubmission = ({
           });
         }
       } else {
-        // Подача сметы для IT-лотов Исполнителем
-        if (submissionByCurator && isItLots) {
-          isInvitedExecutor
-            ? await patchITTaskMember({
-                ID: executor?.memberID,
-                isConfirm: true,
-                isCurator: true,
-                offer: {
-                  taskID: taskId,
-                  isCurator: true,
-                  services: postServices,
-                },
-              }).unwrap()
-            : await postITTaskMember({
-                taskID: taskId,
-                members: [
-                  {
-                    userID: user?.userID,
-                    isConfirm: true,
-                    isCurator: true,
-                    offer: {
-                      taskID: taskId,
-                      isCurator: true,
-                      services: postServices,
-                    },
-                  },
-                ],
-              }).unwrap();
-        }
         if (isItLots) {
-          isInvitedExecutor
-            ? await patchITTaskMember({
-                ID: executor?.memberID,
-                isConfirm: true,
-                isCurator: false,
-                offer: {
-                  taskID: taskId,
-                  isCurator: false,
-                  services: postServices,
-                },
-              }).unwrap()
-            : await postITTaskMember({
-                taskID: taskId,
-                members: [
-                  {
-                    userID: user?.userID,
-                    isConfirm: true,
-                    isCurator: false,
-                    offer: {
-                      taskID: taskId,
-                      isCurator: false,
-                      services: postServices,
-                    },
+          // Подача сметы для IT-лотов Куратором
+          if (submissionByCurator) {
+            isInvitedExecutor
+              ? await patchITTaskMember({
+                  ID: executor?.memberID,
+                  isConfirm: true,
+                  isCurator: true,
+                  offer: {
+                    taskID: taskId,
+                    isCurator: true,
+                    services: postServices,
                   },
-                ],
-              }).unwrap();
+                }).unwrap()
+              : await postITTaskMember({
+                  taskID: taskId,
+                  members: [
+                    {
+                      userID: user?.userID,
+                      isConfirm: true,
+                      isCurator: true,
+                      offer: {
+                        taskID: taskId,
+                        isCurator: true,
+                        services: postServices,
+                      },
+                    },
+                  ],
+                }).unwrap();
+          } else {
+            // Подача сметы для IT-лотов Исполнителем
+            isInvitedExecutor
+              ? await patchITTaskMember({
+                  ID: executor?.memberID,
+                  isConfirm: true,
+                  isCurator: false,
+                  offer: {
+                    taskID: taskId,
+                    isCurator: false,
+                    services: postServices,
+                  },
+                }).unwrap()
+              : await postITTaskMember({
+                  taskID: taskId,
+                  members: [
+                    {
+                      userID: user?.userID,
+                      isConfirm: true,
+                      isCurator: false,
+                      offer: {
+                        taskID: taskId,
+                        isCurator: false,
+                        services: postServices,
+                      },
+                    },
+                  ],
+                }).unwrap();
+          }
         } else {
           // Подача сметы для Общих лотов Исполнителем
           await postOffers({
