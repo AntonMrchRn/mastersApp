@@ -9,12 +9,15 @@ import { useTaskSSE } from '@/hooks/useTaskSSE';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
+  tasksAPI,
   useGetTaskQuery,
+  usePatchITTaskMemberMutation,
   usePatchOffersMutation,
   usePatchTaskLotMutation,
+  usePostITTaskMemberMutation,
   usePostOffersMutation,
 } from '@/store/api/tasks';
-import { Material, Service } from '@/store/api/tasks/types';
+import { Executor, Material, Service } from '@/store/api/tasks/types';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import {
   setNewOfferServices,
@@ -23,12 +26,14 @@ import {
 } from '@/store/slices/tasks/actions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
+import { TaskType } from '@/types/task';
 
 export const useEstimateSubmission = ({
   navigation,
   taskId,
   isEdit,
-  isItLots,
+  isInvitedExecutor,
+  executor,
 }: {
   navigation: StackNavigationProp<
     AppStackParamList,
@@ -37,7 +42,8 @@ export const useEstimateSubmission = ({
   >;
   taskId: number;
   isEdit: boolean | undefined;
-  isItLots: boolean | undefined;
+  isInvitedExecutor: boolean | undefined;
+  executor: Executor | undefined;
 }) => {
   const dispatch = useAppDispatch();
   const toast = useToast();
@@ -46,8 +52,18 @@ export const useEstimateSubmission = ({
   const bsRef = useRef<BottomSheetModal>(null);
   const { data, refetch } = useGetTaskQuery(taskId);
 
-  useTaskSSE(taskId);
+  const refresh = () => {
+    dispatch(
+      tasksAPI.endpoints.getTask.initiate(taskId, {
+        forceRefetch: true,
+      }),
+    );
+  };
 
+  useTaskSSE({ taskId, refresh });
+
+  const [postITTaskMember] = usePostITTaskMemberMutation();
+  const [patchITTaskMember] = usePatchITTaskMemberMutation();
   const [patchTaskLot] = usePatchTaskLotMutation();
   const [postOffers] = usePostOffersMutation();
   const [patchOffers] = usePatchOffersMutation();
@@ -70,10 +86,13 @@ export const useEstimateSubmission = ({
     deleteEstimateMaterialModalVisible,
     setDeleteEstimateMaterialModalVisible,
   ] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { offerServices, error, loading, offerComment, offerID } =
     useAppSelector(selectTasks);
+  const user = useAppSelector(selectAuth).user;
   const userRole = useAppSelector(selectAuth).user?.roleID;
+  const isItLots = data?.tasks[0]?.subsetID === TaskType.IT_AUCTION_SALE;
 
   useEffect(() => {
     if (isFocused) {
@@ -155,7 +174,7 @@ export const useEstimateSubmission = ({
   }, {});
 
   const isError = Object.values(fields).some(
-    field => !!field.localPrice || !!field.localCount
+    field => !!field.localPrice || !!field.localCount,
   );
 
   const onEstimateModalVisible = () => {
@@ -213,7 +232,7 @@ export const useEstimateSubmission = ({
     if (materialForDelete) {
       const newMaterials =
         materialForDelete?.service?.materials?.filter(
-          m => m !== materialForDelete?.material
+          m => m !== materialForDelete?.material,
         ) || [];
       const newServices = services.reduce<Service[]>((acc, val) => {
         if (val === materialForDelete.service) {
@@ -231,6 +250,7 @@ export const useEstimateSubmission = ({
   const setComment = (text: string) => {
     dispatch(setOfferComment(text));
   };
+
   const onSubmit = async () => {
     //если есть ошибка валидации
     if (isError) {
@@ -265,15 +285,13 @@ export const useEstimateSubmission = ({
       });
     }
     try {
+      setIsLoading(true);
       await patchTaskLot({
         taskID: taskId,
         sum: allSum,
         ...(isEdit && offerID && { offerID }),
       }).unwrap();
-      if (isItLots) {
-        // /tasks/members/it
-        // /offers
-      }
+
       const postServices: Service[] = services.map(service => {
         const postMaterials =
           service.materials?.map(material => {
@@ -334,12 +352,44 @@ export const useEstimateSubmission = ({
           });
         }
       } else {
-        await postOffers({
-          taskID: taskId,
-          comment: offerComment,
-          services: postServices,
-          sum: allSum,
-        }).unwrap();
+        // Подача сметы для IT-лотов Исполнителем
+        if (isItLots) {
+          isInvitedExecutor
+            ? await patchITTaskMember({
+                ID: executor?.memberID,
+                isConfirm: true,
+                isCurator: false,
+                offer: {
+                  taskID: taskId,
+                  isCurator: false,
+                  services: postServices,
+                },
+              }).unwrap()
+            : await postITTaskMember({
+                taskID: taskId,
+                members: [
+                  {
+                    userID: user?.userID,
+                    isConfirm: true,
+                    isCurator: false,
+                    offer: {
+                      taskID: taskId,
+                      isCurator: false,
+                      services: postServices,
+                    },
+                  },
+                ],
+              }).unwrap();
+        } else {
+          // Подача сметы для Общих лотов Исполнителем
+          await postOffers({
+            taskID: taskId,
+            comment: offerComment,
+            services: postServices,
+            sum: allSum,
+          }).unwrap();
+        }
+
         dispatch(setNewOfferServices([]));
         dispatch(setOfferComment(''));
         navigation.navigate(AppScreenName.EstimateSubmissionSuccess, {
@@ -351,40 +401,43 @@ export const useEstimateSubmission = ({
         type: 'error',
         title: (err as AxiosQueryErrorResponse).data.message,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
   return {
     bsRef,
-    onEstimateModalVisible,
-    onClosePress,
-    onDeleteEstimateServiceModalVisible,
-    onCancelDeleteService,
-    addServiceBottomSheetClose,
-    offerComment,
-    deleteEstimateServiceModalVisible,
-    estimateModalVisible,
     errors,
-    setServiceForDelete,
-    setComment,
     banner,
-    addService,
-    onDeleteService,
-    loading,
-    serviceNames,
     allSum,
-    pressMaterial,
-    pressService,
-    services,
-    onDeleteMaterial,
-    materialsSum,
     isError,
+    loading,
+    services,
     onSubmit,
-    allowCostIncrease,
-    currentSum,
     costStep,
+    isLoading,
+    currentSum,
+    addService,
+    setComment,
+    serviceNames,
+    pressService,
+    offerComment,
+    onClosePress,
+    materialsSum,
+    pressMaterial,
+    onDeleteService,
+    onDeleteMaterial,
+    allowCostIncrease,
+    setServiceForDelete,
+    estimateModalVisible,
     setMaterialForDelete,
-    onDeleteEstimateMaterialModalVisible,
+    onCancelDeleteService,
     onCancelDeleteMaterial,
+    onEstimateModalVisible,
+    addServiceBottomSheetClose,
+    deleteEstimateServiceModalVisible,
     deleteEstimateMaterialModalVisible,
+    onDeleteEstimateServiceModalVisible,
+    onDeleteEstimateMaterialModalVisible,
   };
 };

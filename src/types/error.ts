@@ -12,6 +12,8 @@ enum ErrorCode {
   TaskIsAlreadyTaken = 20008,
   NetworkError = 30001,
   NoDataFound = 8003,
+  OTHER_CANDIDATE = 7004,
+  NOT_FOUND = 7004,
 }
 
 type AxiosQueryError = {

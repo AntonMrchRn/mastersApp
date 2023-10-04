@@ -9,6 +9,7 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Button, useTheme } from 'rn-ui-kit';
 
+import { CalculatorLargeIcon } from '@/assets/icons/svg/estimate/CalculatorLargeIcon';
 import ActiveTaskIcon from '@/assets/icons/svg/screens/ActiveTaskIcon';
 import ChatIcon from '@/assets/icons/svg/screens/Chat';
 import CloseIcon from '@/assets/icons/svg/screens/CloseIcon';
@@ -46,6 +47,7 @@ export enum PreviewNotFoundType {
   CommentsClosedNow = 'CommentsClosedNow',
   ServiceNotFound = 'ServiceNotFound',
   AccessRestricted = 'AccessRestricted',
+  NoEstimate = 'NoEstimate',
 }
 
 type PreviewContent = {
@@ -197,6 +199,11 @@ const PreviewNotFound = ({ type, closeModal }: PreviewNotFoundProps) => {
       icon: <CloseIcon fill={theme.icons.danger} size={40} />,
       title: 'Услуга не найдена',
       text: 'Пожалуйста, убедитесь, что все слова написаны без ошибок или попробуйте другой запрос',
+    },
+    [PreviewNotFoundType.NoEstimate]: {
+      icon: <CalculatorLargeIcon />,
+      title: 'Сметы нет',
+      text: 'В данной задаче смета не предусмотрена',
     },
   };
 

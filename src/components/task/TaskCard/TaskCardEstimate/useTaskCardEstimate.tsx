@@ -69,22 +69,31 @@ export const useTaskCardEstimate = ({
   const isOffersDeadlineOver =
     offersDeadline && dayjs().isAfter(offersDeadline);
 
-  const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
-
   const userServices = userOffer?.services || [];
   const isTaskEstimateTab = currentEstimateTab === EstimateTab.TASK_ESTIMATE;
   const userComment = userOffer?.comment;
   const clientComment = userOffer?.clientComment || '';
+  const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
 
   const getCurrentServices = () => {
     switch (subsetID) {
       case TaskType.COMMON_FIRST_RESPONSE:
         return services;
       case TaskType.COMMON_AUCTION_SALE:
-        if (statusID !== StatusType.ACTIVE) {
+        if (
+          statusID !== StatusType.ACTIVE ||
+          currentEstimateTab === EstimateTab.MY_SUGGESTION
+        ) {
           return userServices;
         }
-        if (currentEstimateTab === EstimateTab.MY_SUGGESTION) {
+        return services;
+      case TaskType.IT_AUCTION_SALE:
+        if (
+          (statusID &&
+            ![StatusType.ACTIVE, StatusType.WORK].includes(statusID) &&
+            !isContractor) ||
+          currentEstimateTab === EstimateTab.MY_SUGGESTION
+        ) {
           return userServices;
         }
         return services;
@@ -110,15 +119,15 @@ export const useTaskCardEstimate = ({
   const allMaterials = currentServices.reduce<Material[]>(
     (acc, val) =>
       acc.concat(typeof val.materials !== 'undefined' ? val.materials : []),
-    []
+    [],
   );
   const servicesSum = currentServices.reduce(
     (acc, val) => acc + (val?.count || 0) * (val?.price || 0),
-    0
+    0,
   );
   const materialsSum = allMaterials.reduce(
     (acc, val) => acc + (val?.count || 0) * (val?.price || 0),
-    0
+    0,
   );
   const serviceNames = services?.reduce<string[]>((acc, val) => {
     if (val.name) {
@@ -179,13 +188,13 @@ export const useTaskCardEstimate = ({
         const initMaterials: Material[] =
           serv.materials?.map(mat => {
             const coordMaterial = coordServices?.materials?.find(
-              m => m.name === mat.name
+              m => m.name === mat.name,
             );
             return {
               ...mat,
               price: coordMaterial ? coordMaterial.price : mat.price,
               canDelete: !coordMaterial,
-              localPrice: mat.price.toString(),
+              localPrice: mat.price?.toString(),
               count: coordMaterial ? coordMaterial.count : mat.count,
               localCount: mat.count.toString(),
             };

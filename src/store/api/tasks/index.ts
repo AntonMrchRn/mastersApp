@@ -33,7 +33,6 @@ export const tasksAPI = api
           method: 'GET',
         }),
         providesTags: ['task'],
-        // transformResponse: (response: GetTaskResponse) => response.tasks[0],
       }),
       getTaskHistory: builder.query<GetTaskHistoryResponse, number>({
         query: id => ({
@@ -53,7 +52,7 @@ export const tasksAPI = api
             url: `services/categories?query=??`,
             method: 'GET',
           }),
-        }
+        },
       ),
       getServicesByCategories: builder.query<GetServicesResponse, string>({
         query: categoryIds => ({

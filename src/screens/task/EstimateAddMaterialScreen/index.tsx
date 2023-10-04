@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useIsFocused } from '@react-navigation/native';
@@ -23,6 +24,8 @@ import { selectAuth } from '@/store/slices/auth/selectors';
 import { setNewOfferServices } from '@/store/slices/tasks/actions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
+import { EstimateMaterialAdditionFormValues } from '@/types/form';
+import { RoleType } from '@/types/task';
 import { estimateAddMaterialValidationSchema } from '@/utils/formValidation';
 import { getRandomUniqNumber } from '@/utils/getRandomUniqNumber';
 
@@ -56,6 +59,8 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
   const [postMaterial, mutationMaterial] = usePostMaterialMutation();
   const [patchTaskService, mutationPatchTaskService] =
     usePatchTaskServiceMutation();
+
+  const isInternalExecutor = userRole === RoleType.INTERNAL_EXECUTOR;
 
   useEffect(() => {
     if (mutationMaterial.error && 'data' in mutationMaterial.error) {
@@ -92,16 +97,20 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
   const materials = service?.materials || [];
   const materialsNames = materials.reduce<string[]>(
     (acc, val) => acc.concat(val?.name || []),
-    []
+    [],
   );
-  const methods = useForm({
+
+  const methods = useForm<EstimateMaterialAdditionFormValues>({
     defaultValues: {
       name: '',
       count: '',
-      price: '',
+      ...(isInternalExecutor && { price: '' }),
       measure: '',
     },
-    resolver: yupResolver(estimateAddMaterialValidationSchema),
+    resolver: yupResolver<
+      | EstimateMaterialAdditionFormValues
+      | Omit<EstimateMaterialAdditionFormValues, 'price'>
+    >(estimateAddMaterialValidationSchema(isInternalExecutor)),
     mode: 'onSubmit',
   });
   const {
@@ -119,12 +128,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
     count,
     price,
     measure,
-  }: {
-    name: string;
-    count: string;
-    price: string;
-    measure: string;
-  }) => {
+  }: EstimateMaterialAdditionFormValues) => {
     if (!userRole) {
       return toast.show({
         type: 'error',
@@ -145,11 +149,11 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
         ID: getRandomUniqNumber(ids),
         count: +count,
         measure: newMeasure,
-        localPrice: price,
+        ...(!isInternalExecutor && { localPrice: price }),
         localCount: count,
         canDelete: true,
         name,
-        price: +price,
+        ...(!isInternalExecutor && price && { price: +price }),
         roleID: userRole,
       };
       const newMaterials = materials.concat(newMaterial);
@@ -163,16 +167,16 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
       navigation.navigate(AppScreenName.EstimateSubmission, { taskId, isEdit });
     } else {
       try {
-        const newSum = ((service?.sum || 0) + +price * +count)
-          .toString()
-          .includes('.')
-          ? Number(((service?.sum || 0) + +price * +count).toFixed(2))
-          : (service?.sum || 0) + +price * +count;
+        const newSum =
+          price &&
+          (((service?.sum || 0) + +price * +count).toString().includes('.')
+            ? Number(((service?.sum || 0) + Number(price) * +count).toFixed(2))
+            : (service?.sum || 0) + +price * +count);
         await patchTaskService({
           ID: service?.ID,
           taskID: taskId,
           materials: [],
-          sum: newSum,
+          ...(!isInternalExecutor && { sum: newSum }),
         }).unwrap();
         await postMaterial({
           serviceID: service?.ID,
@@ -180,7 +184,7 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
           count: +count,
           measure: measures.find(m => m.description === measure)?.name,
           name,
-          price: +price,
+          ...(!isInternalExecutor && price && { price: +price }),
           roleID: userRole,
         });
       } catch (error) {
@@ -196,61 +200,71 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
 
   const measures = getMeasures.data?.measures || [];
   return (
-    <View style={styles.container}>
-      <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
-        Заполните данные о материале
-      </Text>
-      <Spacer size={'xl'} />
-      <FormProvider {...methods}>
-        <View style={styles.inputs}>
-          <ControlledInput
-            name={'name'}
-            label={'Наименование'}
-            placeholder={'Наименование'}
-            variant={'text'}
-            maxLength={50}
-            hint={
-              errors.name?.message ||
-              (hasName ? 'Данный материал уже включен в смету' : undefined)
-            }
-            isError={!!errors.name?.message || hasName}
+    <KeyboardAwareScrollView
+      enableOnAndroid={true}
+      keyboardOpeningTime={100}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+    >
+      <View style={styles.container}>
+        <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
+          Заполните данные о материале
+        </Text>
+        <FormProvider {...methods}>
+          <View style={styles.inputs}>
+            <ControlledInput
+              name={'name'}
+              label={'Наименование'}
+              placeholder={'Наименование'}
+              variant={'text'}
+              maxLength={50}
+              hint={
+                errors.name?.message ||
+                (hasName && !loading
+                  ? 'Данный материал уже включен в смету'
+                  : undefined)
+              }
+              isError={!!errors.name?.message || (hasName && !loading)}
+            />
+            <ControlledInput
+              name={'count'}
+              label={'Количество'}
+              placeholder={'Количество'}
+              variant={'number'}
+              hint={errors.count?.message}
+              isError={!!errors.count?.message}
+              maxLength={5}
+            />
+            {!isInternalExecutor && (
+              <ControlledPriceInput
+                name={'price'}
+                label={'Цена'}
+                placeholder={'Цена'}
+                variant={'text'}
+                keyboardType="numeric"
+                hint={
+                  errors.price?.message ||
+                  'Указывается в рублях за одну единицу измерения'
+                }
+                isError={!!errors.price?.message}
+              />
+            )}
+          </View>
+          <MeasureItem
+            measure={measure}
+            measures={measures}
+            error={errors.measure?.message}
           />
-          <ControlledInput
-            name={'count'}
-            label={'Количество'}
-            placeholder={'Количество'}
-            variant={'number'}
-            hint={errors.count?.message}
-            isError={!!errors.count?.message}
-            maxLength={5}
+          <Spacer size={'xl'} />
+          <Button
+            label={'Добавить'}
+            onPress={methods.handleSubmit(onSubmit)}
+            style={styles.button}
+            isPending={loading}
+            disabled={loading || hasName}
           />
-          <ControlledPriceInput
-            name={'price'}
-            label={'Цена'}
-            placeholder={'Цена'}
-            variant={'text'}
-            keyboardType="numeric"
-            hint={
-              errors.price?.message ||
-              'Указывается в рублях за одну единицу измерения'
-            }
-            isError={!!errors.price?.message}
-          />
-        </View>
-        <MeasureItem
-          measure={measure}
-          measures={measures}
-          error={errors.measure?.message}
-        />
-        <Spacer size={'xl'} />
-        <Button
-          label={'Добавить'}
-          onPress={methods.handleSubmit(onSubmit)}
-          style={styles.button}
-          isPending={loading}
-          disabled={hasName || loading}
-        />
-      </FormProvider>
-    </View>
+        </FormProvider>
+      </View>
+    </KeyboardAwareScrollView>
   );
 };

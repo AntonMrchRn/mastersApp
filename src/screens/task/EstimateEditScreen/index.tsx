@@ -1,6 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useIsFocused } from '@react-navigation/native';
@@ -19,6 +20,7 @@ import {
 } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { AxiosQueryErrorResponse } from '@/types/error';
+import { RoleType } from '@/types/task';
 import { estimateCountValidationSchema } from '@/utils/formValidation';
 
 import { styles } from './styles';
@@ -37,6 +39,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
   const isFocused = useIsFocused();
 
   const { taskId, serviceId, materialName } = route.params;
+  const userRoleId = useAppSelector(selectAuth).user?.roleID;
 
   const { data, refetch } = useGetTaskQuery(taskId);
 
@@ -140,7 +143,13 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
     }
   };
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView
+      style={styles.container}
+      enableOnAndroid={true}
+      keyboardOpeningTime={100}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+    >
       <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
         Внесите необходимые изменения
       </Text>
@@ -167,7 +176,7 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
           {description}
         </Text>
       )}
-      {!!price && (
+      {!!price && userRoleId !== RoleType.INTERNAL_EXECUTOR && (
         <View style={styles.row}>
           <PriceIcon />
           <Text
@@ -210,6 +219,6 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
           style={styles.button}
         />
       </FormProvider>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };

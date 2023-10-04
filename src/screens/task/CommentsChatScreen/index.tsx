@@ -11,7 +11,7 @@ import { useKeyboardAnimation } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { StackScreenProps } from '@react-navigation/stack';
-import { Input, useTheme } from 'rn-ui-kit';
+import { Input, Text, useTheme } from 'rn-ui-kit';
 
 import SendButton from '@/assets/icons/svg/screens/SendButton';
 import PreviewNotFound, {
@@ -25,7 +25,7 @@ import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { sendMessage } from '@/store/slices/myTasks/asyncActions';
 import { Comment } from '@/store/slices/myTasks/types';
-import { TaskSearch } from '@/types/task';
+import { StatusType, TaskSearch } from '@/types/task';
 
 import { styles } from './style';
 
@@ -36,12 +36,14 @@ type CommentsChatScreenProps = StackScreenProps<
 
 export const CommentsChatScreen = ({
   route: {
-    params: { taskId, recipientIDs, isMessageInputAvailable, isITServices },
+    params: { taskId, recipientIDs, statusID, isITServices },
   },
 }: CommentsChatScreenProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const { height } = useKeyboardAnimation();
+
+  useCommentsSSE(taskId.toString());
   const isKeyboardVisible = useKeyboard();
 
   const flatList = useRef<FlatList>(null);
@@ -49,10 +51,16 @@ export const CommentsChatScreen = ({
   const [valueText, setValueText] = useState('');
 
   const { comments, loadingComments, loadingSend } = useAppSelector(
-    state => state.myTasks
+    state => state.myTasks,
   );
 
-  useCommentsSSE(taskId.toString());
+  const isTaskClosed = statusID === StatusType.CLOSED;
+  const isTaskCanceled =
+    !!statusID &&
+    [
+      StatusType.CANCELLED_BY_CUSTOMER,
+      StatusType.CANCELLED_BY_EXECUTOR,
+    ].includes(statusID);
 
   useEffect(() => {
     if (isKeyboardVisible) {
@@ -70,7 +78,7 @@ export const CommentsChatScreen = ({
     if (valueText.trim()) {
       try {
         await dispatch(
-          sendMessage({ taskId, comment: valueText, recipientIDs })
+          sendMessage({ taskId, comment: valueText, recipientIDs }),
         );
         setValueText('');
       } catch (e) {
@@ -95,6 +103,16 @@ export const CommentsChatScreen = ({
           },
         ]}
       >
+        {(isTaskClosed || isTaskCanceled) && (
+          <Text
+            variant="bodySRegular"
+            style={styles.closingText}
+            color={theme.text.neutral}
+          >
+            {isTaskClosed ? 'Задача закрыта' : 'Задача отменена'}. Отправка
+            сообщений координатору недоступна
+          </Text>
+        )}
         {comments?.taskComment?.length ? (
           <FlatList
             inverted
@@ -118,7 +136,7 @@ export const CommentsChatScreen = ({
           )
         )}
       </Animated.View>
-      {isMessageInputAvailable && (
+      {!isTaskClosed && !isTaskCanceled && (
         <Animated.View
           style={[
             styles.risingBlock,

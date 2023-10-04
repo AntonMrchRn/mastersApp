@@ -15,5 +15,7 @@ export const {
   setIsLinkGenerating,
   setProfileEmailTimeout,
   setProfilePhoneTimeout,
+  setUserFileOnDevice,
+  setUserFilesOnDevice,
   setIsApprovalNotificationShown,
 } = user.actions;

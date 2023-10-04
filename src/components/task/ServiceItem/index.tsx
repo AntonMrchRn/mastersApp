@@ -1,34 +1,28 @@
 import React, { FC } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import { Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { PriceIcon } from '@/assets/icons/svg/estimate/PriceIcon';
+import { useAppSelector } from '@/store';
 import { Service } from '@/store/api/tasks/types';
+import { selectAuth } from '@/store/slices/auth/selectors';
+import { RoleType } from '@/types/task';
+
+import { styles } from './styles';
 
 type ServiceItemProps = {
   service: Service;
+  showPrice?: boolean;
 };
-export const ServiceItem: FC<ServiceItemProps> = ({ service }) => {
+export const ServiceItem: FC<ServiceItemProps> = ({
+  service,
+  showPrice = true,
+}) => {
   const theme = useTheme();
-
-  const styles = StyleSheet.create({
-    ml4: {
-      marginLeft: 4,
-    },
-    rowDirection: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginTop: 4,
-    },
-    itemTitle: {
-      marginVertical: 8,
-    },
-    items: {
-      gap: 4,
-    },
-  });
+  const isInternalExecutor =
+    useAppSelector(selectAuth).user?.roleID === RoleType.INTERNAL_EXECUTOR;
 
   const measureName = service?.measureName?.toLowerCase();
   const measure = measureName === 'час' ? 'часах' : measureName;
@@ -61,7 +55,7 @@ export const ServiceItem: FC<ServiceItemProps> = ({ service }) => {
         </View>
       )}
       <View style={styles.items}>
-        {service?.price ? (
+        {service?.price && showPrice && !isInternalExecutor ? (
           <View style={styles.rowDirection}>
             <PriceIcon />
             <Text

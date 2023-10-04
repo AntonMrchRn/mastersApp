@@ -17,7 +17,6 @@ import { DeleteEstimateServiceModal } from '@/components/task/DeleteEstimateServ
 import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { AddServiceBottomSheet } from '@/components/task/TaskCard/AddServiceBottomSheet';
 import { TaskCardAddEstimateBottomSheet } from '@/components/task/TaskCard/TaskCardAddEstimateBottomSheet';
-import { configApp, deviceWidth } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch } from '@/store';
 import {
@@ -40,42 +39,49 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   navigation,
   route,
 }) => {
-  const { taskId, isEdit, isItLots } = route.params;
+  const { taskId, isEdit, isInvitedExecutor, executor } = route.params;
 
   const {
     bsRef,
-    onEstimateModalVisible,
-    onClosePress,
-    onDeleteEstimateServiceModalVisible,
-    onCancelDeleteService,
-    addServiceBottomSheetClose,
-    offerComment,
-    deleteEstimateServiceModalVisible,
-    estimateModalVisible,
     errors,
-    setServiceForDelete,
-    setComment,
     banner,
-    addService,
-    loading,
-    serviceNames,
     allSum,
-    onDeleteService,
-    pressMaterial,
-    pressService,
-    services,
-    onDeleteMaterial,
-    materialsSum,
     isError,
+    loading,
+    services,
     onSubmit,
-    allowCostIncrease,
-    currentSum,
     costStep,
+    isLoading,
+    currentSum,
+    addService,
+    setComment,
+    serviceNames,
+    pressService,
+    offerComment,
+    onClosePress,
+    materialsSum,
+    pressMaterial,
+    onDeleteService,
+    onDeleteMaterial,
+    allowCostIncrease,
+    setServiceForDelete,
+    estimateModalVisible,
     setMaterialForDelete,
-    onDeleteEstimateMaterialModalVisible,
+    onCancelDeleteService,
     onCancelDeleteMaterial,
+    onEstimateModalVisible,
+    addServiceBottomSheetClose,
+    deleteEstimateServiceModalVisible,
     deleteEstimateMaterialModalVisible,
-  } = useEstimateSubmission({ navigation, taskId, isEdit, isItLots });
+    onDeleteEstimateServiceModalVisible,
+    onDeleteEstimateMaterialModalVisible,
+  } = useEstimateSubmission({
+    navigation,
+    taskId,
+    isEdit,
+    isInvitedExecutor,
+    executor,
+  });
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -150,7 +156,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                 addServiceLocalPrice({
                   serviceID: service.ID,
                   localPrice: text,
-                })
+                }),
               );
             };
             const onChangeCount = (text: string) => {
@@ -161,7 +167,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                 addServiceLocalCount({
                   serviceID: service.ID,
                   localCount: text,
-                })
+                }),
               );
             };
             return (
@@ -197,7 +203,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                         serviceID: service.ID,
                         materialID: material.ID,
                         localPrice: text,
-                      })
+                      }),
                     );
                   };
                   const onChangeCount = (text: string) => {
@@ -209,7 +215,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                         serviceID: service.ID,
                         materialID: material.ID,
                         localCount: text,
-                      })
+                      }),
                     );
                   };
                   return (
@@ -223,7 +229,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                       error={error}
                       title={material.name}
                       count={material.count}
-                      price={material.price}
+                      price={material.price as number}
                       canDelete={material.canDelete}
                       measure={material.measure || ''}
                     />
@@ -239,7 +245,11 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
           <Spacer size={20} />
           <TouchableOpacity style={styles.add} onPress={onEstimateModalVisible}>
             <PlusIcon fill={theme.icons.basic} />
-            <Text variant="bodySBold" color={theme.text.basic}>
+            <Text
+              variant="bodySBold"
+              color={theme.text.basic}
+              style={styles.addText}
+            >
               Добавить услугу или материал
             </Text>
           </TouchableOpacity>
@@ -253,14 +263,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
           <Spacer size={40} />
         </ScrollView>
         <View style={styles.ph20}>
-          <View
-            style={{
-              position: 'absolute',
-              bottom: 70,
-              width: deviceWidth - 40,
-              alignSelf: 'center',
-            }}
-          >
+          <View style={styles.bannerContainer}>
             {banner && (
               <Banner
                 type={'warning'}
@@ -272,10 +275,11 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
             )}
           </View>
           <Button
+            isPending={isLoading}
             label={isEdit ? 'Редактировать смету' : 'Подать смету'}
-            disabled={isError}
+            disabled={isError || isLoading}
             onPress={onSubmit}
-            style={{ marginBottom: configApp.android ? 20 : 0 }}
+            style={styles.btn}
           />
         </View>
       </SafeAreaView>

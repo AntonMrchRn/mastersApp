@@ -74,6 +74,18 @@ type EntityNameFormValues = {
   RRC?: string;
 };
 
+type EstimateMaterialAdditionFormValues = {
+  name: string;
+  count: string;
+  price?: string;
+  measure: string;
+};
+
+type EstimateServiceAdditionFormValues = {
+  count: string;
+  price?: string;
+};
+
 type EntityTypeFormValues =
   | IndividualEntityFormValues
   | CompanyEntityFormValues
@@ -95,4 +107,6 @@ export type {
   SignInWithEmailFormValues,
   SignInWithPhoneFormValues,
   RecoveryConfirmationFormValues,
+  EstimateServiceAdditionFormValues,
+  EstimateMaterialAdditionFormValues,
 };

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import plural from 'plural-ru';
 import { Swipeable } from 'rn-ui-kit';
@@ -8,8 +8,12 @@ import { Variant } from 'rn-ui-kit/lib/typescript/components/Swipeable';
 import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
 import { CubeIcon } from '@/assets/icons/svg/estimate/CubeIcon';
 import { PriceIcon } from '@/assets/icons/svg/estimate/PriceIcon';
+import { useAppSelector } from '@/store';
+import { selectAuth } from '@/store/slices/auth/selectors';
 import { OutlayStatusType, RoleType, StatusType, TaskType } from '@/types/task';
 import { separateThousands } from '@/utils/separateThousands';
+
+import { styles } from './styles';
 
 type TaskEstimateItemProps = {
   previewActions?: boolean;
@@ -25,6 +29,7 @@ type TaskEstimateItemProps = {
   outlayStatusID: OutlayStatusType | undefined;
   statusID: StatusType | undefined;
   subsetID: TaskType | undefined;
+  isContractor: boolean;
 };
 
 export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
@@ -41,27 +46,39 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
   outlayStatusID,
   statusID,
   subsetID,
+  isContractor,
 }) => {
+  const userRoleId = useAppSelector(selectAuth).user?.roleID;
+  const isInternalExecutor = userRoleId === RoleType.INTERNAL_EXECUTOR;
+
   const currentMeasure =
     measure === 'час'
       ? plural(count, '%d час', '%d часa', '%d часов')
       : `${separateThousands(count)} ${measure}`;
 
   const items = [
-    {
-      text: `${separateThousands(price)} ₽ ${
-        measure === 'пустое' ? '' : `за ${measure}`
-      }`,
-      icon: <PriceIcon />,
-    },
+    ...(!isInternalExecutor && !isContractor
+      ? [
+          {
+            text: `${separateThousands(price)} ₽ ${
+              measure === 'пустое' ? '' : `за ${measure}`
+            }`,
+            icon: <PriceIcon />,
+          },
+        ]
+      : []),
     {
       text: measure === 'пустое' ? count.toString() : currentMeasure,
       icon: <CubeIcon />,
     },
-    {
-      text: `${separateThousands(sum)} ₽`,
-      icon: <CalculatorIcon />,
-    },
+    ...(!isInternalExecutor && !isContractor
+      ? [
+          {
+            text: `${separateThousands(sum)} ₽`,
+            icon: <CalculatorIcon />,
+          },
+        ]
+      : []),
   ];
 
   const getVariant = (): Variant => {
@@ -71,11 +88,13 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
       subsetID &&
       statusID !== StatusType.ACTIVE &&
       [OutlayStatusType.RETURNED, OutlayStatusType.MATCHING].includes(
-        outlayStatusID
+        outlayStatusID,
       ) &&
-      [TaskType.COMMON_FIRST_RESPONSE, TaskType.IT_FIRST_RESPONSE].includes(
-        subsetID
-      )
+      [
+        TaskType.COMMON_FIRST_RESPONSE,
+        TaskType.IT_FIRST_RESPONSE,
+        TaskType.IT_INTERNAL_EXECUTIVES,
+      ].includes(subsetID)
     ) {
       switch (roleID) {
         case RoleType.EXTERNAL_EXECUTOR:
@@ -98,7 +117,7 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
       statusID &&
       statusID !== StatusType.ACTIVE &&
       [OutlayStatusType.RETURNED, OutlayStatusType.MATCHING].includes(
-        outlayStatusID
+        outlayStatusID,
       )
     ) {
       switch (roleID) {
@@ -115,12 +134,6 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
     }
     return '';
   };
-
-  const styles = StyleSheet.create({
-    containerStyle: { paddingRight: 20, paddingHorizontal: 20 },
-    wrapper: { flexGrow: 1, marginHorizontal: -20 },
-    item: { flexShrink: 1 },
-  });
 
   return (
     <View style={styles.wrapper}>
@@ -144,6 +157,7 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
             OutlayStatusType.READY,
           ].includes(outlayStatusID)
         }
+        labelPosition={isInternalExecutor ? 'bottom' : 'top'}
       />
     </View>
   );

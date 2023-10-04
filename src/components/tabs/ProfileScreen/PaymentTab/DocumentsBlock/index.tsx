@@ -17,7 +17,7 @@ import { selectUser } from '@/store/slices/user/selectors';
 import { Controllers, File, HandleUpload } from '@/types/fileManager';
 import { ProfileTab } from '@/types/tab';
 import { getFormData } from '@/utils/fileManager/getFormData';
-import { saveOnDevice } from '@/utils/fileManager/saveOnDevice';
+import { saveFiles } from '@/utils/fileManager/saveFiles';
 
 import styles from './style';
 
@@ -51,12 +51,6 @@ const DocumentsBlock = ({
       scrollToEnd();
     }
   }, [Object.keys(controllers)]);
-
-  const saveFiles = async (files: File[]) => {
-    setUploadedFileIDs(files.map(file => file.fileID));
-    await saveOnDevice(files);
-    setUploadedFileIDs([]);
-  };
 
   useEffect(() => {
     if (isBannerVisible) {
@@ -93,7 +87,7 @@ const DocumentsBlock = ({
         signal: controller.signal,
       }).unwrap();
 
-      saveFiles(addedFiles);
+      saveFiles(addedFiles, setUploadedFileIDs, 'user');
     } catch (err) {
       console.log('handleUpload error', err);
     }
@@ -115,6 +109,7 @@ const DocumentsBlock = ({
         <>
           <DownloadManager
             files={files}
+            fileType="user"
             onDelete={onDelete}
             uploadedFileIDs={uploadedFileIDs}
           />

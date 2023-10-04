@@ -17,6 +17,7 @@ import { BottomTabName } from '@/navigation/TabNavigation';
 import { axiosInstance } from '@/services/axios/axiosInstance';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
+  tasksAPI,
   useDeleteITTaskMemberMutation,
   useDeleteOffersMutation,
   useGetAnotherOffersQuery,
@@ -45,6 +46,7 @@ import {
   TaskTab,
   TaskType,
 } from '@/types/task';
+import { checkFilesOnDevice } from '@/utils/fileManager/checkFilesOnDevice';
 
 import { getBanner } from './getBanner';
 import { getButtons } from './getButtons';
@@ -104,6 +106,8 @@ export const useTaskCard = ({
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [estimateBottomVisible, setEstimateBottomVisible] = useState(false);
   const [estimateBannerVisible, setEstimateBannerVisible] = useState(false);
+  const [isSubmissionByCurator, setSubmissionByCurator] = useState(false);
+
   const [cantDeleteBannerVisible, setCantDeleteBannerVisible] = useState(false);
   const [noAccessToTaskBannerVisible, setNoAccessToTaskBannerVisible] =
     useState(false);
@@ -113,7 +117,7 @@ export const useTaskCard = ({
   ] = useState(false);
   const [submissionModalVisible, setSubmissionModalVisible] = useState(false);
   const [currentEstimateTab, setCurrentEstimateTab] = useState<EstimateTab>(
-    EstimateTab.TASK_ESTIMATE
+    EstimateTab.TASK_ESTIMATE,
   );
 
   const user = useAppSelector(selectAuth).user;
@@ -128,18 +132,25 @@ export const useTaskCard = ({
   const [postITTaskMember] = usePostITTaskMemberMutation();
 
   const getUserQuery = useGetUserQuery(user?.userID);
-  const { data, isError, error, refetch, isLoading } = useGetTaskQuery(taskId);
-  useTaskSSE(taskId);
+  const { data, isError, error, refetch, isLoading, isSuccess } =
+    useGetTaskQuery(taskId);
   const getTaskHistory = useGetTaskHistoryQuery(taskId);
   const task = data?.tasks?.[0];
+
+  const isSkipTask =
+    task?.subsetID &&
+    ![TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE].includes(
+      task?.subsetID,
+    );
+
   const getUserOffersQuery = useGetUserOffersQuery(
     {
       taskID: taskId,
       userID: user?.userID as number,
     },
     {
-      skip: task?.subsetID !== TaskType.COMMON_AUCTION_SALE,
-    }
+      skip: isSkipTask,
+    },
   );
   const getAnotherOffers = useGetAnotherOffersQuery(
     {
@@ -147,8 +158,8 @@ export const useTaskCard = ({
       userID: user?.userID as number,
     },
     {
-      skip: task?.subsetID !== TaskType.COMMON_AUCTION_SALE,
-    }
+      skip: isSkipTask,
+    },
   );
 
   const userOffersData = getUserOffersQuery.data?.offers || [];
@@ -161,10 +172,13 @@ export const useTaskCard = ({
   useEffect(() => {
     if (isError) {
       if (
-        (error as AxiosQueryErrorResponse).data.code ===
-        ErrorCode.TaskIsAlreadyTaken
+        [
+          ErrorCode.TaskIsAlreadyTaken,
+          ErrorCode.OTHER_CANDIDATE,
+          ErrorCode.NOT_FOUND,
+        ].includes((error as AxiosQueryErrorResponse).data.code)
       ) {
-        navigation.goBack();
+        navigation.navigate(BottomTabName.TaskSearch);
         return toast.show({
           type: 'info',
           duration: 6000,
@@ -190,6 +204,12 @@ export const useTaskCard = ({
     }
   }, [deleteOffersMutation.isError]);
 
+  useEffect(() => {
+    if (isSuccess) {
+      checkFilesOnDevice(files);
+    }
+  }, [isSuccess]);
+
   const userData = getUserQuery.data;
   const entityTypeID = userData?.entityTypeID;
   /**
@@ -204,6 +224,7 @@ export const useTaskCard = ({
    * участники задачи
    */
   const executors = task?.executors || [];
+  const confirmedExecutors = executors.filter(executor => executor.isConfirm);
   const cancelReason = task?.cancelReason;
   const curators = task?.curators || [];
   const coordinator = task?.coordinator;
@@ -334,7 +355,7 @@ export const useTaskCard = ({
       (subsetID &&
         isContractor &&
         [TaskType.IT_FIRST_RESPONSE, TaskType.IT_AUCTION_SALE].includes(
-          subsetID
+          subsetID,
         )) ||
       (isITServices && isInternalExecutor)
     ) {
@@ -364,11 +385,11 @@ export const useTaskCard = ({
       ? isOffersDeadlineOver &&
         subsetID &&
         [TaskType.IT_AUCTION_SALE, TaskType.COMMON_AUCTION_SALE].includes(
-          subsetID
+          subsetID,
         )
         ? 'Подача заявок окончена. Результаты торгов будут объявлены в ближайшее время'
         : `Срок подачи сметы до ${dayjs(offersDeadline).format(
-            'D MMMM в HH:mm'
+            'D MMMM в HH:mm',
           )}`
       : '';
 
@@ -396,17 +417,57 @@ export const useTaskCard = ({
     statusID === StatusType.ACTIVE &&
     !!userOffersData.length;
 
+  const refresh = () => {
+    dispatch(
+      tasksAPI.endpoints.getTask.initiate(taskId, {
+        forceRefetch: true,
+      }),
+    );
+    dispatch(
+      tasksAPI.endpoints.getTaskHistory.initiate(taskId, {
+        forceRefetch: true,
+      }),
+    );
+    dispatch(
+      getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'desc' }),
+    );
+    if (!isSkipTask) {
+      dispatch(
+        tasksAPI.endpoints.getUserOffers.initiate(
+          {
+            taskID: taskId,
+            userID: user?.userID as number,
+          },
+          {
+            forceRefetch: true,
+          },
+        ),
+      );
+      dispatch(
+        tasksAPI.endpoints.getAnotherOffers.initiate(
+          {
+            taskID: taskId,
+            userID: user?.userID as number,
+          },
+          {
+            forceRefetch: true,
+          },
+        ),
+      );
+    }
+  };
   const onRefresh = () => {
     refetch();
     dispatch(
-      getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'desc' })
+      getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'desc' }),
     );
     getTaskHistory.refetch();
-    if (task?.subsetID === TaskType.COMMON_AUCTION_SALE) {
+    if (!isSkipTask) {
       getUserOffersQuery.refetch();
       getAnotherOffers.refetch();
     }
   };
+  useTaskSSE({ taskId, refresh });
 
   const onUploadLimitBannerVisible = () => {
     setUploadLimitBannerVisible(!uploadLimitBannerVisible);
@@ -426,15 +487,20 @@ export const useTaskCard = ({
   const onCancelModalVisible = () => setCancelModalVisible(!cancelModalVisible);
   const onUploadModalClose = () => setUploadModalVisible(false);
 
-  const onSubmissionModalVisible = () => {
+  // Проверка модалки
+  const onSubmissionModalVisible = (isSubmissionCurator?: boolean) => {
     if (!hasAccessToTask) {
       return onNoAccessToTaskBannerVisible();
     }
     if (!hasAccessToDirection) {
       return onDirectionNotSpecifiedBannerVisible();
     }
+    if (isSubmissionCurator === true) {
+      setSubmissionByCurator(true);
+    }
     return setSubmissionModalVisible(true);
   };
+
   const onSubmissionModalClose = () => setSubmissionModalVisible(false);
 
   const navigateToChat = () => {
@@ -442,12 +508,13 @@ export const useTaskCard = ({
       .concat(curators as { ID: number }[])
       .map(recipient => recipient.ID);
 
-    navigation.navigate(AppScreenName.CommentsChat, {
-      taskId,
-      recipientIDs,
-      isMessageInputAvailable: !isTaskClosed && !isTaskCanceled,
-      isITServices,
-    });
+    statusID &&
+      navigation.navigate(AppScreenName.CommentsChat, {
+        taskId,
+        recipientIDs,
+        statusID,
+        isITServices,
+      });
   };
 
   const banner = getBanner({
@@ -476,13 +543,26 @@ export const useTaskCard = ({
   };
 
   const onTaskSubmission = async () => {
-    //навигация на скрин подачи сметы, если IT-ЛОТЫ
-    if (subsetID === TaskType.IT_AUCTION_SALE) {
+    //навигация на скрин подачи сметы, если IT-ЛОТЫ Исполнитель
+    if (subsetID === TaskType.IT_AUCTION_SALE && !isSubmissionByCurator) {
       dispatch(setNewOfferServices(services));
+      console.log('Исполнитель --->');
+      setSubmissionByCurator(false);
+
       navigation.navigate(AppScreenName.EstimateSubmission, {
         taskId,
-        isItLots: true,
+        isInvitedExecutor,
+        executor,
       });
+    }
+
+    //навигация на скрин подачи сметы, если IT-ЛОТЫ Куратор
+    if (subsetID === TaskType.IT_AUCTION_SALE && isSubmissionByCurator) {
+      setSubmissionByCurator(false);
+      dispatch(setNewOfferServices(services));
+      console.log('Куратор --->');
+      // проверять на наличие подрядчиков, если есть - на подачу сметы, затем на приглашение подрядчиков
+      // если нет - на экран, где написано, что нет подрядчиков
     }
 
     if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
@@ -562,7 +642,7 @@ export const useTaskCard = ({
     //исполнителей может быть один или двое
     if (subsetID === TaskType.IT_INTERNAL_EXECUTIVES && user?.userID) {
       //проверяем есть ли он в мемберах
-      //если пригласили то isIvitedExecutor
+      //если пригласили то isInvitedExecutor
       try {
         if (isInvitedExecutor) {
           //если в мемберах то
@@ -597,14 +677,13 @@ export const useTaskCard = ({
           //либо же руководитель может пропатчить у себя таску не дожидаясь второго исполнителя
 
           const getTask = await axiosInstance.get<GetTaskResponse>(
-            `tasks/web?query=?ID==${id}?`
+            `tasks/web?query=?ID==${id}?`,
           );
           const currentExecutors = getTask.data.tasks[0]?.executors || [];
-
-          const confirmedExecutors = currentExecutors.filter(
-            executor => executor.isConfirm
+          const currentConfirmedExecutors = currentExecutors.filter(
+            executor => executor.isConfirm,
           );
-          if (confirmedExecutors.length > 1) {
+          if (currentConfirmedExecutors.length > 1) {
             await patchTask({
               ID: taskId,
               statusID: StatusType.WORK,
@@ -639,11 +718,9 @@ export const useTaskCard = ({
   const onWorkDelivery = async () => {
     if (
       subsetID &&
-      [
-        TaskType.COMMON_FIRST_RESPONSE,
-        TaskType.IT_FIRST_RESPONSE,
-        TaskType.IT_INTERNAL_EXECUTIVES,
-      ].includes(subsetID) &&
+      [TaskType.COMMON_FIRST_RESPONSE, TaskType.IT_FIRST_RESPONSE].includes(
+        subsetID,
+      ) &&
       outlayStatusID !== OutlayStatusType.READY
     ) {
       !estimateBannerVisible && onEstimateBannerVisible();
@@ -719,12 +796,10 @@ export const useTaskCard = ({
         }
       }
       if (subsetID === TaskType.IT_INTERNAL_EXECUTIVES && executorMemberId) {
-        //делаем удаление мембера (себя оттуда)
-        await deleteITTaskMember(executorMemberId).unwrap();
-        // если все ок то в then проверяем длину executors фильтрованному по isConfirm
-        //если задание не в статусе опубликовано
-        // и если он 1 - то задание переводим во 2 статус (опубликовано)
-        if (statusID !== StatusType.ACTIVE) {
+        //* если задание не в статусе опубликовано
+        //* проверяем длину executors фильтрованному по isConfirm (текущее количество исполнителей)
+        //* и если он 1 - то задание переводим во 2 статус (опубликовано)
+        if (statusID !== StatusType.ACTIVE && confirmedExecutors.length === 1) {
           await patchTask({
             ID: taskId,
             refuseReason,
@@ -732,6 +807,8 @@ export const useTaskCard = ({
             outlayStatusID: OutlayStatusType.READY,
           }).unwrap();
         }
+        //* далее делаем удаление мембера (себя оттуда)
+        await deleteITTaskMember(executorMemberId).unwrap();
       }
     } catch (error) {
       toast.show({
@@ -834,20 +911,20 @@ export const useTaskCard = ({
       case TaskTab.ESTIMATE:
         return (
           <TaskCardEstimate
-            serviceMultiplier={serviceMultiplier}
-            services={services}
-            outlayStatusID={outlayStatusID}
-            statusID={statusID}
             taskId={id}
-            navigation={navigation}
-            onEstimateBottomVisible={onEstimateBottomVisible}
-            estimateBottomVisible={estimateBottomVisible}
-            cantDeleteBannerVisible={cantDeleteBannerVisible}
-            onCantDeleteBannerVisible={onCantDeleteBannerVisible}
+            services={services}
+            statusID={statusID}
             subsetID={subsetID}
-            currentEstimateTab={currentEstimateTab}
+            navigation={navigation}
             winnerOffer={winnerOffer}
             isContractor={isContractor}
+            outlayStatusID={outlayStatusID}
+            serviceMultiplier={serviceMultiplier}
+            currentEstimateTab={currentEstimateTab}
+            estimateBottomVisible={estimateBottomVisible}
+            cantDeleteBannerVisible={cantDeleteBannerVisible}
+            onEstimateBottomVisible={onEstimateBottomVisible}
+            onCantDeleteBannerVisible={onCantDeleteBannerVisible}
           />
         );
       case TaskTab.REPORT:
@@ -863,8 +940,8 @@ export const useTaskCard = ({
             onClose={onUploadModalClose}
             activeBudgetCanceled={!!banner}
             uploadModalVisible={uploadModalVisible}
-            onUploadLimitBannerVisible={onUploadLimitBannerVisible}
             uploadLimitBannerVisible={uploadLimitBannerVisible}
+            onUploadLimitBannerVisible={onUploadLimitBannerVisible}
           />
         );
       case TaskTab.HISTORY:
@@ -947,6 +1024,7 @@ export const useTaskCard = ({
     publicTime,
     executors,
     onRefresh,
+    isExecutor,
     onTabChange,
     isContractor,
     onCancelTask,
@@ -954,9 +1032,9 @@ export const useTaskCard = ({
     getCurrentTab,
     outlayStatusID,
     isEstimateTabs,
+    executorsCount,
     onRevokeBudget,
     onTaskSubmission,
-    isExecutor,
     estimateTabsArray,
     cancelModalVisible,
     budgetModalVisible,
@@ -979,6 +1057,5 @@ export const useTaskCard = ({
     onNoAccessToTaskBannerVisible,
     directionNotSpecifiedBannerVisible,
     onDirectionNotSpecifiedBannerVisible,
-    executorsCount,
   };
 };

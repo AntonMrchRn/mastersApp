@@ -37,7 +37,9 @@ const Preview = ({ text, icon, title, button, type }: PreviewProps) => {
         {icon}
       </View>
       <Spacer size="xl" />
-      <Text variant="title2">{title}</Text>
+      <Text variant="title2" style={styles.title}>
+        {title}
+      </Text>
       <Spacer />
       {text && (
         <Text

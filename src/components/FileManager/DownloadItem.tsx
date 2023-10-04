@@ -11,14 +11,22 @@ import { CloseFileIcon } from '@/assets/icons/svg/files/CloseFileIcon';
 import { DeleteFileIcon } from '@/assets/icons/svg/files/DeleteFileIcon';
 import { DownloadFileIcon } from '@/assets/icons/svg/files/DownloadFileIcon';
 import { configApp, hitSlop } from '@/constants/platform';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { setTaskFileOnDevice } from '@/store/slices/tasks/actions';
+import { setUserFileOnDevice } from '@/store/slices/user/actions';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import { File } from '@/types/fileManager';
 
 import { FileItem } from './FileItem';
 
+const dirs = ReactNativeBlobUtil.fs.dirs;
+const actionByFileType = {
+  task: setTaskFileOnDevice,
+  user: setUserFileOnDevice,
+};
+
 type DownloadItemProps = {
   file: File;
-  isUploading: boolean;
   onDelete: ({
     fileID,
     filePath,
@@ -27,15 +35,20 @@ type DownloadItemProps = {
     filePath?: string;
   }) => Promise<void>;
   canDelete: boolean;
+  isUploading: boolean;
+  fileType: 'user' | 'task';
 };
 
 export const DownloadItem = ({
   file,
-  isUploading,
   onDelete,
   canDelete,
+  fileType,
+  isUploading,
 }: DownloadItemProps) => {
-  const [onDevice, setOnDevice] = useState(false);
+  const toast = useToast();
+  const dispatch = useAppDispatch();
+
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [received, setReceived] = useState(0);
@@ -43,7 +56,9 @@ export const DownloadItem = ({
   const [activeTask, setActiveTask] =
     useState<StatefulPromise<FetchBlobResponse>>();
 
-  const toast = useToast();
+  const onDevice = useAppSelector(state =>
+    fileType === 'task' ? state.tasks : state.user,
+  ).filesOnDevice?.[file.fileID];
 
   useEffect(() => {
     if (!onDevice && !canDownload) {
@@ -51,36 +66,14 @@ export const DownloadItem = ({
     }
   }, [onDevice]);
 
-  useEffect(() => {
-    hasOnDevice();
-  }, []);
-
-  useEffect(() => {
-    hasOnDevice();
-  }, [isUploading]);
-
-  const dirs = ReactNativeBlobUtil.fs.dirs;
-  const fileType = file?.sourceExtension || '';
-
-  const title = `${file.name}.${fileType}`;
+  const type = file?.sourceExtension || '';
+  const title = `${file.name}.${type}`;
   const FILE_PATH = `${dirs.DocumentDir}/${title}`;
   const newFile = ReactNativeBlobUtil.config({
     fileCache: true,
     path: FILE_PATH,
   });
   const canDownload = !!file.url;
-
-  const hasOnDevice = async () => {
-    try {
-      const exist = await ReactNativeBlobUtil.fs.exists(FILE_PATH);
-
-      if (onDevice !== exist) {
-        setOnDevice(exist);
-      }
-    } catch (e) {
-      console.log('hasOnDevice error: ', e);
-    }
-  };
 
   const handleDownload = () => {
     setIsLoading(true);
@@ -99,12 +92,13 @@ export const DownloadItem = ({
         }
 
         console.log(
-          '🚀 ~ file: DownloadItem.tsx:75 ~ handleDownload ~ err:',
-          err
+          '🚀 ~ file: DownloadItem.tsx:93 ~ handleDownload ~ err:',
+          err,
         );
       })
-      .finally(() => {
-        hasOnDevice();
+      .finally(async () => {
+        const exist = await ReactNativeBlobUtil.fs.exists(FILE_PATH);
+        dispatch(actionByFileType[fileType]({ [file.fileID]: exist }));
         setIsLoading(false);
       });
   };
@@ -113,7 +107,7 @@ export const DownloadItem = ({
     try {
       setIsDeleting(true);
       await onDelete({ fileID: file.fileID, filePath: FILE_PATH });
-      await hasOnDevice();
+      dispatch(actionByFileType[fileType]({ [file.fileID]: false }));
     } catch (err) {
       setIsDeleting(false);
       toast.show({
@@ -140,7 +134,7 @@ export const DownloadItem = ({
           ? await ReactNativeBlobUtil.ios.openDocument(FILE_PATH)
           : await ReactNativeBlobUtil.android.actionViewIntent(
               FILE_PATH,
-              file.mime
+              file.mime,
             );
       }
     } catch (e) {
@@ -156,7 +150,7 @@ export const DownloadItem = ({
         </TouchableOpacity>
       );
     }
-    if (isDeleting || isUploading) {
+    if (isUploading || isDeleting) {
       return <ActivityIndicator />;
     }
     if (onDevice && canDelete) {
@@ -181,7 +175,7 @@ export const DownloadItem = ({
       action={getAction()}
       fileOpen={handleOpen}
       sizeBytes={file.sizeBytes}
-      fileType={fileType}
+      fileType={type}
       title={title}
       fileDisabled={!onDevice}
       isLoading={isLoading}

@@ -12,7 +12,7 @@ type Material = {
   count: number;
   measure: string;
   name: string;
-  price: number;
+  price?: number;
   roleID: RoleType;
   localPrice?: string;
   localCount?: string;
@@ -369,6 +369,11 @@ type ITTaskMember = {
   offerID?: number;
   isAccept?: boolean;
   invitedIDs?: number[];
+  offer?: {
+    taskID: number;
+    isCurator: boolean;
+    services: Service[];
+  };
 };
 type Measure = {
   ID: number;
@@ -386,6 +391,11 @@ type PatchITTaskMemberParams = {
   userID?: number;
   isConfirm?: boolean;
   isCurator?: boolean;
+  offer?: {
+    taskID: number;
+    isCurator: boolean;
+    services: Service[];
+  };
 };
 
 type GetMeasuresResponse = {

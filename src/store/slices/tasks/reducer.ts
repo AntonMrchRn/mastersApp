@@ -11,6 +11,7 @@ const initialState: InitialState = {
   loading: false,
   error: undefined,
   offerID: undefined,
+  filesOnDevice: undefined,
 };
 
 const tasks = createSlice({
@@ -22,6 +23,12 @@ const tasks = createSlice({
     },
     deleteProgress: (state, { payload }) => {
       delete state.progresses[payload];
+    },
+    setTaskFilesOnDevice: (state, { payload }) => {
+      state.filesOnDevice = payload;
+    },
+    setTaskFileOnDevice: (state, { payload }) => {
+      state.filesOnDevice = { ...state.filesOnDevice, ...payload };
     },
     setNewOfferServices: (state, { payload }) => {
       state.offerServices = payload;

@@ -38,16 +38,16 @@ export const CandidateItem = ({
 
   const servicesSum = offer.services.reduce(
     (acc, val) => acc + (val?.count || 0) * (val?.price || 0),
-    0
+    0,
   );
   const allMaterials = offer.services.reduce<Material[]>(
     (acc, val) =>
       acc.concat(typeof val.materials !== 'undefined' ? val.materials : []),
-    []
+    [],
   );
   const materialsSum = allMaterials.reduce(
     (acc, val) => acc + (val?.count || 0) * (val?.price || 0),
-    0
+    0,
   );
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -55,7 +55,7 @@ export const CandidateItem = ({
       scrollX.value,
       [(index - 1) * CARD_WIDTH, index * CARD_WIDTH, (index + 1) * CARD_WIDTH],
       [0.9, 1, 0.9],
-      Extrapolate.EXTEND
+      Extrapolate.EXTEND,
     );
 
     return {

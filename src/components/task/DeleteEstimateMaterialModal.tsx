@@ -23,13 +23,7 @@ export const DeleteEstimateMaterialModal: FC<
   });
 
   return (
-    <Modal
-      closeIcon
-      closeIconPress={onCancel}
-      isVisible={isVisible}
-      headerIcon="error"
-      title="Удалить материал?"
-    >
+    <Modal isVisible={isVisible} headerIcon="error" title="Удалить материал?">
       <View style={styles.buttons}>
         <Button
           size="S"

@@ -12,6 +12,7 @@ const initialState: InitialState = {
   isActiveLinkTimer: false,
   isActivePhoneTimer: false,
   isActiveEmailTimer: false,
+  filesOnDevice: undefined,
   isApprovalNotificationShown: false,
   progresses: {},
 };
@@ -58,6 +59,12 @@ const user = createSlice({
     },
     setProfileEmailTimeout: (state, { payload }) => {
       state.emailTimeout = payload;
+    },
+    setUserFilesOnDevice: (state, { payload }) => {
+      state.filesOnDevice = payload;
+    },
+    setUserFileOnDevice: (state, { payload }) => {
+      state.filesOnDevice = { ...state.filesOnDevice, ...payload };
     },
     setProgresses: (state, { payload }) => {
       state.progresses = { ...state.progresses, ...payload };

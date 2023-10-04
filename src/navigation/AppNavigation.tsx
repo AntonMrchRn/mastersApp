@@ -26,7 +26,8 @@ import { EstimateSubmissionSuccessScreen } from '@/screens/task/EstimateSubmissi
 import { NewMaterialScreen } from '@/screens/task/NewMaterialScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
-import { Offer, Service } from '@/store/api/tasks/types';
+import { Executor, Offer, Service } from '@/store/api/tasks/types';
+import { StatusType } from '@/types/task';
 
 export enum AppScreenName {
   AppNavigator = 'AppNavigator',
@@ -60,7 +61,7 @@ export type AppStackParamList = {
   [AppScreenName.CommentsChat]: {
     taskId: number;
     recipientIDs: number[];
-    isMessageInputAvailable: boolean;
+    statusID: StatusType;
     isITServices: boolean;
   };
   [AppScreenName.RecoveryConfirmation]: {
@@ -100,7 +101,8 @@ export type AppStackParamList = {
   [AppScreenName.EstimateSubmission]: {
     taskId: number;
     isEdit?: boolean;
-    isItLots?: boolean;
+    isInvitedExecutor?: boolean;
+    executor?: Executor;
   };
   [AppScreenName.NewMaterial]: {
     taskId: number;

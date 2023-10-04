@@ -76,7 +76,7 @@ export const getButtons = ({
   onCancelModalVisible: () => void;
   onUploadModalVisible: () => void;
   onBudgetModalVisible: () => void;
-  onSubmissionModalVisible: () => void;
+  onSubmissionModalVisible: (isSubmissionByCurator?: boolean) => void;
   onApproveEstimateChanges: () => void;
   onSendEstimateForApproval: () => void;
   onCancelTask: (refuseReason?: string) => void;
@@ -874,7 +874,7 @@ export const getButtons = ({
           return [];
       }
     case TaskType.IT_AUCTION_SALE:
-      //к закрытию
+      //к закрытию IT-Лоты
       if (toClose) {
         switch (tab) {
           case TaskTab.REPORT:
@@ -918,8 +918,11 @@ export const getButtons = ({
             case TaskTab.REPORT:
             case TaskTab.HISTORY:
             case TaskTab.COMMENTS:
-              // приглашенный координатором куратор
+              if (isOffersDeadlineOver) {
+                return [];
+              }
               if (isInvitedCurator) {
+                // приглашенный координатором куратор
                 return [
                   {
                     label: 'Стать куратором',
@@ -951,8 +954,8 @@ export const getButtons = ({
                           variant: 'outlineAccent',
                           onPress:
                             isContractor || isInternalExecutor
-                              ? onTaskSubmission
-                              : onSubmissionModalVisible,
+                              ? onBecomeCurator
+                              : () => onSubmissionModalVisible(true),
                         } as TaskCardBottomButton,
                       ]
                     : []),
@@ -1363,21 +1366,6 @@ export const getButtons = ({
                 },
               ];
             case TaskTab.ESTIMATE:
-              if (outlayStatusID !== OutlayStatusType.READY) {
-                return [
-                  {
-                    label: 'Отправить смету на согласование',
-                    variant: 'accent',
-                    onPress: onSendEstimateForApproval,
-                    disabled: outlayStatusID === OutlayStatusType.MATCHING,
-                  },
-                  {
-                    label: 'Отказаться от задачи',
-                    variant: 'outlineDanger',
-                    onPress: onCancelModalVisible,
-                  },
-                ];
-              }
               return [
                 {
                   label: 'Сдать работы',

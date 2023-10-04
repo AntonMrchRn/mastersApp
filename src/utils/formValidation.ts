@@ -30,21 +30,28 @@ const estimateCountValidation = {
     .test('moreThanNull', 'Количество должно быть больше 0', moreThanNull)
     .required('Укажите количество услуги / материала'),
 };
-const estimateAddMaterialValidation = {
+const estimateAddMaterialValidation = (isInternalExecutor: boolean) => ({
   name: Yup.string().required('Укажите название материала'),
   count: Yup.string()
     .test('moreThanNull', 'Количество должно быть больше 0', moreThanNull)
     .required('Укажите количество материала'),
-  price: Yup.string()
-    .test('moreThanNull', 'Цена должна быть больше 0', moreThanNull)
-    .required('Укажите цену за одну единицу измерения'),
+  ...(!isInternalExecutor && {
+    price: Yup.string()
+      .test('moreThanNull', 'Цена должна быть больше 0', moreThanNull)
+      .required('Укажите цену за одну единицу измерения'),
+  }),
   measure: Yup.string().required('Выберите единицу измерения'),
-};
-const estimateAddServiceValidation = {
+});
+const estimateAddServiceValidation = (isItLots: boolean) => ({
   count: Yup.string()
     .test('moreThanNull', 'Количество должно быть больше 0', moreThanNull)
     .required('Укажите количество услуги'),
-};
+  ...(isItLots && {
+    price: Yup.string()
+      .test('moreThanNull', 'Цена должна быть больше 0', moreThanNull)
+      .required('Укажите цену за одну единицу измерения'),
+  }),
+});
 const phoneValidation = {
   phone: Yup.string()
     .length(10, 'Введите корректный номер телефона')
@@ -146,12 +153,10 @@ const cancelTaskValidationSchema = (withReason: boolean) =>
 const estimateCountValidationSchema = Yup.object().shape(
   estimateCountValidation
 );
-const estimateAddMaterialValidationSchema = Yup.object().shape(
-  estimateAddMaterialValidation
-);
-const estimateAddServiceValidationSchema = Yup.object().shape(
-  estimateAddServiceValidation
-);
+const estimateAddMaterialValidationSchema = (isInternalExecutor: boolean) =>
+  Yup.object().shape(estimateAddMaterialValidation(isInternalExecutor));
+const estimateAddServiceValidationSchema = (isItLots: boolean) =>
+  Yup.object().shape(estimateAddServiceValidation(isItLots));
 
 const phoneValidationSchema = Yup.object().shape(phoneValidation);
 const emailValidationSchema = Yup.object().shape(emailValidation);

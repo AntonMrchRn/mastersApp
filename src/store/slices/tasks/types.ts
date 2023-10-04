@@ -8,6 +8,7 @@ type InitialState = {
   offerComment: string;
   offerID: number | undefined;
   loading: boolean;
+  filesOnDevice: { [index: number]: boolean } | undefined;
   error?: Error;
 };
 

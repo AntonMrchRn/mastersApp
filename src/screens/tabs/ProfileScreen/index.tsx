@@ -46,9 +46,11 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
     user,
     tabs,
     warning,
+    refetch,
     activeTab,
     switchTab,
     isLoading,
+    isFetching,
     onCopyEmail,
     scrollToEnd,
     scrollViewRef,
@@ -56,8 +58,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
     isInternalExecutor,
     isBlockingModalVisible,
     isApprovalNotificationVisible,
-    refetch,
-    isFetching,
   } = useProfile({ tab });
 
   const tabComponents = {

@@ -10,6 +10,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
 import ControlledInput from '@/components/inputs/ControlledInput';
+import ControlledPriceInput from '@/components/inputs/ControlledPriceInput';
 import { ServiceItem } from '@/components/task/ServiceItem';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
@@ -17,6 +18,8 @@ import { useGetTaskQuery, usePostTaskServiceMutation } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { addOfferService } from '@/store/slices/tasks/actions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
+import { EstimateServiceAdditionFormValues } from '@/types/form';
+import { TaskType } from '@/types/task';
 import { estimateAddServiceValidationSchema } from '@/utils/formValidation';
 import { getRandomUniqNumber } from '@/utils/getRandomUniqNumber';
 
@@ -49,7 +52,8 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
   }, []);
   const ID = service?.ID || getRandomUniqNumber(ids);
 
-  const { refetch } = useGetTaskQuery(taskId);
+  const { refetch, data } = useGetTaskQuery(taskId);
+  const isItLots = data?.tasks[0]?.subsetID === TaskType.IT_AUCTION_SALE;
 
   const [postTask, mutationTask] = usePostTaskServiceMutation();
 
@@ -67,11 +71,15 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
     }
   }, [isFocused]);
 
-  const methods = useForm({
+  const methods = useForm<EstimateServiceAdditionFormValues>({
     defaultValues: {
       count: '',
+      ...(isItLots && { price: '' }),
     },
-    resolver: yupResolver(estimateAddServiceValidationSchema),
+    resolver: yupResolver<
+      | EstimateServiceAdditionFormValues
+      | Omit<EstimateServiceAdditionFormValues, 'price'>
+    >(estimateAddServiceValidationSchema(isItLots)),
     mode: 'onSubmit',
   });
   const {
@@ -87,7 +95,13 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
     }
   };
 
-  const onSubmit = async ({ count }: { count: string }) => {
+  const onSubmit = async ({
+    count,
+    price,
+  }: {
+    count: string;
+    price?: string;
+  }) => {
     if (!userRole) {
       return toast.show({
         type: 'error',
@@ -100,14 +114,14 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
           ...service,
           ID,
           count: +count,
-          sum: +count * service.price,
-          localPrice: service.price.toString(),
-          localCount: service.price.toString(),
+          sum: isItLots && price ? +count * +price : +count * service.price,
+          localPrice: isItLots ? price : service.price.toString(),
+          localCount: count,
           measure: service.measureName,
           canDelete: true,
           roleID: userRole,
           materials: [],
-        })
+        }),
       );
     } else {
       await postTask({
@@ -117,11 +131,11 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
         measureID: service.measureID,
         measureName: service.measureName,
         name: service.name,
-        price: service.price,
+        price: isItLots && price ? +price : service.price,
         setID: service.setID,
         serviceID: service.ID,
         count: +count,
-        sum: +count * service.price,
+        sum: isItLots && price ? +count * +price : +count * service.price,
         roleID: userRole,
         taskID: taskId,
         materials: [],
@@ -142,7 +156,7 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
         <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
           Заполните данные об услуге
         </Text>
-        <ServiceItem service={service} />
+        <ServiceItem service={service} showPrice={!isItLots} />
         <FormProvider {...methods}>
           <View style={styles.input}>
             <ControlledInput
@@ -154,6 +168,28 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
               isError={!!errors.count?.message}
               maxLength={5}
             />
+            {isItLots && (
+              <>
+                <Spacer size="l" />
+                <ControlledPriceInput
+                  name={'price'}
+                  label={'Цена'}
+                  placeholder={'Цена'}
+                  variant={'text'}
+                  keyboardType="numeric"
+                  hint={
+                    errors.price?.message ||
+                    'Указывается в рублях за одну единицу измерения'
+                  }
+                  isError={!!errors.price?.message}
+                />
+                <Spacer
+                  size="l"
+                  separator="bottom"
+                  separatorColor={theme.background.neutralDisableSecond}
+                />
+              </>
+            )}
           </View>
           <Spacer size={'xl'} />
           <View style={styles.row}>

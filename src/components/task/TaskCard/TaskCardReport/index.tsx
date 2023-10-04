@@ -20,7 +20,7 @@ import { selectTasks } from '@/store/slices/tasks/selectors';
 import { Controllers, File, HandleUpload } from '@/types/fileManager';
 import { StatusType, TaskType } from '@/types/task';
 import { getFormData } from '@/utils/fileManager/getFormData';
-import { saveOnDevice } from '@/utils/fileManager/saveOnDevice';
+import { saveFiles } from '@/utils/fileManager/saveFiles';
 
 import { styles } from './styles';
 
@@ -59,7 +59,6 @@ export const TaskCardReport = ({
   const [deleteFile] = useDeleteTaskFileMutation();
 
   const [uploadedFileIDs, setUploadedFileIDs] = useState<number[]>([]);
-
   const progressesSelector = useAppSelector(selectTasks).progresses;
   const canDelete =
     !statusID ||
@@ -68,12 +67,6 @@ export const TaskCardReport = ({
       StatusType.CANCELLED_BY_EXECUTOR,
       StatusType.CLOSED,
     ].includes(statusID);
-
-  const saveFiles = async (files: File[]) => {
-    setUploadedFileIDs(files.map(file => file.fileID));
-    await saveOnDevice(files);
-    setUploadedFileIDs([]);
-  };
 
   const handleUpload = async ({ formData, files, date }: HandleUpload) => {
     try {
@@ -86,7 +79,7 @@ export const TaskCardReport = ({
         signal: controller.signal,
       }).unwrap();
 
-      saveFiles(addedFiles);
+      saveFiles(addedFiles, setUploadedFileIDs);
     } catch (err) {
       console.log('handleUpload error: ', err);
     }
@@ -101,7 +94,7 @@ export const TaskCardReport = ({
   };
 
   const UploadedFiles = (
-    <View style={styles.mt36}>
+    <View>
       <Text variant="title3" color={theme.text.basic}>
         Загруженные файлы
       </Text>
@@ -139,7 +132,7 @@ export const TaskCardReport = ({
   const DefaultUploadFiles = (
     <>
       {reportFiles.length || closureFiles.length ? (
-        <View style={styles.mt36}>
+        <View>
           <Text variant="title3" color={theme.text.basic}>
             Загруженные файлы
           </Text>
@@ -175,7 +168,7 @@ export const TaskCardReport = ({
   );
 
   const AllUploadFiles = (
-    <View style={styles.mt36}>
+    <View>
       <Text variant="title3" color={theme.text.basic}>
         Загруженные файлы
       </Text>

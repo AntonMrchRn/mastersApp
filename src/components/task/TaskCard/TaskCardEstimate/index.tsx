@@ -6,9 +6,11 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
-import { CalculatorLargeIcon } from '@/assets/icons/svg/estimate/CalculatorLargeIcon';
 import { GavelIcon } from '@/assets/icons/svg/estimate/GavelIcon';
 import { EditIcon } from '@/assets/icons/svg/screens/EditIcon';
+import PreviewNotFound, {
+  PreviewNotFoundType,
+} from '@/components/tabs/TaskSearch/PreviewNotFound';
 import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { TaskEstimateOutline } from '@/components/task/TaskEstimateOutline';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
@@ -105,32 +107,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   });
 
   if (!services.length) {
-    return (
-      <View style={styles.container}>
-        <View
-          style={[
-            styles.icon,
-            {
-              backgroundColor: theme.background.fieldMain,
-            },
-          ]}
-        >
-          <CalculatorLargeIcon />
-        </View>
-        <Spacer size={'xl'} />
-        <Text variant={'title2'} color={theme.text.basic}>
-          Сметы нет
-        </Text>
-        <Spacer size={12} />
-        <Text
-          variant={'bodySRegular'}
-          color={theme.text.neutral}
-          style={styles.text}
-        >
-          Данная задача не предусматривает наличие сметы
-        </Text>
-      </View>
-    );
+    return <PreviewNotFound type={PreviewNotFoundType.NoEstimate} />;
   }
   return (
     <>
@@ -149,7 +126,6 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
         />
       )}
       <View>
-        <Spacer size={'xxxl'} />
         {outlayStatusID &&
           statusID === StatusType.WORK &&
           !isContractor &&
@@ -158,8 +134,10 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             TaskType.COMMON_FIRST_RESPONSE,
             TaskType.IT_AUCTION_SALE,
             TaskType.IT_FIRST_RESPONSE,
+            TaskType.IT_INTERNAL_EXECUTIVES,
           ].includes(subsetID) && (
             <TaskEstimateOutline
+              showEstimateStatus={!isInternalExecutor}
               outlayStatusID={outlayStatusID}
               onPress={onEstimateSheetVisible}
             />
@@ -191,6 +169,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                 statusID={statusID}
                 serviceID={service.ID as number}
                 refetch={refetch}
+                isContractor={isContractor}
                 handleBanner={handleBanner}
               />
               <Spacer size={0} separator="bottom" />
@@ -203,6 +182,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
                   <View key={material.ID}>
                     <MaterialItem
                       subsetID={subsetID}
+                      isContractor={isContractor}
                       measure={material?.measure.toLowerCase()}
                       firstAction={firstActionMaterial}
                       title={material?.name}
@@ -227,7 +207,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
         {(isContractor &&
           subsetID &&
           [TaskType.IT_FIRST_RESPONSE, TaskType.IT_AUCTION_SALE].includes(
-            subsetID
+            subsetID,
           )) ||
         (setId === TaskSetType.IT_SERVICES && isInternalExecutor) ? null : (
           <EstimateTotal
@@ -242,7 +222,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
         )}
         {subsetID &&
           [TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE].includes(
-            subsetID
+            subsetID,
           ) &&
           statusID === StatusType.ACTIVE && (
             <View style={styles.mt16}>
