@@ -34,6 +34,7 @@ export const useEstimateSubmission = ({
   isEdit,
   isInvitedExecutor,
   executor,
+  submissionByCurator,
 }: {
   navigation: StackNavigationProp<
     AppStackParamList,
@@ -44,11 +45,11 @@ export const useEstimateSubmission = ({
   isEdit: boolean | undefined;
   isInvitedExecutor: boolean | undefined;
   executor: Executor | undefined;
+  submissionByCurator: boolean | undefined;
 }) => {
   const dispatch = useAppDispatch();
   const toast = useToast();
   const isFocused = useIsFocused();
-
   const bsRef = useRef<BottomSheetModal>(null);
   const { data, refetch } = useGetTaskQuery(taskId);
 
@@ -353,6 +354,34 @@ export const useEstimateSubmission = ({
         }
       } else {
         // Подача сметы для IT-лотов Исполнителем
+        if (submissionByCurator && isItLots) {
+          isInvitedExecutor
+            ? await patchITTaskMember({
+                ID: executor?.memberID,
+                isConfirm: true,
+                isCurator: true,
+                offer: {
+                  taskID: taskId,
+                  isCurator: true,
+                  services: postServices,
+                },
+              }).unwrap()
+            : await postITTaskMember({
+                taskID: taskId,
+                members: [
+                  {
+                    userID: user?.userID,
+                    isConfirm: true,
+                    isCurator: true,
+                    offer: {
+                      taskID: taskId,
+                      isCurator: true,
+                      services: postServices,
+                    },
+                  },
+                ],
+              }).unwrap();
+        }
         if (isItLots) {
           isInvitedExecutor
             ? await patchITTaskMember({
@@ -392,6 +421,7 @@ export const useEstimateSubmission = ({
 
         dispatch(setNewOfferServices([]));
         dispatch(setOfferComment(''));
+
         navigation.navigate(AppScreenName.EstimateSubmissionSuccess, {
           taskId,
         });

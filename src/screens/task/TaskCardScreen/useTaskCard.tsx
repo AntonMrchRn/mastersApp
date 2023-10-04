@@ -17,10 +17,10 @@ import { BottomTabName } from '@/navigation/TabNavigation';
 import { axiosInstance } from '@/services/axios/axiosInstance';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
-  tasksAPI,
   useDeleteITTaskMemberMutation,
   useDeleteOffersMutation,
   useGetAnotherOffersQuery,
+  useGetAvailableContractorsQuery,
   useGetTaskHistoryQuery,
   useGetTaskQuery,
   useGetUserOffersQuery,
@@ -37,6 +37,7 @@ import { setNewOfferServices } from '@/store/slices/tasks/actions';
 import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
 import { CompositeTaskCardNavigationProp } from '@/types/navigation';
 import {
+  ContractorStatus,
   EstimateTab,
   OutlayConfirmStatus,
   OutlayStatusType,
@@ -203,7 +204,6 @@ export const useTaskCard = ({
       });
     }
   }, [deleteOffersMutation.isError]);
-
   useEffect(() => {
     if (isSuccess) {
       checkFilesOnDevice(files);
@@ -350,6 +350,25 @@ export const useTaskCard = ({
     (executor?.inviterRoleID === RoleType.COORDINATOR ||
       executor?.inviterRoleID === RoleType.SUPERVISOR);
 
+  const { data: contractors } = useGetAvailableContractorsQuery(
+    {
+      curatorId: user?.userID as number,
+      taskId,
+    },
+    {
+      skip: !user?.userID || !taskId,
+    },
+  );
+
+  /**
+   * Доступны ли подрядчики
+   */
+
+  const isAvailableContractorsExist =
+    !!contractors?.some(
+      contractor => contractor.subStatusID === ContractorStatus.AVAILABLE,
+    ) && !!contractors.length;
+
   const getBudget = () => {
     if (
       (subsetID &&
@@ -417,45 +436,6 @@ export const useTaskCard = ({
     statusID === StatusType.ACTIVE &&
     !!userOffersData.length;
 
-  const refresh = () => {
-    dispatch(
-      tasksAPI.endpoints.getTask.initiate(taskId, {
-        forceRefetch: true,
-      }),
-    );
-    dispatch(
-      tasksAPI.endpoints.getTaskHistory.initiate(taskId, {
-        forceRefetch: true,
-      }),
-    );
-    dispatch(
-      getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'desc' }),
-    );
-    if (!isSkipTask) {
-      dispatch(
-        tasksAPI.endpoints.getUserOffers.initiate(
-          {
-            taskID: taskId,
-            userID: user?.userID as number,
-          },
-          {
-            forceRefetch: true,
-          },
-        ),
-      );
-      dispatch(
-        tasksAPI.endpoints.getAnotherOffers.initiate(
-          {
-            taskID: taskId,
-            userID: user?.userID as number,
-          },
-          {
-            forceRefetch: true,
-          },
-        ),
-      );
-    }
-  };
   const onRefresh = () => {
     refetch();
     dispatch(
@@ -467,7 +447,7 @@ export const useTaskCard = ({
       getAnotherOffers.refetch();
     }
   };
-  useTaskSSE({ taskId, refresh });
+  useTaskSSE({ taskId, refresh: onRefresh });
 
   const onUploadLimitBannerVisible = () => {
     setUploadLimitBannerVisible(!uploadLimitBannerVisible);
@@ -547,7 +527,6 @@ export const useTaskCard = ({
     //навигация на скрин подачи сметы, если IT-ЛОТЫ Исполнитель
     if (subsetID === TaskType.IT_AUCTION_SALE && !isSubmissionByCurator) {
       dispatch(setNewOfferServices(services));
-      console.log('Исполнитель --->');
       setSubmissionByCurator(false);
 
       navigation.navigate(AppScreenName.EstimateSubmission, {
@@ -561,9 +540,26 @@ export const useTaskCard = ({
     if (subsetID === TaskType.IT_AUCTION_SALE && isSubmissionByCurator) {
       setSubmissionByCurator(false);
       dispatch(setNewOfferServices(services));
-      console.log('Куратор --->');
-      // проверять на наличие подрядчиков, если есть - на подачу сметы, затем на приглашение подрядчиков
-      // если нет - на экран, где написано, что нет подрядчиков
+
+      // Подрядчики отсутствуют или недоступны подрядчики'
+      if (!contractors?.length || !isAvailableContractorsExist) {
+        console.log(' Подрядчики отсутствуют');
+        navigation.navigate(AppScreenName.Contractors, {
+          taskId,
+          isInvitedCurator,
+          curatorId: user?.userID as number,
+          curatorMemberId: curator?.memberID,
+        });
+      } else {
+        // Подрядчики доступны -> подача сметы
+        console.log('Подача смет');
+        navigation.navigate(AppScreenName.EstimateSubmission, {
+          taskId,
+          isInvitedExecutor,
+          executor,
+          submissionByCurator: true,
+        });
+      }
     }
 
     if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {

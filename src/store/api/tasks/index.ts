@@ -52,7 +52,7 @@ export const tasksAPI = api
             url: `services/categories?query=??`,
             method: 'GET',
           }),
-        },
+        }
       ),
       getServicesByCategories: builder.query<GetServicesResponse, string>({
         query: categoryIds => ({
