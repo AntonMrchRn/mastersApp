@@ -256,12 +256,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "MastersAppTests" */;
 			buildPhases = (
-				12C3005167A339A915A0156A /* [CP] Check Pods Manifest.lock */,
+				D7193747070A043024F78BA8 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				874D5CCA2C023AF9DEDD4F07 /* [CP] Embed Pods Frameworks */,
 				5BB7E5D80AEE494461F38AF3 /* [CP] Copy Pods Resources */,
+				7DE74126EDE3A23D12D59A80 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -277,16 +277,16 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "MastersApp" */;
 			buildPhases = (
-				C4D12B8A058DDDF08E45FCAF /* [CP] Check Pods Manifest.lock */,
+				BA78F849C025D92EC83D9AE4 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				AB19933A42F8274C048C6C2A /* [CP] Embed Pods Frameworks */,
 				6773836E1AEC12A0361595F3 /* [CP] Copy Pods Resources */,
 				60DF6967270CE5A6AB7EBDEA /* [CP-User] [RNFB] Core Configuration */,
 				DCF5863843A0903A081DDF21 /* [CP-User] [RNFB] Crashlytics Configuration */,
+				C4E5E3F03F8F3B843EB583EC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -398,26 +398,21 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		03331A13075B42515353147F /* [CP] Check Pods Manifest.lock */ = {
+		5BB7E5D80AEE494461F38AF3 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
+			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MastersApp-checkManifestLockResult.txt",
+				"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		60DF6967270CE5A6AB7EBDEA /* [CP-User] [RNFB] Core Configuration */ = {
@@ -450,7 +445,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		860A0F57CB8A3BE87E389719 /* [CP] Embed Pods Frameworks */ = {
+		7DE74126EDE3A23D12D59A80 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -467,7 +462,46 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8C1AE764BDB6123428AF0649 /* [CP] Check Pods Manifest.lock */ = {
+		BA78F849C025D92EC83D9AE4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MastersApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C4E5E3F03F8F3B843EB583EC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D7193747070A043024F78BA8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -487,57 +521,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		2054E3AD1C1078BE31E9B9C3 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		35212C7DF200F1B045DCBE8A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp/Pods-MastersApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5BB7E5D80AEE494461F38AF3 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DCF5863843A0903A081DDF21 /* [CP-User] [RNFB] Crashlytics Configuration */ = {
