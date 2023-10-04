@@ -526,8 +526,8 @@ export const useTaskCard = ({
   const onTaskSubmission = async () => {
     //навигация на скрин подачи сметы, если IT-ЛОТЫ Исполнитель
     if (subsetID === TaskType.IT_AUCTION_SALE && !isSubmissionByCurator) {
-      dispatch(setNewOfferServices(services));
       setSubmissionByCurator(false);
+      dispatch(setNewOfferServices(services));
 
       navigation.navigate(AppScreenName.EstimateSubmission, {
         taskId,
@@ -543,7 +543,6 @@ export const useTaskCard = ({
 
       // Подрядчики отсутствуют или недоступны подрядчики'
       if (!contractors?.length || !isAvailableContractorsExist) {
-        console.log(' Подрядчики отсутствуют');
         navigation.navigate(AppScreenName.Contractors, {
           taskId,
           isInvitedCurator,
@@ -552,7 +551,6 @@ export const useTaskCard = ({
         });
       } else {
         // Подрядчики доступны -> подача сметы
-        console.log('Подача смет');
         navigation.navigate(AppScreenName.EstimateSubmission, {
           taskId,
           isInvitedExecutor,
