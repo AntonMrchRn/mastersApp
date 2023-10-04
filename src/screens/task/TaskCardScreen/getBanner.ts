@@ -13,6 +13,7 @@ export const getBanner = ({
   isCurator,
   curator,
   cancelReason,
+  isInvitedExecutor,
 }: {
   tab: TaskTab;
   statusID: StatusType | undefined;
@@ -23,6 +24,7 @@ export const getBanner = ({
   isContractor: boolean;
   isCurator: boolean;
   cancelReason: string | undefined;
+  isInvitedExecutor: boolean;
 }): BannerProps | null => {
   if (tab === TaskTab.DESCRIPTION) {
     switch (statusID) {
@@ -42,6 +44,13 @@ export const getBanner = ({
             text: `Куратор ${
               executor?.curatorName + ' ' + executor?.curatorSname
             } выбрал вас в качестве подрядчика`,
+          };
+        }
+        if (isInvitedExecutor) {
+          return {
+            type: 'info',
+            icon: 'alert',
+            text: 'Вас выбрали в качестве кандидата на роль исполнителя',
           };
         }
         if (isCurator && curator && !curator.isConfirm) {

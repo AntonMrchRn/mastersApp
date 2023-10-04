@@ -524,6 +524,9 @@ export const getButtons = ({
       if (toClose) {
         switch (tab) {
           case TaskTab.REPORT:
+            if (isContractor) {
+              return [];
+            }
             if (closureFiles.length) {
               return [
                 {
