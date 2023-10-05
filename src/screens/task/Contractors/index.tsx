@@ -11,8 +11,8 @@ import Contractor from '@/components/TabScreens/ContractorsScreen/Contractor';
 import useContractors from '@/screens/task/Contractors/useContractors';
 import { User } from '@/store/api/user/types';
 import {
+  ContractorsInvitationScreenNavigationProp,
   ContractorsScreenRoute,
-  ProfileStackNavigationProp,
 } from '@/types/navigation';
 
 import { styles } from './style';
@@ -23,7 +23,7 @@ export const ContractorsScreen = ({
   },
   navigation,
 }: {
-  navigation: ProfileStackNavigationProp;
+  navigation: ContractorsInvitationScreenNavigationProp;
   route: ContractorsScreenRoute;
 }) => {
   const {

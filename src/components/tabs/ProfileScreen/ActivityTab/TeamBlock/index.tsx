@@ -13,11 +13,12 @@ import MegaphoneIcon from '@/assets/icons/svg/screens/MegaphoneIcon';
 import VectorIcon from '@/assets/icons/svg/screens/Vector';
 import Title from '@/components/tabs/ProfileScreen/Title';
 import UserInfoBlock from '@/components/tabs/ProfileScreen/UserInfoBlock';
+import { AppScreenName } from '@/navigation/AppNavigation';
 import { ProfileScreenName } from '@/navigation/ProfileNavigation';
 import { useGetUserQuery, useGetUsersQuery } from '@/store/api/user';
 import { User } from '@/store/api/user/types';
 import { AxiosQueryErrorResponse } from '@/types/error';
-import { ContractorsInvitationScreenNavigationProp } from '@/types/navigation';
+import { CompositeContractorsInvitationStackNavigationProp } from '@/types/navigation';
 
 import styles from './style';
 
@@ -29,7 +30,8 @@ type TeamBlockProps = {
 const TeamBlock = ({ subcontractorIDs, curatorId }: TeamBlockProps) => {
   const theme = useTheme();
   const toast = useToast();
-  const navigation = useNavigation<ContractorsInvitationScreenNavigationProp>();
+  const navigation =
+    useNavigation<CompositeContractorsInvitationStackNavigationProp>();
   const {
     data: contractors,
     isLoading: isContractorsLoading,
@@ -61,7 +63,7 @@ const TeamBlock = ({ subcontractorIDs, curatorId }: TeamBlockProps) => {
   const isCuratorNameExist = !!curator?.name && !!curator?.sname;
 
   const navigateToContractorsInvitation = () => {
-    navigation.navigate(ProfileScreenName.ContractorsInvitation);
+    navigation.navigate(AppScreenName.ContractorsInvitation);
   };
 
   const navigateToTeamMemberDetails = (id: number, isContractor: boolean) => {

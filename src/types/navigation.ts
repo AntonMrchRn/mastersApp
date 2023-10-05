@@ -81,8 +81,8 @@ type PhoneEditingConfirmationScreenNavigationProp = NativeStackNavigationProp<
   ProfileScreenName.PhoneEditingConfirmation
 >;
 type ContractorsInvitationScreenNavigationProp = NativeStackNavigationProp<
-  ProfileStackParamList,
-  ProfileScreenName.ContractorsInvitation
+  AppStackParamList,
+  AppScreenName.ContractorsInvitation
 >;
 type ChangePasswordScreenNavigationProp = NativeStackNavigationProp<
   ProfileStackParamList,
@@ -97,6 +97,11 @@ type ProfileStackNavigationProp = NativeStackNavigationProp<
   BottomTabName.ProfileNavigation
 >;
 
+type CompositeContractorsInvitationStackNavigationProp =
+  CompositeNavigationProp<
+    StackNavigationProp<ProfileStackParamList, ProfileScreenName.Profile>,
+    StackNavigationProp<AppStackParamList, AppScreenName.ContractorsInvitation>
+  >;
 type CompositeRecoveryConfirmationAndEmailNavigationProp =
   CompositeNavigationProp<
     StackNavigationProp<AppStackParamList, AppScreenName.RecoveryConfirmation>,
@@ -130,10 +135,11 @@ export type {
   TaskCardScreenNavigationProp,
   CompositeEditingNavigationProp,
   BankDetailsScreenNavigationProp,
+  CompositeTaskCardNavigationProp,
   ChangePasswordScreenNavigationProp,
   AccountDeletionScreenNavigationProp,
   ContractorsInvitationScreenNavigationProp,
   PhoneEditingConfirmationScreenNavigationProp,
-  CompositeTaskCardNavigationProp,
+  CompositeContractorsInvitationStackNavigationProp,
   CompositeRecoveryConfirmationAndEmailNavigationProp,
 };

@@ -5,7 +5,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AccountDeletionScreen from '@/screens/profile/AccountDeletionScreen';
 import BankDetailsScreen from '@/screens/profile/BankDetailsScreen';
 import ChangePasswordScreen from '@/screens/profile/ChangePasswordScreen';
-import ContractorsInvitationScreen from '@/screens/profile/ContractorsInvitationScreen';
 import EmailEditingScreen from '@/screens/profile/EmailEditingScreen';
 import PersonalDataEditingScreen from '@/screens/profile/PersonalDataEditingScreen';
 import PhoneEditingConfirmationScreen from '@/screens/profile/PhoneEditingConfirmationScreen';
@@ -25,7 +24,6 @@ export enum ProfileScreenName {
   AccountDeletion = 'AccountDeletion',
   TeamMemberDetails = 'TeamMemberDetails',
   PersonalDataEditing = 'PersonalDataEditing',
-  ContractorsInvitation = 'ContractorsInvitation',
   PhoneEditingConfirmation = 'PhoneEditingConfirmation',
 }
 export type ProfileStackParamList = {
@@ -51,7 +49,6 @@ export type ProfileStackParamList = {
     sname: string | null;
     pname: string | null;
   };
-  [ProfileScreenName.ContractorsInvitation]: undefined;
   [ProfileScreenName.TeamMemberDetails]: {
     contractorIDs: number[];
     teamMemberId: number;
@@ -88,10 +85,6 @@ export const ProfileNavigation = () => (
     <Stack.Screen
       name={ProfileScreenName.BankDetails}
       component={BankDetailsScreen}
-    />
-    <Stack.Screen
-      name={ProfileScreenName.ContractorsInvitation}
-      component={ContractorsInvitationScreen}
     />
     <Stack.Screen
       name={ProfileScreenName.TeamMemberDetails}

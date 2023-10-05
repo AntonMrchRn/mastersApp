@@ -105,11 +105,11 @@ const useContractorsInvitation = () => {
 
   return {
     link,
-    isLoading,
     copyLink,
+    isLoading,
+    sharePress,
     linkTimeout,
     onGenerateLink,
-    sharePress,
   };
 };
 
