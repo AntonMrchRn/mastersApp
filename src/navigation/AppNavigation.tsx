@@ -14,6 +14,7 @@ import PasswordScreen from '@/screens/auth/PasswordScreen';
 import RecoveryConfirmationScreen from '@/screens/auth/RecoveryConfirmationScreen';
 import RecoveryScreen from '@/screens/auth/RecoveryScreen';
 import SignInScreen from '@/screens/auth/SignInScreen';
+import ContractorsInvitationScreen from '@/screens/profile/ContractorsInvitationScreen';
 import { CandidateEstimatesScreen } from '@/screens/task/CandidateEstimatesScreen';
 import { CommentsChatScreen } from '@/screens/task/CommentsChatScreen';
 import ContractorsScreen from '@/screens/task/Contractors';
@@ -45,6 +46,7 @@ export enum AppScreenName {
   WebView = 'WebView',
   EstimateSubmission = 'EstimateSubmission',
   UserEstimateEdit = 'UserEstimateEdit',
+  ContractorsInvitation = 'ContractorsInvitation',
   NewMaterial = 'NewMaterial',
   EstimateSubmissionSuccess = 'EstimateSubmissionSuccess',
   Contractors = 'Contractors',
@@ -68,6 +70,7 @@ export type AppStackParamList = {
   };
   [AppScreenName.Error]: undefined;
   [AppScreenName.TaskCard]: { taskId: number };
+  [AppScreenName.ContractorsInvitation]: undefined;
   [AppScreenName.EstimateEdit]: {
     taskId: number;
     serviceId: number;
@@ -148,6 +151,10 @@ export const AppNavigation = () => {
               <Stack.Screen
                 name={AppScreenName.TaskCard}
                 component={TaskCardScreen}
+              />
+              <Stack.Screen
+                name={AppScreenName.ContractorsInvitation}
+                component={ContractorsInvitationScreen}
               />
               <Stack.Screen
                 name={AppScreenName.Contractors}

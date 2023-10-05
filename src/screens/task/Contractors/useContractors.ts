@@ -3,8 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useToast } from 'rn-ui-kit';
 
-import { ProfileScreenName } from '@/navigation/ProfileNavigation';
-import { BottomTabName } from '@/navigation/TabNavigation';
+import { AppScreenName } from '@/navigation/AppNavigation';
 import { styles } from '@/screens/task/Contractors/style';
 import {
   useGetAvailableContractorsQuery,
@@ -14,15 +13,15 @@ import {
 import { PostITTaskMemberParams } from '@/store/api/tasks/types';
 import { User } from '@/store/api/user/types';
 import { AxiosQueryErrorResponse } from '@/types/error';
-import { ProfileStackNavigationProp } from '@/types/navigation';
+import { ContractorsInvitationScreenNavigationProp } from '@/types/navigation';
 import { ContractorStatus } from '@/types/task';
 
 const useContractors = (
-  navigation: ProfileStackNavigationProp,
+  navigation: ContractorsInvitationScreenNavigationProp,
   taskId: number,
   curatorId: number,
   isInvitedCurator: boolean,
-  curatorMemberId?: number
+  curatorMemberId?: number,
 ) => {
   const insets = useSafeAreaInsets();
   const toast = useToast();
@@ -39,7 +38,7 @@ const useContractors = (
     },
     {
       skip: !curatorId || !taskId,
-    }
+    },
   );
 
   const [
@@ -51,17 +50,11 @@ const useContractors = (
       error: invitationError,
     },
   ] = usePostITTaskMemberMutation();
-  const [
-    addCurator,
-    {
-      isError: isCuratorError,
-      isSuccess: isCuratorSuccess,
-      error: curatorError,
-    },
-  ] = usePatchITTaskMemberMutation();
+  const [addCurator, { isError: isCuratorError, error: curatorError }] =
+    usePatchITTaskMemberMutation();
 
   const [selectedContractorIDs, setSelectedContractorIDs] = useState<number[]>(
-    []
+    [],
   );
 
   useEffect(() => {
@@ -85,19 +78,16 @@ const useContractors = (
 
   const isAvailableContractorsExist =
     !!contractors?.some(
-      contractor => contractor.subStatusID === ContractorStatus.AVAILABLE
+      contractor => contractor.subStatusID === ContractorStatus.AVAILABLE,
     ) && !!contractors.length;
 
   const isAllContractorsAlreadyInvited = !!contractors?.every(
-    contractor => contractor.subStatusID === ContractorStatus.ALREADY_INVITED
+    contractor => contractor.subStatusID === ContractorStatus.ALREADY_INVITED,
   );
 
   const keyExtractor = (item: User) => `${item.ID}`;
-  const navigateToProfile = () => {
-    navigation.navigate(BottomTabName.ProfileNavigation, {
-      screen: ProfileScreenName.ContractorsInvitation,
-    });
-  };
+  const navigateToProfile = () =>
+    navigation.navigate(AppScreenName.ContractorsInvitation);
 
   const onSelectContractor = (id: number) => {
     const isSelected = selectedContractorIDs.includes(id);

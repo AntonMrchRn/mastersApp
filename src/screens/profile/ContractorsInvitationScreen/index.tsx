@@ -13,8 +13,9 @@ import styles from './style';
 
 const ContractorsInvitationScreen = () => {
   const theme = useTheme();
-  const { link, isLoading, copyLink, linkTimeout, onGenerateLink, sharePress } =
+  const { link, copyLink, isLoading, sharePress, linkTimeout, onGenerateLink } =
     useContractorsInvitation();
+
   return (
     <View style={styles.container}>
       <Header title="Приглашение подрядчиков" />
