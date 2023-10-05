@@ -33,7 +33,7 @@ const useActivities = (setIDs: number[] | undefined) => {
         index !== array.length - 1
           ? `${convertedActivities} ${activity.description},`
           : `${convertedActivities} ${activity.description}`,
-      ''
+      '',
     )
     .trim();
 

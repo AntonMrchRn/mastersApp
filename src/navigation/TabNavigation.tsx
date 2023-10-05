@@ -39,37 +39,49 @@ export type BottomTabParamList = {
   [BottomTabName.ProfileNavigation]: NavigatorScreenParams<ProfileStackParamList>;
 };
 const Tab = createBottomTabNavigator<BottomTabParamList>();
-export const TabNavigation = () => (
-  <Tab.Navigator screenOptions={screenOptions}>
-    <Tab.Screen
-      name={BottomTabName.TaskSearch}
-      component={TaskSearchScreen}
-      options={{
-        title: 'Поиск задач',
-        tabBarIcon: color => (
-          <TaskSearch fill={color.focused ? '#3F51B5' : '#707070'} />
-        ),
-      }}
-    />
-    <Tab.Screen
-      name={BottomTabName.MyTasks}
-      component={MyTasksScreen}
-      options={{
-        title: 'Мои задачи',
-        tabBarIcon: color => (
-          <Employees fill={color.focused ? '#3F51B5' : '#707070'} />
-        ),
-      }}
-    />
-    <Tab.Screen
-      name={BottomTabName.ProfileNavigation}
-      component={ProfileNavigation}
-      options={{
-        title: 'Профиль',
-        tabBarIcon: color => (
-          <Profile fill={color.focused ? '#3F51B5' : '#707070'} />
-        ),
-      }}
-    />
-  </Tab.Navigator>
-);
+export const TabNavigation = () => {
+  const taskSearchIcon = (color: {
+    focused: boolean;
+    color: string;
+    size: number;
+  }) => <TaskSearch fill={color.focused ? '#3F51B5' : '#707070'} />;
+  const myTasksIcon = (color: {
+    focused: boolean;
+    color: string;
+    size: number;
+  }) => <Employees fill={color.focused ? '#3F51B5' : '#707070'} />;
+  const profileIcon = (color: {
+    focused: boolean;
+    color: string;
+    size: number;
+  }) => <Profile fill={color.focused ? '#3F51B5' : '#707070'} />;
+
+  return (
+    <Tab.Navigator screenOptions={screenOptions}>
+      <Tab.Screen
+        name={BottomTabName.TaskSearch}
+        component={TaskSearchScreen}
+        options={{
+          title: 'Поиск задач',
+          tabBarIcon: taskSearchIcon,
+        }}
+      />
+      <Tab.Screen
+        name={BottomTabName.MyTasks}
+        component={MyTasksScreen}
+        options={{
+          title: 'Мои задачи',
+          tabBarIcon: myTasksIcon,
+        }}
+      />
+      <Tab.Screen
+        name={BottomTabName.ProfileNavigation}
+        component={ProfileNavigation}
+        options={{
+          title: 'Профиль',
+          tabBarIcon: profileIcon,
+        }}
+      />
+    </Tab.Navigator>
+  );
+};

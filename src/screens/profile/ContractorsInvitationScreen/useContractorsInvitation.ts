@@ -97,7 +97,7 @@ const useContractorsInvitation = () => {
       } catch (err) {
         console.log(
           '🚀 ~ file: useContractorsInvitation.ts:98 ~ sharePress ~ err:',
-          err
+          err,
         );
       }
     }

@@ -9,7 +9,7 @@ import { configApp } from '@/constants/platform';
 export const fillFormData = (
   formData: FormData,
   result: Image | Video | ImageOrVideo[] | DocumentPickerResponse[],
-  actionType: UploadAction
+  actionType: UploadAction,
 ) => {
   let files: { name: string; size: number }[] = [];
   let sizes: { size: number; type: string }[] = [];
@@ -42,7 +42,7 @@ export const fillFormData = (
       }
       if (
         [UploadAction.TakePhotoMedia, UploadAction.TakeVideoMedia].includes(
-          actionType
+          actionType,
         )
       ) {
         return `МастерА-${dayjs().format('D/MM/YYYY-HH:mm:ss')}`;

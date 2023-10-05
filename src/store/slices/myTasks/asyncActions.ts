@@ -38,46 +38,46 @@ const getEndpoint = ({
     //Все ( Мои )
     case 1:
       return `(object==regionID^^${regionID?.join(
-        ','
+        ',',
       )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //Новые
     case 2:
       return `(object==regionID^^${regionID?.join(
-        ','
+        ',',
       )}*statusID==1,2*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //В работе
     case 3:
       return `(object==regionID^^${regionID?.join(
-        ','
+        ',',
       )}*statusID==11*outlayStatusID==1,3,5*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //Согласованные сметы
     case 4:
       return `(object==regionID^^${regionID?.join(
-        ','
+        ',',
       )}*statusID==11*outlayStatusID==2*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //Сдача работ
     case 5:
       return `(object==regionID^^${regionID?.join(
-        ','
+        ',',
       )}*statusID==5*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //Выполненные
     case 6:
       return `(statusID==6,12||statusID==9*toClose==false)*(object==regionID^^${regionID?.join(
-        ','
+        ',',
       )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //Отмененные
     case 7:
       return `(object==regionID^^${regionID?.join(
-        ','
+        ',',
       )}*statusID==7,8*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     //К закрытию
     case 8:
       return `(object==regionID^^${regionID?.join(
-        ','
+        ',',
       )}*toClose==true*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
     default:
       return `(object==regionID^^${regionID?.join(
-        ','
+        ',',
       )}*setID==1,2)?ID,desc,${numberOfPosts},${fromTask}&isMine=true`;
   }
 };
@@ -90,7 +90,7 @@ const getMyTasks = createAsyncThunk<
   '/getMyTasks',
   async (
     { idList, numberOfPosts = 30, fromTask = 0, regionID }: RequestArgs,
-    thunkApi
+    thunkApi,
   ) => {
     const userID = thunkApi.getState().auth.user?.userID;
     try {
@@ -102,7 +102,7 @@ const getMyTasks = createAsyncThunk<
             numberOfPosts,
             fromTask,
             regionID,
-          })}`
+          })}`,
         );
         return data;
       }
@@ -110,7 +110,7 @@ const getMyTasks = createAsyncThunk<
     } catch (error) {
       return thunkApi.rejectWithValue((error as AxiosError).response?.data);
     }
-  }
+  },
 );
 
 const refreshMyTasks = createAsyncThunk<
@@ -121,7 +121,7 @@ const refreshMyTasks = createAsyncThunk<
   '/refreshMyTasks',
   async (
     { idList, numberOfPosts = 30, fromTask = 0, regionID }: RequestArgs,
-    thunkApi
+    thunkApi,
   ) => {
     const userID = thunkApi.getState().auth.user?.userID;
 
@@ -134,7 +134,7 @@ const refreshMyTasks = createAsyncThunk<
             numberOfPosts,
             fromTask,
             regionID,
-          })}`
+          })}`,
         );
         return data;
       }
@@ -142,7 +142,7 @@ const refreshMyTasks = createAsyncThunk<
     } catch (error) {
       return thunkApi.rejectWithValue((error as AxiosError).response?.data);
     }
-  }
+  },
 );
 
 const getCommentsPreview = createAsyncThunk<
@@ -153,14 +153,14 @@ const getCommentsPreview = createAsyncThunk<
   '/getCommentsPreview',
   async (
     { idCard, numberOfPosts = 30, fromTask = 0, sort = 'asc' }: RequestArgs,
-    thunkApi
+    thunkApi,
   ) => {
     const userID = thunkApi.getState().auth.user?.userID;
 
     try {
       if (userID) {
         const { data } = await axiosInstance.get(
-          `tasks/comments?query=ID,userID,nominy,authorTypeID,comment,creationTime,fullname?(taskID==${idCard}*authorTypeID!=3)?creationTime,${sort},${numberOfPosts},${fromTask}`
+          `tasks/comments?query=ID,userID,nominy,authorTypeID,comment,creationTime,fullname?(taskID==${idCard}*authorTypeID!=3)?creationTime,${sort},${numberOfPosts},${fromTask}`,
         );
         return data;
       }
@@ -168,7 +168,7 @@ const getCommentsPreview = createAsyncThunk<
     } catch (error) {
       return thunkApi.rejectWithValue((error as AxiosError).response?.data);
     }
-  }
+  },
 );
 
 const getComments = createAsyncThunk<
@@ -179,14 +179,14 @@ const getComments = createAsyncThunk<
   '/getComments',
   async (
     { idCard, numberOfPosts = 30, fromTask = 0, sort = 'asc' }: RequestArgs,
-    thunkApi
+    thunkApi,
   ) => {
     const userID = thunkApi.getState().auth.user?.userID;
 
     try {
       if (userID) {
         const { data } = await axiosInstance.get(
-          `tasks/comments?query=ID,userID,nominy,authorTypeID,comment,creationTime,fullname?(taskID==${idCard}*authorTypeID!=3)?creationTime,${sort},${numberOfPosts},${fromTask}`
+          `tasks/comments?query=ID,userID,nominy,authorTypeID,comment,creationTime,fullname?(taskID==${idCard}*authorTypeID!=3)?creationTime,${sort},${numberOfPosts},${fromTask}`,
         );
         return data;
       }
@@ -194,7 +194,7 @@ const getComments = createAsyncThunk<
     } catch (error) {
       return thunkApi.rejectWithValue((error as AxiosError).response?.data);
     }
-  }
+  },
 );
 
 const sendMessage = createAsyncThunk<
@@ -215,7 +215,7 @@ const sendMessage = createAsyncThunk<
     } catch (error) {
       return thunkApi.rejectWithValue((error as AxiosError).response?.data);
     }
-  }
+  },
 );
 
 export {

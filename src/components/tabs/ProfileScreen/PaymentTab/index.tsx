@@ -103,10 +103,13 @@ const PaymentTab = ({
         <>
           <UserInfoBlock label="Правовая форма" info={entityType} />
           {(isIndividual || isCompany) && (
-            <UserInfoBlock info={user.entityName!} label="Наименование" />
+            <UserInfoBlock
+              info={user.entityName as string}
+              label="Наименование"
+            />
           )}
-          <UserInfoBlock info={user.ITIN!} label="ИНН" />
-          {isCompany && <UserInfoBlock info={user.RRC!} label="КПП" />}
+          <UserInfoBlock info={user.ITIN as string} label="ИНН" />
+          {isCompany && <UserInfoBlock info={user.RRC as string} label="КПП" />}
           {(isIndividual || isCompany) && (
             <>
               <View style={styles.payerContainer}>
@@ -149,10 +152,16 @@ const PaymentTab = ({
       {/*// if there are bank details, then there is a user*/}
       {isBankDetailsExist ? (
         <>
-          <UserInfoBlock info={user.bankName!} label="Банк" />
-          <UserInfoBlock label="Счет получателя" info={user.checkingAccount!} />
-          <UserInfoBlock info={user.bankID!} label="БИК" />
-          <UserInfoBlock label="Корр. счет" info={user.correspondingAccount!} />
+          <UserInfoBlock info={user.bankName as string} label="Банк" />
+          <UserInfoBlock
+            label="Счет получателя"
+            info={user.checkingAccount as string}
+          />
+          <UserInfoBlock info={user.bankID as string} label="БИК" />
+          <UserInfoBlock
+            label="Корр. счет"
+            info={user.correspondingAccount as string}
+          />
         </>
       ) : (
         <Text variant="bodySRegular" color={theme.text.neutral}>

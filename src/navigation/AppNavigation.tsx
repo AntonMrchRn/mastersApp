@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackHeaderProps,
+} from '@react-navigation/stack';
 
 import Header from '@/components/Header';
 import { useCheckLogin } from '@/hooks/useCheckLogin';
@@ -136,6 +139,43 @@ export const AppNavigation = () => {
     }, 1000);
   }, []);
 
+  const headerContractorsScreen = (props: StackHeaderProps) => (
+    <Header {...props} title="Подрядчики" />
+  );
+  const headerCommentsChatScreen = (props: StackHeaderProps) => (
+    <Header {...props} title="Чат" />
+  );
+  const headerEstimateEditScreen = (props: StackHeaderProps) => (
+    <Header {...props} title="Редактирование сметы" />
+  );
+  const headerEstimateAddMaterialScreen = (props: StackHeaderProps) => (
+    <Header {...props} title="Новый материал" />
+  );
+  const headerEstimateAddServiceScreen = (props: StackHeaderProps) => (
+    <Header {...props} title="Новая услуга" />
+  );
+  const headerCandidateEstimatesScreen = (props: StackHeaderProps) => (
+    <Header {...props} title="Сметы кандидатов" />
+  );
+  const headerEstimateSubmissionScreen = (props: StackHeaderProps) => (
+    <Header
+      {...props}
+      title={
+        (
+          props.route
+            .params as AppStackParamList[AppScreenName.EstimateSubmission]
+        )?.isEdit
+          ? 'Редактирование сметы'
+          : 'Подача сметы'
+      }
+    />
+  );
+  const headerNewMaterialScreen = (props: StackHeaderProps) => (
+    <Header {...props} title={'Новый материал'} />
+  );
+  const headerWebViewScreen = (props: StackHeaderProps) => (
+    <Header {...props} title={''} />
+  );
   return (
     <Stack.Navigator screenOptions={screenOptions}>
       {isAuth ? (
@@ -155,7 +195,7 @@ export const AppNavigation = () => {
                 component={ContractorsScreen}
                 options={{
                   headerShown: true,
-                  header: props => <Header {...props} title="Подрядчики" />,
+                  header: headerContractorsScreen,
                 }}
               />
               <Stack.Screen
@@ -163,7 +203,7 @@ export const AppNavigation = () => {
                 component={CommentsChatScreen}
                 options={{
                   headerShown: true,
-                  header: props => <Header {...props} title={'Чат'} />,
+                  header: headerCommentsChatScreen,
                 }}
               />
               <Stack.Screen
@@ -171,9 +211,7 @@ export const AppNavigation = () => {
                 component={EstimateEditScreen}
                 options={{
                   headerShown: true,
-                  header: props => (
-                    <Header {...props} title={'Редактирование сметы'} />
-                  ),
+                  header: headerEstimateEditScreen,
                 }}
               />
               <Stack.Screen
@@ -181,9 +219,7 @@ export const AppNavigation = () => {
                 component={EstimateAddMaterialScreen}
                 options={{
                   headerShown: true,
-                  header: props => (
-                    <Header {...props} title={'Новый материал'} />
-                  ),
+                  header: headerEstimateAddMaterialScreen,
                 }}
               />
               <Stack.Screen
@@ -191,7 +227,7 @@ export const AppNavigation = () => {
                 component={EstimateAddServiceScreen}
                 options={{
                   headerShown: true,
-                  header: props => <Header {...props} title={'Новая услуга'} />,
+                  header: headerEstimateAddServiceScreen,
                 }}
               />
               <Stack.Screen
@@ -199,9 +235,7 @@ export const AppNavigation = () => {
                 component={CandidateEstimatesScreen}
                 options={{
                   headerShown: true,
-                  header: props => (
-                    <Header {...props} title={'Сметы кандидатов'} />
-                  ),
+                  header: headerCandidateEstimatesScreen,
                 }}
               />
               <Stack.Screen
@@ -209,19 +243,7 @@ export const AppNavigation = () => {
                 component={EstimateSubmissionScreen}
                 options={{
                   headerShown: true,
-                  header: props => (
-                    <Header
-                      {...props}
-                      title={
-                        (
-                          props.route
-                            .params as AppStackParamList[AppScreenName.EstimateSubmission]
-                        )?.isEdit
-                          ? 'Редактирование сметы'
-                          : 'Подача сметы'
-                      }
-                    />
-                  ),
+                  header: headerEstimateSubmissionScreen,
                 }}
               />
               <Stack.Screen
@@ -229,9 +251,7 @@ export const AppNavigation = () => {
                 component={NewMaterialScreen}
                 options={{
                   headerShown: true,
-                  header: props => (
-                    <Header {...props} title={'Новый материал'} />
-                  ),
+                  header: headerNewMaterialScreen,
                 }}
               />
               <Stack.Screen
@@ -270,7 +290,7 @@ export const AppNavigation = () => {
         component={WebViewScreen}
         options={{
           headerShown: true,
-          header: props => <Header {...props} title={''} />,
+          header: headerWebViewScreen,
         }}
       />
     </Stack.Navigator>

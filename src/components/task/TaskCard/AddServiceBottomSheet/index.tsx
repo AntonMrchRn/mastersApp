@@ -200,5 +200,5 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
         </BottomSheetModal>
       </>
     );
-  }
+  },
 );

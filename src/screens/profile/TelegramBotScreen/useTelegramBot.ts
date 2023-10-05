@@ -79,7 +79,7 @@ const useTelegramBot = () => {
         });
       }
     },
-    [params?.tgBotTag]
+    [params?.tgBotTag],
   );
 
   const onConnect = async () => {

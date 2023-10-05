@@ -37,7 +37,7 @@ const useRegions = (regionIDs: number[] | undefined, isContractor = false) => {
             ? `${convertedRegions} ${region.name},`
             : `${convertedRegions} ${region.name}`
           : `${array[0]?.name}, + еще ${array.length - 1}`,
-      ''
+      '',
     )
     .trim();
 

@@ -18,7 +18,7 @@ const actionByFileType: Record<
 
 export const checkFilesOnDevice = async (
   files: File[],
-  fileType: 'task' | 'user' = 'task'
+  fileType: 'task' | 'user' = 'task',
 ) => {
   const filesOnDevice = await Promise.all(files.map(hasOnDevice)).then(res =>
     res.reduce(
@@ -26,8 +26,8 @@ export const checkFilesOnDevice = async (
         ...total,
         [file.fileID]: file.onDevice,
       }),
-      {} as { [index: number]: boolean }
-    )
+      {} as { [index: number]: boolean },
+    ),
   );
   dispatch(actionByFileType[fileType](filesOnDevice));
 };

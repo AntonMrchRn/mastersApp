@@ -23,7 +23,7 @@ import { accountDeletionPasswordValidationSchema } from '@/utils/formValidation'
 
 const useAccountDeletion = (
   navigation: AccountDeletionScreenNavigationProp,
-  { params }: AccountDeletionScreenRoute
+  { params }: AccountDeletionScreenRoute,
 ) => {
   const isFocused = useIsFocused();
   const insets = useSafeAreaInsets();

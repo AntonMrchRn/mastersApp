@@ -37,7 +37,7 @@ export const UploadProgress = ({
                   progress.files.length,
                   '%d файл',
                   '%d файла',
-                  '%d файлов'
+                  '%d файлов',
                 )}
               </Text>
               <TouchableOpacity onPress={() => controllers?.[date]?.abort()}>

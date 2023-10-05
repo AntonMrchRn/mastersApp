@@ -23,7 +23,7 @@ const ActivityTab = ({ user, isTeamVisible }: ActivityTabProps) => {
   const { activities, convertedActivities, isActivitiesLoading } =
     useActivities(user.setIDs);
   const { regions, convertedRegions, isRegionsLoading } = useRegions(
-    user.regionIDs
+    user.regionIDs,
   );
 
   const [isActivitiesModalVisible, setIsActivitiesModalVisible] =

@@ -139,7 +139,7 @@ export const UploadBottomSheet = ({
       return isImage && (configApp.android || isImageTakenOnThisIOS)
         ? fixImageRotation(
             resp as Image,
-            configApp.android ? quality : undefined
+            configApp.android ? quality : undefined,
           )
         : resp;
     });
@@ -173,7 +173,7 @@ export const UploadBottomSheet = ({
       const { sizes, files, names } = fillFormData(
         formData,
         result,
-        actionType
+        actionType,
       );
       onClose();
       const check = checkSizes({

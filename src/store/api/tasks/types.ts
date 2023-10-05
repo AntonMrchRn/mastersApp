@@ -324,7 +324,7 @@ type GetTaskStatusesResponse = [
     code: 'closed';
     description: 'Закрыто';
     tableName: 'task_status';
-  }
+  },
 ];
 type ServicesCategory = {
   ID: number;
