@@ -28,12 +28,12 @@ export const fixImageRotation = async (response: Image, quality?: number) => {
 
   try {
     const correctlyRotatedImageResponse = await ImageResizer.createResizedImage(
-      configApp.ios ? sourceURL! : path,
+      configApp.ios ? (sourceURL as string) : path,
       width / COMPRESS_COEFFICIENT,
       height / COMPRESS_COEFFICIENT,
       format,
       quality ? quality * 100 : 100,
-      rotation
+      rotation,
     );
 
     return {

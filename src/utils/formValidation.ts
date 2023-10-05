@@ -120,11 +120,11 @@ const bankDetailsValidation = (isCompany: boolean) => ({
 const itinValidation = (isCompany = false) => ({
   ITIN: Yup.string()
     .required(
-      `Укажите ${isCompany ? 10 : 12}-значный номер ИНН в цифровом формате`
+      `Укажите ${isCompany ? 10 : 12}-значный номер ИНН в цифровом формате`,
     )
     .length(
       isCompany ? 10 : 12,
-      `Укажите ${isCompany ? 10 : 12}-значный номер ИНН в цифровом формате`
+      `Укажите ${isCompany ? 10 : 12}-значный номер ИНН в цифровом формате`,
     ),
 });
 const entityNameValidation = {
@@ -151,7 +151,7 @@ const accountDeletionPasswordValidation = {
 const cancelTaskValidationSchema = (withReason: boolean) =>
   Yup.object().shape(cancelTaskValidation(withReason));
 const estimateCountValidationSchema = Yup.object().shape(
-  estimateCountValidation
+  estimateCountValidation,
 );
 const estimateAddMaterialValidationSchema = (isInternalExecutor: boolean) =>
   Yup.object().shape(estimateAddMaterialValidation(isInternalExecutor));
@@ -162,19 +162,19 @@ const phoneValidationSchema = Yup.object().shape(phoneValidation);
 const emailValidationSchema = Yup.object().shape(emailValidation);
 const codeValidationSchema = Yup.object().shape(codeValidation);
 const signInWithPhoneValidationSchema = Yup.object().shape(
-  signInWithPhoneValidation
+  signInWithPhoneValidation,
 );
 const signInWithEmailValidationSchema = Yup.object().shape(
-  signInWithEmailValidation
+  signInWithEmailValidation,
 );
 const recoveryPhoneValidationSchema = Yup.object().shape(
-  recoveryPhoneValidation
+  recoveryPhoneValidation,
 );
 const recoveryEmailValidationSchema = Yup.object().shape(
-  recoveryEmailValidation
+  recoveryEmailValidation,
 );
 const recoveryConfirmationValidationSchema = Yup.object().shape(
-  recoveryConfirmationValidation
+  recoveryConfirmationValidation,
 );
 
 const personalDataValidationSchema = Yup.object().shape(personalDataValidation);
@@ -194,10 +194,10 @@ const companyEntityValidationSchema = Yup.object().shape({
 });
 const entityNameValidationSchema = Yup.object().shape(entityNameValidation);
 const changePasswordValidationSchema = Yup.object().shape(
-  changePasswordValidation
+  changePasswordValidation,
 );
 const accountDeletionPasswordValidationSchema = Yup.object().shape(
-  accountDeletionPasswordValidation
+  accountDeletionPasswordValidation,
 );
 
 export {

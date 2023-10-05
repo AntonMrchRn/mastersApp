@@ -47,7 +47,7 @@ const useTeamMemberDetails = () => {
   const onModal = () => setIsModalVisible(!isModalVisible);
 
   const undeletedContractorIDs = params.contractorIDs.filter(
-    id => id !== member?.ID
+    id => id !== member?.ID,
   );
 
   return {

@@ -39,7 +39,7 @@ const TeamMemberDeletionModal = ({
         ? undeletedContractorIDs?.length
           ? { subcontractorIDs: undeletedContractorIDs }
           : { kickSubs: true }
-        : { kickCurator: true }
+        : { kickCurator: true },
     );
   };
 

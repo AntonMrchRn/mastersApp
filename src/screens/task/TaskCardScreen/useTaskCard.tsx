@@ -523,7 +523,10 @@ export const useTaskCard = ({
     return setSubmissionModalVisible(true);
   };
 
-  const onSubmissionModalClose = () => setSubmissionModalVisible(false);
+  const onSubmissionModalClose = () => {
+    setSubmissionModalVisible(false);
+    setSubmissionByCurator(false);
+  };
 
   const navigateToChat = () => {
     const recipientIDs = executors

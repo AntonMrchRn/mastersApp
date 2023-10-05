@@ -71,7 +71,7 @@ const TimerComponent = ({
       {!!timerOffset && (
         <Text style={styles.timer}>
           {`${message} (${timeFormat(
-            timerOffset + expiredTimer - timeMilliSeconds
+            timerOffset + expiredTimer - timeMilliSeconds,
           )})`}
         </Text>
       )}

@@ -50,7 +50,7 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
   const dispatch = useAppDispatch();
 
   const [selectedTabId, setSelectedTabId] = useState<TaskSetType>(
-    TaskSetType.COMMON
+    TaskSetType.COMMON,
   );
   const {
     data = [],
@@ -111,7 +111,7 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
     if (regionIDs && regionIDs?.length) {
       abort && abort();
       const ex = dispatch(
-        refreshTasks({ idList: selectedTabId, regionID: regionIDs })
+        refreshTasks({ idList: selectedTabId, regionID: regionIDs }),
       );
       abort = ex.abort;
     }
@@ -124,7 +124,7 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
           idList: selectedTabId,
           fromTask: data?.length,
           regionID: regionIDs,
-        })
+        }),
       );
     }
   };

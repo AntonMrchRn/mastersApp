@@ -41,7 +41,7 @@ type RegionsModalProps = {
 const RegionsModal = forwardRef(
   (
     { userId, onClose, regions, userRegionIDs }: RegionsModalProps,
-    ref: ForwardedRef<BottomSheetModalMethods>
+    ref: ForwardedRef<BottomSheetModalMethods>,
   ) => {
     const theme = useTheme();
     const insets = useSafeAreaInsets();
@@ -50,17 +50,17 @@ const RegionsModal = forwardRef(
       useEditUserMutation();
 
     const initialSelectedRegions = regions.filter(region =>
-      userRegionIDs.includes(region.ID)
+      userRegionIDs.includes(region.ID),
     );
     const [selectedRegions, setSelectedRegions] = useState<Region[]>(
-      initialSelectedRegions
+      initialSelectedRegions,
     );
     const [filter, setFilter] = useState<string>('');
     const debouncedFilter = useDebounce(filter, 500);
     const { isDirty, isChecked, selectedIDs, onSelectValue } = useModal(
       userRegionIDs,
       selectedRegions,
-      setSelectedRegions
+      setSelectedRegions,
     );
 
     useEffect(() => {
@@ -82,7 +82,7 @@ const RegionsModal = forwardRef(
     const keyExtractor = (item: Region) => `${item.ID}`;
     const onChangeText = useCallback(
       (text: string) => setFilter(text),
-      [filter]
+      [filter],
     );
     const filterData = (region: Region) =>
       region.name.toLowerCase().includes(debouncedFilter.toLowerCase().trim());
@@ -177,7 +177,7 @@ const RegionsModal = forwardRef(
         </>
       </BottomSheetModal>
     );
-  }
+  },
 );
 
 export default RegionsModal;

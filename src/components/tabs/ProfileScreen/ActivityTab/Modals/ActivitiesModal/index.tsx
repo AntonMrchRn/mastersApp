@@ -27,17 +27,17 @@ const ActivitiesModal = ({
 }: ActivitiesModal) => {
   const toast = useToast();
   const initialSelectedActivities = activities.filter(activity =>
-    userActivityIDs.includes(activity.ID)
+    userActivityIDs.includes(activity.ID),
   );
   const [selectedActivities, setSelectedActivities] = useState<Activity[]>(
-    initialSelectedActivities
+    initialSelectedActivities,
   );
   const [editUserActivities, { isSuccess, isLoading, isError, error }] =
     useEditUserMutation();
   const { isDirty, isChecked, selectedIDs, onSelectValue } = useModal(
     userActivityIDs,
     selectedActivities,
-    setSelectedActivities
+    setSelectedActivities,
   );
 
   useEffect(() => {

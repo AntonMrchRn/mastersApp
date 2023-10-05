@@ -42,7 +42,7 @@ export const ContractorsScreen = ({
     taskId,
     curatorId,
     isInvitedCurator,
-    curatorMemberId
+    curatorMemberId,
   );
 
   const renderItem = ({ item: contractor }: ListRenderItemInfo<User>) => (

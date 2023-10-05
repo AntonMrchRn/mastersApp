@@ -91,7 +91,7 @@ const useRecovery = () => {
       const jsonValue = JSON.stringify(timeout);
       await AsyncStorage.setItem(
         isPhoneAuth ? 'authPhoneTimeout' : 'authEmailTimeout',
-        jsonValue
+        jsonValue,
       );
       isPhoneAuth
         ? dispatch(setAuthPhoneTimeout(timeout))

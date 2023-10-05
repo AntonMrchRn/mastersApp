@@ -7,11 +7,11 @@ import WarningCircleIcon from '@/assets/icons/svg/screens/WarningCircleIcon';
 
 import styles from './style';
 
-type DeletionInfoBlock = {
+type DeletionInfoBlockProps = {
   text: string;
 };
 
-export const DeletionInfoBlock = ({ text }: DeletionInfoBlock) => {
+export const DeletionInfoBlock = ({ text }: DeletionInfoBlockProps) => {
   const theme = useTheme();
 
   return (

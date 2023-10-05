@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { GetTaskResponse } from '@/store/api/tasks/types';
 import { Error } from '@/types/error';
 
 import {
@@ -12,7 +13,7 @@ import {
 import { GetSendResponse, InitialState } from './types';
 
 const initialState: InitialState = {
-  list: {},
+  list: undefined,
   data: [],
   tableNames: [],
   comments: {},
@@ -58,14 +59,14 @@ const taskSearch = createSlice({
     });
     builder.addCase(
       getMyTasks.fulfilled,
-      (state, { payload }: PayloadAction<InitialState['list']>) => {
+      (state, { payload }: PayloadAction<GetTaskResponse>) => {
         state.list = payload;
         state.data = payload.tasks?.length
           ? state.data?.concat(<[]>payload.tasks)
           : state.data;
 
         state.loadingEndReached = false;
-      }
+      },
     );
     builder.addCase(getMyTasks.rejected, (state, { payload }) => {
       state.errorList = payload as Error;
@@ -80,9 +81,9 @@ const taskSearch = createSlice({
       refreshMyTasks.fulfilled,
       (state, { payload }: PayloadAction<InitialState['list']>) => {
         state.list = payload;
-        state.data = payload.tasks;
+        state.data = payload?.tasks;
         state.loadingList = false;
-      }
+      },
     );
     builder.addCase(refreshMyTasks.rejected, (state, { payload }) => {
       state.errorList = payload as Error;
@@ -98,7 +99,7 @@ const taskSearch = createSlice({
       (state, { payload }: PayloadAction<InitialState['comments']>) => {
         state.comments = payload;
         state.loadingComments = false;
-      }
+      },
     );
     builder.addCase(getComments.rejected, (state, { payload }) => {
       state.comments.taskComment = [];
@@ -114,7 +115,7 @@ const taskSearch = createSlice({
       (state, { payload }: PayloadAction<InitialState['comments']>) => {
         state.commentsPreview.taskComment = payload.taskComment?.reverse();
         state.loadingCommentsPreview = false;
-      }
+      },
     );
     builder.addCase(getCommentsPreview.rejected, (state, { payload }) => {
       state.errorCommentsPreview = payload as Error;
@@ -130,7 +131,7 @@ const taskSearch = createSlice({
         state.comments.taskComment &&
           state.comments.taskComment.unshift(payload);
         state.loadingSend = false;
-      }
+      },
     );
     builder.addCase(sendMessage.rejected, (state, { payload }) => {
       state.errorComments = payload as Error;

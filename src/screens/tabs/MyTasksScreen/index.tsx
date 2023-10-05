@@ -49,10 +49,11 @@ const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
     data = [],
     loadingList,
     errorList,
-    list: { mobileCounts = [] },
+    list,
   } = useAppSelector(state => state.myTasks);
+  const mobileCounts = list?.mobileCounts || [];
   const [selectedTabID, setSelectedTabID] = useState(
-    mobileCounts?.[0]?.id || 1
+    mobileCounts?.[0]?.id || 1,
   );
 
   const { user: authUser } = useAppSelector(selectAuth);
@@ -81,7 +82,7 @@ const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
             idList: selectedTabID,
             fromTask: data?.length,
             regionID,
-          })
+          }),
         )
       : null;
   }, [data]);
@@ -94,7 +95,7 @@ const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
           idList: item.id,
           fromTask: 0,
           regionID,
-        })
+        }),
       );
       setSelectedTabID(item.id);
     }

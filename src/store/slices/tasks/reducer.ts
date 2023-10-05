@@ -44,7 +44,7 @@ const tasks = createSlice({
           }
           return acc.concat(val);
         },
-        []
+        [],
       );
     },
     addServiceLocalCount: (state, { payload }) => {
@@ -55,7 +55,7 @@ const tasks = createSlice({
           }
           return acc.concat(val);
         },
-        []
+        [],
       );
     },
     addMaterialLocalPrice: (state, { payload }) => {
@@ -72,13 +72,13 @@ const tasks = createSlice({
                 }
                 return matAcc.concat(matVal);
               },
-              []
+              [],
             );
             return acc.concat({ ...val, materials: newMaterials });
           }
           return acc.concat(val);
         },
-        []
+        [],
       );
     },
     addMaterialLocalCount: (state, { payload }) => {
@@ -95,13 +95,13 @@ const tasks = createSlice({
                 }
                 return matAcc.concat(matVal);
               },
-              []
+              [],
             );
             return acc.concat({ ...val, materials: newMaterials });
           }
           return acc.concat(val);
         },
-        []
+        [],
       );
     },
     setOfferComment: (state, { payload }) => {

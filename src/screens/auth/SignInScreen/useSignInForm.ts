@@ -25,7 +25,7 @@ const useSignInForm = (isPhoneAuth: boolean) => {
     resolver: yupResolver<SignInFormValues>(
       isPhoneAuth
         ? signInWithPhoneValidationSchema
-        : signInWithEmailValidationSchema
+        : signInWithEmailValidationSchema,
     ),
     mode: 'onChange',
   });
