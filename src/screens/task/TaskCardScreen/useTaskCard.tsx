@@ -314,10 +314,11 @@ export const useTaskCard = ({
   const isContractor = !!executor?.hasCurator && !isRefusedExecutor;
   const isExecutor = !!executor && !executor.hasCurator && !isRefusedExecutor;
   const isCoordinator = coordinator?.ID === user?.userID;
-  const isSupervisor = user?.roleID === RoleType.SUPERVISOR;
+  const isSupervisor = getUserQuery.data?.roleID === RoleType.SUPERVISOR;
   const isCurator =
     curators.some(curator => curator.ID === user?.userID) && !curator?.isRefuse;
-  const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
+  const isInternalExecutor =
+    getUserQuery.data?.roleID === RoleType.INTERNAL_EXECUTOR;
   /**
    * Принял ли задачу куратор
    */
@@ -352,11 +353,11 @@ export const useTaskCard = ({
 
   const { data: contractors } = useGetAvailableContractorsQuery(
     {
-      curatorId: user?.userID as number,
+      curatorId: getUserQuery.data?.roleID as number,
       taskId,
     },
     {
-      skip: !user?.userID || !taskId,
+      skip: !getUserQuery.data?.roleID || !taskId,
     },
   );
 
