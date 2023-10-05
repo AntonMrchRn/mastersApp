@@ -17,6 +17,7 @@ import { BottomTabName } from '@/navigation/TabNavigation';
 import { axiosInstance } from '@/services/axios/axiosInstance';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
+  tasksAPI,
   useDeleteITTaskMemberMutation,
   useDeleteOffersMutation,
   useGetAnotherOffersQuery,
@@ -314,10 +315,11 @@ export const useTaskCard = ({
   const isContractor = !!executor?.hasCurator && !isRefusedExecutor;
   const isExecutor = !!executor && !executor.hasCurator && !isRefusedExecutor;
   const isCoordinator = coordinator?.ID === user?.userID;
-  const isSupervisor = user?.roleID === RoleType.SUPERVISOR;
+  const isSupervisor = getUserQuery.data?.roleID === RoleType.SUPERVISOR;
   const isCurator =
     curators.some(curator => curator.ID === user?.userID) && !curator?.isRefuse;
-  const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
+  const isInternalExecutor =
+    getUserQuery.data?.roleID === RoleType.INTERNAL_EXECUTOR;
   /**
    * Принял ли задачу куратор
    */
@@ -352,11 +354,11 @@ export const useTaskCard = ({
 
   const { data: contractors } = useGetAvailableContractorsQuery(
     {
-      curatorId: user?.userID as number,
+      curatorId: getUserQuery.data?.roleID as number,
       taskId,
     },
     {
-      skip: !user?.userID || !taskId,
+      skip: !getUserQuery.data?.roleID || !taskId,
     },
   );
 
@@ -436,6 +438,45 @@ export const useTaskCard = ({
     statusID === StatusType.ACTIVE &&
     !!userOffersData.length;
 
+  const refresh = () => {
+    dispatch(
+      tasksAPI.endpoints.getTask.initiate(taskId, {
+        forceRefetch: true,
+      }),
+    );
+    dispatch(
+      tasksAPI.endpoints.getTaskHistory.initiate(taskId, {
+        forceRefetch: true,
+      }),
+    );
+    dispatch(
+      getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'desc' }),
+    );
+    if (!isSkipTask) {
+      dispatch(
+        tasksAPI.endpoints.getUserOffers.initiate(
+          {
+            taskID: taskId,
+            userID: user?.userID as number,
+          },
+          {
+            forceRefetch: true,
+          },
+        ),
+      );
+      dispatch(
+        tasksAPI.endpoints.getAnotherOffers.initiate(
+          {
+            taskID: taskId,
+            userID: user?.userID as number,
+          },
+          {
+            forceRefetch: true,
+          },
+        ),
+      );
+    }
+  };
   const onRefresh = () => {
     refetch();
     dispatch(
@@ -447,7 +488,8 @@ export const useTaskCard = ({
       getAnotherOffers.refetch();
     }
   };
-  useTaskSSE({ taskId, refresh: onRefresh });
+
+  useTaskSSE({ taskId, refresh });
 
   const onUploadLimitBannerVisible = () => {
     setUploadLimitBannerVisible(!uploadLimitBannerVisible);
