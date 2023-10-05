@@ -113,6 +113,8 @@ export const CandidateEstimatesScreen = ({
           <ActivityIndicator size="large" />
         ) : (
           <Animated.FlatList
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             ref={ref}
             pagingEnabled
             horizontal

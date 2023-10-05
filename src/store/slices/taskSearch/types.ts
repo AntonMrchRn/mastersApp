@@ -2,7 +2,7 @@ import { GetTaskResponse, Task } from '@/store/api/tasks/types';
 import { Error } from '@/types/error';
 
 type InitialState = {
-  list: GetTaskResponse;
+  list: GetTaskResponse | undefined;
   data?: Task[];
   tableNames: [];
   loadingNames: boolean;

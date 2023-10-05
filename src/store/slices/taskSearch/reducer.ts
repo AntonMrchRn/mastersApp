@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { GetTaskResponse } from '@/store/api/tasks/types';
 import { Error } from '@/types/error';
 
 import { getSearchTasks, refreshTasks } from './asyncActions';
 import { InitialState } from './types';
 
 const initialState: InitialState = {
-  list: {},
+  list: undefined,
   data: [],
   tableNames: [],
   loadingNames: false,
@@ -31,14 +32,14 @@ const myTasks = createSlice({
     });
     builder.addCase(
       getSearchTasks.fulfilled,
-      (state, { payload }: PayloadAction<InitialState['list']>) => {
+      (state, { payload }: PayloadAction<GetTaskResponse>) => {
         state.list = payload;
         state.data = payload.tasks?.length
           ? state.data?.concat(<[]>payload.tasks)
           : state.data;
 
         state.loadingList = state.loadingList - 1;
-      }
+      },
     );
     builder.addCase(getSearchTasks.rejected, (state, { payload }) => {
       state.errorList = payload as Error;
@@ -53,9 +54,9 @@ const myTasks = createSlice({
       refreshTasks.fulfilled,
       (state, { payload }: PayloadAction<InitialState['list']>) => {
         state.list = payload;
-        state.data = payload.tasks;
+        state.data = payload?.tasks;
         state.loadingList = state.loadingList - 1;
-      }
+      },
     );
     builder.addCase(refreshTasks.rejected, (state, { payload }) => {
       state.errorList = payload as Error;
