@@ -12,7 +12,7 @@ import PreviewNotFound, {
 import { useAppSelector } from '@/store';
 import { selectTasks } from '@/store/slices/tasks/selectors';
 import { File } from '@/types/fileManager';
-import { StatusType, TaskType } from '@/types/task';
+import { StatusType } from '@/types/task';
 
 import { controllers } from '.';
 
@@ -26,7 +26,6 @@ type ContentProps = {
   toClose: boolean | undefined;
   statusID: StatusType | undefined;
   isCurator: boolean;
-  subsetID: TaskType | undefined;
   isContractor: boolean;
   isInternalExecutor: boolean;
 };
@@ -38,7 +37,6 @@ export const Content: FC<ContentProps> = ({
   toClose,
   statusID,
   isCurator,
-  subsetID,
   isContractor,
   isInternalExecutor,
 }) => {
@@ -52,282 +50,166 @@ export const Content: FC<ContentProps> = ({
       StatusType.CLOSED,
     ].includes(statusID);
 
-  const UploadedFiles = (
+  //если нет загруженных файлов
+  //и нет закрывающих документов
+  //и статус не К закрытию
+  //и если пользователь куратор или если статус Закрыто, Отменено исполнителем или Отменено заказчиком
+  if (
+    !reportFiles.length &&
+    !closureFiles.length &&
+    !toClose &&
+    (isCurator ||
+      (statusID &&
+        [
+          StatusType.CLOSED,
+          StatusType.CANCELLED_BY_EXECUTOR,
+          StatusType.CANCELLED_BY_CUSTOMER,
+        ].includes(statusID)))
+  ) {
+    return <PreviewNotFound type={PreviewNotFoundType.NoFiles} />;
+  }
+  return (
     <View>
       <Text variant="title3" color={theme.text.basic}>
         Загруженные файлы
       </Text>
-      <View style={styles.mt24}>
-        {reportFiles.length ? (
+      {reportFiles.length ? (
+        <View style={styles.mt24}>
           <DownloadManager
             files={reportFiles}
             onDelete={onDelete}
             canDelete={canDelete}
             uploadedFileIDs={uploadedFileIDs}
           />
-        ) : (
-          <>
-            <View style={styles.download}>
-              <DownloadFilesIcon />
-              <Text
-                variant="bodySRegular"
-                style={styles.desc}
-                color={theme.text.neutral}
-              >
-                Загрузите файлы, подтверждающие выполнение услуг общим размером
-                не более 250 МВ
-              </Text>
-            </View>
-          </>
-        )}
-        <UploadProgress
-          controllers={controllers}
-          progressesSelector={progressesSelector}
-        />
-      </View>
-    </View>
-  );
-
-  const DefaultUploadFiles = (
-    <>
-      {reportFiles.length || closureFiles.length ? (
-        <View>
+          {statusID === StatusType.WORK && (
+            <UploadProgress
+              controllers={controllers}
+              progressesSelector={progressesSelector}
+            />
+          )}
+        </View>
+      ) : (
+        <>
+          {statusID &&
+          [
+            StatusType.WORK,
+            StatusType.SUMMARIZING,
+            StatusType.MATCHING,
+            StatusType.RETURNED,
+          ].includes(statusID) &&
+          !toClose &&
+          !isCurator ? (
+            <>
+              <Spacer size="xl" />
+              <View style={styles.download}>
+                <DownloadFilesIcon />
+                <Text
+                  variant="bodySRegular"
+                  style={styles.desc}
+                  color={theme.text.neutral}
+                >
+                  Загрузите файлы, подтверждающие выполнение услуг общим
+                  размером не более 250 МВ
+                </Text>
+              </View>
+            </>
+          ) : (
+            <Text
+              variant="bodySRegular"
+              color={theme.text.neutral}
+              style={styles.mt8}
+            >
+              Файлов нет
+            </Text>
+          )}
+          {statusID &&
+            [
+              StatusType.WORK,
+              StatusType.SUMMARIZING,
+              StatusType.MATCHING,
+              StatusType.RETURNED,
+            ].includes(statusID) && (
+              <UploadProgress
+                controllers={controllers}
+                progressesSelector={progressesSelector}
+              />
+            )}
+        </>
+      )}
+      {!isContractor && !isInternalExecutor && (
+        <View style={styles.mt36}>
           <Text variant="title3" color={theme.text.basic}>
-            Загруженные файлы
+            Закрывающие документы
           </Text>
-          <View style={styles.mt24}>
-            {reportFiles.length ? (
+          <View style={{ marginTop: closureFiles.length ? 24 : 8 }}>
+            {closureFiles.length ? (
               <>
                 <DownloadManager
-                  files={reportFiles}
-                  onDelete={onDelete}
                   canDelete={canDelete}
+                  files={closureFiles}
+                  onDelete={onDelete}
                   uploadedFileIDs={uploadedFileIDs}
                 />
-                <UploadProgress
-                  controllers={controllers}
-                  progressesSelector={progressesSelector}
-                />
+                {!!statusID &&
+                  ![
+                    StatusType.WORK,
+                    StatusType.MATCHING,
+                    StatusType.SUMMARIZING,
+                    StatusType.RETURNED,
+                  ].includes(statusID) && (
+                    <UploadProgress
+                      controllers={controllers}
+                      progressesSelector={progressesSelector}
+                    />
+                  )}
               </>
             ) : (
-              <Text
-                variant="bodySRegular"
-                style={styles.mt8}
-                color={theme.text.neutral}
-              >
-                Пока здесь ничего нет
-              </Text>
+              <>
+                <View style={styles.download}>
+                  {!!statusID &&
+                    ![
+                      StatusType.WORK,
+                      StatusType.SUMMARIZING,
+                      StatusType.CLOSED,
+                      StatusType.CANCELLED_BY_CUSTOMER,
+                      StatusType.CANCELLED_BY_EXECUTOR,
+                    ].includes(statusID) && <DownloadFilesIcon />}
+                  <Text
+                    variant="bodySRegular"
+                    style={styles.desc}
+                    color={theme.text.neutral}
+                  >
+                    {!!statusID &&
+                    ![
+                      StatusType.WORK,
+                      StatusType.MATCHING,
+                      StatusType.SUMMARIZING,
+                      StatusType.RETURNED,
+                      StatusType.CLOSED,
+                      StatusType.CANCELLED_BY_CUSTOMER,
+                      StatusType.CANCELLED_BY_EXECUTOR,
+                    ].includes(statusID)
+                      ? 'Загрузите чеки или иные финансовые документы общим размером не более 250 МВ'
+                      : 'Пока здесь ничего нет'}
+                  </Text>
+                </View>
+                {!!statusID &&
+                  ![
+                    StatusType.WORK,
+                    StatusType.MATCHING,
+                    StatusType.SUMMARIZING,
+                    StatusType.RETURNED,
+                  ].includes(statusID) && (
+                    <UploadProgress
+                      controllers={controllers}
+                      progressesSelector={progressesSelector}
+                    />
+                  )}
+              </>
             )}
           </View>
         </View>
-      ) : (
-        <PreviewNotFound type={PreviewNotFoundType.NoFiles} />
       )}
-    </>
+    </View>
   );
-
-  const AllFiles = (
-    <>
-      {!reportFiles.length &&
-      !closureFiles.length &&
-      !toClose &&
-      (isCurator ||
-        (statusID &&
-          [
-            StatusType.CLOSED,
-            StatusType.CANCELLED_BY_EXECUTOR,
-            StatusType.CANCELLED_BY_CUSTOMER,
-          ].includes(statusID))) ? (
-        <PreviewNotFound type={PreviewNotFoundType.NoFiles} />
-      ) : (
-        <View>
-          <Text variant="title3" color={theme.text.basic}>
-            Загруженные файлы
-          </Text>
-          {reportFiles.length ? (
-            <View style={styles.mt24}>
-              <DownloadManager
-                files={reportFiles}
-                onDelete={onDelete}
-                canDelete={canDelete}
-                uploadedFileIDs={uploadedFileIDs}
-              />
-              {statusID === StatusType.WORK && (
-                <UploadProgress
-                  controllers={controllers}
-                  progressesSelector={progressesSelector}
-                />
-              )}
-            </View>
-          ) : (
-            <>
-              {statusID &&
-              [
-                StatusType.WORK,
-                StatusType.SUMMARIZING,
-                StatusType.MATCHING,
-                StatusType.RETURNED,
-              ].includes(statusID) ? (
-                subsetID &&
-                ([
-                  TaskType.IT_AUCTION_SALE,
-                  TaskType.IT_FIRST_RESPONSE,
-                ].includes(subsetID) &&
-                !toClose &&
-                !isCurator ? (
-                  <>
-                    <Spacer size="xl" />
-                    <View style={styles.download}>
-                      <DownloadFilesIcon />
-                      <Text
-                        variant="bodySRegular"
-                        style={styles.desc}
-                        color={theme.text.neutral}
-                      >
-                        Загрузите файлы, подтверждающие выполнение услуг общим
-                        размером не более 250 МВ
-                      </Text>
-                    </View>
-                  </>
-                ) : (
-                  <Text
-                    variant="bodySRegular"
-                    color={theme.text.neutral}
-                    style={styles.mt8}
-                  >
-                    Загрузите чеки или иные финансовые документы общим размером
-                    не более 250 МВ
-                  </Text>
-                ))
-              ) : (
-                <Text
-                  variant="bodySRegular"
-                  color={theme.text.neutral}
-                  style={styles.mt8}
-                >
-                  Файлов нет
-                </Text>
-              )}
-              {statusID &&
-                [
-                  StatusType.WORK,
-                  StatusType.SUMMARIZING,
-                  StatusType.MATCHING,
-                  StatusType.RETURNED,
-                ].includes(statusID) && (
-                  <UploadProgress
-                    controllers={controllers}
-                    progressesSelector={progressesSelector}
-                  />
-                )}
-            </>
-          )}
-          {!isContractor && !isInternalExecutor && (
-            <View style={styles.mt36}>
-              <Text variant="title3" color={theme.text.basic}>
-                Закрывающие документы
-              </Text>
-              <View style={{ marginTop: closureFiles.length ? 24 : 8 }}>
-                {closureFiles.length ? (
-                  <>
-                    <DownloadManager
-                      canDelete={canDelete}
-                      files={closureFiles}
-                      onDelete={onDelete}
-                      uploadedFileIDs={uploadedFileIDs}
-                    />
-                    {!!statusID &&
-                      ![
-                        StatusType.WORK,
-                        StatusType.MATCHING,
-                        StatusType.SUMMARIZING,
-                        StatusType.RETURNED,
-                      ].includes(statusID) && (
-                        <UploadProgress
-                          controllers={controllers}
-                          progressesSelector={progressesSelector}
-                        />
-                      )}
-                  </>
-                ) : (
-                  <>
-                    <View style={styles.download}>
-                      {!!statusID &&
-                        ![
-                          StatusType.WORK,
-                          StatusType.SUMMARIZING,
-                          StatusType.CLOSED,
-                          StatusType.CANCELLED_BY_CUSTOMER,
-                          StatusType.CANCELLED_BY_EXECUTOR,
-                        ].includes(statusID) && <DownloadFilesIcon />}
-                      <Text
-                        variant="bodySRegular"
-                        style={styles.desc}
-                        color={theme.text.neutral}
-                      >
-                        {!!statusID &&
-                        ![
-                          StatusType.WORK,
-                          StatusType.MATCHING,
-                          StatusType.SUMMARIZING,
-                          StatusType.RETURNED,
-                          StatusType.CLOSED,
-                          StatusType.CANCELLED_BY_CUSTOMER,
-                          StatusType.CANCELLED_BY_EXECUTOR,
-                        ].includes(statusID)
-                          ? 'Загрузите чеки или иные финансовые документы общим размером не более 250 МВ'
-                          : 'Пока здесь ничего нет'}
-                      </Text>
-                    </View>
-                    {!!statusID &&
-                      ![
-                        StatusType.WORK,
-                        StatusType.MATCHING,
-                        StatusType.SUMMARIZING,
-                        StatusType.RETURNED,
-                      ].includes(statusID) && (
-                        <UploadProgress
-                          controllers={controllers}
-                          progressesSelector={progressesSelector}
-                        />
-                      )}
-                  </>
-                )}
-              </View>
-            </View>
-          )}
-        </View>
-      )}
-    </>
-  );
-  //к закрытию
-  //необходимо отправить закрывающие документы
-  if (toClose) {
-    return AllFiles;
-  }
-  switch (statusID) {
-    case StatusType.SUMMARIZING:
-      if (subsetID === TaskType.IT_FIRST_RESPONSE && isCurator) {
-        return DefaultUploadFiles;
-      }
-      if (subsetID === TaskType.IT_AUCTION_SALE && !isContractor) {
-        return AllFiles;
-      }
-      return UploadedFiles;
-    case StatusType.WORK:
-    case StatusType.COMPLETED:
-    case StatusType.PAID:
-    case StatusType.CLOSED:
-    case StatusType.MATCHING:
-    case StatusType.RETURNED:
-      return AllFiles;
-    case StatusType.CANCELLED_BY_EXECUTOR:
-    case StatusType.CANCELLED_BY_CUSTOMER:
-      if (subsetID === TaskType.IT_AUCTION_SALE) {
-        return AllFiles;
-      }
-      return DefaultUploadFiles;
-    default:
-      return DefaultUploadFiles;
-  }
 };

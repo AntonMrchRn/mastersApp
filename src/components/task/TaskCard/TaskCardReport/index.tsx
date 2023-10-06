@@ -125,7 +125,6 @@ export const TaskCardReport = ({
         toClose={toClose}
         statusID={statusID}
         isCurator={isCurator}
-        subsetID={subsetID}
         isContractor={isContractor}
         isInternalExecutor={isInternalExecutor}
       />
