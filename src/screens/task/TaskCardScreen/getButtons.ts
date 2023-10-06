@@ -881,6 +881,9 @@ export const getButtons = ({
       if (toClose) {
         switch (tab) {
           case TaskTab.REPORT:
+            if (isContractor) {
+              return [];
+            }
             if (closureFiles.length) {
               return [
                 {
@@ -1079,15 +1082,6 @@ export const getButtons = ({
               return [];
             case TaskTab.REPORT:
               return [
-                ...(isCurator
-                  ? [
-                      {
-                        label: 'Отказаться от задачи',
-                        variant: 'outlineDanger',
-                        onPress: onCancelModalVisible,
-                      } as TaskCardBottomButton,
-                    ]
-                  : []),
                 ...(!isCurator
                   ? !reportFiles.length
                     ? [
@@ -1134,8 +1128,6 @@ export const getButtons = ({
           }
         }
 
-        case StatusType.PAID:
-        case StatusType.COMPLETED:
         case StatusType.SUMMARIZING:
           switch (tab) {
             case TaskTab.COMMENTS:
@@ -1222,6 +1214,8 @@ export const getButtons = ({
               return [];
           }
 
+        case StatusType.PAID:
+        case StatusType.COMPLETED:
         case StatusType.PENDING:
         case StatusType.MATCHING:
         case StatusType.RETURNED:
