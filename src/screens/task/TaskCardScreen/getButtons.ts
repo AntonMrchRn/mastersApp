@@ -793,11 +793,6 @@ export const getButtons = ({
                     ]
                   : [
                       {
-                        label: 'Сдать работы',
-                        variant: 'accent',
-                        onPress: onWorkDelivery,
-                      },
-                      {
                         label: 'Загрузить еще файлы',
                         variant: 'outlineAccent',
                         onPress: onUploadModalVisible,
@@ -1115,6 +1110,8 @@ export const getButtons = ({
           }
         }
 
+        case StatusType.PAID:
+        case StatusType.COMPLETED:
         case StatusType.SUMMARIZING:
           switch (tab) {
             case TaskTab.COMMENTS:
@@ -1139,11 +1136,6 @@ export const getButtons = ({
                       },
                     ]
                   : [
-                      {
-                        label: 'Сдать работы',
-                        variant: 'accent',
-                        onPress: onWorkDelivery,
-                      },
                       {
                         label: 'Загрузить еще файлы',
                         variant: 'outlineAccent',
@@ -1201,8 +1193,6 @@ export const getButtons = ({
               return [];
           }
 
-        case StatusType.PAID:
-        case StatusType.COMPLETED:
         case StatusType.PENDING:
         case StatusType.MATCHING:
         case StatusType.RETURNED:
