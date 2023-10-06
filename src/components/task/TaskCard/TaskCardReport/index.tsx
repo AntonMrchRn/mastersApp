@@ -110,7 +110,7 @@ export const TaskCardReport = ({
         isVisible={uploadModalVisible}
         formData={getFormData({ taskId, toClose, statusID })}
         deleteProgress={deleteProgress}
-        //в загруженные документы нельзя кидать видео
+        //* в загруженные документы нельзя кидать видео
         toClose={
           toClose ||
           (statusID &&
