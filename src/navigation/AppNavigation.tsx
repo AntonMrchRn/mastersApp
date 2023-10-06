@@ -109,6 +109,8 @@ export type AppStackParamList = {
     isInvitedExecutor?: boolean;
     executor?: Executor;
     submissionByCurator?: boolean;
+    curatorMemberID?: number;
+    isInvitedCurator?: boolean;
   };
   [AppScreenName.NewMaterial]: {
     taskId: number;

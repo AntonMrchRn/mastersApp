@@ -35,6 +35,8 @@ export const useEstimateSubmission = ({
   isInvitedExecutor,
   executor,
   submissionByCurator,
+  curatorMemberID,
+  isInvitedCurator,
 }: {
   navigation: StackNavigationProp<
     AppStackParamList,
@@ -46,6 +48,8 @@ export const useEstimateSubmission = ({
   isInvitedExecutor: boolean | undefined;
   executor: Executor | undefined;
   submissionByCurator: boolean | undefined;
+  curatorMemberID: number | undefined;
+  isInvitedCurator: boolean;
 }) => {
   const dispatch = useAppDispatch();
   const toast = useToast();
@@ -424,9 +428,23 @@ export const useEstimateSubmission = ({
         dispatch(setNewOfferServices([]));
         dispatch(setOfferComment(''));
 
-        navigation.navigate(AppScreenName.EstimateSubmissionSuccess, {
-          taskId,
-        });
+        if (!submissionByCurator) {
+          navigation.navigate(AppScreenName.EstimateSubmissionSuccess, {
+            taskId,
+          });
+        } else {
+          toast.show({
+            type: 'success',
+            title: 'Смета успешна подана',
+          });
+
+          navigation.navigate(AppScreenName.Contractors, {
+            taskId,
+            isInvitedCurator,
+            curatorId: user?.userID as number,
+            curatorMemberId: curatorMemberID,
+          });
+        }
       }
     } catch (err) {
       toast.show({
