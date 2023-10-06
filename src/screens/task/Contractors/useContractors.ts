@@ -59,7 +59,9 @@ const useContractors = (
 
   useEffect(() => {
     if (isInvitationSuccess) {
-      navigation.goBack();
+      navigation.navigate(AppScreenName.TaskCard, {
+        taskId,
+      });
     }
   }, [isInvitationSuccess]);
 

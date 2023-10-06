@@ -354,7 +354,7 @@ export const useTaskCard = ({
 
   const { data: contractors } = useGetAvailableContractorsQuery(
     {
-      curatorId: getUserQuery.data?.roleID as number,
+      curatorId: getUserQuery.data?.ID as number,
       taskId,
     },
     {
@@ -601,6 +601,8 @@ export const useTaskCard = ({
           isInvitedExecutor,
           executor,
           submissionByCurator: true,
+          isInvitedCurator,
+          curatorMemberID: curator?.memberID,
         });
       }
     }

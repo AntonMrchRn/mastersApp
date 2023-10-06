@@ -39,8 +39,15 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   navigation,
   route,
 }) => {
-  const { taskId, isEdit, isInvitedExecutor, executor, submissionByCurator } =
-    route.params;
+  const {
+    taskId,
+    isEdit,
+    isInvitedExecutor,
+    executor,
+    submissionByCurator,
+    curatorMemberID,
+    isInvitedCurator,
+  } = route.params;
 
   const {
     bsRef,
@@ -83,6 +90,8 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     isInvitedExecutor,
     executor,
     submissionByCurator,
+    curatorMemberID,
+    isInvitedCurator: !!isInvitedCurator,
   });
 
   const dispatch = useAppDispatch();
