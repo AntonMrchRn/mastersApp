@@ -1,12 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
-import { useIsFocused } from '@react-navigation/native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import {
+  CompositeNavigationProp,
+  useIsFocused,
+} from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useToast } from 'rn-ui-kit';
 
 import { useTaskSSE } from '@/hooks/useTaskSSE';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
+import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   tasksAPI,
@@ -25,7 +30,7 @@ import {
   setOfferID,
 } from '@/store/slices/tasks/actions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
-import { AxiosQueryErrorResponse } from '@/types/error';
+import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
 import { TaskType } from '@/types/task';
 
 export const useEstimateSubmission = ({
@@ -38,10 +43,17 @@ export const useEstimateSubmission = ({
   curatorMemberID,
   isInvitedCurator,
 }: {
-  navigation: StackNavigationProp<
-    AppStackParamList,
-    AppScreenName.EstimateSubmission,
-    undefined
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<
+      AppStackParamList,
+      AppScreenName.EstimateSubmission,
+      undefined
+    >,
+    BottomTabNavigationProp<
+      BottomTabParamList,
+      keyof BottomTabParamList,
+      undefined
+    >
   >;
   taskId: number;
   isEdit: boolean | undefined;
@@ -55,7 +67,12 @@ export const useEstimateSubmission = ({
   const toast = useToast();
   const isFocused = useIsFocused();
   const bsRef = useRef<BottomSheetModal>(null);
-  const { data, refetch } = useGetTaskQuery(taskId);
+  const {
+    data,
+    refetch,
+    isError: isTaskError,
+    error: taskError,
+  } = useGetTaskQuery(taskId);
 
   const refresh = () => {
     dispatch(
@@ -113,6 +130,29 @@ export const useEstimateSubmission = ({
       });
     }
   }, [error]);
+  useEffect(() => {
+    if (isTaskError) {
+      if (
+        [
+          ErrorCode.TaskIsAlreadyTaken,
+          ErrorCode.OTHER_CANDIDATE,
+          ErrorCode.NOT_FOUND,
+        ].includes((taskError as AxiosQueryErrorResponse).data.code)
+      ) {
+        navigation.navigate(BottomTabName.TaskSearch);
+        return toast.show({
+          type: 'info',
+          duration: 6000,
+          title: (taskError as AxiosQueryErrorResponse).data.message,
+        });
+      }
+
+      toast.show({
+        type: 'error',
+        title: (taskError as AxiosQueryErrorResponse).data.message,
+      });
+    }
+  }, [isTaskError]);
 
   const services = offerServices || [];
   const serviceNames = services?.reduce<string[]>((acc, val) => {
@@ -348,7 +388,6 @@ export const useEstimateSubmission = ({
             type: 'success',
             title: 'Ценовое предложение изменено',
           });
-          refetch();
           dispatch(setNewOfferServices([]));
           dispatch(setOfferComment(''));
           dispatch(setOfferID(undefined));
@@ -452,6 +491,7 @@ export const useEstimateSubmission = ({
         title: (err as AxiosQueryErrorResponse).data.message,
       });
     } finally {
+      refetch();
       setIsLoading(false);
     }
   };

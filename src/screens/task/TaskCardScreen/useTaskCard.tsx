@@ -187,13 +187,10 @@ export const useTaskCard = ({
           title: (error as AxiosQueryErrorResponse).data.message,
         });
       }
-
-      if (isError) {
-        toast.show({
-          type: 'error',
-          title: (error as AxiosQueryErrorResponse).data.message,
-        });
-      }
+      toast.show({
+        type: 'error',
+        title: (error as AxiosQueryErrorResponse).data.message,
+      });
     }
   }, [isError]);
   useEffect(() => {
