@@ -35,20 +35,24 @@ export const TaskCardCancelBottomSheet = ({
   const {
     handleSubmit,
     formState: { isValid, errors },
+    reset,
   } = methods;
   const isDisabled = !isValid && !!Object.keys(errors).length;
 
   const onRefusePress = ({ cancelTask }: { cancelTask?: string }) => {
     onRefuse(cancelTask);
   };
-
+  const handleCancel = () => {
+    reset();
+    onCancel();
+  };
   return (
     <BottomSheet
       avoidKeyboard
       isVisible={isVisible}
       titleStyle={styles.title}
-      onSwipeComplete={onCancel}
-      onBackdropPress={onCancel}
+      onSwipeComplete={handleCancel}
+      onBackdropPress={handleCancel}
       title={
         isContractor && !withReason
           ? 'Отклонить предложение куратора?'
@@ -79,7 +83,7 @@ export const TaskCardCancelBottomSheet = ({
           size="M"
           label="Отмена"
           variant="accent"
-          onPress={onCancel}
+          onPress={handleCancel}
         />
       </FormProvider>
       <Spacer size={configApp.ios ? 'xs' : 'l'} />

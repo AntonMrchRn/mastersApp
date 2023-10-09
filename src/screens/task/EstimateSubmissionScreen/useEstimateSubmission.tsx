@@ -348,7 +348,6 @@ export const useEstimateSubmission = ({
             type: 'success',
             title: 'Ценовое предложение изменено',
           });
-          refetch();
           dispatch(setNewOfferServices([]));
           dispatch(setOfferComment(''));
           dispatch(setOfferID(undefined));
@@ -452,6 +451,7 @@ export const useEstimateSubmission = ({
         title: (err as AxiosQueryErrorResponse).data.message,
       });
     } finally {
+      refetch();
       setIsLoading(false);
     }
   };

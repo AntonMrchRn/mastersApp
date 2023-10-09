@@ -24,8 +24,6 @@ export const DeleteEstimateServiceModal: FC<
 
   return (
     <Modal
-      closeIcon
-      closeIconPress={onCancel}
       isVisible={isVisible}
       headerIcon="error"
       title="Удалить услугу?"
