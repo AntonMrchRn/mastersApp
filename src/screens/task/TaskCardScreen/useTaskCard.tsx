@@ -136,6 +136,7 @@ export const useTaskCard = ({
   const getUserQuery = useGetUserQuery(user?.userID);
   const { data, isError, error, refetch, isLoading, isSuccess } =
     useGetTaskQuery(taskId);
+
   const getTaskHistory = useGetTaskHistoryQuery(taskId);
   const task = data?.tasks?.[0];
 
@@ -172,7 +173,7 @@ export const useTaskCard = ({
     }
   }, [isFocused]);
   useEffect(() => {
-    if (isError) {
+    if (isError && error) {
       if (
         [
           ErrorCode.TaskIsAlreadyTaken,
@@ -192,7 +193,7 @@ export const useTaskCard = ({
         title: (error as AxiosQueryErrorResponse).data.message,
       });
     }
-  }, [isError]);
+  }, [isError, error]);
   useEffect(() => {
     if (deleteOffersMutation.isError) {
       toast.show({
