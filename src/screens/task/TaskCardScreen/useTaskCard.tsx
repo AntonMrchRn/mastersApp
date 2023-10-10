@@ -136,6 +136,7 @@ export const useTaskCard = ({
   const getUserQuery = useGetUserQuery(user?.userID);
   const { data, isError, error, refetch, isLoading, isSuccess } =
     useGetTaskQuery(taskId);
+
   const getTaskHistory = useGetTaskHistoryQuery(taskId);
   const task = data?.tasks?.[0];
 
