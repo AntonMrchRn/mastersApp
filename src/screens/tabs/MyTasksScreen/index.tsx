@@ -22,6 +22,7 @@ import { configApp } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
+import { tasksAPI } from '@/store/api/tasks';
 import { Task } from '@/store/api/tasks/types';
 import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
@@ -63,6 +64,11 @@ const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
   const regionID = user?.regionIDs || [];
   const keyExtractor = (item: TaskSearch) => `${item.ID}`;
   const onItemPress = (id: number) => {
+    dispatch(
+      tasksAPI.endpoints.getTask.initiate(id, {
+        forceRefetch: true,
+      }),
+    );
     navigation.navigate(AppScreenName.TaskCard, {
       taskId: id,
     });
