@@ -589,10 +589,9 @@ export const getButtons = ({
                         {
                           label: 'Принять задачу',
                           variant: 'accent',
-                          onPress:
-                            isContractor || isInternalExecutor
-                              ? onTaskSubmission
-                              : onSubmissionModalVisible,
+                          onPress: isContractor
+                            ? onTaskSubmission
+                            : onSubmissionModalVisible,
                         } as TaskCardBottomButton,
                       ]
                     : []),
@@ -922,7 +921,7 @@ export const getButtons = ({
               if (isOffersDeadlineOver) {
                 return [];
               }
-              if (userOffersData.length) {
+              if (userOffersData.length && !isContractor) {
                 return [
                   {
                     label: 'Отозвать смету',
@@ -932,7 +931,7 @@ export const getButtons = ({
                 ];
               }
               if (isInvitedCurator) {
-                // TODO: приглашенный координатором куратор
+                // TODO: приглашенный координатором куратор ( Назначен куратор )
               }
 
               // куратор/подрядчик/приглашенный координатором исполнитель/задача без участия куратора
@@ -946,12 +945,23 @@ export const getButtons = ({
                   ...(!isCurator
                     ? [
                         {
-                          label: 'Подать смету',
+                          label: 'Принять задачу',
                           variant: 'accent',
-                          onPress:
-                            isContractor || isInternalExecutor
-                              ? onTaskSubmission
-                              : onSubmissionModalVisible,
+                          onPress: isContractor
+                            ? onTaskSubmission
+                            : onSubmissionModalVisible,
+                        } as TaskCardBottomButton,
+                      ]
+                    : []),
+                  // задача с участием куратора, в которой нет приглашенного координатором исполнителя
+                  ...(isCuratorAllowedTask && !isInvitedExecutor
+                    ? [
+                        {
+                          label: 'Отклонить приглашение',
+                          variant: 'outlineDanger',
+                          onPress: isContractor
+                            ? onCancelModalVisible
+                            : onCancelTask,
                         } as TaskCardBottomButton,
                       ]
                     : []),
@@ -961,10 +971,9 @@ export const getButtons = ({
                 {
                   label: 'Подать смету как исполнитель',
                   variant: 'accent',
-                  onPress:
-                    isContractor || isInternalExecutor
-                      ? onTaskSubmission
-                      : onSubmissionModalVisible,
+                  onPress: isContractor
+                    ? onTaskSubmission
+                    : onSubmissionModalVisible,
                 } as TaskCardBottomButton,
                 // задача с участием куратора, который её ещё не принял (или принял, но отказался)
                 ...(isTaskWithUnconfirmedCurator
@@ -972,10 +981,7 @@ export const getButtons = ({
                       {
                         label: 'Подать смету как куратор',
                         variant: 'outlineAccent',
-                        onPress:
-                          isContractor || isInternalExecutor
-                            ? onBecomeCurator
-                            : () => onSubmissionModalVisible(true),
+                        onPress: () => onSubmissionModalVisible(true),
                       } as TaskCardBottomButton,
                     ]
                   : []),

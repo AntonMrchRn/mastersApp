@@ -393,6 +393,7 @@ type PatchITTaskMemberParams = {
   userID?: number;
   isConfirm?: boolean;
   isCurator?: boolean;
+  offerID?: number;
   offer?: {
     taskID: number;
     isCurator: boolean;
