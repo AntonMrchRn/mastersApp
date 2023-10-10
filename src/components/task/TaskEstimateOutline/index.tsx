@@ -11,12 +11,14 @@ import { styles } from './styles';
 type TaskEstimateOutlineProps = {
   outlayStatusID: OutlayStatusType | undefined;
   showEstimateStatus: boolean;
+  showAddButton: boolean;
   onPress?: () => void;
 };
 export const TaskEstimateOutline: FC<TaskEstimateOutlineProps> = ({
-  showEstimateStatus,
-  outlayStatusID,
   onPress,
+  showAddButton,
+  outlayStatusID,
+  showEstimateStatus,
 }) => {
   const theme = useTheme();
   const getBadge = () => {
@@ -40,12 +42,18 @@ export const TaskEstimateOutline: FC<TaskEstimateOutlineProps> = ({
   return (
     <View style={styles.container}>
       {showEstimateStatus && getBadge()}
-      <TouchableOpacity style={styles.button} onPress={onPress}>
-        <PlusIcon fill={theme.icons.basic} />
-        <Text variant="bodySBold" color={theme.text.basic} style={styles.text}>
-          Добавить
-        </Text>
-      </TouchableOpacity>
+      {showAddButton && (
+        <TouchableOpacity style={styles.button} onPress={onPress}>
+          <PlusIcon fill={theme.icons.basic} />
+          <Text
+            variant="bodySBold"
+            color={theme.text.basic}
+            style={styles.text}
+          >
+            Добавить
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

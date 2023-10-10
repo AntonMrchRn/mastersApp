@@ -31,7 +31,7 @@ import {
 } from '@/store/slices/tasks/actions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
 import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
-import { TaskType } from '@/types/task';
+import { StatusType, TaskType } from '@/types/task';
 
 export const useEstimateSubmission = ({
   navigation,
@@ -114,7 +114,9 @@ export const useEstimateSubmission = ({
     useAppSelector(selectTasks);
   const user = useAppSelector(selectAuth).user;
   const userRole = useAppSelector(selectAuth).user?.roleID;
-  const isItLots = data?.tasks[0]?.subsetID === TaskType.IT_AUCTION_SALE;
+  const task = data?.tasks?.[0];
+  const isItLots = task?.subsetID === TaskType.IT_AUCTION_SALE;
+  const isActive = task?.statusID === StatusType.ACTIVE;
 
   useEffect(() => {
     if (isFocused) {
@@ -174,7 +176,6 @@ export const useEstimateSubmission = ({
     ? Number(allSumReduce.toFixed(2))
     : allSumReduce;
 
-  const task = data?.tasks?.[0];
   const allowCostIncrease = task?.allowCostIncrease;
   const currentSum = task?.currentSum;
   const costStep = task?.costStep;
@@ -222,18 +223,13 @@ export const useEstimateSubmission = ({
     field => !!field.localPrice || !!field.localCount,
   );
 
-  const onEstimateModalVisible = () => {
+  const onEstimateModalVisible = () =>
     setEstimateModalVisible(!estimateModalVisible);
-  };
-  const onClosePress = () => {
-    setBanner(undefined);
-  };
-  const onDeleteEstimateServiceModalVisible = () => {
+  const onClosePress = () => setBanner(undefined);
+  const onDeleteEstimateServiceModalVisible = () =>
     setDeleteEstimateServiceModalVisible(!deleteEstimateServiceModalVisible);
-  };
-  const onDeleteEstimateMaterialModalVisible = () => {
+  const onDeleteEstimateMaterialModalVisible = () =>
     setDeleteEstimateMaterialModalVisible(!deleteEstimateMaterialModalVisible);
-  };
   const onCancelDeleteService = () => {
     setServiceForDelete(undefined);
     setDeleteEstimateServiceModalVisible(!deleteEstimateServiceModalVisible);
@@ -242,9 +238,8 @@ export const useEstimateSubmission = ({
     setMaterialForDelete(undefined);
     setDeleteEstimateMaterialModalVisible(!deleteEstimateMaterialModalVisible);
   };
-  const addServiceBottomSheetClose = () => {
-    bsRef.current?.close();
-  };
+  const addServiceBottomSheetClose = () => bsRef.current?.close();
+
   const addService = (service: Service) => {
     navigation.navigate(AppScreenName.EstimateAddService, {
       service,
@@ -292,9 +287,7 @@ export const useEstimateSubmission = ({
     }
     onDeleteEstimateMaterialModalVisible();
   };
-  const setComment = (text: string) => {
-    dispatch(setOfferComment(text));
-  };
+  const setComment = (text: string) => dispatch(setOfferComment(text));
 
   const onSubmit = async () => {
     //если есть ошибка валидации
@@ -331,11 +324,13 @@ export const useEstimateSubmission = ({
     }
     try {
       setIsLoading(true);
-      await patchTaskLot({
-        taskID: taskId,
-        sum: allSum,
-        ...(isEdit && offerID && { offerID }),
-      }).unwrap();
+      if (isActive) {
+        await patchTaskLot({
+          taskID: taskId,
+          sum: allSum,
+          ...(isEdit && offerID && { offerID }),
+        }).unwrap();
+      }
 
       const postServices: Service[] = services.map(service => {
         const postMaterials =
@@ -407,6 +402,7 @@ export const useEstimateSubmission = ({
                   offer: {
                     taskID: taskId,
                     isCurator: true,
+                    comment: offerComment,
                     services: postServices,
                   },
                 }).unwrap()
@@ -420,6 +416,7 @@ export const useEstimateSubmission = ({
                       offer: {
                         taskID: taskId,
                         isCurator: true,
+                        comment: offerComment,
                         services: postServices,
                       },
                     },
@@ -435,6 +432,7 @@ export const useEstimateSubmission = ({
                   offer: {
                     taskID: taskId,
                     isCurator: false,
+                    comment: offerComment,
                     services: postServices,
                   },
                 }).unwrap()
@@ -448,6 +446,7 @@ export const useEstimateSubmission = ({
                       offer: {
                         taskID: taskId,
                         isCurator: false,
+                        comment: offerComment,
                         services: postServices,
                       },
                     },
