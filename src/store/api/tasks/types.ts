@@ -44,6 +44,7 @@ type Executor = {
   ID: number;
   email?: string;
   phone?: number;
+  curatorID?: number;
   entityTypeID?: number;
   isAccept?: boolean;
   isApproved?: boolean;
@@ -372,6 +373,7 @@ type ITTaskMember = {
   offer?: {
     taskID: number;
     isCurator: boolean;
+    comment: string;
     services: Service[];
   };
 };
@@ -395,6 +397,7 @@ type PatchITTaskMemberParams = {
     taskID: number;
     isCurator: boolean;
     services: Service[];
+    comment: string;
   };
 };
 

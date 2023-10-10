@@ -958,6 +958,7 @@ export const useTaskCard = ({
             winnerOffer={winnerOffer}
             isContractor={isContractor}
             outlayStatusID={outlayStatusID}
+            curatorId={executor?.curatorID}
             serviceMultiplier={serviceMultiplier}
             currentEstimateTab={currentEstimateTab}
             estimateBottomVisible={estimateBottomVisible}
