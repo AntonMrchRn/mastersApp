@@ -21,7 +21,6 @@ import { configApp } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { usePrefetch } from '@/store/api/tasks';
 import { Task } from '@/store/api/tasks/types';
 import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
@@ -95,9 +94,7 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
       setSelectedTabId(setTypeByTabIndex[tabIndex]);
     }
   };
-  const prefetchTask = usePrefetch('getTask');
   const onItemPress = (id: number) => {
-    prefetchTask(id);
     navigation.navigate(AppScreenName.TaskCard, {
       taskId: id,
     });

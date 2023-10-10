@@ -173,7 +173,7 @@ export const useTaskCard = ({
     }
   }, [isFocused]);
   useEffect(() => {
-    if (isError && error) {
+    if (isError) {
       if (
         [
           ErrorCode.TaskIsAlreadyTaken,
@@ -193,7 +193,7 @@ export const useTaskCard = ({
         title: (error as AxiosQueryErrorResponse).data.message,
       });
     }
-  }, [isError, error]);
+  }, [isError]);
   useEffect(() => {
     if (deleteOffersMutation.isError) {
       toast.show({

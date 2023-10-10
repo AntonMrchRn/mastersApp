@@ -275,7 +275,6 @@ export const tasksAPI = api
   });
 
 export const {
-  usePrefetch,
   useGetTaskQuery,
   useGetAvailableContractorsQuery,
   useGetTaskHistoryQuery,
