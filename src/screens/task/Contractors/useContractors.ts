@@ -41,7 +41,11 @@ const useContractors = ({
   const isFocused = useIsFocused();
   const insets = useSafeAreaInsets();
   const toast = useToast();
-  const { data } = useGetUserOffersQuery(
+  const {
+    data,
+    error: offerError,
+    isError: isOfferError,
+  } = useGetUserOffersQuery(
     {
       taskID: taskId,
       userID: curatorId,
@@ -74,11 +78,27 @@ const useContractors = ({
   ] = usePostITTaskMemberMutation();
   const [addCurator, { isError: isCuratorError, error: curatorError }] =
     usePatchITTaskMemberMutation();
-  const [linkContractorsToCuratorOffer] = usePostITMembersOfferMutation();
+  const [
+    linkContractorsToCuratorOffer,
+    { isError: isMembersOfferError, error: membersOfferError },
+  ] = usePostITMembersOfferMutation();
 
   const [selectedContractorIDs, setSelectedContractorIDs] = useState<number[]>(
     [],
   );
+
+  const error =
+    curatorError ||
+    invitationError ||
+    contractorsError ||
+    membersOfferError ||
+    offerError;
+  const isError =
+    isContractorsError ||
+    isInvitationError ||
+    isCuratorError ||
+    isOfferError ||
+    isMembersOfferError;
 
   useEffect(() => {
     if (isFocused) {
@@ -94,17 +114,13 @@ const useContractors = ({
   }, [isInvitationSuccess]);
 
   useEffect(() => {
-    if (isContractorsError || isInvitationError || isCuratorError) {
+    if (isError) {
       toast.show({
         type: 'error',
-        title: (
-          (contractorsError ||
-            invitationError ||
-            curatorError) as AxiosQueryErrorResponse
-        ).data.message,
+        title: (error as AxiosQueryErrorResponse).data.message,
       });
     }
-  }, [isContractorsError, isInvitationError, isCuratorError]);
+  }, [isError]);
 
   const offerID = data?.offers[0]?.ID;
   const isAvailableContractorsExist =
