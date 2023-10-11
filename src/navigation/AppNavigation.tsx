@@ -122,8 +122,10 @@ export type AppStackParamList = {
   [AppScreenName.Contractors]: {
     taskId: number;
     curatorId: number;
-    curatorMemberId?: number;
     isInvitedCurator: boolean;
+    isItLots?: boolean;
+    curatorMemberId?: number;
+    isConfirmedCurator?: boolean;
   };
 };
 const screenOptions = { headerShown: false };

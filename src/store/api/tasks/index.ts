@@ -15,6 +15,7 @@ import {
   GetTaskStatusesResponse,
   PatchITTaskMemberParams,
   PatchOffersRequest,
+  PostITMembersOfferParams,
   PostITTaskMemberParams,
   PostOffersRequest,
   Service,
@@ -183,6 +184,13 @@ export const tasksAPI = api
           data,
         }),
       }),
+      postITMembersOffer: builder.mutation<object, PostITMembersOfferParams>({
+        query: data => ({
+          url: `offers/it/members`,
+          method: 'POST',
+          data,
+        }),
+      }),
       postOffers: builder.mutation<object, PostOffersRequest>({
         query: data => ({
           url: `offers`,
@@ -305,4 +313,5 @@ export const {
   usePatchITTaskMemberMutation,
   useGetCompressRateQuery,
   useGetMeasuresQuery,
+  usePostITMembersOfferMutation,
 } = tasksAPI;
