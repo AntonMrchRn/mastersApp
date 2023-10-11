@@ -589,10 +589,9 @@ export const getButtons = ({
                         {
                           label: 'Принять задачу',
                           variant: 'accent',
-                          onPress:
-                            isContractor || isInternalExecutor
-                              ? onTaskSubmission
-                              : onSubmissionModalVisible,
+                          onPress: isContractor
+                            ? onTaskSubmission
+                            : onSubmissionModalVisible,
                         } as TaskCardBottomButton,
                       ]
                     : []),
