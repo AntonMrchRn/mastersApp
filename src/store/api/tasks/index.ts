@@ -24,7 +24,7 @@ import {
 
 export const tasksAPI = api
   .enhanceEndpoints({
-    addTagTypes: ['task'],
+    addTagTypes: ['task', 'offer'],
   })
   .injectEndpoints({
     endpoints: builder => ({
@@ -210,7 +210,7 @@ export const tasksAPI = api
           method: 'PATCH',
           data,
         }),
-        invalidatesTags: ['task'],
+        invalidatesTags: ['task', 'offer'],
       }),
       getUserOffers: builder.query<
         GetOffersResponse,
@@ -220,6 +220,7 @@ export const tasksAPI = api
           url: `offers?query=?taskID==${data.taskID}*userID==${data.userID}?`,
           method: 'GET',
         }),
+        providesTags: ['offer'],
       }),
       getAnotherOffers: builder.query<
         GetOffersResponse,
