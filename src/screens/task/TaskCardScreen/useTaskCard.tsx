@@ -918,9 +918,11 @@ export const useTaskCard = ({
     if (user?.userID) {
       navigation.navigate(AppScreenName.Contractors, {
         taskId,
+        isConfirmedCurator,
         isInvitedCurator,
         curatorId: user.userID,
         curatorMemberId: curator?.memberID,
+        isItLots: subsetID === TaskType.IT_AUCTION_SALE,
       });
     }
   };
@@ -939,11 +941,11 @@ export const useTaskCard = ({
             startTime={startTime}
             executors={executors}
             subsetID={subsetID}
-            isCurator={isCurator}
             description={description}
             coordinator={coordinator}
             isITServices={isITServices}
             applicationFiles={applicationFiles}
+            isConfirmedCurator={isConfirmedCurator}
             isInternalExecutor={isInternalExecutor}
             navigateToContractors={navigateToContractors}
           />

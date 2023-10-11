@@ -479,6 +479,7 @@ export const useEstimateSubmission = ({
           navigation.navigate(AppScreenName.Contractors, {
             taskId,
             isInvitedCurator,
+            isItLots,
             curatorId: user?.userID as number,
             curatorMemberId: curatorMemberID,
           });

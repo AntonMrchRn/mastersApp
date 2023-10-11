@@ -354,6 +354,12 @@ type PatchOffersRequest = {
   refuseReason?: string;
   sum?: number;
 };
+type PostITMembersOfferParams = {
+  executorIDs: number[];
+  isConfirm: boolean;
+  curatorID: number;
+  offerID: number;
+};
 type PostITTaskMemberParams = {
   taskID: number;
   members: ITTaskMember[];
@@ -431,4 +437,5 @@ export type {
   Measure,
   GetMeasuresResponse,
   Coordinator,
+  PostITMembersOfferParams,
 };

@@ -15,6 +15,7 @@ import {
   GetTaskStatusesResponse,
   PatchITTaskMemberParams,
   PatchOffersRequest,
+  PostITMembersOfferParams,
   PostITTaskMemberParams,
   PostOffersRequest,
   Service,
@@ -23,7 +24,7 @@ import {
 
 export const tasksAPI = api
   .enhanceEndpoints({
-    addTagTypes: ['task'],
+    addTagTypes: ['task', 'offer'],
   })
   .injectEndpoints({
     endpoints: builder => ({
@@ -183,6 +184,13 @@ export const tasksAPI = api
           data,
         }),
       }),
+      postITMembersOffer: builder.mutation<object, PostITMembersOfferParams>({
+        query: data => ({
+          url: `offers/it/members`,
+          method: 'POST',
+          data,
+        }),
+      }),
       postOffers: builder.mutation<object, PostOffersRequest>({
         query: data => ({
           url: `offers`,
@@ -202,7 +210,7 @@ export const tasksAPI = api
           method: 'PATCH',
           data,
         }),
-        invalidatesTags: ['task'],
+        invalidatesTags: ['task', 'offer'],
       }),
       getUserOffers: builder.query<
         GetOffersResponse,
@@ -212,6 +220,7 @@ export const tasksAPI = api
           url: `offers?query=?taskID==${data.taskID}*userID==${data.userID}?`,
           method: 'GET',
         }),
+        providesTags: ['offer'],
       }),
       getAnotherOffers: builder.query<
         GetOffersResponse,
@@ -305,4 +314,5 @@ export const {
   usePatchITTaskMemberMutation,
   useGetCompressRateQuery,
   useGetMeasuresQuery,
+  usePostITMembersOfferMutation,
 } = tasksAPI;
