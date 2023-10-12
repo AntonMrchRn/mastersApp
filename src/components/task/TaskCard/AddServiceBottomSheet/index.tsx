@@ -32,7 +32,7 @@ import { CategoryContainer } from './CategoryContainer';
 import { SearchContainer } from './SearchContainer';
 
 import { styles } from './styles';
-let timeout: NodeJS.Timer;
+let timeout: ReturnType<typeof setTimeout>;
 
 type AddServiceBottomSheetProps = {
   onCancel: () => void;
