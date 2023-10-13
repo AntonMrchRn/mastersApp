@@ -18,7 +18,7 @@ type CustomEvent = 'comments';
 
 let sseIOS: EventSourceIOS<CustomEvent> | undefined;
 let sseAndroid: EventSourceAndroid<CustomEvent> | undefined;
-let timeout: NodeJS.Timer;
+let timeout: ReturnType<typeof setTimeout>;
 
 export const useCommentsSSE = (taskId: string) => {
   const dispatch = useAppDispatch();
