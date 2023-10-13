@@ -181,7 +181,6 @@ export const useTaskCardEstimate = ({
     navigation.navigate(AppScreenName.CandidateEstimates, {
       taskId,
       ...(!isResults && { userID }),
-      ...(isResults && { winnerOffer }),
       isResults,
     });
 

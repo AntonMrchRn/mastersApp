@@ -100,7 +100,6 @@ export type AppStackParamList = {
     taskId: number;
     isResults: boolean;
     userID?: number;
-    winnerOffer?: Offer;
   };
   [AppScreenName.WebView]: { uri: string };
   [AppScreenName.EstimateSubmission]: {

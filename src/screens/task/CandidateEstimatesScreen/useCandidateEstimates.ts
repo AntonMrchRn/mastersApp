@@ -8,7 +8,11 @@ import {
 import { useIsFocused } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 
-import { useGetAnotherOffersQuery, useGetOffersQuery } from '@/store/api/tasks';
+import {
+  useGetAnotherOffersQuery,
+  useGetOffersQuery,
+  useGetTaskQuery,
+} from '@/store/api/tasks';
 import { AxiosQueryErrorResponse } from '@/types/error';
 
 export const useCandidateEstimates = (
@@ -23,6 +27,8 @@ export const useCandidateEstimates = (
   const ref = useRef<FlatList>(null);
 
   const [activeIndex, setActiveIndex] = useState<number | null | undefined>(0);
+
+  const getTask = useGetTaskQuery(taskId);
 
   const {
     data: offersData,
@@ -49,13 +55,20 @@ export const useCandidateEstimates = (
 
   const error = isResults ? offersError : anotherOffersError;
   const isError = isResults ? isOffersError : isAnotherOffersError;
-  const isLoading = isResults ? isOffersLoading : isAnotherOffersLoading;
+  const isLoading =
+    getTask.isLoading || (isResults ? isOffersLoading : isAnotherOffersLoading);
   const offers =
     (isResults ? offersData?.offers : anotherOffersData?.offers) || [];
+  const winnerOffer = getTask.data?.tasks[0]?.winnerOffer;
+
+  const onRefresh = () => {
+    getTask.refetch();
+    isResults ? refetchOffers() : refetchAnotherOffers();
+  };
 
   useEffect(() => {
     if (isFocused) {
-      isResults ? refetchOffers() : refetchAnotherOffers();
+      onRefresh();
     }
   }, [isFocused]);
 
@@ -94,5 +107,7 @@ export const useCandidateEstimates = (
     isLoading,
     onViewRef,
     activeIndex,
+    onRefresh,
+    winnerOffer,
   };
 };

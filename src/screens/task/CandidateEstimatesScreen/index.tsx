@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import {
   ActivityIndicator,
+  RefreshControl,
   ScrollView,
   TouchableOpacity,
   View,
@@ -29,7 +30,7 @@ type CandidateEstimatesScreenProps = StackScreenProps<
 export const CandidateEstimatesScreen = ({
   route,
 }: CandidateEstimatesScreenProps) => {
-  const { taskId, userID, winnerOffer, isResults } = route.params;
+  const { taskId, userID, isResults } = route.params;
   const theme = useTheme();
   const {
     ref,
@@ -40,6 +41,8 @@ export const CandidateEstimatesScreen = ({
     isLoading,
     onViewRef,
     activeIndex,
+    onRefresh,
+    winnerOffer,
   } = useCandidateEstimates(taskId, isResults, userID);
 
   const keyExtractor = (item: Offer) => `${item.ID}`;
@@ -56,7 +59,7 @@ export const CandidateEstimatesScreen = ({
       index={index}
       scrollX={scrollX}
       length={offers.length}
-      isWinner={winnerOffer?.ID === offer.ID}
+      isWinner={isResults ? winnerOffer?.ID === offer.ID : false}
     />
   );
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
@@ -67,6 +70,9 @@ export const CandidateEstimatesScreen = ({
         nestedScrollEnabled
         style={styles.content}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+        }
       >
         <Text variant="title2" style={styles.title}>
           {isResults ? 'Результаты торгов' : 'Текущие предложения'}
