@@ -104,7 +104,6 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
     navigation,
     currentEstimateTab,
     statusID,
-    winnerOffer,
     subsetID,
     isContractor,
     curatorId,

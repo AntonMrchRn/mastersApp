@@ -20,6 +20,8 @@ import { CandidateItem } from '@/screens/task/CandidateEstimatesScreen/Candidate
 import { useCandidateEstimates } from '@/screens/task/CandidateEstimatesScreen/useCandidateEstimates';
 import { Offer } from '@/store/api/tasks/types';
 
+import { ListEmptyComponent } from './ListEmptyComponent';
+
 import { styles } from './styles';
 
 type CandidateEstimatesScreenProps = StackScreenProps<
@@ -134,6 +136,7 @@ export const CandidateEstimatesScreen = ({
             keyExtractor={keyExtractor}
             showsHorizontalScrollIndicator={false}
             onViewableItemsChanged={onViewRef.current}
+            ListEmptyComponent={ListEmptyComponent}
           />
         )}
       </ScrollView>

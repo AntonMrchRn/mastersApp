@@ -8,7 +8,10 @@ import {
 import { useIsFocused } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 
+import { useTaskSSE } from '@/hooks/useTaskSSE';
+import { useAppDispatch } from '@/store';
 import {
+  tasksAPI,
   useGetAnotherOffersQuery,
   useGetOffersQuery,
   useGetTaskQuery,
@@ -22,7 +25,7 @@ export const useCandidateEstimates = (
 ) => {
   const isFocused = useIsFocused();
   const toast = useToast();
-
+  const dispatch = useAppDispatch();
   const scrollX = useSharedValue<number>(0);
   const ref = useRef<FlatList>(null);
 
@@ -65,6 +68,29 @@ export const useCandidateEstimates = (
     getTask.refetch();
     isResults ? refetchOffers() : refetchAnotherOffers();
   };
+  const refresh = () => {
+    dispatch(
+      tasksAPI.endpoints.getTask.initiate(taskId, {
+        forceRefetch: true,
+      }),
+    );
+    isResults
+      ? dispatch(
+          tasksAPI.endpoints.getOffers.initiate(taskId, {
+            forceRefetch: true,
+          }),
+        )
+      : dispatch(
+          tasksAPI.endpoints.getAnotherOffers.initiate(
+            { taskID: taskId, userID: userID as number },
+            {
+              forceRefetch: true,
+            },
+          ),
+        );
+  };
+
+  useTaskSSE({ taskId, refresh });
 
   useEffect(() => {
     if (isFocused) {
