@@ -331,6 +331,9 @@ export const useTaskCard = ({
    * Принял ли задачу подрядчик
    */
   const isConfirmedExecutor = isExecutor && !!executor?.isConfirm;
+  const isConfirmedContactor = isContractor && !!executor?.isConfirm;
+
+  console.log('isConfirmedContactor', isConfirmedContactor);
   /**
    * Задача с куратором
    */
@@ -1036,6 +1039,7 @@ export const useTaskCard = ({
   };
 
   const buttons = getButtons({
+    isConfirmedContactor,
     tab: tab.label,
     toClose,
     subsetID,

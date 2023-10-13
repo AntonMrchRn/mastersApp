@@ -4,6 +4,7 @@ import { File } from '@/types/fileManager';
 import { OutlayStatusType, StatusType, TaskTab, TaskType } from '@/types/task';
 
 export const getButtons = ({
+  isConfirmedContactor,
   tab,
   toClose,
   subsetID,
@@ -23,7 +24,6 @@ export const getButtons = ({
   isInvitedExecutor,
   isExecutor,
   onSubmitAnTask,
-  isInternalExecutor,
   isCommentsAvailable,
   isCuratorAllowedTask,
   isOffersDeadlineOver,
@@ -49,6 +49,7 @@ export const getButtons = ({
   /**
    * Статус задачи
    */
+  isConfirmedContactor?: boolean;
   statusID?: StatusType;
   reportFiles: File[];
   closureFiles: File[];
@@ -910,7 +911,6 @@ export const getButtons = ({
         }
       }
       switch (statusID) {
-        // TODO: Лоты active
         case StatusType.ACTIVE:
           switch (tab) {
             case TaskTab.DESCRIPTION:
@@ -942,7 +942,7 @@ export const getButtons = ({
                 !isCuratorAllowedTask
               ) {
                 return [
-                  ...(!isCurator
+                  ...(!isCurator && !isConfirmedContactor
                     ? [
                         {
                           label: 'Принять задачу',
@@ -990,8 +990,6 @@ export const getButtons = ({
               return [];
           }
         case StatusType.WORK: {
-          console.log('isCurator', isCurator, 'isContractor', isContractor);
-
           // TODO: Лоты work
           switch (tab) {
             case TaskTab.DESCRIPTION:
