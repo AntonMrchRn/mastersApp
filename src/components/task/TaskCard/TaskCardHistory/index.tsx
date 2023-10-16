@@ -42,26 +42,29 @@ export const TaskCardHistory: FC<TaskCardHistoryProps> = ({
     </View>
   );
 
-  const getContent = () => {
-    return statusID === StatusType.ACTIVE ? (
-      <PreviewNotFound type={PreviewNotFoundType.NoHistoryEvents} />
-    ) : (
-      <View>
-        <Text variant="title3" style={styles.txt} color={theme.text.basic}>
-          События задачи
-        </Text>
-        {history?.isLoading ? (
-          <View style={styles.wrapperLoading}>
-            <ActivityIndicator size={'large'} color={theme.background.accent} />
-          </View>
-        ) : history?.taskComment ? (
-          <ContentHistory history={history} />
-        ) : (
-          NotFoundHistory
-        )}
-      </View>
-    );
-  };
-
-  return <>{getContent()}</>;
+  return (
+    <>
+      {statusID === StatusType.ACTIVE ? (
+        <PreviewNotFound type={PreviewNotFoundType.NoHistoryEvents} />
+      ) : (
+        <View>
+          <Text variant="title3" style={styles.txt} color={theme.text.basic}>
+            События задачи
+          </Text>
+          {history?.isLoading ? (
+            <View style={styles.wrapperLoading}>
+              <ActivityIndicator
+                size={'large'}
+                color={theme.background.accent}
+              />
+            </View>
+          ) : history?.taskComment ? (
+            <ContentHistory history={history} />
+          ) : (
+            NotFoundHistory
+          )}
+        </View>
+      )}
+    </>
+  );
 };

@@ -16,17 +16,16 @@ type UserAuthParams = {
   password: string;
 };
 
-type RecoveryCodeParams =
-  | (
-      | {
-          phone: number;
-        }
-      | {
-          email: string;
-        }
-    ) & {
-      password: string;
-    };
+type RecoveryCodeParams = (
+  | {
+      phone: number;
+    }
+  | {
+      email: string;
+    }
+) & {
+  password: string;
+};
 
 type PasswordRecoveryParams = {
   code: string;

@@ -486,7 +486,7 @@ PODS:
     - React-Core
   - react-native-splash-screen (3.3.0):
     - React-Core
-  - react-native-webview (13.6.0):
+  - react-native-webview (13.6.2):
     - React-Core
   - React-perflogger (0.71.13)
   - React-RCTActionSheet (0.71.13):
@@ -589,7 +589,7 @@ PODS:
     - FirebaseCoreExtension (= 10.14.0)
     - React-Core
     - RNFBApp
-  - RNGestureHandler (2.13.1):
+  - RNGestureHandler (2.13.2):
     - React-Core
   - RNImageCropPicker (0.40.0):
     - React-Core
@@ -950,7 +950,7 @@ SPEC CHECKSUMS:
   react-native-oksse: ad7d8dda81900a782d81694ce0e914478df36a9c
   react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
-  react-native-webview: 669ae162965f629a8d6a4bdd3b99a304d36ef1f2
+  react-native-webview: 8fc09f66a1a5b16bbe37c3878fda27d5982bb776
   React-perflogger: 431a655960a02f01257d631b2a9bfbb02fd21064
   React-RCTActionSheet: 38c8d496d0faa63013d16f709e10a3acf6b5f100
   React-RCTAnimation: 6da4d599f3262ed8021433ddd96de45ac9e731b1
@@ -969,7 +969,7 @@ SPEC CHECKSUMS:
   RNFBApp: af276a038f2e1488d59920697bba97b43f83164c
   RNFBCrashlytics: e3bec3a6f57870a910421e89a9ee533ce373352a
   RNFBMessaging: d991f55546b940c4aaf73559d8590bf9a9d8620c
-  RNGestureHandler: 38aa38413896620338948fbb5c90579a7b1c3fde
+  RNGestureHandler: bb86e378287f7713baf3ca205423eb8109790022
   RNImageCropPicker: 486e2f7e2b0461ce24321f751410dce1b3b49e6d
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
   RNReanimated: be07c7ae209074d0e8a84cf38b7909457ac59a32

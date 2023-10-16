@@ -11,19 +11,26 @@ import Contractor from '@/components/TabScreens/ContractorsScreen/Contractor';
 import useContractors from '@/screens/task/ContractorsScreen/useContractors';
 import { User } from '@/store/api/user/types';
 import {
+  ContractorsInvitationScreenNavigationProp,
   ContractorsScreenRoute,
-  ProfileStackNavigationProp,
 } from '@/types/navigation';
 
 import { styles } from './style';
 
 export const ContractorsScreen = ({
   route: {
-    params: { taskId, curatorId, curatorMemberId, isInvitedCurator },
+    params: {
+      taskId,
+      isItLots,
+      curatorId,
+      curatorMemberId,
+      isInvitedCurator,
+      isConfirmedCurator,
+    },
   },
   navigation,
 }: {
-  navigation: ProfileStackNavigationProp;
+  navigation: ContractorsInvitationScreenNavigationProp;
   route: ContractorsScreenRoute;
 }) => {
   const {
@@ -37,13 +44,15 @@ export const ContractorsScreen = ({
     selectedContractorIDs,
     isAvailableContractorsExist,
     isAllContractorsAlreadyInvited,
-  } = useContractors(
+  } = useContractors({
     navigation,
     taskId,
     curatorId,
     isInvitedCurator,
-    curatorMemberId
-  );
+    curatorMemberId,
+    isItLots,
+    isConfirmedCurator,
+  });
 
   const renderItem = ({ item: contractor }: ListRenderItemInfo<User>) => (
     <Contractor

@@ -11,7 +11,7 @@ import {
   useGetTaskQuery,
   useGetUserOffersQuery,
 } from '@/store/api/tasks';
-import { Material, Offer, Service } from '@/store/api/tasks/types';
+import { Material, Service } from '@/store/api/tasks/types';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import {
   setNewOfferServices,
@@ -21,34 +21,30 @@ import {
 import { EstimateTab, RoleType, StatusType, TaskType } from '@/types/task';
 
 export const useTaskCardEstimate = ({
-  services,
   taskId,
-  navigation,
-  currentEstimateTab,
+  services,
   statusID,
-  winnerOffer,
   subsetID,
+  curatorId,
+  navigation,
   isContractor,
+  currentEstimateTab,
 }: {
-  services: Service[];
   taskId: number;
-  navigation: StackNavigationProp<
-    AppStackParamList,
-    AppScreenName.TaskCard,
-    undefined
-  >;
-  currentEstimateTab: EstimateTab;
-  statusID: StatusType | undefined;
-  winnerOffer: Offer | undefined;
-  subsetID: TaskType | undefined;
+  services: Service[];
+  curatorId?: number;
   isContractor: boolean;
+  subsetID: TaskType | undefined;
+  statusID: StatusType | undefined;
+  currentEstimateTab: EstimateTab;
+  navigation: StackNavigationProp<AppStackParamList, AppScreenName.TaskCard>;
 }) => {
   const dispatch = useAppDispatch();
   const bsRef = useRef<BottomSheetModal>(null);
 
-  const { user } = useAppSelector(selectAuth);
+  const [estimateSheetVisible, setEstimateSheetVisible] = useState(false);
 
-  const userRoleID = user?.roleID;
+  const { user } = useAppSelector(selectAuth);
 
   const userID = user?.userID;
 
@@ -59,9 +55,12 @@ export const useTaskCardEstimate = ({
   });
   const getUserOffersQuery = useGetUserOffersQuery({
     taskID: +taskId,
-    userID: userID as number,
+    userID: (isContractor && subsetID === TaskType.IT_AUCTION_SALE
+      ? curatorId
+      : userID) as number,
   });
   const userOffer = getUserOffersQuery.data?.offers?.[0];
+  const isAnotherOffers = !!getAnotherOffers?.data?.count;
   const task = data?.tasks?.[0];
   const setId = task?.setID;
   const isOffersPublic = task?.isOffersPublic;
@@ -74,6 +73,31 @@ export const useTaskCardEstimate = ({
   const userComment = userOffer?.comment;
   const clientComment = userOffer?.clientComment || '';
   const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
+
+  const showOffers =
+    (subsetID &&
+      !isContractor &&
+      [TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE].includes(
+        subsetID,
+      ) &&
+      statusID === StatusType.ACTIVE) ||
+    (subsetID === TaskType.IT_AUCTION_SALE && statusID === StatusType.WORK);
+
+  const isEstimateEditable =
+    subsetID === TaskType.IT_AUCTION_SALE
+      ? (!isTaskEstimateTab &&
+          !isContractor &&
+          statusID === StatusType.ACTIVE) ||
+        (statusID === StatusType.WORK && !isContractor && isTaskEstimateTab)
+      : !isTaskEstimateTab;
+
+  const canSwipe =
+    subsetID &&
+    !(isContractor && subsetID === TaskType.IT_FIRST_RESPONSE) &&
+    statusID === StatusType.WORK &&
+    ![TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE].includes(
+      subsetID,
+    );
 
   const getCurrentServices = () => {
     switch (subsetID) {
@@ -89,9 +113,8 @@ export const useTaskCardEstimate = ({
         return services;
       case TaskType.IT_AUCTION_SALE:
         if (
-          (statusID &&
-            ![StatusType.ACTIVE, StatusType.WORK].includes(statusID) &&
-            !isContractor) ||
+          (statusID === StatusType.ACTIVE && isContractor) ||
+          (statusID && ![StatusType.ACTIVE].includes(statusID)) ||
           currentEstimateTab === EstimateTab.MY_SUGGESTION
         ) {
           return userServices;
@@ -103,19 +126,6 @@ export const useTaskCardEstimate = ({
   };
 
   const currentServices = getCurrentServices();
-  const canSwipe =
-    subsetID &&
-    !(
-      isContractor &&
-      [TaskType.IT_FIRST_RESPONSE, TaskType.IT_AUCTION_SALE].includes(subsetID)
-    ) &&
-    statusID === StatusType.WORK &&
-    subsetID !== TaskType.COMMON_AUCTION_SALE;
-
-  const [estimateSheetVisible, setEstimateSheetVisible] = useState(false);
-
-  const isAnotherOffers = !!getAnotherOffers?.data?.count;
-
   const allMaterials = currentServices.reduce<Material[]>(
     (acc, val) =>
       acc.concat(typeof val.materials !== 'undefined' ? val.materials : []),
@@ -136,16 +146,10 @@ export const useTaskCardEstimate = ({
     return acc;
   }, []);
 
-  const onEstimateSheetVisible = () => {
-    setEstimateSheetVisible(true);
-  };
-  const onEstimateSheetClose = () => {
-    setEstimateSheetVisible(false);
-  };
+  const onEstimateSheetVisible = () => setEstimateSheetVisible(true);
+  const onEstimateSheetClose = () => setEstimateSheetVisible(false);
+  const addServiceBottomSheetClose = () => bsRef.current?.close();
 
-  const addServiceBottomSheetClose = () => {
-    bsRef.current?.close();
-  };
   const onPressMaterial = () => {
     onEstimateSheetClose();
     navigation.navigate(AppScreenName.NewMaterial, {
@@ -157,13 +161,12 @@ export const useTaskCardEstimate = ({
     onEstimateSheetClose();
     bsRef.current?.present();
   };
-  const onEdit = (serviceId: number, materialName?: string) => {
+  const onEdit = (serviceId: number, materialName?: string) =>
     navigation.navigate(AppScreenName.EstimateEdit, {
       taskId,
       serviceId,
       materialName,
     });
-  };
 
   const addService = (service: Service) => {
     navigation.navigate(AppScreenName.EstimateAddService, {
@@ -172,14 +175,12 @@ export const useTaskCardEstimate = ({
     });
     bsRef.current?.close();
   };
-  const onCandidateEstimates = (isResults: boolean) => {
+  const onCandidateEstimates = (isResults: boolean) =>
     navigation.navigate(AppScreenName.CandidateEstimates, {
       taskId,
       ...(!isResults && { userID }),
-      ...(isResults && { winnerOffer }),
       isResults,
     });
-  };
 
   const onEditEstimate = () => {
     if (userOffer) {
@@ -220,32 +221,32 @@ export const useTaskCardEstimate = ({
   };
 
   return {
+    bsRef,
+    setId,
+    userID,
+    onEdit,
+    refetch,
+    canSwipe,
+    showOffers,
+    servicesSum,
+    addService,
+    userComment,
+    serviceNames,
+    materialsSum,
+    clientComment,
+    onEditEstimate,
+    isOffersPublic,
+    onPressService,
+    currentServices,
+    onPressMaterial,
+    isAnotherOffers,
+    isInternalExecutor,
+    isEstimateEditable,
+    isOffersDeadlineOver,
+    onCandidateEstimates,
+    onEstimateSheetClose,
     estimateSheetVisible,
     onEstimateSheetVisible,
-    onEstimateSheetClose,
-    materialsSum,
-    onEdit,
-    onPressMaterial,
-    onPressService,
-    bsRef,
     addServiceBottomSheetClose,
-    isAnotherOffers,
-    currentServices,
-    userID,
-    userComment,
-    clientComment,
-    isTaskEstimateTab,
-    isOffersPublic,
-    isOffersDeadlineOver,
-    canSwipe,
-    serviceNames,
-    addService,
-    onCandidateEstimates,
-    onEditEstimate,
-    userRoleID,
-    setId,
-    isInternalExecutor,
-    servicesSum,
-    refetch,
   };
 };

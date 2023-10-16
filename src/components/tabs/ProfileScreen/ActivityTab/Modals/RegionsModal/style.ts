@@ -1,6 +1,6 @@
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import { configApp, deviceWidth } from '@/constants/platform';
+import { deviceWidth } from '@/constants/platform';
 
 const styles = StyleSheet.create({
   modalTitle: {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 
@@ -26,6 +26,8 @@ export const TaskCardCancelBottomSheet = ({
   isContractor,
   withReason,
 }: TaskCardCancelBottomSheetProps) => {
+  const [canceled, setCanceled] = useState(false);
+
   const isKeyboardVisible = useKeyboard();
   const methods = useForm({
     defaultValues: { cancelTask: '' },
@@ -35,20 +37,31 @@ export const TaskCardCancelBottomSheet = ({
   const {
     handleSubmit,
     formState: { isValid, errors },
+    reset,
   } = methods;
   const isDisabled = !isValid && !!Object.keys(errors).length;
 
   const onRefusePress = ({ cancelTask }: { cancelTask?: string }) => {
+    reset();
     onRefuse(cancelTask);
   };
-
+  const handleCancel = () => {
+    if (!canceled) {
+      setCanceled(true);
+      reset();
+      onCancel();
+    }
+  };
+  const onModalHide = () => {
+    setCanceled(false);
+  };
   return (
     <BottomSheet
       avoidKeyboard
       isVisible={isVisible}
       titleStyle={styles.title}
-      onSwipeComplete={onCancel}
-      onBackdropPress={onCancel}
+      onSwipeComplete={handleCancel}
+      onBackdropPress={handleCancel}
       title={
         isContractor && !withReason
           ? 'Отклонить предложение куратора?'
@@ -56,6 +69,7 @@ export const TaskCardCancelBottomSheet = ({
       }
       subtitle="Потом это действие нельзя будет отменить"
       containerStyle={configApp.ios && isKeyboardVisible && styles.pb10}
+      onModalHide={onModalHide}
     >
       <FormProvider {...methods}>
         <View style={withReason && styles.mt24}>
@@ -68,7 +82,8 @@ export const TaskCardCancelBottomSheet = ({
           )}
           <Button
             style={styles.mt24}
-            disabled={withReason ? !isValid : isDisabled}
+            disabled={canceled || (withReason ? !isValid : isDisabled)}
+            isPending={canceled}
             variant="outlineDanger"
             onPress={handleSubmit(onRefusePress)}
             label={isContractor && !withReason ? 'Отклонить' : 'Отказаться'}
@@ -79,7 +94,7 @@ export const TaskCardCancelBottomSheet = ({
           size="M"
           label="Отмена"
           variant="accent"
-          onPress={onCancel}
+          onPress={handleCancel}
         />
       </FormProvider>
       <Spacer size={configApp.ios ? 'xs' : 'l'} />

@@ -44,6 +44,7 @@ type Executor = {
   ID: number;
   email?: string;
   phone?: number;
+  curatorID?: number;
   entityTypeID?: number;
   isAccept?: boolean;
   isApproved?: boolean;
@@ -324,7 +325,7 @@ type GetTaskStatusesResponse = [
     code: 'closed';
     description: 'Закрыто';
     tableName: 'task_status';
-  }
+  },
 ];
 type ServicesCategory = {
   ID: number;
@@ -353,6 +354,12 @@ type PatchOffersRequest = {
   refuseReason?: string;
   sum?: number;
 };
+type PostITMembersOfferParams = {
+  executorIDs: number[];
+  isConfirm: boolean;
+  curatorID: number;
+  offerID: number;
+};
 type PostITTaskMemberParams = {
   taskID: number;
   members: ITTaskMember[];
@@ -372,6 +379,7 @@ type ITTaskMember = {
   offer?: {
     taskID: number;
     isCurator: boolean;
+    comment: string;
     services: Service[];
   };
 };
@@ -395,6 +403,7 @@ type PatchITTaskMemberParams = {
     taskID: number;
     isCurator: boolean;
     services: Service[];
+    comment: string;
   };
 };
 
@@ -428,4 +437,5 @@ export type {
   Measure,
   GetMeasuresResponse,
   Coordinator,
+  PostITMembersOfferParams,
 };

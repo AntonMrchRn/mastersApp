@@ -1,12 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
-import { useIsFocused } from '@react-navigation/native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import {
+  CompositeNavigationProp,
+  useIsFocused,
+} from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useToast } from 'rn-ui-kit';
 
 import { useTaskSSE } from '@/hooks/useTaskSSE';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
+import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   tasksAPI,
@@ -25,8 +30,8 @@ import {
   setOfferID,
 } from '@/store/slices/tasks/actions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
-import { AxiosQueryErrorResponse } from '@/types/error';
-import { TaskType } from '@/types/task';
+import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
+import { StatusType, TaskType } from '@/types/task';
 
 export const useEstimateSubmission = ({
   navigation,
@@ -34,23 +39,40 @@ export const useEstimateSubmission = ({
   isEdit,
   isInvitedExecutor,
   executor,
+  submissionByCurator,
+  curatorMemberID,
+  isInvitedCurator,
 }: {
-  navigation: StackNavigationProp<
-    AppStackParamList,
-    AppScreenName.EstimateSubmission,
-    undefined
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<
+      AppStackParamList,
+      AppScreenName.EstimateSubmission,
+      undefined
+    >,
+    BottomTabNavigationProp<
+      BottomTabParamList,
+      keyof BottomTabParamList,
+      undefined
+    >
   >;
   taskId: number;
   isEdit: boolean | undefined;
   isInvitedExecutor: boolean | undefined;
   executor: Executor | undefined;
+  submissionByCurator: boolean | undefined;
+  curatorMemberID: number | undefined;
+  isInvitedCurator: boolean;
 }) => {
   const dispatch = useAppDispatch();
   const toast = useToast();
   const isFocused = useIsFocused();
-
   const bsRef = useRef<BottomSheetModal>(null);
-  const { data, refetch } = useGetTaskQuery(taskId);
+  const {
+    data,
+    refetch,
+    isError: isTaskError,
+    error: taskError,
+  } = useGetTaskQuery(taskId);
 
   const refresh = () => {
     dispatch(
@@ -92,7 +114,9 @@ export const useEstimateSubmission = ({
     useAppSelector(selectTasks);
   const user = useAppSelector(selectAuth).user;
   const userRole = useAppSelector(selectAuth).user?.roleID;
-  const isItLots = data?.tasks[0]?.subsetID === TaskType.IT_AUCTION_SALE;
+  const task = data?.tasks?.[0];
+  const isItLots = task?.subsetID === TaskType.IT_AUCTION_SALE;
+  const isActive = task?.statusID === StatusType.ACTIVE;
 
   useEffect(() => {
     if (isFocused) {
@@ -108,6 +132,29 @@ export const useEstimateSubmission = ({
       });
     }
   }, [error]);
+  useEffect(() => {
+    if (isTaskError) {
+      if (
+        [
+          ErrorCode.TaskIsAlreadyTaken,
+          ErrorCode.OTHER_CANDIDATE,
+          ErrorCode.NOT_FOUND,
+        ].includes((taskError as AxiosQueryErrorResponse).data.code)
+      ) {
+        navigation.navigate(BottomTabName.TaskSearch);
+        return toast.show({
+          type: 'info',
+          duration: 6000,
+          title: (taskError as AxiosQueryErrorResponse).data.message,
+        });
+      }
+
+      toast.show({
+        type: 'error',
+        title: (taskError as AxiosQueryErrorResponse).data.message,
+      });
+    }
+  }, [isTaskError]);
 
   const services = offerServices || [];
   const serviceNames = services?.reduce<string[]>((acc, val) => {
@@ -129,7 +176,6 @@ export const useEstimateSubmission = ({
     ? Number(allSumReduce.toFixed(2))
     : allSumReduce;
 
-  const task = data?.tasks?.[0];
   const allowCostIncrease = task?.allowCostIncrease;
   const currentSum = task?.currentSum;
   const costStep = task?.costStep;
@@ -177,18 +223,13 @@ export const useEstimateSubmission = ({
     field => !!field.localPrice || !!field.localCount,
   );
 
-  const onEstimateModalVisible = () => {
+  const onEstimateModalVisible = () =>
     setEstimateModalVisible(!estimateModalVisible);
-  };
-  const onClosePress = () => {
-    setBanner(undefined);
-  };
-  const onDeleteEstimateServiceModalVisible = () => {
+  const onClosePress = () => setBanner(undefined);
+  const onDeleteEstimateServiceModalVisible = () =>
     setDeleteEstimateServiceModalVisible(!deleteEstimateServiceModalVisible);
-  };
-  const onDeleteEstimateMaterialModalVisible = () => {
+  const onDeleteEstimateMaterialModalVisible = () =>
     setDeleteEstimateMaterialModalVisible(!deleteEstimateMaterialModalVisible);
-  };
   const onCancelDeleteService = () => {
     setServiceForDelete(undefined);
     setDeleteEstimateServiceModalVisible(!deleteEstimateServiceModalVisible);
@@ -197,9 +238,8 @@ export const useEstimateSubmission = ({
     setMaterialForDelete(undefined);
     setDeleteEstimateMaterialModalVisible(!deleteEstimateMaterialModalVisible);
   };
-  const addServiceBottomSheetClose = () => {
-    bsRef.current?.close();
-  };
+  const addServiceBottomSheetClose = () => bsRef.current?.close();
+
   const addService = (service: Service) => {
     navigation.navigate(AppScreenName.EstimateAddService, {
       service,
@@ -247,9 +287,7 @@ export const useEstimateSubmission = ({
     }
     onDeleteEstimateMaterialModalVisible();
   };
-  const setComment = (text: string) => {
-    dispatch(setOfferComment(text));
-  };
+  const setComment = (text: string) => dispatch(setOfferComment(text));
 
   const onSubmit = async () => {
     //если есть ошибка валидации
@@ -286,11 +324,13 @@ export const useEstimateSubmission = ({
     }
     try {
       setIsLoading(true);
-      await patchTaskLot({
-        taskID: taskId,
-        sum: allSum,
-        ...(isEdit && offerID && { offerID }),
-      }).unwrap();
+      if (isActive) {
+        await patchTaskLot({
+          taskID: taskId,
+          sum: allSum,
+          ...(isEdit && offerID && { offerID }),
+        }).unwrap();
+      }
 
       const postServices: Service[] = services.map(service => {
         const postMaterials =
@@ -343,7 +383,6 @@ export const useEstimateSubmission = ({
             type: 'success',
             title: 'Ценовое предложение изменено',
           });
-          refetch();
           dispatch(setNewOfferServices([]));
           dispatch(setOfferComment(''));
           dispatch(setOfferID(undefined));
@@ -352,34 +391,68 @@ export const useEstimateSubmission = ({
           });
         }
       } else {
-        // Подача сметы для IT-лотов Исполнителем
         if (isItLots) {
-          isInvitedExecutor
-            ? await patchITTaskMember({
-                ID: executor?.memberID,
-                isConfirm: true,
-                isCurator: false,
-                offer: {
-                  taskID: taskId,
-                  isCurator: false,
-                  services: postServices,
-                },
-              }).unwrap()
-            : await postITTaskMember({
-                taskID: taskId,
-                members: [
-                  {
-                    userID: user?.userID,
-                    isConfirm: true,
-                    isCurator: false,
-                    offer: {
-                      taskID: taskId,
-                      isCurator: false,
-                      services: postServices,
-                    },
+          // Подача сметы для IT-лотов Куратором
+          if (submissionByCurator) {
+            isInvitedExecutor
+              ? await patchITTaskMember({
+                  ID: executor?.memberID,
+                  isConfirm: true,
+                  isCurator: true,
+                  offer: {
+                    taskID: taskId,
+                    isCurator: true,
+                    comment: offerComment,
+                    services: postServices,
                   },
-                ],
-              }).unwrap();
+                }).unwrap()
+              : await postITTaskMember({
+                  taskID: taskId,
+                  members: [
+                    {
+                      userID: user?.userID,
+                      isConfirm: true,
+                      isCurator: true,
+                      offer: {
+                        taskID: taskId,
+                        isCurator: true,
+                        comment: offerComment,
+                        services: postServices,
+                      },
+                    },
+                  ],
+                }).unwrap();
+          } else {
+            // Подача сметы для IT-лотов Исполнителем
+            isInvitedExecutor
+              ? await patchITTaskMember({
+                  ID: executor?.memberID,
+                  isConfirm: true,
+                  isCurator: false,
+                  offer: {
+                    taskID: taskId,
+                    isCurator: false,
+                    comment: offerComment,
+                    services: postServices,
+                  },
+                }).unwrap()
+              : await postITTaskMember({
+                  taskID: taskId,
+                  members: [
+                    {
+                      userID: user?.userID,
+                      isConfirm: true,
+                      isCurator: false,
+                      offer: {
+                        taskID: taskId,
+                        isCurator: false,
+                        comment: offerComment,
+                        services: postServices,
+                      },
+                    },
+                  ],
+                }).unwrap();
+          }
         } else {
           // Подача сметы для Общих лотов Исполнителем
           await postOffers({
@@ -392,9 +465,25 @@ export const useEstimateSubmission = ({
 
         dispatch(setNewOfferServices([]));
         dispatch(setOfferComment(''));
-        navigation.navigate(AppScreenName.EstimateSubmissionSuccess, {
-          taskId,
-        });
+
+        if (!submissionByCurator) {
+          navigation.navigate(AppScreenName.EstimateSubmissionSuccess, {
+            taskId,
+          });
+        } else {
+          toast.show({
+            type: 'success',
+            title: 'Смета успешна подана',
+          });
+
+          navigation.navigate(AppScreenName.Contractors, {
+            taskId,
+            isInvitedCurator,
+            isItLots,
+            curatorId: user?.userID as number,
+            curatorMemberId: curatorMemberID,
+          });
+        }
       }
     } catch (err) {
       toast.show({
@@ -402,6 +491,7 @@ export const useEstimateSubmission = ({
         title: (err as AxiosQueryErrorResponse).data.message,
       });
     } finally {
+      refetch();
       setIsLoading(false);
     }
   };

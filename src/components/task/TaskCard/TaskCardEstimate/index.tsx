@@ -50,6 +50,7 @@ type TaskCardEstimateProps = {
   isContractor: boolean;
   serviceMultiplier: number;
   cantDeleteBannerVisible: boolean;
+  curatorId?: number;
 };
 
 export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
@@ -64,51 +65,54 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   winnerOffer,
   isContractor,
   serviceMultiplier,
+  curatorId,
   cantDeleteBannerVisible,
 }) => {
   const theme = useTheme();
   const isFocused = useIsFocused();
   const {
+    bsRef,
+    setId,
+    userID,
+    onEdit,
+    refetch,
+    canSwipe,
+    showOffers,
+    servicesSum,
+    addService,
+    userComment,
+    serviceNames,
+    materialsSum,
+    clientComment,
+    onEditEstimate,
+    isOffersPublic,
+    onPressService,
+    currentServices,
+    onPressMaterial,
+    isAnotherOffers,
+    isInternalExecutor,
+    isEstimateEditable,
+    isOffersDeadlineOver,
+    onCandidateEstimates,
+    onEstimateSheetClose,
     estimateSheetVisible,
     onEstimateSheetVisible,
-    onEstimateSheetClose,
-    materialsSum,
-    onEdit,
-    onPressMaterial,
-    onPressService,
-    bsRef,
-    isAnotherOffers,
     addServiceBottomSheetClose,
-    isTaskEstimateTab,
-    currentServices,
-    isOffersPublic,
-    userComment,
-    isOffersDeadlineOver,
-    canSwipe,
-    serviceNames,
-    addService,
-    onCandidateEstimates,
-    onEditEstimate,
-    setId,
-    isInternalExecutor,
-    clientComment,
-    refetch,
-    servicesSum,
-    userID,
   } = useTaskCardEstimate({
     services,
     taskId,
     navigation,
     currentEstimateTab,
     statusID,
-    winnerOffer,
     subsetID,
     isContractor,
+    curatorId,
   });
 
   if (!services.length) {
     return <PreviewNotFound type={PreviewNotFoundType.NoEstimate} />;
   }
+
   return (
     <>
       <TaskCardAddEstimateBottomSheet
@@ -137,6 +141,9 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             TaskType.IT_INTERNAL_EXECUTIVES,
           ].includes(subsetID) && (
             <TaskEstimateOutline
+              showAddButton={
+                subsetID !== TaskType.IT_AUCTION_SALE && !isContractor
+              }
               showEstimateStatus={!isInternalExecutor}
               outlayStatusID={outlayStatusID}
               onPress={onEstimateSheetVisible}
@@ -146,12 +153,10 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           Перечень услуг и материалов
         </Text>
         {currentServices.map(service => {
-          const firstActionService = () => {
-            onEdit(service.ID as number);
-          };
-          const handleBanner = () => {
+          const firstActionService = () => onEdit(service.ID as number);
+          const handleBanner = () =>
             !cantDeleteBannerVisible && onCantDeleteBannerVisible();
-          };
+
           return (
             <View key={service.ID}>
               <ServiceItem
@@ -220,144 +225,129 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
             }
           />
         )}
-        {subsetID &&
-          [TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE].includes(
-            subsetID,
-          ) &&
-          statusID === StatusType.ACTIVE && (
-            <View style={styles.mt16}>
-              {isTaskEstimateTab ? (
-                <>
-                  {isOffersPublic && (
-                    <>
-                      {!isOffersDeadlineOver && !winnerOffer ? (
-                        <>
-                          {isAnotherOffers ? (
-                            <TouchableOpacity
-                              style={styles.candidatRow}
-                              onPress={() => onCandidateEstimates(false)}
-                            >
-                              <CalculatorIcon color={theme.text.basic} />
-                              <Text
-                                variant="bodySBold"
-                                color={theme.text.basic}
-                              >
-                                Сметы других кандидатов
-                              </Text>
-                            </TouchableOpacity>
-                          ) : (
-                            <Text
-                              variant="bodySRegular"
-                              color={theme.text.neutral}
-                            >
-                              Предложений других кандидатов пока нет
+        {showOffers && (
+          <View style={styles.mt16}>
+            {!isEstimateEditable ? (
+              <>
+                {isOffersPublic && (
+                  <>
+                    {!isOffersDeadlineOver && !winnerOffer ? (
+                      <>
+                        {isAnotherOffers ? (
+                          <TouchableOpacity
+                            style={styles.candidatRow}
+                            onPress={() => onCandidateEstimates(false)}
+                          >
+                            <CalculatorIcon color={theme.text.basic} />
+                            <Text variant="bodySBold" color={theme.text.basic}>
+                              Сметы других кандидатов
                             </Text>
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          {isOffersDeadlineOver && (
-                            <>
-                              {winnerOffer && winnerOffer?.userID !== userID ? (
-                                <TouchableOpacity
-                                  style={styles.candidatRow}
-                                  onPress={() => onCandidateEstimates(true)}
+                          </TouchableOpacity>
+                        ) : (
+                          <Text
+                            variant="bodySRegular"
+                            color={theme.text.neutral}
+                          >
+                            Предложений других кандидатов пока нет
+                          </Text>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        {isOffersDeadlineOver && (
+                          <>
+                            {winnerOffer && winnerOffer?.userID !== userID ? (
+                              <TouchableOpacity
+                                style={styles.candidatRow}
+                                onPress={() => onCandidateEstimates(true)}
+                              >
+                                <GavelIcon />
+                                <Text
+                                  variant="bodySBold"
+                                  color={theme.text.basic}
                                 >
-                                  <GavelIcon />
-                                  <Text
-                                    variant="bodySBold"
-                                    color={theme.text.basic}
+                                  Посмотреть результаты торгов
+                                </Text>
+                              </TouchableOpacity>
+                            ) : (
+                              <>
+                                {!winnerOffer && isAnotherOffers ? (
+                                  <TouchableOpacity
+                                    style={styles.candidatRow}
+                                    onPress={() => onCandidateEstimates(false)}
                                   >
-                                    Посмотреть результаты торгов
-                                  </Text>
-                                </TouchableOpacity>
-                              ) : (
-                                <>
-                                  {!winnerOffer && isAnotherOffers ? (
-                                    <TouchableOpacity
-                                      style={styles.candidatRow}
-                                      onPress={() =>
-                                        onCandidateEstimates(false)
-                                      }
-                                    >
-                                      <CalculatorIcon
-                                        color={theme.text.basic}
-                                      />
-                                      <Text
-                                        variant="bodySBold"
-                                        color={theme.text.basic}
-                                      >
-                                        Сметы других кандидатов
-                                      </Text>
-                                    </TouchableOpacity>
-                                  ) : (
+                                    <CalculatorIcon color={theme.text.basic} />
                                     <Text
-                                      variant="bodySRegular"
-                                      color={theme.text.neutral}
+                                      variant="bodySBold"
+                                      color={theme.text.basic}
                                     >
-                                      Предложений других кандидатов нет
+                                      Сметы других кандидатов
                                     </Text>
-                                  )}
-                                </>
-                              )}
-                            </>
-                          )}
-                        </>
-                      )}
-                    </>
-                  )}
-                </>
-              ) : (
-                <>
-                  {!isOffersDeadlineOver && !winnerOffer && (
-                    <TouchableOpacity
-                      style={styles.edit}
-                      onPress={onEditEstimate}
-                    >
-                      <EditIcon />
-                      <Text variant="bodySBold" color={theme.text.basic}>
-                        Редактировать смету
+                                  </TouchableOpacity>
+                                ) : (
+                                  <Text
+                                    variant="bodySRegular"
+                                    color={theme.text.neutral}
+                                  >
+                                    Предложений других кандидатов нет
+                                  </Text>
+                                )}
+                              </>
+                            )}
+                          </>
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+              </>
+            ) : (
+              <>
+                {((!isOffersDeadlineOver && !winnerOffer) ||
+                  (statusID === StatusType.WORK &&
+                    subsetID === TaskType.IT_AUCTION_SALE)) && (
+                  <TouchableOpacity
+                    style={styles.edit}
+                    onPress={onEditEstimate}
+                  >
+                    <EditIcon />
+                    <Text variant="bodySBold" color={theme.text.basic}>
+                      Редактировать смету
+                    </Text>
+                  </TouchableOpacity>
+                )}
+                {userComment && (
+                  <>
+                    <Spacer size={20} />
+                    <View style={styles.comment}>
+                      <Text variant="captionRegular" color={theme.text.neutral}>
+                        Ваш комментарий к ценовому предложению
                       </Text>
-                    </TouchableOpacity>
-                  )}
-                  {userComment && (
-                    <>
-                      <Spacer size={20} />
-                      <View style={styles.comment}>
-                        <Text
-                          variant="captionRegular"
-                          color={theme.text.neutral}
-                        >
-                          Ваш комментарий к ценовому предложению
-                        </Text>
-                        <Text variant="bodyMRegular" color={theme.text.basic}>
-                          {userComment}
-                        </Text>
-                      </View>
-                      <Spacer size={20} separator="bottom" />
-                    </>
-                  )}
-                  {clientComment && (
-                    <>
-                      <Spacer size={20} />
-                      <View style={styles.comment}>
-                        <Text
-                          variant="captionRegular"
-                          color={theme.text.neutral}
-                        >
-                          Ответ координатора
-                        </Text>
-                        <Text variant="bodyMRegular" color={theme.text.basic}>
-                          {clientComment}
-                        </Text>
-                      </View>
-                      <Spacer size={20} separator="bottom" />
-                    </>
-                  )}
-                </>
-              )}
-            </View>
-          )}
+                      <Text variant="bodyMRegular" color={theme.text.basic}>
+                        {userComment}
+                      </Text>
+                    </View>
+                    <Spacer size={20} separator="bottom" />
+                  </>
+                )}
+                {clientComment && (
+                  <>
+                    <Spacer size={20} />
+                    <View style={styles.comment}>
+                      <Text variant="captionRegular" color={theme.text.neutral}>
+                        Ответ координатора
+                      </Text>
+                      <Text variant="bodyMRegular" color={theme.text.basic}>
+                        {clientComment}
+                      </Text>
+                    </View>
+                    <Spacer size={20} separator="bottom" />
+                  </>
+                )}
+              </>
+            )}
+          </View>
+        )}
       </View>
     </>
   );

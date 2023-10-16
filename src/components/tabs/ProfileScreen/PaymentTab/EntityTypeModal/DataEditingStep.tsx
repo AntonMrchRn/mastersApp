@@ -97,7 +97,7 @@ const DataEditingStep = ({
     resolver: (isApproved
       ? yupResolver(entityNameValidationSchema)
       : yupResolver(
-          formProps[description].validationSchema
+          formProps[description].validationSchema,
         )) as Resolver<EntityTypeFormValues>,
     mode: 'onBlur',
   });

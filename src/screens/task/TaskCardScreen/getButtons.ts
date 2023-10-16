@@ -524,6 +524,9 @@ export const getButtons = ({
       if (toClose) {
         switch (tab) {
           case TaskTab.REPORT:
+            if (isContractor) {
+              return [];
+            }
             if (closureFiles.length) {
               return [
                 {
@@ -586,10 +589,9 @@ export const getButtons = ({
                         {
                           label: 'Принять задачу',
                           variant: 'accent',
-                          onPress:
-                            isContractor || isInternalExecutor
-                              ? onTaskSubmission
-                              : onSubmissionModalVisible,
+                          onPress: isContractor
+                            ? onTaskSubmission
+                            : onSubmissionModalVisible,
                         } as TaskCardBottomButton,
                       ]
                     : []),
@@ -790,11 +792,6 @@ export const getButtons = ({
                     ]
                   : [
                       {
-                        label: 'Сдать работы',
-                        variant: 'accent',
-                        onPress: onWorkDelivery,
-                      },
-                      {
                         label: 'Загрузить еще файлы',
                         variant: 'outlineAccent',
                         onPress: onUploadModalVisible,
@@ -878,6 +875,9 @@ export const getButtons = ({
       if (toClose) {
         switch (tab) {
           case TaskTab.REPORT:
+            if (isContractor) {
+              return [];
+            }
             if (closureFiles.length) {
               return [
                 {
@@ -921,16 +921,19 @@ export const getButtons = ({
               if (isOffersDeadlineOver) {
                 return [];
               }
-              if (isInvitedCurator) {
-                // приглашенный координатором куратор
+              if (userOffersData.length) {
                 return [
                   {
-                    label: 'Стать куратором',
-                    variant: 'outlineAccent',
-                    onPress: onBecomeCurator,
-                  } as TaskCardBottomButton,
+                    label: 'Отозвать смету',
+                    variant: 'outlineDanger',
+                    onPress: onBudgetModalVisible,
+                  },
                 ];
               }
+              if (isInvitedCurator) {
+                // TODO: приглашенный координатором куратор
+              }
+
               // куратор/подрядчик/приглашенный координатором исполнитель/задача без участия куратора
               if (
                 isCurator ||
@@ -942,34 +945,12 @@ export const getButtons = ({
                   ...(!isCurator
                     ? [
                         {
-                          label: 'Подать смету как исполнитель',
+                          label: 'Подать смету',
                           variant: 'accent',
                           onPress:
                             isContractor || isInternalExecutor
                               ? onTaskSubmission
                               : onSubmissionModalVisible,
-                        } as TaskCardBottomButton,
-                        {
-                          label: 'Подать смету как куратор',
-                          variant: 'outlineAccent',
-                          onPress:
-                            isContractor || isInternalExecutor
-                              ? onBecomeCurator
-                              : () => onSubmissionModalVisible(true),
-                        } as TaskCardBottomButton,
-                      ]
-                    : []),
-                  // задача с участием куратора, в которой нет приглашенного координатором исполнителя
-                  ...(isCuratorAllowedTask && !isInvitedExecutor
-                    ? [
-                        {
-                          label: isContractor
-                            ? 'Отклонить приглашение'
-                            : 'Отказаться от задачи',
-                          variant: 'outlineDanger',
-                          onPress: isContractor
-                            ? onCancelModalVisible
-                            : onCancelTask,
                         } as TaskCardBottomButton,
                       ]
                     : []),
@@ -977,17 +958,23 @@ export const getButtons = ({
               }
               return [
                 {
-                  label: 'Принять задачу как исполнитель',
+                  label: 'Подать смету как исполнитель',
                   variant: 'accent',
-                  onPress: onSubmissionModalVisible,
-                },
+                  onPress:
+                    isContractor || isInternalExecutor
+                      ? onTaskSubmission
+                      : onSubmissionModalVisible,
+                } as TaskCardBottomButton,
                 // задача с участием куратора, который её ещё не принял (или принял, но отказался)
                 ...(isTaskWithUnconfirmedCurator
                   ? [
                       {
-                        label: 'Стать куратором',
+                        label: 'Подать смету как куратор',
                         variant: 'outlineAccent',
-                        onPress: onBecomeCurator,
+                        onPress:
+                          isContractor || isInternalExecutor
+                            ? onBecomeCurator
+                            : () => onSubmissionModalVisible(true),
                       } as TaskCardBottomButton,
                     ]
                   : []),
@@ -1076,15 +1063,6 @@ export const getButtons = ({
               return [];
             case TaskTab.REPORT:
               return [
-                ...(isCurator
-                  ? [
-                      {
-                        label: 'Отказаться от задачи',
-                        variant: 'outlineDanger',
-                        onPress: onCancelModalVisible,
-                      } as TaskCardBottomButton,
-                    ]
-                  : []),
                 ...(!isCurator
                   ? !reportFiles.length
                     ? [
@@ -1157,11 +1135,6 @@ export const getButtons = ({
                       },
                     ]
                   : [
-                      {
-                        label: 'Сдать работы',
-                        variant: 'accent',
-                        onPress: onWorkDelivery,
-                      },
                       {
                         label: 'Загрузить еще файлы',
                         variant: 'outlineAccent',

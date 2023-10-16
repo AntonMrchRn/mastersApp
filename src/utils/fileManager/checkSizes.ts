@@ -20,7 +20,7 @@ export const checkSizes = ({
     const moreThanMaxSize = sizes.filter(siz => siz.size >= maxSize * MB);
     if (moreThanMaxSize.length) {
       const moreThanMaxSizeImage = moreThanMaxSize.find(si =>
-        imgTypes.includes(si.type)
+        imgTypes.includes(si.type),
       );
       if (moreThanMaxSizeImage) {
         return false;
@@ -37,7 +37,7 @@ export const checkSizes = ({
     const moreThanMaxSize = sizes.filter(siz => siz.size >= 5 * MB);
 
     const moreThanMaxSizeDoc = moreThanMaxSize.find(si =>
-      imgTypes.includes(si.type)
+      imgTypes.includes(si.type),
     );
 
     if (moreThanMaxSizeDoc) {

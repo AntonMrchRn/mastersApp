@@ -1,37 +1,63 @@
 import { useEffect, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useIsFocused } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 
-import { ProfileScreenName } from '@/navigation/ProfileNavigation';
-import { BottomTabName } from '@/navigation/TabNavigation';
+import { AppScreenName } from '@/navigation/AppNavigation';
 import { styles } from '@/screens/task/ContractorsScreen/style';
 import {
   useGetAvailableContractorsQuery,
+  useGetUserOffersQuery,
   usePatchITTaskMemberMutation,
+  usePostITMembersOfferMutation,
   usePostITTaskMemberMutation,
 } from '@/store/api/tasks';
 import { PostITTaskMemberParams } from '@/store/api/tasks/types';
 import { User } from '@/store/api/user/types';
 import { AxiosQueryErrorResponse } from '@/types/error';
-import { ProfileStackNavigationProp } from '@/types/navigation';
+import { ContractorsInvitationScreenNavigationProp } from '@/types/navigation';
 import { ContractorStatus } from '@/types/task';
 
-const useContractors = (
-  navigation: ProfileStackNavigationProp,
-  taskId: number,
-  curatorId: number,
-  isInvitedCurator: boolean,
-  curatorMemberId?: number
-) => {
+type UseContractorsParams = {
+  taskId: number;
+  curatorId: number;
+  isInvitedCurator: boolean;
+  navigation: ContractorsInvitationScreenNavigationProp;
+  isItLots?: boolean;
+  curatorMemberId?: number;
+  isConfirmedCurator?: boolean;
+};
+
+const useContractors = ({
+  taskId,
+  isItLots,
+  curatorId,
+  navigation,
+  curatorMemberId,
+  isInvitedCurator,
+  isConfirmedCurator,
+}: UseContractorsParams) => {
+  const isFocused = useIsFocused();
   const insets = useSafeAreaInsets();
   const toast = useToast();
-
+  const {
+    data,
+    error: offerError,
+    isError: isOfferError,
+  } = useGetUserOffersQuery(
+    {
+      taskID: taskId,
+      userID: curatorId,
+    },
+    { skip: !isItLots || !curatorId },
+  );
   const {
     data: contractors,
     isLoading: isContractorsLoading,
     isError: isContractorsError,
     error: contractorsError,
+    refetch,
   } = useGetAvailableContractorsQuery(
     {
       curatorId,
@@ -39,9 +65,8 @@ const useContractors = (
     },
     {
       skip: !curatorId || !taskId,
-    }
+    },
   );
-
   const [
     inviteContractors,
     {
@@ -51,53 +76,64 @@ const useContractors = (
       error: invitationError,
     },
   ] = usePostITTaskMemberMutation();
+  const [addCurator, { isError: isCuratorError, error: curatorError }] =
+    usePatchITTaskMemberMutation();
   const [
-    addCurator,
-    {
-      isError: isCuratorError,
-      isSuccess: isCuratorSuccess,
-      error: curatorError,
-    },
-  ] = usePatchITTaskMemberMutation();
+    linkContractorsToCuratorOffer,
+    { isError: isMembersOfferError, error: membersOfferError },
+  ] = usePostITMembersOfferMutation();
 
   const [selectedContractorIDs, setSelectedContractorIDs] = useState<number[]>(
-    []
+    [],
   );
 
+  const error =
+    curatorError ||
+    invitationError ||
+    contractorsError ||
+    membersOfferError ||
+    offerError;
+  const isError =
+    isContractorsError ||
+    isInvitationError ||
+    isCuratorError ||
+    isOfferError ||
+    isMembersOfferError;
+
+  useEffect(() => {
+    if (isFocused) {
+      refetch();
+    }
+  }, [isFocused]);
   useEffect(() => {
     if (isInvitationSuccess) {
-      navigation.goBack();
+      navigation.navigate(AppScreenName.TaskCard, {
+        taskId,
+      });
     }
   }, [isInvitationSuccess]);
 
   useEffect(() => {
-    if (isContractorsError || isInvitationError || isCuratorError) {
+    if (isError) {
       toast.show({
         type: 'error',
-        title: (
-          (contractorsError ||
-            invitationError ||
-            curatorError) as AxiosQueryErrorResponse
-        ).data.message,
+        title: (error as AxiosQueryErrorResponse).data.message,
       });
     }
-  }, [isContractorsError, isInvitationError, isCuratorError]);
+  }, [isError]);
 
+  const offerID = data?.offers[0]?.ID;
   const isAvailableContractorsExist =
     !!contractors?.some(
-      contractor => contractor.subStatusID === ContractorStatus.AVAILABLE
+      contractor => contractor.subStatusID === ContractorStatus.AVAILABLE,
     ) && !!contractors.length;
-
   const isAllContractorsAlreadyInvited = !!contractors?.every(
-    contractor => contractor.subStatusID === ContractorStatus.ALREADY_INVITED
+    contractor => contractor.subStatusID === ContractorStatus.ALREADY_INVITED,
   );
 
   const keyExtractor = (item: User) => `${item.ID}`;
-  const navigateToProfile = () => {
-    navigation.navigate(BottomTabName.ProfileNavigation, {
-      screen: ProfileScreenName.ContractorsInvitation,
-    });
-  };
+  const navigateToProfile = () =>
+    navigation.navigate(AppScreenName.ContractorsInvitation);
 
   const onSelectContractor = (id: number) => {
     const isSelected = selectedContractorIDs.includes(id);
@@ -117,36 +153,48 @@ const useContractors = (
       });
     }
 
+    const members = selectedContractorIDs.map(id => ({
+      userID: id,
+    })) as PostITTaskMemberParams['members'];
+
     // делаем отдельно patch куратора, если он приглашен координатором
     if (isInvitedCurator && curatorMemberId) {
       await inviteContractors({
         taskID: taskId,
-        members: selectedContractorIDs.map(id => ({
-          userID: id,
-        })) as PostITTaskMemberParams['members'],
+        members,
       });
 
-      await addCurator({
-        ID: curatorMemberId,
-        userID: curatorId,
-        isCurator: true,
-        isConfirm: true,
-      });
+      if (!isItLots && !isConfirmedCurator) {
+        await addCurator({
+          ID: curatorMemberId,
+          userID: curatorId,
+          isCurator: true,
+          isConfirm: true,
+        });
+      }
     } else {
       await inviteContractors({
         taskID: taskId,
-        members: (
-          selectedContractorIDs.map(id => ({
-            userID: id,
-          })) as PostITTaskMemberParams['members']
-        ).concat([
-          {
-            userID: curatorId,
-            isCurator: true,
-            isConfirm: true,
-          },
-        ]),
+        members:
+          isItLots || isConfirmedCurator
+            ? members
+            : members.concat([
+                {
+                  userID: curatorId,
+                  isCurator: true,
+                  isConfirm: true,
+                },
+              ]),
       });
+
+      if (isItLots && offerID) {
+        await linkContractorsToCuratorOffer({
+          curatorID: curatorId,
+          executorIDs: members.map(contractor => contractor.userID) as number[],
+          offerID,
+          isConfirm: true,
+        });
+      }
     }
   };
 

@@ -7,7 +7,7 @@ export const usePushMessages = () => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       console.log(
         '🚀 ~ file: usePushMessages.tsx:11 ~ unsubscribe ~ remoteMessage:',
-        remoteMessage
+        remoteMessage,
       );
     });
     return unsubscribe;

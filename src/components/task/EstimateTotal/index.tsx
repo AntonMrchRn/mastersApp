@@ -37,7 +37,7 @@ export const EstimateTotal = ({
     ? servicesSum * serviceMultiplier
     : servicesSum;
   const allServiceSumMultiplier = separateThousands(
-    allServiceSumMultiplierPure
+    allServiceSumMultiplierPure,
   );
   const allCurrentSum = separateThousands(allSum);
 

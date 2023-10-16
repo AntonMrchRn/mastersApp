@@ -34,7 +34,7 @@ const EntityTypeModal = ({
 
   const [modalStep, setModalStep] = useState<ModalStep | undefined>();
   const [selectedType, setSelectedType] = useState<EntityType | undefined>(
-    type
+    type,
   );
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const EntityTypeModal = ({
   useEffect(() => {
     if (isVisible) {
       setModalStep(
-        isApproved ? ModalStep.DataEditing : ModalStep.TypeSelection
+        isApproved ? ModalStep.DataEditing : ModalStep.TypeSelection,
       );
     }
 

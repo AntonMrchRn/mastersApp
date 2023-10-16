@@ -3,7 +3,7 @@ import { Activity, Region } from '@/store/api/user/types';
 const useModal = (
   IDs: number[],
   selectedValues: (Region | Activity)[],
-  setSelectedValues: (values: (Region & Activity)[]) => void
+  setSelectedValues: (values: (Region & Activity)[]) => void,
 ) => {
   const isChecked = (id: number) =>
     selectedValues.map(item => item.ID).includes(id);
@@ -14,7 +14,7 @@ const useModal = (
       : selectedValues.reduce(
           (isDirty: boolean, value: Region | Activity) =>
             IDs.every(id => id !== value.ID),
-          false
+          false,
         );
 
   const onSelectValue = (value: Region | Activity) => {

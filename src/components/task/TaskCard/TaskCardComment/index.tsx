@@ -109,7 +109,11 @@ export const TaskCardComment = ({
     <View style={styles.container}>
       {isCommentsAvailable && !!commentsPreview?.taskComment?.length && (
         <Text variant="title3">
-          {`Последние ${plural(
+          {`${
+            commentsPreview.taskComment?.length === 1
+              ? 'Последнее'
+              : 'Последние'
+          } ${plural(
             commentsPreview.taskComment?.length > 5
               ? 5
               : commentsPreview.taskComment?.length,

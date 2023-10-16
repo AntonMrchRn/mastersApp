@@ -7,7 +7,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useIsFocused } from '@react-navigation/native';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { CompositeScreenProps, useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Banner, Button, Input, Spacer, Text, useTheme } from 'rn-ui-kit';
 
@@ -18,6 +19,7 @@ import { EstimateTotal } from '@/components/task/EstimateTotal';
 import { AddServiceBottomSheet } from '@/components/task/TaskCard/AddServiceBottomSheet';
 import { TaskCardAddEstimateBottomSheet } from '@/components/task/TaskCard/TaskCardAddEstimateBottomSheet';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
+import { BottomTabParamList } from '@/navigation/TabNavigation';
 import { useAppDispatch } from '@/store';
 import {
   addMaterialLocalCount,
@@ -31,15 +33,23 @@ import { useEstimateSubmission } from './useEstimateSubmission';
 
 import { styles } from './styles';
 
-type EstimateSubmissionScreenProps = StackScreenProps<
-  AppStackParamList,
-  AppScreenName.EstimateSubmission
+type EstimateSubmissionScreenProps = CompositeScreenProps<
+  StackScreenProps<AppStackParamList, AppScreenName.EstimateSubmission>,
+  BottomTabScreenProps<BottomTabParamList>
 >;
 export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   navigation,
   route,
 }) => {
-  const { taskId, isEdit, isInvitedExecutor, executor } = route.params;
+  const {
+    taskId,
+    isEdit,
+    isInvitedExecutor,
+    executor,
+    submissionByCurator,
+    curatorMemberID,
+    isInvitedCurator,
+  } = route.params;
 
   const {
     bsRef,
@@ -81,6 +91,9 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     isEdit,
     isInvitedExecutor,
     executor,
+    submissionByCurator,
+    curatorMemberID,
+    isInvitedCurator: !!isInvitedCurator,
   });
 
   const dispatch = useAppDispatch();

@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import {
   ActivityIndicator,
+  RefreshControl,
   ScrollView,
   TouchableOpacity,
   View,
@@ -19,6 +20,8 @@ import { CandidateItem } from '@/screens/task/CandidateEstimatesScreen/Candidate
 import { useCandidateEstimates } from '@/screens/task/CandidateEstimatesScreen/useCandidateEstimates';
 import { Offer } from '@/store/api/tasks/types';
 
+import { ListEmptyComponent } from './ListEmptyComponent';
+
 import { styles } from './styles';
 
 type CandidateEstimatesScreenProps = StackScreenProps<
@@ -29,7 +32,7 @@ type CandidateEstimatesScreenProps = StackScreenProps<
 export const CandidateEstimatesScreen = ({
   route,
 }: CandidateEstimatesScreenProps) => {
-  const { taskId, userID, winnerOffer, isResults } = route.params;
+  const { taskId, userID, isResults } = route.params;
   const theme = useTheme();
   const {
     ref,
@@ -40,6 +43,8 @@ export const CandidateEstimatesScreen = ({
     isLoading,
     onViewRef,
     activeIndex,
+    onRefresh,
+    winnerOffer,
   } = useCandidateEstimates(taskId, isResults, userID);
 
   const keyExtractor = (item: Offer) => `${item.ID}`;
@@ -56,7 +61,7 @@ export const CandidateEstimatesScreen = ({
       index={index}
       scrollX={scrollX}
       length={offers.length}
-      isWinner={winnerOffer?.ID === offer.ID}
+      isWinner={isResults ? winnerOffer?.ID === offer.ID : false}
     />
   );
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
@@ -67,6 +72,9 @@ export const CandidateEstimatesScreen = ({
         nestedScrollEnabled
         style={styles.content}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+        }
       >
         <Text variant="title2" style={styles.title}>
           {isResults ? 'Результаты торгов' : 'Текущие предложения'}
@@ -113,6 +121,8 @@ export const CandidateEstimatesScreen = ({
           <ActivityIndicator size="large" />
         ) : (
           <Animated.FlatList
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             ref={ref}
             pagingEnabled
             horizontal
@@ -126,6 +136,7 @@ export const CandidateEstimatesScreen = ({
             keyExtractor={keyExtractor}
             showsHorizontalScrollIndicator={false}
             onViewableItemsChanged={onViewRef.current}
+            ListEmptyComponent={ListEmptyComponent}
           />
         )}
       </ScrollView>

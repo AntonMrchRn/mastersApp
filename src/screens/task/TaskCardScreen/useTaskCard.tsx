@@ -21,6 +21,7 @@ import {
   useDeleteITTaskMemberMutation,
   useDeleteOffersMutation,
   useGetAnotherOffersQuery,
+  useGetAvailableContractorsQuery,
   useGetTaskHistoryQuery,
   useGetTaskQuery,
   useGetUserOffersQuery,
@@ -37,6 +38,7 @@ import { setNewOfferServices } from '@/store/slices/tasks/actions';
 import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
 import { CompositeTaskCardNavigationProp } from '@/types/navigation';
 import {
+  ContractorStatus,
   EstimateTab,
   OutlayConfirmStatus,
   OutlayStatusType,
@@ -134,6 +136,7 @@ export const useTaskCard = ({
   const getUserQuery = useGetUserQuery(user?.userID);
   const { data, isError, error, refetch, isLoading, isSuccess } =
     useGetTaskQuery(taskId);
+
   const getTaskHistory = useGetTaskHistoryQuery(taskId);
   const task = data?.tasks?.[0];
 
@@ -185,13 +188,10 @@ export const useTaskCard = ({
           title: (error as AxiosQueryErrorResponse).data.message,
         });
       }
-
-      if (isError) {
-        toast.show({
-          type: 'error',
-          title: (error as AxiosQueryErrorResponse).data.message,
-        });
-      }
+      toast.show({
+        type: 'error',
+        title: (error as AxiosQueryErrorResponse).data.message,
+      });
     }
   }, [isError]);
   useEffect(() => {
@@ -203,7 +203,6 @@ export const useTaskCard = ({
       });
     }
   }, [deleteOffersMutation.isError]);
-
   useEffect(() => {
     if (isSuccess) {
       checkFilesOnDevice(files);
@@ -314,10 +313,11 @@ export const useTaskCard = ({
   const isContractor = !!executor?.hasCurator && !isRefusedExecutor;
   const isExecutor = !!executor && !executor.hasCurator && !isRefusedExecutor;
   const isCoordinator = coordinator?.ID === user?.userID;
-  const isSupervisor = user?.roleID === RoleType.SUPERVISOR;
+  const isSupervisor = getUserQuery.data?.roleID === RoleType.SUPERVISOR;
   const isCurator =
     curators.some(curator => curator.ID === user?.userID) && !curator?.isRefuse;
-  const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
+  const isInternalExecutor =
+    getUserQuery.data?.roleID === RoleType.INTERNAL_EXECUTOR;
   /**
    * Принял ли задачу куратор
    */
@@ -349,6 +349,25 @@ export const useTaskCard = ({
     (!isConfirmedExecutor || (isConfirmedExecutor && isRefusedExecutor)) &&
     (executor?.inviterRoleID === RoleType.COORDINATOR ||
       executor?.inviterRoleID === RoleType.SUPERVISOR);
+
+  const { data: contractors } = useGetAvailableContractorsQuery(
+    {
+      curatorId: getUserQuery.data?.ID as number,
+      taskId,
+    },
+    {
+      skip: !getUserQuery.data?.roleID || !taskId,
+    },
+  );
+
+  /**
+   * Доступны ли подрядчики
+   */
+
+  const isAvailableContractorsExist =
+    !!contractors?.some(
+      contractor => contractor.subStatusID === ContractorStatus.AVAILABLE,
+    ) && !!contractors.length;
 
   const getBudget = () => {
     if (
@@ -467,6 +486,7 @@ export const useTaskCard = ({
       getAnotherOffers.refetch();
     }
   };
+
   useTaskSSE({ taskId, refresh });
 
   const onUploadLimitBannerVisible = () => {
@@ -501,7 +521,10 @@ export const useTaskCard = ({
     return setSubmissionModalVisible(true);
   };
 
-  const onSubmissionModalClose = () => setSubmissionModalVisible(false);
+  const onSubmissionModalClose = () => {
+    setSubmissionModalVisible(false);
+    setSubmissionByCurator(false);
+  };
 
   const navigateToChat = () => {
     const recipientIDs = executors
@@ -527,6 +550,7 @@ export const useTaskCard = ({
     isCurator,
     curator,
     cancelReason,
+    isInvitedExecutor,
   });
 
   const onEstimateBannerPress = () => {
@@ -545,9 +569,8 @@ export const useTaskCard = ({
   const onTaskSubmission = async () => {
     //навигация на скрин подачи сметы, если IT-ЛОТЫ Исполнитель
     if (subsetID === TaskType.IT_AUCTION_SALE && !isSubmissionByCurator) {
-      dispatch(setNewOfferServices(services));
-      console.log('Исполнитель --->');
       setSubmissionByCurator(false);
+      dispatch(setNewOfferServices(services));
 
       navigation.navigate(AppScreenName.EstimateSubmission, {
         taskId,
@@ -560,9 +583,26 @@ export const useTaskCard = ({
     if (subsetID === TaskType.IT_AUCTION_SALE && isSubmissionByCurator) {
       setSubmissionByCurator(false);
       dispatch(setNewOfferServices(services));
-      console.log('Куратор --->');
-      // проверять на наличие подрядчиков, если есть - на подачу сметы, затем на приглашение подрядчиков
-      // если нет - на экран, где написано, что нет подрядчиков
+
+      // Подрядчики отсутствуют или недоступны подрядчики'
+      if (!contractors?.length || !isAvailableContractorsExist) {
+        navigation.navigate(AppScreenName.Contractors, {
+          taskId,
+          isInvitedCurator,
+          curatorId: user?.userID as number,
+          curatorMemberId: curator?.memberID,
+        });
+      } else {
+        // Подрядчики доступны -> подача сметы
+        navigation.navigate(AppScreenName.EstimateSubmission, {
+          taskId,
+          isInvitedExecutor,
+          executor,
+          submissionByCurator: true,
+          isInvitedCurator,
+          curatorMemberID: curator?.memberID,
+        });
+      }
     }
 
     if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
@@ -878,9 +918,11 @@ export const useTaskCard = ({
     if (user?.userID) {
       navigation.navigate(AppScreenName.Contractors, {
         taskId,
+        isConfirmedCurator,
         isInvitedCurator,
         curatorId: user.userID,
         curatorMemberId: curator?.memberID,
+        isItLots: subsetID === TaskType.IT_AUCTION_SALE,
       });
     }
   };
@@ -899,11 +941,11 @@ export const useTaskCard = ({
             startTime={startTime}
             executors={executors}
             subsetID={subsetID}
-            isCurator={isCurator}
             description={description}
             coordinator={coordinator}
             isITServices={isITServices}
             applicationFiles={applicationFiles}
+            isConfirmedCurator={isConfirmedCurator}
             isInternalExecutor={isInternalExecutor}
             navigateToContractors={navigateToContractors}
           />
@@ -919,6 +961,7 @@ export const useTaskCard = ({
             winnerOffer={winnerOffer}
             isContractor={isContractor}
             outlayStatusID={outlayStatusID}
+            curatorId={executor?.curatorID}
             serviceMultiplier={serviceMultiplier}
             currentEstimateTab={currentEstimateTab}
             estimateBottomVisible={estimateBottomVisible}
@@ -936,9 +979,12 @@ export const useTaskCard = ({
             subsetID={subsetID}
             isCurator={isCurator}
             reportFiles={reportFiles}
+            isContractor={isContractor}
             closureFiles={closureFiles}
             onClose={onUploadModalClose}
             activeBudgetCanceled={!!banner}
+            isInvitedExecutor={isInvitedExecutor}
+            isInternalExecutor={isInternalExecutor}
             uploadModalVisible={uploadModalVisible}
             uploadLimitBannerVisible={uploadLimitBannerVisible}
             onUploadLimitBannerVisible={onUploadLimitBannerVisible}

@@ -35,7 +35,6 @@ type TaskCardDescriptionProps = {
   address: string;
   endTime: string;
   startTime: string;
-  isCurator: boolean;
   description: string;
   contacts: Contact[];
   car: Car | undefined;
@@ -43,6 +42,7 @@ type TaskCardDescriptionProps = {
   applicationFiles: File[];
   executors: Executor[] | [];
   isInternalExecutor: boolean;
+  isConfirmedCurator: boolean;
   webdata: WebData | undefined;
   subsetID: TaskType | undefined;
   statusID: StatusType | undefined;
@@ -58,7 +58,6 @@ export const TaskCardDescription = ({
   contacts,
   statusID,
   subsetID,
-  isCurator,
   executors,
   startTime,
   coordinator,
@@ -66,6 +65,7 @@ export const TaskCardDescription = ({
   isITServices,
   applicationFiles,
   isInternalExecutor,
+  isConfirmedCurator,
   navigateToContractors,
 }: TaskCardDescriptionProps) => {
   const theme = useTheme();
@@ -105,10 +105,10 @@ export const TaskCardDescription = ({
       [TaskType.IT_AUCTION_SALE, TaskType.IT_FIRST_RESPONSE].includes(
         subsetID,
       ) &&
-      isCurator &&
+      isConfirmedCurator &&
       statusID === StatusType.ACTIVE ? (
         <>
-          <Text variant="title3" style={styles.mt36} color={theme.text.basic}>
+          <Text variant="title3" color={theme.text.basic}>
             Приглашенные подрядчики
           </Text>
           {isLoading ? (
@@ -217,6 +217,7 @@ export const TaskCardDescription = ({
               onPress={navigateToContractors}
             />
           )}
+          <Spacer size="xxxl" />
         </>
       ) : (
         <></>

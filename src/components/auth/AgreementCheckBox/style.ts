@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import normalize from 'react-native-normalize';
 
 import { fonts } from '@/constants/fonts';
 import { configApp } from '@/constants/platform';

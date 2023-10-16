@@ -21,7 +21,7 @@ const useRecoveryForm = (isPhoneAuth: boolean) => {
     resolver: yupResolver<RecoveryFormValues>(
       isPhoneAuth
         ? recoveryPhoneValidationSchema
-        : recoveryEmailValidationSchema
+        : recoveryEmailValidationSchema,
     ),
     mode: 'onChange',
   });

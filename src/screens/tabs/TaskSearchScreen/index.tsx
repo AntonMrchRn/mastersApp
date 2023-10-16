@@ -21,6 +21,7 @@ import { configApp } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
+import { tasksAPI } from '@/store/api/tasks';
 import { Task } from '@/store/api/tasks/types';
 import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
@@ -50,7 +51,7 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
   const dispatch = useAppDispatch();
 
   const [selectedTabId, setSelectedTabId] = useState<TaskSetType>(
-    TaskSetType.COMMON
+    TaskSetType.COMMON,
   );
   const {
     data = [],
@@ -94,8 +95,12 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
       setSelectedTabId(setTypeByTabIndex[tabIndex]);
     }
   };
-
   const onItemPress = (id: number) => {
+    dispatch(
+      tasksAPI.endpoints.getTask.initiate(id, {
+        forceRefetch: true,
+      }),
+    );
     navigation.navigate(AppScreenName.TaskCard, {
       taskId: id,
     });
@@ -111,7 +116,7 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
     if (regionIDs && regionIDs?.length) {
       abort && abort();
       const ex = dispatch(
-        refreshTasks({ idList: selectedTabId, regionID: regionIDs })
+        refreshTasks({ idList: selectedTabId, regionID: regionIDs }),
       );
       abort = ex.abort;
     }
@@ -124,7 +129,7 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
           idList: selectedTabId,
           fromTask: data?.length,
           regionID: regionIDs,
-        })
+        }),
       );
     }
   };

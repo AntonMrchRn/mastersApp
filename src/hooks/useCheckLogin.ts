@@ -11,7 +11,7 @@ export const useCheckLogin = () => {
   const isExecutor =
     user &&
     [RoleType.EXTERNAL_EXECUTOR, RoleType.INTERNAL_EXECUTOR].includes(
-      user.roleID
+      user.roleID,
     );
   const dispatch = useDispatch();
 
