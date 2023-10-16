@@ -37,6 +37,11 @@ const App = () => {
           TaskSearch: {
             path: 'TaskSearch',
           },
+          ProfileNavigation: {
+            screens: {
+              Profile: 'Profile',
+            },
+          },
         },
       },
     },
