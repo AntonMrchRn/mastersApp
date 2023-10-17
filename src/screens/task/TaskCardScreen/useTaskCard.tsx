@@ -139,17 +139,26 @@ export const useTaskCard = ({
 
   const getTaskHistory = useGetTaskHistoryQuery(taskId);
   const task = data?.tasks?.[0];
+  const executors = task?.executors || [];
+  const executor = executors.find(executor => executor.ID === user?.userID);
+  /**
+   * Отказался ли подрядчик принять задачу
+   */
+  const isRefusedExecutor = !!executor?.isRefuse;
+  const isContractor = !!executor?.hasCurator && !isRefusedExecutor;
 
   const isSkipTask =
     task?.subsetID &&
     ![TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE].includes(
       task?.subsetID,
     );
-
+  const isItLots = task?.subsetID === TaskType.IT_AUCTION_SALE;
   const getUserOffersQuery = useGetUserOffersQuery(
     {
       taskID: taskId,
-      userID: user?.userID as number,
+      userID: (isItLots && isContractor
+        ? executor.curatorID
+        : user?.userID) as number,
     },
     {
       skip: isSkipTask,
@@ -188,10 +197,13 @@ export const useTaskCard = ({
           title: (error as AxiosQueryErrorResponse).data.message,
         });
       }
-      toast.show({
-        type: 'error',
-        title: (error as AxiosQueryErrorResponse).data.message,
-      });
+
+      if (isError) {
+        toast.show({
+          type: 'error',
+          title: (error as AxiosQueryErrorResponse).data.message,
+        });
+      }
     }
   }, [isError]);
   useEffect(() => {
@@ -222,12 +234,11 @@ export const useTaskCard = ({
   /**
    * участники задачи
    */
-  const executors = task?.executors || [];
+
   const confirmedExecutors = executors.filter(executor => executor.isConfirm);
   const cancelReason = task?.cancelReason;
   const curators = task?.curators || [];
   const coordinator = task?.coordinator;
-  const executor = executors.find(executor => executor.ID === user?.userID);
   const curator = curators.find(curator => curator.ID === user?.userID);
   const executorMemberId = executor?.memberID;
   const curatorMemberId = curator?.memberID;
@@ -300,17 +311,12 @@ export const useTaskCard = ({
     : '';
 
   /**
-   * Отказался ли подрядчик принять задачу
-   */
-  const isRefusedExecutor = !!executor?.isRefuse;
-  /**
    * Отказался ли куратор принять задачу
    */
   const isRefusedCurator = !!curator?.isRefuse;
   // проверка на роль в задаче
 
   // is подрядчик
-  const isContractor = !!executor?.hasCurator && !isRefusedExecutor;
   const isExecutor = !!executor && !executor.hasCurator && !isRefusedExecutor;
   const isCoordinator = coordinator?.ID === user?.userID;
   const isSupervisor = getUserQuery.data?.roleID === RoleType.SUPERVISOR;
@@ -326,6 +332,8 @@ export const useTaskCard = ({
    * Принял ли задачу подрядчик
    */
   const isConfirmedExecutor = isExecutor && !!executor?.isConfirm;
+  const isConfirmedContractor = isContractor && !!executor?.isConfirm;
+
   /**
    * Задача с куратором
    */
@@ -397,20 +405,41 @@ export const useTaskCard = ({
   };
   const budget = getBudget();
 
-  const budgetEndTime =
-    subsetID === TaskType.IT_AUCTION_SALE && isContractor
-      ? ''
-      : offersDeadline
-      ? isOffersDeadlineOver &&
+  const getBudgetEndTime = () => {
+    if (subsetID === TaskType.IT_AUCTION_SALE && isContractor) {
+      //принятие приглашения подрядчиком IT-лоты
+      if (!isOffersDeadlineOver && offersDeadline && isConfirmedContractor) {
+        return `Эта задача с конкурсным отбором участников. Результаты отбора будут объявлены после ${dayjs(
+          offersDeadline,
+        ).format('D MMMM в HH:mm')}`;
+      }
+      if (
+        isOffersDeadlineOver &&
+        subsetID &&
+        [TaskType.IT_AUCTION_SALE].includes(subsetID)
+      ) {
+        return 'Подача заявок окончена. К сожалению, вы больше не можете принять участие в этой задаче';
+      }
+    }
+    if (offersDeadline) {
+      if (
+        isOffersDeadlineOver &&
         subsetID &&
         [TaskType.IT_AUCTION_SALE, TaskType.COMMON_AUCTION_SALE].includes(
           subsetID,
         )
-        ? 'Подача заявок окончена. Результаты торгов будут объявлены в ближайшее время'
-        : `Срок подачи сметы до ${dayjs(offersDeadline).format(
-            'D MMMM в HH:mm',
-          )}`
-      : '';
+      ) {
+        return 'Подача заявок окончена. Результаты торгов будут объявлены в ближайшее время';
+      } else {
+        `Срок подачи сметы до ${dayjs(offersDeadline).format(
+          'D MMMM в HH:mm',
+        )}`;
+      }
+    }
+    return '';
+  };
+
+  const budgetEndTime = getBudgetEndTime();
 
   const hasAccessToTask = userData?.isApproved;
   const isCommentsAvailable =
@@ -567,41 +596,58 @@ export const useTaskCard = ({
   };
 
   const onTaskSubmission = async () => {
-    //навигация на скрин подачи сметы, если IT-ЛОТЫ Исполнитель
-    if (subsetID === TaskType.IT_AUCTION_SALE && !isSubmissionByCurator) {
-      setSubmissionByCurator(false);
-      dispatch(setNewOfferServices(services));
+    if (subsetID === TaskType.IT_AUCTION_SALE) {
+      if (isContractor) {
+        const offerID = userOffersData?.[0]?.ID;
+        try {
+          await patchITTaskMember({
+            ID: executorMemberId,
+            isConfirm: true,
+            isCurator: false,
+            offerID: offerID,
+          }).unwrap();
+        } catch (error) {
+          toast.show({
+            type: 'error',
+            title: (error as AxiosQueryErrorResponse).data.message,
+          });
+        }
+      }
+      if (!isSubmissionByCurator && !isContractor) {
+        //IT-ЛОТЫ Исполнитель, навигация на скрин подачи сметы
+        setSubmissionByCurator(false);
+        dispatch(setNewOfferServices(services));
 
-      navigation.navigate(AppScreenName.EstimateSubmission, {
-        taskId,
-        isInvitedExecutor,
-        executor,
-      });
-    }
-
-    //навигация на скрин подачи сметы, если IT-ЛОТЫ Куратор
-    if (subsetID === TaskType.IT_AUCTION_SALE && isSubmissionByCurator) {
-      setSubmissionByCurator(false);
-      dispatch(setNewOfferServices(services));
-
-      // Подрядчики отсутствуют или недоступны подрядчики'
-      if (!contractors?.length || !isAvailableContractorsExist) {
-        navigation.navigate(AppScreenName.Contractors, {
-          taskId,
-          isInvitedCurator,
-          curatorId: user?.userID as number,
-          curatorMemberId: curator?.memberID,
-        });
-      } else {
-        // Подрядчики доступны -> подача сметы
         navigation.navigate(AppScreenName.EstimateSubmission, {
           taskId,
           isInvitedExecutor,
           executor,
-          submissionByCurator: true,
-          isInvitedCurator,
-          curatorMemberID: curator?.memberID,
         });
+      }
+      //IT-ЛОТЫ Куратор, навигация на скрин подачи сметы
+      if (isSubmissionByCurator) {
+        setSubmissionByCurator(false);
+        dispatch(setNewOfferServices(services));
+
+        // Подрядчики отсутствуют или недоступны подрядчики'
+        if (!contractors?.length || !isAvailableContractorsExist) {
+          navigation.navigate(AppScreenName.Contractors, {
+            taskId,
+            isInvitedCurator,
+            curatorId: user?.userID as number,
+            curatorMemberId: curator?.memberID,
+          });
+        } else {
+          // Подрядчики доступны -> подача сметы
+          navigation.navigate(AppScreenName.EstimateSubmission, {
+            taskId,
+            isInvitedExecutor,
+            executor,
+            submissionByCurator: true,
+            isInvitedCurator,
+            curatorMemberID: curator?.memberID,
+          });
+        }
       }
     }
 
@@ -961,7 +1007,6 @@ export const useTaskCard = ({
             winnerOffer={winnerOffer}
             isContractor={isContractor}
             outlayStatusID={outlayStatusID}
-            curatorId={executor?.curatorID}
             serviceMultiplier={serviceMultiplier}
             currentEstimateTab={currentEstimateTab}
             estimateBottomVisible={estimateBottomVisible}
@@ -1017,6 +1062,7 @@ export const useTaskCard = ({
   };
 
   const buttons = getButtons({
+    isConfirmedContractor,
     tab: tab.label,
     toClose,
     subsetID,
