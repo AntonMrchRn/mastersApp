@@ -62,6 +62,7 @@ export const TaskCardCancelBottomSheet = ({
       titleStyle={styles.title}
       onSwipeComplete={handleCancel}
       onBackdropPress={handleCancel}
+      backdropTransitionOutTiming={0}
       title={
         isContractor && !withReason
           ? 'Отклонить предложение куратора?'
