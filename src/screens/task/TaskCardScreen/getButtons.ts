@@ -4,7 +4,7 @@ import { File } from '@/types/fileManager';
 import { OutlayStatusType, StatusType, TaskTab, TaskType } from '@/types/task';
 
 export const getButtons = ({
-  isConfirmedContactor,
+  isConfirmedContractor,
   tab,
   toClose,
   subsetID,
@@ -49,7 +49,7 @@ export const getButtons = ({
   /**
    * Статус задачи
    */
-  isConfirmedContactor?: boolean;
+  isConfirmedContractor?: boolean;
   statusID?: StatusType;
   reportFiles: File[];
   closureFiles: File[];
@@ -942,7 +942,7 @@ export const getButtons = ({
                 !isCuratorAllowedTask
               ) {
                 return [
-                  ...(!isCurator && !isConfirmedContactor
+                  ...(!isCurator && !isConfirmedContractor
                     ? [
                         {
                           label: 'Принять задачу',

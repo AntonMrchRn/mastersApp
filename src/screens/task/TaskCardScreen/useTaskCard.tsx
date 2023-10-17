@@ -331,7 +331,7 @@ export const useTaskCard = ({
    * Принял ли задачу подрядчик
    */
   const isConfirmedExecutor = isExecutor && !!executor?.isConfirm;
-  const isConfirmedContactor = isContractor && !!executor?.isConfirm;
+  const isConfirmedContractor = isContractor && !!executor?.isConfirm;
 
   /**
    * Задача с куратором
@@ -406,11 +406,17 @@ export const useTaskCard = ({
 
   const getBudgetEndTime = () => {
     if (subsetID === TaskType.IT_AUCTION_SALE && isContractor) {
-      if (!isOffersDeadlineOver && offersDeadline) {
+      //принятие приглашения подрядчиком IT-лоты
+      if (!isOffersDeadlineOver && offersDeadline && isConfirmedContractor) {
         return `Эта задача с конкурсным отбором участников. Результаты отбора будут объявлены после ${dayjs(
           offersDeadline,
         ).format('D MMMM в HH:mm')}`;
-      } else {
+      }
+      if (
+        isOffersDeadlineOver &&
+        subsetID &&
+        [TaskType.IT_AUCTION_SALE].includes(subsetID)
+      ) {
         return 'Подача заявок окончена. К сожалению, вы больше не можете принять участие в этой задаче';
       }
     }
@@ -1053,7 +1059,7 @@ export const useTaskCard = ({
   };
 
   const buttons = getButtons({
-    isConfirmedContactor,
+    isConfirmedContractor,
     tab: tab.label,
     toClose,
     subsetID,
