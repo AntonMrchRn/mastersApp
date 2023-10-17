@@ -13,20 +13,13 @@ import { ThemeProvider, ToastProvider } from 'rn-ui-kit';
 
 import { MyTheme } from '@/constants/platform';
 import { AppNavigation, AppStackParamList } from '@/navigation/AppNavigation';
-import { getBackgroundMessages } from '@/services/notifications/getBackgroundMessages';
-import { iosPushPermission } from '@/services/notifications/iosPushPermission';
-import { usePushMessages } from '@/services/notifications/usePushMessages';
 import { persistor, store } from '@/store';
 
 import 'dayjs/locale/ru';
 
 dayjs.locale('ru');
 
-getBackgroundMessages();
-iosPushPermission();
-
 const App = () => {
-  usePushMessages();
   const config = {
     screens: {
       TaskCard: {

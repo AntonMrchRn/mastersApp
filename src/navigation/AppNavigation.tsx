@@ -30,6 +30,11 @@ import { EstimateSubmissionSuccessScreen } from '@/screens/task/EstimateSubmissi
 import { NewMaterialScreen } from '@/screens/task/NewMaterialScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
+import { getBackgroundMessages } from '@/services/notifications/getBackgroundMessages';
+import { getInitialNotification } from '@/services/notifications/getInitialNotification';
+import { iosPushPermission } from '@/services/notifications/iosPushPermission';
+import { onNotificationOpenedApp } from '@/services/notifications/onNotificationOpenedApp';
+import { usePushMessages } from '@/services/notifications/usePushMessages';
 import { Executor, Service } from '@/store/api/tasks/types';
 import { StatusType } from '@/types/task';
 
@@ -132,6 +137,14 @@ const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<AppStackParamList>();
 export const AppNavigation = () => {
   useConnectionToast();
+
+  useEffect(() => {
+    // getBackgroundMessages();
+    iosPushPermission();
+    onNotificationOpenedApp();
+    // usePushMessages();
+    getInitialNotification();
+  }, []);
   const { checkLogin, isAuth, isExecutor } = useCheckLogin();
   const [isLoad, setIsLoad] = useState<boolean>(false);
 
