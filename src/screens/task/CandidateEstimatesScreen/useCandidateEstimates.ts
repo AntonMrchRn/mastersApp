@@ -8,7 +8,14 @@ import {
 import { useIsFocused } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 
-import { useGetAnotherOffersQuery, useGetOffersQuery } from '@/store/api/tasks';
+import { useTaskSSE } from '@/hooks/useTaskSSE';
+import { useAppDispatch } from '@/store';
+import {
+  tasksAPI,
+  useGetAnotherOffersQuery,
+  useGetOffersQuery,
+  useGetTaskQuery,
+} from '@/store/api/tasks';
 import { AxiosQueryErrorResponse } from '@/types/error';
 
 export const useCandidateEstimates = (
@@ -18,11 +25,13 @@ export const useCandidateEstimates = (
 ) => {
   const isFocused = useIsFocused();
   const toast = useToast();
-
+  const dispatch = useAppDispatch();
   const scrollX = useSharedValue<number>(0);
   const ref = useRef<FlatList>(null);
 
   const [activeIndex, setActiveIndex] = useState<number | null | undefined>(0);
+
+  const getTask = useGetTaskQuery(taskId);
 
   const {
     data: offersData,
@@ -49,13 +58,43 @@ export const useCandidateEstimates = (
 
   const error = isResults ? offersError : anotherOffersError;
   const isError = isResults ? isOffersError : isAnotherOffersError;
-  const isLoading = isResults ? isOffersLoading : isAnotherOffersLoading;
+  const isLoading =
+    getTask.isLoading || (isResults ? isOffersLoading : isAnotherOffersLoading);
   const offers =
     (isResults ? offersData?.offers : anotherOffersData?.offers) || [];
+  const winnerOffer = getTask.data?.tasks[0]?.winnerOffer;
+
+  const onRefresh = () => {
+    getTask.refetch();
+    isResults ? refetchOffers() : refetchAnotherOffers();
+  };
+  const refresh = () => {
+    dispatch(
+      tasksAPI.endpoints.getTask.initiate(taskId, {
+        forceRefetch: true,
+      }),
+    );
+    isResults
+      ? dispatch(
+          tasksAPI.endpoints.getOffers.initiate(taskId, {
+            forceRefetch: true,
+          }),
+        )
+      : dispatch(
+          tasksAPI.endpoints.getAnotherOffers.initiate(
+            { taskID: taskId, userID: userID as number },
+            {
+              forceRefetch: true,
+            },
+          ),
+        );
+  };
+
+  useTaskSSE({ taskId, refresh });
 
   useEffect(() => {
     if (isFocused) {
-      isResults ? refetchOffers() : refetchAnotherOffers();
+      onRefresh();
     }
   }, [isFocused]);
 
@@ -94,5 +133,7 @@ export const useCandidateEstimates = (
     isLoading,
     onViewRef,
     activeIndex,
+    onRefresh,
+    winnerOffer,
   };
 };

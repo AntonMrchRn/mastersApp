@@ -100,7 +100,6 @@ export type AppStackParamList = {
     taskId: number;
     isResults: boolean;
     userID?: number;
-    winnerOffer?: Offer;
   };
   [AppScreenName.WebView]: { uri: string };
   [AppScreenName.EstimateSubmission]: {
@@ -122,8 +121,10 @@ export type AppStackParamList = {
   [AppScreenName.Contractors]: {
     taskId: number;
     curatorId: number;
-    curatorMemberId?: number;
     isInvitedCurator: boolean;
+    isItLots?: boolean;
+    curatorMemberId?: number;
+    isConfirmedCurator?: boolean;
   };
 };
 const screenOptions = { headerShown: false };

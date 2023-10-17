@@ -11,7 +11,7 @@ import {
   useGetTaskQuery,
   useGetUserOffersQuery,
 } from '@/store/api/tasks';
-import { Material, Offer, Service } from '@/store/api/tasks/types';
+import { Material, Service } from '@/store/api/tasks/types';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import {
   setNewOfferServices,
@@ -27,7 +27,6 @@ export const useTaskCardEstimate = ({
   subsetID,
   curatorId,
   navigation,
-  winnerOffer,
   isContractor,
   currentEstimateTab,
 }: {
@@ -35,7 +34,6 @@ export const useTaskCardEstimate = ({
   services: Service[];
   curatorId?: number;
   isContractor: boolean;
-  winnerOffer: Offer | undefined;
   subsetID: TaskType | undefined;
   statusID: StatusType | undefined;
   currentEstimateTab: EstimateTab;
@@ -181,7 +179,6 @@ export const useTaskCardEstimate = ({
     navigation.navigate(AppScreenName.CandidateEstimates, {
       taskId,
       ...(!isResults && { userID }),
-      ...(isResults && { winnerOffer }),
       isResults,
     });
 

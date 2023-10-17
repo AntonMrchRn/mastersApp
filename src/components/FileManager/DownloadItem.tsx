@@ -66,7 +66,7 @@ export const DownloadItem = ({
     }
   }, [onDevice]);
 
-  const type = file?.sourceExtension || '';
+  const type = file?.sourceExtension || file.extensionOriginal;
   const title = `${file.name}.${type}`;
   const FILE_PATH = `${dirs.DocumentDir}/${title}`;
   const newFile = ReactNativeBlobUtil.config({

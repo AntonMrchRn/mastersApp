@@ -19,7 +19,14 @@ import { styles } from './style';
 
 export const ContractorsScreen = ({
   route: {
-    params: { taskId, curatorId, curatorMemberId, isInvitedCurator },
+    params: {
+      taskId,
+      isItLots,
+      curatorId,
+      curatorMemberId,
+      isInvitedCurator,
+      isConfirmedCurator,
+    },
   },
   navigation,
 }: {
@@ -37,13 +44,15 @@ export const ContractorsScreen = ({
     selectedContractorIDs,
     isAvailableContractorsExist,
     isAllContractorsAlreadyInvited,
-  } = useContractors(
+  } = useContractors({
     navigation,
     taskId,
     curatorId,
     isInvitedCurator,
     curatorMemberId,
-  );
+    isItLots,
+    isConfirmedCurator,
+  });
 
   const renderItem = ({ item: contractor }: ListRenderItemInfo<User>) => (
     <Contractor

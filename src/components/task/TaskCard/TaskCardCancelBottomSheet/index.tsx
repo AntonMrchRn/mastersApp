@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 
@@ -26,6 +26,8 @@ export const TaskCardCancelBottomSheet = ({
   isContractor,
   withReason,
 }: TaskCardCancelBottomSheetProps) => {
+  const [canceled, setCanceled] = useState(false);
+
   const isKeyboardVisible = useKeyboard();
   const methods = useForm({
     defaultValues: { cancelTask: '' },
@@ -40,11 +42,18 @@ export const TaskCardCancelBottomSheet = ({
   const isDisabled = !isValid && !!Object.keys(errors).length;
 
   const onRefusePress = ({ cancelTask }: { cancelTask?: string }) => {
+    reset();
     onRefuse(cancelTask);
   };
   const handleCancel = () => {
-    reset();
-    onCancel();
+    if (!canceled) {
+      setCanceled(true);
+      reset();
+      onCancel();
+    }
+  };
+  const onModalHide = () => {
+    setCanceled(false);
   };
   return (
     <BottomSheet
@@ -60,6 +69,7 @@ export const TaskCardCancelBottomSheet = ({
       }
       subtitle="Потом это действие нельзя будет отменить"
       containerStyle={configApp.ios && isKeyboardVisible && styles.pb10}
+      onModalHide={onModalHide}
     >
       <FormProvider {...methods}>
         <View style={withReason && styles.mt24}>
