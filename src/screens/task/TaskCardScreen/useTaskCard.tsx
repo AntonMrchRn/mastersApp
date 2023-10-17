@@ -333,7 +333,6 @@ export const useTaskCard = ({
   const isConfirmedExecutor = isExecutor && !!executor?.isConfirm;
   const isConfirmedContactor = isContractor && !!executor?.isConfirm;
 
-  console.log('isConfirmedContactor', isConfirmedContactor);
   /**
    * Задача с куратором
    */
@@ -405,20 +404,35 @@ export const useTaskCard = ({
   };
   const budget = getBudget();
 
-  const budgetEndTime =
-    subsetID === TaskType.IT_AUCTION_SALE && isContractor
-      ? ''
-      : offersDeadline
-      ? isOffersDeadlineOver &&
+  const getBudgetEndTime = () => {
+    if (subsetID === TaskType.IT_AUCTION_SALE && isContractor) {
+      if (!isOffersDeadlineOver && offersDeadline) {
+        return `Эта задача с конкурсным отбором участников. Результаты отбора будут объявлены после ${dayjs(
+          offersDeadline,
+        ).format('D MMMM в HH:mm')}`;
+      } else {
+        return 'Подача заявок окончена. К сожалению, вы больше не можете принять участие в этой задаче';
+      }
+    }
+    if (offersDeadline) {
+      if (
+        isOffersDeadlineOver &&
         subsetID &&
         [TaskType.IT_AUCTION_SALE, TaskType.COMMON_AUCTION_SALE].includes(
           subsetID,
         )
-        ? 'Подача заявок окончена. Результаты торгов будут объявлены в ближайшее время'
-        : `Срок подачи сметы до ${dayjs(offersDeadline).format(
-            'D MMMM в HH:mm',
-          )}`
-      : '';
+      ) {
+        return 'Подача заявок окончена. Результаты торгов будут объявлены в ближайшее время';
+      } else {
+        `Срок подачи сметы до ${dayjs(offersDeadline).format(
+          'D MMMM в HH:mm',
+        )}`;
+      }
+    }
+    return '';
+  };
+
+  const budgetEndTime = getBudgetEndTime();
 
   const hasAccessToTask = userData?.isApproved;
   const isCommentsAvailable =
