@@ -118,7 +118,8 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
           onRefuse={onCancelTask}
           withReason={
             !(
-              subsetID === TaskType.IT_FIRST_RESPONSE &&
+              (subsetID === TaskType.IT_FIRST_RESPONSE ||
+                subsetID === TaskType.IT_AUCTION_SALE) &&
               statusID === StatusType.ACTIVE
             )
           }
