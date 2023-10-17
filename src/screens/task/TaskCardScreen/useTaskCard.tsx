@@ -533,7 +533,8 @@ export const useTaskCard = ({
     setEstimateBottomVisible(!estimateBottomVisible);
   const onBudgetModalVisible = () => setBudgetModalVisible(!budgetModalVisible);
   const onUploadModalVisible = () => setUploadModalVisible(!uploadModalVisible);
-  const onCancelModalVisible = () => setCancelModalVisible(!cancelModalVisible);
+  const onCloseCancelModalVisible = () => setCancelModalVisible(false);
+  const onOpenCancelModalVisible = () => setCancelModalVisible(true);
   const onUploadModalClose = () => setUploadModalVisible(false);
 
   // Проверка модалки
@@ -902,9 +903,7 @@ export const useTaskCard = ({
         title: (error as AxiosQueryErrorResponse).data.message,
       });
     } finally {
-      if (cancelModalVisible) {
-        onCancelModalVisible();
-      }
+      onCloseCancelModalVisible();
     }
   };
 
@@ -945,7 +944,11 @@ export const useTaskCard = ({
     }
     setCurrentEstimateTab(EstimateTab.TASK_ESTIMATE);
   };
-
+  useEffect(() => {
+    if (statusID === StatusType.ACTIVE) {
+      setCurrentEstimateTab(EstimateTab.TASK_ESTIMATE);
+    }
+  }, [statusID]);
   const onSubmitAnTask = () => {
     if (!hasAccessToTask) {
       return onNoAccessToTaskBannerVisible();
@@ -1085,7 +1088,7 @@ export const useTaskCard = ({
     isCommentsAvailable,
     isCuratorAllowedTask,
     isOffersDeadlineOver,
-    onCancelModalVisible,
+    onOpenCancelModalVisible,
     onUploadModalVisible,
     onBudgetModalVisible,
     onSubmissionModalVisible,
@@ -1133,7 +1136,6 @@ export const useTaskCard = ({
     onSwitchEstimateTab,
     noAccessButtonPress,
     onBudgetModalVisible,
-    onCancelModalVisible,
     refreshing: isLoading,
     estimateBannerVisible,
     onEstimateBannerPress,
@@ -1149,5 +1151,6 @@ export const useTaskCard = ({
     onNoAccessToTaskBannerVisible,
     directionNotSpecifiedBannerVisible,
     onDirectionNotSpecifiedBannerVisible,
+    onCloseCancelModalVisible,
   };
 };
