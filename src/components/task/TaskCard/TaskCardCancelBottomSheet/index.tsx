@@ -82,20 +82,19 @@ export const TaskCardCancelBottomSheet = ({
           )}
           <Button
             style={styles.mt24}
-            disabled={canceled || (withReason ? !isValid : isDisabled)}
-            isPending={canceled}
+            size="M"
+            label="Отмена"
+            variant="accent"
+            onPress={onCancel}
+          />
+          <Button
+            style={styles.mt16}
+            disabled={withReason ? !isValid : isDisabled}
             variant="outlineDanger"
             onPress={handleSubmit(onRefusePress)}
             label={isContractor && !withReason ? 'Отклонить' : 'Отказаться'}
           />
         </View>
-        <Button
-          style={styles.mt16}
-          size="M"
-          label="Отмена"
-          variant="accent"
-          onPress={handleCancel}
-        />
       </FormProvider>
       <Spacer size={configApp.ios ? 'xs' : 'l'} />
     </BottomSheet>
