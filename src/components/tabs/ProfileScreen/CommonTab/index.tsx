@@ -90,9 +90,7 @@ const CommonTab = ({
     });
     onCloseContactUs();
   };
-  const onQuestions = () => {
-    //
-  };
+  // const onQuestions = () => {};
 
   return (
     <>
@@ -156,11 +154,11 @@ const CommonTab = ({
       <Spacer size="xxxl" />
       <Title title="Помощь" />
       <Spacer />
-      <UserInfoBlock
+      {/* <UserInfoBlock
         isPressable
         onPress={onQuestions}
         info="Часто задаваемые вопросы"
-      />
+      /> */}
       <UserInfoBlock
         isPressable
         onPress={onOpenContactUs}
