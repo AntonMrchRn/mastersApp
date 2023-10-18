@@ -65,7 +65,6 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
     onBudgetModalVisible,
     onRevokeBudget,
     cancelModalVisible,
-    onCancelModalVisible,
     onCancelTask,
     subsetID,
     statusID,
@@ -96,6 +95,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
     onUploadLimitBannerVisible,
     executorsCount,
     isExecutor,
+    onCloseCancelModalVisible,
   } = useTaskCard({ taskId, navigation });
 
   return (
@@ -114,7 +114,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
         <TaskCardCancelBottomSheet
           isVisible={cancelModalVisible}
           isContractor={isContractor}
-          onCancel={onCancelModalVisible}
+          onCancel={onCloseCancelModalVisible}
           onRefuse={onCancelTask}
           withReason={
             !(

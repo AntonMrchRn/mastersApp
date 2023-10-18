@@ -27,7 +27,7 @@ export const getButtons = ({
   isCommentsAvailable,
   isCuratorAllowedTask,
   isOffersDeadlineOver,
-  onCancelModalVisible,
+  onOpenCancelModalVisible,
   onUploadModalVisible,
   onBudgetModalVisible,
   onSubmissionModalVisible,
@@ -74,7 +74,7 @@ export const getButtons = ({
   onBecomeCurator: () => void;
   onTaskSubmission: () => void;
   onSubmitAnTask: () => void;
-  onCancelModalVisible: () => void;
+  onOpenCancelModalVisible: () => void;
   onUploadModalVisible: () => void;
   onBudgetModalVisible: () => void;
   onSubmissionModalVisible: (isSubmissionByCurator?: boolean) => void;
@@ -188,7 +188,7 @@ export const getButtons = ({
                 {
                   label: 'Отказаться от задачи',
                   variant: 'outlineDanger',
-                  onPress: onCancelModalVisible,
+                  onPress: onOpenCancelModalVisible,
                 },
               ];
             case TaskTab.COMMENTS:
@@ -210,7 +210,7 @@ export const getButtons = ({
                 {
                   label: 'Отказаться от задачи',
                   variant: 'outlineDanger',
-                  onPress: onCancelModalVisible,
+                  onPress: onOpenCancelModalVisible,
                 },
               ];
             case TaskTab.ESTIMATE:
@@ -225,7 +225,7 @@ export const getButtons = ({
                   {
                     label: 'Отказаться от задачи',
                     variant: 'outlineDanger',
-                    onPress: onCancelModalVisible,
+                    onPress: onOpenCancelModalVisible,
                   },
                 ];
               }
@@ -238,7 +238,7 @@ export const getButtons = ({
                 {
                   label: 'Отказаться от задачи',
                   variant: 'outlineDanger',
-                  onPress: onCancelModalVisible,
+                  onPress: onOpenCancelModalVisible,
                 },
               ];
             default:
@@ -412,7 +412,7 @@ export const getButtons = ({
                 {
                   label: 'Отказаться от задачи',
                   variant: 'outlineDanger',
-                  onPress: onCancelModalVisible,
+                  onPress: onOpenCancelModalVisible,
                 },
               ];
             case TaskTab.COMMENTS:
@@ -434,7 +434,7 @@ export const getButtons = ({
                 {
                   label: 'Отказаться от задачи',
                   variant: 'outlineDanger',
-                  onPress: onCancelModalVisible,
+                  onPress: onOpenCancelModalVisible,
                 },
               ];
             case TaskTab.ESTIMATE:
@@ -447,7 +447,7 @@ export const getButtons = ({
                 {
                   label: 'Отказаться от задачи',
                   variant: 'outlineDanger',
-                  onPress: onCancelModalVisible,
+                  onPress: onOpenCancelModalVisible,
                 },
               ];
             default:
@@ -605,7 +605,7 @@ export const getButtons = ({
                             : 'Отказаться от задачи',
                           variant: 'outlineDanger',
                           onPress: isContractor
-                            ? onCancelModalVisible
+                            ? onOpenCancelModalVisible
                             : onCancelTask,
                         } as TaskCardBottomButton,
                       ]
@@ -649,7 +649,7 @@ export const getButtons = ({
                 {
                   label: 'Отказаться от задачи',
                   variant: 'outlineDanger',
-                  onPress: onCancelModalVisible,
+                  onPress: onOpenCancelModalVisible,
                 },
               ];
             case TaskTab.ESTIMATE:
@@ -695,7 +695,7 @@ export const getButtons = ({
                 {
                   label: 'Отказаться от задачи',
                   variant: 'outlineDanger',
-                  onPress: onCancelModalVisible,
+                  onPress: onOpenCancelModalVisible,
                 },
               ];
             case TaskTab.COMMENTS:
@@ -716,7 +716,7 @@ export const getButtons = ({
                       {
                         label: 'Отказаться от задачи',
                         variant: 'outlineDanger',
-                        onPress: onCancelModalVisible,
+                        onPress: onOpenCancelModalVisible,
                       } as TaskCardBottomButton,
                     ]
                   : []),
@@ -757,7 +757,7 @@ export const getButtons = ({
                 {
                   label: 'Отказаться от задачи',
                   variant: 'outlineDanger',
-                  onPress: onCancelModalVisible,
+                  onPress: onOpenCancelModalVisible,
                 },
               ];
 
@@ -960,7 +960,7 @@ export const getButtons = ({
                           label: 'Отклонить приглашение',
                           variant: 'outlineDanger',
                           onPress: isContractor
-                            ? onCancelModalVisible
+                            ? onOpenCancelModalVisible
                             : onCancelTask,
                         } as TaskCardBottomButton,
                       ]
@@ -1006,7 +1006,7 @@ export const getButtons = ({
                 {
                   label: 'Отказаться от задачи',
                   variant: 'outlineDanger',
-                  onPress: onCancelModalVisible,
+                  onPress: onOpenCancelModalVisible,
                 },
               ];
             case TaskTab.ESTIMATE:
@@ -1052,7 +1052,7 @@ export const getButtons = ({
                 {
                   label: 'Отказаться от задачи',
                   variant: 'outlineDanger',
-                  onPress: onCancelModalVisible,
+                  onPress: onOpenCancelModalVisible,
                 },
               ];
             case TaskTab.COMMENTS:
@@ -1105,7 +1105,7 @@ export const getButtons = ({
                 {
                   label: 'Отказаться от задачи',
                   variant: 'outlineDanger',
-                  onPress: onCancelModalVisible,
+                  onPress: onOpenCancelModalVisible,
                 },
               ];
 
@@ -1269,7 +1269,7 @@ export const getButtons = ({
                   {
                     label: 'Отказаться от задачи',
                     variant: 'outlineDanger',
-                    onPress: onCancelModalVisible,
+                    onPress: onOpenCancelModalVisible,
                   },
                 ];
               }
@@ -1318,7 +1318,7 @@ export const getButtons = ({
                 {
                   label: 'Отказаться от задачи',
                   variant: 'outlineDanger',
-                  onPress: onCancelModalVisible,
+                  onPress: onOpenCancelModalVisible,
                 },
               ];
             case TaskTab.COMMENTS:
@@ -1340,7 +1340,7 @@ export const getButtons = ({
                 {
                   label: 'Отказаться от задачи',
                   variant: 'outlineDanger',
-                  onPress: onCancelModalVisible,
+                  onPress: onOpenCancelModalVisible,
                 },
               ];
             case TaskTab.ESTIMATE:
@@ -1353,7 +1353,7 @@ export const getButtons = ({
                 {
                   label: 'Отказаться от задачи',
                   variant: 'outlineDanger',
-                  onPress: onCancelModalVisible,
+                  onPress: onOpenCancelModalVisible,
                 },
               ];
             default:
