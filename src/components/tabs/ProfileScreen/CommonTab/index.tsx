@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Clipboard from '@react-native-community/clipboard';
 import { useNavigation } from '@react-navigation/native';
-import { Banner, Button, Spacer, useTheme } from 'rn-ui-kit';
+import { Banner, Button, Spacer, useTheme, useToast } from 'rn-ui-kit';
 
 import PencilIcon from '@/assets/icons/svg/screens/PencilIcon';
 import Title from '@/components/tabs/ProfileScreen/Title';
@@ -17,6 +18,8 @@ import {
 } from '@/store/slices/user/actions';
 import { CompositeEditingNavigationProp } from '@/types/navigation';
 import { convertPhone } from '@/utils/convertPhone';
+
+import { ContactUsBottomSheet } from './ContactUsBottomSheet';
 
 import styles from './style';
 
@@ -34,6 +37,11 @@ const CommonTab = ({
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const navigation = useNavigation<CompositeEditingNavigationProp>();
+  const toast = useToast();
+
+  const [contactUsVisible, setContactUsVisible] = useState(false);
+  const onOpenContactUs = () => setContactUsVisible(true);
+  const onCloseContactUs = () => setContactUsVisible(false);
 
   useEffect(() => {
     getData();
@@ -68,16 +76,31 @@ const CommonTab = ({
     if (user.isApproved) {
       return onBlockingModal();
     }
-
     navigation.navigate(ProfileScreenName.PersonalDataEditing, {
       name: user.name,
       sname: user.sname,
       pname: user.pname,
     });
   };
+  const onCopy = () => {
+    Clipboard.setString('info@mastera-service.ru');
+    toast.show({
+      type: 'success',
+      title: 'Адрес почты скопирован',
+    });
+    onCloseContactUs();
+  };
+  const onQuestions = () => {
+    //
+  };
 
   return (
     <>
+      <ContactUsBottomSheet
+        isVisible={contactUsVisible}
+        onClose={onCloseContactUs}
+        onCopy={onCopy}
+      />
       <Title
         withButton
         onPress={onEdit}
@@ -130,6 +153,19 @@ const CommonTab = ({
           style={styles.addBtn}
         />
       )}
+      <Spacer size="xxxl" />
+      <Title title="Помощь" />
+      <Spacer />
+      <UserInfoBlock
+        isPressable
+        onPress={onQuestions}
+        info="Часто задаваемые вопросы"
+      />
+      <UserInfoBlock
+        isPressable
+        onPress={onOpenContactUs}
+        info="Связаться с нами"
+      />
       {isApprovalNotificationVisible && (
         <Banner
           type="success"
