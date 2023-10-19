@@ -73,7 +73,7 @@ const AccountTab = ({ hasActiveTasks }: AccountTabProps) => {
       ))}
       <Text
         variant="bodySRegular"
-        color={theme.text.neutral}
+        color={theme.text.neutralOptional}
         style={styles.text}
       >
         Версия приложения: {version}
