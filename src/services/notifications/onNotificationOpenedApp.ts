@@ -7,9 +7,11 @@ export const onNotificationOpenedApp = () => {
     console.log('Message handled in the background!', remoteMessage);
     if (remoteMessage) {
       const data = remoteMessage?.data as { type: string };
-      const canOpenURL = await Linking.canOpenURL(data?.type);
-      if (canOpenURL) {
-        Linking.openURL(data?.type);
+      if (data?.type) {
+        const canOpenURL = await Linking.canOpenURL(data?.type);
+        if (canOpenURL) {
+          Linking.openURL(data?.type);
+        }
       }
     }
   });

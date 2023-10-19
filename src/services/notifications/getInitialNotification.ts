@@ -10,9 +10,11 @@ export const getInitialNotification = async () => {
   );
   if (notification) {
     const data = notification?.data as { type: string };
-    const canOpenURL = await Linking.canOpenURL(data?.type);
-    if (canOpenURL) {
-      Linking.openURL(data?.type);
+    if (data?.type) {
+      const canOpenURL = await Linking.canOpenURL(data.type);
+      if (canOpenURL) {
+        Linking.openURL(data?.type);
+      }
     }
   }
 };
