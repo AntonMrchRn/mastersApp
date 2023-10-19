@@ -576,6 +576,8 @@ PODS:
     - React-Core
   - RNCClipboard (1.5.1):
     - React-Core
+  - RNDeviceInfo (10.11.0):
+    - React-Core
   - RNFBApp (18.4.0):
     - Firebase/CoreOnly (= 10.14.0)
     - React-Core
@@ -723,6 +725,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
@@ -865,6 +868,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCClipboard:
     :path: "../node_modules/@react-native-community/clipboard"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBCrashlytics:
@@ -966,6 +971,7 @@ SPEC CHECKSUMS:
   ReactCommon: fc9d1da17fa902910dcba550a54c16e7e1c70d2c
   RNCAsyncStorage: c913ede1fa163a71cea118ed4670bbaaa4b511bb
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
+  RNDeviceInfo: bf8a32acbcb875f568217285d1793b0e8588c974
   RNFBApp: af276a038f2e1488d59920697bba97b43f83164c
   RNFBCrashlytics: e3bec3a6f57870a910421e89a9ee533ce373352a
   RNFBMessaging: d991f55546b940c4aaf73559d8590bf9a9d8620c

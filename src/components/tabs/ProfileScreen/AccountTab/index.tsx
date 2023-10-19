@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { getVersion } from 'react-native-device-info';
 
 import { useNavigation } from '@react-navigation/native';
-import { useTheme } from 'rn-ui-kit';
+import { Text, useTheme } from 'rn-ui-kit';
 
 import { DeleteFileIcon } from '@/assets/icons/svg/files/DeleteFileIcon';
 import KeyIcon from '@/assets/icons/svg/screens/KeyIcon';
@@ -34,6 +36,8 @@ const AccountTab = ({ hasActiveTasks }: AccountTabProps) => {
       hasActiveTasks,
     });
 
+  const version = getVersion();
+
   const actions = {
     changePassword: {
       title: 'Сменить пароль',
@@ -58,7 +62,7 @@ const AccountTab = ({ hasActiveTasks }: AccountTabProps) => {
   };
 
   return (
-    <>
+    <View>
       {Object.values(actions).map(action => (
         <ActionButton
           icon={action.icon}
@@ -67,9 +71,20 @@ const AccountTab = ({ hasActiveTasks }: AccountTabProps) => {
           onPress={action.onPress}
         />
       ))}
+      <Text
+        variant="bodySRegular"
+        color={theme.text.neutralOptional}
+        style={styles.text}
+      >
+        Версия приложения: {version}
+      </Text>
       <ExitModal onClose={onExitModal} isVisible={isModalVisible} />
-    </>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  text: { paddingTop: 20 },
+});
 
 export default AccountTab;
