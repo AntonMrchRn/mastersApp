@@ -60,6 +60,7 @@ export const useCandidateEstimates = (
   const isError = isResults ? isOffersError : isAnotherOffersError;
   const isLoading =
     getTask.isLoading || (isResults ? isOffersLoading : isAnotherOffersLoading);
+
   const offers =
     (isResults ? offersData?.offers : anotherOffersData?.offers) || [];
   const winnerOffer = getTask.data?.tasks[0]?.winnerOffer;
@@ -91,6 +92,13 @@ export const useCandidateEstimates = (
   };
 
   useTaskSSE({ taskId, refresh });
+
+  useEffect(() => {
+    if (activeIndex && activeIndex > offers.length - 1) {
+      setActiveIndex(offers.length - 1);
+      ref.current?.scrollToEnd();
+    }
+  }, [offers]);
 
   useEffect(() => {
     if (isFocused) {
