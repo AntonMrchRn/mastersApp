@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 
+import { NavigatorScreenParams } from '@react-navigation/native';
 import {
   createStackNavigator,
   StackHeaderProps,
@@ -9,7 +10,7 @@ import {
 import Header from '@/components/Header';
 import { useCheckLogin } from '@/hooks/useCheckLogin';
 import useConnectionToast from '@/hooks/useConnectionToast';
-import { TabNavigation } from '@/navigation/TabNavigation';
+import { BottomTabParamList, TabNavigation } from '@/navigation/TabNavigation';
 import { AccessRestrictedScreen } from '@/screens/auth/AccessRestrictedScreen';
 import EmailScreen from '@/screens/auth/EmailScreen';
 import ErrorScreen from '@/screens/auth/ErrorScreen';
@@ -20,7 +21,7 @@ import SignInScreen from '@/screens/auth/SignInScreen';
 import ContractorsInvitationScreen from '@/screens/profile/ContractorsInvitationScreen';
 import { CandidateEstimatesScreen } from '@/screens/task/CandidateEstimatesScreen';
 import { CommentsChatScreen } from '@/screens/task/CommentsChatScreen';
-import ContractorsScreen from '@/screens/task/Contractors';
+import { ContractorsScreen } from '@/screens/task/ContractorsScreen';
 import { EstimateAddMaterialScreen } from '@/screens/task/EstimateAddMaterialScreen';
 import { EstimateAddServiceScreen } from '@/screens/task/EstimateAddServiceScreen';
 import { EstimateEditScreen } from '@/screens/task/EstimateEditScreen';
@@ -29,7 +30,12 @@ import { EstimateSubmissionSuccessScreen } from '@/screens/task/EstimateSubmissi
 import { NewMaterialScreen } from '@/screens/task/NewMaterialScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
-import { Executor, Offer, Service } from '@/store/api/tasks/types';
+import { getBackgroundMessages } from '@/services/notifications/getBackgroundMessages';
+import { getInitialNotification } from '@/services/notifications/getInitialNotification';
+import { iosPushPermission } from '@/services/notifications/iosPushPermission';
+import { onNotificationOpenedApp } from '@/services/notifications/onNotificationOpenedApp';
+import { usePushMessages } from '@/services/notifications/usePushMessages';
+import { Executor, Service } from '@/store/api/tasks/types';
 import { StatusType } from '@/types/task';
 
 export enum AppScreenName {
@@ -58,7 +64,7 @@ export enum AppScreenName {
 export type AppStackParamList = {
   [AppScreenName.AccessRestricted]: undefined;
   [AppScreenName.SignIn]: undefined;
-  [AppScreenName.AppNavigator]: undefined;
+  [AppScreenName.AppNavigator]: NavigatorScreenParams<BottomTabParamList>;
   [AppScreenName.Email]: undefined;
   [AppScreenName.Recovery]: undefined;
   [AppScreenName.Password]: undefined;
@@ -131,6 +137,14 @@ const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<AppStackParamList>();
 export const AppNavigation = () => {
   useConnectionToast();
+
+  useEffect(() => {
+    // getBackgroundMessages();
+    iosPushPermission();
+    onNotificationOpenedApp();
+    // usePushMessages();
+    getInitialNotification();
+  }, []);
   const { checkLogin, isAuth, isExecutor } = useCheckLogin();
   const [isLoad, setIsLoad] = useState<boolean>(false);
 

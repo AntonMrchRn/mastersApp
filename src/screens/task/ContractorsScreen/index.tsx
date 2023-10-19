@@ -8,7 +8,7 @@ import PreviewNotFound, {
   PreviewNotFoundType,
 } from '@/components/tabs/TaskSearch/PreviewNotFound';
 import Contractor from '@/components/TabScreens/ContractorsScreen/Contractor';
-import useContractors from '@/screens/task/Contractors/useContractors';
+import useContractors from '@/screens/task/ContractorsScreen/useContractors';
 import { User } from '@/store/api/user/types';
 import {
   ContractorsInvitationScreenNavigationProp,
@@ -121,5 +121,3 @@ export const ContractorsScreen = ({
     </SafeAreaView>
   );
 };
-
-export default ContractorsScreen;
