@@ -12,21 +12,21 @@ PODS:
     - React-Core (= 0.71.13)
     - React-jsi (= 0.71.13)
     - ReactCommon/turbomodule/core (= 0.71.13)
-  - Firebase (10.14.0):
-    - Firebase/Core (= 10.14.0)
-  - Firebase/Core (10.14.0):
+  - Firebase (10.15.0):
+    - Firebase/Core (= 10.15.0)
+  - Firebase/Core (10.15.0):
     - Firebase/CoreOnly
-    - FirebaseAnalytics (~> 10.14.0)
-  - Firebase/CoreOnly (10.14.0):
-    - FirebaseCore (= 10.14.0)
-  - Firebase/Crashlytics (10.14.0):
+    - FirebaseAnalytics (~> 10.15.0)
+  - Firebase/CoreOnly (10.15.0):
+    - FirebaseCore (= 10.15.0)
+  - Firebase/Crashlytics (10.15.0):
     - Firebase/CoreOnly
-    - FirebaseCrashlytics (~> 10.14.0)
-  - Firebase/Messaging (10.14.0):
+    - FirebaseCrashlytics (~> 10.15.0)
+  - Firebase/Messaging (10.15.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (~> 10.14.0)
-  - FirebaseAnalytics (10.14.0):
-    - FirebaseAnalytics/AdIdSupport (= 10.14.0)
+    - FirebaseMessaging (~> 10.15.0)
+  - FirebaseAnalytics (10.15.0):
+    - FirebaseAnalytics/AdIdSupport (= 10.15.0)
     - FirebaseCore (~> 10.0)
     - FirebaseInstallations (~> 10.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
@@ -34,24 +34,24 @@ PODS:
     - GoogleUtilities/Network (~> 7.11)
     - "GoogleUtilities/NSData+zlib (~> 7.11)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - FirebaseAnalytics/AdIdSupport (10.14.0):
+  - FirebaseAnalytics/AdIdSupport (10.15.0):
     - FirebaseCore (~> 10.0)
     - FirebaseInstallations (~> 10.0)
-    - GoogleAppMeasurement (= 10.14.0)
+    - GoogleAppMeasurement (= 10.15.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
     - GoogleUtilities/MethodSwizzler (~> 7.11)
     - GoogleUtilities/Network (~> 7.11)
     - "GoogleUtilities/NSData+zlib (~> 7.11)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - FirebaseCore (10.14.0):
+  - FirebaseCore (10.15.0):
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/Logger (~> 7.8)
-  - FirebaseCoreExtension (10.14.0):
+  - FirebaseCoreExtension (10.15.0):
     - FirebaseCore (~> 10.0)
-  - FirebaseCoreInternal (10.15.0):
+  - FirebaseCoreInternal (10.16.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
-  - FirebaseCrashlytics (10.14.0):
+  - FirebaseCrashlytics (10.15.0):
     - FirebaseCore (~> 10.5)
     - FirebaseInstallations (~> 10.0)
     - FirebaseSessions (~> 10.5)
@@ -59,12 +59,12 @@ PODS:
     - GoogleUtilities/Environment (~> 7.8)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (~> 2.1)
-  - FirebaseInstallations (10.15.0):
+  - FirebaseInstallations (10.16.0):
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
     - PromisesObjC (~> 2.1)
-  - FirebaseMessaging (10.14.0):
+  - FirebaseMessaging (10.15.0):
     - FirebaseCore (~> 10.0)
     - FirebaseInstallations (~> 10.0)
     - GoogleDataTransport (~> 9.2)
@@ -141,21 +141,21 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - glog (0.3.5)
-  - GoogleAppMeasurement (10.14.0):
-    - GoogleAppMeasurement/AdIdSupport (= 10.14.0)
+  - GoogleAppMeasurement (10.15.0):
+    - GoogleAppMeasurement/AdIdSupport (= 10.15.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
     - GoogleUtilities/MethodSwizzler (~> 7.11)
     - GoogleUtilities/Network (~> 7.11)
     - "GoogleUtilities/NSData+zlib (~> 7.11)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - GoogleAppMeasurement/AdIdSupport (10.14.0):
-    - GoogleAppMeasurement/WithoutAdIdSupport (= 10.14.0)
+  - GoogleAppMeasurement/AdIdSupport (10.15.0):
+    - GoogleAppMeasurement/WithoutAdIdSupport (= 10.15.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
     - GoogleUtilities/MethodSwizzler (~> 7.11)
     - GoogleUtilities/Network (~> 7.11)
     - "GoogleUtilities/NSData+zlib (~> 7.11)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - GoogleAppMeasurement/WithoutAdIdSupport (10.14.0):
+  - GoogleAppMeasurement/WithoutAdIdSupport (10.15.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
     - GoogleUtilities/MethodSwizzler (~> 7.11)
     - GoogleUtilities/Network (~> 7.11)
@@ -578,17 +578,17 @@ PODS:
     - React-Core
   - RNDeviceInfo (10.11.0):
     - React-Core
-  - RNFBApp (18.4.0):
-    - Firebase/CoreOnly (= 10.14.0)
+  - RNFBApp (18.5.0):
+    - Firebase/CoreOnly (= 10.15.0)
     - React-Core
   - RNFBCrashlytics (18.5.0):
-    - Firebase/Crashlytics (= 10.14.0)
-    - FirebaseCoreExtension (= 10.14.0)
+    - Firebase/Crashlytics (= 10.15.0)
+    - FirebaseCoreExtension (= 10.15.0)
     - React-Core
     - RNFBApp
-  - RNFBMessaging (18.4.0):
-    - Firebase/Messaging (= 10.14.0)
-    - FirebaseCoreExtension (= 10.14.0)
+  - RNFBMessaging (18.5.0):
+    - Firebase/Messaging (= 10.15.0)
+    - FirebaseCoreExtension (= 10.15.0)
     - React-Core
     - RNFBApp
   - RNGestureHandler (2.13.2):
@@ -900,14 +900,14 @@ SPEC CHECKSUMS:
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: 24e08bf294faea0abc0278abb2fcad7f3e446f6f
   FBReactNativeSpec: c949e4b726d8cf9e19b73be60ecfa26355deceb3
-  Firebase: 6c1bf3f534bc422d52af2e41fe0d50bf08b6b773
-  FirebaseAnalytics: 5c6d58814afa4db82cf7fdbc02b0b0e2fa3d43ff
-  FirebaseCore: 6fc17ac9f03509d51c131298aacb3ee5698b4f02
-  FirebaseCoreExtension: 976638051b1a46b503afce7ec80277f9161f2040
-  FirebaseCoreInternal: 2f4bee5ed00301b5e56da0849268797a2dd31fb4
-  FirebaseCrashlytics: 0fbfa4efa57e8a09d8bf195393b50c237e3322b5
-  FirebaseInstallations: cae95cab0f965ce05b805189de1d4c70b11c76fb
-  FirebaseMessaging: 1077a4499f0c0a140b9a2e34fe08a1acc806b36d
+  Firebase: 66043bd4579e5b73811f96829c694c7af8d67435
+  FirebaseAnalytics: 47cef43728f81a839cf1306576bdd77ffa2eac7e
+  FirebaseCore: 2cec518b43635f96afe7ac3a9c513e47558abd2e
+  FirebaseCoreExtension: d3f1ea3725fb41f56e8fbfb29eeaff54e7ffb8f6
+  FirebaseCoreInternal: 26233f705cc4531236818a07ac84d20c333e505a
+  FirebaseCrashlytics: a83f26fb922a3fe181eb738fb4dcf0c92bba6455
+  FirebaseInstallations: b822f91a61f7d1ba763e5ccc9d4f2e6f2ed3b3ee
+  FirebaseMessaging: 0c0ae1eb722ef0c07f7801e5ded8dccd1357d6d4
   FirebaseSessions: 96e7781e545929cde06dd91088ddbb0841391b43
   Flipper: 45c3900c53747f9698ffbe574045a0e2d2fb2565
   Flipper-Boost-iOSX: fd1e2b8cbef7e662a122412d7ac5f5bea715403c
@@ -920,7 +920,7 @@ SPEC CHECKSUMS:
   FlipperKit: f075a1a668a6034a38c051ee848e58a51dd906fb
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
-  GoogleAppMeasurement: 7fee012a868315d418f365fbc8d394d8e020e749
+  GoogleAppMeasurement: 722db6550d1e6d552b08398b69a975ac61039338
   GoogleDataTransport: 54dee9d48d14580407f8f5fbf2f496e92437a2f2
   GoogleUtilities: 13e2c67ede716b8741c7989e26893d151b2b2084
   hermes-engine: 8b9dc37355d2e12879267382f4256afd356349a1
@@ -972,9 +972,9 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: c913ede1fa163a71cea118ed4670bbaaa4b511bb
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNDeviceInfo: bf8a32acbcb875f568217285d1793b0e8588c974
-  RNFBApp: af276a038f2e1488d59920697bba97b43f83164c
-  RNFBCrashlytics: e3bec3a6f57870a910421e89a9ee533ce373352a
-  RNFBMessaging: d991f55546b940c4aaf73559d8590bf9a9d8620c
+  RNFBApp: 082df9f8ffba99f23f7aee3ecb64df703e7e1adb
+  RNFBCrashlytics: 9d5b36a7e280178c5d61695936cb812005bf17ad
+  RNFBMessaging: b167065ee2fcc7fe43a32b35d79d5eb23bceb4ad
   RNGestureHandler: bb86e378287f7713baf3ca205423eb8109790022
   RNImageCropPicker: 486e2f7e2b0461ce24321f751410dce1b3b49e6d
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
