@@ -5,7 +5,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
 
 import { AppScreenName } from '@/navigation/AppNavigation';
-import { styles } from '@/screens/task/Contractors/style';
+import { styles } from '@/screens/task/ContractorsScreen/style';
 import {
   useGetAvailableContractorsQuery,
   useGetUserOffersQuery,

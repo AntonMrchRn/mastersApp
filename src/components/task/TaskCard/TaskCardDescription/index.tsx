@@ -97,7 +97,7 @@ export const TaskCardDescription = ({
       Linking.openURL(url);
     }
   };
-
+  console.log('executors', executors);
   return (
     <View>
       {/* Выбор подрядчиков  */}

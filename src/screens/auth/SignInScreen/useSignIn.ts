@@ -10,8 +10,10 @@ import { configApp } from '@/constants/platform';
 import { storageMMKV } from '@/mmkv/storage';
 import { AppScreenName } from '@/navigation/AppNavigation';
 import useSignInForm from '@/screens/auth/SignInScreen/useSignInForm';
+import { getPushToken } from '@/services/notifications/getPushToken';
 import { useAppDispatch } from '@/store';
 import { useGetUserAuthMutation } from '@/store/api/auth';
+import { usePostTokenMutation } from '@/store/api/user';
 import {
   login,
   setAuthEmailTimeout,
@@ -47,6 +49,8 @@ const useSignIn = () => {
     { data: userAuth, isSuccess, isLoading, isError, error: authError },
   ] = useGetUserAuthMutation();
 
+  const [postToken, tokenMutation] = usePostTokenMutation();
+
   const [activeTab, setActiveTab] = useState<AuthTab>(AuthTab.Phone);
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
@@ -79,7 +83,6 @@ const useSignIn = () => {
             'Отсутствует связь с сервером. Проверьте доступность сети интернет или сети Wi-Fi.',
         });
       }
-
       const inputName = inputNameByErrorCode[error?.code];
       if (inputName) {
         methods.setError(inputName, {
@@ -88,6 +91,15 @@ const useSignIn = () => {
       }
     }
   }, [isError]);
+
+  useEffect(() => {
+    if (tokenMutation.isError) {
+      toast.show({
+        type: 'error',
+        title: (tokenMutation.error as AxiosQueryErrorResponse).data.message,
+      });
+    }
+  }, [tokenMutation.isError]);
 
   useEffect(() => {
     if (isSuccess && userAuth) {
@@ -135,8 +147,13 @@ const useSignIn = () => {
     setActiveTab(authTabByIndex[tabIndex] as AuthTab);
   };
 
-  const onLoginSuccess = (token: string) => {
+  const onLoginSuccess = async (token: string) => {
     storageMMKV.set('token', token);
+    const pushToken = await getPushToken();
+    await postToken({
+      typeID: configApp.android ? 1 : 2,
+      token: pushToken,
+    });
     dispatch(login());
     dispatch(setUserAuth(userAuth));
   };

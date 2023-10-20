@@ -596,10 +596,12 @@ export const useTaskCard = ({
     newTab && setCurrentEstimateTab(newTab);
   };
 
+  const offerID = userOffersData?.[0]?.ID;
+
   const onTaskSubmission = async () => {
     if (subsetID === TaskType.IT_AUCTION_SALE) {
+      //IT-Лоты принятие задачи подрядчиком
       if (isContractor) {
-        const offerID = userOffersData?.[0]?.ID;
         try {
           await patchITTaskMember({
             ID: executorMemberId,
@@ -823,6 +825,16 @@ export const useTaskCard = ({
 
   const onCancelTask = async (refuseReason?: string) => {
     try {
+      if (subsetID === TaskType.IT_AUCTION_SALE) {
+        //отклонить приглашение
+        await patchITTaskMember({
+          ID: executorMemberId,
+          isConfirm: false,
+          isCurator: false,
+          offerID: offerID,
+          isRefuse: true,
+        }).unwrap();
+      }
       //если это общие, то
       //первый отклик - патч задания, refuseReason, id задания
       if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
