@@ -4,7 +4,6 @@ import { firebase } from '@react-native-firebase/messaging';
 
 export const onNotificationOpenedApp = () => {
   firebase.messaging().onNotificationOpenedApp(async remoteMessage => {
-    console.log('Message handled in the background!', remoteMessage);
     if (remoteMessage) {
       const data = remoteMessage?.data as { type: string };
       if (data?.type) {
