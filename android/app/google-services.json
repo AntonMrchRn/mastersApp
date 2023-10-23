@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1005672931296",
+    "project_id": "mas-tas",
+    "storage_bucket": "mas-tas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005672931296:android:af033a4af7fa6f616ed585",
+        "android_client_info": {
+          "package_name": "com.vector.mastera"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvTA4DL-XUWGgdWHYeGCi6CJysqbWuXKg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
