@@ -149,11 +149,15 @@ const useSignIn = () => {
 
   const onLoginSuccess = async (token: string) => {
     storageMMKV.set('token', token);
-    const pushToken = await getPushToken();
-    await postToken({
-      typeID: configApp.android ? 1 : 2,
-      token: pushToken,
-    });
+    try {
+      const pushToken = await getPushToken();
+      await postToken({
+        typeID: configApp.android ? 1 : 2,
+        token: pushToken,
+      });
+    } catch (err) {
+      console.log('onLoginSuccess getPushToken error', err);
+    }
     dispatch(login());
     dispatch(setUserAuth(userAuth));
   };
