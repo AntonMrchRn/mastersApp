@@ -931,6 +931,13 @@ export const getButtons = ({
                 ];
               }
               if (isInvitedCurator) {
+                return [
+                  {
+                    label: 'Подать смету',
+                    variant: 'outlineAccent',
+                    onPress: () => onSubmissionModalVisible(true),
+                  } as TaskCardBottomButton,
+                ];
                 // TODO: приглашенный координатором куратор ( Назначен куратор )
               }
 
