@@ -394,9 +394,9 @@ export const useEstimateSubmission = ({
         if (isItLots) {
           // Подача сметы для IT-лотов Куратором
           if (submissionByCurator) {
-            isInvitedExecutor
+            isInvitedCurator
               ? await patchITTaskMember({
-                  ID: executor?.memberID,
+                  ID: curatorMemberID,
                   isConfirm: true,
                   isCurator: true,
                   offer: {

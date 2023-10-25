@@ -930,10 +930,16 @@ export const getButtons = ({
                   },
                 ];
               }
+              //приглашенный координатором куратор ( Назначен куратор )
               if (isInvitedCurator) {
-                // TODO: приглашенный координатором куратор ( Назначен куратор )
+                return [
+                  {
+                    label: 'Подать смету',
+                    variant: 'outlineAccent',
+                    onPress: () => onSubmissionModalVisible(true),
+                  } as TaskCardBottomButton,
+                ];
               }
-
               // куратор/подрядчик/приглашенный координатором исполнитель/задача без участия куратора
               if (
                 isCurator ||
@@ -954,7 +960,7 @@ export const getButtons = ({
                       ]
                     : []),
                   // задача с участием куратора, в которой нет приглашенного координатором исполнителя
-                  ...(isCuratorAllowedTask && !isInvitedExecutor
+                  ...(isContractor
                     ? [
                         {
                           label: 'Отклонить приглашение',

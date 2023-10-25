@@ -431,7 +431,7 @@ export const useTaskCard = ({
       ) {
         return 'Подача заявок окончена. Результаты торгов будут объявлены в ближайшее время';
       } else {
-        `Срок подачи сметы до ${dayjs(offersDeadline).format(
+        return `Срок подачи сметы до ${dayjs(offersDeadline).format(
           'D MMMM в HH:mm',
         )}`;
       }
