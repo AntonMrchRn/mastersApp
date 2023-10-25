@@ -396,7 +396,7 @@ export const useEstimateSubmission = ({
           if (submissionByCurator) {
             isInvitedCurator
               ? await patchITTaskMember({
-                  ID: executor?.memberID,
+                  ID: curatorMemberID,
                   isConfirm: true,
                   isCurator: true,
                   offer: {
