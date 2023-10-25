@@ -157,9 +157,10 @@ const useSignIn = () => {
       });
     } catch (err) {
       console.log('onLoginSuccess getPushToken error', err);
+    } finally {
+      dispatch(setUserAuth(userAuth));
+      dispatch(login());
     }
-    dispatch(login());
-    dispatch(setUserAuth(userAuth));
   };
 
   return {
