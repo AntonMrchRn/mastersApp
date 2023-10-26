@@ -578,15 +578,15 @@ PODS:
     - React-Core
   - RNDeviceInfo (10.11.0):
     - React-Core
-  - RNFBApp (18.5.0):
+  - RNFBApp (18.6.0):
     - Firebase/CoreOnly (= 10.15.0)
     - React-Core
-  - RNFBCrashlytics (18.5.0):
+  - RNFBCrashlytics (18.6.0):
     - Firebase/Crashlytics (= 10.15.0)
     - FirebaseCoreExtension (= 10.15.0)
     - React-Core
     - RNFBApp
-  - RNFBMessaging (18.5.0):
+  - RNFBMessaging (18.6.0):
     - Firebase/Messaging (= 10.15.0)
     - FirebaseCoreExtension (= 10.15.0)
     - React-Core
@@ -973,9 +973,9 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: c913ede1fa163a71cea118ed4670bbaaa4b511bb
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNDeviceInfo: bf8a32acbcb875f568217285d1793b0e8588c974
-  RNFBApp: 082df9f8ffba99f23f7aee3ecb64df703e7e1adb
-  RNFBCrashlytics: 9d5b36a7e280178c5d61695936cb812005bf17ad
-  RNFBMessaging: b167065ee2fcc7fe43a32b35d79d5eb23bceb4ad
+  RNFBApp: 29a81c55c97887851fe2d8180293e0c618523d02
+  RNFBCrashlytics: 92dab06c6006cb54bfb1aae184536b7b10c2f9a2
+  RNFBMessaging: 534bab7d0527d560cd1a35e74223735b4ed1eeee
   RNGestureHandler: 6e46dde1f87e5f018a54fe5d40cd0e0b942b49ee
   RNImageCropPicker: 486e2f7e2b0461ce24321f751410dce1b3b49e6d
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c

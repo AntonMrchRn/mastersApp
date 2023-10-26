@@ -10,6 +10,7 @@ import TaskSearch from '@/assets/icons/svg/tabBar/TaskSearch';
 import { fonts } from '@/constants/fonts';
 import MyTasksScreen from '@/screens/tabs/MyTasksScreen';
 import TaskSearchScreen from '@/screens/tabs/TaskSearchScreen';
+import { TaskSetType } from '@/types/task';
 
 import { ProfileNavigation, ProfileStackParamList } from './ProfileNavigation';
 
@@ -34,7 +35,7 @@ export enum BottomTabName {
   ProfileNavigation = 'ProfileNavigation',
 }
 export type BottomTabParamList = {
-  [BottomTabName.TaskSearch]: undefined;
+  [BottomTabName.TaskSearch]: { tab?: string };
   [BottomTabName.MyTasks]: undefined;
   [BottomTabName.ProfileNavigation]: NavigatorScreenParams<ProfileStackParamList>;
 };

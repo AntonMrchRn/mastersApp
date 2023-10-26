@@ -141,7 +141,7 @@ export const useEstimateSubmission = ({
           ErrorCode.NOT_FOUND,
         ].includes((taskError as AxiosQueryErrorResponse).data.code)
       ) {
-        navigation.navigate(BottomTabName.TaskSearch);
+        navigation.navigate(BottomTabName.TaskSearch, {});
         return toast.show({
           type: 'info',
           duration: 6000,
