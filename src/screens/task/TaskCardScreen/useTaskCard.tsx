@@ -190,7 +190,7 @@ export const useTaskCard = ({
           ErrorCode.NOT_FOUND,
         ].includes((error as AxiosQueryErrorResponse).data.code)
       ) {
-        navigation.navigate(BottomTabName.TaskSearch);
+        navigation.navigate(BottomTabName.TaskSearch, {});
         return toast.show({
           type: 'info',
           duration: 6000,
@@ -1164,5 +1164,6 @@ export const useTaskCard = ({
     directionNotSpecifiedBannerVisible,
     onDirectionNotSpecifiedBannerVisible,
     onCloseCancelModalVisible,
+    currentEstimateTab,
   };
 };
