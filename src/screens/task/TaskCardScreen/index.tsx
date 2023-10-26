@@ -32,7 +32,7 @@ import { TaskCardSubmissionBottomSheet } from '@/components/task/TaskCard/TaskCa
 import { configApp, deviceWidth, hitSlop } from '@/constants/platform';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { BottomTabParamList } from '@/navigation/TabNavigation';
-import { StatusType, TaskSetType, TaskType } from '@/types/task';
+import { EstimateTab, StatusType, TaskSetType, TaskType } from '@/types/task';
 
 import { useTaskCard } from './useTaskCard';
 
@@ -96,6 +96,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
     executorsCount,
     isExecutor,
     onCloseCancelModalVisible,
+    currentEstimateTab,
   } = useTaskCard({ taskId, navigation });
 
   return (
@@ -198,6 +199,9 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
                 {isEstimateTabs && (
                   <View style={styles.segment}>
                     <SegmentedControl
+                      currentTabId={
+                        currentEstimateTab === EstimateTab.TASK_ESTIMATE ? 0 : 1
+                      }
                       tabs={estimateTabsArray}
                       onChange={onSwitchEstimateTab}
                       width={deviceWidth - 40}

@@ -14,6 +14,7 @@ import ControlledInputPhone from '@/components/inputs/ControlledInputPhone';
 import TimerBlockEmailAuth from '@/components/Timer/TimerBlockEmailAuth';
 import TimerBlockPhoneAuth from '@/components/Timer/TimerBlockPhoneAuth';
 import { configApp } from '@/constants/platform';
+import { AuthTab } from '@/types/tab';
 
 import useRecovery from './useRecovery';
 
@@ -53,7 +54,11 @@ const RecoveryScreen = () => {
           />
           <Spacer size="xs" />
           <ForgotPreview />
-          <SegmentedControl onChange={switchTab} tabs={['Телефон', 'Email']} />
+          <SegmentedControl
+            currentTabId={isPhoneAuth ? 0 : 1}
+            onChange={switchTab}
+            tabs={['Телефон', 'Email']}
+          />
           <Spacer size="xl" />
           <FormProvider {...methods}>
             {isPhoneAuth ? (

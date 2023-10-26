@@ -28,7 +28,7 @@ const App = () => {
       AppNavigator: {
         screens: {
           TaskSearch: {
-            path: 'TaskSearch',
+            path: 'TaskSearch/:tab',
           },
           ProfileNavigation: {
             screens: {

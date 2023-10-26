@@ -45,14 +45,17 @@ type TaskSearchScreenProps = CompositeScreenProps<
   StackScreenProps<AppStackParamList>
 >;
 let abort: () => void | undefined;
-const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
+const TaskSearchScreen = ({ navigation, route }: TaskSearchScreenProps) => {
   const theme = useTheme();
   const isFocused = useIsFocused();
   const dispatch = useAppDispatch();
 
+  const tab = route.params?.tab;
+
   const [selectedTabId, setSelectedTabId] = useState<TaskSetType>(
     TaskSetType.COMMON,
   );
+
   const {
     data = [],
     loadingList,
@@ -76,6 +79,15 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
   useEffect(() => {
     onRefresh();
   }, [selectedTabId]);
+
+  useEffect(() => {
+    if (tab) {
+      const setID = tab.split('|')[0];
+      if (setID && selectedTabId !== +setID) {
+        setSelectedTabId(+setID);
+      }
+    }
+  }, [tab]);
 
   useEffect(() => {
     if (
@@ -142,6 +154,7 @@ const TaskSearchScreen = ({ navigation }: TaskSearchScreenProps) => {
         </Text>
         {userRole !== RoleType.INTERNAL_EXECUTOR && (
           <SegmentedControl
+            currentTabId={selectedTabId === TaskSetType.COMMON ? 0 : 1}
             style={styles.tabs}
             onChange={switchTab}
             tabs={['Общие услуги', 'IT услуги']}

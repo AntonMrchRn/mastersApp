@@ -54,6 +54,7 @@ const SignInScreen = () => {
               ]}
             >
               <SegmentedControl
+                currentTabId={isPhoneAuth ? 0 : 1}
                 onChange={switchTab}
                 tabs={['Телефон', 'Email']}
               />
