@@ -12,7 +12,7 @@ const createDebugger = require('redux-flipper').default;
 const persistConfig = {
   key: 'root',
   storage: reduxStorage,
-  whitelist: ['auth'],
+  whitelist: ['auth', 'onboarding'],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

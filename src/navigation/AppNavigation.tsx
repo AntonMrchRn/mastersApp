@@ -28,12 +28,15 @@ import { EstimateEditScreen } from '@/screens/task/EstimateEditScreen';
 import { EstimateSubmissionScreen } from '@/screens/task/EstimateSubmissionScreen';
 import { EstimateSubmissionSuccessScreen } from '@/screens/task/EstimateSubmissionSuccessScreen';
 import { NewMaterialScreen } from '@/screens/task/NewMaterialScreen';
+import { OnboardingScreen } from '@/screens/task/OnboardingScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
 import { getInitialNotification } from '@/services/notifications/getInitialNotification';
 import { iosPushPermission } from '@/services/notifications/iosPushPermission';
 import { onNotificationOpenedApp } from '@/services/notifications/onNotificationOpenedApp';
+import { useAppSelector } from '@/store';
 import { Executor, Service } from '@/store/api/tasks/types';
+import { selectOnboarding } from '@/store/slices/onboarding/selectors';
 import { StatusType } from '@/types/task';
 
 export enum AppScreenName {
@@ -58,6 +61,7 @@ export enum AppScreenName {
   EstimateSubmissionSuccess = 'EstimateSubmissionSuccess',
   Contractors = 'Contractors',
   AccessRestricted = 'AccessRestricted',
+  OnboardingScreen = 'OnboardingScreen',
 }
 export type AppStackParamList = {
   [AppScreenName.AccessRestricted]: undefined;
@@ -77,6 +81,7 @@ export type AppStackParamList = {
   };
   [AppScreenName.Error]: undefined;
   [AppScreenName.TaskCard]: { taskId: number };
+  [AppScreenName.OnboardingScreen]: undefined;
   [AppScreenName.ContractorsInvitation]: undefined;
   [AppScreenName.EstimateEdit]: {
     taskId: number;
@@ -142,6 +147,7 @@ export const AppNavigation = () => {
     getInitialNotification();
   }, []);
   const { checkLogin, isAuth, isExecutor } = useCheckLogin();
+  const { onboarding } = useAppSelector(selectOnboarding);
   const [isLoad, setIsLoad] = useState<boolean>(false);
 
   useEffect(() => {
@@ -198,6 +204,12 @@ export const AppNavigation = () => {
         <>
           {isExecutor ? (
             <>
+              {onboarding && (
+                <Stack.Screen
+                  name={AppScreenName.OnboardingScreen}
+                  component={OnboardingScreen}
+                />
+              )}
               <Stack.Screen
                 name={AppScreenName.AppNavigator}
                 component={TabNavigation}
