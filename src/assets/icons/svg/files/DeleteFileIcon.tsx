@@ -5,7 +5,7 @@ import { IconProps } from '@/assets/icons/svg/types';
 
 export const DeleteFileIcon = ({ fill = '#1B1B1B' }: IconProps) => {
   return (
-    <SVG width="18" height="20" viewBox="0 0 18 20" fill="none">
+    <SVG width="24" height="24" viewBox="0 0 18 20" fill="none">
       <Path
         fillRule="evenodd"
         clipRule="evenodd"
