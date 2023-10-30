@@ -14,7 +14,6 @@ import ControlledInputPhone from '@/components/inputs/ControlledInputPhone';
 import TimerBlockEmailAuth from '@/components/Timer/TimerBlockEmailAuth';
 import TimerBlockPhoneAuth from '@/components/Timer/TimerBlockPhoneAuth';
 import { configApp } from '@/constants/platform';
-import { AuthTab } from '@/types/tab';
 
 import useRecovery from './useRecovery';
 
