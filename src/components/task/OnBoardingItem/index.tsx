@@ -1,12 +1,18 @@
 import React, { FC, ReactElement } from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import CircularProgress from 'react-native-circular-progress-indicator';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, Text, useTheme } from 'rn-ui-kit';
 
+import StepFour from '@/assets/icons/svg/onboarding/StepFour';
+import StepOne from '@/assets/icons/svg/onboarding/StepOne';
+import StepThree from '@/assets/icons/svg/onboarding/StepThree';
+import StepTwo from '@/assets/icons/svg/onboarding/StepTwo';
 import { useAppDispatch } from '@/store';
-import { unActiveOnboarding } from '@/store/slices/onboarding/actions';
+import {
+  activeToolTip,
+  unActiveOnboarding,
+} from '@/store/slices/onboarding/actions';
 
 import { styles } from './styles';
 
@@ -47,15 +53,30 @@ export const OnBoardingItem: FC<onBoardItem> = ({
     return 'Начать';
   };
 
+  const getCircularProgress = () => {
+    if (item?.id === 1) {
+      return <StepOne />;
+    }
+    if (item?.id === 2) {
+      return <StepTwo />;
+    }
+    if (item?.id === 3) {
+      return <StepThree />;
+    }
+    return <StepFour />;
+  };
+
   const onPressBtn = () => {
     if (isLast) {
-      return dispatch(unActiveOnboarding());
+      dispatch(unActiveOnboarding());
+      return dispatch(activeToolTip());
     }
     return onPress?.(index);
   };
 
   const allSkip = () => {
     dispatch(unActiveOnboarding());
+    dispatch(activeToolTip());
   };
 
   return (
@@ -77,23 +98,7 @@ export const OnBoardingItem: FC<onBoardItem> = ({
         {item?.icon && <View>{item?.icon}</View>}
       </View>
       <View style={styles.wrapBottom}>
-        <View style={styles.wrapCircle}>
-          <CircularProgress
-            value={index + 1}
-            inActiveStrokeOpacity={0.2}
-            inActiveStrokeColor={'#6F7FD4'}
-            activeStrokeColor={'#6F7FD4'}
-            radius={24}
-            duration={2000}
-            progressValueColor={'#6F7FD4'}
-            maxValue={4}
-            valueSuffix={'/4'}
-            inActiveStrokeWidth={1}
-            activeStrokeWidth={6}
-            valueSuffixStyle={styles.suffix}
-            progressValueStyle={styles.value}
-          />
-        </View>
+        <View style={styles.wrapCircle}>{getCircularProgress()}</View>
         <View style={[styles.wrapBtn, isLast && styles.wrapBtnLast]}>
           <Button
             hitSlop={hitSlop}

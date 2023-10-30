@@ -32,14 +32,6 @@ export const styles = StyleSheet.create({
     marginBottom: 12,
     alignItems: 'center',
   },
-  suffix: {
-    fontSize: 12,
-    fontFamily: 'Nunito Sans',
-  },
-  value: {
-    fontSize: 16,
-    fontFamily: 'Nunito Sans',
-  },
   wrapCircle: {
     justifyContent: 'center',
     alignItems: 'center',
