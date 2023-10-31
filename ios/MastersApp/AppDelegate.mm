@@ -36,7 +36,7 @@
     rootView.backgroundColor = [UIColor whiteColor]; // change with your desired backgroundColor
  
     Dynamic *t = [Dynamic new];
-    UIView *animationUIView = (UIView *)[t createAnimationViewWithRootView:rootView lottieName:@"logo_animated"]; // change lottieName to your lottie files name
+    UIView *animationUIView = (UIView *)[t createAnimationViewWithRootView:rootView lottieName:@"loading"];
  
     // register LottieSplashScreen to RNSplashScreen
     [RNSplashScreen showLottieSplash:animationUIView inRootView:rootView];
