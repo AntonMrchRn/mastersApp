@@ -465,7 +465,7 @@ PODS:
   - React-jsinspector (0.71.14)
   - React-logger (0.71.14):
     - glog
-  - react-native-blob-util (0.19.1):
+  - react-native-blob-util (0.19.2):
     - React-Core
   - react-native-document-picker (9.0.1):
     - React-Core
@@ -596,12 +596,12 @@ PODS:
   - RNGestureHandler (2.13.4):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - RNImageCropPicker (0.40.0):
+  - RNImageCropPicker (0.40.1):
     - React-Core
     - React-RCTImage
-    - RNImageCropPicker/QBImagePickerController (= 0.40.0)
+    - RNImageCropPicker/QBImagePickerController (= 0.40.1)
     - TOCropViewController
-  - RNImageCropPicker/QBImagePickerController (0.40.0):
+  - RNImageCropPicker/QBImagePickerController (0.40.1):
     - React-Core
     - React-RCTImage
     - TOCropViewController
@@ -951,7 +951,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 94cfc1788637ceaf8841ef1f69b10cc0d62baadc
   React-jsinspector: 7bf923954b4e035f494b01ac16633963412660d7
   React-logger: 655ff5db8bd922acfbe76a4983ffab048916343e
-  react-native-blob-util: af2dc91365bfde33f61389cbd0c692af9a4a97cb
+  react-native-blob-util: c74e4ce87c76d244761c68623df78bf0d1638271
   react-native-document-picker: 2b8f18667caee73a96708a82b284a4f40b30a156
   react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
   react-native-image-resizer: 681f7607418b97c084ba2d0999b153b103040d8a
@@ -983,7 +983,7 @@ SPEC CHECKSUMS:
   RNFBCrashlytics: 92dab06c6006cb54bfb1aae184536b7b10c2f9a2
   RNFBMessaging: 534bab7d0527d560cd1a35e74223735b4ed1eeee
   RNGestureHandler: 6e46dde1f87e5f018a54fe5d40cd0e0b942b49ee
-  RNImageCropPicker: 486e2f7e2b0461ce24321f751410dce1b3b49e6d
+  RNImageCropPicker: 521d8ef2dcf0549f141dbf82d086c75e3a9fbe65
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
   RNReanimated: be07c7ae209074d0e8a84cf38b7909457ac59a32
   RNScreens: 3c2d122f5e08c192e254c510b212306da97d2581
