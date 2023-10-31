@@ -39,7 +39,6 @@ export const styles = StyleSheet.create({
   wrapBtn: {
     borderRadius: 12,
     borderWidth: 1.5,
-    width: 120,
     borderColor: '#FFFFFF',
   },
   wrapBtnLast: {
@@ -51,6 +50,7 @@ export const styles = StyleSheet.create({
   },
   btn: {
     paddingHorizontal: 12,
+    minWidth: 120,
   },
   labelBtn: {
     textAlign: 'center',
