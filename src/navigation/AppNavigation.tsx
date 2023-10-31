@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import SplashScreen from 'react-native-splash-screen';
+import SplashScreen from 'react-native-lottie-splash-screen';
 
 import { NavigatorScreenParams } from '@react-navigation/native';
 import {

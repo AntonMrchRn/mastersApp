@@ -37,6 +37,7 @@
 		B79EED2209294CAC91774E98 /* NunitoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F93E25DDB174AD3B26BF399 /* NunitoSans-Bold.ttf */; };
 		BC603E080F6C3905CA3814E0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		BC71A61FECC449E689F8D25B /* OpenSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 342B248EE36B4C509B80ECF3 /* OpenSans-BoldItalic.ttf */; };
+		CE07603E2AF0EC0B000D3676 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE07603D2AF0EC0B000D3676 /* Dynamic.swift */; };
 		CE41F59E2AB9AA6400D57AFC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE41F59D2AB9AA6400D57AFC /* GoogleService-Info.plist */; };
 		D36EE826ECE74C52935A56E7 /* OpenSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1055706D723E4AD08EEAE5CD /* OpenSans-Italic.ttf */; };
 		DB49D17F55B4394EC0B20724 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
@@ -95,6 +96,8 @@
 		C6B56BE7BD1641A2A49C85CC /* NunitoSans-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-ExtraLight.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-ExtraLight.ttf"; sourceTree = "<group>"; };
 		C7E77ADD024646D9818D49E7 /* NunitoSans-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-Black.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-Black.ttf"; sourceTree = "<group>"; };
 		CC070988147F4A21970DDA27 /* NunitoSans-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-Light.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-Light.ttf"; sourceTree = "<group>"; };
+		CE07603C2AF0EC0B000D3676 /* MastersApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MastersApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		CE07603D2AF0EC0B000D3676 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		CE41F59D2AB9AA6400D57AFC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CE41F59F2AB9AE5500D57AFC /* MastersApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MastersApp.entitlements; path = MastersApp/MastersApp.entitlements; sourceTree = "<group>"; };
 		D64AF841637C43CCB0FDEBA0 /* NunitoSans-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-LightItalic.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-LightItalic.ttf"; sourceTree = "<group>"; };
@@ -156,6 +159,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				CE07603D2AF0EC0B000D3676 /* Dynamic.swift */,
+				CE07603C2AF0EC0B000D3676 /* MastersApp-Bridging-Header.h */,
 			);
 			name = MastersApp;
 			sourceTree = "<group>";
@@ -310,7 +315,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1500;
 					};
 				};
 			};
@@ -571,6 +576,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE07603E2AF0EC0B000D3676 /* Dynamic.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
@@ -591,7 +597,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 50C7CA4F26BE6258D3896948 /* Pods-MastersApp-MastersAppTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 9Z429T382D;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -618,8 +626,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C619DEAE3299C0F74BA4A9FC /* Pods-MastersApp-MastersAppTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = 9Z429T382D;
 				INFOPLIST_FILE = MastersAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -665,6 +675,7 @@
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.vector.mastera;
 				PRODUCT_NAME = MastersApp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "MastersApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -696,6 +707,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vector.mastera;
 				PRODUCT_NAME = MastersApp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "MastersApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -769,7 +781,11 @@
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl",
+					"-ld_classic",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 			};
@@ -838,7 +854,11 @@
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl",
+					"-ld_classic",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
