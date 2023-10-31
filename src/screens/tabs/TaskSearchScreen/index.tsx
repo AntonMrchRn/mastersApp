@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   FlatList,
   ListRenderItemInfo,
+  Platform,
   SafeAreaView,
   View,
 } from 'react-native';
@@ -48,7 +49,8 @@ type TaskSearchScreenProps = CompositeScreenProps<
 >;
 let abort: () => void | undefined;
 
-const payerTooltipCoords = { x: 85, y: -675 };
+const payerTooltipCoords =
+  Platform.OS === 'android' ? { x: 65, y: -520 } : { x: 85, y: -675 };
 
 const TaskSearchScreen = ({ navigation, route }: TaskSearchScreenProps) => {
   const { visitToolTip } = useAppSelector(selectOnboarding);
