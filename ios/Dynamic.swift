@@ -3,8 +3,6 @@ import Foundation
 import Lottie
 
 @objc class Dynamic: NSObject {
-  
-
   @objc func createAnimationView(rootView: UIView, lottieName: String) -> LottieAnimationView {
     
     let animationView = LottieAnimationView(name: lottieName)
