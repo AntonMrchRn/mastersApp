@@ -137,7 +137,6 @@ export const AppNavigation = () => {
   useConnectionToast();
 
   useEffect(() => {
-    pushPermission();
     onNotificationOpenedApp();
     getInitialNotification();
   }, []);
