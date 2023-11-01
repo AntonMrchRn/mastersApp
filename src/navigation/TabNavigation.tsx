@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigatorScreenParams } from '@react-navigation/native';
+import { Tooltip } from 'rn-ui-kit';
 
 import Employees from '@/assets/icons/svg/tabBar/Employees';
 import Profile from '@/assets/icons/svg/tabBar/Profile';
 import TaskSearch from '@/assets/icons/svg/tabBar/TaskSearch';
 import { fonts } from '@/constants/fonts';
+import { configApp } from '@/constants/platform';
 import MyTasksScreen from '@/screens/tabs/MyTasksScreen';
 import TaskSearchScreen from '@/screens/tabs/TaskSearchScreen';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { unActiveToolTip } from '@/store/slices/onboarding/actions';
+import { selectOnboarding } from '@/store/slices/onboarding/selectors';
 
 import { ProfileNavigation, ProfileStackParamList } from './ProfileNavigation';
 
@@ -27,6 +32,10 @@ const screenOptions = {
   tabBarInactiveTintColor: '#707070',
   tabBarLabelStyle: styles.label,
 };
+
+const payerTooltipCoords = configApp.android
+  ? { x: 65, y: -520 }
+  : { x: 85, y: -675 };
 
 export enum BottomTabName {
   TaskSearch = 'TaskSearch',
@@ -54,7 +63,30 @@ export const TabNavigation = () => {
     focused: boolean;
     color: string;
     size: number;
-  }) => <Profile fill={color.focused ? '#3F51B5' : '#707070'} />;
+  }) => {
+    const { visitToolTip } = useAppSelector(selectOnboarding);
+    const dispatch = useAppDispatch();
+    const onTooltipClose = () => dispatch(unActiveToolTip());
+    useEffect(() => {
+      if (visitToolTip) {
+        setTimeout(() => {
+          onTooltipClose();
+        }, 3000);
+      }
+    }, []);
+    return (
+      <Tooltip
+        triangleEdge="bottom"
+        triagnleAlign="end"
+        coords={payerTooltipCoords}
+        isVisible={visitToolTip}
+        onClose={onTooltipClose}
+        text={`Для выполнения задач заполните\nданные профиля`}
+      >
+        <Profile fill={color.focused ? '#3F51B5' : '#707070'} />
+      </Tooltip>
+    );
+  };
 
   return (
     <Tab.Navigator screenOptions={screenOptions}>

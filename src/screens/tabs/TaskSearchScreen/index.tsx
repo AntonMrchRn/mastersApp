@@ -3,7 +3,6 @@ import {
   ActivityIndicator,
   FlatList,
   ListRenderItemInfo,
-  Platform,
   SafeAreaView,
   View,
 } from 'react-native';
@@ -12,7 +11,7 @@ import { ShadowedView } from 'react-native-fast-shadow';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { SegmentedControl, Text, Tooltip, useTheme } from 'rn-ui-kit';
+import { SegmentedControl, Text, useTheme } from 'rn-ui-kit';
 
 import CardTasks from '@/components/tabs/TaskSearch/Card';
 import PreviewNotFound, {
@@ -26,8 +25,6 @@ import { tasksAPI } from '@/store/api/tasks';
 import { Task } from '@/store/api/tasks/types';
 import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import { unActiveToolTip } from '@/store/slices/onboarding/actions';
-import { selectOnboarding } from '@/store/slices/onboarding/selectors';
 import {
   getSearchTasks,
   refreshTasks,
@@ -49,25 +46,10 @@ type TaskSearchScreenProps = CompositeScreenProps<
 >;
 let abort: () => void | undefined;
 
-const payerTooltipCoords =
-  Platform.OS === 'android' ? { x: 65, y: -520 } : { x: 85, y: -675 };
-
 const TaskSearchScreen = ({ navigation, route }: TaskSearchScreenProps) => {
-  const { visitToolTip } = useAppSelector(selectOnboarding);
-
   const theme = useTheme();
   const isFocused = useIsFocused();
   const dispatch = useAppDispatch();
-
-  const onTooltipClose = () => dispatch(unActiveToolTip());
-
-  useEffect(() => {
-    if (visitToolTip) {
-      setTimeout(() => {
-        onTooltipClose();
-      }, 3000);
-    }
-  }, []);
 
   const tab = route.params?.tab;
 
@@ -218,14 +200,6 @@ const TaskSearchScreen = ({ navigation, route }: TaskSearchScreenProps) => {
           />
         )}
       </ShadowedView>
-      <Tooltip
-        triangleEdge="bottom"
-        triagnleAlign="end"
-        coords={payerTooltipCoords}
-        isVisible={visitToolTip}
-        onClose={onTooltipClose}
-        text={`Для выполнения задач заполните\nданные профиля`}
-      />
     </SafeAreaView>
   );
 };
