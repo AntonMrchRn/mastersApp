@@ -32,7 +32,6 @@ import { OnboardingScreen } from '@/screens/task/OnboardingScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
 import { getInitialNotification } from '@/services/notifications/getInitialNotification';
-import { iosPushPermission } from '@/services/notifications/iosPushPermission';
 import { onNotificationOpenedApp } from '@/services/notifications/onNotificationOpenedApp';
 import { useAppSelector } from '@/store';
 import { Executor, Service } from '@/store/api/tasks/types';
@@ -142,7 +141,6 @@ export const AppNavigation = () => {
   useConnectionToast();
 
   useEffect(() => {
-    iosPushPermission();
     onNotificationOpenedApp();
     getInitialNotification();
   }, []);

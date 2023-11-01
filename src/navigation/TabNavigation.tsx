@@ -12,6 +12,7 @@ import { fonts } from '@/constants/fonts';
 import { configApp } from '@/constants/platform';
 import MyTasksScreen from '@/screens/tabs/MyTasksScreen';
 import TaskSearchScreen from '@/screens/tabs/TaskSearchScreen';
+import { pushPermission } from '@/services/notifications/pushPermission';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { unActiveToolTip } from '@/store/slices/onboarding/actions';
 import { selectOnboarding } from '@/store/slices/onboarding/selectors';
@@ -49,6 +50,9 @@ export type BottomTabParamList = {
 };
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 export const TabNavigation = () => {
+  useEffect(() => {
+    pushPermission();
+  }, []);
   const taskSearchIcon = (color: {
     focused: boolean;
     color: string;
