@@ -8,7 +8,7 @@ import { hitSlop } from '@/constants/platform';
 
 import styles from './style';
 
-const payerTooltipCoords = { x: -171, y: 101 };
+const payerTooltipCoords = { x: -10, y: 101 };
 
 const NDSPayerTooltip = () => {
   const theme = useTheme();
@@ -18,22 +18,23 @@ const NDSPayerTooltip = () => {
   const onTooltipClose = () => setIsTooltipVisible(false);
 
   return (
-    <View style={styles.payerTooltip} onLayout={e => e.nativeEvent.layout.y}>
-      <Text variant="bodyMRegular" style={styles.tooltipTitle}>
-        Плательщик НДС
-      </Text>
-      <TouchableOpacity hitSlop={hitSlop} onPress={onTooltipOpen}>
-        <QuestionIcon fill={theme.icons.neutral} />
-      </TouchableOpacity>
-      <Tooltip
-        triangleEdge="bottom"
-        triagnleAlign="center"
-        coords={payerTooltipCoords}
-        onClose={onTooltipClose}
-        isVisible={isTooltipVisible}
-        text={`Сумма НДС будет выделяться из итоговой \n суммы сметы по формуле:\n НДС = Сумма/120*20`}
-      />
-    </View>
+    <Tooltip
+      triangleEdge="bottom"
+      triagnleAlign="center"
+      coords={payerTooltipCoords}
+      onClose={onTooltipClose}
+      isVisible={isTooltipVisible}
+      text={`Сумма НДС будет выделяться из итоговой \n суммы сметы по формуле:\n НДС = Сумма/120*20`}
+    >
+      <View style={styles.payerTooltip} onLayout={e => e.nativeEvent.layout.y}>
+        <Text variant="bodyMRegular" style={styles.tooltipTitle}>
+          Плательщик НДС
+        </Text>
+        <TouchableOpacity hitSlop={hitSlop} onPress={onTooltipOpen}>
+          <QuestionIcon fill={theme.icons.neutral} />
+        </TouchableOpacity>
+      </View>
+    </Tooltip>
   );
 };
 
