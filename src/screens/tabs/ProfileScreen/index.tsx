@@ -149,15 +149,12 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
           </>
         </View>
         <BottomSheet
-          closeIcon
           title="Изменение заблокировано"
           isVisible={isBlockingModalVisible}
-          closeIconPress={onBlockingModalClose}
           onBackdropPress={onBlockingModalClose}
           onSwipeComplete={onBlockingModalClose}
           titleStyle={styles.modalTitle}
           backdropTransitionOutTiming={0}
-          closeIconContainerStyle={styles.closeIcon}
         >
           <>
             <Spacer />
