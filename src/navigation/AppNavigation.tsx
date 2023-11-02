@@ -192,10 +192,7 @@ export const AppNavigation = () => {
     <Header {...props} title={''} />
   );
   return (
-    <Stack.Navigator
-      screenOptions={screenOptions}
-      // initialRouteName={AppScreenName.RecoveryConfirmation}
-    >
+    <Stack.Navigator screenOptions={screenOptions}>
       {isAuth ? (
         <>
           {isExecutor ? (

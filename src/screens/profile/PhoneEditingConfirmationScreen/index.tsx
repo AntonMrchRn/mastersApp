@@ -37,7 +37,11 @@ const PhoneEditingConfirmationScreen = () => {
             Подтверждение телефона
           </Text>
           <Spacer />
-          <Text variant="bodyMRegular" color={theme.text.neutral}>
+          <Text
+            variant="bodyMRegular"
+            color={theme.text.neutral}
+            style={styles.title}
+          >
             Мы отправили вам смс с 6-значным кодом. Пожалуйста, введите код
           </Text>
           <Spacer size="xl" />
