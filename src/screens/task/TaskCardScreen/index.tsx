@@ -46,6 +46,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
   const taskId = route.params.taskId;
+  const tabId = route.params.tabId;
 
   const {
     id,
@@ -97,7 +98,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
     isExecutor,
     onCloseCancelModalVisible,
     currentEstimateTab,
-  } = useTaskCard({ taskId, navigation });
+  } = useTaskCard({ taskId, navigation, tabId });
 
   return (
     <>
