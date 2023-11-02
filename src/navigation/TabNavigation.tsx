@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigatorScreenParams } from '@react-navigation/native';
@@ -19,6 +19,8 @@ import { selectOnboarding } from '@/store/slices/onboarding/selectors';
 
 import { ProfileNavigation, ProfileStackParamList } from './ProfileNavigation';
 
+const windowHeight = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
   label: {
     fontWeight: '600',
@@ -34,9 +36,12 @@ const screenOptions = {
   tabBarLabelStyle: styles.label,
 };
 
+const checkSlipper =
+  windowHeight < 680 ? { x: 20, y: -478 } : { x: 25, y: -520 };
+
 const payerTooltipCoords = configApp.android
-  ? { x: 65, y: -520 }
-  : { x: 85, y: -675 };
+  ? checkSlipper
+  : { x: 24, y: -675 };
 
 export enum BottomTabName {
   TaskSearch = 'TaskSearch',

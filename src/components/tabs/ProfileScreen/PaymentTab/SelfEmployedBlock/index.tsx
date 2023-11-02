@@ -18,7 +18,7 @@ import { AxiosQueryErrorResponse } from '@/types/error';
 
 import styles from './style';
 
-const selfTooltipCoords = { x: -151, y: 85 };
+const selfTooltipCoords = { x: 25, y: 85 };
 
 type SelfEmployedBlockProps = {
   id: number;
@@ -87,12 +87,6 @@ const SelfEmployedBlock = ({
     <>
       <Spacer size="xxxl" />
       <View style={styles.selfContainer}>
-        <Text variant="title3" style={styles.tooltipTitle}>
-          Самозанятым
-        </Text>
-        <TouchableOpacity hitSlop={hitSlop} onPress={onSelfTooltipOpen}>
-          <QuestionIcon fill={theme.icons.neutral} />
-        </TouchableOpacity>
         <Tooltip
           triangleEdge="bottom"
           isVisible={isSelfTooltipVisible}
@@ -100,7 +94,14 @@ const SelfEmployedBlock = ({
           coords={selfTooltipCoords}
           onClose={onSelfTooltipClose}
           text={`Доступна оплата услуг самозанятых \n через сервис «Свое дело»`}
-        />
+        >
+          <Text variant="title3" style={styles.tooltipTitle}>
+            Самозанятым
+          </Text>
+        </Tooltip>
+        <TouchableOpacity hitSlop={hitSlop} onPress={onSelfTooltipOpen}>
+          <QuestionIcon fill={theme.icons.neutral} />
+        </TouchableOpacity>
       </View>
       <Spacer size="xl" />
       <View style={styles.sber}>
