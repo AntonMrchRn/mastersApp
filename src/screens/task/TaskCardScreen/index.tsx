@@ -46,7 +46,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
   const taskId = route.params.taskId;
-  const tabId = route.params.tabId;
+  const tabId = route.params?.tabId;
 
   const {
     id,
