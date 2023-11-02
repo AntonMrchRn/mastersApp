@@ -54,7 +54,8 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
     onCopyEmail,
     scrollToEnd,
     scrollViewRef,
-    onBlockingModal,
+    onBlockingModalClose,
+    onBlockingModalOpen,
     isInternalExecutor,
     isBlockingModalVisible,
     isApprovalNotificationVisible,
@@ -64,7 +65,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
     [ProfileTab.Common]: user && (
       <CommonTab
         user={user}
-        onBlockingModal={onBlockingModal}
+        onBlockingModalOpen={onBlockingModalOpen}
         isApprovalNotificationVisible={isApprovalNotificationVisible}
       />
     ),
@@ -73,7 +74,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
         user={user}
         scrollToEnd={scrollToEnd}
         activeTab={activeTab.label}
-        onBlockingModal={onBlockingModal}
+        onBlockingModalOpen={onBlockingModalOpen}
         entityType={user?.entityTypeDescription}
       />
     ),
@@ -151,9 +152,9 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
           closeIcon
           title="Изменение заблокировано"
           isVisible={isBlockingModalVisible}
-          closeIconPress={onBlockingModal}
-          onBackdropPress={onBlockingModal}
-          onSwipeComplete={onBlockingModal}
+          closeIconPress={onBlockingModalClose}
+          onBackdropPress={onBlockingModalClose}
+          onSwipeComplete={onBlockingModalClose}
           titleStyle={styles.modalTitle}
           backdropTransitionOutTiming={0}
           closeIconContainerStyle={styles.closeIcon}
@@ -172,7 +173,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
             <Spacer size="l" />
             <Button
               label="Хорошо, понятно"
-              onPress={onBlockingModal}
+              onPress={onBlockingModalClose}
               style={styles.btn}
             />
           </>

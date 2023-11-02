@@ -25,13 +25,13 @@ import styles from './style';
 
 type CommonTabProps = {
   user: User;
-  onBlockingModal: () => void;
+  onBlockingModalOpen: () => void;
   isApprovalNotificationVisible: boolean;
 };
 
 const CommonTab = ({
   user,
-  onBlockingModal,
+  onBlockingModalOpen,
   isApprovalNotificationVisible,
 }: CommonTabProps) => {
   const theme = useTheme();
@@ -74,7 +74,7 @@ const CommonTab = ({
 
   const onEdit = () => {
     if (user.isApproved) {
-      return onBlockingModal();
+      return onBlockingModalOpen();
     }
     navigation.navigate(ProfileScreenName.PersonalDataEditing, {
       name: user.name,
