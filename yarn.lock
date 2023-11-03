@@ -1562,10 +1562,10 @@
     picocolors "^1.0.0"
     tslib "^2.6.0"
 
-"@react-native-async-storage/async-storage@^1.19.3":
-  version "1.19.3"
-  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.19.3.tgz#ad5fe3ed0a82d4624aa4500321c1e09c02daeb46"
-  integrity sha512-CwGfoHCWdPOTPS+2fW6YRE1fFBpT9++ahLEroX5hkgwyoQ+TkmjOaUxixdEIoVua9Pz5EF2pGOIJzqOTMWfBlA==
+"@react-native-async-storage/async-storage@^1.19.4":
+  version "1.19.4"
+  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.19.4.tgz#f3c8648fa6d06f085e30f68f0810ea8e53165ace"
+  integrity sha512-Stj6Q1v5knTMaYOinEEJl030SzJWEhqW+IYI5uA9Nl9Olo+vDUecmQXqpIxELucwOGDJ8KwvI0UL22UHudwZeQ==
   dependencies:
     merge-options "^3.0.4"
 
@@ -1772,30 +1772,30 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/eslint-plugin/-/eslint-plugin-1.3.0.tgz#9e558170c106bbafaa1ef502bd8e6d4651012bf9"
   integrity sha512-+zDZ20NUnSWghj7Ku5aFphMzuM9JulqCW+aPXT6IfIXFbb8tzYTTOSeRFOtuekJ99ibW2fUCSsjuKNlwDIbHFg==
 
-"@react-native-community/netinfo@^9.4.1":
-  version "9.4.1"
-  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-9.4.1.tgz#7b880758adca65fe47ee866cf7b00416b9dcc192"
-  integrity sha512-dAbY5mfw+6Kas/GJ6QX9AZyY+K+eq9ad4Su6utoph/nxyH3whp5cMSgRNgE2VhGQVRZ/OG0qq3IaD3+wzoqJXw==
+"@react-native-community/netinfo@^9.5.0":
+  version "9.5.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-9.5.0.tgz#93663bbb105feb8f729b8f0271ee06ffc009f024"
+  integrity sha512-sppTBobjvIlPYXyDAyb5WJoBaQq1hprnHj1PWICsA10mVnlmwX5ZVkgO2vGjsfFtb+fmWK9XtZF+aQ6ijqQcwg==
 
-"@react-native-firebase/app@^18.6.0":
-  version "18.6.0"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-18.6.0.tgz#939c92fda17c2641079314f30d52797db43a673e"
-  integrity sha512-pJwq2D0VBk8QvmIw6qZ5P3Y5Uaq4LL9NarAcTdEIA342VlhmTB1rovcYHE/F/hohdGBwFzi5qXAQnZmTxv27sg==
+"@react-native-firebase/app@^18.6.1":
+  version "18.6.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-18.6.1.tgz#9dd741b9b4e0493a7fa037c7e5717ba0c53086e4"
+  integrity sha512-lqINQLLTCmBSeln/cSPfvuJNQuwsPY9n6QyxSRRCTjyZdEPI3EY2df7isOCp8BwuxqYmkR9YhTNw2yFI72th+w==
   dependencies:
     opencollective-postinstall "^2.0.3"
     superstruct "^0.6.2"
 
-"@react-native-firebase/crashlytics@^18.6.0":
-  version "18.6.0"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/crashlytics/-/crashlytics-18.6.0.tgz#3a37d03178de6f2a1019f8054376f015f940503a"
-  integrity sha512-VGBvY8hNbyk30Fd1rTsQlUvSO425AnOootB+B0HCmuS2Mhn02RDA/ylPbkjGAavX+bM8TB6bOZ7hbpCAFgpa0Q==
+"@react-native-firebase/crashlytics@^18.6.1":
+  version "18.6.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/crashlytics/-/crashlytics-18.6.1.tgz#79b7c566a6cbc9df5aa5b3540c9bf0ce5195ee3e"
+  integrity sha512-mPP6RKwy0cCL4rYyanplwg2HGAswE4z4I9p0p3q8ZOuvD/F48IwVMebbE0f5aeEztlEBguL3KOeGXGUttw61+w==
   dependencies:
     stacktrace-js "^2.0.2"
 
-"@react-native-firebase/messaging@^18.6.0":
-  version "18.6.0"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-18.6.0.tgz#be0a7b8841c65a7b6d4dfd8407e9e216e7b57633"
-  integrity sha512-0fBDvbu13MJazAJhiT1rm//hnxhzOSu1ZpqmGUKpNu73llxPqVYDk4L8uZ7WBRtu3e6TP7Mw8IfH3gGB1qeelA==
+"@react-native-firebase/messaging@^18.6.1":
+  version "18.6.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-18.6.1.tgz#e1bbdcf11f34544687ed79e35539d31b62ba375e"
+  integrity sha512-HdZ5eGBynGM2gOUxoemaVmYE0UJP2oRg8+rLPB6kncv6eCRuMvpDQY4zhQS1jken5m2/KVU9/ZxDkI2659PCug==
 
 "@react-native/assets@1.0.0":
   version "1.0.0"
@@ -1812,7 +1812,7 @@
   resolved "https://registry.yarnpkg.com/@react-native/polyfills/-/polyfills-2.0.0.tgz#4c40b74655c83982c8cf47530ee7dc13d957b6aa"
   integrity sha512-K0aGNn1TjalKj+65D7ycc1//H9roAQ51GJVk5ZJQFb2teECGmzd86bYDC0aYdbRf7gtovescq4Zt6FR0tgXiHQ==
 
-"@react-navigation/bottom-tabs@^6.5.10":
+"@react-navigation/bottom-tabs@^6.5.11":
   version "6.5.11"
   resolved "https://registry.yarnpkg.com/@react-navigation/bottom-tabs/-/bottom-tabs-6.5.11.tgz#b6e67a3aa19e60ed9c1139fa0253586c479832d5"
   integrity sha512-CBN/NOdxnMvmjw+AJQI1kltOYaClTZmGec5pQ3ZNTPX86ytbIOylDIITKMfTgHZcIEFQDymx1SHeS++PIL3Szw==
@@ -1855,7 +1855,7 @@
   dependencies:
     nanoid "^3.1.23"
 
-"@react-navigation/stack@^6.3.19":
+"@react-navigation/stack@^6.3.20":
   version "6.3.20"
   resolved "https://registry.yarnpkg.com/@react-navigation/stack/-/stack-6.3.20.tgz#8eec944888f317bb1ba1ff30e7f513806bea16c2"
   integrity sha512-vE6mgZzOgoa5Uy7ayT97Cj+ZIK7DK+JBYVuKUViILlWZy6IWK7HFDuqoChSbZ1ajTIfAxj/acVGg1jkbAKsToA==
@@ -2390,10 +2390,10 @@ available-typed-arrays@^1.0.5:
   resolved "https://registry.yarnpkg.com/available-typed-arrays/-/available-typed-arrays-1.0.5.tgz#92f95616501069d07d10edb2fc37d3e1c65123b7"
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
 
-axios@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.5.1.tgz#11fbaa11fc35f431193a9564109c88c1f27b585f"
-  integrity sha512-Q28iYCWzNHjAm+yEAot5QaAMxhMghWLFVf7rRdwhUI+c2jix2DUXjAHXVi+s1ibs3mjPO/cCgbA++3BjD0vP/A==
+axios@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.0.tgz#f1e5292f26b2fd5c2e66876adc5b06cdbd7d2102"
+  integrity sha512-EZ1DYihju9pwVB+jg67ogm+Tmqc6JmhamRN6I4Zt8DfZu5lbcQGw3ozH9lFejSJgs/ibaef3A9PMXPLeefFGJg==
   dependencies:
     follow-redirects "^1.15.0"
     form-data "^4.0.0"
@@ -6180,7 +6180,7 @@ react-native-animatable@1.3.3:
   dependencies:
     prop-types "^15.7.2"
 
-react-native-blob-util@^0.19.1:
+react-native-blob-util@^0.19.2:
   version "0.19.2"
   resolved "https://registry.yarnpkg.com/react-native-blob-util/-/react-native-blob-util-0.19.2.tgz#32f37557b24cf30d1b6aac9d81666a75617598ab"
   integrity sha512-dU6Tq0SqdWpW5Csk64PrskmiYGn3HtaNsob8/PH2D1DjDZTvv2WjSyhgE+hqSgnxljkj4ZlNM73RxZBYrinQGA==
@@ -6198,7 +6198,7 @@ react-native-codegen@^0.71.6:
     jscodeshift "^0.14.0"
     nullthrows "^1.1.1"
 
-react-native-confirmation-code-field@^7.3.1:
+react-native-confirmation-code-field@^7.3.2:
   version "7.3.2"
   resolved "https://registry.yarnpkg.com/react-native-confirmation-code-field/-/react-native-confirmation-code-field-7.3.2.tgz#f0ee9e72f632aa2ae4dade4a1664a7a484885ea8"
   integrity sha512-uuJKxR+pQrXSx8lmRpekA+Hlle/nkoQKppS8jH7ApqY00+c11nCJg9kuFM0++vdbXg1rKm2P6jPZoSEJK2EaKw==
@@ -6241,7 +6241,7 @@ react-native-gradle-plugin@^0.71.19:
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.19.tgz#3379e28341fcd189bc1f4691cefc84c1a4d7d232"
   integrity sha512-1dVk9NwhoyKHCSxcrM6vY6cxmojeATsBobDicX0ZKr7DgUF2cBQRTKsimQFvzH8XhOVXyH8p4HyDSZNIFI8OlQ==
 
-react-native-image-crop-picker@^0.40.0:
+react-native-image-crop-picker@^0.40.1:
   version "0.40.1"
   resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.40.1.tgz#3b619d7af5f870aa676d7d5b06a276343b817c0f"
   integrity sha512-rs7W4jrisOiQtRip5WG0N4bxhT1hr5TWSA8Mo2OrlZgIhvTU9gdIw63hKw35rbwzVAzDkPXOBsR3ZolsTBxqww==
@@ -6308,6 +6308,11 @@ react-native-oksse@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/react-native-oksse/-/react-native-oksse-0.2.0.tgz#bf99177bdb55b1e56229c710116e4c123960986e"
   integrity sha512-fhw5XTw0DLskPbSPqGxQOhljLS6cyxKCfjZ/KqvvPFCtL+xVBQXpmJE6FlgfnhhEeb/0Xxz94KT73aPL6QViVQ==
+
+react-native-permissions@^3.10.1:
+  version "3.10.1"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.10.1.tgz#cb0171c8d12113869deaabbdfb979aad1a44752b"
+  integrity sha512-Gc5BxxpjZn4QNUDiVeHOO0vXh3AH7ToolmwTJozqC6DsxV7NAf3ttap+8BSmzDR8WxuAM3Cror+YNiBhHJx7/w==
 
 react-native-reanimated@^3.5.4:
   version "3.5.4"
@@ -6675,9 +6680,9 @@ rimraf@~2.6.2:
   dependencies:
     glob "^7.1.3"
 
-"rn-ui-kit@git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#3.1.1":
-  version "3.1.1"
-  resolved "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#0c405a41030977f5273d5e49749f41796b06a677"
+"rn-ui-kit@git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#3.1.3":
+  version "3.1.3"
+  resolved "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#782d23f3e26547e5e0a7ef982beb1be91761c941"
 
 run-applescript@^5.0.0:
   version "5.0.0"

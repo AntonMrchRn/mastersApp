@@ -205,7 +205,6 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                   const onDelete = () => {
                     setMaterialForDelete({ service, material });
                     onDeleteEstimateMaterialModalVisible();
-                    // onDeleteMaterial(service, material);
                   };
                   const onChangePrice = (text: string) => {
                     if (text && error) {

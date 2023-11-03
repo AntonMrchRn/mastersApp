@@ -31,8 +31,8 @@ import { NewMaterialScreen } from '@/screens/task/NewMaterialScreen';
 import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
 import { getInitialNotification } from '@/services/notifications/getInitialNotification';
-import { iosPushPermission } from '@/services/notifications/iosPushPermission';
 import { onNotificationOpenedApp } from '@/services/notifications/onNotificationOpenedApp';
+import { pushPermission } from '@/services/notifications/pushPermission';
 import { Executor, Service } from '@/store/api/tasks/types';
 import { StatusType } from '@/types/task';
 
@@ -76,7 +76,7 @@ export type AppStackParamList = {
     phone: string;
   };
   [AppScreenName.Error]: undefined;
-  [AppScreenName.TaskCard]: { taskId: number };
+  [AppScreenName.TaskCard]: { taskId: number; tabId?: number };
   [AppScreenName.ContractorsInvitation]: undefined;
   [AppScreenName.EstimateEdit]: {
     taskId: number;
@@ -137,7 +137,6 @@ export const AppNavigation = () => {
   useConnectionToast();
 
   useEffect(() => {
-    iosPushPermission();
     onNotificationOpenedApp();
     getInitialNotification();
   }, []);

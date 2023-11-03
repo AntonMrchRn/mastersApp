@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -10,6 +10,7 @@ import TaskSearch from '@/assets/icons/svg/tabBar/TaskSearch';
 import { fonts } from '@/constants/fonts';
 import MyTasksScreen from '@/screens/tabs/MyTasksScreen';
 import TaskSearchScreen from '@/screens/tabs/TaskSearchScreen';
+import { pushPermission } from '@/services/notifications/pushPermission';
 
 import { ProfileNavigation, ProfileStackParamList } from './ProfileNavigation';
 
@@ -40,6 +41,9 @@ export type BottomTabParamList = {
 };
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 export const TabNavigation = () => {
+  useEffect(() => {
+    pushPermission();
+  }, []);
   const taskSearchIcon = (color: {
     focused: boolean;
     color: string;
