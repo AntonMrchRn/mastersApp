@@ -64,7 +64,10 @@ const screenOptions = { headerShown: false };
 const Stack = createStackNavigator<ProfileStackParamList>();
 
 export const ProfileNavigation = () => (
-  <Stack.Navigator screenOptions={screenOptions}>
+  <Stack.Navigator
+    screenOptions={screenOptions}
+    initialRouteName={ProfileScreenName.PersonalDataEditing}
+  >
     <Stack.Screen name={ProfileScreenName.Profile} component={ProfileScreen} />
     <Stack.Screen
       name={ProfileScreenName.EmailEditing}
