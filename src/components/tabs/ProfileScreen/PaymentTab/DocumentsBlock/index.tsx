@@ -98,7 +98,7 @@ const DocumentsBlock = ({
   return (
     <>
       <Title
-        withButton
+        withButton={files.length < 10}
         title="Документы"
         onPress={onModal}
         buttonLabel={files.length ? 'Загрузить еще' : 'Загрузить'}
