@@ -13,7 +13,7 @@ import styles from './style';
 
 const ContractorsInvitationScreen = () => {
   const theme = useTheme();
-  const { link, copyLink, isLoading, sharePress, linkTimeout, onGenerateLink } =
+  const { link, copyLink, sharePress, linkTimeout, onGenerateLink } =
     useContractorsInvitation();
 
   return (
@@ -39,7 +39,6 @@ const ContractorsInvitationScreen = () => {
         <Spacer size="xl" />
         <View style={styles.rowBetween}>
           <Button
-            isPending={isLoading}
             size={'S'}
             style={styles.button}
             label={
