@@ -19,6 +19,15 @@ const styles = StyleSheet.create({
   btn: {
     height: 48,
   },
+  code: {
+    alignItems: 'center',
+  },
+  form: {
+    height: 150,
+    alignItems: 'center',
+    width: '100%',
+    justifyContent: 'space-between',
+  },
 });
 
 export default styles;
