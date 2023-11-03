@@ -30,7 +30,6 @@ const PersonalDataEditingScreen = () => {
               variant="text"
               label="Фамилия"
               maxLength={60}
-              isAnimatedLabel
               style={styles.input}
               autoCapitalize="none"
               hint={errors.sname?.message}
@@ -43,7 +42,6 @@ const PersonalDataEditingScreen = () => {
               label="Имя"
               variant="text"
               maxLength={60}
-              isAnimatedLabel
               style={styles.input}
               autoCapitalize="none"
               isError={!!errors.name?.message}
@@ -56,7 +54,6 @@ const PersonalDataEditingScreen = () => {
               variant="text"
               maxLength={60}
               label="Отчество"
-              isAnimatedLabel
               style={styles.input}
               autoCapitalize="none"
               isError={!!errors.pname?.message}

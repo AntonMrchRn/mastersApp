@@ -79,8 +79,8 @@ export type AppStackParamList = {
     phone: string;
   };
   [AppScreenName.Error]: undefined;
-  [AppScreenName.TaskCard]: { taskId: number };
   [AppScreenName.OnboardingScreen]: undefined;
+  [AppScreenName.TaskCard]: { taskId: number; tabId?: number };
   [AppScreenName.ContractorsInvitation]: undefined;
   [AppScreenName.EstimateEdit]: {
     taskId: number;

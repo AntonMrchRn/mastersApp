@@ -116,7 +116,14 @@ export const UploadBottomSheet = ({
               'org.openxmlformats.spreadsheetml.sheet',
               'com.compuserve.gif',
               ...(!toClose
-                ? ['public.mpeg', 'public.mpeg-4', 'com.apple.quicktime-movie']
+                ? [
+                    'public.mpeg',
+                    'public.mpeg-4',
+                    'com.apple.quicktime-movie',
+                    'io.iina.mkv',
+                    'dyn.ah62d4rv4ge804450',
+                    DocumentPicker.types.video,
+                  ]
                 : []),
             ],
       }),
@@ -129,14 +136,15 @@ export const UploadBottomSheet = ({
       // ios
       // если фото из галереи и оно сделано на данное устройство
       // (скриншоты/загруженные картинки и т.п. не теряют корректный поворот(rotation) и не нуждаются в обработке)
-      const isImageTakenOnThisIOS =
-        isImage &&
-        configApp.ios &&
-        !!((resp as Image)?.exif as Exif)['{MakerApple}'];
+      //TODO крашится на реальном ios устройстве
+      // const isImageTakenOnThisIOS =
+      //   isImage &&
+      //   configApp.ios &&
+      //   !!((resp as Image)?.exif as Exif)['{MakerApple}'];
 
       // передаем quality только для android, потому что для ios передается
       // параметр compressImageQuality в опциях пикера
-      return isImage && (configApp.android || isImageTakenOnThisIOS)
+      return isImage && configApp.android
         ? fixImageRotation(
             resp as Image,
             configApp.android ? quality : undefined,

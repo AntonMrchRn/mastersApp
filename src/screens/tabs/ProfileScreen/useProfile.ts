@@ -105,7 +105,9 @@ const useProfile = ({ tab }: { tab: TabProf | undefined }) => {
     { id: 3, label: ProfileTab.Account },
   ];
 
-  const onBlockingModal = () =>
+  const onBlockingModalOpen = () =>
+    setIsBlockingModalVisible(!isBlockingModalVisible);
+  const onBlockingModalClose = () =>
     setIsBlockingModalVisible(!isBlockingModalVisible);
 
   const switchTab = ({ id, label }: TabItem) => {
@@ -119,7 +121,7 @@ const useProfile = ({ tab }: { tab: TabProf | undefined }) => {
   };
 
   const onCopyEmail = () => {
-    onBlockingModal();
+    onBlockingModalClose();
     Clipboard.setString('info@mastera-service.ru');
     toast.show({
       type: 'success',
@@ -150,7 +152,8 @@ const useProfile = ({ tab }: { tab: TabProf | undefined }) => {
     onCopyEmail,
     scrollToEnd,
     scrollViewRef,
-    onBlockingModal,
+    onBlockingModalClose,
+    onBlockingModalOpen,
     isInternalExecutor,
     isBlockingModalVisible,
     isApprovalNotificationVisible,

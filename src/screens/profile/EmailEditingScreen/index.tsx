@@ -46,7 +46,6 @@ const EmailEditingScreen = () => {
               name="email"
               variant="text"
               maxLength={60}
-              isAnimatedLabel
               label="Электронная почта"
               autoCapitalize="none"
               onClear={clearErrors}

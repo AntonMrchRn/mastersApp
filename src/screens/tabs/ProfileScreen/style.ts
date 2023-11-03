@@ -20,12 +20,6 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 8,
   },
-  closeIcon: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    zIndex: 1,
-  },
   wrapper: {
     flex: 1,
     width: '100%',

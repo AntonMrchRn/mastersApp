@@ -77,7 +77,9 @@ const useContractorsInvitation = () => {
   };
 
   const onGenerateLink = async () => {
-    await generateLink();
+    if (!isLoading) {
+      await generateLink();
+    }
   };
 
   const copyLink = (link: string) => {
@@ -106,7 +108,6 @@ const useContractorsInvitation = () => {
   return {
     link,
     copyLink,
-    isLoading,
     sharePress,
     linkTimeout,
     onGenerateLink,

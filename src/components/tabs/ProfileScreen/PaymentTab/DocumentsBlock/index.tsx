@@ -98,7 +98,7 @@ const DocumentsBlock = ({
   return (
     <>
       <Title
-        withButton
+        withButton={files.length < 10}
         title="Документы"
         onPress={onModal}
         buttonLabel={files.length ? 'Загрузить еще' : 'Загрузить'}
@@ -128,7 +128,7 @@ const DocumentsBlock = ({
               color={theme.text.neutral}
             >
               При необходимости загрузите файлы для подтверждения учетной
-              записи. Максимальный размер одного файл не более 5 МВ
+              записи. Максимальный размер одного файла не более 5 МВ
             </Text>
           </View>
           <UploadProgress

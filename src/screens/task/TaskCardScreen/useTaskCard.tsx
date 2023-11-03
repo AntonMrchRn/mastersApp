@@ -84,22 +84,22 @@ const estimateTabsArray = [
   EstimateTab.TASK_ESTIMATE,
   EstimateTab.MY_SUGGESTION,
 ];
-const initialTab = {
-  id: 0,
-  label: TaskTab.DESCRIPTION,
-};
 
 export const useTaskCard = ({
   taskId,
   navigation,
+  tabId,
 }: {
   taskId: number;
   navigation: CompositeTaskCardNavigationProp;
+  tabId: number | undefined;
 }) => {
   const isFocused = useIsFocused();
   const toast = useToast();
   const dispatch = useAppDispatch();
-
+  const initialTab = (
+    tabId && +tabId <= 4 ? tabs?.[+tabId || 0] : tabs[0]
+  ) as Tab;
   const [tab, setTab] = useState<Tab>(initialTab);
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [uploadLimitBannerVisible, setUploadLimitBannerVisible] =
@@ -176,6 +176,11 @@ export const useTaskCard = ({
 
   const userOffersData = getUserOffersQuery.data?.offers || [];
 
+  useEffect(() => {
+    if (tabId && initialTab !== tab) {
+      setTab(initialTab);
+    }
+  }, [tabId]);
   useEffect(() => {
     if (isFocused) {
       onRefresh();

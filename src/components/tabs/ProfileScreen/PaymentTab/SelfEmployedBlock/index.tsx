@@ -24,14 +24,14 @@ type SelfEmployedBlockProps = {
   id: number;
   isApproved: boolean;
   isSberPayment: boolean;
-  onBlockingModal: () => void;
+  onBlockingModalOpen: () => void;
 };
 
 const SelfEmployedBlock = ({
   id,
   isApproved,
   isSberPayment,
-  onBlockingModal,
+  onBlockingModalOpen,
 }: SelfEmployedBlockProps) => {
   const theme = useTheme();
   const toast = useToast();
@@ -61,7 +61,7 @@ const SelfEmployedBlock = ({
   const onSelfTooltipClose = () => setIsSelfTooltipVisible(false);
   const editIsSber = async (isSberPayment: boolean) => {
     if (isApproved) {
-      return onBlockingModal();
+      return onBlockingModalOpen();
     }
 
     await editIsSberPayment({ ID: id, isSberPayment });
@@ -93,7 +93,7 @@ const SelfEmployedBlock = ({
           triagnleAlign={'center'}
           coords={selfTooltipCoords}
           onClose={onSelfTooltipClose}
-          text={`Доступна оплата услуг самозанятых \n через сервис «Свое дело»`}
+          text={`Доступна оплата услуг самозанятых\nчерез сервис «Свое дело»`}
         >
           <Text variant="title3" style={styles.tooltipTitle}>
             Самозанятым
