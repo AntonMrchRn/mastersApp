@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import normalize from 'react-native-normalize';
 
 const styles = StyleSheet.create({
   container: {
@@ -18,7 +19,12 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   empty: {
-    flex: 0.25,
+    height: normalize(120, 'height'),
+  },
+  wrapIcon: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   toastTitle: {
     fontSize: 17,
@@ -32,6 +38,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     gap: 16,
+  },
+  txt: {
+    textAlign: 'center',
   },
   button: {
     paddingHorizontal: 24,

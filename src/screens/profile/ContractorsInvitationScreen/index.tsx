@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
 import { Button, Spacer, Text, Tips, useTheme } from 'rn-ui-kit';
 
@@ -19,53 +19,66 @@ const ContractorsInvitationScreen = () => {
   return (
     <View style={styles.container}>
       <Header title="Приглашение подрядчиков" />
-      <View style={styles.empty} />
       <View style={styles.content}>
-        <View
-          style={[
-            styles.iconContainer,
-            { backgroundColor: theme.background.fieldMain },
-          ]}
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
         >
-          <MegaphoneIcon fill={theme.icons.accent} />
-        </View>
-        <Spacer size="xl" />
-        <Text variant="title2">Пополняйте свою команду</Text>
-        <Spacer />
-        <Text variant="bodyMRegular" color={theme.text.neutral}>
-          Отправляйте исполнителям приглашения стать вашими подрядчиками. Вы
-          сможете курировать работы вступивших в команду
-        </Text>
-        <Spacer size="xl" />
-        <View style={styles.rowBetween}>
-          <Button
-            isPending={isLoading}
-            size={'S'}
-            style={styles.button}
-            label={
-              link ? 'Копировать ссылку' : 'Сгенерировать ссылку-приглашение'
-            }
-            onPress={link ? () => copyLink(link) : onGenerateLink}
-          />
-          {!!link && (
+          <View style={styles.empty} />
+          <View style={styles.wrapIcon}>
+            <View
+              style={[
+                styles.iconContainer,
+                { backgroundColor: theme.background.fieldMain },
+              ]}
+            >
+              <MegaphoneIcon fill={theme.icons.accent} />
+            </View>
+          </View>
+          <Spacer size="xl" />
+          <Text variant="title2" style={styles.txt}>
+            Пополняйте свою команду
+          </Text>
+          <Spacer />
+          <Text
+            variant="bodyMRegular"
+            style={styles.txt}
+            color={theme.text.neutral}
+          >
+            Отправляйте исполнителям приглашения стать вашими подрядчиками. Вы
+            сможете курировать работы вступивших в команду
+          </Text>
+          <Spacer size="xl" />
+          <View style={styles.rowBetween}>
             <Button
-              onPress={sharePress}
-              icon={<ShareIcon />}
-              size="S"
-              variant="outlineAccent"
-              style={styles.share}
+              isPending={isLoading}
+              size={'S'}
+              style={styles.button}
+              label={
+                link ? 'Копировать ссылку' : 'Сгенерировать ссылку-приглашение'
+              }
+              onPress={link ? () => copyLink(link) : onGenerateLink}
+            />
+            {!!link && (
+              <Button
+                onPress={sharePress}
+                icon={<ShareIcon />}
+                size="S"
+                variant="outlineAccent"
+                style={styles.share}
+              />
+            )}
+          </View>
+          {(!!linkTimeout || !!link) && (
+            <TimerBlockLink
+              isConfirm={!!link}
+              callBack={onGenerateLink}
+              expiredTimer={
+                linkTimeout ? Number(linkTimeout.timeout * 1000) : undefined
+              }
             />
           )}
-        </View>
-        {(!!linkTimeout || !!link) && (
-          <TimerBlockLink
-            isConfirm={!!link}
-            callBack={onGenerateLink}
-            expiredTimer={
-              linkTimeout ? Number(linkTimeout.timeout * 1000) : undefined
-            }
-          />
-        )}
+        </ScrollView>
         <Tips
           type="info"
           containerStyle={styles.info}

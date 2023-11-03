@@ -33,7 +33,11 @@ const Header = ({ title, description, icon = <ArrowBack /> }: HeaderProps) => {
         </TouchableOpacity>
         <View style={styles.wrapper}>
           {title && (
-            <Text variant="bodyMBold" color={theme.text.basic}>
+            <Text
+              variant="bodyMBold"
+              style={styles.titleTxt}
+              color={theme.text.basic}
+            >
               {title}
             </Text>
           )}
