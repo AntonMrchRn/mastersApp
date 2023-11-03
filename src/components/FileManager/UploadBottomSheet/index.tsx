@@ -116,7 +116,14 @@ export const UploadBottomSheet = ({
               'org.openxmlformats.spreadsheetml.sheet',
               'com.compuserve.gif',
               ...(!toClose
-                ? ['public.mpeg', 'public.mpeg-4', 'com.apple.quicktime-movie']
+                ? [
+                    'public.mpeg',
+                    'public.mpeg-4',
+                    'com.apple.quicktime-movie',
+                    'io.iina.mkv',
+                    'dyn.ah62d4rv4ge804450',
+                    DocumentPicker.types.video,
+                  ]
                 : []),
             ],
       }),
