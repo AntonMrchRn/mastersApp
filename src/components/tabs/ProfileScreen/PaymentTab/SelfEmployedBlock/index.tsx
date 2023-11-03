@@ -93,7 +93,7 @@ const SelfEmployedBlock = ({
           triagnleAlign={'center'}
           coords={selfTooltipCoords}
           onClose={onSelfTooltipClose}
-          text={`Доступна оплата услуг самозанятых \n через сервис «Свое дело»`}
+          text={`Доступна оплата услуг самозанятых\nчерез сервис «Свое дело»`}
         >
           <Text variant="title3" style={styles.tooltipTitle}>
             Самозанятым

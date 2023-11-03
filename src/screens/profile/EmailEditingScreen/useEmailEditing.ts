@@ -101,6 +101,9 @@ const useEmailEditing = () => {
   };
 
   const sendCode = async ({ email }: EmailValue) => {
+    if (userEmail === email) {
+      return navigation.goBack();
+    }
     await sendConfirmationCode(email);
   };
 
