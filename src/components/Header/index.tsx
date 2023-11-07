@@ -42,7 +42,11 @@ const Header = ({ title, description, icon = <ArrowBack /> }: HeaderProps) => {
             </Text>
           )}
           {description && (
-            <Text variant="captionRegular" color={theme.text.neutral}>
+            <Text
+              variant="captionRegular"
+              style={styles.descriptionTxt}
+              color={theme.text.neutral}
+            >
               {description}
             </Text>
           )}

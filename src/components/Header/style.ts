@@ -18,6 +18,9 @@ const styles = StyleSheet.create({
   titleTxt: {
     textAlign: 'center',
   },
+  descriptionTxt: {
+    textAlign: 'center',
+  },
   btnBack: {
     width: 45,
     paddingVertical: 5,

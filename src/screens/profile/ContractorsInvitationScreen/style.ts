@@ -38,13 +38,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     gap: 16,
+    marginBottom: 25,
   },
   txt: {
     textAlign: 'center',
   },
   button: {
     paddingHorizontal: 24,
-    height: 48,
+    minHeight: 48,
     flexGrow: 1,
   },
   share: {

@@ -9,7 +9,7 @@ import Employees from '@/assets/icons/svg/tabBar/Employees';
 import Profile from '@/assets/icons/svg/tabBar/Profile';
 import TaskSearch from '@/assets/icons/svg/tabBar/TaskSearch';
 import { fonts } from '@/constants/fonts';
-import { configApp } from '@/constants/platform';
+import { configApp, deviceHeight } from '@/constants/platform';
 import MyTasksScreen from '@/screens/tabs/MyTasksScreen';
 import TaskSearchScreen from '@/screens/tabs/TaskSearchScreen';
 import { pushPermission } from '@/services/notifications/pushPermission';
@@ -18,8 +18,6 @@ import { unActiveToolTip } from '@/store/slices/onboarding/actions';
 import { selectOnboarding } from '@/store/slices/onboarding/selectors';
 
 import { ProfileNavigation, ProfileStackParamList } from './ProfileNavigation';
-
-const windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   label: {
@@ -37,11 +35,11 @@ const screenOptions = {
 };
 
 const checkSlipper =
-  windowHeight < 680 ? { x: 20, y: -478 } : { x: 25, y: -520 };
+  deviceHeight < 680 ? { x: 20, y: -478 } : { x: 25, y: -520 };
 
 const payerTooltipCoords = configApp.android
   ? checkSlipper
-  : { x: 24, y: -675 };
+  : { x: 24, y: -685 };
 
 export enum BottomTabName {
   TaskSearch = 'TaskSearch',
