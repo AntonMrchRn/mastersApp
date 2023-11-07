@@ -137,6 +137,7 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
                             <Text
                               variant={'bodyMRegular'}
                               color={theme.text.basic}
+                              style={styles.itemText}
                             >
                               {category.name}
                             </Text>
