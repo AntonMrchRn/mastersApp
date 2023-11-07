@@ -46,4 +46,5 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  itemText: { flexShrink: 1 },
 });

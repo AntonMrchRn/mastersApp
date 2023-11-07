@@ -96,6 +96,9 @@ const usePhoneEditing = () => {
   };
 
   const sendCode = async ({ phone }: PhoneValue) => {
+    if (userPhone === phone) {
+      return navigation.goBack();
+    }
     await sendConfirmationCode(`7${phone}`);
   };
 

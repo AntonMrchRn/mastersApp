@@ -28,18 +28,18 @@ const usePersonalDataEditing = () => {
 
   const methods = useForm({
     defaultValues: {
-      name: params.name || '',
-      sname: params.sname || '',
-      pname: params.pname || '',
+      name: params?.name || '',
+      sname: params?.sname || '',
+      pname: params?.pname || '',
     },
     resolver: yupResolver(personalDataValidationSchema),
-    mode: 'onBlur',
+    mode: 'onSubmit',
   });
   const {
     handleSubmit,
     formState: { errors, isDirty },
   } = methods;
-  const isDataExist = !!params.name && !!params.sname;
+  const isDataExist = !!params?.name && !!params?.sname;
 
   useEffect(() => {
     if (isSuccess) {

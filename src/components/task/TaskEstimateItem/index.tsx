@@ -53,7 +53,7 @@ export const TaskEstimateItem: FC<TaskEstimateItemProps> = ({
 
   const currentMeasure =
     measure === 'час'
-      ? plural(count, '%d час', '%d часa', '%d часов')
+      ? plural(count, '%d час', '%d часа', '%d часов')
       : `${separateThousands(count)} ${measure}`;
 
   const items = [

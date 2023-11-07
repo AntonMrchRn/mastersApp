@@ -24,7 +24,7 @@ const NDSPayerTooltip = () => {
       coords={payerTooltipCoords}
       onClose={onTooltipClose}
       isVisible={isTooltipVisible}
-      text={`Сумма НДС будет выделяться из итоговой \n суммы сметы по формуле:\n НДС = Сумма/120*20`}
+      text={`Сумма НДС будет выделяться из итоговой\nсуммы сметы по формуле:\nНДС = Сумма/120*20`}
     >
       <View style={styles.payerTooltip} onLayout={e => e.nativeEvent.layout.y}>
         <Text variant="bodyMRegular" style={styles.tooltipTitle}>

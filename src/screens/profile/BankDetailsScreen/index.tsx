@@ -27,7 +27,6 @@ const BankDetailsScreen = () => {
               name="bankName"
               variant="text"
               maxLength={100}
-              isAnimatedLabel
               autoCapitalize="none"
               style={styles.input}
               label="Полное наименование банка"
@@ -39,7 +38,6 @@ const BankDetailsScreen = () => {
             <ControlledInput
               variant="text"
               maxLength={20}
-              isAnimatedLabel
               autoCapitalize="none"
               style={styles.input}
               name="checkingAccount"
@@ -55,7 +53,6 @@ const BankDetailsScreen = () => {
               name="bankID"
               variant="text"
               maxLength={9}
-              isAnimatedLabel
               autoCapitalize="none"
               style={styles.input}
               keyboardType="number-pad"
@@ -67,7 +64,6 @@ const BankDetailsScreen = () => {
             <ControlledInput
               variant="text"
               maxLength={20}
-              isAnimatedLabel
               label="Корр. счет"
               autoCapitalize="none"
               style={styles.input}

@@ -168,7 +168,6 @@ const DataEditingStep = ({
               name="entityName"
               variant="text"
               maxLength={60}
-              isAnimatedLabel
               autoCapitalize="none"
               style={styles.input}
               label={`Наименование${isIndividual ? ' ИП' : ''}`}
@@ -185,7 +184,6 @@ const DataEditingStep = ({
             label="ИНН"
             variant="text"
             maxLength={isCompany ? 10 : 12}
-            isAnimatedLabel
             autoCapitalize="none"
             style={styles.input}
             keyboardType="number-pad"
@@ -202,7 +200,6 @@ const DataEditingStep = ({
               label="КПП"
               variant="text"
               maxLength={9}
-              isAnimatedLabel
               autoCapitalize="none"
               style={styles.input}
               keyboardType="number-pad"

@@ -89,11 +89,13 @@ export const CandidateItem = ({
               name={service?.name || ''}
               price={service?.price || 0}
               count={service?.count || 0}
+              measure={service?.measure?.toLowerCase()}
               sum={(service?.count || 0) * (service?.price || 0)}
             />
             {service.materials?.map(material => (
               <Item
                 key={material.name}
+                measure={material?.measure?.toLowerCase()}
                 name={material?.name || ''}
                 price={material?.price || 0}
                 count={material?.count || 0}

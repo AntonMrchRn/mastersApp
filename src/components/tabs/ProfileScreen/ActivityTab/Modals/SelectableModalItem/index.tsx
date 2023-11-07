@@ -23,7 +23,9 @@ const SelectableModalItem = ({
   return (
     <>
       <View style={styles.container}>
-        <Text variant="bodyMRegular">{text}</Text>
+        <Text variant="bodyMRegular" style={styles.text}>
+          {text}
+        </Text>
         <CheckBox
           hitSlop={hitSlop}
           onPress={onSelect}
