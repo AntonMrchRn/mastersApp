@@ -4,16 +4,17 @@ import { File } from '@/types/fileManager';
 import { OutlayStatusType, StatusType, TaskTab, TaskType } from '@/types/task';
 
 export const getButtons = ({
-  isConfirmedContractor,
   tab,
   toClose,
   subsetID,
   statusID,
   isCurator,
+  isExecutor,
   reportFiles,
   closureFiles,
   onCancelTask,
   isContractor,
+  onSubmitAnTask,
   navigateToChat,
   userOffersData,
   onWorkDelivery,
@@ -22,14 +23,14 @@ export const getButtons = ({
   isInvitedCurator,
   onTaskSubmission,
   isInvitedExecutor,
-  isExecutor,
-  onSubmitAnTask,
   isCommentsAvailable,
   isCuratorAllowedTask,
   isOffersDeadlineOver,
-  onOpenCancelModalVisible,
   onUploadModalVisible,
   onBudgetModalVisible,
+  isConfirmedContractor,
+  isRefusedInvitedMember,
+  onOpenCancelModalVisible,
   onSubmissionModalVisible,
   onApproveEstimateChanges,
   onSendEstimateForApproval,
@@ -80,6 +81,7 @@ export const getButtons = ({
   onSubmissionModalVisible: (isSubmissionByCurator?: boolean) => void;
   onApproveEstimateChanges: () => void;
   onSendEstimateForApproval: () => void;
+  isRefusedInvitedMember: boolean;
   onCancelTask: (refuseReason?: string) => void;
 }): TaskCardBottomButton[] => {
   switch (subsetID) {
@@ -930,12 +932,11 @@ export const getButtons = ({
                   },
                 ];
               }
-              //приглашенный координатором куратор ( Назначен куратор )
-              if (isInvitedCurator) {
+              // приглашенный координатором куратор, который не отзывал смету
+              if (isInvitedCurator && !isRefusedInvitedMember) {
                 return [
                   {
                     label: 'Подать смету',
-                    variant: 'outlineAccent',
                     onPress: () => onSubmissionModalVisible(true),
                   } as TaskCardBottomButton,
                 ];

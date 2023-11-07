@@ -10,6 +10,7 @@ import { TaskCardDescription } from '@/components/task/TaskCard/TaskCardDescript
 import { TaskCardEstimate } from '@/components/task/TaskCard/TaskCardEstimate';
 import { TaskCardHistory } from '@/components/task/TaskCard/TaskCardHistory';
 import { TaskCardReport } from '@/components/task/TaskCard/TaskCardReport';
+import { useTaskMembers } from '@/hooks/useTaskMembers';
 import { useTaskSSE } from '@/hooks/useTaskSSE';
 import { AppScreenName } from '@/navigation/AppNavigation';
 import { ProfileScreenName } from '@/navigation/ProfileNavigation';
@@ -23,7 +24,6 @@ import {
   useGetAnotherOffersQuery,
   useGetAvailableContractorsQuery,
   useGetTaskHistoryQuery,
-  useGetTaskQuery,
   useGetUserOffersQuery,
   usePatchITTaskMemberMutation,
   usePatchOffersMutation,
@@ -32,7 +32,6 @@ import {
 } from '@/store/api/tasks';
 import { GetTaskResponse } from '@/store/api/tasks/types';
 import { useGetUserQuery } from '@/store/api/user';
-import { selectAuth } from '@/store/slices/auth/selectors';
 import { getCommentsPreview } from '@/store/slices/myTasks/asyncActions';
 import { setNewOfferServices } from '@/store/slices/tasks/actions';
 import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
@@ -97,6 +96,36 @@ export const useTaskCard = ({
   const isFocused = useIsFocused();
   const toast = useToast();
   const dispatch = useAppDispatch();
+
+  const {
+    task,
+    error,
+    isError,
+    userID,
+    refetch,
+    isLoading,
+    curator,
+    curators,
+    executor,
+    executors,
+    isSuccess,
+    isCurator,
+    isExecutor,
+    coordinator,
+    isContractor,
+    isSupervisor,
+    isCoordinator,
+    curatorMemberId,
+    executorMemberId,
+    isInvitedCurator,
+    isInvitedExecutor,
+    isConfirmedCurator,
+    isCuratorAllowedTask,
+    isConfirmedContractor,
+    isRefusedInvitedMember,
+    isTaskWithUnconfirmedCurator,
+  } = useTaskMembers(taskId);
+
   const initialTab = (
     tabId && +tabId <= 4 ? tabs?.[+tabId || 0] : tabs[0]
   ) as Tab;
@@ -122,7 +151,6 @@ export const useTaskCard = ({
     EstimateTab.TASK_ESTIMATE,
   );
 
-  const user = useAppSelector(selectAuth).user;
   const isMessagesExist = !!useAppSelector(state => state.myTasks)
     .commentsPreview?.taskComment?.length;
 
@@ -133,19 +161,17 @@ export const useTaskCard = ({
   const [deleteITTaskMember] = useDeleteITTaskMemberMutation();
   const [postITTaskMember] = usePostITTaskMemberMutation();
 
-  const getUserQuery = useGetUserQuery(user?.userID);
-  const { data, isError, error, refetch, isLoading, isSuccess } =
-    useGetTaskQuery(taskId);
-
+  const user = useGetUserQuery(userID).data;
   const getTaskHistory = useGetTaskHistoryQuery(taskId);
-  const task = data?.tasks?.[0];
-  const executors = task?.executors || [];
-  const executor = executors.find(executor => executor.ID === user?.userID);
-  /**
-   * Отказался ли подрядчик принять задачу
-   */
-  const isRefusedExecutor = !!executor?.isRefuse;
-  const isContractor = !!executor?.hasCurator && !isRefusedExecutor;
+  const { data: contractors } = useGetAvailableContractorsQuery(
+    {
+      curatorId: user?.ID as number,
+      taskId,
+    },
+    {
+      skip: !user?.roleID || !taskId,
+    },
+  );
 
   const isSkipTask =
     task?.subsetID &&
@@ -157,8 +183,8 @@ export const useTaskCard = ({
     {
       taskID: taskId,
       userID: (isItLots && isContractor
-        ? executor.curatorID
-        : user?.userID) as number,
+        ? executor?.curatorID
+        : userID) as number,
     },
     {
       skip: isSkipTask,
@@ -167,7 +193,7 @@ export const useTaskCard = ({
   const getAnotherOffers = useGetAnotherOffersQuery(
     {
       taskID: taskId,
-      userID: user?.userID as number,
+      userID: userID as number,
     },
     {
       skip: isSkipTask,
@@ -190,7 +216,7 @@ export const useTaskCard = ({
     if (isError) {
       if (
         [
-          ErrorCode.TaskIsAlreadyTaken,
+          ErrorCode.TASK_IS_ALREADY_TAKEN,
           ErrorCode.OTHER_CANDIDATE,
           ErrorCode.NOT_FOUND,
         ].includes((error as AxiosQueryErrorResponse).data.code)
@@ -226,27 +252,19 @@ export const useTaskCard = ({
     }
   }, [isSuccess]);
 
-  const userData = getUserQuery.data;
-  const entityTypeID = userData?.entityTypeID;
+  const entityTypeID = user?.entityTypeID;
   /**
    * личный коэффициент оплаты исполнителя
    */
-  const serviceMultiplier = userData?.serviceMultiplier || 1;
+  const serviceMultiplier = user?.serviceMultiplier || 1;
   const isSelfEmployed = entityTypeID === 1;
+  const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
 
   const id = task?.ID || 0;
   const name = task?.name || '';
-  /**
-   * участники задачи
-   */
 
   const confirmedExecutors = executors.filter(executor => executor.isConfirm);
   const cancelReason = task?.cancelReason;
-  const curators = task?.curators || [];
-  const coordinator = task?.coordinator;
-  const curator = curators.find(curator => curator.ID === user?.userID);
-  const executorMemberId = executor?.memberID;
-  const curatorMemberId = curator?.memberID;
   /**
    * тип задачи
    */
@@ -316,67 +334,8 @@ export const useTaskCard = ({
     : '';
 
   /**
-   * Отказался ли куратор принять задачу
-   */
-  const isRefusedCurator = !!curator?.isRefuse;
-  // проверка на роль в задаче
-
-  // is подрядчик
-  const isExecutor = !!executor && !executor.hasCurator && !isRefusedExecutor;
-  const isCoordinator = coordinator?.ID === user?.userID;
-  const isSupervisor = getUserQuery.data?.roleID === RoleType.SUPERVISOR;
-  const isCurator =
-    curators.some(curator => curator.ID === user?.userID) && !curator?.isRefuse;
-  const isInternalExecutor =
-    getUserQuery.data?.roleID === RoleType.INTERNAL_EXECUTOR;
-  /**
-   * Принял ли задачу куратор
-   */
-  const isConfirmedCurator = isCurator && !!curator?.isConfirm;
-  /**
-   * Принял ли задачу подрядчик
-   */
-  const isConfirmedExecutor = isExecutor && !!executor?.isConfirm;
-  const isConfirmedContractor = isContractor && !!executor?.isConfirm;
-
-  /**
-   * Задача с куратором
-   */
-  const isCuratorAllowedTask = !!task?.isCuratorAllowed;
-  /**
-   * Задача с участием куратора, который её ещё не принял (или принял, но отказался)
-   */
-  const isTaskWithUnconfirmedCurator =
-    isCuratorAllowedTask && (!isConfirmedCurator || isRefusedCurator);
-  /**
-   * Является ли куратор приглашённым (координатором или руководителем)
-   */
-  const isInvitedCurator =
-    (!isConfirmedCurator || isRefusedCurator) &&
-    (curator?.inviterRoleID === RoleType.COORDINATOR ||
-      curator?.inviterRoleID === RoleType.SUPERVISOR);
-  /**
-   * Является ли исполнитель приглашённым (координатором или руководителем)
-   */
-  const isInvitedExecutor =
-    (!isConfirmedExecutor || (isConfirmedExecutor && isRefusedExecutor)) &&
-    (executor?.inviterRoleID === RoleType.COORDINATOR ||
-      executor?.inviterRoleID === RoleType.SUPERVISOR);
-
-  const { data: contractors } = useGetAvailableContractorsQuery(
-    {
-      curatorId: getUserQuery.data?.ID as number,
-      taskId,
-    },
-    {
-      skip: !getUserQuery.data?.roleID || !taskId,
-    },
-  );
-
-  /**
    * Доступны ли подрядчики
    */
-
   const isAvailableContractorsExist =
     !!contractors?.some(
       contractor => contractor.subStatusID === ContractorStatus.AVAILABLE,
@@ -446,7 +405,7 @@ export const useTaskCard = ({
 
   const budgetEndTime = getBudgetEndTime();
 
-  const hasAccessToTask = userData?.isApproved;
+  const hasAccessToTask = user?.isApproved;
   const isCommentsAvailable =
     (isSupervisor ||
       isExecutor ||
@@ -461,7 +420,7 @@ export const useTaskCard = ({
       StatusType.CANCELLED_BY_EXECUTOR,
     ].includes(statusID);
 
-  const hasAccessToDirection = setId && userData?.setIDs?.includes(setId);
+  const hasAccessToDirection = setId && user?.setIDs?.includes(setId);
 
   const isTaskClosed = statusID === StatusType.CLOSED;
 
@@ -489,7 +448,7 @@ export const useTaskCard = ({
         tasksAPI.endpoints.getUserOffers.initiate(
           {
             taskID: taskId,
-            userID: user?.userID as number,
+            userID: userID as number,
           },
           {
             forceRefetch: true,
@@ -500,7 +459,7 @@ export const useTaskCard = ({
         tasksAPI.endpoints.getAnotherOffers.initiate(
           {
             taskID: taskId,
-            userID: user?.userID as number,
+            userID: userID as number,
           },
           {
             forceRefetch: true,
@@ -523,9 +482,8 @@ export const useTaskCard = ({
 
   useTaskSSE({ taskId, refresh });
 
-  const onUploadLimitBannerVisible = () => {
+  const onUploadLimitBannerVisible = () =>
     setUploadLimitBannerVisible(!uploadLimitBannerVisible);
-  };
   const onCantDeleteBannerVisible = () =>
     setCantDeleteBannerVisible(!cantDeleteBannerVisible);
   const onDirectionNotSpecifiedBannerVisible = () =>
@@ -628,8 +586,6 @@ export const useTaskCard = ({
 
         navigation.navigate(AppScreenName.EstimateSubmission, {
           taskId,
-          isInvitedExecutor,
-          executor,
         });
       }
       //IT-ЛОТЫ Куратор, навигация на скрин подачи сметы
@@ -642,18 +598,14 @@ export const useTaskCard = ({
           navigation.navigate(AppScreenName.Contractors, {
             taskId,
             isInvitedCurator,
-            curatorId: user?.userID as number,
+            curatorId: userID as number,
             curatorMemberId: curator?.memberID,
           });
         } else {
           // Подрядчики доступны -> подача сметы
           navigation.navigate(AppScreenName.EstimateSubmission, {
             taskId,
-            isInvitedExecutor,
-            executor,
-            submissionByCurator: true,
-            isInvitedCurator,
-            curatorMemberID: curator?.memberID,
+            isSubmissionByCuratorItLots: true,
           });
         }
       }
@@ -662,14 +614,14 @@ export const useTaskCard = ({
     if (subsetID === TaskType.COMMON_FIRST_RESPONSE) {
       //принимаем таску в работу, если первый отклик
       try {
-        if (user?.userID) {
+        if (userID) {
           await patchTask({
             //id таски
             ID: id,
             //статус для принятия в работу
             statusID: StatusType.WORK,
             //id профиля
-            executors: [{ ID: user?.userID }],
+            executors: [{ ID: userID }],
           }).unwrap();
         }
       } catch (error) {
@@ -688,7 +640,7 @@ export const useTaskCard = ({
     }
 
     //принять задачу, если IT первый отклик
-    if (subsetID === TaskType.IT_FIRST_RESPONSE && user?.userID) {
+    if (subsetID === TaskType.IT_FIRST_RESPONSE && userID) {
       try {
         // куратор-подрядчик
         // сначала делаем patch задачи, потом patch участника задания (подрядчика)
@@ -713,7 +665,7 @@ export const useTaskCard = ({
             taskID: taskId,
             members: [
               {
-                userID: user.userID,
+                userID,
                 isConfirm: true,
               },
             ],
@@ -734,7 +686,7 @@ export const useTaskCard = ({
 
     //принять задачу, если IT внутренний исполнитель
     //исполнителей может быть один или двое
-    if (subsetID === TaskType.IT_INTERNAL_EXECUTIVES && user?.userID) {
+    if (subsetID === TaskType.IT_INTERNAL_EXECUTIVES && userID) {
       //проверяем есть ли он в мемберах
       //если пригласили то isInvitedExecutor
       try {
@@ -750,7 +702,7 @@ export const useTaskCard = ({
           taskID: taskId,
           members: [
             {
-              userID: user.userID,
+              userID,
               isConfirm: true,
             },
           ],
@@ -864,17 +816,17 @@ export const useTaskCard = ({
       // IT задачи - первый отклик
       if (subsetID === TaskType.IT_FIRST_RESPONSE) {
         // при отказе от задачи в статусе 'опубликовано' сбрасываем участника через patch
-        if (statusID === StatusType.ACTIVE && user?.userID) {
+        if (statusID === StatusType.ACTIVE && userID) {
           await patchITTaskMember({
             ID: isConfirmedCurator ? curatorMemberId : executorMemberId,
-            userID: user?.userID,
+            userID,
             isConfirm: false,
             isRefuse: true,
           }).unwrap();
         }
         // при отказе от задачи в статусе 'в работе' делаем patch задачи (если это не куратор)
         // и сбрасываем участника через delete
-        if (statusID === StatusType.WORK && user?.userID) {
+        if (statusID === StatusType.WORK && userID) {
           if (!isCurator) {
             await patchTask({
               ID: taskId,
@@ -980,18 +932,16 @@ export const useTaskCard = ({
     return onSubmissionModalVisible();
   };
 
-  const navigateToContractors = () => {
-    if (user?.userID) {
-      navigation.navigate(AppScreenName.Contractors, {
-        taskId,
-        isConfirmedCurator,
-        isInvitedCurator,
-        curatorId: user.userID,
-        curatorMemberId: curator?.memberID,
-        isItLots: subsetID === TaskType.IT_AUCTION_SALE,
-      });
-    }
-  };
+  const navigateToContractors = () =>
+    userID &&
+    navigation.navigate(AppScreenName.Contractors, {
+      taskId,
+      isConfirmedCurator,
+      isInvitedCurator,
+      curatorId: userID,
+      curatorMemberId: curator?.memberID,
+      isItLots: subsetID === TaskType.IT_AUCTION_SALE,
+    });
 
   const getCurrentTab = () => {
     switch (tab.label) {
@@ -1027,6 +977,7 @@ export const useTaskCard = ({
             winnerOffer={winnerOffer}
             isContractor={isContractor}
             outlayStatusID={outlayStatusID}
+            curatorId={executor?.curatorID}
             serviceMultiplier={serviceMultiplier}
             currentEstimateTab={currentEstimateTab}
             estimateBottomVisible={estimateBottomVisible}
@@ -1088,11 +1039,12 @@ export const useTaskCard = ({
     subsetID,
     statusID,
     isCurator,
+    isExecutor,
     reportFiles,
     closureFiles,
     onCancelTask,
     isContractor,
-    isExecutor,
+    onSubmitAnTask,
     navigateToChat,
     userOffersData,
     onWorkDelivery,
@@ -1100,14 +1052,14 @@ export const useTaskCard = ({
     isInvitedCurator,
     onTaskSubmission,
     isInvitedExecutor,
-    onSubmitAnTask,
     isInternalExecutor,
     isCommentsAvailable,
     isCuratorAllowedTask,
     isOffersDeadlineOver,
-    onOpenCancelModalVisible,
     onUploadModalVisible,
     onBudgetModalVisible,
+    isRefusedInvitedMember,
+    onOpenCancelModalVisible,
     onSubmissionModalVisible,
     onApproveEstimateChanges,
     onSendEstimateForApproval,
@@ -1148,6 +1100,7 @@ export const useTaskCard = ({
     onRevokeBudget,
     onTaskSubmission,
     estimateTabsArray,
+    currentEstimateTab,
     cancelModalVisible,
     budgetModalVisible,
     onSwitchEstimateTab,
@@ -1156,19 +1109,18 @@ export const useTaskCard = ({
     refreshing: isLoading,
     estimateBannerVisible,
     onEstimateBannerPress,
+    onSubmissionModalClose,
     noDirectionButtonPress,
     submissionModalVisible,
     cantDeleteBannerVisible,
     onEstimateBannerVisible,
     uploadLimitBannerVisible,
-    onSubmissionModalClose,
+    onCloseCancelModalVisible,
     onCantDeleteBannerVisible,
     onUploadLimitBannerVisible,
     noAccessToTaskBannerVisible,
     onNoAccessToTaskBannerVisible,
     directionNotSpecifiedBannerVisible,
     onDirectionNotSpecifiedBannerVisible,
-    onCloseCancelModalVisible,
-    currentEstimateTab,
   };
 };

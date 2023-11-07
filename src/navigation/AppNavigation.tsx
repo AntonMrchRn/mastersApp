@@ -32,7 +32,7 @@ import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
 import { getInitialNotification } from '@/services/notifications/getInitialNotification';
 import { onNotificationOpenedApp } from '@/services/notifications/onNotificationOpenedApp';
-import { Executor, Service } from '@/store/api/tasks/types';
+import { Service } from '@/store/api/tasks/types';
 import { StatusType } from '@/types/task';
 
 export enum AppScreenName {
@@ -93,6 +93,10 @@ export type AppStackParamList = {
      * Редактирование уже имеющейся сметы офера
      */
     isEdit?: boolean;
+    /**
+     * Подача сметы куратором в ит лотах (для добавление/редактирование сметы офера куратором в ит лотах)
+     */
+    isSubmissionByCuratorItLots?: boolean;
   };
   [AppScreenName.EstimateAddService]: {
     taskId: number;
@@ -108,26 +112,25 @@ export type AppStackParamList = {
   [AppScreenName.EstimateSubmission]: {
     taskId: number;
     isEdit?: boolean;
-    isInvitedExecutor?: boolean;
-    executor?: Executor;
-    submissionByCurator?: boolean;
-    curatorMemberID?: number;
-    isInvitedCurator?: boolean;
+    isSubmissionByCuratorItLots?: boolean;
   };
   [AppScreenName.NewMaterial]: {
     taskId: number;
     services: Service[];
     isEdit?: boolean;
     fromEstimateSubmission?: boolean;
+    isSubmissionByCuratorItLots?: boolean;
   };
   [AppScreenName.EstimateSubmissionSuccess]: { taskId: number };
   [AppScreenName.Contractors]: {
     taskId: number;
     curatorId: number;
-    isInvitedCurator: boolean;
     isItLots?: boolean;
+    services?: Service[];
     curatorMemberId?: number;
+    isInvitedCurator?: boolean;
     isConfirmedCurator?: boolean;
+    fromEstimateSubmission?: boolean;
   };
 };
 const screenOptions = { headerShown: false };
@@ -152,10 +155,6 @@ export const AppNavigation = () => {
       setIsLoad(true);
     }, 1000);
   }, []);
-
-  const headerContractorsScreen = (props: StackHeaderProps) => (
-    <Header {...props} title="Подрядчики" />
-  );
   const headerCommentsChatScreen = (props: StackHeaderProps) => (
     <Header {...props} title="Чат" />
   );
@@ -211,10 +210,6 @@ export const AppNavigation = () => {
               <Stack.Screen
                 name={AppScreenName.Contractors}
                 component={ContractorsScreen}
-                options={{
-                  headerShown: true,
-                  header: headerContractorsScreen,
-                }}
               />
               <Stack.Screen
                 name={AppScreenName.CommentsChat}

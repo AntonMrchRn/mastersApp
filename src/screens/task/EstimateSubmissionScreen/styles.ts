@@ -49,4 +49,10 @@ export const styles = StyleSheet.create({
   addText: {
     flex: 1,
   },
+  loader: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    backgroundColor: 'white',
+  },
 });

@@ -20,7 +20,13 @@ export const NewMaterialScreen: FC<NewMaterialScreenProps> = ({
 }) => {
   const theme = useTheme();
 
-  const { taskId, isEdit, services, fromEstimateSubmission } = route.params;
+  const {
+    taskId,
+    isEdit,
+    services,
+    fromEstimateSubmission,
+    isSubmissionByCuratorItLots,
+  } = route.params;
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
@@ -35,6 +41,7 @@ export const NewMaterialScreen: FC<NewMaterialScreenProps> = ({
               taskId,
               fromEstimateSubmission,
               isEdit,
+              isSubmissionByCuratorItLots,
             });
           };
           return (

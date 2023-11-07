@@ -6,6 +6,7 @@ import { useToast } from 'rn-ui-kit';
 
 import { AppScreenName } from '@/navigation/AppNavigation';
 import { styles } from '@/screens/task/ContractorsScreen/style';
+import { useAppDispatch } from '@/store';
 import {
   useGetAvailableContractorsQuery,
   useGetUserOffersQuery,
@@ -13,24 +14,32 @@ import {
   usePostITMembersOfferMutation,
   usePostITTaskMemberMutation,
 } from '@/store/api/tasks';
-import { PostITTaskMemberParams } from '@/store/api/tasks/types';
+import { PostITTaskMemberParams, Service } from '@/store/api/tasks/types';
 import { User } from '@/store/api/user/types';
+import {
+  setNewOfferServices,
+  setOfferComment,
+  setOfferID,
+} from '@/store/slices/tasks/actions';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import { ContractorsInvitationScreenNavigationProp } from '@/types/navigation';
 import { ContractorStatus } from '@/types/task';
+import { getInitServices } from '@/utils/getInitServices';
 
 type UseContractorsParams = {
   taskId: number;
   curatorId: number;
-  isInvitedCurator: boolean;
-  navigation: ContractorsInvitationScreenNavigationProp;
+  services?: Service[];
   isItLots?: boolean;
   curatorMemberId?: number;
+  isInvitedCurator?: boolean;
   isConfirmedCurator?: boolean;
+  navigation: ContractorsInvitationScreenNavigationProp;
 };
 
 const useContractors = ({
   taskId,
+  services,
   isItLots,
   curatorId,
   navigation,
@@ -41,8 +50,10 @@ const useContractors = ({
   const isFocused = useIsFocused();
   const insets = useSafeAreaInsets();
   const toast = useToast();
+  const dispatch = useAppDispatch();
+
   const {
-    data,
+    data: offersData,
     error: offerError,
     isError: isOfferError,
   } = useGetUserOffersQuery(
@@ -122,7 +133,7 @@ const useContractors = ({
     }
   }, [isError]);
 
-  const offerID = data?.offers[0]?.ID;
+  const offer = offersData?.offers[0];
   const isAvailableContractorsExist =
     !!contractors?.some(
       contractor => contractor.subStatusID === ContractorStatus.AVAILABLE,
@@ -187,14 +198,30 @@ const useContractors = ({
               ]),
       });
 
-      if (isItLots && offerID) {
+      if (isItLots && offer?.ID) {
         await linkContractorsToCuratorOffer({
           curatorID: curatorId,
           executorIDs: members.map(contractor => contractor.userID) as number[],
-          offerID,
+          offerID: offer.ID,
           isConfirm: true,
         });
       }
+    }
+  };
+
+  // навигация на скрин редактирования сметы в случае, если это куратор в ит лотах
+  const customGoBack = () => {
+    if (services && offer) {
+      const initServices = getInitServices(offer, services);
+      dispatch(setOfferID(offer.ID));
+      dispatch(setOfferComment(offer.comment));
+      dispatch(setNewOfferServices(initServices));
+
+      navigation.navigate(AppScreenName.EstimateSubmission, {
+        taskId,
+        isEdit: true,
+        isSubmissionByCuratorItLots: true,
+      });
     }
   };
 
@@ -202,6 +229,7 @@ const useContractors = ({
     onSelect,
     contractors,
     keyExtractor,
+    customGoBack,
     navigateToProfile,
     onSelectContractor,
     isInvitationLoading,

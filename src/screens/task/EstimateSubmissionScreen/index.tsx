@@ -41,15 +41,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   navigation,
   route,
 }) => {
-  const {
-    taskId,
-    isEdit,
-    isInvitedExecutor,
-    executor,
-    submissionByCurator,
-    curatorMemberID,
-    isInvitedCurator,
-  } = route.params;
+  const { taskId, isEdit, isSubmissionByCuratorItLots } = route.params;
 
   const {
     bsRef,
@@ -89,11 +81,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     navigation,
     taskId,
     isEdit,
-    isInvitedExecutor,
-    executor,
-    submissionByCurator,
-    curatorMemberID,
-    isInvitedCurator: !!isInvitedCurator,
+    isSubmissionByCuratorItLots,
   });
 
   const dispatch = useAppDispatch();
@@ -102,14 +90,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
 
   if (loading) {
     return (
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          flex: 1,
-          backgroundColor: 'white',
-        }}
-      >
+      <View style={styles.loader}>
         <ActivityIndicator size={'large'} />
       </View>
     );
