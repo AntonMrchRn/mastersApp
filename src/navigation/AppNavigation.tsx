@@ -32,7 +32,6 @@ import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
 import { getInitialNotification } from '@/services/notifications/getInitialNotification';
 import { onNotificationOpenedApp } from '@/services/notifications/onNotificationOpenedApp';
-import { pushPermission } from '@/services/notifications/pushPermission';
 import { Executor, Service } from '@/store/api/tasks/types';
 import { StatusType } from '@/types/task';
 

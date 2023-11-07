@@ -21,7 +21,7 @@ import { AxiosQueryErrorResponse } from '@/types/error';
 import { HandleUpload } from '@/types/fileManager';
 import { checkSizes } from '@/utils/fileManager/checkSizes';
 import { fillFormData } from '@/utils/fileManager/fillFormData';
-import { Exif, fixImageRotation } from '@/utils/fileManager/fixImageRotation';
+import { fixImageRotation } from '@/utils/fileManager/fixImageRotation';
 
 import styles from './styles';
 
