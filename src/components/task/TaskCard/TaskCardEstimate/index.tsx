@@ -51,6 +51,7 @@ type TaskCardEstimateProps = {
   serviceMultiplier: number;
   cantDeleteBannerVisible: boolean;
   curatorId?: number;
+  withNDS?: boolean;
 };
 
 export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
@@ -67,6 +68,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
   serviceMultiplier,
   curatorId,
   cantDeleteBannerVisible,
+  withNDS,
 }) => {
   const theme = useTheme();
   const isFocused = useIsFocused();
@@ -218,6 +220,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
           <EstimateTotal
             servicesSum={servicesSum}
             materialsSum={materialsSum}
+            withNDS={withNDS}
             serviceMultiplier={
               subsetID === TaskType.COMMON_FIRST_RESPONSE
                 ? serviceMultiplier

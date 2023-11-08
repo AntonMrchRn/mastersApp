@@ -74,7 +74,6 @@ export const useTaskCardEstimate = ({
   const userComment = userOffer?.comment;
   const clientComment = userOffer?.clientComment || '';
   const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
-
   const showOffers =
     (subsetID &&
       !isContractor &&
