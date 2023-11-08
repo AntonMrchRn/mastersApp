@@ -77,6 +77,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     deleteEstimateMaterialModalVisible,
     onDeleteEstimateServiceModalVisible,
     onDeleteEstimateMaterialModalVisible,
+    withNDS,
   } = useEstimateSubmission({
     navigation,
     taskId,
@@ -234,6 +235,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
           <EstimateTotal
             servicesSum={allSum - materialsSum}
             materialsSum={materialsSum}
+            withNDS={withNDS}
           />
           <Spacer size={20} />
           <TouchableOpacity style={styles.add} onPress={onEstimateModalVisible}>
