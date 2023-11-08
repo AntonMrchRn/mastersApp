@@ -136,15 +136,14 @@ export const UploadBottomSheet = ({
       // ios
       // если фото из галереи и оно сделано на данное устройство
       // (скриншоты/загруженные картинки и т.п. не теряют корректный поворот(rotation) и не нуждаются в обработке)
-      //TODO крашится на реальном ios устройстве
-      // const isImageTakenOnThisIOS =
-      //   isImage &&
-      //   configApp.ios &&
-      //   !!((resp as Image)?.exif as Exif)['{MakerApple}'];
+      const isImageTakenOnThisIOS =
+        isImage &&
+        configApp.ios &&
+        !!((resp as Image)?.exif as Exif)['{MakerApple}'];
 
       // передаем quality только для android, потому что для ios передается
       // параметр compressImageQuality в опциях пикера
-      return isImage && configApp.android
+      return isImage && (configApp.android || isImageTakenOnThisIOS)
         ? fixImageRotation(
             resp as Image,
             configApp.android ? quality : undefined,

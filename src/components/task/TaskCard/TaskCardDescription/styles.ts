@@ -13,9 +13,6 @@ export const styles = StyleSheet.create({
   mt8: {
     marginTop: 8,
   },
-  mt5: {
-    marginTop: 5,
-  },
   mr16: {
     marginRight: 16,
   },
@@ -42,18 +39,17 @@ export const styles = StyleSheet.create({
   },
   wrapStatus: {
     width: '50%',
-    alignItems: 'flex-start',
   },
   wrapBottom: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     width: '100%',
   },
   wrapInvitation: {
     width: '50%',
     alignItems: 'flex-end',
     paddingHorizontal: 0,
-    paddingVertical: 3,
   },
   attachments: {
     marginTop: 36,

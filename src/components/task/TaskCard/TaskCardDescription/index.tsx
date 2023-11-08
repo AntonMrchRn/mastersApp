@@ -151,7 +151,6 @@ export const TaskCardDescription = ({
                           <Text
                             variant="captionRegular"
                             color={theme.background.danger}
-                            style={styles.mt5}
                           >
                             Отказался от задачи
                           </Text>
@@ -160,7 +159,6 @@ export const TaskCardDescription = ({
                           <Text
                             variant="captionRegular"
                             color={theme.background.success}
-                            style={styles.mt5}
                           >
                             Задачу принял
                           </Text>
@@ -169,7 +167,6 @@ export const TaskCardDescription = ({
                           <Text
                             variant="captionRegular"
                             color={theme.text.warning}
-                            style={styles.mt5}
                           >
                             Пока не принял задачу
                           </Text>
@@ -183,7 +180,11 @@ export const TaskCardDescription = ({
                         onPress={() => cancelInvitation(executor?.memberID)}
                       />
                     </View>
-                    <Spacer size={'m'} separator="bottom" />
+                    <Spacer
+                      size={'m'}
+                      separator="bottom"
+                      separatorColor={theme.background.neutralDisableSecond}
+                    />
                   </View>
                 </View>
               );

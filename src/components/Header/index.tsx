@@ -13,14 +13,23 @@ type HeaderProps = {
   title?: string;
   description?: string;
   icon?: JSX.Element;
+  customGoBack?: () => void;
 };
 
-const Header = ({ title, description, icon = <ArrowBack /> }: HeaderProps) => {
+const Header = ({
+  title,
+  description,
+  icon = <ArrowBack />,
+  customGoBack,
+}: HeaderProps) => {
   const theme = useTheme();
   const navigation = useNavigation();
 
   const goBack = () => {
     if (navigation.canGoBack()) {
+      if (customGoBack) {
+        return customGoBack();
+      }
       navigation.goBack();
     }
   };

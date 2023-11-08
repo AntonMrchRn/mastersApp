@@ -77,13 +77,13 @@ const useChangePassword = (navigation: ChangePasswordScreenNavigationProp) => {
 
   const onChangePassword = async () => {
     if (password === newPassword) {
-      return setError('newPassword', {
+      setError('newPassword', {
         message: 'Новый пароль не должен совпадать с текущим',
       });
     }
 
     if (newPassword !== repeatedNewPassword) {
-      return setError('repeatedNewPassword', {
+      setError('repeatedNewPassword', {
         message: 'Подтверждение не совпадает с новым паролем',
       });
     }
