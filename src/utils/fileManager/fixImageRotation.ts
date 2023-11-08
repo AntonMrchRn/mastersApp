@@ -1,8 +1,6 @@
 import { Image } from 'react-native-image-crop-picker';
 
-import ImageResizer, {
-  ResizeFormat,
-} from '@bam.tech/react-native-image-resizer';
+import ImageResizer from '@bam.tech/react-native-image-resizer';
 
 import { configApp } from '@/constants/platform';
 
@@ -24,14 +22,13 @@ const rotationByOrientation = {
 export const fixImageRotation = async (response: Image, quality?: number) => {
   const { exif, path, sourceURL, filename, width, height, mime } = response;
   const rotation = rotationByOrientation[(exif as Exif).Orientation];
-  const format = mime.split('/')[1]?.toUpperCase() as ResizeFormat;
 
   try {
     const correctlyRotatedImageResponse = await ImageResizer.createResizedImage(
       configApp.ios ? (sourceURL as string) : path,
       width / COMPRESS_COEFFICIENT,
       height / COMPRESS_COEFFICIENT,
-      format,
+      'JPEG',
       quality ? quality * 100 : 100,
       rotation,
     );
