@@ -6,7 +6,7 @@
     "android": "npx react-native run-android",
     "android-release": "npx react-native run-android --mode release",
     "ios-release": "npx react-native run-ios --configuration Release",
-    "ios": "npx react-native run-ios --simulator=\"iPhone 11\"",
+    "ios": "npx react-native run-ios --simulator=\"iPhone 15\"",
     "pod": "npx pod-install",
     "start": "npx react-native start",
     "test": "jest",

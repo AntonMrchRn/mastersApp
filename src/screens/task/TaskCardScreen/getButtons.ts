@@ -945,14 +945,16 @@ export const getButtons = ({
               if (
                 isCurator ||
                 isContractor ||
-                isInvitedExecutor ||
+                (isInvitedExecutor && !isRefusedInvitedMember) ||
                 !isCuratorAllowedTask
               ) {
                 return [
                   ...(!isCurator && !isConfirmedContractor
                     ? [
                         {
-                          label: 'Принять задачу',
+                          label: isInvitedExecutor
+                            ? 'Подать смету'
+                            : 'Принять задачу',
                           variant: 'accent',
                           onPress: isContractor
                             ? onTaskSubmission
