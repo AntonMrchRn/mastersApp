@@ -43,16 +43,17 @@ const useSignIn = () => {
   const toast = useToast();
   const dispatch = useAppDispatch();
   const navigation = useNavigation<ErrorScreenNavigationProp>();
+  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
   const [
     getUserAuth,
-    { data: userAuth, isSuccess, isLoading, isError, error: authError },
+    { data: userAuth, isSuccess, isError, error: authError },
   ] = useGetUserAuthMutation();
 
   const [postToken, tokenMutation] = usePostTokenMutation();
 
   const [activeTab, setActiveTab] = useState<AuthTab>(AuthTab.Phone);
-  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const isPhoneAuth = activeTab === AuthTab.Phone;
   const error = (authError as AxiosQueryErrorResponse)?.data;
@@ -64,6 +65,7 @@ const useSignIn = () => {
 
   useEffect(() => {
     if (isError) {
+      setIsLoading(false);
       if (error?.code === ErrorCode.Server) {
         return navigation.navigate(AppScreenName.Error);
       }
@@ -108,6 +110,7 @@ const useSignIn = () => {
   }, [isSuccess]);
 
   const signIn = async (values: SignInFormValues) => {
+    setIsLoading(true);
     await getUserAuth({
       login: isPhoneAuth
         ? '7' + (values as SignInWithPhoneFormValues).phone
@@ -160,6 +163,7 @@ const useSignIn = () => {
     } finally {
       dispatch(setUserAuth(userAuth));
       dispatch(login());
+      setIsLoading(false);
     }
   };
 

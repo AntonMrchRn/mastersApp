@@ -1,7 +1,7 @@
 import { useAppSelector } from '@/store';
 import { useGetTaskQuery } from '@/store/api/tasks';
 import { selectAuth } from '@/store/slices/auth/selectors';
-import { RoleType } from '@/types/task';
+import { RoleType, TaskType } from '@/types/task';
 
 export const useTaskMembers = (taskId: number) => {
   const user = useAppSelector(selectAuth).user;
@@ -75,14 +75,22 @@ export const useTaskMembers = (taskId: number) => {
    * Является ли куратор приглашённым (координатором или руководителем)
    */
   const isInvitedCurator =
-    (!isConfirmedCurator || isRefusedCurator) &&
+    (((!isConfirmedCurator || isRefusedCurator) &&
+      task?.subsetID === TaskType.IT_FIRST_RESPONSE) ||
+      (!isConfirmedCurator &&
+        !isRefusedCurator &&
+        task?.subsetID === TaskType.IT_AUCTION_SALE)) &&
     (curator?.inviterRoleID === RoleType.COORDINATOR ||
       curator?.inviterRoleID === RoleType.SUPERVISOR);
   /**
    * Является ли исполнитель приглашённым (координатором или руководителем)
    */
   const isInvitedExecutor =
-    (!isConfirmedExecutor || (isConfirmedExecutor && isRefusedExecutor)) &&
+    (((!isConfirmedExecutor || (isConfirmedExecutor && isRefusedExecutor)) &&
+      task?.subsetID === TaskType.IT_FIRST_RESPONSE) ||
+      (!isConfirmedExecutor &&
+        !isRefusedExecutor &&
+        task?.subsetID === TaskType.IT_AUCTION_SALE)) &&
     (executor?.inviterRoleID === RoleType.COORDINATOR ||
       executor?.inviterRoleID === RoleType.SUPERVISOR);
   /**
