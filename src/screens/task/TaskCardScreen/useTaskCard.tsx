@@ -259,7 +259,62 @@ export const useTaskCard = ({
   const serviceMultiplier = user?.serviceMultiplier || 1;
   const isSelfEmployed = entityTypeID === 1;
   const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
+  /**
+   * Статус задачи
+   */
+  const statusID: StatusType | undefined = task?.statusID;
+  const isEstimateTabs =
+    tab.label === TaskTab.ESTIMATE &&
+    statusID === StatusType.ACTIVE &&
+    !!userOffersData.length;
 
+  const getWithNDS = () => {
+    //показываем НДС если правовая форма получателя ИП или Юр. лицо и он является Плательщиком НДС
+    // (Общее условие для всех остальных условий)
+    if (entityTypeID && [2, 3].includes(entityTypeID) && user.isNDSPayer) {
+      //Если в задании участвует куратор и подрядчик то сумму НДС показываем только если куратор является плательщиком НДС
+      //(подрядчик напрямую отношения к смете не имеет)
+      if (isCuratorAllowedTask) {
+        return !!curator?.isNDSPayer;
+      }
+      //В лотах не показываем сумму НДС на смете координатора(смета задачи)
+      if (
+        task?.subsetID &&
+        [TaskType.COMMON_AUCTION_SALE, TaskType.IT_AUCTION_SALE].includes(
+          task?.subsetID,
+        )
+      ) {
+        if (isEstimateTabs) {
+          return currentEstimateTab !== EstimateTab.TASK_ESTIMATE;
+        }
+        return statusID !== StatusType.ACTIVE;
+      }
+      //для первого отклика соответственно:
+      //если задача опубликована (исполнитель не принял) , то суммы НДС нет,
+      //если на задачу назначен исполнитель плательщик НДС (в работе, сдача работ, выполнено, закрыто и т.д.),
+      //то сумму НДС показываем
+      if (
+        task?.subsetID &&
+        statusID &&
+        [TaskType.COMMON_FIRST_RESPONSE, TaskType.IT_FIRST_RESPONSE].includes(
+          task?.subsetID,
+        )
+      ) {
+        return statusID !== StatusType.ACTIVE;
+      }
+      return true;
+    }
+    return false;
+  };
+  /**
+   * показываем НДС если правовая форма получателя ИП или Юр. лицо и он является Плательщиком НДС
+   *
+   * Если в задании участвует куратор и подрядчик то сумму НДС показываем только если куратор является плательщиком
+   * НДС (подрядчик напрямую отношения к смете не имеет)
+   *
+   * В лотах не показываем сумму НДС на смете координатора(смета задачи)
+   */
+  const withNDS = getWithNDS();
   const id = task?.ID || 0;
   const name = task?.name || '';
 
@@ -308,10 +363,7 @@ export const useTaskCard = ({
   const isOffersDeadlineOver = !!(
     offersDeadline && dayjs().isAfter(offersDeadline)
   );
-  /**
-   * Статус задачи
-   */
-  const statusID: StatusType | undefined = task?.statusID;
+
   /**
    * Статус сметы
    */
@@ -423,11 +475,6 @@ export const useTaskCard = ({
   const hasAccessToDirection = setId && user?.setIDs?.includes(setId);
 
   const isTaskClosed = statusID === StatusType.CLOSED;
-
-  const isEstimateTabs =
-    tab.label === TaskTab.ESTIMATE &&
-    statusID === StatusType.ACTIVE &&
-    !!userOffersData.length;
 
   const refresh = () => {
     dispatch(
@@ -984,6 +1031,7 @@ export const useTaskCard = ({
             cantDeleteBannerVisible={cantDeleteBannerVisible}
             onEstimateBottomVisible={onEstimateBottomVisible}
             onCantDeleteBannerVisible={onCantDeleteBannerVisible}
+            withNDS={withNDS}
           />
         );
       case TaskTab.REPORT:

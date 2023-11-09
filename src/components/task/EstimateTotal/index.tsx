@@ -31,12 +31,14 @@ type EstimateTotalProps = {
   servicesSum: number;
   materialsSum: number;
   serviceMultiplier?: number;
+  withNDS?: boolean;
 };
 
 export const EstimateTotal = ({
   servicesSum,
   materialsSum,
   serviceMultiplier,
+  withNDS,
 }: EstimateTotalProps) => {
   const theme = useTheme();
 
@@ -53,7 +55,7 @@ export const EstimateTotal = ({
     allServiceSumMultiplierPure,
   );
   const allCurrentSum = separateThousands(allSum);
-
+  const NDSSum = separateThousands(allSum / 6).replace('.', ',');
   return (
     <View style={styles.bottom}>
       <View style={styles.rowStart}>
@@ -101,13 +103,25 @@ export const EstimateTotal = ({
           </Text>
         </View>
       </View>
-      <View style={styles.row}>
-        <Text variant="bodyMRegular" color={theme.text.accent}>
-          ИТОГО
-        </Text>
-        <Text variant="bodyMRegular" color={theme.text.accent}>
-          {allCurrentSum} ₽
-        </Text>
+      <View style={{ gap: 4 }}>
+        <View style={styles.row}>
+          <Text variant="bodyMRegular" color={theme.text.accent}>
+            ИТОГО
+          </Text>
+          <Text variant="bodyMRegular" color={theme.text.accent}>
+            {allCurrentSum} ₽
+          </Text>
+        </View>
+        {withNDS && (
+          <View style={styles.row}>
+            <Text variant="captionRegular" color={theme.text.neutral}>
+              В том числе НДС 20%
+            </Text>
+            <Text variant="captionRegular" color={theme.text.neutral}>
+              {NDSSum} ₽
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   );

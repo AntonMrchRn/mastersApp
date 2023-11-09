@@ -23,6 +23,7 @@ import {
   usePostOffersMutation,
 } from '@/store/api/tasks';
 import { Material, Service } from '@/store/api/tasks/types';
+import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import {
   setNewOfferServices,
@@ -64,6 +65,8 @@ export const useEstimateSubmission = ({
     isInvitedExecutor,
     isError: isTaskError,
     error: taskError,
+    isCuratorAllowedTask,
+    curator,
   } = useTaskMembers(taskId);
 
   const refresh = () =>
@@ -102,6 +105,7 @@ export const useEstimateSubmission = ({
 
   const { error, loading, offerID, offerComment, offerServices } =
     useAppSelector(selectTasks);
+  const user = useGetUserQuery(userID).data;
   const roleID = useAppSelector(selectAuth).user?.roleID;
   const isItLots = task?.subsetID === TaskType.IT_AUCTION_SALE;
   const isActive = task?.statusID === StatusType.ACTIVE;
@@ -167,6 +171,26 @@ export const useEstimateSubmission = ({
   const allowCostIncrease = task?.allowCostIncrease;
   const currentSum = task?.currentSum;
   const costStep = task?.costStep;
+  const getWithNDS = () => {
+    //показываем НДС если правовая форма получателя ИП или Юр. лицо и он является Плательщиком НДС
+    // (Общее условие для всех остальных условий)
+    if (
+      user &&
+      user?.entityTypeID &&
+      [2, 3].includes(user.entityTypeID) &&
+      user.isNDSPayer
+    ) {
+      //Если в задании участвует куратор и подрядчик то сумму НДС показываем только если куратор является плательщиком НДС
+      //(подрядчик напрямую отношения к смете не имеет)
+      if (isCuratorAllowedTask) {
+        return !!curator?.isNDSPayer;
+      }
+      return true;
+    }
+    return false;
+  };
+  const withNDS = getWithNDS();
+
   const materials = services.reduce<Material[]>((acc, val) => {
     if (val.materials) {
       return acc.concat(val.materials);
@@ -533,5 +557,6 @@ export const useEstimateSubmission = ({
     deleteEstimateMaterialModalVisible,
     onDeleteEstimateServiceModalVisible,
     onDeleteEstimateMaterialModalVisible,
+    withNDS,
   };
 };
