@@ -978,6 +978,14 @@ export const useTaskCard = ({
       }
     }
     setCurrentEstimateTab(EstimateTab.TASK_ESTIMATE);
+
+    if (isOffersDeadlineOver) {
+      toast.show({
+        type: 'info',
+        title: 'Ваше ценовое предложение отозвано',
+      });
+      navigation.navigate(BottomTabName.MyTasks);
+    }
   };
   useEffect(() => {
     if (statusID === StatusType.ACTIVE) {

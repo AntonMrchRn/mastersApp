@@ -97,8 +97,7 @@ export const useTaskMembers = (taskId: number) => {
    * Отказался ли приглашенный участник от задания с закрытым доступом (отозвал смету)
    */
   const isRefusedInvitedMember =
-    (isInvitedCurator && isRefusedCurator) ||
-    (isInvitedExecutor && isRefusedExecutor);
+    !task?.isOpenAccess && (isRefusedCurator || isRefusedExecutor);
 
   return {
     task,
