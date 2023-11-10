@@ -418,9 +418,11 @@ export const useTaskCard = ({
         OutlayStatusType.MATCHING,
       ].includes(outlayStatusID)
     ) {
-      return (
-        `${services.reduce((acc, val) => acc + (val?.sum || 0), 0)} ₽` || ''
-      );
+      const reducer = services.reduce((acc, val) => acc + (val?.sum || 0), 0);
+      const result = Number.isInteger(reducer)
+        ? reducer.toString()
+        : reducer.toFixed(2);
+      return `${result} ₽` || '';
     }
     return `${task?.budget} ₽` || '';
   };
