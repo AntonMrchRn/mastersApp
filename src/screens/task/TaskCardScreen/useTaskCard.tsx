@@ -146,6 +146,10 @@ export const useTaskCard = ({
     directionNotSpecifiedBannerVisible,
     setDirectionNotSpecifiedBannerVisible,
   ] = useState(false);
+  const [
+    inappropriateRegionBannerVisible,
+    setInappropriateRegionBannerVisible,
+  ] = useState<boolean>(false);
   const [submissionModalVisible, setSubmissionModalVisible] = useState(false);
   const [currentEstimateTab, setCurrentEstimateTab] = useState<EstimateTab>(
     EstimateTab.TASK_ESTIMATE,
@@ -345,6 +349,7 @@ export const useTaskCard = ({
   const webdata = task?.webdata;
   const endTime = task?.endTime || '';
   const address = task?.object?.name || '';
+  const regionID = task?.object?.regionID;
   const car = task?.car;
   const description = task?.description || '';
   const offersDeadline = task?.offersDeadline;
@@ -413,9 +418,11 @@ export const useTaskCard = ({
         OutlayStatusType.MATCHING,
       ].includes(outlayStatusID)
     ) {
-      return (
-        `${services.reduce((acc, val) => acc + (val?.sum || 0), 0)} ₽` || ''
-      );
+      const reducer = services.reduce((acc, val) => acc + (val?.sum || 0), 0);
+      const result = Number.isInteger(reducer)
+        ? reducer.toString()
+        : reducer.toFixed(2);
+      return `${result} ₽` || '';
     }
     return `${task?.budget} ₽` || '';
   };
@@ -473,6 +480,7 @@ export const useTaskCard = ({
     ].includes(statusID);
 
   const hasAccessToDirection = setId && user?.setIDs?.includes(setId);
+  const hasAppropriateRegion = regionID && user?.regionIDs?.includes(regionID);
 
   const isTaskClosed = statusID === StatusType.CLOSED;
 
@@ -535,6 +543,8 @@ export const useTaskCard = ({
     setCantDeleteBannerVisible(!cantDeleteBannerVisible);
   const onDirectionNotSpecifiedBannerVisible = () =>
     setDirectionNotSpecifiedBannerVisible(!directionNotSpecifiedBannerVisible);
+  const onInappropriateRegionBannerVisible = () =>
+    setInappropriateRegionBannerVisible(!inappropriateRegionBannerVisible);
   const onNoAccessToTaskBannerVisible = () =>
     setNoAccessToTaskBannerVisible(!noAccessToTaskBannerVisible);
   const onEstimateBannerVisible = () =>
@@ -554,6 +564,9 @@ export const useTaskCard = ({
     }
     if (!hasAccessToDirection) {
       return onDirectionNotSpecifiedBannerVisible();
+    }
+    if (!hasAppropriateRegion) {
+      return onInappropriateRegionBannerVisible();
     }
     if (isSubmissionCurator === true) {
       setSubmissionByCurator(true);
@@ -808,6 +821,12 @@ export const useTaskCard = ({
       screen: ProfileScreenName.Profile,
     });
   };
+  const inappropriateRegionButtonPress = () => {
+    onInappropriateRegionBannerVisible();
+    navigation.navigate(BottomTabName.ProfileNavigation, {
+      screen: ProfileScreenName.Profile,
+    });
+  };
   const onWorkDelivery = async () => {
     if (
       subsetID &&
@@ -959,6 +978,14 @@ export const useTaskCard = ({
       }
     }
     setCurrentEstimateTab(EstimateTab.TASK_ESTIMATE);
+
+    if (isOffersDeadlineOver) {
+      toast.show({
+        type: 'info',
+        title: 'Ваше ценовое предложение отозвано',
+      });
+      navigation.navigate(BottomTabName.MyTasks);
+    }
   };
   useEffect(() => {
     if (statusID === StatusType.ACTIVE) {
@@ -1136,6 +1163,7 @@ export const useTaskCard = ({
     publicTime,
     executors,
     onRefresh,
+    isCurator,
     isExecutor,
     onTabChange,
     isContractor,
@@ -1168,6 +1196,9 @@ export const useTaskCard = ({
     onUploadLimitBannerVisible,
     noAccessToTaskBannerVisible,
     onNoAccessToTaskBannerVisible,
+    inappropriateRegionButtonPress,
+    inappropriateRegionBannerVisible,
+    onInappropriateRegionBannerVisible,
     directionNotSpecifiedBannerVisible,
     onDirectionNotSpecifiedBannerVisible,
   };

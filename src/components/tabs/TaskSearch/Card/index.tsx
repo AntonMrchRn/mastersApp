@@ -43,7 +43,8 @@ const CardTasks = ({
 
   const sum =
     services && services.reduce((acc, val) => acc + (val?.sum || 0), 0);
-
+  const currentSum =
+    !!sum && (Number.isInteger(sum) ? sum.toString() : sum.toFixed(2));
   return (
     <TouchableOpacity style={styles.btn} onPress={onPress}>
       <Card style={styles.wrapper}>
@@ -68,7 +69,7 @@ const CardTasks = ({
           </Text>
           {!!sum && !!(userRole !== RoleType.INTERNAL_EXECUTOR) && (
             <Text variant="title2" style={styles.price}>
-              {sum} ₽
+              {currentSum} ₽
             </Text>
           )}
           <Text variant="bodySRegular" numberOfLines={3}>

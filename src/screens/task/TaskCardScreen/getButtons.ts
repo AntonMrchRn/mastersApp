@@ -357,7 +357,7 @@ export const getButtons = ({
             case TaskTab.REPORT:
             case TaskTab.HISTORY:
             case TaskTab.COMMENTS:
-              if (isOffersDeadlineOver) {
+              if (isOffersDeadlineOver && !userOffersData.length) {
                 return [];
               }
               if (userOffersData.length) {
@@ -920,7 +920,7 @@ export const getButtons = ({
             case TaskTab.REPORT:
             case TaskTab.HISTORY:
             case TaskTab.COMMENTS:
-              if (isOffersDeadlineOver) {
+              if (isOffersDeadlineOver && !userOffersData.length) {
                 return [];
               }
               if (userOffersData.length && !isContractor) {
@@ -945,14 +945,16 @@ export const getButtons = ({
               if (
                 isCurator ||
                 isContractor ||
-                isInvitedExecutor ||
-                !isCuratorAllowedTask
+                (isInvitedExecutor && !isRefusedInvitedMember) ||
+                (!isCuratorAllowedTask && !isRefusedInvitedMember)
               ) {
                 return [
                   ...(!isCurator && !isConfirmedContractor
                     ? [
                         {
-                          label: 'Принять задачу',
+                          label: isContractor
+                            ? 'Принять задачу'
+                            : 'Подать смету',
                           variant: 'accent',
                           onPress: isContractor
                             ? onTaskSubmission
@@ -982,8 +984,8 @@ export const getButtons = ({
                     ? onTaskSubmission
                     : onSubmissionModalVisible,
                 } as TaskCardBottomButton,
-                // задача с участием куратора, который её ещё не принял (или принял, но отказался)
-                ...(isTaskWithUnconfirmedCurator
+                // задача с участием куратора, который её ещё не принял (или принял, но отказался) или с приглашенным кандидатом, который отказался (отозвал смету)
+                ...(isTaskWithUnconfirmedCurator || isRefusedInvitedMember
                   ? [
                       {
                         label: 'Подать смету как куратор',
