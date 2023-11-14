@@ -54,6 +54,7 @@ const useSignIn = () => {
 
   const [activeTab, setActiveTab] = useState<AuthTab>(AuthTab.Phone);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  console.log('🚀 ~ file: useSignIn.ts:57 ~ useSignIn ~ isLoading:', isLoading);
 
   const isPhoneAuth = activeTab === AuthTab.Phone;
   const error = (authError as AxiosQueryErrorResponse)?.data;
@@ -110,13 +111,15 @@ const useSignIn = () => {
   }, [isSuccess]);
 
   const signIn = async (values: SignInFormValues) => {
-    setIsLoading(true);
-    await getUserAuth({
-      login: isPhoneAuth
-        ? '7' + (values as SignInWithPhoneFormValues).phone
-        : (values as SignInWithEmailFormValues).email,
-      password: values.password,
-    });
+    if (!isLoading) {
+      setIsLoading(true);
+      await getUserAuth({
+        login: isPhoneAuth
+          ? '7' + (values as SignInWithPhoneFormValues).phone
+          : (values as SignInWithEmailFormValues).email,
+        password: values.password,
+      });
+    }
   };
 
   const getData = async () => {
@@ -160,10 +163,10 @@ const useSignIn = () => {
       });
     } catch (err) {
       console.log('onLoginSuccess getPushToken error', err);
+      setIsLoading(false);
     } finally {
       dispatch(setUserAuth(userAuth));
       dispatch(login());
-      setIsLoading(false);
     }
   };
 

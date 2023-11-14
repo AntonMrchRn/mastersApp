@@ -105,10 +105,8 @@ const useProfile = ({ tab }: { tab: TabProf | undefined }) => {
     { id: 3, label: ProfileTab.Account },
   ];
 
-  const onBlockingModalOpen = () =>
-    setIsBlockingModalVisible(!isBlockingModalVisible);
-  const onBlockingModalClose = () =>
-    setIsBlockingModalVisible(!isBlockingModalVisible);
+  const onBlockingModalOpen = () => setIsBlockingModalVisible(true);
+  const onBlockingModalClose = () => setIsBlockingModalVisible(false);
 
   const switchTab = ({ id, label }: TabItem) => {
     setActiveTab({ id, label: label as ProfileTab });
