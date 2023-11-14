@@ -66,7 +66,7 @@ export const UploadBottomSheet = ({
     // андроид при передаче параметра compressImageQuality меняет оригинальное наименование файла
     [UploadAction.TakeFromGallery]: async () =>
       await ImagePicker.openPicker({
-        mediaType: isUserFile ? 'photo' : 'any',
+        mediaType: isUserFile || toClose ? 'photo' : 'any',
         includeExif: true,
         multiple: true,
         maxFiles: 10,
