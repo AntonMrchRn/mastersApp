@@ -97,7 +97,7 @@ const useAccountDeletion = (
             message: 'Неверный пароль, попробуйте ещё раз',
           });
         }
-        if (params.hasActiveTasks) {
+        if (params.hasActiveTasks && !isBannerVisible) {
           return onBanner();
         }
         await deleteAccount({
