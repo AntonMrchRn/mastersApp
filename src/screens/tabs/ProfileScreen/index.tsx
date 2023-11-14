@@ -46,11 +46,9 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
     user,
     tabs,
     warning,
-    refetch,
     activeTab,
     switchTab,
     isLoading,
-    isFetching,
     onCopyEmail,
     scrollToEnd,
     scrollViewRef,
@@ -59,6 +57,8 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
     isInternalExecutor,
     isBlockingModalVisible,
     isApprovalNotificationVisible,
+    onRefresh,
+    refreshing,
   } = useProfile({ tab });
 
   const tabComponents = {
@@ -90,7 +90,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView
         refreshControl={
-          <RefreshControl refreshing={isFetching} onRefresh={refetch} />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         ref={scrollViewRef}
         showsVerticalScrollIndicator={false}

@@ -65,10 +65,19 @@ export const DownloadItem = ({
       setIsDeleting(false);
     }
   }, [onDevice]);
-
+  /**
+   * Изначальное расширение файла
+   */
   const type = file?.sourceExtension || file.extensionOriginal;
+  /**
+   * Название файла
+   */
   const title = `${file.name}.${type}`;
-  const FILE_PATH = `${dirs.DocumentDir}/${title}`;
+  /**
+   * Уникальный путь для каждого файла
+   */
+  const pathEnd = `${file.fileID}.${type}`;
+  const FILE_PATH = `${dirs.DocumentDir}/${pathEnd}`;
   const newFile = ReactNativeBlobUtil.config({
     fileCache: true,
     path: FILE_PATH,
@@ -86,11 +95,9 @@ export const DownloadItem = ({
     active
       .catch(async err => {
         const exist = await ReactNativeBlobUtil.fs.exists(FILE_PATH);
-
         if (exist) {
           await ReactNativeBlobUtil.fs.unlink(FILE_PATH);
         }
-
         console.log(
           '🚀 ~ file: DownloadItem.tsx:93 ~ handleDownload ~ err:',
           err,
@@ -130,12 +137,16 @@ export const DownloadItem = ({
   const handleOpen = async () => {
     try {
       if (onDevice) {
-        configApp.ios
-          ? await ReactNativeBlobUtil.ios.openDocument(FILE_PATH)
-          : await ReactNativeBlobUtil.android.actionViewIntent(
-              FILE_PATH,
-              file.mime,
-            );
+        const exist = await ReactNativeBlobUtil.fs.exists(FILE_PATH);
+        dispatch(actionByFileType[fileType]({ [file.fileID]: exist }));
+        if (exist) {
+          configApp.ios
+            ? await ReactNativeBlobUtil.ios.openDocument(FILE_PATH)
+            : await ReactNativeBlobUtil.android.actionViewIntent(
+                FILE_PATH,
+                file.mime,
+              );
+        }
       }
     } catch (e) {
       console.log('handleOpen error: ', e);
