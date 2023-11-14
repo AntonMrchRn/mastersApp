@@ -54,7 +54,6 @@ const useSignIn = () => {
 
   const [activeTab, setActiveTab] = useState<AuthTab>(AuthTab.Phone);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  console.log('🚀 ~ file: useSignIn.ts:57 ~ useSignIn ~ isLoading:', isLoading);
 
   const isPhoneAuth = activeTab === AuthTab.Phone;
   const error = (authError as AxiosQueryErrorResponse)?.data;
