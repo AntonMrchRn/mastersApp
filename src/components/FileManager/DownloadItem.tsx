@@ -73,11 +73,7 @@ export const DownloadItem = ({
    * Название файла
    */
   const title = `${file.name}.${type}`;
-  /**
-   * Уникальный путь для каждого файла
-   */
-  const pathEnd = `${file.fileID}.${type}`;
-  const FILE_PATH = `${dirs.DocumentDir}/${pathEnd}`;
+  const FILE_PATH = `${dirs.DocumentDir}/${title}`;
   const newFile = ReactNativeBlobUtil.config({
     fileCache: true,
     path: FILE_PATH,
@@ -150,6 +146,12 @@ export const DownloadItem = ({
       }
     } catch (e) {
       console.log('handleOpen error: ', e);
+      if ((e as { message: string }).message === 'document is not supported') {
+        toast.show({
+          type: 'error',
+          title: 'Документ не поддерживается',
+        });
+      }
     }
   };
 
