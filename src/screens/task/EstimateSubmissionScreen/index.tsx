@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { Banner, Button, Input, Spacer, Text, useTheme } from 'rn-ui-kit';
+import { Banner, Button, Input, Spacer, Text, Tips, useTheme } from 'rn-ui-kit';
 
 import { PlusIcon } from '@/assets/icons/svg/estimate/PlusIcon';
 import { DeleteEstimateMaterialModal } from '@/components/task/DeleteEstimateMaterialModal';
@@ -124,14 +124,12 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
           enableOnAndroid={true}
           keyboardShouldPersistTaps="handled"
         >
-          <Banner
+          <Tips
             type={'info'}
-            icon={<></>}
-            closeIcon={<></>}
             text={
               allowCostIncrease
-                ? `Смета должна отличаться от последнего предложения (${currentSum} ₽) как минимум на ${costStep} ₽`
-                : `Смета должна быть меньше последнего предложения (${currentSum} ₽) как минимум на ${costStep} ₽`
+                ? `Смета должна отличаться от последнего предложения (${currentSum} ₽) как минимум \n на ${costStep} ₽`
+                : `Смета должна быть меньше последнего предложения (${currentSum} ₽) как минимум \n на ${costStep} ₽`
             }
           />
           <Text variant="title3" color={theme.text.basic} style={styles.title}>
