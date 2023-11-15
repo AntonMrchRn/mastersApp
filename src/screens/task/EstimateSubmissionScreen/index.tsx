@@ -41,15 +41,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
   navigation,
   route,
 }) => {
-  const {
-    taskId,
-    isEdit,
-    isInvitedExecutor,
-    executor,
-    submissionByCurator,
-    curatorMemberID,
-    isInvitedCurator,
-  } = route.params;
+  const { taskId, isEdit, isSubmissionByCuratorItLots } = route.params;
 
   const {
     bsRef,
@@ -85,15 +77,12 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     deleteEstimateMaterialModalVisible,
     onDeleteEstimateServiceModalVisible,
     onDeleteEstimateMaterialModalVisible,
+    withNDS,
   } = useEstimateSubmission({
     navigation,
     taskId,
     isEdit,
-    isInvitedExecutor,
-    executor,
-    submissionByCurator,
-    curatorMemberID,
-    isInvitedCurator: !!isInvitedCurator,
+    isSubmissionByCuratorItLots,
   });
 
   const dispatch = useAppDispatch();
@@ -102,14 +91,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
 
   if (loading) {
     return (
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          flex: 1,
-          backgroundColor: 'white',
-        }}
-      >
+      <View style={styles.loader}>
         <ActivityIndicator size={'large'} />
       </View>
     );
@@ -205,7 +187,6 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                   const onDelete = () => {
                     setMaterialForDelete({ service, material });
                     onDeleteEstimateMaterialModalVisible();
-                    // onDeleteMaterial(service, material);
                   };
                   const onChangePrice = (text: string) => {
                     if (text && error) {
@@ -254,6 +235,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
           <EstimateTotal
             servicesSum={allSum - materialsSum}
             materialsSum={materialsSum}
+            withNDS={withNDS}
           />
           <Spacer size={20} />
           <TouchableOpacity style={styles.add} onPress={onEstimateModalVisible}>

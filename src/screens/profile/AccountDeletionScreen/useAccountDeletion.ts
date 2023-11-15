@@ -89,20 +89,17 @@ const useAccountDeletion = (
 
   const onDelete = async () => {
     Keyboard.dismiss();
-    if (params.hasActiveTasks) {
-      return onBanner();
-    }
-
     try {
       const credentials = await Keychain.getGenericPassword();
-
       if (credentials) {
         if (credentials.password !== password) {
           return setError('password', {
             message: 'Неверный пароль, попробуйте ещё раз',
           });
         }
-
+        if (params.hasActiveTasks && !isBannerVisible) {
+          return onBanner();
+        }
         await deleteAccount({
           login: credentials.username,
           password,

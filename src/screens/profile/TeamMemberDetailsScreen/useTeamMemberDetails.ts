@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Linking } from 'react-native';
 
 import { useIsFocused, useRoute } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
@@ -49,7 +50,22 @@ const useTeamMemberDetails = () => {
   const undeletedContractorIDs = params.contractorIDs.filter(
     id => id !== member?.ID,
   );
-
+  const onPressEmail = async () => {
+    if (member?.email) {
+      const emailLink = 'mailto:' + member?.email;
+      if (await Linking.canOpenURL(emailLink)) {
+        Linking.openURL(emailLink);
+      }
+    }
+  };
+  const onPressPhone = async () => {
+    if (member?.phone) {
+      const phoneLink = 'tel:' + member?.phone;
+      if (await Linking.canOpenURL(phoneLink)) {
+        Linking.openURL(phoneLink);
+      }
+    }
+  };
   return {
     member,
     onModal,
@@ -60,6 +76,8 @@ const useTeamMemberDetails = () => {
     convertedActivities,
     undeletedContractorIDs,
     isContractor: params.isContractor,
+    onPressEmail,
+    onPressPhone,
   };
 };
 

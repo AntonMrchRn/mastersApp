@@ -9,7 +9,7 @@ enum ErrorCode {
   NoAccess = 20007,
   PhoneAlreadyRegistered = 8025,
   EmailAlreadyRegistered = 8021,
-  TaskIsAlreadyTaken = 20008,
+  TASK_IS_ALREADY_TAKEN = 20008,
   NetworkError = 30001,
   NoDataFound = 8003,
   OTHER_CANDIDATE = 7004,

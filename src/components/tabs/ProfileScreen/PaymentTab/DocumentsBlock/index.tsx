@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 
 import { useIsFocused } from '@react-navigation/native';
-import { Banner, Spacer, Text, useTheme } from 'rn-ui-kit';
+import { Banner, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
 import { UploadIcon } from '@/assets/icons/svg/files/UploadIcon';
 import { DownloadFilesIcon } from '@/assets/icons/svg/screens/DownloadFilesIcon';
@@ -35,6 +35,7 @@ const DocumentsBlock = ({
   activeTab,
 }: DocumentsBlockProps) => {
   const theme = useTheme();
+  const toast = useToast();
   const isFocused = useIsFocused();
 
   const [addFiles, { isLoading, isSuccess }] = useAddFilesMutation();
@@ -75,14 +76,25 @@ const DocumentsBlock = ({
   const onBanner = () => setIsBannerVisible(!isBannerVisible);
   const onModal = () => setIsModalVisible(!isModalVisible);
 
-  const handleUpload = async ({ formData, files, date }: HandleUpload) => {
+  const handleUpload = async ({
+    formData,
+    files: uploadFiles,
+    date,
+  }: HandleUpload) => {
+    const allFilesLength = files.length + uploadFiles.length;
+    if (allFilesLength > 10) {
+      return toast.show({
+        type: 'error',
+        title: 'Не более 10 вложений одновременно',
+      });
+    }
     try {
       const controller = new AbortController();
       controllers = { ...controllers, [date]: controller };
 
       const addedFiles = await addFiles({
         formData,
-        files,
+        files: uploadFiles,
         date,
         signal: controller.signal,
       }).unwrap();
@@ -92,13 +104,14 @@ const DocumentsBlock = ({
       console.log('handleUpload error', err);
     }
   };
+
   const onDelete = async ({ fileID }: { fileID?: number }) => {
     fileID && (await deleteFile(fileID).unwrap());
   };
   return (
     <>
       <Title
-        withButton
+        withButton={files.length < 10}
         title="Документы"
         onPress={onModal}
         buttonLabel={files.length ? 'Загрузить еще' : 'Загрузить'}
@@ -128,7 +141,7 @@ const DocumentsBlock = ({
               color={theme.text.neutral}
             >
               При необходимости загрузите файлы для подтверждения учетной
-              записи. Максимальный размер одного файл не более 5 МВ
+              записи. Максимальный размер одного файла не более 5 МВ
             </Text>
           </View>
           <UploadProgress

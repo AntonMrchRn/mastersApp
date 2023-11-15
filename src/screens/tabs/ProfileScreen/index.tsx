@@ -46,25 +46,26 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
     user,
     tabs,
     warning,
-    refetch,
     activeTab,
     switchTab,
     isLoading,
-    isFetching,
     onCopyEmail,
     scrollToEnd,
     scrollViewRef,
-    onBlockingModal,
+    onBlockingModalClose,
+    onBlockingModalOpen,
     isInternalExecutor,
     isBlockingModalVisible,
     isApprovalNotificationVisible,
+    onRefresh,
+    refreshing,
   } = useProfile({ tab });
 
   const tabComponents = {
     [ProfileTab.Common]: user && (
       <CommonTab
         user={user}
-        onBlockingModal={onBlockingModal}
+        onBlockingModalOpen={onBlockingModalOpen}
         isApprovalNotificationVisible={isApprovalNotificationVisible}
       />
     ),
@@ -73,7 +74,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
         user={user}
         scrollToEnd={scrollToEnd}
         activeTab={activeTab.label}
-        onBlockingModal={onBlockingModal}
+        onBlockingModalOpen={onBlockingModalOpen}
         entityType={user?.entityTypeDescription}
       />
     ),
@@ -89,7 +90,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView
         refreshControl={
-          <RefreshControl refreshing={isFetching} onRefresh={refetch} />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
@@ -148,15 +149,12 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
           </>
         </View>
         <BottomSheet
-          closeIcon
           title="Изменение заблокировано"
           isVisible={isBlockingModalVisible}
-          closeIconPress={onBlockingModal}
-          onBackdropPress={onBlockingModal}
-          onSwipeComplete={onBlockingModal}
+          onBackdropPress={onBlockingModalClose}
+          onSwipeComplete={onBlockingModalClose}
           titleStyle={styles.modalTitle}
           backdropTransitionOutTiming={0}
-          closeIconContainerStyle={styles.closeIcon}
         >
           <>
             <Spacer />
@@ -172,7 +170,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
             <Spacer size="l" />
             <Button
               label="Хорошо, понятно"
-              onPress={onBlockingModal}
+              onPress={onBlockingModalClose}
               style={styles.btn}
             />
           </>

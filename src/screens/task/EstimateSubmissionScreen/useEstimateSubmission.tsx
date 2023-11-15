@@ -9,20 +9,21 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useToast } from 'rn-ui-kit';
 
+import { useTaskMembers } from '@/hooks/useTaskMembers';
 import { useTaskSSE } from '@/hooks/useTaskSSE';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   tasksAPI,
-  useGetTaskQuery,
   usePatchITTaskMemberMutation,
   usePatchOffersMutation,
   usePatchTaskLotMutation,
   usePostITTaskMemberMutation,
   usePostOffersMutation,
 } from '@/store/api/tasks';
-import { Executor, Material, Service } from '@/store/api/tasks/types';
+import { Material, Service } from '@/store/api/tasks/types';
+import { useGetUserQuery } from '@/store/api/user';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import {
   setNewOfferServices,
@@ -33,55 +34,47 @@ import { selectTasks } from '@/store/slices/tasks/selectors';
 import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
 import { StatusType, TaskType } from '@/types/task';
 
+type EstimateSubmissionNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<AppStackParamList, AppScreenName.EstimateSubmission>,
+  BottomTabNavigationProp<BottomTabParamList, keyof BottomTabParamList>
+>;
+
 export const useEstimateSubmission = ({
   navigation,
   taskId,
   isEdit,
-  isInvitedExecutor,
-  executor,
-  submissionByCurator,
-  curatorMemberID,
-  isInvitedCurator,
+  isSubmissionByCuratorItLots,
 }: {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<
-      AppStackParamList,
-      AppScreenName.EstimateSubmission,
-      undefined
-    >,
-    BottomTabNavigationProp<
-      BottomTabParamList,
-      keyof BottomTabParamList,
-      undefined
-    >
-  >;
+  navigation: EstimateSubmissionNavigationProp;
   taskId: number;
   isEdit: boolean | undefined;
-  isInvitedExecutor: boolean | undefined;
-  executor: Executor | undefined;
-  submissionByCurator: boolean | undefined;
-  curatorMemberID: number | undefined;
-  isInvitedCurator: boolean;
+  isSubmissionByCuratorItLots: boolean | undefined;
 }) => {
-  const dispatch = useAppDispatch();
-  const toast = useToast();
   const isFocused = useIsFocused();
+  const toast = useToast();
   const bsRef = useRef<BottomSheetModal>(null);
+  const dispatch = useAppDispatch();
+
   const {
-    data,
+    task,
+    userID,
     refetch,
+    executor,
+    curatorMemberId,
+    isInvitedCurator,
+    isInvitedExecutor,
     isError: isTaskError,
     error: taskError,
-  } = useGetTaskQuery(taskId);
+    isCuratorAllowedTask,
+    curator,
+  } = useTaskMembers(taskId);
 
-  const refresh = () => {
+  const refresh = () =>
     dispatch(
       tasksAPI.endpoints.getTask.initiate(taskId, {
         forceRefetch: true,
       }),
     );
-  };
-
   useTaskSSE({ taskId, refresh });
 
   const [postITTaskMember] = usePostITTaskMemberMutation();
@@ -110,11 +103,10 @@ export const useEstimateSubmission = ({
   ] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { offerServices, error, loading, offerComment, offerID } =
+  const { error, loading, offerID, offerComment, offerServices } =
     useAppSelector(selectTasks);
-  const user = useAppSelector(selectAuth).user;
-  const userRole = useAppSelector(selectAuth).user?.roleID;
-  const task = data?.tasks?.[0];
+  const user = useGetUserQuery(userID).data;
+  const roleID = useAppSelector(selectAuth).user?.roleID;
   const isItLots = task?.subsetID === TaskType.IT_AUCTION_SALE;
   const isActive = task?.statusID === StatusType.ACTIVE;
 
@@ -136,7 +128,7 @@ export const useEstimateSubmission = ({
     if (isTaskError) {
       if (
         [
-          ErrorCode.TaskIsAlreadyTaken,
+          ErrorCode.TASK_IS_ALREADY_TAKEN,
           ErrorCode.OTHER_CANDIDATE,
           ErrorCode.NOT_FOUND,
         ].includes((taskError as AxiosQueryErrorResponse).data.code)
@@ -179,6 +171,26 @@ export const useEstimateSubmission = ({
   const allowCostIncrease = task?.allowCostIncrease;
   const currentSum = task?.currentSum;
   const costStep = task?.costStep;
+  const getWithNDS = () => {
+    //показываем НДС если правовая форма получателя ИП или Юр. лицо и он является Плательщиком НДС
+    // (Общее условие для всех остальных условий)
+    if (
+      user &&
+      user?.entityTypeID &&
+      [2, 3].includes(user.entityTypeID) &&
+      user.isNDSPayer
+    ) {
+      //Если в задании участвует куратор и подрядчик то сумму НДС показываем только если куратор является плательщиком НДС
+      //(подрядчик напрямую отношения к смете не имеет)
+      if (isCuratorAllowedTask) {
+        return !!curator?.isNDSPayer;
+      }
+      return true;
+    }
+    return false;
+  };
+  const withNDS = getWithNDS();
+
   const materials = services.reduce<Material[]>((acc, val) => {
     if (val.materials) {
       return acc.concat(val.materials);
@@ -260,6 +272,7 @@ export const useEstimateSubmission = ({
       isEdit,
       fromEstimateSubmission: true,
       services: offerServices,
+      isSubmissionByCuratorItLots,
     });
   };
   const pressService = () => {
@@ -315,7 +328,7 @@ export const useEstimateSubmission = ({
         text: `Ваша цена должна отличаться от последнего предложения (${currentSum} ₽) как минимум на ${costStep} ₽`,
       });
     }
-    if (!userRole) {
+    if (!roleID) {
       return toast.show({
         type: 'error',
         title: 'Не удалось определить роль пользователя',
@@ -340,7 +353,7 @@ export const useEstimateSubmission = ({
               measure: material.measure,
               name: material.name,
               price: +(material.localPrice || 0),
-              roleID: userRole,
+              roleID,
             };
           }) || [];
         const matSums =
@@ -364,7 +377,7 @@ export const useEstimateSubmission = ({
           count: +(service.localCount || 0),
           sum:
             +(service.localPrice || 0) * +(service.localCount || 0) + matSums,
-          roleID: userRole,
+          roleID,
           taskID: taskId,
           materials: postMaterials,
         };
@@ -386,17 +399,30 @@ export const useEstimateSubmission = ({
           dispatch(setNewOfferServices([]));
           dispatch(setOfferComment(''));
           dispatch(setOfferID(undefined));
-          navigation.navigate(AppScreenName.TaskCard, {
-            taskId,
-          });
+
+          if (isSubmissionByCuratorItLots) {
+            navigation.navigate(AppScreenName.Contractors, {
+              taskId,
+              isInvitedCurator,
+              isItLots,
+              fromEstimateSubmission: true,
+              services: task?.services,
+              curatorId: userID as number,
+              curatorMemberId,
+            });
+          } else {
+            navigation.navigate(AppScreenName.TaskCard, {
+              taskId,
+            });
+          }
         }
       } else {
         if (isItLots) {
           // Подача сметы для IT-лотов Куратором
-          if (submissionByCurator) {
+          if (isSubmissionByCuratorItLots) {
             isInvitedCurator
               ? await patchITTaskMember({
-                  ID: curatorMemberID,
+                  ID: curatorMemberId,
                   isConfirm: true,
                   isCurator: true,
                   offer: {
@@ -410,7 +436,7 @@ export const useEstimateSubmission = ({
                   taskID: taskId,
                   members: [
                     {
-                      userID: user?.userID,
+                      userID,
                       isConfirm: true,
                       isCurator: true,
                       offer: {
@@ -440,7 +466,7 @@ export const useEstimateSubmission = ({
                   taskID: taskId,
                   members: [
                     {
-                      userID: user?.userID,
+                      userID,
                       isConfirm: true,
                       isCurator: false,
                       offer: {
@@ -466,22 +492,24 @@ export const useEstimateSubmission = ({
         dispatch(setNewOfferServices([]));
         dispatch(setOfferComment(''));
 
-        if (!submissionByCurator) {
+        if (!isSubmissionByCuratorItLots) {
           navigation.navigate(AppScreenName.EstimateSubmissionSuccess, {
             taskId,
           });
         } else {
           toast.show({
             type: 'success',
-            title: 'Смета успешна подана',
+            title: 'Смета успешно подана',
           });
 
           navigation.navigate(AppScreenName.Contractors, {
             taskId,
             isInvitedCurator,
             isItLots,
-            curatorId: user?.userID as number,
-            curatorMemberId: curatorMemberID,
+            fromEstimateSubmission: true,
+            services: task?.services,
+            curatorId: userID as number,
+            curatorMemberId,
           });
         }
       }
@@ -529,5 +557,6 @@ export const useEstimateSubmission = ({
     deleteEstimateMaterialModalVisible,
     onDeleteEstimateServiceModalVisible,
     onDeleteEstimateMaterialModalVisible,
+    withNDS,
   };
 };

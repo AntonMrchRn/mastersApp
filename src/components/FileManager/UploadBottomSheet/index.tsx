@@ -66,7 +66,7 @@ export const UploadBottomSheet = ({
     // андроид при передаче параметра compressImageQuality меняет оригинальное наименование файла
     [UploadAction.TakeFromGallery]: async () =>
       await ImagePicker.openPicker({
-        mediaType: isUserFile ? 'photo' : 'any',
+        mediaType: isUserFile || toClose ? 'photo' : 'any',
         includeExif: true,
         multiple: true,
         maxFiles: 10,
@@ -94,7 +94,7 @@ export const UploadBottomSheet = ({
               'application/vnd.ms-excel',
               'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
               'image/gif',
-              ...(!toClose
+              ...(!toClose && !isUserFile
                 ? [
                     'video/mpeg',
                     'video/mp4',
@@ -115,8 +115,15 @@ export const UploadBottomSheet = ({
               'com.microsoft.excel.xls',
               'org.openxmlformats.spreadsheetml.sheet',
               'com.compuserve.gif',
-              ...(!toClose
-                ? ['public.mpeg', 'public.mpeg-4', 'com.apple.quicktime-movie']
+              ...(!toClose && !isUserFile
+                ? [
+                    'public.mpeg',
+                    'public.mpeg-4',
+                    'com.apple.quicktime-movie',
+                    'io.iina.mkv',
+                    'dyn.ah62d4rv4ge804450',
+                    DocumentPicker.types.video,
+                  ]
                 : []),
             ],
       }),
@@ -145,73 +152,74 @@ export const UploadBottomSheet = ({
     });
 
   const onUploadAction = async (actionType: UploadAction) => {
-    const date = new Date().toISOString();
+    onClose();
+    setTimeout(async () => {
+      const date = new Date().toISOString();
 
-    try {
-      let result = await uploadActions[actionType]();
+      try {
+        let result = await uploadActions[actionType]();
 
-      // исправление поворота изображения на android
-      // и ios (только в кейсе загрузки изображения, снятого на данное устройство, из галереи)
-      if (actionType === UploadAction.TakePhotoMedia && configApp.android) {
-        // передаем quality только для android, потому что для ios передается
-        // параметр compressImageQuality в опциях пикера
-        result = await fixImageRotation(result as Image, quality);
-      }
+        // исправление поворота изображения на android
+        // и ios (только в кейсе загрузки изображения, снятого на данное устройство, из галереи)
+        if (actionType === UploadAction.TakePhotoMedia && configApp.android) {
+          // передаем quality только для android, потому что для ios передается
+          // параметр compressImageQuality в опциях пикера
+          result = await fixImageRotation(result as Image, quality);
+        }
 
-      if (actionType === UploadAction.TakeFromGallery) {
-        result = await Promise.all(convertResponse(result as ImageOrVideo[]));
-      }
-      //////////
+        if (actionType === UploadAction.TakeFromGallery) {
+          result = await Promise.all(convertResponse(result as ImageOrVideo[]));
+        }
+        //////////
 
-      if ((result as ImageOrVideo[]).length > 10) {
-        return toast.show({
-          type: 'error',
-          title: 'Превышено максимальное число файлов (10)',
-        });
-      }
+        if ((result as ImageOrVideo[]).length > 10) {
+          return toast.show({
+            type: 'error',
+            title: 'Превышено максимальное число файлов (10)',
+          });
+        }
 
-      const { sizes, files, names } = fillFormData(
-        formData,
-        result,
-        actionType,
-      );
-      onClose();
-      const check = checkSizes({
-        sizes,
-        isUserFile,
-        isDoc: actionType === UploadAction.TakeFromFiles,
-      });
-
-      if (check) {
-        await handleUpload({
+        const { sizes, files, names } = fillFormData(
           formData,
-          files,
-          date,
-          names,
+          result,
+          actionType,
+        );
+        const check = checkSizes({
+          sizes,
+          isUserFile,
+          isDoc: actionType === UploadAction.TakeFromFiles,
         });
-      } else {
-        onBanner();
+
+        if (check) {
+          await handleUpload({
+            formData,
+            files,
+            date,
+            names,
+          });
+        } else {
+          onBanner();
+        }
+      } catch (error) {
+        if (
+          typeof error === 'object' &&
+          error !== null &&
+          'data' in error &&
+          typeof error.data === 'object' &&
+          error.data !== null &&
+          'message' in error.data &&
+          typeof error.data.message === 'string' &&
+          (error as AxiosQueryErrorResponse).data.message !== 'canceled'
+        ) {
+          toast.show({
+            type: 'error',
+            title: (error as AxiosQueryErrorResponse).data.message,
+          });
+        }
+      } finally {
+        dispatch(deleteProgress(date));
       }
-    } catch (error) {
-      onClose();
-      if (
-        typeof error === 'object' &&
-        error !== null &&
-        'data' in error &&
-        typeof error.data === 'object' &&
-        error.data !== null &&
-        'message' in error.data &&
-        typeof error.data.message === 'string' &&
-        (error as AxiosQueryErrorResponse).data.message !== 'canceled'
-      ) {
-        toast.show({
-          type: 'error',
-          title: (error as AxiosQueryErrorResponse).data.message,
-        });
-      }
-    } finally {
-      dispatch(deleteProgress(date));
-    }
+    }, 500);
   };
 
   const actions = [

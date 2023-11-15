@@ -9,6 +9,9 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     marginRight: configApp.android ? 1 : 0,
   },
+  text: {
+    flexShrink: 1,
+  },
 });
 
 export default styles;

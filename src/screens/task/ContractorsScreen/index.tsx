@@ -1,9 +1,15 @@
 import React from 'react';
-import { ActivityIndicator, FlatList, ListRenderItemInfo } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  ListRenderItemInfo,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Banner, Button, Spacer, Text } from 'rn-ui-kit';
 
+import Header from '@/components/Header';
 import PreviewNotFound, {
   PreviewNotFoundType,
 } from '@/components/tabs/TaskSearch/PreviewNotFound';
@@ -21,11 +27,13 @@ export const ContractorsScreen = ({
   route: {
     params: {
       taskId,
+      services,
       isItLots,
       curatorId,
       curatorMemberId,
       isInvitedCurator,
       isConfirmedCurator,
+      fromEstimateSubmission,
     },
   },
   navigation,
@@ -37,6 +45,7 @@ export const ContractorsScreen = ({
     onSelect,
     contractors,
     keyExtractor,
+    customGoBack,
     navigateToProfile,
     onSelectContractor,
     isInvitationLoading,
@@ -47,10 +56,11 @@ export const ContractorsScreen = ({
   } = useContractors({
     navigation,
     taskId,
+    services,
+    isItLots,
     curatorId,
     isInvitedCurator,
     curatorMemberId,
-    isItLots,
     isConfirmedCurator,
   });
 
@@ -64,60 +74,66 @@ export const ContractorsScreen = ({
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
-      <Spacer size="xl" />
-      {!!contractors?.length && (
-        <Text variant="title3">Выберите подрядчика</Text>
-      )}
-      <Spacer size="xl" />
-      {isContractorsLoading ? (
-        <ActivityIndicator size="large" style={styles.loader} />
-      ) : (
-        <FlatList
-          scrollEnabled
-          data={contractors}
-          style={styles.contractors}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.contractorsContainer}
-          ListEmptyComponent={
-            <PreviewNotFound type={PreviewNotFoundType.NoContractors} />
-          }
-        />
-      )}
-      {!isAvailableContractorsExist && !!contractors?.length && (
-        <>
-          <Banner
-            type="error"
-            icon="alert"
-            title="Нет доступных подрядчиков"
-            text={`К сожалению, ${
-              isAllContractorsAlreadyInvited
-                ? 'вам некого пригласить для выполнения этой задачи'
-                : 'вы не можете принять участие в этой задаче'
-            }`}
+      <Header
+        title="Подрядчики"
+        customGoBack={fromEstimateSubmission ? customGoBack : undefined}
+      />
+      <View style={styles.content}>
+        <Spacer size="xl" />
+        {!!contractors?.length && (
+          <Text variant="title3">Выберите подрядчика</Text>
+        )}
+        <Spacer size="xl" />
+        {isContractorsLoading ? (
+          <ActivityIndicator size="large" style={styles.loader} />
+        ) : (
+          <FlatList
+            scrollEnabled
+            data={contractors}
+            style={styles.contractors}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.contractorsContainer}
+            ListEmptyComponent={
+              <PreviewNotFound type={PreviewNotFoundType.NoContractors} />
+            }
           />
-          <Spacer size="l" />
-        </>
-      )}
-      {!!contractors?.length && (
-        <Button
-          label="Выбрать"
-          style={styles.btn}
-          onPress={onSelect}
-          isPending={isInvitationLoading}
-          disabled={!isAvailableContractorsExist}
-        />
-      )}
-      {!contractors?.length && !isContractorsLoading && (
-        <Button
-          icon
-          style={styles.btn}
-          label="Пригласить подрядчика"
-          onPress={navigateToProfile}
-        />
-      )}
-      <Spacer />
+        )}
+        {!isAvailableContractorsExist && !!contractors?.length && (
+          <>
+            <Banner
+              type="error"
+              icon="alert"
+              title="Нет доступных подрядчиков"
+              text={`К сожалению, ${
+                isAllContractorsAlreadyInvited
+                  ? 'вам некого пригласить для выполнения этой задачи'
+                  : 'вы не можете принять участие в этой задаче'
+              }`}
+            />
+            <Spacer size="l" />
+          </>
+        )}
+        {!!contractors?.length && (
+          <Button
+            label="Выбрать"
+            style={styles.btn}
+            onPress={onSelect}
+            isPending={isInvitationLoading}
+            disabled={!isAvailableContractorsExist}
+          />
+        )}
+        {!contractors?.length && !isContractorsLoading && (
+          <Button
+            icon
+            style={styles.btn}
+            label="Пригласить подрядчика"
+            onPress={navigateToProfile}
+          />
+        )}
+        <Spacer />
+      </View>
     </SafeAreaView>
   );
 };

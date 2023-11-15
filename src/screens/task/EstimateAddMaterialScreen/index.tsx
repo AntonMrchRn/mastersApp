@@ -48,7 +48,13 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
 
   const [loading, setLoading] = useState(false);
 
-  const { serviceId, taskId, fromEstimateSubmission, isEdit } = route.params;
+  const {
+    taskId,
+    isEdit,
+    serviceId,
+    fromEstimateSubmission,
+    isSubmissionByCuratorItLots,
+  } = route.params;
 
   const userRole = useAppSelector(selectAuth).user?.roleID;
   const { offerServices } = useAppSelector(selectTasks);
@@ -164,7 +170,11 @@ export const EstimateAddMaterialScreen: FC<EstimateAddMaterialScreenProps> = ({
         return acc.concat(val);
       }, []);
       dispatch(setNewOfferServices(newServices));
-      navigation.navigate(AppScreenName.EstimateSubmission, { taskId, isEdit });
+      navigation.navigate(AppScreenName.EstimateSubmission, {
+        taskId,
+        isEdit,
+        isSubmissionByCuratorItLots,
+      });
     } else {
       try {
         const newSum =

@@ -25,7 +25,7 @@ type PaymentTabProps = {
   user: User;
   activeTab: ProfileTab;
   scrollToEnd: () => void;
-  onBlockingModal: () => void;
+  onBlockingModalOpen: () => void;
   entityType?: UserEntityType;
 };
 
@@ -34,7 +34,7 @@ const PaymentTab = ({
   activeTab,
   entityType,
   scrollToEnd,
-  onBlockingModal,
+  onBlockingModalOpen,
 }: PaymentTabProps) => {
   const theme = useTheme();
   const navigation = useNavigation<BankDetailsScreenNavigationProp>();
@@ -62,14 +62,14 @@ const PaymentTab = ({
 
   const editPersonalDetails = () => {
     if (user.isApproved && isSelf) {
-      return onBlockingModal();
+      return onBlockingModalOpen();
     }
 
     onModal();
   };
   const editBankDetails = () => {
     if (user.isApproved) {
-      return onBlockingModal();
+      return onBlockingModalOpen();
     }
 
     navigation.navigate(ProfileScreenName.BankDetails, {
@@ -134,7 +134,7 @@ const PaymentTab = ({
         <SelfEmployedBlock
           id={user.ID}
           isApproved={user.isApproved}
-          onBlockingModal={onBlockingModal}
+          onBlockingModalOpen={onBlockingModalOpen}
           isSberPayment={user.isSberPayment}
         />
       )}

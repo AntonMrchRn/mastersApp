@@ -4,16 +4,17 @@ import { File } from '@/types/fileManager';
 import { OutlayStatusType, StatusType, TaskTab, TaskType } from '@/types/task';
 
 export const getButtons = ({
-  isConfirmedContractor,
   tab,
   toClose,
   subsetID,
   statusID,
   isCurator,
+  isExecutor,
   reportFiles,
   closureFiles,
   onCancelTask,
   isContractor,
+  onSubmitAnTask,
   navigateToChat,
   userOffersData,
   onWorkDelivery,
@@ -22,14 +23,14 @@ export const getButtons = ({
   isInvitedCurator,
   onTaskSubmission,
   isInvitedExecutor,
-  isExecutor,
-  onSubmitAnTask,
   isCommentsAvailable,
   isCuratorAllowedTask,
   isOffersDeadlineOver,
-  onOpenCancelModalVisible,
   onUploadModalVisible,
   onBudgetModalVisible,
+  isConfirmedContractor,
+  isRefusedInvitedMember,
+  onOpenCancelModalVisible,
   onSubmissionModalVisible,
   onApproveEstimateChanges,
   onSendEstimateForApproval,
@@ -80,6 +81,7 @@ export const getButtons = ({
   onSubmissionModalVisible: (isSubmissionByCurator?: boolean) => void;
   onApproveEstimateChanges: () => void;
   onSendEstimateForApproval: () => void;
+  isRefusedInvitedMember: boolean;
   onCancelTask: (refuseReason?: string) => void;
 }): TaskCardBottomButton[] => {
   switch (subsetID) {
@@ -355,7 +357,7 @@ export const getButtons = ({
             case TaskTab.REPORT:
             case TaskTab.HISTORY:
             case TaskTab.COMMENTS:
-              if (isOffersDeadlineOver) {
+              if (isOffersDeadlineOver && !userOffersData.length) {
                 return [];
               }
               if (userOffersData.length) {
@@ -918,7 +920,7 @@ export const getButtons = ({
             case TaskTab.REPORT:
             case TaskTab.HISTORY:
             case TaskTab.COMMENTS:
-              if (isOffersDeadlineOver) {
+              if (isOffersDeadlineOver && !userOffersData.length) {
                 return [];
               }
               if (userOffersData.length && !isContractor) {
@@ -930,12 +932,11 @@ export const getButtons = ({
                   },
                 ];
               }
-              //приглашенный координатором куратор ( Назначен куратор )
-              if (isInvitedCurator) {
+              // приглашенный координатором куратор, который не отзывал смету
+              if (isInvitedCurator && !isRefusedInvitedMember) {
                 return [
                   {
                     label: 'Подать смету',
-                    variant: 'outlineAccent',
                     onPress: () => onSubmissionModalVisible(true),
                   } as TaskCardBottomButton,
                 ];
@@ -944,14 +945,16 @@ export const getButtons = ({
               if (
                 isCurator ||
                 isContractor ||
-                isInvitedExecutor ||
-                !isCuratorAllowedTask
+                (isInvitedExecutor && !isRefusedInvitedMember) ||
+                (!isCuratorAllowedTask && !isRefusedInvitedMember)
               ) {
                 return [
                   ...(!isCurator && !isConfirmedContractor
                     ? [
                         {
-                          label: 'Принять задачу',
+                          label: isContractor
+                            ? 'Принять задачу'
+                            : 'Подать смету',
                           variant: 'accent',
                           onPress: isContractor
                             ? onTaskSubmission
@@ -981,8 +984,8 @@ export const getButtons = ({
                     ? onTaskSubmission
                     : onSubmissionModalVisible,
                 } as TaskCardBottomButton,
-                // задача с участием куратора, который её ещё не принял (или принял, но отказался)
-                ...(isTaskWithUnconfirmedCurator
+                // задача с участием куратора, который её ещё не принял (или принял, но отказался) или с приглашенным кандидатом, который отказался (отозвал смету)
+                ...(isTaskWithUnconfirmedCurator || isRefusedInvitedMember
                   ? [
                       {
                         label: 'Подать смету как куратор',

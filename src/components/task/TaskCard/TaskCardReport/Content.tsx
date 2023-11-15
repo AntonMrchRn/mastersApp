@@ -82,12 +82,13 @@ export const Content: FC<ContentProps> = ({
             canDelete={canDelete}
             uploadedFileIDs={uploadedFileIDs}
           />
-          {statusID === StatusType.WORK && (
-            <UploadProgress
-              controllers={controllers}
-              progressesSelector={progressesSelector}
-            />
-          )}
+          {statusID &&
+            [StatusType.WORK, StatusType.SUMMARIZING].includes(statusID) && (
+              <UploadProgress
+                controllers={controllers}
+                progressesSelector={progressesSelector}
+              />
+            )}
         </View>
       ) : (
         <>

@@ -27,7 +27,7 @@ const useChangePassword = (navigation: ChangePasswordScreenNavigationProp) => {
   const methods = useForm({
     defaultValues,
     resolver: yupResolver(changePasswordValidationSchema),
-    mode: 'onTouched',
+    mode: 'onChange',
   });
   const {
     watch,
@@ -76,22 +76,25 @@ const useChangePassword = (navigation: ChangePasswordScreenNavigationProp) => {
   };
 
   const onChangePassword = async () => {
+    let isError = false;
     if (password === newPassword) {
-      return setError('newPassword', {
+      setError('newPassword', {
         message: 'Новый пароль не должен совпадать с текущим',
       });
+      isError = true;
     }
-
     if (newPassword !== repeatedNewPassword) {
-      return setError('repeatedNewPassword', {
+      setError('repeatedNewPassword', {
         message: 'Подтверждение не совпадает с новым паролем',
       });
+      isError = true;
     }
-
-    await changePassword({
-      password,
-      newPassword,
-    });
+    if (!isError) {
+      await changePassword({
+        password,
+        newPassword,
+      });
+    }
   };
 
   return {

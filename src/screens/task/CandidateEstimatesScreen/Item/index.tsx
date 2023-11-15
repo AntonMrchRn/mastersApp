@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
+import plural from 'plural-ru';
 import { Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { CalculatorIcon } from '@/assets/icons/svg/estimate/CalculatorIcon';
@@ -15,18 +16,22 @@ type ItemProps = {
   price: number;
   count: number;
   sum: number;
+  measure: string | undefined;
 };
 
-export const Item = ({ name, price, count, sum }: ItemProps) => {
+export const Item = ({ name, price, count, sum, measure }: ItemProps) => {
   const theme = useTheme();
-
+  const currentMeasure =
+    measure === 'час'
+      ? plural(count, '%d час', '%d часа', '%d часов')
+      : `${separateThousands(count)} ${measure || ''}`;
   const items = [
     {
-      text: `${separateThousands(price)} ₽ за шт.`,
+      text: `${separateThousands(price)} ₽ за ${currentMeasure}`,
       icon: <PriceIcon />,
     },
     {
-      text: `${separateThousands(count)} шт.`,
+      text: `${separateThousands(count)} ${currentMeasure}`,
       icon: <CubeIcon />,
     },
     {

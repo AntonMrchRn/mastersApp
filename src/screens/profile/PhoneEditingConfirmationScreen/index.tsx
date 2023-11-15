@@ -37,24 +37,31 @@ const PhoneEditingConfirmationScreen = () => {
             Подтверждение телефона
           </Text>
           <Spacer />
-          <Text variant="bodyMRegular" color={theme.text.neutral}>
+          <Text
+            variant="bodyMRegular"
+            color={theme.text.neutral}
+            style={styles.title}
+          >
             Мы отправили вам смс с 6-значным кодом. Пожалуйста, введите код
           </Text>
           <Spacer size="xl" />
           <FormProvider {...methods}>
-            <ControlledInputCode
-              name="code"
-              hint={errors.code?.message}
-              rootStyle={styles.inputCode}
-            />
-            <Spacer size={errors.code?.message ? 'xl' : 'xxl'} />
-            <Button
-              style={styles.btn}
-              disabled={isDisabled}
-              isPending={isLoading}
-              label="Подтвердить телефон"
-              onPress={confirmPhone}
-            />
+            <View style={styles.form}>
+              <View style={styles.code}>
+                <ControlledInputCode
+                  name="code"
+                  hint={errors.code?.message}
+                  rootStyle={styles.inputCode}
+                />
+              </View>
+              <Button
+                style={styles.btn}
+                disabled={isDisabled}
+                isPending={isLoading}
+                label="Подтвердить телефон"
+                onPress={confirmPhone}
+              />
+            </View>
           </FormProvider>
           {!!phoneTimeout && (
             <TimerBlockPhoneProfile

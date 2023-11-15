@@ -46,9 +46,11 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
   const taskId = route.params.taskId;
+  const tabId = route.params?.tabId;
 
   const {
     id,
+    isCurator,
     onTabChange,
     getCurrentTab,
     tabs,
@@ -87,7 +89,10 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
     noAccessToTaskBannerVisible,
     noAccessButtonPress,
     toClose,
+    inappropriateRegionBannerVisible,
+    onInappropriateRegionBannerVisible,
     directionNotSpecifiedBannerVisible,
+    inappropriateRegionButtonPress,
     onDirectionNotSpecifiedBannerVisible,
     noDirectionButtonPress,
     setId,
@@ -97,7 +102,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
     isExecutor,
     onCloseCancelModalVisible,
     currentEstimateTab,
-  } = useTaskCard({ taskId, navigation });
+  } = useTaskCard({ taskId, navigation, tabId });
 
   return (
     <>
@@ -108,6 +113,7 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
           onSubmit={onTaskSubmission}
         />
         <TaskCardBudgetModal
+          isCurator={isCurator}
           isVisible={budgetModalVisible}
           onCancel={onBudgetModalVisible}
           onRevoke={onRevokeBudget}
@@ -278,6 +284,19 @@ export const TaskCardScreen = ({ navigation, route }: TaskCardScreenProps) => {
               onClosePress={onDirectionNotSpecifiedBannerVisible}
               buttonText="Перейти в Профиль"
               onButtonPress={noDirectionButtonPress}
+            />
+          </View>
+        )}
+        {inappropriateRegionBannerVisible && (
+          <View style={styles.mb16}>
+            <Banner
+              type="error"
+              title="Неподходящий регион"
+              icon="alert"
+              text="Для участия в этой задаче ваш регион должен совпадать с местоположением объекта"
+              onClosePress={onInappropriateRegionBannerVisible}
+              buttonText="Перейти в Профиль"
+              onButtonPress={inappropriateRegionButtonPress}
             />
           </View>
         )}

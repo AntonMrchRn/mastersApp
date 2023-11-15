@@ -24,6 +24,8 @@ const TeamMemberDetailsScreen = () => {
     convertedRegions,
     convertedActivities,
     undeletedContractorIDs,
+    onPressEmail,
+    onPressPhone,
   } = useTeamMemberDetails();
 
   return (
@@ -69,11 +71,15 @@ const TeamMemberDetailsScreen = () => {
           <Text variant="title3">Контакты</Text>
           <Spacer />
           <UserInfoBlock
+            onPress={onPressPhone}
+            isPressable={!!member.phone}
             label="Телефон"
             info={member.phone ? convertPhone(member.phone) : 'Не указано'}
           />
           <UserInfoBlock
             label="Электронная почта"
+            isPressable={!!member.email}
+            onPress={onPressEmail}
             info={member.email || 'Не указано'}
           />
           <Spacer size="xl" />
