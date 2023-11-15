@@ -22,7 +22,7 @@ export const ContactUsBottomSheet: FC<ContactUsBottomSheetProps> = ({
       onSwipeComplete={onClose}
     >
       <View style={styles.container}>
-        <Text variant="bodySRegular">
+        <Text variant="bodyMRegular">
           Для связи со службой поддержки напишите нам письмо по адресу:
         </Text>
         <Text variant="bodyMBold">info@mastera-service.ru</Text>

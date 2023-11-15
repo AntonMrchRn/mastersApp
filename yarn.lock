@@ -6685,9 +6685,9 @@ rimraf@~2.6.2:
   dependencies:
     glob "^7.1.3"
 
-"rn-ui-kit@git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#3.1.7":
-  version "3.1.7"
-  resolved "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#74fa4eb122a08f50b747116343f47e78780f1d1c"
+"rn-ui-kit@git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#3.1.8":
+  version "3.1.8"
+  resolved "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#cacfdecbedf770dd0d30feae441a172c50b1b86a"
 
 run-applescript@^5.0.0:
   version "5.0.0"

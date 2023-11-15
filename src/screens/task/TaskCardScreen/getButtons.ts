@@ -189,7 +189,7 @@ export const getButtons = ({
                 },
                 {
                   label: 'Отказаться от задачи',
-                  variant: 'outlineDanger',
+                  variant: 'ghost',
                   onPress: onOpenCancelModalVisible,
                 },
               ];
@@ -211,7 +211,7 @@ export const getButtons = ({
                 },
                 {
                   label: 'Отказаться от задачи',
-                  variant: 'outlineDanger',
+                  variant: 'ghost',
                   onPress: onOpenCancelModalVisible,
                 },
               ];
@@ -226,7 +226,7 @@ export const getButtons = ({
                   },
                   {
                     label: 'Отказаться от задачи',
-                    variant: 'outlineDanger',
+                    variant: 'ghost',
                     onPress: onOpenCancelModalVisible,
                   },
                 ];
@@ -239,7 +239,7 @@ export const getButtons = ({
                 },
                 {
                   label: 'Отказаться от задачи',
-                  variant: 'outlineDanger',
+                  variant: 'ghost',
                   onPress: onOpenCancelModalVisible,
                 },
               ];
@@ -413,7 +413,7 @@ export const getButtons = ({
                 },
                 {
                   label: 'Отказаться от задачи',
-                  variant: 'outlineDanger',
+                  variant: 'ghost',
                   onPress: onOpenCancelModalVisible,
                 },
               ];
@@ -435,7 +435,7 @@ export const getButtons = ({
                 },
                 {
                   label: 'Отказаться от задачи',
-                  variant: 'outlineDanger',
+                  variant: 'ghost',
                   onPress: onOpenCancelModalVisible,
                 },
               ];
@@ -448,7 +448,7 @@ export const getButtons = ({
                 },
                 {
                   label: 'Отказаться от задачи',
-                  variant: 'outlineDanger',
+                  variant: 'ghost',
                   onPress: onOpenCancelModalVisible,
                 },
               ];
@@ -605,7 +605,7 @@ export const getButtons = ({
                           label: isContractor
                             ? 'Отклонить приглашение'
                             : 'Отказаться от задачи',
-                          variant: 'outlineDanger',
+                          variant: 'ghost',
                           onPress: isContractor
                             ? onOpenCancelModalVisible
                             : onCancelTask,
@@ -650,7 +650,7 @@ export const getButtons = ({
                   : []),
                 {
                   label: 'Отказаться от задачи',
-                  variant: 'outlineDanger',
+                  variant: 'ghost',
                   onPress: onOpenCancelModalVisible,
                 },
               ];
@@ -696,7 +696,7 @@ export const getButtons = ({
                   : []),
                 {
                   label: 'Отказаться от задачи',
-                  variant: 'outlineDanger',
+                  variant: 'ghost',
                   onPress: onOpenCancelModalVisible,
                 },
               ];
@@ -717,7 +717,7 @@ export const getButtons = ({
                   ? [
                       {
                         label: 'Отказаться от задачи',
-                        variant: 'outlineDanger',
+                        variant: 'ghost',
                         onPress: onOpenCancelModalVisible,
                       } as TaskCardBottomButton,
                     ]
@@ -758,7 +758,7 @@ export const getButtons = ({
                   : []),
                 {
                   label: 'Отказаться от задачи',
-                  variant: 'outlineDanger',
+                  variant: 'ghost',
                   onPress: onOpenCancelModalVisible,
                 },
               ];
@@ -967,7 +967,7 @@ export const getButtons = ({
                     ? [
                         {
                           label: 'Отклонить приглашение',
-                          variant: 'outlineDanger',
+                          variant: 'ghost',
                           onPress: isContractor
                             ? onOpenCancelModalVisible
                             : onCancelTask,
@@ -1014,7 +1014,7 @@ export const getButtons = ({
                   : []),
                 {
                   label: 'Отказаться от задачи',
-                  variant: 'outlineDanger',
+                  variant: 'ghost',
                   onPress: onOpenCancelModalVisible,
                 },
               ];
@@ -1060,7 +1060,7 @@ export const getButtons = ({
                   : []),
                 {
                   label: 'Отказаться от задачи',
-                  variant: 'outlineDanger',
+                  variant: 'ghost',
                   onPress: onOpenCancelModalVisible,
                 },
               ];
@@ -1113,7 +1113,7 @@ export const getButtons = ({
                   : []),
                 {
                   label: 'Отказаться от задачи',
-                  variant: 'outlineDanger',
+                  variant: 'ghost',
                   onPress: onOpenCancelModalVisible,
                 },
               ];
@@ -1277,7 +1277,7 @@ export const getButtons = ({
                 return [
                   {
                     label: 'Отказаться от задачи',
-                    variant: 'outlineDanger',
+                    variant: 'ghost',
                     onPress: onOpenCancelModalVisible,
                   },
                 ];
@@ -1326,7 +1326,7 @@ export const getButtons = ({
                 },
                 {
                   label: 'Отказаться от задачи',
-                  variant: 'outlineDanger',
+                  variant: 'ghost',
                   onPress: onOpenCancelModalVisible,
                 },
               ];
@@ -1348,7 +1348,7 @@ export const getButtons = ({
                 },
                 {
                   label: 'Отказаться от задачи',
-                  variant: 'outlineDanger',
+                  variant: 'ghost',
                   onPress: onOpenCancelModalVisible,
                 },
               ];
@@ -1361,7 +1361,7 @@ export const getButtons = ({
                 },
                 {
                   label: 'Отказаться от задачи',
-                  variant: 'outlineDanger',
+                  variant: 'ghost',
                   onPress: onOpenCancelModalVisible,
                 },
               ];
