@@ -33,7 +33,7 @@ const usePersonalDataEditing = () => {
       pname: params?.pname || '',
     },
     resolver: yupResolver(personalDataValidationSchema),
-    mode: 'onSubmit',
+    mode: 'onChange',
   });
   const {
     handleSubmit,

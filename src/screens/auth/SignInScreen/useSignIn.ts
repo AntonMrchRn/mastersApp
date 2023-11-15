@@ -110,13 +110,15 @@ const useSignIn = () => {
   }, [isSuccess]);
 
   const signIn = async (values: SignInFormValues) => {
-    setIsLoading(true);
-    await getUserAuth({
-      login: isPhoneAuth
-        ? '7' + (values as SignInWithPhoneFormValues).phone
-        : (values as SignInWithEmailFormValues).email,
-      password: values.password,
-    });
+    if (!isLoading) {
+      setIsLoading(true);
+      await getUserAuth({
+        login: isPhoneAuth
+          ? '7' + (values as SignInWithPhoneFormValues).phone
+          : (values as SignInWithEmailFormValues).email,
+        password: values.password,
+      });
+    }
   };
 
   const getData = async () => {
@@ -160,10 +162,10 @@ const useSignIn = () => {
       });
     } catch (err) {
       console.log('onLoginSuccess getPushToken error', err);
+      setIsLoading(false);
     } finally {
       dispatch(setUserAuth(userAuth));
       dispatch(login());
-      setIsLoading(false);
     }
   };
 

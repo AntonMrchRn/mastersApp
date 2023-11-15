@@ -47,7 +47,6 @@ const useProfile = ({ tab }: { tab: TabProf | undefined }) => {
   const {
     data: user,
     isLoading,
-    isFetching,
     isError,
     error,
     isSuccess,
@@ -56,6 +55,13 @@ const useProfile = ({ tab }: { tab: TabProf | undefined }) => {
     skip: !authUser?.userID,
   });
 
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = () => {
+    setRefreshing(true);
+    refetch().then(() => {
+      setRefreshing(false);
+    });
+  };
   const [activeTab, setActiveTab] = useState<TabProf>(initialTab);
   const [isBlockingModalVisible, setIsBlockingModalVisible] =
     useState<boolean>(false);
@@ -105,10 +111,8 @@ const useProfile = ({ tab }: { tab: TabProf | undefined }) => {
     { id: 3, label: ProfileTab.Account },
   ];
 
-  const onBlockingModalOpen = () =>
-    setIsBlockingModalVisible(!isBlockingModalVisible);
-  const onBlockingModalClose = () =>
-    setIsBlockingModalVisible(!isBlockingModalVisible);
+  const onBlockingModalOpen = () => setIsBlockingModalVisible(true);
+  const onBlockingModalClose = () => setIsBlockingModalVisible(false);
 
   const switchTab = ({ id, label }: TabItem) => {
     setActiveTab({ id, label: label as ProfileTab });
@@ -144,11 +148,9 @@ const useProfile = ({ tab }: { tab: TabProf | undefined }) => {
     user,
     tabs,
     warning,
-    refetch,
     activeTab,
     switchTab,
     isLoading,
-    isFetching,
     onCopyEmail,
     scrollToEnd,
     scrollViewRef,
@@ -157,6 +159,8 @@ const useProfile = ({ tab }: { tab: TabProf | undefined }) => {
     isInternalExecutor,
     isBlockingModalVisible,
     isApprovalNotificationVisible,
+    onRefresh,
+    refreshing,
   };
 };
 
