@@ -1,10 +1,6 @@
 import React, { FC } from 'react';
-import {
-  ActivityIndicator,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
@@ -123,7 +119,11 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
         pressService={pressService}
       />
       <SafeAreaView style={styles.container} edges={['bottom']}>
-        <ScrollView style={styles.ph20}>
+        <KeyboardAwareScrollView
+          style={styles.ph20}
+          enableOnAndroid={true}
+          keyboardShouldPersistTaps="handled"
+        >
           <Banner
             type={'info'}
             icon={<></>}
@@ -256,7 +256,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
             onChangeText={setComment}
           />
           <Spacer size={40} />
-        </ScrollView>
+        </KeyboardAwareScrollView>
         <View style={styles.ph20}>
           <View style={styles.bannerContainer}>
             {banner && (
