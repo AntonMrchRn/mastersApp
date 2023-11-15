@@ -94,7 +94,7 @@ export const UploadBottomSheet = ({
               'application/vnd.ms-excel',
               'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
               'image/gif',
-              ...(!toClose
+              ...(!toClose && !isUserFile
                 ? [
                     'video/mpeg',
                     'video/mp4',
@@ -115,7 +115,7 @@ export const UploadBottomSheet = ({
               'com.microsoft.excel.xls',
               'org.openxmlformats.spreadsheetml.sheet',
               'com.compuserve.gif',
-              ...(!toClose
+              ...(!toClose && !isUserFile
                 ? [
                     'public.mpeg',
                     'public.mpeg-4',
