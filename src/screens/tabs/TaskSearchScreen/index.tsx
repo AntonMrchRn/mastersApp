@@ -55,6 +55,7 @@ const TaskSearchScreen = ({ navigation, route }: TaskSearchScreenProps) => {
   const [selectedTabId, setSelectedTabId] = useState<TaskSetType>(
     TaskSetType.COMMON,
   );
+  const [refreshing, setRefreshing] = useState(false);
 
   const {
     data = [],
@@ -71,13 +72,13 @@ const TaskSearchScreen = ({ navigation, route }: TaskSearchScreenProps) => {
 
   useEffect(() => {
     if (regionIDs?.length && isFocused) {
-      onRefresh();
+      onRefetch();
       refetch();
     }
   }, [regionIDs?.length, isFocused]);
 
   useEffect(() => {
-    onRefresh();
+    onRefetch();
   }, [selectedTabId]);
 
   useEffect(() => {
@@ -124,14 +125,21 @@ const TaskSearchScreen = ({ navigation, route }: TaskSearchScreenProps) => {
     <CardTasks {...item} onItemPress={onItemPress} userRole={userRole} />
   );
 
-  const onRefresh = () => {
+  const onRefetch = () => {
     if (regionIDs && regionIDs?.length) {
       abort && abort();
       const ex = dispatch(
         refreshTasks({ idList: selectedTabId, regionID: regionIDs }),
       );
       abort = ex.abort;
+      ex.then(() => {
+        setRefreshing(false);
+      });
     }
+  };
+  const onRefresh = () => {
+    setRefreshing(true);
+    onRefetch();
   };
 
   const onEndReached = () => {
@@ -183,7 +191,7 @@ const TaskSearchScreen = ({ navigation, route }: TaskSearchScreenProps) => {
             keyExtractor={keyExtractor}
             style={styles.list}
             onRefresh={onRefresh}
-            refreshing={!!loadingList}
+            refreshing={refreshing}
             contentContainerStyle={[
               styles.listContainer,
               !data?.length && styles.emptyListContainer,
