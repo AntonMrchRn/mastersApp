@@ -30,7 +30,7 @@ type Comment = {
 
 type InitialState = {
   list: GetTaskResponse | undefined;
-  loadingList: boolean;
+  loadingList: number;
   errorList: Error | null;
   data?: Task[];
   tableNames: [];
