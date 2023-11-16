@@ -70,6 +70,7 @@ export const UploadBottomSheet = ({
         includeExif: true,
         multiple: true,
         maxFiles: 10,
+        compressVideoPreset: 'HighestQuality',
         ...(configApp.ios && { compressImageQuality: quality }),
       }),
     [UploadAction.TakePhotoMedia]: async () =>
@@ -79,7 +80,10 @@ export const UploadBottomSheet = ({
         ...(configApp.ios && { compressImageQuality: quality }),
       }),
     [UploadAction.TakeVideoMedia]: async () =>
-      await ImagePicker.openCamera({ mediaType: 'video' }),
+      await ImagePicker.openCamera({
+        mediaType: 'video',
+        compressVideoPreset: 'HighestQuality',
+      }),
     [UploadAction.TakeFromFiles]: async () =>
       await DocumentPicker.pick({
         type: configApp.android

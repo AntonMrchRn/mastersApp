@@ -21,7 +21,7 @@ const initialState: InitialState = {
   loadingSend: false,
   loadingCommentsPreview: false,
   loadingComments: false,
-  loadingList: false,
+  loadingList: 0,
   loadingEndReached: false,
   errorList: null,
   errorNames: null,
@@ -75,19 +75,19 @@ const taskSearch = createSlice({
 
     // обновить задачи
     builder.addCase(refreshMyTasks.pending, state => {
-      state.loadingList = true;
+      state.loadingList = state.loadingList + 1;
     });
     builder.addCase(
       refreshMyTasks.fulfilled,
       (state, { payload }: PayloadAction<InitialState['list']>) => {
         state.list = payload;
         state.data = payload?.tasks;
-        state.loadingList = false;
+        state.loadingList = state.loadingList - 1;
       },
     );
     builder.addCase(refreshMyTasks.rejected, (state, { payload }) => {
       state.errorList = payload as Error;
-      state.loadingList = false;
+      state.loadingList = state.loadingList - 1;
     });
 
     // получить комментарии
