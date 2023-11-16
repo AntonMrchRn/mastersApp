@@ -104,7 +104,7 @@ export const getBanner = ({
             type: 'success',
             icon: 'success',
             text: 'Денежные средства переведены вам на указанные в профиле реквизиты.\nДля завершения задачи загрузите чек об оплате',
-            buttonText: 'Загруть файл',
+            buttonText: 'Загрузить файл',
             onButtonPress: navigateToReport,
           };
         }
