@@ -129,6 +129,7 @@ export const useTaskCard = ({
   const initialTab = (
     tabId && +tabId <= 4 ? tabs?.[+tabId || 0] : tabs[0]
   ) as Tab;
+
   const [tab, setTab] = useState<Tab>(initialTab);
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [uploadLimitBannerVisible, setUploadLimitBannerVisible] =
@@ -261,12 +262,19 @@ export const useTaskCard = ({
    * личный коэффициент оплаты исполнителя
    */
   const serviceMultiplier = user?.serviceMultiplier || 1;
+  /**
+   * Самозанятый
+   */
   const isSelfEmployed = entityTypeID === 1;
   const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
   /**
    * Статус задачи
    */
   const statusID: StatusType | undefined = task?.statusID;
+  /**
+   * Сбер Свое дело
+   */
+  const isSberPayment = user?.isSberPayment;
   const isEstimateTabs =
     tab.label === TaskTab.ESTIMATE &&
     statusID === StatusType.ACTIVE &&
@@ -593,6 +601,14 @@ export const useTaskCard = ({
       });
   };
 
+  const navigateToReport = () => {
+    setTab({
+      id: 3,
+      label: TaskTab.REPORT,
+    });
+    onUploadModalVisible();
+  };
+
   const banner = getBanner({
     tab: tab.label,
     statusID,
@@ -604,6 +620,10 @@ export const useTaskCard = ({
     curator,
     cancelReason,
     isInvitedExecutor,
+    isInternalExecutor,
+    isSelfEmployed,
+    isSberPayment,
+    navigateToReport,
   });
 
   const onEstimateBannerPress = () => {

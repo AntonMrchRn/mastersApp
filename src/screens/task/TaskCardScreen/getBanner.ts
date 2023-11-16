@@ -14,6 +14,10 @@ export const getBanner = ({
   curator,
   cancelReason,
   isInvitedExecutor,
+  isInternalExecutor,
+  isSelfEmployed,
+  isSberPayment,
+  navigateToReport,
 }: {
   tab: TaskTab;
   statusID: StatusType | undefined;
@@ -25,6 +29,10 @@ export const getBanner = ({
   isCurator: boolean;
   cancelReason: string | undefined;
   isInvitedExecutor: boolean;
+  isInternalExecutor: boolean;
+  isSelfEmployed: boolean;
+  isSberPayment: boolean | undefined;
+  navigateToReport: () => void;
 }): BannerProps | null => {
   if (tab === TaskTab.DESCRIPTION) {
     switch (statusID) {
@@ -78,7 +86,9 @@ export const getBanner = ({
           title: 'Задача на проверке',
           type: 'info',
           icon: 'info',
-          text: 'Координатор проверяет выполненные услуги. После успешной проверки задача будет передана на оплату',
+          text: `Координатор проверяет выполненные услуги. После успешной проверки задача будет ${
+            isInternalExecutor ? 'считаться выполненной' : 'передана на оплату'
+          }`,
         };
       case StatusType.COMPLETED:
         return {
@@ -88,12 +98,17 @@ export const getBanner = ({
           text: 'В ближайшее время оплата поступит на вашу банковскую карту/счет',
         };
       case StatusType.PAID:
-        return {
-          title: 'Оплата произведена',
-          type: 'success',
-          icon: 'success',
-          text: 'Денежные средства переведены вам на указанные в профиле реквизиты',
-        };
+        if (!isInternalExecutor && isSelfEmployed && !isSberPayment) {
+          return {
+            title: 'Оплата произведена',
+            type: 'success',
+            icon: 'success',
+            text: 'Денежные средства переведены вам на указанные в профиле реквизиты.\nДля завершения задачи загрузите чек об оплате',
+            buttonText: 'Загруть файл',
+            onButtonPress: navigateToReport,
+          };
+        }
+        return null;
       case StatusType.CANCELLED_BY_CUSTOMER:
       case StatusType.CANCELLED_BY_EXECUTOR:
         return {
