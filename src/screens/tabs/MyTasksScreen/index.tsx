@@ -40,7 +40,7 @@ type MyTasksScreenProps = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, BottomTabName.MyTasks>,
   StackScreenProps<AppStackParamList>
 >;
-
+let abort: () => void | undefined;
 const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -78,8 +78,11 @@ const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
     <CardTasks {...item} onItemPress={onItemPress} userRole={userRole} />
   );
 
-  const onRefresh = () =>
-    dispatch(refreshMyTasks({ idList: selectedTabID, regionID }));
+  const onRefresh = () => {
+    abort && abort();
+    const ex = dispatch(refreshMyTasks({ idList: selectedTabID, regionID }));
+    abort = ex.abort;
+  };
 
   const cachedOnEndReached = useCallback(() => {
     !loadingList && data.length && data.length > 4
@@ -95,14 +98,16 @@ const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
 
   const onChangeTab = (item: TabItem) => {
     if (item.id !== selectedTabID) {
+      abort && abort();
       dispatch(clearList());
-      dispatch(
+      const ex = dispatch(
         refreshMyTasks({
           idList: item.id,
           fromTask: 0,
           regionID,
         }),
       );
+      abort = ex.abort;
       setSelectedTabID(item.id);
     }
   };
@@ -144,7 +149,7 @@ const MyTasksScreen = ({ navigation }: MyTasksScreenProps) => {
             keyExtractor={keyExtractor}
             style={styles.list}
             onRefresh={onRefresh}
-            refreshing={loadingList}
+            refreshing={!!loadingList}
             contentContainerStyle={[
               styles.listContainer,
               !data?.length && styles.emptyListContainer,
