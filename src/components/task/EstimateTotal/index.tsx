@@ -34,13 +34,13 @@ export const EstimateTotal = ({
   const onTooltipOpen = () => setIsTooltipVisible(true);
   const onTooltipClose = () => setIsTooltipVisible(false);
 
-  const allSum = materialsSum + servicesSum;
   const allServiceSumMultiplierPure = serviceMultiplier
     ? servicesSum * serviceMultiplier
     : servicesSum;
   const allServiceSumMultiplier = separateThousands(
     allServiceSumMultiplierPure,
   );
+  const allSum = materialsSum + allServiceSumMultiplierPure;
   const allCurrentSum = separateThousands(allSum);
   const NDSSum = separateThousands(allSum / 6).replace('.', ',');
   return (
