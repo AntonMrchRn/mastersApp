@@ -119,6 +119,10 @@ type Car = {
 };
 type Task = {
   ID?: number;
+  /**
+   * коэффициент оплаты исполнителя после принятия задачи
+   */
+  serviceMultiplier?: number;
   refuseReason?: string;
   budget?: number;
   car?: Car;

@@ -264,10 +264,6 @@ export const useTaskCard = ({
 
   const entityTypeID = user?.entityTypeID;
   /**
-   * личный коэффициент оплаты исполнителя
-   */
-  const serviceMultiplier = user?.serviceMultiplier || 1;
-  /**
    * Самозанятый
    */
   const isSelfEmployed = entityTypeID === 1;
@@ -284,6 +280,13 @@ export const useTaskCard = ({
     tab.label === TaskTab.ESTIMATE &&
     statusID === StatusType.ACTIVE &&
     !!userOffersData.length;
+  /**
+   * личный коэффициент оплаты исполнителя
+   */
+  const serviceMultiplier =
+    (statusID === StatusType.ACTIVE
+      ? user?.serviceMultiplier
+      : task?.serviceMultiplier) || 1;
 
   useEffect(() => {
     !visible && setVisible(true);
