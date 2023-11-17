@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { FlatList, ViewToken } from 'react-native';
+import { FlatList, ScrollView, ViewToken } from 'react-native';
 import {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -28,6 +28,7 @@ export const useCandidateEstimates = (
   const dispatch = useAppDispatch();
   const scrollX = useSharedValue<number>(0);
   const ref = useRef<FlatList>(null);
+  const scrollViewRef = useRef<ScrollView>(null);
 
   const [activeIndex, setActiveIndex] = useState<number | null | undefined>(0);
 
@@ -118,6 +119,7 @@ export const useCandidateEstimates = (
   const onViewRef = useRef(
     ({ viewableItems }: { viewableItems: Array<ViewToken> }) => {
       setActiveIndex(viewableItems[0]?.index);
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0 });
     },
   );
   const onScroll = useAnimatedScrollHandler({
@@ -143,5 +145,6 @@ export const useCandidateEstimates = (
     activeIndex,
     onRefresh,
     winnerOffer,
+    scrollViewRef,
   };
 };

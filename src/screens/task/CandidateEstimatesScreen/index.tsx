@@ -1,9 +1,9 @@
 import React, { useRef } from 'react';
 import {
   ActivityIndicator,
+  Pressable,
   RefreshControl,
   ScrollView,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import { ShadowedView } from 'react-native-fast-shadow';
@@ -44,6 +44,7 @@ export const CandidateEstimatesScreen = ({
     onViewRef,
     activeIndex,
     onRefresh,
+    scrollViewRef,
     winnerOffer,
   } = useCandidateEstimates(taskId, isResults, userID);
 
@@ -65,10 +66,10 @@ export const CandidateEstimatesScreen = ({
     />
   );
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
-
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
       <ScrollView
+        ref={scrollViewRef}
         nestedScrollEnabled
         style={styles.content}
         showsVerticalScrollIndicator={false}
@@ -84,7 +85,7 @@ export const CandidateEstimatesScreen = ({
             <Spacer />
             <View style={styles.arrows}>
               <ShadowedView style={[styles.arrow, styles.shadow]}>
-                <TouchableOpacity
+                <Pressable
                   style={styles.arrowBtn}
                   disabled={activeIndex === 0}
                   onPress={() => scrollTo('left')}
@@ -96,10 +97,10 @@ export const CandidateEstimatesScreen = ({
                         : theme.icons.basic
                     }
                   />
-                </TouchableOpacity>
+                </Pressable>
               </ShadowedView>
               <ShadowedView style={[styles.arrow, styles.shadow]}>
-                <TouchableOpacity
+                <Pressable
                   style={styles.arrowBtn}
                   disabled={activeIndex === offers.length - 1}
                   onPress={() => scrollTo('right')}
@@ -111,7 +112,7 @@ export const CandidateEstimatesScreen = ({
                         : theme.icons.basic
                     }
                   />
-                </TouchableOpacity>
+                </Pressable>
               </ShadowedView>
             </View>
           </>
