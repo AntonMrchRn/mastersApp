@@ -44,6 +44,7 @@ export const CandidateEstimatesScreen = ({
     onViewRef,
     activeIndex,
     onRefresh,
+    scrollViewRef,
     winnerOffer,
   } = useCandidateEstimates(taskId, isResults, userID);
 
@@ -65,10 +66,10 @@ export const CandidateEstimatesScreen = ({
     />
   );
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
-
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
       <ScrollView
+        ref={scrollViewRef}
         nestedScrollEnabled
         style={styles.content}
         showsVerticalScrollIndicator={false}
