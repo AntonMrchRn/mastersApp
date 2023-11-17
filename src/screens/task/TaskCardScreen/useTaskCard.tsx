@@ -151,6 +151,7 @@ export const useTaskCard = ({
     inappropriateRegionBannerVisible,
     setInappropriateRegionBannerVisible,
   ] = useState<boolean>(false);
+  const [visible, setVisible] = useState<boolean>(true);
   const [submissionModalVisible, setSubmissionModalVisible] = useState(false);
   const [currentEstimateTab, setCurrentEstimateTab] = useState<EstimateTab>(
     EstimateTab.TASK_ESTIMATE,
@@ -206,6 +207,10 @@ export const useTaskCard = ({
   );
 
   const userOffersData = getUserOffersQuery.data?.offers || [];
+
+  const unVisible = () => {
+    setVisible(false);
+  };
 
   useEffect(() => {
     if (tabId && initialTab !== tab) {
@@ -279,6 +284,10 @@ export const useTaskCard = ({
     tab.label === TaskTab.ESTIMATE &&
     statusID === StatusType.ACTIVE &&
     !!userOffersData.length;
+
+  useEffect(() => {
+    !visible && setVisible(true);
+  }, [statusID]);
 
   const getWithNDS = () => {
     //показываем НДС если правовая форма получателя ИП или Юр. лицо и он является Плательщиком НДС
@@ -606,6 +615,7 @@ export const useTaskCard = ({
       id: 3,
       label: TaskTab.REPORT,
     });
+    unVisible();
     onUploadModalVisible();
   };
 
@@ -624,6 +634,8 @@ export const useTaskCard = ({
     isSelfEmployed,
     isSberPayment,
     navigateToReport,
+    visible,
+    unVisible,
   });
 
   const onEstimateBannerPress = () => {
