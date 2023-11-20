@@ -8,6 +8,7 @@ import { RoleType } from '@/types/task';
 
 export const useCheckLogin = () => {
   const { isAuth, user } = useAppSelector(selectAuth);
+
   const isExecutor =
     user &&
     [RoleType.EXTERNAL_EXECUTOR, RoleType.INTERNAL_EXECUTOR].includes(

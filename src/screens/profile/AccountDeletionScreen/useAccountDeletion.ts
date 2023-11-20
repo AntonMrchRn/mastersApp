@@ -12,7 +12,10 @@ import { useToast } from 'rn-ui-kit';
 import { storageMMKV } from '@/mmkv/storage';
 import styles from '@/screens/tabs/ProfileScreen/style';
 import { useAppDispatch } from '@/store';
-import { useDeleteAccountMutation } from '@/store/api/user';
+import {
+  useDeleteAccountMutation,
+  useDeleteTokenMutation,
+} from '@/store/api/user';
 import { logOut } from '@/store/slices/auth/actions';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import {
@@ -29,6 +32,7 @@ const useAccountDeletion = (
   const insets = useSafeAreaInsets();
   const toast = useToast();
   const dispatch = useAppDispatch();
+  const [deleteToken] = useDeleteTokenMutation();
 
   const [isBannerVisible, setIsBannerVisible] = useState<boolean>(false);
   const [deleteAccount, { isSuccess, isError, error: deletionError }] =
@@ -100,6 +104,7 @@ const useAccountDeletion = (
         if (params.hasActiveTasks && !isBannerVisible) {
           return onBanner();
         }
+        await deleteToken();
         await deleteAccount({
           login: credentials.username,
           password,
