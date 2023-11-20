@@ -94,7 +94,7 @@ export const CandidateItem = ({
             />
             {service.materials?.map(material => (
               <Item
-                key={material.name}
+                key={material.ID}
                 measure={material?.measure?.toLowerCase()}
                 name={material?.name || ''}
                 price={material?.price || 0}

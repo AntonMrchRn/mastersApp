@@ -23,7 +23,7 @@ const App = () => {
   const config = {
     screens: {
       TaskCard: {
-        path: 'TaskCard/:taskId/:tabId',
+        path: 'TaskCard/:taskId/:tabId?',
       },
       AppNavigator: {
         screens: {
