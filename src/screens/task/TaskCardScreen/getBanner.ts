@@ -14,6 +14,12 @@ export const getBanner = ({
   curator,
   cancelReason,
   isInvitedExecutor,
+  isInternalExecutor,
+  isSelfEmployed,
+  isSberPayment,
+  navigateToReport,
+  visible,
+  unVisible,
 }: {
   tab: TaskTab;
   statusID: StatusType | undefined;
@@ -25,8 +31,14 @@ export const getBanner = ({
   isCurator: boolean;
   cancelReason: string | undefined;
   isInvitedExecutor: boolean;
+  isInternalExecutor: boolean;
+  isSelfEmployed: boolean;
+  isSberPayment: boolean | undefined;
+  navigateToReport: () => void;
+  visible: boolean;
+  unVisible: () => void;
 }): BannerProps | null => {
-  if (tab === TaskTab.DESCRIPTION) {
+  if (tab === TaskTab.DESCRIPTION && visible) {
     switch (statusID) {
       case StatusType.ACTIVE:
         if (outlayStatusID === OutlayStatusType.CANCELLED) {
@@ -35,6 +47,7 @@ export const getBanner = ({
             type: 'error',
             icon: 'alert',
             text: 'К сожалению, теперь вы не можете стать исполнителем этой задачи',
+            onClosePress: unVisible,
           };
         }
         if (isContractor) {
@@ -44,6 +57,7 @@ export const getBanner = ({
             text: `Куратор ${
               executor?.curatorName + ' ' + executor?.curatorSname
             } выбрал вас в качестве подрядчика`,
+            onClosePress: unVisible,
           };
         }
         if (isInvitedExecutor) {
@@ -51,6 +65,7 @@ export const getBanner = ({
             type: 'info',
             icon: 'alert',
             text: 'Вас выбрали в качестве кандидата на роль исполнителя',
+            onClosePress: unVisible,
           };
         }
         if (isCurator && curator && !curator.isConfirm) {
@@ -58,6 +73,7 @@ export const getBanner = ({
             type: 'info',
             icon: 'alert',
             text: 'Вас выбрали в качестве кандидата на роль куратора',
+            onClosePress: unVisible,
           };
         }
         return null;
@@ -70,6 +86,7 @@ export const getBanner = ({
             text: 'После проверки задача возвращена на доработку. Уточнить подробности у координатора можно в комментариях',
             buttonText: 'Написать координатору',
             onButtonPress: navigateToChat,
+            onClosePress: unVisible,
           };
         }
         return null;
@@ -78,7 +95,10 @@ export const getBanner = ({
           title: 'Задача на проверке',
           type: 'info',
           icon: 'info',
-          text: 'Координатор проверяет выполненные услуги. После успешной проверки задача будет передана на оплату',
+          text: `Координатор проверяет выполненные услуги. После успешной проверки задача будет ${
+            isInternalExecutor ? 'считаться выполненной' : 'передана на оплату'
+          }`,
+          onClosePress: unVisible,
         };
       case StatusType.COMPLETED:
         return {
@@ -86,14 +106,21 @@ export const getBanner = ({
           type: 'success',
           icon: 'success',
           text: 'В ближайшее время оплата поступит на вашу банковскую карту/счет',
+          onClosePress: unVisible,
         };
       case StatusType.PAID:
-        return {
-          title: 'Оплата произведена',
-          type: 'success',
-          icon: 'success',
-          text: 'Денежные средства переведены вам на указанные в профиле реквизиты',
-        };
+        if (!isInternalExecutor && isSelfEmployed && !isSberPayment) {
+          return {
+            title: 'Оплата произведена',
+            type: 'success',
+            icon: 'success',
+            text: 'Денежные средства переведены вам на указанные в профиле реквизиты.\nДля завершения задачи загрузите чек об оплате',
+            buttonText: 'Загрузить файл',
+            onButtonPress: navigateToReport,
+            onClosePress: unVisible,
+          };
+        }
+        return null;
       case StatusType.CANCELLED_BY_CUSTOMER:
       case StatusType.CANCELLED_BY_EXECUTOR:
         return {
@@ -103,6 +130,7 @@ export const getBanner = ({
           text: cancelReason
             ? `Координатор указал причину «${cancelReason}»`
             : 'По инициативе координатора выполнение задачи прекращено',
+          onClosePress: unVisible,
         };
       default:
         return null;

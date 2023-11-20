@@ -129,6 +129,7 @@ export const useTaskCard = ({
   const initialTab = (
     tabId && +tabId <= 4 ? tabs?.[+tabId || 0] : tabs[0]
   ) as Tab;
+
   const [tab, setTab] = useState<Tab>(initialTab);
   const [budgetModalVisible, setBudgetModalVisible] = useState(false);
   const [uploadLimitBannerVisible, setUploadLimitBannerVisible] =
@@ -150,6 +151,7 @@ export const useTaskCard = ({
     inappropriateRegionBannerVisible,
     setInappropriateRegionBannerVisible,
   ] = useState<boolean>(false);
+  const [visible, setVisible] = useState<boolean>(true);
   const [submissionModalVisible, setSubmissionModalVisible] = useState(false);
   const [currentEstimateTab, setCurrentEstimateTab] = useState<EstimateTab>(
     EstimateTab.TASK_ESTIMATE,
@@ -206,6 +208,10 @@ export const useTaskCard = ({
 
   const userOffersData = getUserOffersQuery.data?.offers || [];
 
+  const unVisible = () => {
+    setVisible(false);
+  };
+
   useEffect(() => {
     if (tabId && initialTab !== tab) {
       setTab(initialTab);
@@ -258,7 +264,7 @@ export const useTaskCard = ({
 
   const entityTypeID = user?.entityTypeID;
   /**
-   * личный коэффициент оплаты исполнителя
+   * Самозанятый
    */
   const isSelfEmployed = entityTypeID === 1;
   const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
@@ -266,14 +272,25 @@ export const useTaskCard = ({
    * Статус задачи
    */
   const statusID: StatusType | undefined = task?.statusID;
+  /**
+   * Сбер Свое дело
+   */
+  const isSberPayment = user?.isSberPayment;
   const isEstimateTabs =
     tab.label === TaskTab.ESTIMATE &&
     statusID === StatusType.ACTIVE &&
     !!userOffersData.length;
+  /**
+   * личный коэффициент оплаты исполнителя
+   */
   const serviceMultiplier =
     (statusID === StatusType.ACTIVE
       ? user?.serviceMultiplier
       : task?.serviceMultiplier) || 1;
+
+  useEffect(() => {
+    !visible && setVisible(true);
+  }, [statusID]);
 
   const getWithNDS = () => {
     //показываем НДС если правовая форма получателя ИП или Юр. лицо и он является Плательщиком НДС
@@ -596,6 +613,15 @@ export const useTaskCard = ({
       });
   };
 
+  const navigateToReport = () => {
+    setTab({
+      id: 3,
+      label: TaskTab.REPORT,
+    });
+    unVisible();
+    onUploadModalVisible();
+  };
+
   const banner = getBanner({
     tab: tab.label,
     statusID,
@@ -607,6 +633,12 @@ export const useTaskCard = ({
     curator,
     cancelReason,
     isInvitedExecutor,
+    isInternalExecutor,
+    isSelfEmployed,
+    isSberPayment,
+    navigateToReport,
+    visible,
+    unVisible,
   });
 
   const onEstimateBannerPress = () => {
