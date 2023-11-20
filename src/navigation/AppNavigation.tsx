@@ -153,7 +153,7 @@ export const AppNavigation = () => {
     checkLogin();
     setTimeout(() => {
       setIsLoad(true);
-    }, 1000);
+    }, 1500);
   }, []);
   const headerCommentsChatScreen = (props: StackHeaderProps) => (
     <Header {...props} title="Чат" />
