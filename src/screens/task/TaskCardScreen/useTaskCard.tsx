@@ -260,7 +260,6 @@ export const useTaskCard = ({
   /**
    * личный коэффициент оплаты исполнителя
    */
-  const serviceMultiplier = user?.serviceMultiplier || 1;
   const isSelfEmployed = entityTypeID === 1;
   const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
   /**
@@ -271,6 +270,10 @@ export const useTaskCard = ({
     tab.label === TaskTab.ESTIMATE &&
     statusID === StatusType.ACTIVE &&
     !!userOffersData.length;
+  const serviceMultiplier =
+    (statusID === StatusType.ACTIVE
+      ? user?.serviceMultiplier
+      : task?.serviceMultiplier) || 1;
 
   const getWithNDS = () => {
     //показываем НДС если правовая форма получателя ИП или Юр. лицо и он является Плательщиком НДС

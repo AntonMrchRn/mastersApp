@@ -24,14 +24,14 @@ export const Item = ({ name, price, count, sum, measure }: ItemProps) => {
   const currentMeasure =
     measure === 'час'
       ? plural(count, '%d час', '%d часа', '%d часов')
-      : `${separateThousands(count)} ${measure || ''}`;
+      : `${count} ${measure || ''}`;
   const items = [
     {
-      text: `${separateThousands(price)} ₽ за ${currentMeasure}`,
+      text: `${separateThousands(price)} ₽ за 1 ${measure}`,
       icon: <PriceIcon />,
     },
     {
-      text: `${separateThousands(count)} ${currentMeasure}`,
+      text: `${currentMeasure}`,
       icon: <CubeIcon />,
     },
     {

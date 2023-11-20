@@ -9,10 +9,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   chipsContainer: {
-    flexDirection: 'row',
     gap: 8,
-    flexWrap: 'wrap',
     marginBottom: 12,
+    paddingHorizontal: 20,
   },
   btn: {
     height: 48,
@@ -20,6 +19,15 @@ const styles = StyleSheet.create({
   },
   chipsLabel: {
     maxWidth: deviceWidth * 0.78,
+  },
+  ph0: {
+    paddingHorizontal: 0,
+  },
+  ph20: {
+    paddingHorizontal: 20,
+  },
+  pr20: {
+    paddingRight: 20,
   },
 });
 

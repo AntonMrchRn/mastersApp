@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import { ListRenderItemInfo, View } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
@@ -101,27 +101,34 @@ const RegionsModal = forwardRef(
     };
 
     const renderItem = ({ item: region }: ListRenderItemInfo<Region>) => (
-      <SelectableModalItem
-        key={region.ID}
-        text={region.name}
-        onSelect={() => onSelectValue(region)}
-        isChecked={isChecked(region.ID)}
-      />
+      <View style={styles.ph20}>
+        <SelectableModalItem
+          text={region.name}
+          onSelect={() => onSelectValue(region)}
+          isChecked={isChecked(region.ID)}
+        />
+      </View>
     );
 
     const ListHeaderComponent = (
-      <>
-        <Input
-          value={filter}
-          variant={'text'}
-          placeholder={'Поиск'}
-          iconLeft={<SearchIcon />}
-          onChangeText={onChangeText}
-          onClear={() => setFilter('')}
-        />
+      <View>
+        <View style={styles.ph20}>
+          <Input
+            value={filter}
+            variant={'text'}
+            placeholder={'Поиск'}
+            iconLeft={<SearchIcon />}
+            onChangeText={onChangeText}
+            onClear={() => setFilter('')}
+          />
+        </View>
         <Spacer size="xl" />
         {!!selectedRegions?.length && (
-          <View style={styles.chipsContainer}>
+          <ScrollView
+            contentContainerStyle={styles.chipsContainer}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          >
             {selectedRegions.filter(filterData).map(region => (
               <Chips
                 selected
@@ -140,9 +147,9 @@ const RegionsModal = forwardRef(
                 }}
               />
             ))}
-          </View>
+          </ScrollView>
         )}
-      </>
+      </View>
     );
 
     return (
@@ -153,6 +160,8 @@ const RegionsModal = forwardRef(
         titleStyle={styles.modalTitle}
         closeIconPress={onCloseHandler}
         onBackdropPress={onCloseHandler}
+        style={styles.ph0}
+        closeIconStyle={styles.pr20}
       >
         <>
           <FlatList
@@ -164,16 +173,18 @@ const RegionsModal = forwardRef(
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={ListHeaderComponent}
           />
-          <Button
-            label="Выбрать"
-            onPress={onSelect}
-            isPending={isLoading}
-            style={[
-              styles.btn,
-              { marginBottom: 12 + (configApp.android ? 15 : insets.bottom) },
-            ]}
-            disabled={!selectedRegions.length || !isDirty}
-          />
+          <View style={styles.ph20}>
+            <Button
+              label="Выбрать"
+              onPress={onSelect}
+              isPending={isLoading}
+              style={[
+                styles.btn,
+                { marginBottom: 12 + (configApp.android ? 15 : insets.bottom) },
+              ]}
+              disabled={!selectedRegions.length || !isDirty}
+            />
+          </View>
         </>
       </BottomSheetModal>
     );

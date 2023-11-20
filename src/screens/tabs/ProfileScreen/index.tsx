@@ -95,9 +95,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ route }) => {
         ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.content}
-        keyboardShouldPersistTaps={
-          activeTab.label === ProfileTab.Activity ? 'handled' : undefined
-        }
+        keyboardShouldPersistTaps="handled"
       >
         <View style={styles.wrapper}>
           <View style={styles.titleContainer}>
