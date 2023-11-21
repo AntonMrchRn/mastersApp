@@ -48,6 +48,7 @@ type TaskCardDescriptionProps = {
   statusID: StatusType | undefined;
   navigateToContractors: () => void;
   coordinator: Coordinator | undefined;
+  contractorsInvitedByCurator: Executor[] | [];
 };
 
 export const TaskCardDescription = ({
@@ -67,12 +68,17 @@ export const TaskCardDescription = ({
   isInternalExecutor,
   isConfirmedCurator,
   navigateToContractors,
+  contractorsInvitedByCurator,
 }: TaskCardDescriptionProps) => {
   const theme = useTheme();
   const toast = useToast();
 
   const [deleteInvitation, { isLoading, isError, error }] =
     useDeleteInvitationMutation();
+
+  const showContractorsInvitationButton = contractorsInvitedByCurator.every(
+    contractor => !contractor.isConfirm,
+  );
 
   useEffect(() => {
     if (isError) {
@@ -203,16 +209,13 @@ export const TaskCardDescription = ({
               </View>
             </View>
           )}
-          {!isLoading && executors.length ? (
+          {showContractorsInvitationButton && (
             <Button
-              label="Изменить выбор"
-              size="S"
-              style={styles.mt16}
-              onPress={navigateToContractors}
-            />
-          ) : (
-            <Button
-              label="Пригласить"
+              label={
+                !isLoading && contractorsInvitedByCurator.length
+                  ? 'Изменить выбор'
+                  : 'Пригласить'
+              }
               size="S"
               style={styles.mt16}
               onPress={navigateToContractors}

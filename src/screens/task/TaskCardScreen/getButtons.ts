@@ -29,7 +29,8 @@ export const getButtons = ({
   onUploadModalVisible,
   onBudgetModalVisible,
   isConfirmedContractor,
-  isRefusedInvitedMember,
+  isRefusedInvitedCurator,
+  isRefusedInvitedExecutor,
   onOpenCancelModalVisible,
   onSubmissionModalVisible,
   onApproveEstimateChanges,
@@ -81,7 +82,8 @@ export const getButtons = ({
   onSubmissionModalVisible: (isSubmissionByCurator?: boolean) => void;
   onApproveEstimateChanges: () => void;
   onSendEstimateForApproval: () => void;
-  isRefusedInvitedMember: boolean;
+  isRefusedInvitedCurator: boolean;
+  isRefusedInvitedExecutor: boolean;
   onCancelTask: (refuseReason?: string) => void;
 }): TaskCardBottomButton[] => {
   switch (subsetID) {
@@ -933,7 +935,7 @@ export const getButtons = ({
                 ];
               }
               // приглашенный координатором куратор, который не отзывал смету
-              if (isInvitedCurator && !isRefusedInvitedMember) {
+              if (isInvitedCurator && !isRefusedInvitedCurator) {
                 return [
                   {
                     label: 'Подать смету',
@@ -941,15 +943,15 @@ export const getButtons = ({
                   } as TaskCardBottomButton,
                 ];
               }
-              // куратор/подрядчик/приглашенный координатором исполнитель/задача без участия куратора
+              // подрядчик/приглашенный координатором исполнитель/приглашенный координатором, но откавшийся исполнитель/задача без участия куратора
               if (
-                isCurator ||
                 isContractor ||
-                (isInvitedExecutor && !isRefusedInvitedMember) ||
-                (!isCuratorAllowedTask && !isRefusedInvitedMember)
+                isInvitedExecutor ||
+                isRefusedInvitedExecutor ||
+                !isCuratorAllowedTask
               ) {
                 return [
-                  ...(!isCurator && !isConfirmedContractor
+                  ...(!isConfirmedContractor
                     ? [
                         {
                           label: isContractor
@@ -968,9 +970,7 @@ export const getButtons = ({
                         {
                           label: 'Отклонить приглашение',
                           variant: 'outlineDanger',
-                          onPress: isContractor
-                            ? onOpenCancelModalVisible
-                            : onCancelTask,
+                          onPress: onOpenCancelModalVisible,
                         } as TaskCardBottomButton,
                       ]
                     : []),
@@ -984,8 +984,8 @@ export const getButtons = ({
                     ? onTaskSubmission
                     : onSubmissionModalVisible,
                 } as TaskCardBottomButton,
-                // задача с участием куратора, который её ещё не принял (или принял, но отказался) или с приглашенным кандидатом, который отказался (отозвал смету)
-                ...(isTaskWithUnconfirmedCurator || isRefusedInvitedMember
+                // задача с участием куратора, который её ещё не принял (или принял, но отказался)
+                ...(isTaskWithUnconfirmedCurator || isRefusedInvitedCurator
                   ? [
                       {
                         label: 'Подать смету как куратор',
@@ -999,7 +999,6 @@ export const getButtons = ({
               return [];
           }
         case StatusType.WORK: {
-          // TODO: Лоты work
           switch (tab) {
             case TaskTab.DESCRIPTION:
               return [
@@ -1020,13 +1019,14 @@ export const getButtons = ({
               ];
             case TaskTab.ESTIMATE:
               return [
-                ...((outlayStatusID === OutlayStatusType.PENDING &&
+                ...(!isContractor &&
+                ((outlayStatusID === OutlayStatusType.PENDING &&
                   !isLastChangesFromCoordinator) ||
-                (outlayStatusID &&
-                  [
-                    OutlayStatusType.RETURNED,
-                    OutlayStatusType.MATCHING,
-                  ].includes(outlayStatusID))
+                  (outlayStatusID &&
+                    [
+                      OutlayStatusType.RETURNED,
+                      OutlayStatusType.MATCHING,
+                    ].includes(outlayStatusID)))
                   ? [
                       {
                         label: 'Отправить смету на согласование',
@@ -1037,19 +1037,8 @@ export const getButtons = ({
                     ]
                   : []),
 
-                // Если последние изменения были только от координатора
-                ...(isLastChangesFromCoordinator &&
-                outlayStatusID === OutlayStatusType.PENDING
-                  ? [
-                      {
-                        label: 'Согласовать изменения сметы',
-                        variant: 'accent',
-                        onPress: onApproveEstimateChanges,
-                      } as TaskCardBottomButton,
-                    ]
-                  : []),
-
-                ...(!isCurator && outlayStatusID === OutlayStatusType.READY
+                ...(isContractor ||
+                (isExecutor && outlayStatusID === OutlayStatusType.READY)
                   ? [
                       {
                         label: 'Сдать работы',
@@ -1087,11 +1076,15 @@ export const getButtons = ({
                         } as TaskCardBottomButton,
                       ]
                     : [
-                        {
-                          label: 'Сдать работы',
-                          variant: 'accent',
-                          onPress: onWorkDelivery,
-                        } as TaskCardBottomButton,
+                        ...(!isCurator
+                          ? [
+                              {
+                                label: 'Сдать работы',
+                                variant: 'accent',
+                                onPress: onWorkDelivery,
+                              } as TaskCardBottomButton,
+                            ]
+                          : []),
                         {
                           label: 'Загрузить еще файлы',
                           variant: 'outlineAccent',
