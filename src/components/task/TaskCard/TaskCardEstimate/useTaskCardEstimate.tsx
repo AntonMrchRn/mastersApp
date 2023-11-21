@@ -159,7 +159,7 @@ export const useTaskCardEstimate = ({
   };
   const onPressService = () => {
     onEstimateSheetClose();
-    setTimeout(() => bsRef.current?.present(), 100);
+    setTimeout(() => bsRef.current?.present(), 500);
   };
   const onEdit = (serviceId: number, materialName?: string) =>
     navigation.navigate(AppScreenName.EstimateEdit, {
