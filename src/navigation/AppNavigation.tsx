@@ -148,7 +148,7 @@ export const AppNavigation = () => {
     checkLogin();
     setTimeout(() => {
       SplashScreen.hide();
-    }, 1700);
+    }, 2000);
   }, []);
 
   const headerCommentsChatScreen = (props: StackHeaderProps) => (
