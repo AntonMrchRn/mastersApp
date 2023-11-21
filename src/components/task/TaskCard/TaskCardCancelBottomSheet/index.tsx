@@ -93,7 +93,7 @@ export const TaskCardCancelBottomSheet = ({
             size="M"
             label="Отмена"
             variant="accent"
-            onPress={onCancel}
+            onPress={handleCancel}
           />
         </View>
       </FormProvider>

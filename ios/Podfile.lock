@@ -478,7 +478,7 @@ PODS:
   - react-native-mmkv (2.10.2):
     - MMKV (>= 1.2.13)
     - React-Core
-  - react-native-netinfo (9.5.0):
+  - react-native-netinfo (11.1.0):
     - React-Core
   - react-native-oksse (0.2.0):
     - React-Core
@@ -962,7 +962,7 @@ SPEC CHECKSUMS:
   react-native-image-resizer: 681f7607418b97c084ba2d0999b153b103040d8a
   react-native-keyboard-controller: 755721cc0f3fb08e10a882d0f92995bb7892bf48
   react-native-mmkv: 9ae7ca3977e8ef48dbf7f066974eb844c20b5fd7
-  react-native-netinfo: 48c5f79a84fbc3ba1d28a8b0d04adeda72885fa8
+  react-native-netinfo: 3aa5637c18834966e0c932de8ae1ae56fea20a97
   react-native-oksse: ad7d8dda81900a782d81694ce0e914478df36a9c
   react-native-pager-view: 02a5c4962530f7efc10dd51ee9cdabeff5e6c631
   react-native-safe-area-context: 2cd91d532de12acdb0a9cbc8d43ac72a8e4c897c
