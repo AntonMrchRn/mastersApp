@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import SplashScreen from 'react-native-lottie-splash-screen';
 
 import { NavigatorScreenParams } from '@react-navigation/native';
@@ -143,18 +143,14 @@ export const AppNavigation = () => {
     getInitialNotification();
   }, []);
   const { checkLogin, isAuth, isExecutor } = useCheckLogin();
-  const [isLoad, setIsLoad] = useState<boolean>(false);
-
-  useEffect(() => {
-    isLoad && SplashScreen.hide();
-  }, [isLoad]);
 
   useEffect(() => {
     checkLogin();
     setTimeout(() => {
-      setIsLoad(true);
-    }, 1500);
+      SplashScreen.hide();
+    }, 1700);
   }, []);
+
   const headerCommentsChatScreen = (props: StackHeaderProps) => (
     <Header {...props} title="Чат" />
   );
