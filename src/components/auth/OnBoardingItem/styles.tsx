@@ -51,6 +51,8 @@ export const styles = StyleSheet.create({
   btn: {
     paddingHorizontal: 12,
     minWidth: 120,
+    backgroundColor: 'transparent',
+    width: undefined,
   },
   labelBtn: {
     textAlign: 'center',

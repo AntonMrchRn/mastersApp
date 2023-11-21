@@ -9,7 +9,7 @@ import FirstResponse from '@/assets/icons/svg/onboarding/FirstResponse';
 import Lots from '@/assets/icons/svg/onboarding/Lots';
 import Rating from '@/assets/icons/svg/onboarding/Rating';
 import Team from '@/assets/icons/svg/onboarding/Team';
-import { OnBoardingItem } from '@/components/task/OnBoardingItem';
+import { OnBoardingItem } from '@/components/auth/OnBoardingItem';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
 
 import { styles } from './styles';

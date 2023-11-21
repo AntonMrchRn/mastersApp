@@ -41,16 +41,16 @@ export const OnBoardingItem: FC<onBoardItem> = ({
   };
 
   const getLabel = () => {
-    if (item?.id === 1) {
-      return 'Понятно';
+    switch (item?.id) {
+      case 1:
+        return 'Понятно';
+      case 2:
+        return 'Интересно';
+      case 3:
+        return 'Отлично';
+      default:
+        return 'Начать';
     }
-    if (item?.id === 2) {
-      return 'Интересно';
-    }
-    if (item?.id === 3) {
-      return 'Отлично';
-    }
-    return 'Начать';
   };
 
   const getCircularProgress = () => {
@@ -103,7 +103,7 @@ export const OnBoardingItem: FC<onBoardItem> = ({
           <Button
             hitSlop={hitSlop}
             label={getLabel()}
-            onPress={() => onPressBtn()}
+            onPress={onPressBtn}
             style={[styles.btn, isLast && styles.wrapBtnLast]}
             labelStyle={[styles.labelBtn, isLast && styles.labelBtnLast]}
           />
