@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
+import { taskCardsQueryKeys } from '@/constants/task';
 import { axiosInstance } from '@/services/axios/axiosInstance';
 import { RootState } from '@/store';
 import { GetTaskResponse } from '@/store/api/tasks/types';
@@ -96,7 +97,7 @@ const getMyTasks = createAsyncThunk<
     try {
       if (userID && idList && regionID) {
         const { data } = await axiosInstance.get(
-          `tasks/web?query=?${getEndpoint({
+          `tasks/web?query=${taskCardsQueryKeys}?${getEndpoint({
             idList,
             userID,
             numberOfPosts,
@@ -128,7 +129,7 @@ const refreshMyTasks = createAsyncThunk<
     try {
       if (userID && idList && regionID) {
         const { data } = await axiosInstance.get(
-          `tasks/web?query=?${getEndpoint({
+          `tasks/web?query=${taskCardsQueryKeys}?${getEndpoint({
             idList,
             userID,
             numberOfPosts,
