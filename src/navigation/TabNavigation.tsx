@@ -9,7 +9,6 @@ import Employees from '@/assets/icons/svg/tabBar/Employees';
 import Profile from '@/assets/icons/svg/tabBar/Profile';
 import TaskSearch from '@/assets/icons/svg/tabBar/TaskSearch';
 import { fonts } from '@/constants/fonts';
-import { configApp, deviceHeight } from '@/constants/platform';
 import MyTasksScreen from '@/screens/tabs/MyTasksScreen';
 import TaskSearchScreen from '@/screens/tabs/TaskSearchScreen';
 import { pushPermission } from '@/services/notifications/pushPermission';
@@ -34,12 +33,7 @@ const screenOptions = {
   tabBarLabelStyle: styles.label,
 };
 
-const checkSlipper =
-  deviceHeight < 680 ? { x: 20, y: -478 } : { x: 25, y: -520 };
-
-const payerTooltipCoords = configApp.android
-  ? checkSlipper
-  : { x: 24, y: -685 };
+const payerTooltipCoords = { x: -250, y: 100 };
 
 export enum BottomTabName {
   TaskSearch = 'TaskSearch',
