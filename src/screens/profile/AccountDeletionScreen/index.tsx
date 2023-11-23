@@ -15,7 +15,7 @@ import {
   AccountDeletionScreenRoute,
 } from '@/types/navigation';
 
-import styles from './style';
+import { styles } from './styles';
 
 const AccountDeletionScreen = ({
   route,
@@ -45,15 +45,17 @@ const AccountDeletionScreen = ({
         <DeletionInfoBlock text="Восстановить аккаунт можно в течении 6 месяцев через службу поддержки: info@mastera-service.ru" />
         <Spacer size="xxl" />
         <FormProvider {...methods}>
-          <ControlledInput
-            name="password"
-            maxLength={64}
-            variant="password"
-            placeholder="Пароль"
-            style={styles.input}
-            hint={errors.password?.message}
-            isError={!!errors.password?.message}
-          />
+          <View style={styles.inputWrapper}>
+            <ControlledInput
+              name="password"
+              maxLength={64}
+              variant="password"
+              placeholder="Пароль"
+              style={styles.input}
+              hint={errors.password?.message}
+              isError={!!errors.password?.message}
+            />
+          </View>
           <Spacer size="xl" />
           <Button
             label="Да, удалить"
