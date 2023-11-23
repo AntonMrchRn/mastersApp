@@ -27,7 +27,7 @@ const useChangePassword = (navigation: ChangePasswordScreenNavigationProp) => {
   const methods = useForm({
     defaultValues,
     resolver: yupResolver(changePasswordValidationSchema),
-    mode: 'onChange',
+    mode: 'onSubmit',
   });
   const {
     watch,

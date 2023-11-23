@@ -14,7 +14,7 @@ import styles from '@/screens/tabs/ProfileScreen/style';
 import { useAppDispatch } from '@/store';
 import { useDeleteAccountMutation } from '@/store/api/user';
 import { logOut } from '@/store/slices/auth/actions';
-import { AxiosQueryErrorResponse } from '@/types/error';
+import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
 import {
   AccountDeletionScreenNavigationProp,
   AccountDeletionScreenRoute,
@@ -44,7 +44,7 @@ const useAccountDeletion = (
 
   useEffect(() => {
     if (!isFocused && isBannerVisible) {
-      onBanner();
+      onBannerClose();
     }
 
     if (!isFocused && !!errors?.password?.message) {
@@ -54,6 +54,9 @@ const useAccountDeletion = (
 
   useEffect(() => {
     if (isError) {
+      if (error.code === ErrorCode.HAVE_TASK_IN_WORK) {
+        return onBannerOpen();
+      }
       toast.show({
         type: 'error',
         title: error.message,
@@ -75,7 +78,8 @@ const useAccountDeletion = (
   } = methods;
   const password = watch('password');
 
-  const onBanner = () => setIsBannerVisible(!isBannerVisible);
+  const onBannerOpen = () => setIsBannerVisible(true);
+  const onBannerClose = () => setIsBannerVisible(false);
 
   const onCopyEmail = () => {
     Clipboard.setString('info@mastera-service.ru');
@@ -97,8 +101,8 @@ const useAccountDeletion = (
             message: 'Неверный пароль, попробуйте ещё раз',
           });
         }
-        if (params.hasActiveTasks && !isBannerVisible) {
-          return onBanner();
+        if (params?.hasActiveTasks) {
+          return onBannerOpen();
         }
         await deleteAccount({
           login: credentials.username,
@@ -119,7 +123,7 @@ const useAccountDeletion = (
   return {
     errors,
     methods,
-    onBanner,
+    onBannerClose,
     onCopyEmail,
     isBannerVisible,
     onDelete: handleSubmit(onDelete),

@@ -1562,10 +1562,10 @@
     picocolors "^1.0.0"
     tslib "^2.6.0"
 
-"@react-native-async-storage/async-storage@^1.19.6":
-  version "1.19.6"
-  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.19.6.tgz#0f91666eb209b1f719ea245a33b88920c1fd6791"
-  integrity sha512-Qjd1HlEusQQtPyDTM7zpO2P3G2mYY+z5at/aqsVJLJpzytZ+8QT+jgDQmt6BVgZcwk/74jSrhDIdu2j3YCmoEg==
+"@react-native-async-storage/async-storage@^1.19.8":
+  version "1.19.8"
+  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.19.8.tgz#a29fc4f4aa5c85805f8b3edea84e19f797c59fdd"
+  integrity sha512-O25eaSbmH+LEmOobkpwf43bAGIkqE9YGzfWcirTszI90xk4ItaDWpgJsQx9LeAbeAKzVkn1h+Nq5Bo6I6q2oFA==
   dependencies:
     merge-options "^3.0.4"
 
@@ -6153,10 +6153,10 @@ react-freeze@^1.0.0:
   resolved "https://registry.yarnpkg.com/react-freeze/-/react-freeze-1.0.3.tgz#5e3ca90e682fed1d73a7cb50c2c7402b3e85618d"
   integrity sha512-ZnXwLQnGzrDpHBHiC56TXFXvmolPeMjTn1UOm610M4EXGzbEDR7oOIyS2ZiItgbs6eZc4oU/a0hpk8PrcKvv5g==
 
-react-hook-form@^7.47.0:
-  version "7.47.0"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.47.0.tgz#a42f07266bd297ddf1f914f08f4b5f9783262f31"
-  integrity sha512-F/TroLjTICipmHeFlMrLtNLceO2xr1jU3CyiNla5zdwsGUGu2UOxxR4UyJgLlhMwLW/Wzp4cpJ7CPfgJIeKdSg==
+react-hook-form@^7.48.2:
+  version "7.48.2"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.48.2.tgz#01150354d2be61412ff56a030b62a119283b9935"
+  integrity sha512-H0T2InFQb1hX7qKtDIZmvpU1Xfn/bdahWBN1fH19gSe4bBEqTfmlr7H3XWTaVtiK4/tpPaI1F3355GPMZYge+A==
 
 "react-is@^16.12.0 || ^17.0.0 || ^18.0.0", react-is@^18.0.0, react-is@^18.2.0:
   version "18.2.0"
@@ -6180,10 +6180,10 @@ react-native-animatable@1.3.3:
   dependencies:
     prop-types "^15.7.2"
 
-react-native-blob-util@^0.19.2:
-  version "0.19.2"
-  resolved "https://registry.yarnpkg.com/react-native-blob-util/-/react-native-blob-util-0.19.2.tgz#32f37557b24cf30d1b6aac9d81666a75617598ab"
-  integrity sha512-dU6Tq0SqdWpW5Csk64PrskmiYGn3HtaNsob8/PH2D1DjDZTvv2WjSyhgE+hqSgnxljkj4ZlNM73RxZBYrinQGA==
+react-native-blob-util@^0.19.4:
+  version "0.19.4"
+  resolved "https://registry.yarnpkg.com/react-native-blob-util/-/react-native-blob-util-0.19.4.tgz#32a872ca846a92f7e6a3b6bb9177b2d64fc4942e"
+  integrity sha512-qQ2l3ZmclxA8Ht9NyI4qVJ94j8R4wIUaNP40ZMGjDMXelzvk3tTBeuEYkx7a2R84TGpaXCpKDQmee7+x9Bmo7A==
   dependencies:
     base-64 "0.1.0"
     glob "^7.2.3"
@@ -6241,10 +6241,10 @@ react-native-gradle-plugin@^0.71.19:
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.19.tgz#3379e28341fcd189bc1f4691cefc84c1a4d7d232"
   integrity sha512-1dVk9NwhoyKHCSxcrM6vY6cxmojeATsBobDicX0ZKr7DgUF2cBQRTKsimQFvzH8XhOVXyH8p4HyDSZNIFI8OlQ==
 
-react-native-image-crop-picker@^0.40.1:
-  version "0.40.1"
-  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.40.1.tgz#3b619d7af5f870aa676d7d5b06a276343b817c0f"
-  integrity sha512-rs7W4jrisOiQtRip5WG0N4bxhT1hr5TWSA8Mo2OrlZgIhvTU9gdIw63hKw35rbwzVAzDkPXOBsR3ZolsTBxqww==
+react-native-image-crop-picker@^0.40.2:
+  version "0.40.2"
+  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.40.2.tgz#be9098435504b8a2083f7cad553dfeedc442a804"
+  integrity sha512-u9iceozX8985vtZV5ozLMfNuCDjtm00GivExSxKwZmwv2wZYyv30VJkKhVJffVYsujvIzMfSCaWJPBsb5nSfZg==
 
 react-native-iphone-x-helper@^1.0.3:
   version "1.3.1"
@@ -6680,9 +6680,9 @@ rimraf@~2.6.2:
   dependencies:
     glob "^7.1.3"
 
-"rn-ui-kit@git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#3.3.0":
-  version "3.3.0"
-  resolved "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#f042bf3a35129bce68379f6e9866ad4a27da0bb5"
+"rn-ui-kit@git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#3.3.3":
+  version "3.3.3"
+  resolved "git+https://git@devgit.apteka-aprel.ru/mobile/rn-ui-kit#b136558280e0082e67376a8e53e2abf6625bad17"
 
 run-applescript@^5.0.0:
   version "5.0.0"
