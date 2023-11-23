@@ -121,8 +121,9 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
       <SafeAreaView style={styles.container} edges={['bottom']}>
         <KeyboardAwareScrollView
           style={styles.ph20}
-          enableOnAndroid={true}
+          enableOnAndroid
           keyboardShouldPersistTaps="handled"
+          extraHeight={90}
         >
           <Tips
             type={'info'}
@@ -254,18 +255,18 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
             onChangeText={setComment}
           />
           <Spacer size={40} />
-        </KeyboardAwareScrollView>
-        <View style={styles.ph20}>
-          <View style={styles.bannerContainer}>
-            {banner && (
-              <Banner
-                type={'warning'}
-                icon={'alert'}
-                title={banner?.title}
-                text={banner?.text}
-                onClosePress={onClosePress}
-              />
-            )}
+          <View style={styles.ph20}>
+            <View style={styles.bannerContainer}>
+              {banner && (
+                <Banner
+                  type={'warning'}
+                  icon={'alert'}
+                  title={banner?.title}
+                  text={banner?.text}
+                  onClosePress={onClosePress}
+                />
+              )}
+            </View>
           </View>
           <Button
             isPending={isLoading}
@@ -274,7 +275,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
             onPress={onSubmit}
             style={styles.btn}
           />
-        </View>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </>
   );
