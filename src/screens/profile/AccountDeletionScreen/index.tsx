@@ -25,8 +25,14 @@ const AccountDeletionScreen = ({
   navigation: AccountDeletionScreenNavigationProp;
 }) => {
   const theme = useTheme();
-  const { methods, errors, onDelete, isBannerVisible, onBanner, onCopyEmail } =
-    useAccountDeletion(navigation, route);
+  const {
+    methods,
+    errors,
+    onDelete,
+    isBannerVisible,
+    onBannerClose,
+    onCopyEmail,
+  } = useAccountDeletion(navigation, route);
 
   return (
     <View style={styles.container}>
@@ -75,7 +81,7 @@ const AccountDeletionScreen = ({
             <Banner
               icon="alert"
               type="warning"
-              onClosePress={onBanner}
+              onClosePress={onBannerClose}
               onButtonPress={onCopyEmail}
               containerStyle={styles.banner}
               title="Завершите активные задачи"
