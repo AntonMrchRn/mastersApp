@@ -465,7 +465,7 @@ PODS:
   - React-jsinspector (0.71.14)
   - React-logger (0.71.14):
     - glog
-  - react-native-blob-util (0.19.2):
+  - react-native-blob-util (0.19.4):
     - React-Core
   - react-native-document-picker (9.0.1):
     - React-Core
@@ -572,7 +572,7 @@ PODS:
     - React-jsi (= 0.71.14)
     - React-logger (= 0.71.14)
     - React-perflogger (= 0.71.14)
-  - RNCAsyncStorage (1.19.6):
+  - RNCAsyncStorage (1.19.8):
     - React-Core
   - RNCClipboard (1.5.1):
     - React-Core
@@ -594,12 +594,12 @@ PODS:
   - RNGestureHandler (2.13.4):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - RNImageCropPicker (0.40.1):
+  - RNImageCropPicker (0.40.2):
     - React-Core
     - React-RCTImage
-    - RNImageCropPicker/QBImagePickerController (= 0.40.1)
+    - RNImageCropPicker/QBImagePickerController (= 0.40.2)
     - TOCropViewController
-  - RNImageCropPicker/QBImagePickerController (0.40.1):
+  - RNImageCropPicker/QBImagePickerController (0.40.2):
     - React-Core
     - React-RCTImage
     - TOCropViewController
@@ -951,7 +951,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 94cfc1788637ceaf8841ef1f69b10cc0d62baadc
   React-jsinspector: 7bf923954b4e035f494b01ac16633963412660d7
   React-logger: 655ff5db8bd922acfbe76a4983ffab048916343e
-  react-native-blob-util: c74e4ce87c76d244761c68623df78bf0d1638271
+  react-native-blob-util: 30a6c9fd067aadf9177e61a998f2c7efb670598d
   react-native-document-picker: 2b8f18667caee73a96708a82b284a4f40b30a156
   react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
   react-native-image-resizer: 681f7607418b97c084ba2d0999b153b103040d8a
@@ -975,14 +975,14 @@ SPEC CHECKSUMS:
   React-RCTVibration: 64e412b9ac684c4edc938fa1187135ada9af7faf
   React-runtimeexecutor: ffe826b7b1cfbc32a35ed5b64d5886c0ff75f501
   ReactCommon: 7f3dd5e98a9ec627c6b03d26c062bf37ea9fc888
-  RNCAsyncStorage: 191a99459b4a6d174cfe51579d34b5267201bbf3
+  RNCAsyncStorage: 687bb9e85dd3d45b966662440dcfc0cd962347e6
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNDeviceInfo: bf8a32acbcb875f568217285d1793b0e8588c974
   RNFBApp: b43d4829366a5065e17f9af3b03a0c4890eaeb85
   RNFBCrashlytics: 7456cc01ce08e6043dcfade9dbf5e28671887409
   RNFBMessaging: 1b55308131dc7e4cca6b22deb5067f1fdb55f768
   RNGestureHandler: 6e46dde1f87e5f018a54fe5d40cd0e0b942b49ee
-  RNImageCropPicker: 521d8ef2dcf0549f141dbf82d086c75e3a9fbe65
+  RNImageCropPicker: d9616a0cb9b72e8551ff94a7a5021fbd29050aa5
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
   RNPermissions: 4e3714e18afe7141d000beae3755e5b5fb2f5e05
   RNReanimated: be07c7ae209074d0e8a84cf38b7909457ac59a32
