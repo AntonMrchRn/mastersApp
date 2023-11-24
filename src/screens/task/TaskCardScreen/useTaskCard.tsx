@@ -161,12 +161,18 @@ export const useTaskCard = ({
   const isMessagesExist = !!useAppSelector(state => state.myTasks)
     .commentsPreview?.taskComment?.length;
 
-  const [patchTask] = usePatchTaskMutation();
+  const [patchTask, { isLoading: isPatchTaskLoading }] = usePatchTaskMutation();
   const [patchOffers] = usePatchOffersMutation();
   const [deleteOffer, deleteOffersMutation] = useDeleteOffersMutation();
-  const [patchITTaskMember] = usePatchITTaskMemberMutation();
+  const [
+    patchITTaskMember,
+    { isSuccess: isPatchITMemberSuccess, isLoading: isPatchITMemberLoading },
+  ] = usePatchITTaskMemberMutation();
   const [deleteITTaskMember] = useDeleteITTaskMemberMutation();
-  const [postITTaskMember] = usePostITTaskMemberMutation();
+  const [
+    postITTaskMember,
+    { isSuccess: isPostITMemberSuccess, isLoading: isPostITMemberLoading },
+  ] = usePostITTaskMemberMutation();
 
   const user = useGetUserQuery(userID).data;
   const getTaskHistory = useGetTaskHistoryQuery(taskId);
@@ -661,6 +667,16 @@ export const useTaskCard = ({
   const offerID = userOffersData?.[0]?.ID;
 
   const onTaskSubmission = async () => {
+    if (
+      isPatchTaskLoading ||
+      isPatchITMemberLoading ||
+      isPostITMemberLoading ||
+      isPostITMemberSuccess ||
+      isPatchITMemberSuccess
+    ) {
+      return;
+    }
+
     if (subsetID === TaskType.IT_AUCTION_SALE) {
       //IT-Лоты принятие задачи подрядчиком
       if (isContractor) {
@@ -893,7 +909,7 @@ export const useTaskCard = ({
             ID: executorMemberId,
             isConfirm: false,
             isCurator: false,
-            offerID: offerID,
+            offerID,
             isRefuse: true,
           }).unwrap();
         }

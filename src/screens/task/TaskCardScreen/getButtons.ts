@@ -658,13 +658,14 @@ export const getButtons = ({
               ];
             case TaskTab.ESTIMATE:
               return [
-                ...((outlayStatusID === OutlayStatusType.PENDING &&
+                ...(!isContractor &&
+                ((outlayStatusID === OutlayStatusType.PENDING &&
                   !isLastChangesFromCoordinator) ||
-                (outlayStatusID &&
-                  [
-                    OutlayStatusType.RETURNED,
-                    OutlayStatusType.MATCHING,
-                  ].includes(outlayStatusID))
+                  (outlayStatusID &&
+                    [
+                      OutlayStatusType.RETURNED,
+                      OutlayStatusType.MATCHING,
+                    ].includes(outlayStatusID)))
                   ? [
                       {
                         label: 'Отправить смету на согласование',
