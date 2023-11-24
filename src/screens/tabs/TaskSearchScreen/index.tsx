@@ -125,9 +125,9 @@ const TaskSearchScreen = ({ navigation, route }: TaskSearchScreenProps) => {
     <CardTasks {...item} onItemPress={onItemPress} userRole={userRole} />
   );
 
-  const onRefetch = () => {
+  const onRefetch = (isRefresh = false) => {
     if (regionIDs && regionIDs?.length) {
-      abort && abort();
+      abort && !isRefresh && abort();
       const ex = dispatch(
         refreshTasks({ idList: selectedTabId, regionID: regionIDs }),
       );
@@ -137,9 +137,9 @@ const TaskSearchScreen = ({ navigation, route }: TaskSearchScreenProps) => {
       });
     }
   };
-  const onRefresh = () => {
+  const onRefresh = (isRefresh = false) => {
     setRefreshing(true);
-    onRefetch();
+    onRefetch(isRefresh);
   };
 
   const onEndReached = () => {
@@ -190,7 +190,7 @@ const TaskSearchScreen = ({ navigation, route }: TaskSearchScreenProps) => {
             renderItem={renderItem}
             keyExtractor={keyExtractor}
             style={styles.list}
-            onRefresh={onRefresh}
+            onRefresh={() => onRefresh(true)}
             refreshing={refreshing}
             contentContainerStyle={[
               styles.listContainer,
