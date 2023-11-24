@@ -108,7 +108,7 @@ export const TaskCardReport = ({
         onBanner={onBanner}
         handleUpload={handleUpload}
         isVisible={uploadModalVisible}
-        formData={getFormData({ taskId, toClose, statusID })}
+        formData={getFormData({ taskId, toClose, statusID, isContractor })}
         deleteProgress={deleteProgress}
         //* в загруженные документы нельзя кидать видео
         toClose={
