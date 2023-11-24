@@ -51,8 +51,8 @@ export const getButtons = ({
   /**
    * Статус задачи
    */
-  isConfirmedContractor?: boolean;
   statusID?: StatusType;
+  isConfirmedContractor?: boolean;
   reportFiles: File[];
   closureFiles: File[];
   userOffersData: Offer[];
@@ -787,7 +787,11 @@ export const getButtons = ({
               }
               return [];
             case TaskTab.REPORT:
-              if (!isCurator) {
+              if (
+                (isCurator &&
+                  [StatusType.COMPLETED, StatusType.PAID].includes(statusID)) ||
+                !isCurator
+              ) {
                 return !reportFiles.length
                   ? [
                       {

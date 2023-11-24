@@ -83,7 +83,8 @@ export const Content: FC<ContentProps> = ({
             uploadedFileIDs={uploadedFileIDs}
           />
           {statusID &&
-            [StatusType.WORK, StatusType.SUMMARIZING].includes(statusID) && (
+            ([StatusType.WORK, StatusType.SUMMARIZING].includes(statusID) ||
+              ([StatusType.PAID, StatusType.COMPLETED] && isContractor)) && (
               <UploadProgress
                 controllers={controllers}
                 progressesSelector={progressesSelector}
@@ -125,12 +126,13 @@ export const Content: FC<ContentProps> = ({
             </Text>
           )}
           {statusID &&
-            [
+            ([
               StatusType.WORK,
               StatusType.SUMMARIZING,
               StatusType.MATCHING,
               StatusType.RETURNED,
-            ].includes(statusID) && (
+            ].includes(statusID) ||
+              ([StatusType.PAID, StatusType.COMPLETED] && isContractor)) && (
               <UploadProgress
                 controllers={controllers}
                 progressesSelector={progressesSelector}
