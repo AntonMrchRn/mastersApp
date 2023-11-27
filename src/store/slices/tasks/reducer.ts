@@ -12,6 +12,7 @@ const initialState: InitialState = {
   error: undefined,
   offerID: undefined,
   filesOnDevice: undefined,
+  filesLoading: undefined,
 };
 
 const tasks = createSlice({
@@ -29,6 +30,9 @@ const tasks = createSlice({
     },
     setTaskFileOnDevice: (state, { payload }) => {
       state.filesOnDevice = { ...state.filesOnDevice, ...payload };
+    },
+    setTaskFileLoading: (state, { payload }) => {
+      state.filesLoading = { ...state.filesLoading, ...payload };
     },
     setNewOfferServices: (state, { payload }) => {
       state.offerServices = payload;

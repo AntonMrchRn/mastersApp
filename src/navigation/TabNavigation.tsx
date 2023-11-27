@@ -35,7 +35,7 @@ export enum BottomTabName {
   ProfileNavigation = 'ProfileNavigation',
 }
 export type BottomTabParamList = {
-  [BottomTabName.TaskSearch]: { tab?: string };
+  [BottomTabName.TaskSearch]: { tab?: string } | undefined;
   [BottomTabName.MyTasks]: undefined;
   [BottomTabName.ProfileNavigation]: NavigatorScreenParams<ProfileStackParamList>;
 };

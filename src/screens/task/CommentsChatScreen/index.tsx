@@ -93,13 +93,14 @@ export const CommentsChatScreen = ({
     }
   };
 
+  const notFound = !loadingComments && !comments?.taskComment?.length;
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
       <Animated.View
         style={[
           styles.containerChat,
           {
-            transform: [{ translateY: height }],
+            transform: [{ translateY: notFound ? 0 : height }],
           },
         ]}
       >
@@ -123,7 +124,7 @@ export const CommentsChatScreen = ({
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.wrapperChat}
           />
-        ) : !loadingComments || comments?.taskComment ? (
+        ) : notFound ? (
           <PreviewNotFound type={PreviewNotFoundType.NoMessagesYet} />
         ) : (
           !comments?.taskComment && (

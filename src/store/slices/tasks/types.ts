@@ -9,6 +9,9 @@ type InitialState = {
   offerID: number | undefined;
   loading: boolean;
   filesOnDevice: { [index: number]: boolean } | undefined;
+  filesLoading:
+    | { [index: number]: { isLoading: boolean; progress: number; rec: number } }
+    | undefined;
   error?: Error;
 };
 

@@ -12,8 +12,14 @@ import { DeleteFileIcon } from '@/assets/icons/svg/files/DeleteFileIcon';
 import { DownloadFileIcon } from '@/assets/icons/svg/files/DownloadFileIcon';
 import { configApp, hitSlop } from '@/constants/platform';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { setTaskFileOnDevice } from '@/store/slices/tasks/actions';
-import { setUserFileOnDevice } from '@/store/slices/user/actions';
+import {
+  setTaskFileLoading,
+  setTaskFileOnDevice,
+} from '@/store/slices/tasks/actions';
+import {
+  setUserFileLoading,
+  setUserFileOnDevice,
+} from '@/store/slices/user/actions';
 import { AxiosQueryErrorResponse } from '@/types/error';
 import { File } from '@/types/fileManager';
 
@@ -23,6 +29,10 @@ const dirs = ReactNativeBlobUtil.fs.dirs;
 const actionByFileType = {
   task: setTaskFileOnDevice,
   user: setUserFileOnDevice,
+};
+const loadingActionByFileType = {
+  task: setTaskFileLoading,
+  user: setUserFileLoading,
 };
 
 type DownloadItemProps = {
@@ -49,16 +59,22 @@ export const DownloadItem = ({
   const toast = useToast();
   const dispatch = useAppDispatch();
 
-  const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
-  const [received, setReceived] = useState(0);
-  const [progress, setProgress] = useState(0);
   const [activeTask, setActiveTask] =
     useState<StatefulPromise<FetchBlobResponse>>();
 
   const onDevice = useAppSelector(state =>
     fileType === 'task' ? state.tasks : state.user,
   ).filesOnDevice?.[file.fileID];
+  const isLoading = useAppSelector(state =>
+    fileType === 'task' ? state.tasks : state.user,
+  ).filesLoading?.[file.fileID]?.isLoading;
+  const received = useAppSelector(state =>
+    fileType === 'task' ? state.tasks : state.user,
+  ).filesLoading?.[file.fileID]?.rec;
+  const progress = useAppSelector(state =>
+    fileType === 'task' ? state.tasks : state.user,
+  ).filesLoading?.[file.fileID]?.progress;
 
   useEffect(() => {
     if (!onDevice && !canDownload) {
@@ -81,12 +97,21 @@ export const DownloadItem = ({
   const canDownload = !!file.url;
 
   const handleDownload = () => {
-    setIsLoading(true);
+    dispatch(
+      loadingActionByFileType[fileType]({ [file.fileID]: { isLoading: true } }),
+    );
     const active = newFile.fetch('GET', file.url);
     setActiveTask(active);
     active.progress((rec, total) => {
-      setReceived(+rec);
-      setProgress(+Math.floor((+rec / +total) * 100));
+      dispatch(
+        loadingActionByFileType[fileType]({
+          [file.fileID]: {
+            isLoading: true,
+            rec: +rec,
+            progress: +Math.floor((+rec / +total) * 100),
+          },
+        }),
+      );
     });
     active
       .catch(async err => {
@@ -102,7 +127,11 @@ export const DownloadItem = ({
       .finally(async () => {
         const exist = await ReactNativeBlobUtil.fs.exists(FILE_PATH);
         dispatch(actionByFileType[fileType]({ [file.fileID]: exist }));
-        setIsLoading(false);
+        dispatch(
+          loadingActionByFileType[fileType]({
+            [file.fileID]: { isLoading: false, rec: 0, progress: 0 },
+          }),
+        );
       });
   };
 
@@ -123,9 +152,11 @@ export const DownloadItem = ({
   const handleStop = () => {
     activeTask &&
       activeTask.cancel(() => {
-        setReceived(0);
-        setProgress(0);
-        setIsLoading(false);
+        dispatch(
+          loadingActionByFileType[fileType]({
+            [file.fileID]: { isLoading: false, rec: 0, progress: 0 },
+          }),
+        );
         setActiveTask(undefined);
       });
   };
@@ -191,7 +222,7 @@ export const DownloadItem = ({
       fileType={type}
       title={title}
       fileDisabled={!onDevice}
-      isLoading={isLoading}
+      isLoading={!!isLoading}
       progress={progress}
       received={received}
     />

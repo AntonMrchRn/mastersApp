@@ -89,7 +89,7 @@ const PreviewNotFound = ({ type, closeModal, text }: PreviewNotFoundProps) => {
     });
   };
 
-  const navigateToTaskSearch = () => navigate(BottomTabName.TaskSearch, {});
+  const navigateToTaskSearch = () => navigate(BottomTabName.TaskSearch);
 
   const onExit = async () => {
     await deleteToken();

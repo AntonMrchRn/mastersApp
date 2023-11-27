@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -15,9 +15,8 @@ const styles = StyleSheet.create({
   input: {
     paddingRight: 8,
   },
+  inputWrapper: { height: 62 },
   banner: {
     marginTop: 'auto',
   },
 });
-
-export default styles;
