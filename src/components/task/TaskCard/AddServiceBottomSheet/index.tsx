@@ -85,6 +85,12 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
         addService(service);
       }
     };
+    const onDismiss = () => {
+      setChipses([]);
+      setServiceName('');
+      setBanner(false);
+      setSelectCategories([]);
+    };
     return (
       <>
         <BottomSheetModal
@@ -94,6 +100,7 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
           closeIconPress={onCancel}
           title={'Добавление услуги'}
           subtitle={subtitle}
+          onDismiss={onDismiss}
         >
           <BottomSheetScrollView
             style={styles.container}
