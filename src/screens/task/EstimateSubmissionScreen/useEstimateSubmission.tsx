@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Keyboard } from 'react-native';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
@@ -238,8 +239,10 @@ export const useEstimateSubmission = ({
     field => !!field.localPrice || !!field.localCount,
   );
 
-  const onEstimateModalVisible = () =>
+  const onEstimateModalVisible = () => {
+    Keyboard.dismiss();
     setEstimateModalVisible(!estimateModalVisible);
+  };
   const onClosePress = () => setBanner(undefined);
   const onDeleteEstimateServiceModalVisible = () =>
     setDeleteEstimateServiceModalVisible(!deleteEstimateServiceModalVisible);
