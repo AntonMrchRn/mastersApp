@@ -12,6 +12,7 @@ import useRegions from '@/components/tabs/ProfileScreen/ActivityTab/useRegions';
 import Title from '@/components/tabs/ProfileScreen/Title';
 import UserInfoBlock from '@/components/tabs/ProfileScreen/UserInfoBlock';
 import { User } from '@/store/api/user/types';
+import { RoleType } from '@/types/task';
 
 type ActivityTabProps = {
   user: User;
@@ -25,7 +26,7 @@ const ActivityTab = ({ user, isTeamVisible }: ActivityTabProps) => {
   const { regions, convertedRegions, isRegionsLoading } = useRegions(
     user.regionIDs,
   );
-
+  const isInternalExecutor = user?.roleID === RoleType.INTERNAL_EXECUTOR;
   const [isActivitiesModalVisible, setIsActivitiesModalVisible] =
     useState<boolean>(false);
   const [isSpecialityModalVisible, setIsSpecialityModalVisible] =
@@ -42,14 +43,16 @@ const ActivityTab = ({ user, isTeamVisible }: ActivityTabProps) => {
     <>
       <Title title="Основная информация" />
       <Spacer />
-      <UserInfoBlock
-        isPressable
-        onPress={onActivitiesModal}
-        isLoading={isActivitiesLoading}
-        iconType={convertedActivities ? 'arrow' : 'plus'}
-        info={convertedActivities || 'Добавить направление'}
-        label={convertedActivities ? 'Направление' : undefined}
-      />
+      {!isInternalExecutor && (
+        <UserInfoBlock
+          isPressable
+          onPress={onActivitiesModal}
+          isLoading={isActivitiesLoading}
+          iconType={convertedActivities ? 'arrow' : 'plus'}
+          info={convertedActivities || 'Добавить направление'}
+          label={convertedActivities ? 'Направление' : undefined}
+        />
+      )}
       <UserInfoBlock
         isPressable
         onPress={onOpenRegionsModal}
