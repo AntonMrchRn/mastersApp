@@ -163,6 +163,12 @@ export const userAPI = api
           data,
         }),
       }),
+      deleteToken: builder.mutation<void, void>({
+        query: () => ({
+          url: 'devices',
+          method: 'DELETE',
+        }),
+      }),
       deleteFile: builder.mutation<UserParamsResponse, number>({
         query: id => ({
           url: `me/files/${id}`,
@@ -192,4 +198,5 @@ export const {
   useSendEmailConfirmationCodeMutation,
   useSendPhoneConfirmationCodeMutation,
   usePostTokenMutation,
+  useDeleteTokenMutation,
 } = userAPI;
