@@ -98,6 +98,7 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
           <BottomSheetScrollView
             style={styles.container}
             showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
           >
             {!chipses.length && (
               <Input
