@@ -49,10 +49,11 @@ export const TaskCardComment = ({
         getCommentsPreview({ idCard: taskId, numberOfPosts: 5, sort: 'desc' }),
       );
     }
-
-    return () => {
-      dispatch(clearCommentsPreview());
-    };
+    if (!isFocused) {
+      setTimeout(() => {
+        dispatch(clearCommentsPreview());
+      }, 100);
+    }
   }, [isFocused]);
 
   const renderContent = () => {
