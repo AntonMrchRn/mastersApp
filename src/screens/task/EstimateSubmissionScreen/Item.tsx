@@ -128,6 +128,7 @@ export const Item: FC<ItemProps> = ({
       <Input
         variant={'text'}
         keyboardType="numeric"
+        autoComplete="off"
         label={'Цена за единицу'}
         placeholder={!canDelete ? `${price} ₽ (изначальная)` : undefined}
         hint={
