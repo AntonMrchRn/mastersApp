@@ -103,7 +103,7 @@ export const TaskCardDescription = ({
       Linking.openURL(url);
     }
   };
-
+  const isWebData = !!webdata && Object.values(webdata).some(it => !!it);
   return (
     <View>
       {/* Выбор подрядчиков  */}
@@ -295,8 +295,8 @@ export const TaskCardDescription = ({
           <Text variant="title3" color={theme.text.basic} style={styles.mt36}>
             Интернет данные
           </Text>
-          <Spacer size={webdata ? 'xl' : 's'} />
-          {webdata ? (
+          <Spacer size={isWebData ? 'xl' : 's'} />
+          {isWebData ? (
             <View style={styles.wrapperGrid}>
               <View>
                 <Text variant="captionRegular" color={theme.text.neutral}>
@@ -403,18 +403,22 @@ export const TaskCardDescription = ({
       )}
 
       {/* Прикрепленные файлы */}
-      {applicationFiles.length ? (
-        <>
-          <View style={styles.attachments}>
-            <Text variant="title3" color={theme.text.basic} style={styles.mr11}>
-              Вложения
-            </Text>
-          </View>
+
+      <>
+        <View style={styles.attachments}>
+          <Text variant="title3" color={theme.text.basic} style={styles.mr11}>
+            Вложения
+          </Text>
+        </View>
+        <Spacer size={applicationFiles.length ? 'xl' : 's'} />
+        {applicationFiles.length ? (
           <DownloadManager files={applicationFiles} onDelete={onDelete} />
-        </>
-      ) : (
-        <></>
-      )}
+        ) : (
+          <Text variant="bodySRegular" color={theme.text.neutral}>
+            Файлов нет
+          </Text>
+        )}
+      </>
     </View>
   );
 };
