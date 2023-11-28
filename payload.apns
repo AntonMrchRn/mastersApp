@@ -1,9 +1,0 @@
-{
-  "Simulator Target Bundle": "com.vector.mastera",
-  "aps": {
-    "alert": {
-      "title": "Transfer Update",
-      "body": "Your Transfer has been downloaded"
-    }
-  }
-}
