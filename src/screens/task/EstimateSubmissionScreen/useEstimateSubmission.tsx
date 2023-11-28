@@ -403,9 +403,6 @@ export const useEstimateSubmission = ({
             type: 'success',
             title: 'Ценовое предложение изменено',
           });
-          dispatch(setNewOfferServices([]));
-          dispatch(setOfferComment(''));
-          dispatch(setOfferID(undefined));
 
           if (isSubmissionByCuratorItLots) {
             navigation.navigate(AppScreenName.Contractors, {
@@ -417,6 +414,9 @@ export const useEstimateSubmission = ({
               taskId,
             });
           }
+          dispatch(setNewOfferServices([]));
+          dispatch(setOfferComment(''));
+          dispatch(setOfferID(undefined));
         }
       } else {
         if (isItLots) {
@@ -491,9 +491,6 @@ export const useEstimateSubmission = ({
           }).unwrap();
         }
 
-        dispatch(setNewOfferServices([]));
-        dispatch(setOfferComment(''));
-
         if (!isSubmissionByCuratorItLots) {
           navigation.navigate(AppScreenName.EstimateSubmissionSuccess, {
             taskId,
@@ -503,12 +500,13 @@ export const useEstimateSubmission = ({
             type: 'success',
             title: 'Смета успешно подана',
           });
-
           navigation.navigate(AppScreenName.Contractors, {
             taskId,
             fromEstimateSubmission: true,
           });
         }
+        dispatch(setNewOfferServices([]));
+        dispatch(setOfferComment(''));
       }
     } catch (err) {
       toast.show({
