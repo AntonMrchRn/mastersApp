@@ -6,6 +6,7 @@ import AccountDeletionScreen from '@/screens/profile/AccountDeletionScreen';
 import BankDetailsScreen from '@/screens/profile/BankDetailsScreen';
 import ChangePasswordScreen from '@/screens/profile/ChangePasswordScreen';
 import EmailEditingScreen from '@/screens/profile/EmailEditingScreen';
+import FAQDetailsScreen from '@/screens/profile/FAQDetailsScreen';
 import PersonalDataEditingScreen from '@/screens/profile/PersonalDataEditingScreen';
 import PhoneEditingConfirmationScreen from '@/screens/profile/PhoneEditingConfirmationScreen';
 import PhoneEditingScreen from '@/screens/profile/PhoneEditingScreen';
@@ -25,6 +26,7 @@ export enum ProfileScreenName {
   TeamMemberDetails = 'TeamMemberDetails',
   PersonalDataEditing = 'PersonalDataEditing',
   PhoneEditingConfirmation = 'PhoneEditingConfirmation',
+  FAQDetails = 'FAQDetails',
 }
 export type ProfileStackParamList = {
   [ProfileScreenName.Profile]: { tab?: TabProf } | undefined;
@@ -56,6 +58,7 @@ export type ProfileStackParamList = {
   };
   [ProfileScreenName.ChangePassword]: undefined;
   [ProfileScreenName.TelegramBot]: undefined;
+  [ProfileScreenName.FAQDetails]: undefined;
   [ProfileScreenName.AccountDeletion]: {
     hasActiveTasks: boolean;
   };
@@ -101,6 +104,10 @@ export const ProfileNavigation = () => (
     <Stack.Screen
       name={ProfileScreenName.AccountDeletion}
       component={AccountDeletionScreen}
+    />
+    <Stack.Screen
+      name={ProfileScreenName.FAQDetails}
+      component={FAQDetailsScreen}
     />
   </Stack.Navigator>
 );
