@@ -138,13 +138,10 @@ const RegionsModal = forwardRef(
                 labelStyle={[
                   styles.chipsLabel,
                   {
-                    color: theme.text.contrast,
+                    color: theme.text.accent,
                   },
                 ]}
                 closeIconPress={() => onSelectValue(region)}
-                containerStyle={{
-                  backgroundColor: theme.background.accent,
-                }}
               />
             ))}
           </ScrollView>

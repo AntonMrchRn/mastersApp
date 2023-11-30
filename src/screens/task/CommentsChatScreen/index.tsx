@@ -88,6 +88,7 @@ export const CommentsChatScreen = ({
   };
 
   const onChangeText = (text: string) => {
+    !text?.length && setValueText('');
     if (!loadingSend) {
       setValueText(text);
     }
