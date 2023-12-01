@@ -15,7 +15,7 @@ import {
   AccountDeletionScreenRoute,
 } from '@/types/navigation';
 
-import styles from './style';
+import { styles } from './styles';
 
 const AccountDeletionScreen = ({
   route,
@@ -25,8 +25,14 @@ const AccountDeletionScreen = ({
   navigation: AccountDeletionScreenNavigationProp;
 }) => {
   const theme = useTheme();
-  const { methods, errors, onDelete, isBannerVisible, onBanner, onCopyEmail } =
-    useAccountDeletion(navigation, route);
+  const {
+    methods,
+    errors,
+    onDelete,
+    isBannerVisible,
+    onBannerClose,
+    onCopyEmail,
+  } = useAccountDeletion(navigation, route);
 
   return (
     <View style={styles.container}>
@@ -45,15 +51,17 @@ const AccountDeletionScreen = ({
         <DeletionInfoBlock text="Восстановить аккаунт можно в течении 6 месяцев через службу поддержки: info@mastera-service.ru" />
         <Spacer size="xxl" />
         <FormProvider {...methods}>
-          <ControlledInput
-            name="password"
-            maxLength={64}
-            variant="password"
-            placeholder="Пароль"
-            style={styles.input}
-            hint={errors.password?.message}
-            isError={!!errors.password?.message}
-          />
+          <View style={styles.inputWrapper}>
+            <ControlledInput
+              name="password"
+              maxLength={64}
+              variant="password"
+              placeholder="Пароль"
+              style={styles.input}
+              hint={errors.password?.message}
+              isError={!!errors.password?.message}
+            />
+          </View>
           <Spacer size="xl" />
           <Button
             label="Да, удалить"
@@ -73,7 +81,7 @@ const AccountDeletionScreen = ({
             <Banner
               icon="alert"
               type="warning"
-              onClosePress={onBanner}
+              onClosePress={onBannerClose}
               onButtonPress={onCopyEmail}
               containerStyle={styles.banner}
               title="Завершите активные задачи"

@@ -9,6 +9,7 @@ import Employees from '@/assets/icons/svg/tabBar/Employees';
 import Profile from '@/assets/icons/svg/tabBar/Profile';
 import TaskSearch from '@/assets/icons/svg/tabBar/TaskSearch';
 import { fonts } from '@/constants/fonts';
+import { LoggerScreen } from '@/screens/tabs/LoggerScreen';
 import MyTasksScreen from '@/screens/tabs/MyTasksScreen';
 import TaskSearchScreen from '@/screens/tabs/TaskSearchScreen';
 import { pushPermission } from '@/services/notifications/pushPermission';
@@ -39,11 +40,13 @@ export enum BottomTabName {
   TaskSearch = 'TaskSearch',
   MyTasks = 'MyTasks',
   ProfileNavigation = 'ProfileNavigation',
+  Logger = 'Logger',
 }
 export type BottomTabParamList = {
-  [BottomTabName.TaskSearch]: { tab?: string };
+  [BottomTabName.TaskSearch]: { tab?: string } | undefined;
   [BottomTabName.MyTasks]: undefined;
   [BottomTabName.ProfileNavigation]: NavigatorScreenParams<ProfileStackParamList>;
+  [BottomTabName.Logger]: undefined;
 };
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 export const TabNavigation = () => {
@@ -113,6 +116,13 @@ export const TabNavigation = () => {
         options={{
           title: 'Профиль',
           tabBarIcon: profileIcon,
+        }}
+      />
+      <Tab.Screen
+        name={BottomTabName.Logger}
+        component={LoggerScreen}
+        options={{
+          title: 'Logger',
         }}
       />
     </Tab.Navigator>

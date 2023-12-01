@@ -11,6 +11,7 @@ export const {
   addMaterialLocalPrice,
   setOfferComment,
   setOfferID,
+  setTaskFileLoading,
   addMaterialLocalCount,
   addServiceLocalCount,
 } = tasks.actions;

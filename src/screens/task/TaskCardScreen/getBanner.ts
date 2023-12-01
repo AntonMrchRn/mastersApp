@@ -1,6 +1,6 @@
 import { BannerProps } from 'rn-ui-kit/lib/typescript/components/Banner';
 
-import { Curator, Executor } from '@/store/api/tasks/types';
+import { Executor } from '@/store/api/tasks/types';
 import { OutlayStatusType, StatusType, TaskTab } from '@/types/task';
 
 export const getBanner = ({
@@ -10,8 +10,6 @@ export const getBanner = ({
   navigateToChat,
   executor,
   isContractor,
-  isCurator,
-  curator,
   cancelReason,
   isInvitedExecutor,
   isInternalExecutor,
@@ -20,15 +18,14 @@ export const getBanner = ({
   navigateToReport,
   visible,
   unVisible,
+  isInvitedCurator,
 }: {
   tab: TaskTab;
   statusID: StatusType | undefined;
   outlayStatusID: OutlayStatusType | undefined;
   navigateToChat: () => void;
-  curator?: Curator;
   executor?: Executor;
   isContractor: boolean;
-  isCurator: boolean;
   cancelReason: string | undefined;
   isInvitedExecutor: boolean;
   isInternalExecutor: boolean;
@@ -37,6 +34,7 @@ export const getBanner = ({
   navigateToReport: () => void;
   visible: boolean;
   unVisible: () => void;
+  isInvitedCurator: boolean;
 }): BannerProps | null => {
   if (tab === TaskTab.DESCRIPTION && visible) {
     switch (statusID) {
@@ -68,7 +66,7 @@ export const getBanner = ({
             onClosePress: unVisible,
           };
         }
-        if (isCurator && curator && !curator.isConfirm) {
+        if (isInvitedCurator) {
           return {
             type: 'info',
             icon: 'alert',

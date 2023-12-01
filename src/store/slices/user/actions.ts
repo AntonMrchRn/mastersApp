@@ -6,6 +6,7 @@ export const {
   setProgresses,
   deleteProgress,
   setLinkTimeout,
+  setUserFileLoading,
   setIsPhoneEditing,
   setIsEmailEditing,
   timerOnProfileEmail,

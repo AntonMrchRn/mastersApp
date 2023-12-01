@@ -94,10 +94,13 @@ export const useTaskMembers = (taskId: number) => {
     (executor?.inviterRoleID === RoleType.COORDINATOR ||
       executor?.inviterRoleID === RoleType.SUPERVISOR);
   /**
-   * Отказался ли приглашенный участник от задания с закрытым доступом (отозвал смету)
+   * Отказался ли приглашенный куратор от задания с закрытым доступом (отозвал смету)
    */
-  const isRefusedInvitedMember =
-    !task?.isOpenAccess && (isRefusedCurator || isRefusedExecutor);
+  const isRefusedInvitedCurator = !task?.isOpenAccess && isRefusedCurator;
+  /**
+   * Отказался ли приглашенный исполнитель от задания с закрытым доступом (отозвал смету)
+   */
+  const isRefusedInvitedExecutor = !task?.isOpenAccess && isRefusedExecutor;
 
   return {
     task,
@@ -124,7 +127,8 @@ export const useTaskMembers = (taskId: number) => {
     userID: user?.userID,
     isCuratorAllowedTask,
     isConfirmedContractor,
-    isRefusedInvitedMember,
+    isRefusedInvitedCurator,
+    isRefusedInvitedExecutor,
     isTaskWithUnconfirmedCurator,
   };
 };

@@ -27,6 +27,7 @@ import {
 } from '@/navigation/ProfileNavigation';
 import { BottomTabName, BottomTabParamList } from '@/navigation/TabNavigation';
 import { useAppDispatch } from '@/store';
+import { useDeleteTokenMutation } from '@/store/api/user';
 import { logOut } from '@/store/slices/auth/actions';
 import { ProfileTab } from '@/types/tab';
 
@@ -66,6 +67,7 @@ type PreviewNotFoundProps = {
 const PreviewNotFound = ({ type, closeModal, text }: PreviewNotFoundProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const [deleteToken] = useDeleteTokenMutation();
   const { navigate } =
     useNavigation<
       CompositeNavigationProp<
@@ -87,9 +89,10 @@ const PreviewNotFound = ({ type, closeModal, text }: PreviewNotFoundProps) => {
     });
   };
 
-  const navigateToTaskSearch = () => navigate(BottomTabName.TaskSearch, {});
+  const navigateToTaskSearch = () => navigate(BottomTabName.TaskSearch);
 
-  const onExit = () => {
+  const onExit = async () => {
+    await deleteToken();
     storageMMKV.clearAll();
     dispatch(logOut());
   };
