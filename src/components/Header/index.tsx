@@ -42,12 +42,20 @@ const Header = ({
         </TouchableOpacity>
         <View style={styles.wrapper}>
           {title && (
-            <Text variant="bodyMBold" color={theme.text.basic}>
+            <Text
+              variant="bodyMBold"
+              style={styles.titleTxt}
+              color={theme.text.basic}
+            >
               {title}
             </Text>
           )}
           {description && (
-            <Text variant="captionRegular" color={theme.text.neutral}>
+            <Text
+              variant="captionRegular"
+              style={styles.descriptionTxt}
+              color={theme.text.neutral}
+            >
               {description}
             </Text>
           )}

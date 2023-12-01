@@ -45,6 +45,7 @@ type TaskSearchScreenProps = CompositeScreenProps<
   StackScreenProps<AppStackParamList>
 >;
 let abort: () => void | undefined;
+
 const TaskSearchScreen = ({ navigation, route }: TaskSearchScreenProps) => {
   const theme = useTheme();
   const isFocused = useIsFocused();

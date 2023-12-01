@@ -90,7 +90,6 @@ const CommonTab = ({
     });
     onCloseContactUs();
   };
-  // const onQuestions = () => {};
 
   return (
     <>

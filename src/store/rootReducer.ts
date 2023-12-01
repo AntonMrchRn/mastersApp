@@ -4,6 +4,7 @@ import { authAPI } from '@/store/api/auth';
 import { userAPI } from '@/store/api/user';
 import { RootState } from '@/store/index';
 import auth from '@/store/slices/auth/reducer';
+import onboarding from '@/store/slices/onboarding/reducer';
 import user from '@/store/slices/user/reducer';
 
 import { tasksAPI } from './api/tasks';
@@ -14,6 +15,7 @@ import taskSearch from './slices/taskSearch/reducer';
 
 const combinedReducer = combineReducers({
   auth: auth.reducer,
+  onboarding: onboarding.reducer,
   user: user.reducer,
   tasks: tasks.reducer,
   taskSearch: taskSearch.reducer,
@@ -25,7 +27,9 @@ const combinedReducer = combineReducers({
 
 const rootReducer: typeof combinedReducer = (state, action) => {
   if (action.type === 'auth/logOut') {
-    state = {} as RootState;
+    state = {
+      onboarding: state?.onboarding,
+    } as RootState;
   }
   return combinedReducer(state, action);
 };

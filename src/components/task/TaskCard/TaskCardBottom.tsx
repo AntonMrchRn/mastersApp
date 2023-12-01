@@ -24,14 +24,14 @@ export const TaskCardBottom: FC<TaskCardBottomProps> = ({
 }) => {
   const styles = StyleSheet.create({
     container: {
-      gap: 16,
+      gap: 8,
     },
   });
   return (
     <>
       <LinearGradient
         colors={['rgba(255, 255, 255, 0.00)', '#FFF']}
-        locations={[0, 0.9]}
+        locations={[0, 0.6]}
       >
         <View style={styles.container}>
           {banner && <Banner {...banner} />}

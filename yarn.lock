@@ -6345,6 +6345,11 @@ react-native-oksse@^0.2.0:
   resolved "https://registry.yarnpkg.com/react-native-oksse/-/react-native-oksse-0.2.0.tgz#bf99177bdb55b1e56229c710116e4c123960986e"
   integrity sha512-fhw5XTw0DLskPbSPqGxQOhljLS6cyxKCfjZ/KqvvPFCtL+xVBQXpmJE6FlgfnhhEeb/0Xxz94KT73aPL6QViVQ==
 
+react-native-pager-view@^6.2.2:
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-6.2.2.tgz#4c1c45d5f3f622c0922ef96ac114666392ebf5ec"
+  integrity sha512-MLkJB7iP6v0Hd4/B4/R/gLCSE+YBtjxG/vHZYBDU+fI3U7HBYgKAg4o6ad8HxbKVcWWyRDNeeVRGISw1MUjlHw==
+
 react-native-permissions@^3.10.1:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.10.1.tgz#cb0171c8d12113869deaabbdfb979aad1a44752b"

@@ -14,6 +14,7 @@ import { BottomTabParamList, TabNavigation } from '@/navigation/TabNavigation';
 import { AccessRestrictedScreen } from '@/screens/auth/AccessRestrictedScreen';
 import EmailScreen from '@/screens/auth/EmailScreen';
 import ErrorScreen from '@/screens/auth/ErrorScreen';
+import { OnboardingScreen } from '@/screens/auth/OnboardingScreen';
 import PasswordScreen from '@/screens/auth/PasswordScreen';
 import RecoveryConfirmationScreen from '@/screens/auth/RecoveryConfirmationScreen';
 import RecoveryScreen from '@/screens/auth/RecoveryScreen';
@@ -32,7 +33,9 @@ import { TaskCardScreen } from '@/screens/task/TaskCardScreen';
 import { WebViewScreen } from '@/screens/WebViewScreen';
 import { getInitialNotification } from '@/services/notifications/getInitialNotification';
 import { onNotificationOpenedApp } from '@/services/notifications/onNotificationOpenedApp';
+import { useAppSelector } from '@/store';
 import { Service } from '@/store/api/tasks/types';
+import { selectOnboarding } from '@/store/slices/onboarding/selectors';
 import { StatusType } from '@/types/task';
 
 export enum AppScreenName {
@@ -57,6 +60,7 @@ export enum AppScreenName {
   EstimateSubmissionSuccess = 'EstimateSubmissionSuccess',
   Contractors = 'Contractors',
   AccessRestricted = 'AccessRestricted',
+  OnboardingScreen = 'OnboardingScreen',
 }
 export type AppStackParamList = {
   [AppScreenName.AccessRestricted]: undefined;
@@ -75,6 +79,7 @@ export type AppStackParamList = {
     phone: string;
   };
   [AppScreenName.Error]: undefined;
+  [AppScreenName.OnboardingScreen]: undefined;
   [AppScreenName.TaskCard]: { taskId: number; tabId?: number };
   [AppScreenName.ContractorsInvitation]: undefined;
   [AppScreenName.EstimateEdit]: {
@@ -137,6 +142,7 @@ export const AppNavigation = () => {
     getInitialNotification();
   }, []);
   const { checkLogin, isAuth, isExecutor } = useCheckLogin();
+  const { onboarding } = useAppSelector(selectOnboarding);
 
   useEffect(() => {
     checkLogin();
@@ -185,6 +191,12 @@ export const AppNavigation = () => {
         <>
           {isExecutor ? (
             <>
+              {onboarding && (
+                <Stack.Screen
+                  name={AppScreenName.OnboardingScreen}
+                  component={OnboardingScreen}
+                />
+              )}
               <Stack.Screen
                 name={AppScreenName.AppNavigator}
                 component={TabNavigation}
