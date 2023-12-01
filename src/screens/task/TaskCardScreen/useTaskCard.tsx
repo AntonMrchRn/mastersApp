@@ -122,7 +122,8 @@ export const useTaskCard = ({
     isConfirmedCurator,
     isCuratorAllowedTask,
     isConfirmedContractor,
-    isRefusedInvitedMember,
+    isRefusedInvitedCurator,
+    isRefusedInvitedExecutor,
     isTaskWithUnconfirmedCurator,
   } = useTaskMembers(taskId);
 
@@ -160,12 +161,18 @@ export const useTaskCard = ({
   const isMessagesExist = !!useAppSelector(state => state.myTasks)
     .commentsPreview?.taskComment?.length;
 
-  const [patchTask] = usePatchTaskMutation();
+  const [patchTask, { isLoading: isPatchTaskLoading }] = usePatchTaskMutation();
   const [patchOffers] = usePatchOffersMutation();
   const [deleteOffer, deleteOffersMutation] = useDeleteOffersMutation();
-  const [patchITTaskMember] = usePatchITTaskMemberMutation();
+  const [
+    patchITTaskMember,
+    { isSuccess: isPatchITMemberSuccess, isLoading: isPatchITMemberLoading },
+  ] = usePatchITTaskMemberMutation();
   const [deleteITTaskMember] = useDeleteITTaskMemberMutation();
-  const [postITTaskMember] = usePostITTaskMemberMutation();
+  const [
+    postITTaskMember,
+    { isSuccess: isPostITMemberSuccess, isLoading: isPostITMemberLoading },
+  ] = usePostITTaskMemberMutation();
 
   const user = useGetUserQuery(userID).data;
   const getTaskHistory = useGetTaskHistoryQuery(taskId);
@@ -231,7 +238,7 @@ export const useTaskCard = ({
           ErrorCode.NOT_FOUND,
         ].includes((error as AxiosQueryErrorResponse).data.code)
       ) {
-        navigation.navigate(BottomTabName.TaskSearch, {});
+        navigation.navigate(BottomTabName.TaskSearch);
         return toast.show({
           type: 'info',
           duration: 6000,
@@ -279,7 +286,8 @@ export const useTaskCard = ({
   const isEstimateTabs =
     tab.label === TaskTab.ESTIMATE &&
     statusID === StatusType.ACTIVE &&
-    !!userOffersData.length;
+    !!userOffersData.length &&
+    !isContractor;
   /**
    * личный коэффициент оплаты исполнителя
    */
@@ -343,6 +351,9 @@ export const useTaskCard = ({
   const name = task?.name || '';
 
   const confirmedExecutors = executors.filter(executor => executor.isConfirm);
+  const contractorsInvitedByCurator = executors.filter(
+    contractor => contractor.curatorID === userID,
+  );
   const cancelReason = task?.cancelReason;
   /**
    * тип задачи
@@ -629,8 +640,6 @@ export const useTaskCard = ({
     navigateToChat,
     isContractor,
     executor,
-    isCurator,
-    curator,
     cancelReason,
     isInvitedExecutor,
     isInternalExecutor,
@@ -639,6 +648,7 @@ export const useTaskCard = ({
     navigateToReport,
     visible,
     unVisible,
+    isInvitedCurator,
   });
 
   const onEstimateBannerPress = () => {
@@ -657,6 +667,16 @@ export const useTaskCard = ({
   const offerID = userOffersData?.[0]?.ID;
 
   const onTaskSubmission = async () => {
+    if (
+      isPatchTaskLoading ||
+      isPatchITMemberLoading ||
+      isPostITMemberLoading ||
+      isPostITMemberSuccess ||
+      isPatchITMemberSuccess
+    ) {
+      return;
+    }
+
     if (subsetID === TaskType.IT_AUCTION_SALE) {
       //IT-Лоты принятие задачи подрядчиком
       if (isContractor) {
@@ -665,7 +685,7 @@ export const useTaskCard = ({
             ID: executorMemberId,
             isConfirm: true,
             isCurator: false,
-            offerID: offerID,
+            offerID,
           }).unwrap();
         } catch (error) {
           toast.show({
@@ -692,9 +712,6 @@ export const useTaskCard = ({
         if (!contractors?.length || !isAvailableContractorsExist) {
           navigation.navigate(AppScreenName.Contractors, {
             taskId,
-            isInvitedCurator,
-            curatorId: userID as number,
-            curatorMemberId: curator?.memberID,
           });
         } else {
           // Подрядчики доступны -> подача сметы
@@ -865,9 +882,11 @@ export const useTaskCard = ({
   const onWorkDelivery = async () => {
     if (
       subsetID &&
-      [TaskType.COMMON_FIRST_RESPONSE, TaskType.IT_FIRST_RESPONSE].includes(
-        subsetID,
-      ) &&
+      [
+        TaskType.COMMON_FIRST_RESPONSE,
+        TaskType.IT_FIRST_RESPONSE,
+        TaskType.IT_AUCTION_SALE,
+      ].includes(subsetID) &&
       outlayStatusID !== OutlayStatusType.READY
     ) {
       !estimateBannerVisible && onEstimateBannerVisible();
@@ -876,7 +895,7 @@ export const useTaskCard = ({
         //id таски
         ID: id,
         //перевод таски в статус Сдача работ
-        statusID: 5,
+        statusID: StatusType.SUMMARIZING,
       });
     }
   };
@@ -884,14 +903,37 @@ export const useTaskCard = ({
   const onCancelTask = async (refuseReason?: string) => {
     try {
       if (subsetID === TaskType.IT_AUCTION_SALE) {
-        //отклонить приглашение
-        await patchITTaskMember({
-          ID: executorMemberId,
-          isConfirm: false,
-          isCurator: false,
-          offerID: offerID,
-          isRefuse: true,
-        }).unwrap();
+        //отклонение приглашения подрядчиком в статусе Опубликовано
+        if (isContractor && statusID === StatusType.ACTIVE) {
+          await patchITTaskMember({
+            ID: executorMemberId,
+            isConfirm: false,
+            isCurator: false,
+            offerID,
+            isRefuse: true,
+          }).unwrap();
+        }
+
+        // отказ от задачи в статусе в работе
+        if (statusID === StatusType.WORK && winnerOffer) {
+          // если это куратор, то удаляем мембера
+          if (isCurator && curatorMemberId) {
+            await deleteITTaskMember(curatorMemberId).unwrap();
+            navigation.navigate(BottomTabName.TaskSearch);
+          }
+          // если это подрядчик или самостоятельный исполнитель,
+          // то патчим оффер (остальная обработка на бэке)
+          if (isContractor || isExecutor) {
+            await patchOffers({
+              //id таски
+              taskID: id,
+              //id выигрышного офера (юзер уже должен его выиграть)
+              ID: winnerOffer.ID,
+              //причина отказа
+              refuseReason,
+            }).unwrap();
+          }
+        }
       }
       //если это общие, то
       //первый отклик - патч задания, refuseReason, id задания
@@ -1045,11 +1087,6 @@ export const useTaskCard = ({
     userID &&
     navigation.navigate(AppScreenName.Contractors, {
       taskId,
-      isConfirmedCurator,
-      isInvitedCurator,
-      curatorId: userID,
-      curatorMemberId: curator?.memberID,
-      isItLots: subsetID === TaskType.IT_AUCTION_SALE,
     });
 
   const getCurrentTab = () => {
@@ -1073,6 +1110,7 @@ export const useTaskCard = ({
             isConfirmedCurator={isConfirmedCurator}
             isInternalExecutor={isInternalExecutor}
             navigateToContractors={navigateToContractors}
+            contractorsInvitedByCurator={contractorsInvitedByCurator}
           />
         );
       case TaskTab.ESTIMATE:
@@ -1168,7 +1206,8 @@ export const useTaskCard = ({
     isOffersDeadlineOver,
     onUploadModalVisible,
     onBudgetModalVisible,
-    isRefusedInvitedMember,
+    isRefusedInvitedCurator,
+    isRefusedInvitedExecutor,
     onOpenCancelModalVisible,
     onSubmissionModalVisible,
     onApproveEstimateChanges,

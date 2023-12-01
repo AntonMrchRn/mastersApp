@@ -25,16 +25,7 @@ import { styles } from './style';
 
 export const ContractorsScreen = ({
   route: {
-    params: {
-      taskId,
-      services,
-      isItLots,
-      curatorId,
-      curatorMemberId,
-      isInvitedCurator,
-      isConfirmedCurator,
-      fromEstimateSubmission,
-    },
+    params: { taskId, fromEstimateSubmission },
   },
   navigation,
 }: {
@@ -56,12 +47,6 @@ export const ContractorsScreen = ({
   } = useContractors({
     navigation,
     taskId,
-    services,
-    isItLots,
-    curatorId,
-    isInvitedCurator,
-    curatorMemberId,
-    isConfirmedCurator,
   });
 
   const renderItem = ({ item: contractor }: ListRenderItemInfo<User>) => (

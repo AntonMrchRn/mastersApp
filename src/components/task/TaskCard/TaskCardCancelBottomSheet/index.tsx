@@ -42,6 +42,10 @@ export const TaskCardCancelBottomSheet = ({
   const isDisabled = !isValid && !!Object.keys(errors).length;
 
   const onRefusePress = ({ cancelTask }: { cancelTask?: string }) => {
+    if ((withReason && !isValid) || (!withReason && isDisabled)) {
+      return;
+    }
+
     reset();
     onRefuse(cancelTask);
   };
@@ -83,7 +87,6 @@ export const TaskCardCancelBottomSheet = ({
           )}
           <Button
             style={styles.mt24}
-            disabled={withReason ? !isValid : isDisabled}
             variant="outlineDanger"
             onPress={handleSubmit(onRefusePress)}
             label={isContractor && !withReason ? 'Отклонить' : 'Отказаться'}

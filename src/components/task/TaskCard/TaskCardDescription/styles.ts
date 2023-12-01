@@ -53,7 +53,6 @@ export const styles = StyleSheet.create({
   },
   attachments: {
     marginTop: 36,
-    marginBottom: 24,
     flexDirection: 'row',
     alignItems: 'center',
   },

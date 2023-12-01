@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Keyboard } from 'react-native';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
@@ -32,7 +33,7 @@ import {
 } from '@/store/slices/tasks/actions';
 import { selectTasks } from '@/store/slices/tasks/selectors';
 import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
-import { StatusType, TaskType } from '@/types/task';
+import { OutlayStatusType, StatusType, TaskType } from '@/types/task';
 
 type EstimateSubmissionNavigationProp = CompositeNavigationProp<
   StackNavigationProp<AppStackParamList, AppScreenName.EstimateSubmission>,
@@ -60,6 +61,8 @@ export const useEstimateSubmission = ({
     userID,
     refetch,
     executor,
+    isRefusedInvitedCurator,
+    isRefusedInvitedExecutor,
     curatorMemberId,
     isInvitedCurator,
     isInvitedExecutor,
@@ -109,6 +112,7 @@ export const useEstimateSubmission = ({
   const roleID = useAppSelector(selectAuth).user?.roleID;
   const isItLots = task?.subsetID === TaskType.IT_AUCTION_SALE;
   const isActive = task?.statusID === StatusType.ACTIVE;
+  const isWork = task?.statusID === StatusType.WORK;
 
   useEffect(() => {
     if (isFocused) {
@@ -133,7 +137,7 @@ export const useEstimateSubmission = ({
           ErrorCode.NOT_FOUND,
         ].includes((taskError as AxiosQueryErrorResponse).data.code)
       ) {
-        navigation.navigate(BottomTabName.TaskSearch, {});
+        navigation.navigate(BottomTabName.TaskSearch);
         return toast.show({
           type: 'info',
           duration: 6000,
@@ -235,8 +239,10 @@ export const useEstimateSubmission = ({
     field => !!field.localPrice || !!field.localCount,
   );
 
-  const onEstimateModalVisible = () =>
+  const onEstimateModalVisible = () => {
+    Keyboard.dismiss();
     setEstimateModalVisible(!estimateModalVisible);
+  };
   const onClosePress = () => setBanner(undefined);
   const onDeleteEstimateServiceModalVisible = () =>
     setDeleteEstimateServiceModalVisible(!deleteEstimateServiceModalVisible);
@@ -390,37 +396,33 @@ export const useEstimateSubmission = ({
             ID: offerID,
             comment: offerComment,
             services: postServices,
+            ...(isWork && { outlayStatusID: OutlayStatusType.PENDING }),
             sum: allSum,
           }).unwrap();
           toast.show({
             type: 'success',
             title: 'Ценовое предложение изменено',
           });
-          dispatch(setNewOfferServices([]));
-          dispatch(setOfferComment(''));
-          dispatch(setOfferID(undefined));
 
           if (isSubmissionByCuratorItLots) {
             navigation.navigate(AppScreenName.Contractors, {
               taskId,
-              isInvitedCurator,
-              isItLots,
               fromEstimateSubmission: true,
-              services: task?.services,
-              curatorId: userID as number,
-              curatorMemberId,
             });
           } else {
             navigation.navigate(AppScreenName.TaskCard, {
               taskId,
             });
           }
+          dispatch(setNewOfferServices([]));
+          dispatch(setOfferComment(''));
+          dispatch(setOfferID(undefined));
         }
       } else {
         if (isItLots) {
           // Подача сметы для IT-лотов Куратором
           if (isSubmissionByCuratorItLots) {
-            isInvitedCurator
+            isInvitedCurator || isRefusedInvitedCurator
               ? await patchITTaskMember({
                   ID: curatorMemberId,
                   isConfirm: true,
@@ -450,7 +452,7 @@ export const useEstimateSubmission = ({
                 }).unwrap();
           } else {
             // Подача сметы для IT-лотов Исполнителем
-            isInvitedExecutor
+            isInvitedExecutor || isRefusedInvitedExecutor
               ? await patchITTaskMember({
                   ID: executor?.memberID,
                   isConfirm: true,
@@ -489,9 +491,6 @@ export const useEstimateSubmission = ({
           }).unwrap();
         }
 
-        dispatch(setNewOfferServices([]));
-        dispatch(setOfferComment(''));
-
         if (!isSubmissionByCuratorItLots) {
           navigation.navigate(AppScreenName.EstimateSubmissionSuccess, {
             taskId,
@@ -501,17 +500,13 @@ export const useEstimateSubmission = ({
             type: 'success',
             title: 'Смета успешно подана',
           });
-
           navigation.navigate(AppScreenName.Contractors, {
             taskId,
-            isInvitedCurator,
-            isItLots,
             fromEstimateSubmission: true,
-            services: task?.services,
-            curatorId: userID as number,
-            curatorMemberId,
           });
         }
+        dispatch(setNewOfferServices([]));
+        dispatch(setOfferComment(''));
       }
     } catch (err) {
       toast.show({
@@ -528,6 +523,7 @@ export const useEstimateSubmission = ({
     errors,
     banner,
     allSum,
+    withNDS,
     isError,
     loading,
     services,
@@ -557,6 +553,5 @@ export const useEstimateSubmission = ({
     deleteEstimateMaterialModalVisible,
     onDeleteEstimateServiceModalVisible,
     onDeleteEstimateMaterialModalVisible,
-    withNDS,
   };
 };

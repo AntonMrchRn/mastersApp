@@ -124,12 +124,6 @@ export type AppStackParamList = {
   [AppScreenName.EstimateSubmissionSuccess]: { taskId: number };
   [AppScreenName.Contractors]: {
     taskId: number;
-    curatorId: number;
-    isItLots?: boolean;
-    services?: Service[];
-    curatorMemberId?: number;
-    isInvitedCurator?: boolean;
-    isConfirmedCurator?: boolean;
     fromEstimateSubmission?: boolean;
   };
 };

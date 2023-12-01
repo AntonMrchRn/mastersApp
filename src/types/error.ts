@@ -14,6 +14,7 @@ enum ErrorCode {
   NoDataFound = 8003,
   OTHER_CANDIDATE = 7004,
   NOT_FOUND = 7003,
+  HAVE_TASK_IN_WORK = 4020,
 }
 
 type AxiosQueryError = {

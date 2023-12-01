@@ -15,6 +15,7 @@ const initialState: InitialState = {
   filesOnDevice: undefined,
   isApprovalNotificationShown: false,
   progresses: {},
+  filesLoading: undefined,
 };
 
 const user = createSlice({
@@ -26,6 +27,9 @@ const user = createSlice({
     },
     setIsPhoneEditing: (state, { payload }) => {
       state.isPhoneEditing = payload;
+    },
+    setUserFileLoading: (state, { payload }) => {
+      state.filesLoading = { ...state.filesLoading, ...payload };
     },
     setIsEmailEditing: (state, { payload }) => {
       state.isEmailEditing = payload;

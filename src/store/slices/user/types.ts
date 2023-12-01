@@ -13,6 +13,9 @@ type InitialState = {
   emailTimeout: null | { timeout: number };
   filesOnDevice: { [index: number]: boolean } | undefined;
   progresses: Progresses;
+  filesLoading:
+    | { [index: number]: { isLoading: boolean; progress: number; rec: number } }
+    | undefined;
 };
 
 export type { InitialState };

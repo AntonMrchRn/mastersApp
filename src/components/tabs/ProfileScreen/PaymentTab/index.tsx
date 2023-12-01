@@ -58,14 +58,14 @@ const PaymentTab = ({
       (isCompany && user.entityName && user.RRC))
   );
 
-  const onModal = () => setIsEntityModalVisible(!isEntityModalVisible);
+  const onEntityModalOpen = () => setIsEntityModalVisible(true);
+  const onEntityModalClose = () => setIsEntityModalVisible(false);
 
   const editPersonalDetails = () => {
     if (user.isApproved && isSelf) {
       return onBlockingModalOpen();
     }
-
-    onModal();
+    onEntityModalOpen();
   };
   const editBankDetails = () => {
     if (user.isApproved) {
@@ -184,7 +184,7 @@ const PaymentTab = ({
           isNDSPayer: user.isNDSPayer,
         }}
         isVisible={isEntityModalVisible}
-        onCloseModal={onModal}
+        onCloseModal={onEntityModalClose}
         type={
           user.ITIN && user.entityTypeID
             ? {

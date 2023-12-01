@@ -105,7 +105,7 @@ export const UploadBottomSheet = ({
                     'video/ogg',
                     'video/webm',
                     'video/quicktime',
-                    'video/x-matroska',
+                    // 'video/x-matroska',
                   ]
                 : []),
             ]
@@ -124,9 +124,9 @@ export const UploadBottomSheet = ({
                     'public.mpeg',
                     'public.mpeg-4',
                     'com.apple.quicktime-movie',
-                    'io.iina.mkv',
-                    'dyn.ah62d4rv4ge804450',
-                    DocumentPicker.types.video,
+                    // 'io.iina.mkv',
+                    // 'dyn.ah62d4rv4ge804450',
+                    // DocumentPicker.types.video,
                   ]
                 : []),
             ],

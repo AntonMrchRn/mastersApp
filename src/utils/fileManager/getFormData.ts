@@ -4,10 +4,12 @@ export const getFormData = ({
   taskId,
   toClose,
   statusID,
+  isContractor,
 }: {
   taskId?: number;
   toClose?: boolean | undefined;
   statusID?: StatusType | undefined;
+  isContractor?: boolean;
 }) => {
   const formData = new FormData();
   if (taskId) {
@@ -16,7 +18,9 @@ export const getFormData = ({
       !toClose &&
       (!statusID ||
         (statusID &&
-          ![StatusType.PAID, StatusType.COMPLETED].includes(statusID)))
+          ![StatusType.PAID, StatusType.COMPLETED].includes(statusID)) ||
+        // подрядчик не может добавлять закрывающие документы
+        isContractor)
     ) {
       formData.append('isApplication', false);
       formData.append('isOffer', true);

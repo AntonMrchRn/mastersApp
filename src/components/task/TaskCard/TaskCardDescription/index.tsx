@@ -48,6 +48,7 @@ type TaskCardDescriptionProps = {
   statusID: StatusType | undefined;
   navigateToContractors: () => void;
   coordinator: Coordinator | undefined;
+  contractorsInvitedByCurator: Executor[] | [];
 };
 
 export const TaskCardDescription = ({
@@ -67,12 +68,17 @@ export const TaskCardDescription = ({
   isInternalExecutor,
   isConfirmedCurator,
   navigateToContractors,
+  contractorsInvitedByCurator,
 }: TaskCardDescriptionProps) => {
   const theme = useTheme();
   const toast = useToast();
 
   const [deleteInvitation, { isLoading, isError, error }] =
     useDeleteInvitationMutation();
+
+  const showContractorsInvitationButton = contractorsInvitedByCurator.every(
+    contractor => !contractor.isConfirm,
+  );
 
   useEffect(() => {
     if (isError) {
@@ -97,7 +103,7 @@ export const TaskCardDescription = ({
       Linking.openURL(url);
     }
   };
-
+  const isWebData = !!webdata && Object.values(webdata).some(it => !!it);
   return (
     <View>
       {/* Выбор подрядчиков  */}
@@ -203,16 +209,13 @@ export const TaskCardDescription = ({
               </View>
             </View>
           )}
-          {!isLoading && executors.length ? (
+          {showContractorsInvitationButton && (
             <Button
-              label="Изменить выбор"
-              size="S"
-              style={styles.mt16}
-              onPress={navigateToContractors}
-            />
-          ) : (
-            <Button
-              label="Пригласить"
+              label={
+                !isLoading && contractorsInvitedByCurator.length
+                  ? 'Изменить выбор'
+                  : 'Пригласить'
+              }
               size="S"
               style={styles.mt16}
               onPress={navigateToContractors}
@@ -292,8 +295,8 @@ export const TaskCardDescription = ({
           <Text variant="title3" color={theme.text.basic} style={styles.mt36}>
             Интернет данные
           </Text>
-          <Spacer size={webdata ? 'xl' : 's'} />
-          {webdata ? (
+          <Spacer size={isWebData ? 'xl' : 's'} />
+          {isWebData ? (
             <View style={styles.wrapperGrid}>
               <View>
                 <Text variant="captionRegular" color={theme.text.neutral}>
@@ -400,18 +403,22 @@ export const TaskCardDescription = ({
       )}
 
       {/* Прикрепленные файлы */}
-      {applicationFiles.length ? (
-        <>
-          <View style={styles.attachments}>
-            <Text variant="title3" color={theme.text.basic} style={styles.mr11}>
-              Вложения
-            </Text>
-          </View>
+
+      <>
+        <View style={styles.attachments}>
+          <Text variant="title3" color={theme.text.basic} style={styles.mr11}>
+            Вложения
+          </Text>
+        </View>
+        <Spacer size={applicationFiles.length ? 'xl' : 's'} />
+        {applicationFiles.length ? (
           <DownloadManager files={applicationFiles} onDelete={onDelete} />
-        </>
-      ) : (
-        <></>
-      )}
+        ) : (
+          <Text variant="bodySRegular" color={theme.text.neutral}>
+            Файлов нет
+          </Text>
+        )}
+      </>
     </View>
   );
 };

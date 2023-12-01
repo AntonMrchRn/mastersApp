@@ -12,9 +12,12 @@ import { useToast } from 'rn-ui-kit';
 import { storageMMKV } from '@/mmkv/storage';
 import styles from '@/screens/tabs/ProfileScreen/style';
 import { useAppDispatch } from '@/store';
-import { useDeleteAccountMutation } from '@/store/api/user';
+import {
+  useDeleteAccountMutation,
+  useDeleteTokenMutation,
+} from '@/store/api/user';
 import { logOut } from '@/store/slices/auth/actions';
-import { AxiosQueryErrorResponse } from '@/types/error';
+import { AxiosQueryErrorResponse, ErrorCode } from '@/types/error';
 import {
   AccountDeletionScreenNavigationProp,
   AccountDeletionScreenRoute,
@@ -29,6 +32,7 @@ const useAccountDeletion = (
   const insets = useSafeAreaInsets();
   const toast = useToast();
   const dispatch = useAppDispatch();
+  const [deleteToken] = useDeleteTokenMutation();
 
   const [isBannerVisible, setIsBannerVisible] = useState<boolean>(false);
   const [deleteAccount, { isSuccess, isError, error: deletionError }] =
@@ -44,7 +48,7 @@ const useAccountDeletion = (
 
   useEffect(() => {
     if (!isFocused && isBannerVisible) {
-      onBanner();
+      onBannerClose();
     }
 
     if (!isFocused && !!errors?.password?.message) {
@@ -54,6 +58,9 @@ const useAccountDeletion = (
 
   useEffect(() => {
     if (isError) {
+      if (error.code === ErrorCode.HAVE_TASK_IN_WORK) {
+        return onBannerOpen();
+      }
       toast.show({
         type: 'error',
         title: error.message,
@@ -75,7 +82,8 @@ const useAccountDeletion = (
   } = methods;
   const password = watch('password');
 
-  const onBanner = () => setIsBannerVisible(!isBannerVisible);
+  const onBannerOpen = () => setIsBannerVisible(true);
+  const onBannerClose = () => setIsBannerVisible(false);
 
   const onCopyEmail = () => {
     Clipboard.setString('info@mastera-service.ru');
@@ -97,9 +105,10 @@ const useAccountDeletion = (
             message: 'Неверный пароль, попробуйте ещё раз',
           });
         }
-        if (params.hasActiveTasks && !isBannerVisible) {
-          return onBanner();
+        if (params?.hasActiveTasks) {
+          return onBannerOpen();
         }
+        await deleteToken();
         await deleteAccount({
           login: credentials.username,
           password,
@@ -119,7 +128,7 @@ const useAccountDeletion = (
   return {
     errors,
     methods,
-    onBanner,
+    onBannerClose,
     onCopyEmail,
     isBannerVisible,
     onDelete: handleSubmit(onDelete),

@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { BottomSheet, Button, Spacer, useTheme } from 'rn-ui-kit';
 
 import { storageMMKV } from '@/mmkv/storage';
+import { useDeleteTokenMutation } from '@/store/api/user';
 import { logOut } from '@/store/slices/auth/actions';
 
 import styles from './style';
@@ -17,8 +18,11 @@ const ExitModal = ({ isVisible, onClose }: ExitModalProps) => {
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  const onExit = () => {
+  const [deleteToken] = useDeleteTokenMutation();
+
+  const onExit = async () => {
     onClose();
+    await deleteToken();
     storageMMKV.clearAll();
     dispatch(logOut());
   };

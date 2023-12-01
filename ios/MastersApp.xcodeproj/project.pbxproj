@@ -33,14 +33,14 @@
 		A7FD0A390AC64387ABC65B7D /* OpenSans-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7341733B1B3545CC90C35FA4 /* OpenSans-SemiBoldItalic.ttf */; };
 		B3A62EBF102D4CF4A66BC392 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5EE7C4B10CBD49B69F27DDF2 /* OpenSans-Bold.ttf */; };
 		B79EED2209294CAC91774E98 /* NunitoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F93E25DDB174AD3B26BF399 /* NunitoSans-Bold.ttf */; };
-		BC603E080F6C3905CA3814E0 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		BC603E080F6C3905CA3814E0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		BC71A61FECC449E689F8D25B /* OpenSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 342B248EE36B4C509B80ECF3 /* OpenSans-BoldItalic.ttf */; };
 		CE07603E2AF0EC0B000D3676 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE07603D2AF0EC0B000D3676 /* Dynamic.swift */; };
 		CE0760402AF243EE000D3676 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = CE07603F2AF243EE000D3676 /* loading.json */; };
 		CE41F59E2AB9AA6400D57AFC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE41F59D2AB9AA6400D57AFC /* GoogleService-Info.plist */; };
 		D36EE826ECE74C52935A56E7 /* OpenSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1055706D723E4AD08EEAE5CD /* OpenSans-Italic.ttf */; };
 		D7791C0E18DBFB58284941A4 /* libPods-MastersApp-MastersAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80512EAE1E7FF56503C4779C /* libPods-MastersApp-MastersAppTests.a */; };
-		DB49D17F55B4394EC0B20724 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		DB49D17F55B4394EC0B20724 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		DC8CF9788C87486289898C2F /* NunitoSans-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7C1CAD46B7B4DBF9528F3C4 /* NunitoSans-ExtraBoldItalic.ttf */; };
 		E31F12FBA1D849208758B253 /* NunitoSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5562BC1AB6E64940BAF9D445 /* NunitoSans-Italic.ttf */; };
 		E7AA55B075DD48C197B4E489 /* NunitoSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D64AF841637C43CCB0FDEBA0 /* NunitoSans-LightItalic.ttf */; };
@@ -115,7 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DB49D17F55B4394EC0B20724 /* (null) in Frameworks */,
+				DB49D17F55B4394EC0B20724 /* BuildFile in Frameworks */,
 				D7791C0E18DBFB58284941A4 /* libPods-MastersApp-MastersAppTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -124,7 +124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BC603E080F6C3905CA3814E0 /* (null) in Frameworks */,
+				BC603E080F6C3905CA3814E0 /* BuildFile in Frameworks */,
 				22E7BDD4862EE8FC6CD8472E /* libPods-MastersApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

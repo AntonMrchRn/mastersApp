@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
+import { taskCardsQueryKeys } from '@/constants/task';
 import { axiosInstance } from '@/services/axios/axiosInstance';
 
 type RequestArgs = {
@@ -18,7 +19,7 @@ const getSearchTasks = createAsyncThunk(
   ) => {
     try {
       const { data } = await axiosInstance.get(
-        `tasks/web?query=?(object==regionID^^${regionID?.join(
+        `tasks/web?query=${taskCardsQueryKeys}?(object==regionID^^${regionID?.join(
           ',',
         )}*setID==${idList}*statusID!=1)?ID,desc,${numberOfPosts},${fromTask}`,
       );
@@ -38,7 +39,7 @@ const refreshTasks = createAsyncThunk(
   ) => {
     try {
       const { data } = await axiosInstance.get(
-        `tasks/web?query=?(object==regionID^^${regionID?.join(
+        `tasks/web?query=${taskCardsQueryKeys}?(object==regionID^^${regionID?.join(
           ',',
         )}*setID==${idList}*statusID!=1)?ID,desc,${numberOfPosts},${fromTask}`,
       );
