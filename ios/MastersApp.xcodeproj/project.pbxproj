@@ -27,7 +27,6 @@
 		57DC35F2B368451788FE5BDC /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C068402937EF42AF9C436442 /* OpenSans-Light.ttf */; };
 		681FE9D6677642858DDDB2B2 /* OpenSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9A7E351261D84FEA9F850D59 /* OpenSans-Medium.ttf */; };
 		7C43DA2FD517476DA6C90E65 /* NunitoSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 67C8C130C5FD458B88EEA530 /* NunitoSans-SemiBold.ttf */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		946A3D9D0DDB40898FA6B40F /* NunitoSans-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9F40E230B8EF4EEC9CFBEA3A /* NunitoSans-BlackItalic.ttf */; };
 		9645DB821F024C86A3358CD1 /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FAE4E00677C44A8C983BA444 /* OpenSans-ExtraBold.ttf */; };
 		A52217E575604880B8F9D56E /* NunitoSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CC070988147F4A21970DDA27 /* NunitoSans-Light.ttf */; };
@@ -36,6 +35,8 @@
 		B79EED2209294CAC91774E98 /* NunitoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F93E25DDB174AD3B26BF399 /* NunitoSans-Bold.ttf */; };
 		BC603E080F6C3905CA3814E0 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		BC71A61FECC449E689F8D25B /* OpenSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 342B248EE36B4C509B80ECF3 /* OpenSans-BoldItalic.ttf */; };
+		CE07603E2AF0EC0B000D3676 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE07603D2AF0EC0B000D3676 /* Dynamic.swift */; };
+		CE0760402AF243EE000D3676 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = CE07603F2AF243EE000D3676 /* loading.json */; };
 		CE41F59E2AB9AA6400D57AFC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE41F59D2AB9AA6400D57AFC /* GoogleService-Info.plist */; };
 		D36EE826ECE74C52935A56E7 /* OpenSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1055706D723E4AD08EEAE5CD /* OpenSans-Italic.ttf */; };
 		D7791C0E18DBFB58284941A4 /* libPods-MastersApp-MastersAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80512EAE1E7FF56503C4779C /* libPods-MastersApp-MastersAppTests.a */; };
@@ -83,7 +84,6 @@
 		6F93E25DDB174AD3B26BF399 /* NunitoSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-Bold.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-Bold.ttf"; sourceTree = "<group>"; };
 		7341733B1B3545CC90C35FA4 /* OpenSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-SemiBoldItalic.ttf"; path = "../src/assets/fonts/OpenSans/OpenSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		80512EAE1E7FF56503C4779C /* libPods-MastersApp-MastersAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MastersApp-MastersAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MastersApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		991F2DBBF379404EA92B55FA /* OpenSans-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-ExtraBoldItalic.ttf"; path = "../src/assets/fonts/OpenSans/OpenSans-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
 		9A7E351261D84FEA9F850D59 /* OpenSans-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Medium.ttf"; path = "../src/assets/fonts/OpenSans/OpenSans-Medium.ttf"; sourceTree = "<group>"; };
 		9F40E230B8EF4EEC9CFBEA3A /* NunitoSans-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-BlackItalic.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-BlackItalic.ttf"; sourceTree = "<group>"; };
@@ -92,6 +92,9 @@
 		C6B56BE7BD1641A2A49C85CC /* NunitoSans-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-ExtraLight.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-ExtraLight.ttf"; sourceTree = "<group>"; };
 		C7E77ADD024646D9818D49E7 /* NunitoSans-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-Black.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-Black.ttf"; sourceTree = "<group>"; };
 		CC070988147F4A21970DDA27 /* NunitoSans-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-Light.ttf"; path = "../src/assets/fonts/NunitoSans/NunitoSans-Light.ttf"; sourceTree = "<group>"; };
+		CE07603C2AF0EC0B000D3676 /* MastersApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MastersApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		CE07603D2AF0EC0B000D3676 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
+		CE07603F2AF243EE000D3676 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		CE41F59D2AB9AA6400D57AFC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CE41F59F2AB9AE5500D57AFC /* MastersApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MastersApp.entitlements; path = MastersApp/MastersApp.entitlements; sourceTree = "<group>"; };
 		D2555201A91051C14D127333 /* Pods-MastersApp-MastersAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MastersApp-MastersAppTests.debug.xcconfig"; path = "Target Support Files/Pods-MastersApp-MastersAppTests/Pods-MastersApp-MastersAppTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -152,10 +155,12 @@
 				CE41F59F2AB9AE5500D57AFC /* MastersApp.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				CE07603F2AF243EE000D3676 /* loading.json */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				CE07603D2AF0EC0B000D3676 /* Dynamic.swift */,
+				CE07603C2AF0EC0B000D3676 /* MastersApp-Bridging-Header.h */,
 			);
 			name = MastersApp;
 			sourceTree = "<group>";
@@ -310,7 +315,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1500;
 					};
 				};
 			};
@@ -345,8 +350,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				CE0760402AF243EE000D3676 /* loading.json in Resources */,
 				B3A62EBF102D4CF4A66BC392 /* OpenSans-Bold.ttf in Resources */,
 				BC71A61FECC449E689F8D25B /* OpenSans-BoldItalic.ttf in Resources */,
 				9645DB821F024C86A3358CD1 /* OpenSans-ExtraBold.ttf in Resources */,
@@ -571,6 +576,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE07603E2AF0EC0B000D3676 /* Dynamic.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
@@ -591,7 +597,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D2555201A91051C14D127333 /* Pods-MastersApp-MastersAppTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 9Z429T382D;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -618,8 +626,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 354A47DE53BF945187C31E70 /* Pods-MastersApp-MastersAppTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = 9Z429T382D;
 				INFOPLIST_FILE = MastersAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -647,7 +657,7 @@
 				CODE_SIGN_ENTITLEMENTS = MastersApp/MastersApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = 9Z429T382D;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MastersApp/Info.plist;
@@ -655,7 +665,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -665,6 +675,7 @@
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.vector.mastera;
 				PRODUCT_NAME = MastersApp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "MastersApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -680,14 +691,14 @@
 				CODE_SIGN_ENTITLEMENTS = MastersApp/MastersApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
-				DEVELOPMENT_TEAM = 8S5JMGSU5G;
+				CURRENT_PROJECT_VERSION = 18;
+				DEVELOPMENT_TEAM = 9Z429T382D;
 				INFOPLIST_FILE = MastersApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -696,6 +707,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vector.mastera;
 				PRODUCT_NAME = MastersApp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "MastersApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
