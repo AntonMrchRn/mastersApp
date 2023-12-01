@@ -51,7 +51,9 @@ export type BottomTabParamList = {
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 export const TabNavigation = () => {
   useEffect(() => {
-    pushPermission();
+    setTimeout(() => {
+      pushPermission();
+    }, 300);
   }, []);
   const taskSearchIcon = (color: {
     focused: boolean;

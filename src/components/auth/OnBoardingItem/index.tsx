@@ -69,14 +69,19 @@ export const OnBoardingItem: FC<onBoardItem> = ({
   const onPressBtn = () => {
     if (isLast) {
       dispatch(unActiveOnboarding());
-      return dispatch(activeToolTip());
+      setTimeout(() => {
+        dispatch(activeToolTip());
+      }, 300);
+      return;
     }
     return onPress?.(index);
   };
 
   const allSkip = () => {
     dispatch(unActiveOnboarding());
-    dispatch(activeToolTip());
+    setTimeout(() => {
+      dispatch(activeToolTip());
+    }, 300);
   };
 
   return (
