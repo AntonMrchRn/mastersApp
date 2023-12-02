@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap: 'wrap',
   },
   bannerText: {
     marginLeft: 2,
@@ -19,6 +20,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 8,
+    marginTop: 10,
   },
   wrapper: {
     flex: 1,

@@ -4,11 +4,14 @@ import { TouchableOpacity, View } from 'react-native';
 import { Text, Tooltip, useTheme } from 'rn-ui-kit';
 
 import QuestionIcon from '@/assets/icons/svg/screens/QuestionIcon';
-import { hitSlop } from '@/constants/platform';
+import { configApp, deviceHeight, hitSlop } from '@/constants/platform';
 
 import styles from './style';
 
-const payerTooltipCoords = { x: -10, y: 101 };
+const checkSlipper =
+  deviceHeight < 680 ? { x: -20, y: 121 } : { x: -8, y: 101 };
+
+const payerTooltipCoords = configApp.android ? checkSlipper : { x: 13, y: 101 };
 
 const NDSPayerTooltip = () => {
   const theme = useTheme();

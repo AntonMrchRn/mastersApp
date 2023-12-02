@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
-    height: 45,
+    minHeight: 45,
     alignItems: 'center',
     width: '100%',
     flexDirection: 'row',
@@ -14,6 +14,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     maxWidth: '70%',
+    flex: 1,
+  },
+  titleTxt: {
+    textAlign: 'center',
+  },
+  descriptionTxt: {
+    textAlign: 'center',
   },
   btnBack: {
     width: 45,

@@ -12,13 +12,15 @@ import {
 } from 'rn-ui-kit';
 
 import QuestionIcon from '@/assets/icons/svg/screens/QuestionIcon';
-import { hitSlop } from '@/constants/platform';
+import { configApp, deviceHeight, hitSlop } from '@/constants/platform';
 import { useEditUserMutation, useGetUserParamsQuery } from '@/store/api/user';
 import { AxiosQueryErrorResponse } from '@/types/error';
 
 import styles from './style';
 
-const selfTooltipCoords = { x: 25, y: 85 };
+const checkSlipper = deviceHeight < 680 ? { x: -10, y: 85 } : { x: 30, y: 85 };
+
+const selfTooltipCoords = configApp.android ? checkSlipper : { x: 34, y: 85 };
 
 type SelfEmployedBlockProps = {
   id: number;

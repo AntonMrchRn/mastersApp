@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigatorScreenParams } from '@react-navigation/native';
+import { Tooltip } from 'rn-ui-kit';
 
 import Employees from '@/assets/icons/svg/tabBar/Employees';
 import Profile from '@/assets/icons/svg/tabBar/Profile';
@@ -12,6 +13,9 @@ import { LoggerScreen } from '@/screens/tabs/LoggerScreen';
 import MyTasksScreen from '@/screens/tabs/MyTasksScreen';
 import TaskSearchScreen from '@/screens/tabs/TaskSearchScreen';
 import { pushPermission } from '@/services/notifications/pushPermission';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { unActiveToolTip } from '@/store/slices/onboarding/actions';
+import { selectOnboarding } from '@/store/slices/onboarding/selectors';
 
 import { ProfileNavigation, ProfileStackParamList } from './ProfileNavigation';
 
@@ -30,6 +34,8 @@ const screenOptions = {
   tabBarLabelStyle: styles.label,
 };
 
+const payerTooltipCoords = { x: -250, y: 100 };
+
 export enum BottomTabName {
   TaskSearch = 'TaskSearch',
   MyTasks = 'MyTasks',
@@ -45,7 +51,9 @@ export type BottomTabParamList = {
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 export const TabNavigation = () => {
   useEffect(() => {
-    pushPermission();
+    setTimeout(() => {
+      pushPermission();
+    }, 300);
   }, []);
   const taskSearchIcon = (color: {
     focused: boolean;
@@ -61,7 +69,30 @@ export const TabNavigation = () => {
     focused: boolean;
     color: string;
     size: number;
-  }) => <Profile fill={color.focused ? '#3F51B5' : '#707070'} />;
+  }) => {
+    const { visitToolTip } = useAppSelector(selectOnboarding);
+    const dispatch = useAppDispatch();
+    const onTooltipClose = () => dispatch(unActiveToolTip());
+    useEffect(() => {
+      if (visitToolTip) {
+        setTimeout(() => {
+          onTooltipClose();
+        }, 3000);
+      }
+    }, []);
+    return (
+      <Tooltip
+        triangleEdge="bottom"
+        triagnleAlign="end"
+        coords={payerTooltipCoords}
+        isVisible={visitToolTip}
+        onClose={onTooltipClose}
+        text={`Для выполнения задач заполните\nданные профиля`}
+      >
+        <Profile fill={color.focused ? '#3F51B5' : '#707070'} />
+      </Tooltip>
+    );
+  };
 
   return (
     <Tab.Navigator screenOptions={screenOptions}>

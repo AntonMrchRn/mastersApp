@@ -45,6 +45,7 @@ const Header = ({
             <Text
               numberOfLines={1}
               variant="bodyMBold"
+              style={styles.titleTxt}
               color={theme.text.basic}
             >
               {title}
@@ -54,6 +55,7 @@ const Header = ({
             <Text
               numberOfLines={1}
               variant="captionRegular"
+              style={styles.descriptionTxt}
               color={theme.text.neutral}
             >
               {description}
