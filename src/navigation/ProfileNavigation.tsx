@@ -6,6 +6,7 @@ import AccountDeletionScreen from '@/screens/profile/AccountDeletionScreen';
 import BankDetailsScreen from '@/screens/profile/BankDetailsScreen';
 import ChangePasswordScreen from '@/screens/profile/ChangePasswordScreen';
 import EmailEditingScreen from '@/screens/profile/EmailEditingScreen';
+import FAQAnswerScreen from '@/screens/profile/FAQAnswerScreen';
 import FAQDetailsScreen from '@/screens/profile/FAQDetailsScreen';
 import PersonalDataEditingScreen from '@/screens/profile/PersonalDataEditingScreen';
 import PhoneEditingConfirmationScreen from '@/screens/profile/PhoneEditingConfirmationScreen';
@@ -27,6 +28,7 @@ export enum ProfileScreenName {
   PersonalDataEditing = 'PersonalDataEditing',
   PhoneEditingConfirmation = 'PhoneEditingConfirmation',
   FAQDetails = 'FAQDetails',
+  FAQAnswer = 'FAQAnswer',
 }
 export type ProfileStackParamList = {
   [ProfileScreenName.Profile]: { tab?: TabProf } | undefined;
@@ -59,6 +61,20 @@ export type ProfileStackParamList = {
   [ProfileScreenName.ChangePassword]: undefined;
   [ProfileScreenName.TelegramBot]: undefined;
   [ProfileScreenName.FAQDetails]: undefined;
+  [ProfileScreenName.FAQAnswer]: {
+    name: string;
+    answer?: {
+      subTitle?: string;
+      subText?: string;
+      dotSubText?: {
+        text?: string;
+      }[];
+      numSubText?: {
+        text?: string;
+      }[];
+      lineRightText?: string;
+    }[];
+  };
   [ProfileScreenName.AccountDeletion]: {
     hasActiveTasks: boolean;
   };
@@ -108,6 +124,10 @@ export const ProfileNavigation = () => (
     <Stack.Screen
       name={ProfileScreenName.FAQDetails}
       component={FAQDetailsScreen}
+    />
+    <Stack.Screen
+      name={ProfileScreenName.FAQAnswer}
+      component={FAQAnswerScreen}
     />
   </Stack.Navigator>
 );
