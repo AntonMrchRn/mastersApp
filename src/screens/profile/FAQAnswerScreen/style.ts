@@ -13,12 +13,13 @@ export const styles = StyleSheet.create({
   wrap: {
     paddingVertical: 2,
     gap: 8,
-  },
-  mt2: {
-    marginTop: 2,
+    marginBottom: 4,
   },
   mr5: {
-    marginRight: 5,
+    marginRight: 10,
+  },
+  mt5: {
+    marginTop: 5,
   },
   dotWrap: {
     paddingHorizontal: 12,
@@ -27,8 +28,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
   },
-  ph10: {
-    paddingHorizontal: 10,
+  ph14: {
+    paddingHorizontal: 14,
   },
   dot: {
     width: 6,
@@ -37,9 +38,6 @@ export const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 8,
     backgroundColor: '#3F51B5',
-  },
-  pv5: {
-    paddingVertical: 5,
   },
   lineContent: {
     borderLeftWidth: 4,

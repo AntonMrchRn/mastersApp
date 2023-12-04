@@ -62,7 +62,7 @@ export type ProfileStackParamList = {
   [ProfileScreenName.TelegramBot]: undefined;
   [ProfileScreenName.FAQDetails]: undefined;
   [ProfileScreenName.FAQAnswer]: {
-    name: string;
+    name?: string;
     answer?: {
       subTitle?: string;
       subText?: string;

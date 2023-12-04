@@ -17,7 +17,7 @@ interface SubText {
 }
 
 interface Subsection {
-  name: string;
+  name?: string;
   answer?: {
     subTitle?: string;
     subText?: string;
@@ -28,15 +28,15 @@ interface Subsection {
 }
 
 type ItemProps = {
-  title: string;
-  subsections: Subsection[];
+  title?: string;
+  subsections?: Subsection[];
 };
 export const Item: FC<ItemProps> = ({ title, subsections }) => {
   const theme = useTheme();
   const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   const navigationAnswer = (
-    name: string,
+    name?: string,
     answer?: {
       subTitle?: string;
       subText?: string;
@@ -49,7 +49,7 @@ export const Item: FC<ItemProps> = ({ title, subsections }) => {
   };
 
   const subsectionsItem = () => {
-    return subsections.map((item, index) => {
+    return subsections?.filter(Boolean).map((item, index) => {
       return (
         <View key={index} style={styles.subsectionsWrapper}>
           <TouchableOpacity
@@ -73,7 +73,7 @@ export const Item: FC<ItemProps> = ({ title, subsections }) => {
   return (
     <View>
       <Spacer size="xl" />
-      <Title title={title} />
+      {title && <Title title={title} />}
       <Spacer size="l" />
       {subsectionsItem()}
     </View>

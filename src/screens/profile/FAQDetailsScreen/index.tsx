@@ -4,7 +4,13 @@ import { FlatList, View } from 'react-native';
 import { useTheme } from 'rn-ui-kit';
 
 import Header from '@/components/Header';
-import { FAQDataExecutor } from '@/utils/FAQdata';
+import { useAppSelector } from '@/store';
+import { selectAuth } from '@/store/slices/auth/selectors';
+import { RoleType } from '@/types/task';
+import {
+  FAQDataExecutorExternal,
+  FAQDataExecutorInternal,
+} from '@/utils/FAQdata';
 
 import Item from './item';
 import { ItemSeparatorComponent } from './ItemSeparatorComponent';
@@ -18,13 +24,16 @@ interface SubText {
 const FAQDetailsScreen = () => {
   const theme = useTheme();
 
+  const userRoleId = useAppSelector(selectAuth).user?.roleID;
+  const isInternalExecutor = userRoleId === RoleType.INTERNAL_EXECUTOR;
+
   const renderItem = ({
     item,
   }: {
     item: {
-      title: string;
-      subsections: {
-        name: string;
+      title?: string;
+      subsections?: {
+        name?: string;
         answer?: {
           subTitle?: string;
           subText?: string;
@@ -44,7 +53,9 @@ const FAQDetailsScreen = () => {
       <FlatList
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
-        data={FAQDataExecutor}
+        data={
+          isInternalExecutor ? FAQDataExecutorInternal : FAQDataExecutorExternal
+        }
         renderItem={renderItem}
         ItemSeparatorComponent={ItemSeparatorComponent}
         contentContainerStyle={styles.contentContainerStyle}

@@ -33,28 +33,28 @@ const FAQAnswerScreen = ({
         return (
           <View key={index} style={styles.dotWrap}>
             <View style={styles.dot} />
-            <Text variant="bodyMRegular">{item?.text}</Text>
+            <Text variant="bodySRegular">{item?.text}</Text>
           </View>
         );
       });
     };
 
-    const NumTextFunc = (
+    const numTextFunc = (
       item?: {
         text?: string;
       }[],
     ) => {
       return item?.map((item, index) => {
         return (
-          <View key={index} style={[styles.dotWrap, styles.ph10]}>
+          <View key={index} style={[styles.dotWrap, styles.ph14]}>
             <Text
               variant="bodySRegular"
-              style={[styles.mt2, styles.mr5]}
+              style={styles.mr5}
               color={theme.text.accent}
             >
               {index + 1}.
             </Text>
-            <Text variant="bodyMRegular">{item?.text}</Text>
+            <Text variant="bodySRegular">{item?.text}</Text>
           </View>
         );
       });
@@ -63,18 +63,18 @@ const FAQAnswerScreen = ({
     return answer?.map((item, index) => {
       return (
         <View key={index} style={styles.wrap}>
-          {item?.subTitle && <Text variant="bodyMBold">{item?.subTitle}</Text>}
+          {item?.subTitle && <Text variant="bodySBold">{item?.subTitle}</Text>}
           {item?.subText && <Text variant="bodySRegular">{item?.subText}</Text>}
-          {item?.dotSubText && (
-            <View style={styles.pv5}>{dotTextFunc(item?.dotSubText)}</View>
-          )}
-          {item?.numSubText && (
-            <View style={styles.pv5}>{NumTextFunc(item?.numSubText)}</View>
-          )}
+          {item?.dotSubText && dotTextFunc(item?.dotSubText)}
+          {item?.numSubText && numTextFunc(item?.numSubText)}
           {item?.lineRightText && (
             <View style={styles.lineContent}>
               <Text variant="bodySRegular">{item?.lineRightText}</Text>
-              <Text variant="captionRegular" color={theme.text.neutral}>
+              <Text
+                variant="captionRegular"
+                style={styles.mt5}
+                color={theme.text.neutral}
+              >
                 МастерА
               </Text>
             </View>
