@@ -29,6 +29,7 @@ interface Subsection {
 
 type ItemProps = {
   title?: string;
+  description?: string;
   subsections?: Subsection[];
 };
 export const Item: FC<ItemProps> = ({ title, subsections }) => {

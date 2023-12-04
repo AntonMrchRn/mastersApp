@@ -1,6 +1,7 @@
 export const FAQDataExecutorExternal = [
   {
     title: 'Учетная запись',
+    description: 'Редакция от 30 ноября 2023 г.',
     subsections: [
       {
         name: 'Подтверждение учетной записи',
@@ -499,6 +500,7 @@ export const FAQDataExecutorExternal = [
 export const FAQDataExecutorInternal = [
   {
     title: 'Учетная запись',
+    description: 'Редакция от 30 ноября 2023 г.',
     subsections: [
       {
         name: 'Подтверждение учетной записи',

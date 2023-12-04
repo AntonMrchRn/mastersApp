@@ -27,11 +27,18 @@ const FAQDetailsScreen = () => {
   const userRoleId = useAppSelector(selectAuth).user?.roleID;
   const isInternalExecutor = userRoleId === RoleType.INTERNAL_EXECUTOR;
 
+  const FAQdata = isInternalExecutor
+    ? FAQDataExecutorInternal
+    : FAQDataExecutorExternal;
+
+  const description = FAQdata[0]?.description;
+
   const renderItem = ({
     item,
   }: {
     item: {
       title?: string;
+      description?: string;
       subsections?: {
         name?: string;
         answer?: {
@@ -49,13 +56,11 @@ const FAQDetailsScreen = () => {
     <View
       style={[styles.container, { backgroundColor: theme.background.main }]}
     >
-      <Header title={`Вопросы`} description={'Редакция от 30 ноября 2023 г.'} />
+      <Header title={`Вопросы`} description={description} />
       <FlatList
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
-        data={
-          isInternalExecutor ? FAQDataExecutorInternal : FAQDataExecutorExternal
-        }
+        data={FAQdata}
         renderItem={renderItem}
         ItemSeparatorComponent={ItemSeparatorComponent}
         contentContainerStyle={styles.contentContainerStyle}
