@@ -8,6 +8,7 @@ import { useAppSelector } from '@/store';
 import { selectAuth } from '@/store/slices/auth/selectors';
 import { RoleType } from '@/types/task';
 import {
+  FAQData,
   FAQDataExecutorExternal,
   FAQDataExecutorInternal,
 } from '@/utils/FAQdata';
@@ -16,10 +17,6 @@ import Item from './item';
 import { ItemSeparatorComponent } from './ItemSeparatorComponent';
 
 import { styles } from './style';
-
-interface SubText {
-  text?: string;
-}
 
 const FAQDetailsScreen = () => {
   const theme = useTheme();
@@ -33,24 +30,7 @@ const FAQDetailsScreen = () => {
 
   const description = FAQdata[0]?.description;
 
-  const renderItem = ({
-    item,
-  }: {
-    item: {
-      title?: string;
-      description?: string;
-      subsections?: {
-        name?: string;
-        answer?: {
-          subTitle?: string;
-          subText?: string;
-          dotSubText?: SubText[];
-          numSubText?: SubText[];
-          lineRightText?: string;
-        }[];
-      }[];
-    };
-  }) => <Item {...item} />;
+  const renderItem = ({ item }: { item: FAQData }) => <Item {...item} />;
 
   return (
     <View

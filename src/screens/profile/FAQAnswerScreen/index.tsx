@@ -5,16 +5,9 @@ import { Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import Header from '@/components/Header';
 import { FAQAnswerScreenNavigationProp } from '@/types/navigation';
+import { FAQDataAnswer } from '@/utils/FAQdata';
 
 import { styles } from './style';
-
-type AnswerType = {
-  subTitle?: string;
-  subText?: string;
-  dotSubText?: { text?: string }[];
-  numSubText?: { text?: string }[];
-  lineRightText?: string;
-}[];
 
 const FAQAnswerScreen = ({
   route,
@@ -23,7 +16,7 @@ const FAQAnswerScreen = ({
 }) => {
   const theme = useTheme();
 
-  const renderSection = (answer?: AnswerType) => {
+  const renderSection = (answer?: FAQDataAnswer[]) => {
     const dotTextFunc = (
       item?: {
         text?: string;

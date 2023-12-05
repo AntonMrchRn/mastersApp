@@ -15,6 +15,7 @@ import TeamMemberDetailsScreen from '@/screens/profile/TeamMemberDetailsScreen';
 import TelegramBotScreen from '@/screens/profile/TelegramBotScreen';
 import ProfileScreen from '@/screens/tabs/ProfileScreen';
 import { TabProf } from '@/screens/tabs/ProfileScreen/useProfile';
+import { FAQDataSubsections } from '@/utils/FAQdata';
 
 export enum ProfileScreenName {
   Profile = 'Profile',
@@ -61,20 +62,7 @@ export type ProfileStackParamList = {
   [ProfileScreenName.ChangePassword]: undefined;
   [ProfileScreenName.TelegramBot]: undefined;
   [ProfileScreenName.FAQDetails]: undefined;
-  [ProfileScreenName.FAQAnswer]: {
-    name?: string;
-    answer?: {
-      subTitle?: string;
-      subText?: string;
-      dotSubText?: {
-        text?: string;
-      }[];
-      numSubText?: {
-        text?: string;
-      }[];
-      lineRightText?: string;
-    }[];
-  };
+  [ProfileScreenName.FAQAnswer]: FAQDataSubsections;
   [ProfileScreenName.AccountDeletion]: {
     hasActiveTasks: boolean;
   };

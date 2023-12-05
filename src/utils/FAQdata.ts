@@ -1,3 +1,26 @@
+export type FAQDataSubText = {
+  text?: string;
+};
+
+export type FAQDataAnswer = {
+  subTitle?: string;
+  subText?: string;
+  dotSubText?: FAQDataSubText[];
+  numSubText?: FAQDataSubText[];
+  lineRightText?: string;
+};
+
+export type FAQDataSubsections = {
+  name?: string;
+  answer?: FAQDataAnswer[];
+};
+
+export type FAQData = {
+  title?: string;
+  description?: string;
+  subsections?: FAQDataSubsections[];
+};
+
 export const FAQDataExecutorExternal = [
   {
     title: 'Учетная запись',
