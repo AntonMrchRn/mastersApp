@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: '#fff',
     alignItems: 'center',
+    maxWidth: '70%',
     flex: 1,
   },
   titleTxt: {
@@ -24,10 +25,6 @@ const styles = StyleSheet.create({
   btnBack: {
     width: 45,
     paddingVertical: 5,
-  },
-  lateralWrapper: {
-    width: '15%',
-    justifyContent: 'center',
   },
   fix: {
     width: '15%',

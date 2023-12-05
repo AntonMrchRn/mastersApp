@@ -92,6 +92,10 @@ type AccountDeletionScreenNavigationProp = NativeStackNavigationProp<
   ProfileStackParamList,
   ProfileScreenName.AccountDeletion
 >;
+type FAQAnswerScreenNavigationProp = RouteProp<
+  ProfileStackParamList,
+  ProfileScreenName.FAQAnswer
+>;
 type ProfileStackNavigationProp = NativeStackNavigationProp<
   BottomTabParamList,
   BottomTabName.ProfileNavigation
@@ -135,6 +139,7 @@ export type {
   TaskCardScreenNavigationProp,
   CompositeEditingNavigationProp,
   BankDetailsScreenNavigationProp,
+  FAQAnswerScreenNavigationProp,
   CompositeTaskCardNavigationProp,
   ChangePasswordScreenNavigationProp,
   AccountDeletionScreenNavigationProp,

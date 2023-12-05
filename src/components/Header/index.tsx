@@ -43,6 +43,7 @@ const Header = ({
         <View style={styles.wrapper}>
           {title && (
             <Text
+              numberOfLines={1}
               variant="bodyMBold"
               style={styles.titleTxt}
               color={theme.text.basic}
@@ -52,6 +53,7 @@ const Header = ({
           )}
           {description && (
             <Text
+              numberOfLines={1}
               variant="captionRegular"
               style={styles.descriptionTxt}
               color={theme.text.neutral}
