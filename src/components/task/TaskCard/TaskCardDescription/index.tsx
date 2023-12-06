@@ -43,6 +43,7 @@ type TaskCardDescriptionProps = {
   executors: Executor[] | [];
   isInternalExecutor: boolean;
   isConfirmedCurator: boolean;
+  regionID: number | undefined;
   webdata: WebData | undefined;
   subsetID: TaskType | undefined;
   statusID: StatusType | undefined;
@@ -56,6 +57,7 @@ export const TaskCardDescription = ({
   address,
   endTime,
   webdata,
+  regionID,
   contacts,
   statusID,
   subsetID,
@@ -244,8 +246,16 @@ export const TaskCardDescription = ({
           </Text>
         </View>
       )}
-      {address && <TaskAddress address={address} />}
-      {(startTime || endTime) && <TaskDate from={startTime} to={endTime} />}
+      {address && (
+        <TaskAddress
+          address={address}
+          textColor={theme.text.basic}
+          {...(isITServices && { regionID })}
+        />
+      )}
+      {(startTime || endTime) && (
+        <TaskDate from={startTime} to={endTime} textColor={theme.text.basic} />
+      )}
 
       {/* Контакты в задаче */}
       {(contacts.length || coordinator) &&

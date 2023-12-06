@@ -14,7 +14,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { TabControl, Text, useTheme } from 'rn-ui-kit';
 import { TabItem } from 'rn-ui-kit/lib/typescript/components/TabControl';
 
-import CardTasks from '@/components/tabs/TaskSearch/Card';
+import { CardTasks } from '@/components/tabs/TaskSearch/Card';
 import PreviewNotFound, {
   PreviewNotFoundType,
 } from '@/components/tabs/TaskSearch/PreviewNotFound';

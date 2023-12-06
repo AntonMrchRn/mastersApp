@@ -1,18 +1,26 @@
-import React from 'react';
+import React, { FC } from 'react';
 import SVG, { Path } from 'react-native-svg';
 
-export const CalendarCheckIcon = () => {
+import { useTheme } from 'rn-ui-kit';
+
+type CalendarCheckIconProps = {
+  fill?: string;
+};
+
+export const CalendarCheckIcon = ({ fill }: CalendarCheckIconProps) => {
+  const theme = useTheme();
+
   return (
     <SVG width="16" height="16" viewBox="0 0 20 16" fill="none">
       <Path
         d="M13.2411 10.4549C13.4923 10.2182 13.5041 9.82264 13.2674 9.5714C13.0307 9.32017 12.6351 9.3084 12.3839 9.5451L9.16552 12.5774L7.61764 11.1091C7.36721 10.8715 6.97162 10.8819 6.73406 11.1324C6.4965 11.3828 6.50693 11.7784 6.75736 12.0159L8.73392 13.8909C8.97447 14.1191 9.35134 14.1198 9.59266 13.8924L13.2411 10.4549Z"
-        fill="#1B1B1B"
+        fill={fill ?? theme.text.neutral}
       />
       <Path
         fillRule="evenodd"
         clipRule="evenodd"
         d="M13.75 1.25C14.0952 1.25 14.375 1.52982 14.375 1.875V2.5H16.25C16.9404 2.5 17.5 3.05964 17.5 3.75V16.25C17.5 16.9404 16.9404 17.5 16.25 17.5H3.75C3.05964 17.5 2.5 16.9404 2.5 16.25V3.75C2.5 3.05964 3.05964 2.5 3.75 2.5H5.625V1.875C5.625 1.52982 5.90482 1.25 6.25 1.25C6.59518 1.25 6.875 1.52982 6.875 1.875V2.5H13.125V1.875C13.125 1.52982 13.4048 1.25 13.75 1.25ZM14.375 3.75H16.25V6.25H3.75V3.75H5.625V4.375C5.625 4.72018 5.90482 5 6.25 5C6.59518 5 6.875 4.72018 6.875 4.375V3.75H13.125V4.375C13.125 4.72018 13.4048 5 13.75 5C14.0952 5 14.375 4.72018 14.375 4.375V3.75ZM16.25 7.5H3.75V16.25H16.25V7.5Z"
-        fill="#1B1B1B"
+        fill={fill ?? theme.text.neutral}
       />
     </SVG>
   );

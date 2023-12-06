@@ -1,7 +1,7 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
-import { Card, Spacer, Text } from 'rn-ui-kit';
+import { Card, Spacer, Text, useTheme } from 'rn-ui-kit';
 
 import { TaskAddress } from '@/components/task/TaskAddress';
 import { TaskBadges } from '@/components/task/TaskBadges';
@@ -17,7 +17,7 @@ type CardTasksProp = Task & {
   userRole: RoleType | undefined;
 };
 
-const CardTasks = ({
+export const CardTasks = ({
   object,
   startTime = '',
   endTime = '',
@@ -33,6 +33,8 @@ const CardTasks = ({
   userRole,
   services,
 }: CardTasksProp) => {
+  const theme = useTheme();
+
   const address = object?.name || '';
 
   const onPress = () => {
@@ -78,12 +80,21 @@ const CardTasks = ({
           <View style={styles.wrapperAddress}>
             <TaskAddress address={address} />
           </View>
-          {(startTime || endTime) && <TaskDate from={startTime} to={endTime} />}
+          <View style={styles.dateWrapper}>
+            {(startTime || endTime) && (
+              <TaskDate from={startTime} to={endTime} />
+            )}
+            <Text
+              variant="captionRegular"
+              color={theme.text.neutralDisable}
+              style={styles.id}
+            >
+              ID {ID}
+            </Text>
+          </View>
         </>
       </Card>
       <Spacer size="xs" separator="bottom" />
     </TouchableOpacity>
   );
 };
-
-export default memo(CardTasks);
