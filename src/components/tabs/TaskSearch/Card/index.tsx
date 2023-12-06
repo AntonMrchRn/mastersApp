@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
 import { Card, Spacer, Text, useTheme } from 'rn-ui-kit';
@@ -17,84 +17,90 @@ type CardTasksProp = Task & {
   userRole: RoleType | undefined;
 };
 
-export const CardTasks = ({
-  object,
-  startTime = '',
-  endTime = '',
-  name,
-  description,
-  statusID,
-  isUrgent,
-  isNight,
-  ID,
-  onItemPress,
-  outlayStatusID,
-  toClose,
-  userRole,
-  services,
-}: CardTasksProp) => {
-  const theme = useTheme();
+export const CardTasks = memo(
+  ({
+    object,
+    startTime = '',
+    endTime = '',
+    name,
+    description,
+    statusID,
+    isUrgent,
+    isNight,
+    ID,
+    onItemPress,
+    outlayStatusID,
+    toClose,
+    userRole,
+    services,
+  }: CardTasksProp) => {
+    const theme = useTheme();
 
-  const address = object?.name || '';
+    const address = object?.name || '';
 
-  const onPress = () => {
-    if (typeof ID === 'number') {
-      onItemPress(ID);
-    }
-  };
+    const onPress = () => {
+      if (typeof ID === 'number') {
+        onItemPress(ID);
+      }
+    };
 
-  const sum =
-    services && services.reduce((acc, val) => acc + (val?.sum || 0), 0);
-  const currentSum =
-    !!sum && (Number.isInteger(sum) ? sum.toString() : sum.toFixed(2));
-  return (
-    <TouchableOpacity style={styles.btn} onPress={onPress}>
-      <Card style={styles.wrapper}>
-        <>
-          <View style={styles.wrapperBadge}>
-            <TaskBadges
-              outlayStatusID={outlayStatusID}
-              statusID={statusID}
-              isUrgent={isUrgent}
-              isNight={isNight}
-              useOutlayStatus
-              toClose={toClose}
-            />
-          </View>
-          {isDev && (
-            <Text variant="bodySRegular" style={styles.wrapperTitle}>
-              Номер задачи: {ID}
-            </Text>
-          )}
-          <Text variant="title3" style={styles.wrapperTitle} numberOfLines={2}>
-            {name}
-          </Text>
-          {!!sum && !!(userRole !== RoleType.INTERNAL_EXECUTOR) && (
-            <Text variant="title2" style={styles.price}>
-              {currentSum} ₽
-            </Text>
-          )}
-          <Text variant="bodySRegular" numberOfLines={3}>
-            {description}
-          </Text>
-          <View style={styles.wrapperAddress}>
-            <TaskAddress address={address} />
-          </View>
-          <View style={styles.dateWrapper}>
-            {(startTime || endTime) && (
-              <TaskDate from={startTime} to={endTime} />
+    const sum =
+      services && services.reduce((acc, val) => acc + (val?.sum || 0), 0);
+    const currentSum =
+      !!sum && (Number.isInteger(sum) ? sum.toString() : sum.toFixed(2));
+    return (
+      <TouchableOpacity style={styles.btn} onPress={onPress}>
+        <Card style={styles.wrapper}>
+          <>
+            <View style={styles.wrapperBadge}>
+              <TaskBadges
+                outlayStatusID={outlayStatusID}
+                statusID={statusID}
+                isUrgent={isUrgent}
+                isNight={isNight}
+                useOutlayStatus
+                toClose={toClose}
+              />
+            </View>
+            {isDev && (
+              <Text variant="bodySRegular" style={styles.wrapperTitle}>
+                Номер задачи: {ID}
+              </Text>
             )}
             <Text
-              variant="captionRegular"
-              color={theme.text.neutralDisable}
-              style={styles.id}
+              variant="title3"
+              style={styles.wrapperTitle}
+              numberOfLines={2}
             >
-              ID {ID}
+              {name}
             </Text>
-          </View>
-        </>
-      </Card>
-      <Spacer size="xs" separator="bottom" />
-    </TouchableOpacity>
-  );
-};
+            {!!sum && !!(userRole !== RoleType.INTERNAL_EXECUTOR) && (
+              <Text variant="title2" style={styles.price}>
+                {currentSum} ₽
+              </Text>
+            )}
+            <Text variant="bodySRegular" numberOfLines={3}>
+              {description}
+            </Text>
+            <View style={styles.wrapperAddress}>
+              <TaskAddress address={address} />
+            </View>
+            <View style={styles.dateWrapper}>
+              {(startTime || endTime) && (
+                <TaskDate from={startTime} to={endTime} />
+              )}
+              <Text
+                variant="captionRegular"
+                color={theme.text.neutralDisable}
+                style={styles.id}
+              >
+                ID {ID}
+              </Text>
+            </View>
+          </>
+        </Card>
+        <Spacer size="xs" separator="bottom" />
+      </TouchableOpacity>
+    );
+  },
+);

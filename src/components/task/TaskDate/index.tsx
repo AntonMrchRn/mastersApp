@@ -16,7 +16,7 @@ type TaskDateProps = {
 export const TaskDate: FC<TaskDateProps> = ({ from, to, textColor }) => {
   const theme = useTheme();
 
-  const color = textColor ?? theme.text.neutral;
+  const color = textColor || theme.text.neutral;
 
   const inOneMonth = !!(
     from &&

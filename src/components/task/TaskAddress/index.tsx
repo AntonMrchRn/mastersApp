@@ -20,12 +20,12 @@ export const TaskAddress: FC<TaskAddressProps> = ({
 }) => {
   const theme = useTheme();
 
-  const color = textColor ?? theme.text.neutral;
+  const color = textColor || theme.text.neutral;
 
   return (
     <View style={styles.address}>
       <View style={styles.wrapperIcon}>
-        <AddressIcon fill={textColor ?? theme.text.neutral} />
+        <AddressIcon fill={color} />
       </View>
       <View style={styles.ml10}>
         <Text variant="captionRegular" color={color}>
