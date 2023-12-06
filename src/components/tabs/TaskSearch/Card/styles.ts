@@ -23,4 +23,13 @@ export const styles = StyleSheet.create({
   price: {
     marginBottom: 16,
   },
+  id: {
+    flex: 1,
+    textAlign: 'right',
+  },
+  dateWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+  },
 });

@@ -1,12 +1,12 @@
 import React from 'react';
 import { FormProvider } from 'react-hook-form';
 import { View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { Button, Spacer, Text } from 'rn-ui-kit';
 
 import Header from '@/components/Header';
 import ControlledInput from '@/components/inputs/ControlledInput';
-import { DismissKeyboardView } from '@/hocs/DismissKeyboardView';
 import useBankDetails from '@/screens/profile/BankDetailsScreen/useBankDetails';
 
 import styles from './style';
@@ -17,7 +17,10 @@ const BankDetailsScreen = () => {
   return (
     <View style={styles.container}>
       <Header title="Банковские реквизиты" />
-      <DismissKeyboardView>
+      <KeyboardAwareScrollView
+        enableOnAndroid
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.content}>
           <Text variant="title3" style={styles.title}>
             Заполните данные вашего банка
@@ -82,7 +85,7 @@ const BankDetailsScreen = () => {
             />
           </FormProvider>
         </View>
-      </DismissKeyboardView>
+      </KeyboardAwareScrollView>
     </View>
   );
 };

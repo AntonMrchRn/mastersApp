@@ -63,7 +63,9 @@ const TypeSelectionStep = ({
             }
           >
             <View style={styles.entityType}>
-              <Text variant="bodyMRegular">{type.description}</Text>
+              <Text variant="bodyMRegular" style={styles.entityTypeText}>
+                {type.description}
+              </Text>
               {selectedType?.description === type.description && (
                 <CheckMeasureIcon fill={theme.icons.accent} />
               )}
