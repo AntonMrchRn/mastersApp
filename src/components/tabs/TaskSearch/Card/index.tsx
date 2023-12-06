@@ -6,7 +6,6 @@ import { Card, Spacer, Text, useTheme } from 'rn-ui-kit';
 import { TaskAddress } from '@/components/task/TaskAddress';
 import { TaskBadges } from '@/components/task/TaskBadges';
 import { TaskDate } from '@/components/task/TaskDate';
-import { isDev } from '@/constants/platform';
 import { Task } from '@/store/api/tasks/types';
 import { RoleType } from '@/types/task';
 
@@ -62,11 +61,6 @@ export const CardTasks = memo(
                 toClose={toClose}
               />
             </View>
-            {isDev && (
-              <Text variant="bodySRegular" style={styles.wrapperTitle}>
-                Номер задачи: {ID}
-              </Text>
-            )}
             <Text
               variant="title3"
               style={styles.wrapperTitle}

@@ -12,6 +12,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 12,
   },
+  entityTypeText: {
+    flexShrink: 1,
+  },
   payerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
