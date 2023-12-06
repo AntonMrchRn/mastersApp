@@ -466,7 +466,7 @@ PODS:
   - React-jsinspector (0.71.14)
   - React-logger (0.71.14):
     - glog
-  - react-native-blob-util (0.19.4):
+  - react-native-blob-util (0.19.6):
     - React-Core
   - react-native-document-picker (9.0.1):
     - React-Core
@@ -474,18 +474,19 @@ PODS:
     - React-Core
   - react-native-image-resizer (3.0.7):
     - React-Core
-  - react-native-keyboard-controller (1.9.4):
+  - react-native-keyboard-controller (1.9.5):
     - React-Core
   - react-native-lottie-splash-screen (1.1.2):
     - React
   - react-native-mmkv (2.11.0):
     - MMKV (>= 1.2.13)
     - React-Core
-  - react-native-netinfo (11.1.0):
+  - react-native-netinfo (11.2.0):
     - React-Core
   - react-native-oksse (0.2.0):
     - React-Core
-  - react-native-pager-view (6.2.2):
+  - react-native-pager-view (6.2.3):
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-safe-area-context (4.7.4):
     - React-Core
@@ -575,11 +576,11 @@ PODS:
     - React-jsi (= 0.71.14)
     - React-logger (= 0.71.14)
     - React-perflogger (= 0.71.14)
-  - RNCAsyncStorage (1.19.8):
+  - RNCAsyncStorage (1.21.0):
     - React-Core
   - RNCClipboard (1.5.1):
     - React-Core
-  - RNDeviceInfo (10.11.0):
+  - RNDeviceInfo (10.12.0):
     - React-Core
   - RNFBApp (18.6.2):
     - Firebase/CoreOnly (= 10.18.0)
@@ -642,9 +643,9 @@ PODS:
   - RNScreens (3.27.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - RNShare (10.0.1):
+  - RNShare (10.0.2):
     - React-Core
-  - RNSVG (14.0.0):
+  - RNSVG (14.1.0):
     - React-Core
   - SocketRocket (0.7.0)
   - TOCropViewController (2.6.1)
@@ -961,16 +962,16 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 94cfc1788637ceaf8841ef1f69b10cc0d62baadc
   React-jsinspector: 7bf923954b4e035f494b01ac16633963412660d7
   React-logger: 655ff5db8bd922acfbe76a4983ffab048916343e
-  react-native-blob-util: 30a6c9fd067aadf9177e61a998f2c7efb670598d
+  react-native-blob-util: d8fa1a7f726867907a8e43163fdd8b441d4489ea
   react-native-document-picker: 2b8f18667caee73a96708a82b284a4f40b30a156
   react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
   react-native-image-resizer: 681f7607418b97c084ba2d0999b153b103040d8a
-  react-native-keyboard-controller: 006c8ac9efc61ad5bda50cf974d4d4b236ee2c86
+  react-native-keyboard-controller: b0d78d3a1576aa57bb62a295ff42150e1f25ee7d
   react-native-lottie-splash-screen: 4e1b1fd9d6633f9cd2106d6877eb5ba0147f3e2b
   react-native-mmkv: e97c0c79403fb94577e5d902ab1ebd42b0715b43
-  react-native-netinfo: 3aa5637c18834966e0c932de8ae1ae56fea20a97
+  react-native-netinfo: 25c87e28495d955b30aeca9c22594691668c907a
   react-native-oksse: ad7d8dda81900a782d81694ce0e914478df36a9c
-  react-native-pager-view: 02a5c4962530f7efc10dd51ee9cdabeff5e6c631
+  react-native-pager-view: e26d35e382d86950c936f8917e3beb9188115ccc
   react-native-safe-area-context: 2cd91d532de12acdb0a9cbc8d43ac72a8e4c897c
   react-native-webview: 88293a0f23eca8465c0433c023ec632930e644d0
   React-perflogger: 4987ad83731c23d11813c84263963b0d3028c966
@@ -986,9 +987,9 @@ SPEC CHECKSUMS:
   React-RCTVibration: 64e412b9ac684c4edc938fa1187135ada9af7faf
   React-runtimeexecutor: ffe826b7b1cfbc32a35ed5b64d5886c0ff75f501
   ReactCommon: 7f3dd5e98a9ec627c6b03d26c062bf37ea9fc888
-  RNCAsyncStorage: 687bb9e85dd3d45b966662440dcfc0cd962347e6
+  RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
-  RNDeviceInfo: bf8a32acbcb875f568217285d1793b0e8588c974
+  RNDeviceInfo: db5c64a060e66e5db3102d041ebe3ef307a85120
   RNFBApp: 09fd96441b0f556a1ef50ee70fa72160ae71ecb9
   RNFBCrashlytics: 0866393a9fbca1d8d353052243e21d1cdeb55394
   RNFBMessaging: 95fa608c79d3378b1a958a64f8be82e4699368a9
@@ -998,8 +999,8 @@ SPEC CHECKSUMS:
   RNPermissions: 4e3714e18afe7141d000beae3755e5b5fb2f5e05
   RNReanimated: be07c7ae209074d0e8a84cf38b7909457ac59a32
   RNScreens: 3c2d122f5e08c192e254c510b212306da97d2581
-  RNShare: bed7c4fbe615f3d977f22feb0902af9a790c1660
-  RNSVG: 255767813dac22db1ec2062c8b7e7b856d4e5ae6
+  RNShare: 859ff710211285676b0bcedd156c12437ea1d564
+  RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   Yoga: e71803b4c1fff832ccf9b92541e00f9b873119b9
