@@ -4,28 +4,11 @@ import { TouchableOpacity, View } from 'react-native';
 import { Text, Tooltip, useTheme } from 'rn-ui-kit';
 
 import { InfoIcon } from '@/assets/icons/svg/estimate/InfoIcon';
-import { configApp, deviceHeight, deviceWidth } from '@/constants/platform';
 import { separateThousands } from '@/utils/separateThousands';
 
 import { styles } from './styles';
 
-const checkSlipper =
-  deviceHeight < 680
-    ? {
-        x: deviceWidth * -0.28,
-        y: deviceWidth - deviceWidth * 0.75 + 120,
-      }
-    : {
-        x: deviceWidth * -0.179,
-        y: deviceWidth - deviceWidth * 0.75 + 70,
-      };
-
-const coords = configApp.android
-  ? checkSlipper
-  : {
-      x: deviceWidth * -0.168,
-      y: deviceWidth - deviceWidth * 0.75 + 74,
-    };
+const coords = { x: -30, y: 160 };
 
 type EstimateTotalProps = {
   servicesSum: number;

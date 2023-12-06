@@ -38,20 +38,15 @@ const DocumentsBlock = ({
   const toast = useToast();
   const isFocused = useIsFocused();
 
-  const [addFiles, { isLoading, isSuccess }] = useAddFilesMutation();
+  const [addFiles] = useAddFilesMutation();
   const [deleteFile] = useDeleteFileMutation();
 
   const progressesSelector = useAppSelector(selectUser).progresses;
 
   const [isBannerVisible, setIsBannerVisible] = useState<boolean>(false);
+
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [uploadedFileIDs, setUploadedFileIDs] = useState<number[]>([]);
-
-  useEffect(() => {
-    if (isLoading || isSuccess) {
-      scrollToEnd();
-    }
-  }, [Object.keys(controllers)]);
 
   useEffect(() => {
     if (isBannerVisible) {
@@ -91,7 +86,9 @@ const DocumentsBlock = ({
     try {
       const controller = new AbortController();
       controllers = { ...controllers, [date]: controller };
-
+      setTimeout(() => {
+        scrollToEnd();
+      }, 100);
       const addedFiles = await addFiles({
         formData,
         files: uploadFiles,
