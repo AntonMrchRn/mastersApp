@@ -7,7 +7,6 @@ import { StackScreenProps } from '@react-navigation/stack';
 
 import FirstResponse from '@/assets/icons/svg/onboarding/FirstResponse';
 import Lots from '@/assets/icons/svg/onboarding/Lots';
-import Rating from '@/assets/icons/svg/onboarding/Rating';
 import Team from '@/assets/icons/svg/onboarding/Team';
 import { OnBoardingItem } from '@/components/auth/OnBoardingItem';
 import { AppScreenName, AppStackParamList } from '@/navigation/AppNavigation';
@@ -30,10 +29,6 @@ export const OnboardingScreen: FC<OnboardingScreenProps> = () => {
     },
     {
       id: 3,
-      icon: <Rating />,
-    },
-    {
-      id: 4,
       icon: <Team />,
     },
   ];

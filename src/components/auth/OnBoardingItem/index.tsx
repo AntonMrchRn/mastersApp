@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, Text, useTheme } from 'rn-ui-kit';
 
-import StepFour from '@/assets/icons/svg/onboarding/StepFour';
 import StepOne from '@/assets/icons/svg/onboarding/StepOne';
 import StepThree from '@/assets/icons/svg/onboarding/StepThree';
 import StepTwo from '@/assets/icons/svg/onboarding/StepTwo';
@@ -47,9 +46,6 @@ export const OnBoardingItem: FC<onBoardItem> = ({
     if (item?.id === 2) {
       return 'Интересно';
     }
-    if (item?.id === 3) {
-      return 'Отлично';
-    }
     return 'Начать';
   };
 
@@ -60,28 +56,21 @@ export const OnBoardingItem: FC<onBoardItem> = ({
     if (item?.id === 2) {
       return <StepTwo />;
     }
-    if (item?.id === 3) {
-      return <StepThree />;
-    }
-    return <StepFour />;
+    return <StepThree />;
   };
 
-  const onPressBtn = () => {
+  const onPressBtn = async () => {
     if (isLast) {
-      dispatch(unActiveOnboarding());
-      setTimeout(() => {
-        dispatch(activeToolTip());
-      }, 300);
+      await dispatch(activeToolTip());
+      await dispatch(unActiveOnboarding());
       return;
     }
     return onPress?.(index);
   };
 
-  const allSkip = () => {
-    dispatch(unActiveOnboarding());
-    setTimeout(() => {
-      dispatch(activeToolTip());
-    }, 300);
+  const allSkip = async () => {
+    await dispatch(activeToolTip());
+    await dispatch(unActiveOnboarding());
   };
 
   return (
