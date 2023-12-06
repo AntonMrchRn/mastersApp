@@ -13,7 +13,7 @@ import { CompositeScreenProps, useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { SegmentedControl, Text, useTheme } from 'rn-ui-kit';
 
-import CardTasks from '@/components/tabs/TaskSearch/Card';
+import { CardTasks } from '@/components/tabs/TaskSearch/Card';
 import PreviewNotFound, {
   PreviewNotFoundType,
 } from '@/components/tabs/TaskSearch/PreviewNotFound';
@@ -40,11 +40,12 @@ const setTypeByTabIndex: Record<0 | 1, TaskSetType> = {
   1: TaskSetType.IT_SERVICES,
 };
 
+let abort: () => void | undefined;
+
 type TaskSearchScreenProps = CompositeScreenProps<
   BottomTabScreenProps<BottomTabParamList, BottomTabName.TaskSearch>,
   StackScreenProps<AppStackParamList>
 >;
-let abort: () => void | undefined;
 
 const TaskSearchScreen = ({ navigation, route }: TaskSearchScreenProps) => {
   const theme = useTheme();

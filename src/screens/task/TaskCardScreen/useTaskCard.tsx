@@ -79,6 +79,7 @@ const tabs: TabItem[] = [
     label: TaskTab.HISTORY,
   },
 ];
+
 const estimateTabsArray = [
   EstimateTab.TASK_ESTIMATE,
   EstimateTab.MY_SUGGESTION,
@@ -203,6 +204,7 @@ export const useTaskCard = ({
       skip: isSkipTask,
     },
   );
+
   const getAnotherOffers = useGetAnotherOffersQuery(
     {
       taskID: taskId,
@@ -1100,6 +1102,7 @@ export const useTaskCard = ({
             webdata={webdata}
             contacts={contacts}
             statusID={statusID}
+            regionID={regionID}
             startTime={startTime}
             executors={executors}
             subsetID={subsetID}
