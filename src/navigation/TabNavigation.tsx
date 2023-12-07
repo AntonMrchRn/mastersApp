@@ -60,12 +60,12 @@ export const TabNavigation = () => {
   const onTooltipClose = () => dispatch(unActiveToolTip());
 
   useEffect(() => {
+    if (visitToolTip) {
+      setTimeout(() => {
+        onTooltipClose();
+      }, 3000);
+    }
     setTimeout(() => {
-      if (visitToolTip) {
-        setTimeout(() => {
-          onTooltipClose();
-        }, 3000);
-      }
       pushPermission();
     }, 300);
   }, []);
