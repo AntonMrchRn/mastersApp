@@ -40,7 +40,8 @@ export const TaskAddress: FC<TaskAddressProps> = ({
             color={theme.text.neutral}
             style={styles.id}
           >
-            ID {isNewPharmacy && 'ПО'} {separateThousands(ID)}
+            ID {isNewPharmacy && 'ПО '}
+            {separateThousands(ID)}
           </Text>
         )}
       </View>
