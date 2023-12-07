@@ -128,7 +128,12 @@ const taskSearch = createSlice({
     builder.addCase(
       sendMessage.fulfilled,
       (state, { payload }: PayloadAction<GetSendResponse>) => {
+        const isMessageExist = !!state.comments?.taskComment?.find(
+          message => message.ID === payload.ID,
+        );
+
         state.comments.taskComment &&
+          !isMessageExist &&
           state.comments.taskComment.unshift(payload);
         state.loadingSend = false;
       },
