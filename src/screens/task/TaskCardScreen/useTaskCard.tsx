@@ -388,6 +388,8 @@ export const useTaskCard = ({
   const offersDeadline = task?.offersDeadline;
   const winnerOffer = task?.winnerOffer;
   const executorsCount = task?.executorsCount;
+  const addressID = task?.object?.ID;
+  const isNewPharmacy = !!task?.object?.findID;
 
   /**
    * Промежуточный статус “к Закрытию“ для:
@@ -1102,13 +1104,14 @@ export const useTaskCard = ({
             webdata={webdata}
             contacts={contacts}
             statusID={statusID}
-            regionID={regionID}
+            addressID={addressID}
             startTime={startTime}
             executors={executors}
             subsetID={subsetID}
             description={description}
             coordinator={coordinator}
             isITServices={isITServices}
+            isNewPharmacy={isNewPharmacy}
             applicationFiles={applicationFiles}
             isConfirmedCurator={isConfirmedCurator}
             isInternalExecutor={isInternalExecutor}

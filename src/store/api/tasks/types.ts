@@ -165,6 +165,8 @@ type Task = {
     ID?: number;
     name?: string;
     regionID?: number;
+    objectID?: number;
+    findID?: number;
   };
   offerIDs?: number[];
   /**

@@ -4,19 +4,22 @@ import { View } from 'react-native';
 import { Text, useTheme } from 'rn-ui-kit';
 
 import { AddressIcon } from '@/assets/icons/svg/screens/AddressIcon';
+import { separateThousands } from '@/utils/separateThousands';
 
 import { styles } from './styles';
 
 type TaskAddressProps = {
   address: string;
-  regionID?: number;
+  ID?: number;
   textColor?: string;
+  isNewPharmacy?: boolean;
 };
 
 export const TaskAddress: FC<TaskAddressProps> = ({
   address,
-  regionID,
+  ID,
   textColor,
+  isNewPharmacy,
 }) => {
   const theme = useTheme();
 
@@ -31,13 +34,14 @@ export const TaskAddress: FC<TaskAddressProps> = ({
         <Text variant="captionRegular" color={color}>
           {address}
         </Text>
-        {!!regionID && (
+        {!!ID && (
           <Text
             variant="captionRegular"
             color={theme.text.neutral}
             style={styles.id}
           >
-            ID {regionID}
+            ID {isNewPharmacy && 'ПО '}
+            {separateThousands(ID)}
           </Text>
         )}
       </View>

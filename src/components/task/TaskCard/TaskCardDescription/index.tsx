@@ -39,11 +39,12 @@ type TaskCardDescriptionProps = {
   contacts: Contact[];
   car: Car | undefined;
   isITServices: boolean;
+  isNewPharmacy: boolean;
   applicationFiles: File[];
   executors: Executor[] | [];
   isInternalExecutor: boolean;
   isConfirmedCurator: boolean;
-  regionID: number | undefined;
+  addressID: number | undefined;
   webdata: WebData | undefined;
   subsetID: TaskType | undefined;
   statusID: StatusType | undefined;
@@ -57,15 +58,16 @@ export const TaskCardDescription = ({
   address,
   endTime,
   webdata,
-  regionID,
   contacts,
   statusID,
   subsetID,
   executors,
+  addressID,
   startTime,
   coordinator,
   description,
   isITServices,
+  isNewPharmacy,
   applicationFiles,
   isInternalExecutor,
   isConfirmedCurator,
@@ -250,7 +252,7 @@ export const TaskCardDescription = ({
         <TaskAddress
           address={address}
           textColor={theme.text.basic}
-          {...(isITServices && { regionID })}
+          {...(isITServices && { ID: addressID, isNewPharmacy })}
         />
       )}
       {(startTime || endTime) && (
