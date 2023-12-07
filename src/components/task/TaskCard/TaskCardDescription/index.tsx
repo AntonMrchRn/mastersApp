@@ -12,6 +12,7 @@ import { Button, Spacer, Text, useTheme, useToast } from 'rn-ui-kit';
 
 import { CarIcon } from '@/assets/icons/svg/screens/CarIcon';
 import { UsersIcon } from '@/assets/icons/svg/screens/UsersIcon';
+import { WrenchIcon } from '@/assets/icons/svg/screens/WrenchIcon';
 import { DownloadManager } from '@/components/FileManager/DownloadManager';
 import { TaskAddress } from '@/components/task/TaskAddress';
 import { TaskDate } from '@/components/task/TaskDate';
@@ -32,6 +33,7 @@ import { ContactItem } from './ContactItem';
 import { styles } from './styles';
 
 type TaskCardDescriptionProps = {
+  stage: string;
   address: string;
   endTime: string;
   startTime: string;
@@ -55,6 +57,7 @@ type TaskCardDescriptionProps = {
 
 export const TaskCardDescription = ({
   car,
+  stage,
   address,
   endTime,
   webdata,
@@ -238,14 +241,20 @@ export const TaskCardDescription = ({
         {description}
       </Text>
       <Spacer size="l" />
-      {isInternalExecutor && statusID !== StatusType.ACTIVE && (
-        <View style={styles.car}>
+      {isInternalExecutor && (
+        <View style={styles.descriptionBlock}>
           <CarIcon />
           <Text variant="bodySRegular">
             {car
               ? `${car.model}, гос. номер ${car.number}`
               : 'Автомобиль не нужен'}
           </Text>
+        </View>
+      )}
+      {isITServices && stage && (
+        <View style={styles.descriptionBlock}>
+          <WrenchIcon />
+          <Text variant="bodySRegular">{stage}</Text>
         </View>
       )}
       {address && (

@@ -153,7 +153,7 @@ export const useTaskCard = ({
     inappropriateRegionBannerVisible,
     setInappropriateRegionBannerVisible,
   ] = useState<boolean>(false);
-  const [visible, setVisible] = useState<boolean>(true);
+  const [isBannerVisible, setIsBannerVisible] = useState<boolean>(true);
   const [submissionModalVisible, setSubmissionModalVisible] = useState(false);
   const [currentEstimateTab, setCurrentEstimateTab] = useState<EstimateTab>(
     EstimateTab.TASK_ESTIMATE,
@@ -216,10 +216,6 @@ export const useTaskCard = ({
   );
 
   const userOffersData = getUserOffersQuery.data?.offers || [];
-
-  const unVisible = () => {
-    setVisible(false);
-  };
 
   useEffect(() => {
     if (tabId && initialTab !== tab) {
@@ -299,7 +295,7 @@ export const useTaskCard = ({
       : task?.serviceMultiplier) || 1;
 
   useEffect(() => {
-    !visible && setVisible(true);
+    !isBannerVisible && setIsBannerVisible(true);
   }, [statusID]);
 
   const getWithNDS = () => {
@@ -382,6 +378,7 @@ export const useTaskCard = ({
   const webdata = task?.webdata;
   const endTime = task?.endTime || '';
   const address = task?.object?.name || '';
+  const stage = task?.stage || '';
   const regionID = task?.object?.regionID;
   const car = task?.car;
   const description = task?.description || '';
@@ -572,6 +569,7 @@ export const useTaskCard = ({
 
   useTaskSSE({ taskId, refresh });
 
+  const onBannerClose = () => setIsBannerVisible(false);
   const onUploadLimitBannerVisible = () =>
     setUploadLimitBannerVisible(!uploadLimitBannerVisible);
   const onCantDeleteBannerVisible = () =>
@@ -633,7 +631,7 @@ export const useTaskCard = ({
       id: 3,
       label: TaskTab.REPORT,
     });
-    unVisible();
+    onBannerClose();
     onUploadModalVisible();
   };
 
@@ -650,8 +648,8 @@ export const useTaskCard = ({
     isSelfEmployed,
     isSberPayment,
     navigateToReport,
-    visible,
-    unVisible,
+    isBannerVisible,
+    onBannerClose,
     isInvitedCurator,
   });
 
@@ -1099,6 +1097,7 @@ export const useTaskCard = ({
         return (
           <TaskCardDescription
             car={car}
+            stage={stage}
             endTime={endTime}
             address={address}
             webdata={webdata}

@@ -80,10 +80,10 @@ export const styles = StyleSheet.create({
     fontSize: 17,
     lineHeight: 24,
   },
-  car: {
+  descriptionBlock: {
     flexDirection: 'row',
     gap: 8,
-    alignItems: 'center',
     marginBottom: 8,
+    alignItems: 'center',
   },
 });

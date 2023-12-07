@@ -16,6 +16,7 @@ import {
   usePostITTaskMemberMutation,
 } from '@/store/api/tasks';
 import { PostITTaskMemberParams } from '@/store/api/tasks/types';
+import { useGetUserQuery } from '@/store/api/user';
 import { User } from '@/store/api/user/types';
 import {
   setNewOfferServices,
@@ -48,6 +49,13 @@ const useContractors = ({ taskId, navigation }: UseContractorsParams) => {
   } = useTaskMembers(taskId);
   const isItLots = task?.subsetID === TaskType.IT_AUCTION_SALE;
 
+  const {
+    data: user,
+    isError: isUserError,
+    error: userError,
+  } = useGetUserQuery(userID, {
+    skip: !userID,
+  });
   const {
     data: offersData,
     error: offerError,
@@ -85,8 +93,8 @@ const useContractors = ({ taskId, navigation }: UseContractorsParams) => {
     [],
   );
 
-  const error = contractorsError || offerError;
-  const isError = isContractorsError || isOfferError;
+  const error = contractorsError || offerError || userError;
+  const isError = isContractorsError || isOfferError || isUserError;
 
   useEffect(() => {
     if (isFocused) {
@@ -140,6 +148,21 @@ const useContractors = ({ taskId, navigation }: UseContractorsParams) => {
       });
     }
 
+    if (!user?.isApproved) {
+      toast.show({
+        type: 'error',
+        title: 'Ваша учетная запись не подтверждена координатором',
+      });
+
+      return setSelectedContractorIDs(
+        contractors
+          ?.filter(
+            contractor => contractor.subStatusID !== ContractorStatus.AVAILABLE,
+          )
+          .map(item => item.ID) as number[],
+      );
+    }
+
     const members = selectedContractorIDs.map(id => ({
       userID: id,
     })) as PostITTaskMemberParams['members'];
@@ -191,6 +214,8 @@ const useContractors = ({ taskId, navigation }: UseContractorsParams) => {
         type: 'error',
         title: (err as AxiosQueryErrorResponse).data.message,
       });
+    } finally {
+      refetch();
     }
   };
 
