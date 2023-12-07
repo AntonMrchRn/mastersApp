@@ -3,6 +3,7 @@ module.exports = {
   root: true,
   extends: [
     'prettier',
+    '@react-native',
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',

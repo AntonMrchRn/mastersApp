@@ -34,7 +34,7 @@ const persistor = persistStore(store);
 type RootState = ReturnType<typeof store.getState>;
 type AppDispatch = typeof store.dispatch;
 
-const useAppDispatch = () => useDispatch<AppDispatch>();
+const useAppDispatch = useDispatch<AppDispatch>;
 const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export type { RootState };
