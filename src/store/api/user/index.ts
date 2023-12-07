@@ -115,7 +115,7 @@ export const userAPI = api
       addFiles: builder.mutation<File[], FilesParams>({
         query: ({ formData, files, date, signal }) => {
           return {
-            url: `me/files`,
+            url: 'me/files',
             method: 'POST',
             data: formData,
             headers: {
