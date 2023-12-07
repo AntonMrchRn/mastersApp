@@ -7,6 +7,12 @@ const styles = StyleSheet.create({
   mt16: {
     marginTop: 16,
   },
+  fileName: {
+    width: '80%',
+  },
+  mt4: {
+    marginTop: 4,
+  },
   rowBetween: {
     flexDirection: 'row',
     justifyContent: 'space-between',

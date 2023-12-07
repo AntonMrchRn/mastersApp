@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import SVG, { Path } from 'react-native-svg';
 
 import { useTheme } from 'rn-ui-kit';

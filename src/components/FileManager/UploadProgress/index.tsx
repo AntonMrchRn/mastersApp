@@ -41,7 +41,7 @@ export const UploadProgress = ({
                 )}
               </Text>
               <TouchableOpacity onPress={() => controllers?.[date]?.abort()}>
-                <Text variant={'bodySBold'} color={theme.text.basic}>
+                <Text variant="bodySBold" color={theme.text.basic}>
                   Отмена
                 </Text>
               </TouchableOpacity>
@@ -64,12 +64,12 @@ export const UploadProgress = ({
               {progress.files.map((file, index) => (
                 <View
                   key={file.name}
-                  style={[styles.rowBetween, index !== 0 && { marginTop: 4 }]}
+                  style={[styles.rowBetween, index !== 0 && styles.mt4]}
                 >
                   <Text
                     variant={'bodySRegular'}
                     numberOfLines={1}
-                    style={{ width: '80%' }}
+                    style={styles.fileName}
                     color={theme.text.basic}
                   >
                     {file.name}
