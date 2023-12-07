@@ -53,11 +53,23 @@ export type BottomTabParamList = {
 };
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 export const TabNavigation = () => {
+  const dispatch = useAppDispatch();
+
+  const { visitToolTip } = useAppSelector(selectOnboarding);
+
+  const onTooltipClose = () => dispatch(unActiveToolTip());
+
   useEffect(() => {
     setTimeout(() => {
+      if (visitToolTip) {
+        setTimeout(() => {
+          onTooltipClose();
+        }, 3000);
+      }
       pushPermission();
     }, 300);
   }, []);
+
   const taskSearchIcon = (color: {
     focused: boolean;
     color: string;
@@ -73,16 +85,6 @@ export const TabNavigation = () => {
     color: string;
     size: number;
   }) => {
-    const { visitToolTip } = useAppSelector(selectOnboarding);
-    const dispatch = useAppDispatch();
-    const onTooltipClose = () => dispatch(unActiveToolTip());
-    useEffect(() => {
-      if (visitToolTip) {
-        setTimeout(() => {
-          onTooltipClose();
-        }, 3000);
-      }
-    }, []);
     return (
       <Tooltip
         triangleEdge="bottom"
