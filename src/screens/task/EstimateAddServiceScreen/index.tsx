@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -39,6 +39,8 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
   const dispatch = useAppDispatch();
   const isFocused = useIsFocused();
 
+  const [loading, setLoading] = useState(false);
+
   const userRole = useAppSelector(selectAuth).user?.roleID;
   const { offerServices } = useAppSelector(selectTasks);
 
@@ -54,7 +56,6 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
 
   const { refetch, data } = useGetTaskQuery(taskId);
   const isItLots = data?.tasks[0]?.subsetID === TaskType.IT_AUCTION_SALE;
-
   const [postTask, mutationTask] = usePostTaskServiceMutation();
 
   useEffect(() => {
@@ -63,6 +64,7 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
         type: 'error',
         title: mutationTask?.error?.data?.message,
       });
+      setLoading(false);
     }
   }, [mutationTask.error]);
   useEffect(() => {
@@ -124,6 +126,7 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
         }),
       );
     } else {
+      setLoading(true);
       await postTask({
         categoryID: service.categoryID,
         categoryName: service.categoryName,
@@ -204,6 +207,8 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
               label={'Добавить'}
               onPress={methods.handleSubmit(onSubmit)}
               style={styles.button}
+              isPending={loading}
+              disabled={loading}
             />
           </View>
         </FormProvider>
