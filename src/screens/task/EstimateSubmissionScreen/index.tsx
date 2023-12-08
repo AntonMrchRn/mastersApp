@@ -259,7 +259,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
             <View style={styles.bannerContainer}>
               {banner && (
                 <Banner
-                  type={'warning'}
+                  type={'error'}
                   icon={'alert'}
                   title={banner?.title}
                   text={banner?.text}
@@ -267,14 +267,14 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
                 />
               )}
             </View>
+            <Button
+              isPending={isLoading}
+              label={isEdit ? 'Редактировать смету' : 'Подать смету'}
+              disabled={isError || isLoading}
+              onPress={onSubmit}
+              style={styles.btn}
+            />
           </View>
-          <Button
-            isPending={isLoading}
-            label={isEdit ? 'Редактировать смету' : 'Подать смету'}
-            disabled={isError || isLoading}
-            onPress={onSubmit}
-            style={styles.btn}
-          />
         </KeyboardAwareScrollView>
       </SafeAreaView>
     </>
