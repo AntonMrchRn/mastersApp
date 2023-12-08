@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { Linking } from 'react-native';
+import { AppState, Linking } from 'react-native';
 
 import { useIsFocused } from '@react-navigation/native';
 import { useToast } from 'rn-ui-kit';
@@ -42,6 +42,17 @@ const useTelegramBot = () => {
     refetch: refetchParams,
   } = useGetUserParamsQuery();
 
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (nextAppState === 'active') {
+        refetch();
+        refetchParams();
+      }
+    });
+    return () => {
+      subscription.remove();
+    };
+  }, []);
   useEffect(() => {
     if (isFocused) {
       refetch();
@@ -92,10 +103,12 @@ const useTelegramBot = () => {
     }
   };
 
+  const isBotActive = user?.isTGConnected && user?.isTGActive;
+  const isLoading = isUserLoading || isBotLoading;
   return {
     onConnect,
-    isLoading: isUserLoading || isBotLoading,
-    isBotActive: user?.isTGConnected && user?.isTGActive,
+    isLoading,
+    isBotActive,
   };
 };
 
