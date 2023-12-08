@@ -77,14 +77,17 @@ export const EstimateEditScreen: FC<EstimateEditScreenProps> = ({
   const material = materialName
     ? service?.materials?.find(materia => materia.name === materialName)
     : undefined;
+
   const userRole = useAppSelector(selectAuth).user?.roleID;
   const name = materialName ? material?.name : service?.name;
   const description = materialName ? '' : service?.description;
   const price = materialName ? material?.price : service?.price;
   const measure = materialName
-    ? material?.measure?.split('(')?.[1]?.slice(0, -1)
+    ? material?.measure?.toLowerCase()
     : service?.measure?.toLowerCase();
+
   const currMeasure = measure === 'час' ? 'часах' : measure;
+
   const methods = useForm({
     defaultValues: { estimateCount: '' },
     resolver: yupResolver(estimateCountValidationSchema),
