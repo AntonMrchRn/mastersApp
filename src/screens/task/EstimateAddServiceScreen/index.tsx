@@ -151,7 +151,8 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
     >
       <KeyboardAwareScrollView
         contentContainerStyle={styles.container}
-        enableOnAndroid={true}
+        enableOnAndroid
+        keyboardShouldPersistTaps="handled"
       >
         <Text variant={'title3'} style={styles.title} color={theme.text.basic}>
           Заполните данные об услуге
