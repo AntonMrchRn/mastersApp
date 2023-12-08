@@ -110,6 +110,7 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
         title: 'Не удалось определить роль пользователя',
       });
     }
+    setLoading(true);
     if (fromEstimateSubmission) {
       dispatch(
         addOfferService({
@@ -126,7 +127,6 @@ export const EstimateAddServiceScreen: FC<EstimateAddServiceScreenProps> = ({
         }),
       );
     } else {
-      setLoading(true);
       await postTask({
         categoryID: service.categoryID,
         categoryName: service.categoryName,
