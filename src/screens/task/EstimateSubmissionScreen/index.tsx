@@ -43,6 +43,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
     bsRef,
     errors,
     banner,
+    setId,
     allSum,
     isError,
     loading,
@@ -107,6 +108,7 @@ export const EstimateSubmissionScreen: FC<EstimateSubmissionScreenProps> = ({
       {isFocused && (
         <AddServiceBottomSheet
           ref={bsRef}
+          setId={setId}
           onCancel={addServiceBottomSheetClose}
           addService={addService}
           serviceNames={serviceNames}

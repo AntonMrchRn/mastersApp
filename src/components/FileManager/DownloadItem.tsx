@@ -132,6 +132,16 @@ export const DownloadItem = ({
             [file.fileID]: { isLoading: false, rec: 0, progress: 0 },
           }),
         );
+
+        // обработка битого файла
+        const { size } = await ReactNativeBlobUtil.fs.stat(FILE_PATH);
+        if (file.sizeBytes !== size) {
+          await ReactNativeBlobUtil.fs.unlink(FILE_PATH);
+          toast.show({
+            type: 'error',
+            title: 'Не удалось скачать файл. Пожалуйста, повторите позже.',
+          });
+        }
       });
   };
 

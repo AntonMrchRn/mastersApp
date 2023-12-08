@@ -542,6 +542,7 @@ export const useEstimateSubmission = ({
     onDeleteService,
     onDeleteMaterial,
     allowCostIncrease,
+    setId: task?.setID,
     setServiceForDelete,
     estimateModalVisible,
     setMaterialForDelete,

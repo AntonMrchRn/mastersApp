@@ -3,6 +3,7 @@ import React, {
   ForwardedRef,
   forwardRef,
   useCallback,
+  useEffect,
   useState,
 } from 'react';
 import { ActivityIndicator, View } from 'react-native';
@@ -19,6 +20,7 @@ import {
   Spacer,
   Text,
   useTheme,
+  useToast,
 } from 'rn-ui-kit';
 
 import { SearchIcon } from '@/assets/icons/svg/estimate/SearchIcon';
@@ -27,6 +29,9 @@ import {
   useLazyGetServicesByNameQuery,
 } from '@/store/api/tasks';
 import { Service, ServicesCategory } from '@/store/api/tasks/types';
+import { useGetActivitiesQuery } from '@/store/api/user';
+import { AxiosQueryErrorResponse } from '@/types/error';
+import { TaskSetType } from '@/types/task';
 
 import { CategoryContainer } from './CategoryContainer';
 import { SearchContainer } from './SearchContainer';
@@ -39,11 +44,13 @@ type AddServiceBottomSheetProps = {
   ref?: ForwardedRef<BottomSheetModalMethods>;
   addService: (service: Service) => void;
   serviceNames: string[];
+  setId?: TaskSetType;
 };
 export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
-  ({ onCancel, addService, serviceNames }, ref) => {
+  ({ setId, onCancel, addService, serviceNames }, ref) => {
     const theme = useTheme();
     const insets = useSafeAreaInsets();
+    const toast = useToast();
 
     const [chipses, setChipses] = useState<ServicesCategory[]>([]);
     const [serviceName, setServiceName] = useState('');
@@ -52,8 +59,28 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
       ServicesCategory[]
     >([]);
 
-    const categories = useGetServicesCategoriesQuery();
+    const { categories, isLoading, error, isError } =
+      useGetServicesCategoriesQuery(undefined, {
+        skip: !setId,
+        selectFromResult: ({ data, isLoading, isError, error }) => ({
+          categories: data?.categories.filter(
+            category => setId && category.setIDs.includes(setId),
+          ),
+          error,
+          isError,
+          isLoading,
+        }),
+      });
     const [trigger, result] = useLazyGetServicesByNameQuery();
+
+    useEffect(() => {
+      if (isError) {
+        toast.show({
+          type: 'error',
+          title: (error as AxiosQueryErrorResponse).data.message,
+        });
+      }
+    }, [isError]);
 
     const subtitle =
       !chipses.length && !serviceName.length
@@ -127,14 +154,14 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
                 >
                   Категории
                 </Text>
-                {categories.isLoading ? (
+                {isLoading ? (
                   <ActivityIndicator />
                 ) : (
-                  categories?.data?.categories?.map(category => {
+                  categories?.map(category => {
                     const isActive = selectCategories.includes(category);
                     const onPress = () => {
                       const newArray = isActive
-                        ? selectCategories.filter(cat => cat !== category)
+                        ? selectCategories.filter(cat => cat.ID !== category.ID)
                         : selectCategories.concat(category);
                       setSelectCategories(newArray);
                     };
@@ -152,7 +179,7 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
                             <CheckBox
                               checked={isActive}
                               onPress={onPress}
-                              style={{ marginRight: 1 }}
+                              style={styles.mr1}
                             />
                           </View>
                         </View>
@@ -196,7 +223,7 @@ export const AddServiceBottomSheet: FC<AddServiceBottomSheetProps> = forwardRef(
           )}
 
           {banner && (
-            <View style={{ position: 'absolute', bottom: 100, width: '100%' }}>
+            <View style={styles.banner}>
               <Banner
                 type={'error'}
                 icon={'alert'}

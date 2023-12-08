@@ -338,6 +338,7 @@ type ServicesCategory = {
   description: string;
   isImmutable: boolean;
   name: string;
+  setIDs: TaskSetType[];
 };
 type GetServicesCategoriesResponse = {
   categories: ServicesCategory[];

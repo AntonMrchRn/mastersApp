@@ -126,6 +126,7 @@ export const TaskCardEstimate: FC<TaskCardEstimateProps> = ({
       {isFocused && (
         <AddServiceBottomSheet
           ref={bsRef}
+          setId={setId}
           onCancel={addServiceBottomSheetClose}
           addService={addService}
           serviceNames={serviceNames}
