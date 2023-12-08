@@ -49,4 +49,12 @@ export const styles = StyleSheet.create({
   itemText: {
     flexShrink: 1,
   },
+  mr1: {
+    marginRight: 1,
+  },
+  banner: {
+    position: 'absolute',
+    bottom: 100,
+    width: '100%',
+  },
 });

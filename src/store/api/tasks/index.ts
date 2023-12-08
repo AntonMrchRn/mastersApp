@@ -43,14 +43,14 @@ export const tasksAPI = api
       }),
       getTaskStatuses: builder.query<GetTaskStatusesResponse, void>({
         query: () => ({
-          url: `/aux?query=?tableName==task_status?`,
+          url: '/aux?query=?tableName==task_status?',
           method: 'GET',
         }),
       }),
       getServicesCategories: builder.query<GetServicesCategoriesResponse, void>(
         {
           query: () => ({
-            url: `services/categories?query=??`,
+            url: 'services/categories?query=??',
             method: 'GET',
           }),
         },
@@ -99,7 +99,7 @@ export const tasksAPI = api
       }),
       patchTask: builder.mutation<GetTaskResponse, Task>({
         query: data => ({
-          url: `tasks/web`,
+          url: 'tasks/web',
           method: 'PATCH',
           data,
         }),
@@ -160,7 +160,7 @@ export const tasksAPI = api
       }),
       deleteMaterial: builder.mutation<object, { ID: string; taskID: string }>({
         query: data => ({
-          url: `materials`,
+          url: 'materials',
           params: data,
           method: 'DELETE',
           data,
@@ -179,21 +179,21 @@ export const tasksAPI = api
         { taskID: number; offerID?: number; sum: number }
       >({
         query: data => ({
-          url: `tasks/lot`,
+          url: 'tasks/lot',
           method: 'PATCH',
           data,
         }),
       }),
       postITMembersOffer: builder.mutation<object, PostITMembersOfferParams>({
         query: data => ({
-          url: `offers/it/members`,
+          url: 'offers/it/members',
           method: 'POST',
           data,
         }),
       }),
       postOffers: builder.mutation<object, PostOffersRequest>({
         query: data => ({
-          url: `offers`,
+          url: 'offers',
           method: 'POST',
           data,
         }),
@@ -206,7 +206,7 @@ export const tasksAPI = api
       }),
       patchOffers: builder.mutation<object, PatchOffersRequest>({
         query: data => ({
-          url: `offers`,
+          url: 'offers',
           method: 'PATCH',
           data,
         }),
@@ -240,7 +240,7 @@ export const tasksAPI = api
       postTasksFiles: builder.mutation<File[], FilesParams>({
         query: ({ formData, files, date, signal }) => {
           return {
-            url: `tasks/files/multiple`,
+            url: 'tasks/files/multiple',
             method: 'POST',
             data: formData,
             headers: {
