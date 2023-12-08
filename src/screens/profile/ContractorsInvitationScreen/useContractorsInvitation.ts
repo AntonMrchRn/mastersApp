@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Clipboard from '@react-native-community/clipboard';
 import { useToast } from 'rn-ui-kit';
 
+import { deviceWidth } from '@/constants/platform';
 import { storageMMKV } from '@/mmkv/storage';
 import styles from '@/screens/profile/ContractorsInvitationScreen/style';
 import { useAppDispatch, useAppSelector } from '@/store';
@@ -88,7 +89,7 @@ const useContractorsInvitation = () => {
       type: 'success',
       titleStyle: styles.toastTitle,
       title: 'Ссылка-приглашение скопирована',
-      containerStyle: { height: 60 + insets.top },
+      containerStyle: { height: (deviceWidth < 400 ? 80 : 60) + insets.top },
     });
   };
 

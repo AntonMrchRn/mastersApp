@@ -202,7 +202,7 @@ PODS:
     - hermes-engine/Pre-built (= 0.72.7)
   - hermes-engine/Pre-built (0.72.7)
   - libevent (2.1.12)
-  - lottie-ios (4.3.3)
+  - lottie-ios (4.3.4)
   - MMKV (1.3.2):
     - MMKVCore (~> 1.3.2)
   - MMKVCore (1.3.2)
@@ -657,15 +657,15 @@ PODS:
     - React-Core
   - RNDeviceInfo (10.12.0):
     - React-Core
-  - RNFBApp (18.6.2):
+  - RNFBApp (18.7.1):
     - Firebase/CoreOnly (= 10.18.0)
     - React-Core
-  - RNFBCrashlytics (18.6.2):
+  - RNFBCrashlytics (18.7.1):
     - Firebase/Crashlytics (= 10.18.0)
     - FirebaseCoreExtension (= 10.18.0)
     - React-Core
     - RNFBApp
-  - RNFBMessaging (18.6.2):
+  - RNFBMessaging (18.7.1):
     - Firebase/Messaging (= 10.18.0)
     - FirebaseCoreExtension (= 10.18.0)
     - React-Core
@@ -715,7 +715,7 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.27.0):
+  - RNScreens (3.29.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - RNShare (10.0.2):
@@ -1032,7 +1032,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
   hermes-engine: 9180d43df05c1ed658a87cc733dc3044cf90c00a
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  lottie-ios: 25e7b2675dad5c3ddad369ac9baab03560c5bfdd
+  lottie-ios: 3d98679b41fa6fd6aff2352b3953dbd3df8a397e
   MMKV: f21593c0af4b3f2a0ceb8f820f28bb639ea22bb7
   MMKVCore: 31b4cb83f8266467eef20a35b6d78e409a11060d
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
@@ -1086,15 +1086,15 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNDeviceInfo: db5c64a060e66e5db3102d041ebe3ef307a85120
-  RNFBApp: 09fd96441b0f556a1ef50ee70fa72160ae71ecb9
-  RNFBCrashlytics: 0866393a9fbca1d8d353052243e21d1cdeb55394
-  RNFBMessaging: 95fa608c79d3378b1a958a64f8be82e4699368a9
+  RNFBApp: 3d518e0ea7f945ae546facc0e6034806d9ddfde7
+  RNFBCrashlytics: 9f9b3b35f4db6f39c2a365e55b59a0668617cb33
+  RNFBMessaging: 5c909e97a0c81c4a03c56ca17f0fe79256941ec9
   RNGestureHandler: 32a01c29ecc9bb0b5bf7bc0a33547f61b4dc2741
   RNImageCropPicker: d9616a0cb9b72e8551ff94a7a5021fbd29050aa5
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
   RNPermissions: 4e3714e18afe7141d000beae3755e5b5fb2f5e05
   RNReanimated: ab2e96c6d5591c3dfbb38a464f54c8d17fb34a87
-  RNScreens: 3c2d122f5e08c192e254c510b212306da97d2581
+  RNScreens: 3c5b9f4a9dcde752466854b6109b79c0e205dad3
   RNShare: 859ff710211285676b0bcedd156c12437ea1d564
   RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
@@ -1104,4 +1104,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 537324bfbf858f3b25195f8c538f7510e3f3e839
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.12.1
